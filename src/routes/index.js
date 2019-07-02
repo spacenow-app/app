@@ -19,6 +19,7 @@ const Routes = props => {
     <BrowserRouter>
       <Switch>
         <PublicRoute exact path="/auth" isAuthenticated={isAuthenticated} component={() => <h1>Login Page</h1>} />
+        <PublicRoute exact path="/test" component={() => <h1>Test Page</h1>} />
         <PrivateRoute
           {...props}
           path="/"

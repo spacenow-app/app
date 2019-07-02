@@ -6,6 +6,9 @@ import Button from './Button'
 import Card from './Card'
 import Title from './Title'
 import StepButtons from './StepButtons'
+import Input from './Input'
+import Map from './Map'
+import AutoComplete from './AutoComplete'
 // import Avatar from './Avatar'
 // import Badge from './Badge'
 // import Checkbox from './Checkbox'
@@ -39,7 +42,10 @@ export {
   Button,
   Card,
   Title,
-  StepButtons
+  StepButtons,
+  Input,
+  Map,
+  AutoComplete
   // Avatar,
   // Badge,
   // Button,

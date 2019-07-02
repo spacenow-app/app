@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { Wrapper } from '../../../components'
+import { Wrapper } from 'components'
 
 class PreviewPage extends Component {
   render() {

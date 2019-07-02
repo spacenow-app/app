@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { Wrapper } from '../../components'
+import { Wrapper } from 'components'
 
 export class SpecificationTab extends Component {
   render() {

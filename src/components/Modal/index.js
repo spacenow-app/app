@@ -2,7 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import { useSelector } from 'react-redux'
 
-import { TypesModal } from '../../redux/ducks/modal'
+import { TypesModal } from 'redux/ducks/modal'
 import ModalConfirm from './ModalConfirm'
 
 const MODAL_COMPONENTS = {

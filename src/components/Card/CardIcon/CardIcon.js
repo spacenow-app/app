@@ -1,6 +1,6 @@
 import React from 'react'
 import styled from 'styled-components'
-import { Button, Icon } from '../../../components'
+import { Button, Icon } from 'components'
 
 const Wrapper = styled.div`
   display: grid;

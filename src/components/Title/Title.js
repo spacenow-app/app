@@ -2,11 +2,6 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import styled, { css } from 'styled-components'
 
-const TitleStyled = styled.div`
-  display: grid;
-  margin: ${props => (props.noMargin ? '0' : '30px 0;')};
-`
-
 const baseStyle = css`
   font-family: 'Montserrat-Bold';
   font-weight: bold;
@@ -18,6 +13,11 @@ const baseStyle = css`
     if (props.right) return 'right'
     return 'left'
   }};
+`
+
+const TitleStyled = styled.div`
+  display: ${props => (props.subtitle ? 'grid' : 'block')};
+  margin: ${props => (props.noMargin ? '0' : '30px 0;')};
 `
 
 const H1Styled = styled.h1`

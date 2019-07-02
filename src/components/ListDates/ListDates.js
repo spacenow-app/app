@@ -4,7 +4,7 @@ import styled from 'styled-components'
 import _ from 'lodash'
 import { format } from 'date-fns'
 import Badge from '../Badge'
-import { monthNames } from '../../../constants'
+import { monthNames } from 'constants'
 
 const WrapperStyled = styled.div`
   margin: 25px 0;

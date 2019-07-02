@@ -1,5 +1,5 @@
-// import { login as loginApi, loginWithToken as loginWithTokenApi, logoutApi } from '../../services/api/auth'
-// import setAuthorizationHeader from '../../utils/setAuthorizationHeader'
+// import { login as loginApi, loginWithToken as loginWithTokenApi, logoutApi } from 'services/api/auth'
+// import setAuthorizationHeader from 'utils/setAuthorizationHeader'
 
 // Action Types
 

@@ -1,16 +1,17 @@
-import React, { cloneElement } from 'react';
-import PropTypes from 'prop-types';
-import styled from 'styled-components';
+import React, { cloneElement } from 'react'
+import PropTypes from 'prop-types'
+import styled from 'styled-components'
 
-import { withTheme } from '../../theme';
+import { withTheme } from 'theme'
 
 const WrapperStyled = styled.div`
   display: grid;
   width: 350px;
   min-height: 200px;
-  background-color: ${props => (props.backgroundColor ? props.backgroundColor : props.theme.cardVertical.backgroundColor)};
+  background-color: ${props =>
+    props.backgroundColor ? props.backgroundColor : props.theme.cardVertical.backgroundColor};
   border-radius: ${props => props.theme.cardVertical.borderRadius};
-`;
+`
 
 const ImageStyled = styled.img`
   width: 100%;
@@ -20,13 +21,13 @@ const ImageStyled = styled.img`
   border-top-right-radius: ${props => props.theme.cardVertical.borderRadius};
 
   @media (max-width: 680px) {
-   height:230px;
+    height: 230px;
   }
-`;
+`
 
 const ContentStyled = styled.div`
   padding: 30px;
-`;
+`
 
 const CardVertical = ({ imageSrc, contentComponent, theme, backgroundColor }) => (
   <WrapperStyled theme={theme} backgroundColor={backgroundColor}>
@@ -35,22 +36,22 @@ const CardVertical = ({ imageSrc, contentComponent, theme, backgroundColor }) =>
     </div>
     <ContentStyled>
       {cloneElement(contentComponent, {
-        ...contentComponent.props,
+        ...contentComponent.props
       })}
     </ContentStyled>
   </WrapperStyled>
-);
+)
 
 CardVertical.defaultProps = {
   contentComponent: null,
-  backgroundColor: null,
-};
+  backgroundColor: null
+}
 
 CardVertical.propTypes = {
   theme: PropTypes.string.isRequired,
   imageSrc: PropTypes.string.isRequired,
   contentComponent: PropTypes.element,
-  backgroundColor: PropTypes.string,
-};
+  backgroundColor: PropTypes.string
+}
 
-export default withTheme(CardVertical);
+export default withTheme(CardVertical)

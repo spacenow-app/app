@@ -1,5 +1,5 @@
 import HomePage from './HomePage'
 import NotFoundPage from './NotFoundPage'
-import { IntroPage, LocationPage } from './Listing'
+import { IntroPage, LocationPage, CategoryPage } from './Listing'
 
-export { HomePage, NotFoundPage, IntroPage, LocationPage }
+export { HomePage, NotFoundPage, IntroPage, LocationPage, CategoryPage }

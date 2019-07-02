@@ -1,7 +1,7 @@
-import React from 'react';
-import PropTypes from 'prop-types';
-import styled from 'styled-components';
-import { withTheme } from '../../theme';
+import React from 'react'
+import PropTypes from 'prop-types'
+import styled from 'styled-components'
+import { withTheme } from 'theme'
 
 const WrapperStyled = styled.div`
   display: grid;
@@ -10,9 +10,8 @@ const WrapperStyled = styled.div`
   box-shadow: ${props => `${props.theme.card.boxShadow.blur} ${props.theme.card.boxShadow.color}`};
   cursor: pointer;
   overflow: hidden;
-`;
-export const ImageStyled = styled.div`
-`;
+`
+export const ImageStyled = styled.div``
 export const ContentStyled = styled.div`
   display: grid;
   grid-template-columns: repeat(7, 1fr);
@@ -43,24 +42,24 @@ export const ContentStyled = styled.div`
     grid-column-start: 6;
     grid-column-end: span 2;
   }
-`;
+`
 
 const CardHorizontal = props => (
   <WrapperStyled isRounded={props.isRounded} {...props}>
     {props.children}
   </WrapperStyled>
-);
+)
 
 CardHorizontal.defaultProps = {
   isRounded: false,
-  children: null,
-};
+  children: null
+}
 
 CardHorizontal.propTypes = {
   // eslint-disable-next-line react/no-unused-prop-types
   theme: PropTypes.instanceOf(Object).isRequired,
   children: PropTypes.instanceOf(Object).isRequired,
-  isRounded: PropTypes.bool,
-};
+  isRounded: PropTypes.bool
+}
 
-export default withTheme(CardHorizontal);
+export default withTheme(CardHorizontal)

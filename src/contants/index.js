@@ -1,3 +1,4 @@
-import { monthNames } from './date'
+import config from './config'
+import { monthNames } from './dates'
 
-export { monthNames }
+export { config, monthNames }

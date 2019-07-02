@@ -4,7 +4,6 @@ import styled from 'styled-components'
 
 const ContainerStyled = styled(Container)`
   &&& {
-    padding-right: 50px;
   }
 `
 
