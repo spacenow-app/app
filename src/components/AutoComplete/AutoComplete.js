@@ -63,7 +63,7 @@ const AutoComplete = props => {
         <div>
           <Input
             {...getInputProps({
-              label: 'Address',
+              label: 'Address or Business name',
               placeholder: 'Type address or business name.',
               loading: loading,
               disabled: props.disabled,
