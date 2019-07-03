@@ -9,6 +9,8 @@ import StepButtons from './StepButtons'
 import Input from './Input'
 import Map from './Map'
 import AutoComplete from './AutoComplete'
+import List from './List'
+import Caption from './Caption'
 // import Avatar from './Avatar'
 // import Badge from './Badge'
 // import Checkbox from './Checkbox'
@@ -29,7 +31,7 @@ import AutoComplete from './AutoComplete'
 // import Heading from './Heading'
 // import Subtitle from './Subtitle'
 // import Content from './Content'
-// import Caption from './Caption'
+
 // import CardVertical from './CardVertical'
 // import PriceDetailWithoutCalc from './PriceDetailWithoutCalc'
 // import BackgroundImage from './BackgroundImage'
@@ -45,7 +47,9 @@ export {
   StepButtons,
   Input,
   Map,
-  AutoComplete
+  AutoComplete,
+  List,
+  Caption
   // Avatar,
   // Badge,
   // Button,

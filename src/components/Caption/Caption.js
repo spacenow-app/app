@@ -2,43 +2,43 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import styled, { css } from 'styled-components'
 
-const baseStyle = css`
-  font-family: 'Montserrat-Regular';
-  color: #1f252a;
-`
-
-const Large = styled.div`
-  font-family: 'Montserrat-Medium' !important;
-  font-size: 14px;
+const large = css`
+  font-size: 16px;
   font-weight: 500;
-  ${baseStyle};
 `
 
-const Medium = styled.div`
+const medium = css`
   font-size: 14px;
-  ${baseStyle};
 `
 
-const Small = styled.div`
+const small = css`
   font-size: 12px;
-  ${baseStyle};
+`
+
+const Container = styled.div`
+  text-align: ${props => props.centered && 'center'};
+  margin: ${props => props.margin && props.margin};
+`
+
+const CaptionStyled = styled.span`
+  font-family: 'Montserrat-Medium';
+  color: #1f252a;
+  font-size: 14px;
+  ${props => (props.small && small) || (props.medium && medium) || (props.large && large)}
 `
 
 const Caption = props => {
-  switch (props.type) {
-    case 'large':
-      return <Large {...props}>{props.children}</Large>
-    case 'medium':
-      return <Medium {...props}>{props.children}</Medium>
-    case 'small':
-      return <Small {...props}>{props.children}</Small>
-    default:
-      return <Medium {...props}>{props.children}</Medium>
-  }
+  return (
+    <Container {...props}>
+      <CaptionStyled {...props} />
+    </Container>
+  )
 }
 
 Caption.defaultProps = {
-  type: 'medium'
+  small: false,
+  medium: false,
+  large: false
 }
 
 Caption.propTypes = {
