@@ -1,7 +1,83 @@
 import React, { Component } from 'react'
-import { Wrapper, Title, StepButtons } from 'components'
+import { Wrapper, Title, StepButtons, List, Caption } from 'components'
 
 class CategoryPage extends Component {
+  constructor(props) {
+    super(props)
+    this.state = {
+      category: [
+        {
+          id: 1,
+          title: 'Business',
+          icon: 'business',
+          subCategories: [
+            {
+              id: 1,
+              title: 'Private Room',
+              icon: 'business'
+            },
+            {
+              id: 2,
+              title: 'Entire Office',
+              icon: 'business'
+            },
+            {
+              id: 3,
+              title: 'Coworking',
+              icon: 'business'
+            }
+          ]
+        },
+        {
+          id: 2,
+          title: 'Coworking',
+          icon: 'business',
+          subCategories: []
+        },
+        {
+          id: 3,
+          title: 'Meeting',
+          icon: 'business'
+        },
+        {
+          id: 4,
+          title: 'Venue',
+          icon: 'business'
+        },
+        {
+          id: 5,
+          title: 'Parking',
+          icon: 'business'
+        },
+        {
+          id: 6,
+          title: 'Storage',
+          icon: 'business'
+        },
+        {
+          id: 7,
+          title: 'Desk',
+          icon: 'business'
+        },
+        {
+          id: 8,
+          title: 'Hospitaly',
+          icon: 'business'
+        }
+      ],
+      categorySelected: null,
+      subCategorySelected: null
+    }
+  }
+
+  _handleCategoryClick = (e, value) => {
+    this.setState({ categorySelected: value, subCategorySelected: null })
+  }
+
+  _handleSubCategoryClick = (e, value) => {
+    this.setState({ subCategorySelected: value })
+  }
+
   render() {
     const { props } = this
     return (
@@ -11,6 +87,28 @@ class CategoryPage extends Component {
           title="Choose one category"
           subtitle="To list a space you’ll need to put it in the right category. The icons below all have categories drop down once selected. You can click on several to find the right category for your space."
         />
+
+        <List
+          vertical
+          data={this.state.category}
+          handleItemClick={this._handleCategoryClick}
+          itemSelected={this.state.categorySelected}
+        />
+
+        {this.state.categorySelected && this.state.categorySelected.subCategories && (
+          <>
+            <Caption large centered margin="50px 0">
+              Select a sub-category
+            </Caption>
+            <List
+              vertical
+              circular
+              data={this.state.categorySelected.subCategories}
+              handleItemClick={this._handleSubCategoryClick}
+              itemSelected={this.state.subCategorySelected}
+            />
+          </>
+        )}
 
         <StepButtons
           prev={{ disabled: false, onClick: () => props.history.goBack() }}
