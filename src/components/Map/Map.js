@@ -4,28 +4,30 @@ import { withGoogleMap, GoogleMap, Marker } from 'react-google-maps'
 import default_map_style from './default_map_style.json'
 import mapPinIcon from './spacenow_logo_pin.png'
 
-const Map = withGoogleMap(props => (
-  <GoogleMap
-    defaultZoom={16}
-    center={props.position}
-    defaultCenter={props.position}
-    defaultOptions={{
-      scrollwheel: false,
-      maxZoom: 18,
-      minZoom: 14,
-      streetViewControl: false,
-      mapTypeControl: false,
-      styles: props.styles
-    }}
-  >
-    <Marker
-      position={props.position}
-      icon={{
-        url: mapPinIcon
+const Map = withGoogleMap(props => {
+  return (
+    <GoogleMap
+      defaultZoom={16}
+      center={props.position}
+      defaultCenter={props.position}
+      defaultOptions={{
+        scrollwheel: false,
+        maxZoom: 18,
+        minZoom: 14,
+        streetViewControl: false,
+        mapTypeControl: false,
+        styles: props.styles
       }}
-    />
-  </GoogleMap>
-))
+    >
+      <Marker
+        position={props.position}
+        icon={{
+          url: mapPinIcon
+        }}
+      />
+    </GoogleMap>
+  )
+})
 
 Map.defaultProps = {
   loadingElement: <div style={{ height: `100%` }} />,
