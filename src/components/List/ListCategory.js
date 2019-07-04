@@ -62,6 +62,7 @@ const IconContainer = styled.div`
   :hover {
     background-color: #6adc91;
     cursor: pointer;
+    border: none;
   }
 `
 
@@ -93,8 +94,6 @@ const ListCategory = ({ circular, data, handleItemClick, itemSelected }) => {
     return null
   }
 
-  console.log(data)
-
   return (
     <List circular={circular}>
       {data.map(item => (
@@ -107,13 +106,13 @@ const ListCategory = ({ circular, data, handleItemClick, itemSelected }) => {
           {circular ? (
             <>
               <IconContainer active={itemSelected && item.id === itemSelected.id}>
-                <IconStyled name={item.icon} />
+                <IconStyled name={item.icon} fill="#172439" />
               </IconContainer>
               <TitleStyled circular>{item.title}</TitleStyled>
             </>
           ) : (
             <>
-              <IconStyled name={item.icon} />
+              <IconStyled name={item.icon} fill="#172439" />
               <TitleStyled>{item.title}</TitleStyled>
             </>
           )}
