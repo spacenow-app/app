@@ -9,7 +9,7 @@ class CategoryPage extends Component {
         {
           id: 1,
           title: 'Business',
-          icon: 'business',
+          icon: 'category-office',
           subCategories: [
             {
               id: 1,
@@ -31,38 +31,38 @@ class CategoryPage extends Component {
         {
           id: 2,
           title: 'Coworking',
-          icon: 'business',
+          icon: 'category-coworking',
           subCategories: []
         },
         {
           id: 3,
           title: 'Meeting',
-          icon: 'business'
+          icon: 'category-meeting-room'
         },
         {
           id: 4,
           title: 'Venue',
-          icon: 'business'
+          icon: 'category-events'
         },
         {
           id: 5,
           title: 'Parking',
-          icon: 'business'
+          icon: 'category-parking'
         },
         {
           id: 6,
           title: 'Storage',
-          icon: 'business'
+          icon: 'category-storage'
         },
         {
           id: 7,
           title: 'Desk',
-          icon: 'business'
+          icon: 'category-desk'
         },
         {
           id: 8,
           title: 'Hospitaly',
-          icon: 'business'
+          icon: 'category-hospitality'
         }
       ],
       categorySelected: null,
