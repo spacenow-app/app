@@ -112,7 +112,7 @@ class CategoryPage extends Component {
 
         <StepButtons
           prev={{ disabled: false, onClick: () => props.history.goBack() }}
-          next={{ disabled: false, onClick: () => props.history.push('/listing/category') }}
+          next={{ disabled: false, onClick: () => props.history.push('/listing/space/1') }}
         />
       </Wrapper>
     )
