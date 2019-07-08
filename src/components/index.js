@@ -11,6 +11,10 @@ import Map from './Map'
 import AutoComplete from './AutoComplete'
 import List from './List'
 import Caption from './Caption'
+import { Tab, TabItem } from './Tab'
+import Checkbox from './Checkbox'
+import Select from './Select'
+import TextArea from './TextArea'
 // import Avatar from './Avatar'
 // import Badge from './Badge'
 // import Checkbox from './Checkbox'
@@ -21,7 +25,6 @@ import Caption from './Caption'
 // import Label from './Label'
 // import Link from './Link'
 // import PriceDetail from './PriceDetail'
-// import Select from './Select'
 // import Table from './Table'
 // import Tag from './Tag'
 // import Text from './Text'
@@ -49,7 +52,12 @@ export {
   Map,
   AutoComplete,
   List,
-  Caption
+  Caption,
+  Tab,
+  TabItem,
+  Checkbox,
+  Select,
+  TextArea
   // Avatar,
   // Badge,
   // Button,

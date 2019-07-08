@@ -17,7 +17,7 @@ const Icon = styled.svg`
 const HiddenCheckbox = styled.input.attrs({ type: 'checkbox' })`
   border: 0;
   clip: rect(0 0 0 0);
-  clippath: inset(50%);
+  clip-path: inset(50%);
   height: 1px;
   margin: -1px;
   overflow: hidden;
@@ -29,48 +29,54 @@ const HiddenCheckbox = styled.input.attrs({ type: 'checkbox' })`
 
 const StyledCheckbox = styled.div`
   display: inline-block;
-  width: 16px;
-  height: 16px;
-  background: ${props => (props.checked ? '#6ADC91' : '#fff')}
-  border: 2px solid ${props => (props.checked ? '#6ADC91' : '#CBCBCB')};
-  border-radius: 3px;
+  width: 20px;
+  height: 20px;
+  background: ${props => (props.checked ? '#6ADC91' : '#fff')};
+  border: 2px solid ${props => (props.checked ? '#6ADC91' : '#172439')};
+  border-radius: 5px;
   transition: all 150ms;
 
   ${HiddenCheckbox}:focus + & {
-    box-shadow: 0 0 0 3px #6ADC91;
-    border: 2px solid #6ADC91;;
+    box-shadow: 0 0 0 3px #6adc91;
+    border: 2px solid #6adc91;
   }
 
   ${Icon} {
-    visibility: ${props => (props.checked ? 'visible' : 'hidden')}
+    visibility: ${props => (props.checked ? 'visible' : 'hidden')};
   }
 `
 
 const LabelStyled = styled.span`
-  margin-left: 8px;
+  font-family: 'Montserrat-Regular';
+  color: #172439;
+  font-size: 16px;
+  margin: 0 8px;
 `
 
 const Checkbox = ({ className, name, checked, label, handleCheckboxChange, ...props }) => (
-  <label>
-    <CheckboxContainer {...props} className={className}>
-      <HiddenCheckbox
-        name={name}
-        checked={checked}
-        onChange={e => handleCheckboxChange(e, { checked: !e.target.checked, name })}
-      />
-      <StyledCheckbox checked={checked}>
-        <Icon viewBox="0 0 24 24">
-          <polyline points="20 6 9 17 4 12" />
-        </Icon>
-      </StyledCheckbox>
-    </CheckboxContainer>
+  <div>
+    <label>
+      <CheckboxContainer {...props} className={className}>
+        <HiddenCheckbox
+          name={name}
+          checked={checked}
+          onChange={e => handleCheckboxChange(e, { checked: !e.target.checked, name })}
+        />
+        <StyledCheckbox checked={checked}>
+          <Icon viewBox="0 0 24 24">
+            <polyline points="20 6 9 17 4 12" />
+          </Icon>
+        </StyledCheckbox>
+      </CheckboxContainer>
+    </label>
     {label && <LabelStyled>{label}</LabelStyled>}
-  </label>
+  </div>
 )
 
 Checkbox.defaultProps = {
   checked: false,
-  label: false
+  label: false,
+  handleCheckboxChange: () => {}
 }
 
 Checkbox.propTypes = {
