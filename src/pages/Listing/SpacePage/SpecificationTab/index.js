@@ -1,5 +1,7 @@
-import React, { Component } from 'react'
+import React from 'react'
 import styled from 'styled-components'
+import { withFormik } from 'formik'
+import * as Yup from 'yup'
 import { Title, Input, Checkbox, Select, TextArea } from 'components'
 
 const WrapperStyled = styled.div`
@@ -21,9 +23,11 @@ const CheckboxGroup = styled.div`
   grid-row-gap: 40px;
 `
 
-class SpecificationTab extends Component {
-  render() {
-    return (
+const SpecificationTab = props => {
+  const { values, touched, errors, isSubmitting, handleChange, handleBlur, handleSubmit, handleReset, dirty } = props
+  console.log('Values => ', props)
+  return (
+    <form onSubmit={handleSubmit}>
       <WrapperStyled>
         <SectionStyled>
           <Title
@@ -40,10 +44,18 @@ class SpecificationTab extends Component {
             subtitle="Give users the quick highlights of the space. These are also important search criteria for guests to find their perfect space."
           />
           <InputGroup>
-            <Input label="Capacity" placeholder="Specification" />
+            <Input
+              label="Capacity"
+              name="capacity"
+              placeholder="Specification"
+              error={errors.capacity && touched.capacity && errors.capacity}
+              value={values.capacity}
+              onChange={handleChange}
+              onBlur={handleBlur}
+            />
             <Input label="Size" placeholder="Specification" />
             <Input label="Car Space" placeholder="Specification" />
-            <Select label="Type" />
+            <Select label="Type" value={0} />
           </InputGroup>
         </SectionStyled>
         <SectionStyled>
@@ -86,7 +98,9 @@ class SpecificationTab extends Component {
         </SectionStyled>
         <SectionStyled>
           <Title type="h3" title="Access Information*" subtitle="Let your guests know how they’ll get in." />
-          <Select />
+          <div style={{ width: '350px' }}>
+            <Select value={0} />
+          </div>
         </SectionStyled>
         <SectionStyled>
           <Title
@@ -108,8 +122,26 @@ class SpecificationTab extends Component {
           </p>
         </SectionStyled>
       </WrapperStyled>
-    )
-  }
+    </form>
+  )
 }
 
-export default SpecificationTab
+const formik = {
+  displayName: 'SpecificationForm',
+  mapPropsToValues: props => ({
+    capacity: props.capacity || ''
+  }),
+  mapValuesToPayload: x => x,
+  validationSchema: Yup.object().shape({
+    capacity: Yup.number().required('Capacity is required!')
+  }),
+  handleSubmit: (values, { setSubmitting }) => {
+    setTimeout(() => {
+      alert(JSON.stringify(values, null, 2))
+      setSubmitting(false)
+    }, 1000)
+  },
+  enableReinitialize: true
+}
+
+export default withFormik(formik)(SpecificationTab)
