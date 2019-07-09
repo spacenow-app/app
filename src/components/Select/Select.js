@@ -11,7 +11,7 @@ const sizeStyle = {
     border-radius: 37px;
   `,
   md: css`
-    padding: 10px 20px;
+    padding: 0 40px 0 20px;
     font-size: 14px;
     line-height: 1.5;
     border-radius: 37px;
@@ -30,10 +30,9 @@ const WrapperInput = styled.div`
 `
 
 const SelectStyled = styled.select`
-  display: inline-block;
+  display: block;
   width: 100%;
   color: rgb(33, 37, 41);
-  background-color: #fff;
   border-width: 1px;
   border-color: #ebebeb;
   border-style: solid;
