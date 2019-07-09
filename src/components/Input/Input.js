@@ -32,9 +32,9 @@ const InputStyled = styled.input`
   display: inline-block;
   width: 100%;
   color: rgb(33, 37, 41);
-  background-color: #fff;
+  background-color: ${props => (props.error ? 'rgba(224, 82, 82, 0.1);' : '#ffffff')};
   border-width: 1px;
-  border-color: #ebebeb;
+  border-color: ${props => (props.error ? '#e05252' : '#ebebeb')};
   border-style: solid;
   transition: color 0.2s ease-in-out 0s, border-style 0.2s ease-in-out 0s, border-color 0.2s ease-in-out 0s,
     visibility 0.2s ease-in-out 0s, background 0.2s ease-in-out 0s, background-color 0.2s ease-in-out 0s,
@@ -45,8 +45,8 @@ const InputStyled = styled.input`
 
   :focus {
     outline: 0px;
-    box-shadow: 0 0 0 0.2rem rgba(106, 220, 145, 0.5);
-    border-color: #6adc91;
+    box-shadow: 0 0 0 0.2rem ${props => (props.error ? 'rgba(224, 82, 82, 0.5)' : 'rgba(106, 220, 145, 0.5)')};
+    border-color: ${props => (props.error ? '#e05252' : '#6adc91')};
   }
 
   &[type='number']::-webkit-inner-spin-button,
@@ -134,32 +134,32 @@ const Button = styled.button`
   }
 `
 
-const Input = ({ type, value, placeholder, size, label, loading, closeButton, onClickCloseButton, ...props }) => {
+const ErrorMessage = styled.small`
+  color: #e05252;
+  margin-left: 20px;
+`
+
+const Input = ({ size, label, error, loading, closeButton, onClickCloseButton, ...props }) => {
   return (
     <WrapperInput>
       {label && <Label>{label}</Label>}
-      <InputStyled {...props} value={value} type={type} size={size} placeholder={placeholder} />
+      <InputStyled {...props} size={size} error={error} />
       <RightContent closeButton={closeButton}>
         {loading && <LoaderIcon />}
         {closeButton && <Button onClick={onClickCloseButton}>x</Button>}
       </RightContent>
+      {error && <ErrorMessage>{error}</ErrorMessage>}
     </WrapperInput>
   )
 }
 
 Input.defaultProps = {
   size: 'md',
-  placeholder: 'Input',
-  value: '',
-  type: 'text',
   label: null
 }
 
 Input.propTypes = {
   size: PropTypes.oneOf(['sm', 'md', 'lg']),
-  value: PropTypes.string,
-  placeholder: PropTypes.string,
-  type: PropTypes.string,
   label: PropTypes.string
 }
 
