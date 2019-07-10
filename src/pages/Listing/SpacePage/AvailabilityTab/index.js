@@ -1,10 +1,12 @@
-import React, { Component } from 'react'
+import React from 'react'
 import { Wrapper } from 'components'
 
-class AvailabilityTab extends Component {
-  render() {
-    return <Wrapper>TimeTab</Wrapper>
-  }
+const AvailabilityTab = () => {
+  return (
+    <Wrapper>
+      <div />
+    </Wrapper>
+  )
 }
 
 export default AvailabilityTab
