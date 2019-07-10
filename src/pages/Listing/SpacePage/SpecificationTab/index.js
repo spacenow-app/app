@@ -24,8 +24,7 @@ const CheckboxGroup = styled.div`
 `
 
 const SpecificationTab = props => {
-  const { values, touched, errors, isSubmitting, handleChange, handleBlur, handleSubmit, handleReset, dirty } = props
-  console.log('Values => ', props)
+  const { values, touched, errors, handleChange, handleBlur, handleSubmit } = props
   return (
     <form onSubmit={handleSubmit}>
       <WrapperStyled>
