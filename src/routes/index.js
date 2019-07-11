@@ -4,8 +4,8 @@ import { useSelector } from 'react-redux'
 import PrivateRoute from './PrivateRoute'
 import PublicRoute from './PublicRoute'
 import Listing from './Listing'
-import { NavBar } from '../components'
-import { HomePage, NotFoundPage } from '../pages'
+import { NavBar } from 'components'
+import { HomePage, NotFoundPage } from 'pages'
 
 const Routes = props => {
   const isAuthenticated = useSelector(state => state.auth.isAuthenticated)
@@ -19,6 +19,7 @@ const Routes = props => {
     <BrowserRouter>
       <Switch>
         <PublicRoute exact path="/auth" isAuthenticated={isAuthenticated} component={() => <h1>Login Page</h1>} />
+        <PublicRoute  path="/test" component={() => <h1>Test Page</h1>} />
         <PrivateRoute
           {...props}
           path="/"
@@ -28,7 +29,7 @@ const Routes = props => {
               <>
                 <NavBar />
                 <Switch>
-                  <PrivateRoute
+                  <Route
                     {...props}
                     exact
                     path={props.match.path}

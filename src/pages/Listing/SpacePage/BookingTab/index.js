@@ -61,11 +61,11 @@ const BookingTab = () => {
       </Cell>
       <Cell>
         <Title type="h3" title="Price*" />
-        <Grid columns={3} columnGap="20px" width="550px">
-          <Cell width={2}>
+        <Grid columns={12} columnGap="20px">
+          <Cell width={4}>
             <Select label="Currecy" />
           </Cell>
-          <Cell width={1}>
+          <Cell width={2}>
             <Input label="Price*" placeholder="AU$ 100.00" />
           </Cell>
         </Grid>

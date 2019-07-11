@@ -27,6 +27,7 @@ const SpecificationTab = props => {
   const { values, touched, errors, handleChange, handleBlur, handleSubmit } = props
   return (
     <form onSubmit={handleSubmit}>
+      <button type="submit">tete</button>
       <WrapperStyled>
         <SectionStyled>
           <Title
@@ -132,7 +133,7 @@ const formik = {
   }),
   mapValuesToPayload: x => x,
   validationSchema: Yup.object().shape({
-    capacity: Yup.number().required('Capacity is required!')
+    capacity: Yup.number('Capacity need to be number').required('Capacity is required!')
   }),
   handleSubmit: (values, { setSubmitting }) => {
     setTimeout(() => {
@@ -142,5 +143,6 @@ const formik = {
   },
   enableReinitialize: true
 }
+
 
 export default withFormik(formik)(SpecificationTab)
