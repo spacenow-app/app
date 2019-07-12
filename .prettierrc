@@ -1,0 +1,15 @@
+{
+  "eslintIntegration": false,
+  "printWidth": 120,
+  "semi": false,
+  "singleQuote": true,
+  "tabWidth": 2,
+  "trailingComma": "none",
+  "useTabs": false,
+  "editor.maxTokenizationLineLength": 200000,
+  "editor.formatOnSave": true,
+  "proseWrap": "always",
+  "requireConfig": false,
+  "bracketSpacing": true,
+  "jsxBracketSameLine": false
+}
