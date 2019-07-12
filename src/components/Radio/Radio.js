@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 import styled, { css } from 'styled-components'
 
 const RadioItem = styled.div`
-  font-family: 'Montserrat-SemiBold';
+  font-family: 'Montserrat-Regular';
   font-size: 16px;
   width: fit-content;
   cursor: pointer;
@@ -11,7 +11,8 @@ const RadioItem = styled.div`
   ${props =>
     props.box &&
     css`
-      border: 1px solid ${props => (props.checked ? '#6adc91' : '#e2e2e2')};
+      font-family: 'Montserrat-SemiBold';
+      border: 1px solid ${props.checked ? '#6adc91' : '#e2e2e2'};
       display: grid;
       padding: 40px;
       border-radius: 10px;
@@ -69,8 +70,14 @@ const RadioButton = styled.input`
 
 const RadioContent = styled.div`
   display: grid;
-  grid-template-columns: 1fr auto;
-  grid-column-gap: 20px;
+
+  ${props =>
+    props.image &&
+    css`
+      display: grid;
+      grid-template-columns: 1fr auto;
+      grid-column-gap: 20px;
+    `}
 `
 
 const RadioText = styled.span`
@@ -86,18 +93,17 @@ const ImageStyled = styled.img`
   border-radius: 100%;
 `
 
-const Radio = ({ handleChange, box, value, name, checked, label, text, image, ...props }) => {
-  const handleRadioChange = (e, value) => {
+const Radio = ({ handleChange, box, value, name, checked, label, text, image }) => {
+  const handleRadioChange = (e, valueTarget) => {
     if (handleChange) {
-      if (value) {
-        handleChange(e, { value })
+      if (valueTarget) {
+        handleChange(e, { valueTarget })
         return
       }
       handleChange(e, { value: e.target.value })
-      return
     }
-    return
   }
+
   return (
     <RadioItem box={box} checked={checked} onClick={e => handleRadioChange(e, value)}>
       <RadioStyled>
@@ -107,7 +113,7 @@ const Radio = ({ handleChange, box, value, name, checked, label, text, image, ..
       </RadioStyled>
 
       {box && (
-        <RadioContent>
+        <RadioContent image={image}>
           {text && <RadioText>{text}</RadioText>}
           {image && <ImageStyled src={image} />}
         </RadioContent>
@@ -117,11 +123,25 @@ const Radio = ({ handleChange, box, value, name, checked, label, text, image, ..
 }
 
 Radio.defaultProps = {
-  children: null
+  // handleChange: () => {},
+  // box: false,
+  // value: '',
+  // name: '',
+  checked: false
+  // label: '',
+  // text: '',
+  // image: ''
 }
 
 Radio.propTypes = {
-  children: PropTypes.element
+  handleChange: PropTypes.func,
+  box: PropTypes.bool,
+  value: PropTypes.string,
+  name: PropTypes.string,
+  checked: PropTypes.bool,
+  label: PropTypes.string,
+  text: PropTypes.string,
+  image: PropTypes.string
 }
 
 export default memo(Radio, (prevProps, nextProps) => {

@@ -1,4 +1,5 @@
 import React from 'react'
+import PropTypes from 'prop-types'
 import styled from 'styled-components'
 import { withFormik } from 'formik'
 import * as Yup from 'yup'
@@ -144,5 +145,8 @@ const formik = {
   enableReinitialize: true
 }
 
+SpecificationTab.propTypes = {
+  ...withFormik.propTypes
+}
 
 export default withFormik(formik)(SpecificationTab)

@@ -7,8 +7,8 @@ const GridStyled = styled(GridImported)`
   width: ${props => props.width};
 `
 
-const Grid = props => {
-  return <GridStyled {...props}>{props.children}</GridStyled>
+const Grid = ({ children, ...props }) => {
+  return <GridStyled {...props}>{children}</GridStyled>
 }
 
 Grid.defaultProps = {
