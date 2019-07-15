@@ -17,6 +17,9 @@ import Select from './Select'
 import TextArea from './TextArea'
 import { Radio, RadioGroup } from './Radio'
 import { Grid, Cell } from './Grid'
+import TimeTable from './TimeTable'
+import Switch from './Switch'
+import TimePicker from './TimePicker'
 
 export {
   Modal,
@@ -40,5 +43,8 @@ export {
   Radio,
   RadioGroup,
   Grid,
-  Cell
+  Cell,
+  TimeTable,
+  Switch,
+  TimePicker
 }
