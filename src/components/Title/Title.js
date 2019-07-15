@@ -61,8 +61,8 @@ const SubtitleStyled = styled.p`
 const Title = ({ type, title, subtitle, subTitleSize, noMargin, right, center, ...props }) => {
   if (type === 'h1') {
     return (
-      <TitleStyled className={props.className}>
-        <H1Styled noMargin={noMargin} right={right} center={center} {...props}>
+      <TitleStyled className={props.className} noMargin={noMargin}>
+        <H1Styled  right={right} center={center} {...props}>
           {title}
         </H1Styled>
         <SubtitleStyled subTitleSize={subTitleSize}>{subtitle}</SubtitleStyled>
@@ -71,8 +71,8 @@ const Title = ({ type, title, subtitle, subTitleSize, noMargin, right, center, .
   }
   if (type === 'h2') {
     return (
-      <TitleStyled className={props.className}>
-        <H2Styled noMargin={noMargin} right={right} center={center} {...props}>
+      <TitleStyled className={props.className} noMargin={noMargin}>
+        <H2Styled  right={right} center={center} {...props}>
           {title}
         </H2Styled>
         <SubtitleStyled subTitleSize={subTitleSize}>{subtitle}</SubtitleStyled>
@@ -81,8 +81,8 @@ const Title = ({ type, title, subtitle, subTitleSize, noMargin, right, center, .
   }
   if (type === 'h3') {
     return (
-      <TitleStyled className={props.className}>
-        <H3Styled noMargin={noMargin} right={right} center={center} {...props}>
+      <TitleStyled className={props.className} noMargin={noMargin}>
+        <H3Styled right={right} center={center} {...props}>
           {title}
         </H3Styled>
         <SubtitleStyled subTitleSize={subTitleSize}>{subtitle}</SubtitleStyled>
@@ -91,8 +91,8 @@ const Title = ({ type, title, subtitle, subTitleSize, noMargin, right, center, .
   }
   if (type === 'h4') {
     return (
-      <TitleStyled className={props.className}>
-        <H4Styled noMargin={noMargin} right={right} center={center} {...props}>
+      <TitleStyled className={props.className} noMargin={noMargin}>
+        <H4Styled  right={right} center={center} {...props}>
           {title}
         </H4Styled>
         <SubtitleStyled subTitleSize={subTitleSize}>{subtitle}</SubtitleStyled>
@@ -101,8 +101,8 @@ const Title = ({ type, title, subtitle, subTitleSize, noMargin, right, center, .
   }
   if (type === 'h5') {
     return (
-      <TitleStyled className={props.className}>
-        <H5Styled noMargin={noMargin} right={right} center={center} {...props}>
+      <TitleStyled className={props.className} noMargin={noMargin}>
+        <H5Styled  right={right} center={center} {...props}>
           {title}
         </H5Styled>
         <SubtitleStyled subTitleSize={subTitleSize}>{subtitle}</SubtitleStyled>
@@ -111,8 +111,8 @@ const Title = ({ type, title, subtitle, subTitleSize, noMargin, right, center, .
   }
   if (type === 'h6') {
     return (
-      <TitleStyled className={props.className}>
-        <H6Styled noMargin={noMargin} right={right} center={center} {...props}>
+      <TitleStyled className={props.className} noMargin={noMargin}>
+        <H6Styled  right={right} center={center} {...props}>
           {title}
         </H6Styled>
         <SubtitleStyled subTitleSize={subTitleSize}>{subtitle}</SubtitleStyled>
@@ -120,8 +120,8 @@ const Title = ({ type, title, subtitle, subTitleSize, noMargin, right, center, .
     )
   }
   return (
-    <TitleStyled className={props.className}>
-      <H1Styled noMargin={noMargin} right={right} center={center} {...props}>
+    <TitleStyled className={props.className} noMargin={noMargin}>
+      <H1Styled  right={right} center={center} {...props}>
         {title}
       </H1Styled>
       <SubtitleStyled subTitleSize={subTitleSize}>{subtitle}</SubtitleStyled>
