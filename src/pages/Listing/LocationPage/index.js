@@ -12,7 +12,7 @@ import {
   AutoComplete
 } from 'components'
 
-import { onGetOrCreateLocation } from 'redux/ducks/location'
+import * as actions from 'redux/ducks/location'
 
 const GroupInput = styled.div`
   display: grid;
@@ -52,7 +52,7 @@ const LocationPage = props => {
   }
 
   const _onNext = () => {
-    dispatch(onGetOrCreateLocation(address))
+    dispatch(actions.onGetOrCreateLocation(address))
   }
 
   if (isLoading) return <div>Loading...</div>

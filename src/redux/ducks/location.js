@@ -1,3 +1,7 @@
+import { gql } from 'apollo-boost'
+
+import { getClient } from 'graphql/apolloClient'
+
 // Actions
 export const Types = {
   GET_OR_CREATE_START: 'GET_OR_CREATE_START',
@@ -15,6 +19,30 @@ const initialState = {
     location: null
   }
 }
+
+// GraphQL
+const mutationGetOrCreateLocation = gql`
+  mutation getOrCreateLocation($suggestAddress: String!) {
+    getOrCreateLocation(
+      suggestAddress: $suggestAddress
+      userId: "c4c77350-6c80-11e9-bfb6-55a34828950d"
+    ) {
+      id
+      userId
+      country
+      address1
+      address2
+      buildingName
+      city
+      state
+      zipcode
+      lat
+      lng
+      createdAt
+      updatedAt
+    }
+  }
+`
 
 // Reducer
 export default function reducer(state = initialState, action) {
@@ -68,7 +96,15 @@ const getOrCreateError = error => {
 }
 
 // Side Effects
-export const onGetOrCreateLocation = suggestAddress => dispatch => {
+export const onGetOrCreateLocation = suggestAddress => async dispatch => {
   dispatch(getOrCreateStart())
-  setTimeout(() => dispatch(getOrCreateSuccess({})), 5000)
+  try {
+    const { data } = await getClient().mutate({
+      mutation: mutationGetOrCreateLocation,
+      variables: { suggestAddress }
+    })
+    dispatch(getOrCreateSuccess(data.getOrCreateLocation))
+  } catch (err) {
+    dispatch(getOrCreateError(err))
+  }
 }
