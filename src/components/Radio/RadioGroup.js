@@ -1,5 +1,5 @@
 import React from 'react'
-import { Grid, Cell } from 'styled-css-grid'
+import { Grid, Cell } from 'components'
 
 const RadioGroup = ({ children }) => {
   return (
