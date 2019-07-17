@@ -1,6 +1,7 @@
 import { gql } from 'apollo-boost'
 
-import { getClient } from 'graphql/apolloClient'
+import { getClientWithAuth } from 'graphql/apolloClient'
+import errToMsg from 'utils/errToMsg'
 
 // Actions
 export const Types = {
@@ -23,10 +24,7 @@ const initialState = {
 // GraphQL
 const mutationGetOrCreateLocation = gql`
   mutation getOrCreateLocation($suggestAddress: String!) {
-    getOrCreateLocation(
-      suggestAddress: $suggestAddress
-      userId: "c4c77350-6c80-11e9-bfb6-55a34828950d"
-    ) {
+    getOrCreateLocation(suggestAddress: $suggestAddress) {
       id
       userId
       country
@@ -99,12 +97,12 @@ const getOrCreateError = error => {
 export const onGetOrCreateLocation = suggestAddress => async dispatch => {
   dispatch(getOrCreateStart())
   try {
-    const { data } = await getClient().mutate({
+    const { data } = await getClientWithAuth().mutate({
       mutation: mutationGetOrCreateLocation,
       variables: { suggestAddress }
     })
     dispatch(getOrCreateSuccess(data.getOrCreateLocation))
   } catch (err) {
-    dispatch(getOrCreateError(err))
+    dispatch(getOrCreateError(errToMsg(err)))
   }
 }

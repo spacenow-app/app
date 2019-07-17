@@ -1,13 +1,20 @@
+/* eslint-disable no-console */
 import ApolloClient from 'apollo-boost'
 
-let apolloClient = null
+import config from 'contants/config'
+
+import getCookieByName from 'utils/getCookieByName'
+
+export const getClientWithAuth = () => {
+  console.info('Creating a new connection with Authentication to Apollo GraphQL.')
+  const idToken = getCookieByName('id_token')
+  return new ApolloClient({
+    uri: config.graphQlHost,
+    headers: { authorization: idToken ? `Bearer ${idToken}` : '' }
+  })
+}
 
 export const getClient = () => {
-  if (apolloClient === null) {
-    console.info('Creating a new connection to Apollo GraphQL.')
-    apolloClient = new ApolloClient({
-      uri: 'http://localhost:4000/graphql'
-    })
-  }
-  return apolloClient
+  console.info('Creating a new connection to Apollo GraphQL.')
+  return new ApolloClient({ uri: config.graphQlHost })
 }
