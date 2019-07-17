@@ -6,6 +6,7 @@ const IntroPage = lazy(() => import('pages/Listing/IntroPage'))
 const LocationPage = lazy(() => import('pages/Listing/LocationPage'))
 const CategoryPage = lazy(() => import('pages/Listing/CategoryPage'))
 const SpacePage = lazy(() => import('pages/Listing/SpacePage'))
+const PreviewPage = lazy(() => import('pages/Listing/PreviewPage'))
 const NotFoundPage = lazy(() => import('pages/NotFoundPage'))
 
 const Listing = ({ match, ...props }) => {
@@ -17,7 +18,7 @@ const Listing = ({ match, ...props }) => {
         <Route exact component={LocationPage} path={`${match.path}/location`} />
         <Route exact component={CategoryPage} path={`${match.path}/category`} />
         <Route component={SpacePage} path={`${match.path}/space/:id`} />
-        <Route exact component={() => <h1>Prview</h1>} path={`${match.path}/preview/:id`} />
+        <Route exact component={PreviewPage} path={`${match.path}/preview/:id`} />
         <Route component={NotFoundPage} />
       </Switch>
     </Suspense>
