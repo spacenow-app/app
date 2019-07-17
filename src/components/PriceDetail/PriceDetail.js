@@ -1,7 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import styled from 'styled-components'
-import _ from 'lodash'
 
 const WrapperStyled = styled.div`
   display: grid;
@@ -41,34 +40,40 @@ const RightStyled = styled.span`
   font-weight: 700;
 `
 
-const PriceDetail = props => (
+const PriceDetail = ({
+  currency,
+  currencySymbol,
+  price,
+  totalDays,
+  periodLabel,
+  days,
+  quantity,
+  guestServiceFee,
+  total,
+  ...props
+}) => (
   <WrapperStyled>
     <ContentStyled>
       <LeftTitleStyled>Description</LeftTitleStyled>
-      <RightTitleStyled>Value ({`${props.currency} ${props.currencySymbol}`})</RightTitleStyled>
+      <RightTitleStyled>Value ({`${currency} ${currencySymbol}`})</RightTitleStyled>
     </ContentStyled>
     <ContentStyled>
-      <LeftStyled>{`${props.currency} ${props.currencySymbol} ${props.price.toFixed(2)} x ${props.days} ${
-        props.periodLabel
-      }`}</LeftStyled>
-      <RightStyled>{`${props.currency} ${props.currencySymbol}${props.totalDays.toFixed(2)}`}</RightStyled>
+      <LeftStyled>{`${currency} ${currencySymbol} ${price.toFixed(2)} x ${days} ${periodLabel}`}</LeftStyled>
+      <RightStyled>{`${currency} ${currencySymbol}${totalDays.toFixed(2)}`}</RightStyled>
     </ContentStyled>
     <ContentStyled>
-      <LeftStyled>Quantity x{props.quantity}</LeftStyled>
-      <RightStyled>{`${props.currency} ${props.currencySymbol}${props.totalDays.toFixed(2)}`}</RightStyled>
+      <LeftStyled>Quantity x{quantity}</LeftStyled>
+      <RightStyled>{`${currency} ${currencySymbol}${totalDays.toFixed(2)}`}</RightStyled>
     </ContentStyled>
     <ContentStyled>
       <LeftStyled>Service fee</LeftStyled>
-      <RightStyled>{`${props.currency} ${props.currencySymbol}${(
-        props.price *
-        props.days *
-        props.quantity *
-        props.guestServiceFee
-      ).toFixed(2)}`}</RightStyled>
+      <RightStyled>{`${currency} ${currencySymbol}${(price * days * quantity * guestServiceFee).toFixed(
+        2
+      )}`}</RightStyled>
     </ContentStyled>
     <ContentStyled>
       <LeftStyled>Total</LeftStyled>
-      <RightStyled>{`${props.currency} ${props.currencySymbol}${props.total.toFixed(2)}`}</RightStyled>
+      <RightStyled>{`${currency} ${currencySymbol}${total.toFixed(2)}`}</RightStyled>
     </ContentStyled>
   </WrapperStyled>
 )

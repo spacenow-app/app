@@ -1,24 +1,8 @@
 import React from 'react'
 import { storiesOf } from '@storybook/react'
+import { action } from '@storybook/addon-actions'
 import PriceDetail from './PriceDetail'
 
-const arrayMock = [
-  {
-    name: 'AUD $182.84 x 9 days',
-    value: 'Quantity x10'
-  },
-  {
-    name: 'Quantity x10',
-    value: 'AUD $112.80'
-  },
-  {
-    name: 'Service fee',
-    value: 'AUD $478.49'
-  },
-  {
-    name: 'Total',
-    value: 'AUD $478.49'
-  }
-]
-
-storiesOf('PriceDetail', module).add('Default', () => <PriceDetail list={arrayMock} />)
+storiesOf('PriceDetail', module).add('Default', () => (
+  <PriceDetail onClick={action('clicked')}>Hello PriceDetail</PriceDetail>
+))
