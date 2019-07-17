@@ -28,7 +28,6 @@ const SpecificationTab = props => {
   const { values, touched, errors, handleChange, handleBlur, handleSubmit } = props
   return (
     <form onSubmit={handleSubmit}>
-      <button type="submit">tete</button>
       <WrapperStyled>
         <SectionStyled>
           <Title
