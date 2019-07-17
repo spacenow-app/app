@@ -2,7 +2,6 @@
 // import setAuthorizationHeader from 'utils/setAuthorizationHeader'
 
 // Action Types
-
 export const Types = {
   AUTH_REQUEST: 'AUTH_REQUEST',
   AUTH_SUCCESS: 'AUTH_SUCCESS',
@@ -60,7 +59,6 @@ export default function reducer(state = initialState, action) {
 }
 
 // Action Creators
-
 function loginError(error) {
   return {
     type: Types.AUTH_FAILURE,
@@ -107,7 +105,7 @@ export const loginWithToken = () => async dispatch => {
   } catch (error) {
     window.localStorage.removeItem('xcllusiveJWT')
     // setAuthorizationHeader()
-    dispatch(loginError(null))
+    dispatch(loginError(error))
   }
 }
 
@@ -118,6 +116,6 @@ export const logout = (user, error = null) => async dispatch => {
     // setAuthorizationHeader()
     // dispatch(userLogout(error))
   } catch (error) {
-    dispatch(loginError(null))
+    dispatch(loginError(error))
   }
 }
