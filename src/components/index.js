@@ -20,6 +20,9 @@ import { Grid, Cell } from './Grid'
 import TimeTable from './TimeTable'
 import Switch from './Switch'
 import TimePicker from './TimePicker'
+import Calendar from './Calendar'
+import PriceDetail from './PriceDetail'
+import SubTitle from './SubTitle'
 
 export {
   Modal,
@@ -46,5 +49,8 @@ export {
   Cell,
   TimeTable,
   Switch,
-  TimePicker
+  TimePicker,
+  Calendar,
+  PriceDetail,
+  SubTitle
 }
