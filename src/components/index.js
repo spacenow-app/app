@@ -22,7 +22,7 @@ import Switch from './Switch'
 import TimePicker from './TimePicker'
 import Calendar from './Calendar'
 import PriceDetail from './PriceDetail'
-import SubTitle from './SubTitle'
+import Subtitle from './Subtitle'
 
 export {
   Modal,
@@ -52,5 +52,5 @@ export {
   TimePicker,
   Calendar,
   PriceDetail,
-  SubTitle
+  Subtitle
 }

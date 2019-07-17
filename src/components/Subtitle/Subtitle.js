@@ -36,7 +36,7 @@ const ExtraSmallBold = styled.div`
   ${baseStyle};
 `
 
-const SubTitle = props => {
+const Subtitle = props => {
   switch (props.type) {
     case 'large':
       return <Large>{props.children}</Large>
@@ -53,13 +53,13 @@ const SubTitle = props => {
   }
 }
 
-SubTitle.defaultProps = {
+Subtitle.defaultProps = {
   type: 'medium'
 }
 
-SubTitle.propTypes = {
+Subtitle.propTypes = {
   children: PropTypes.string.isRequired,
   type: PropTypes.oneOf(['large', 'medium', 'small', 'xSmall', 'xSmallBold'])
 }
 
-export default SubTitle
+export default Subtitle
