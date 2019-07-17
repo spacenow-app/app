@@ -4,7 +4,7 @@ import styled, { css } from 'styled-components'
 
 const baseStyle = css`
   font-family: 'Montserrat-Regular';
-  color: #707070;
+  color: ${({ color }) => color || '#707070'};
 `
 
 const Large = styled.div`
@@ -36,7 +36,7 @@ const ExtraSmallBold = styled.div`
   ${baseStyle};
 `
 
-const Subtitle = props => {
+const SubTitle = props => {
   switch (props.type) {
     case 'large':
       return <Large>{props.children}</Large>
@@ -53,13 +53,13 @@ const Subtitle = props => {
   }
 }
 
-Subtitle.defaultProps = {
+SubTitle.defaultProps = {
   type: 'medium'
 }
 
-Subtitle.propTypes = {
+SubTitle.propTypes = {
   children: PropTypes.string.isRequired,
   type: PropTypes.oneOf(['large', 'medium', 'small', 'xSmall', 'xSmallBold'])
 }
 
-export default Subtitle
+export default SubTitle
