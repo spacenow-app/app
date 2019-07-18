@@ -4,7 +4,6 @@ import { Route, Redirect } from 'react-router-dom'
 
 const PrivateRoute = ({ handlerCheckAuthentication, isAuthenticated, component: Component, location, ...rest }) => {
   useEffect(() => {
-    console.log('Enter Private Route')
     handlerCheckAuthentication()
   })
   return (

@@ -17,7 +17,6 @@ const Routes = props => {
   const isAppLoading = useSelector(state => state.system.isAppLoading)
 
   const _handlerCheckAuthentication = () => {
-    console.log('Handler Routes')
     dispatch(actions.onTokenValidation())
   }
 

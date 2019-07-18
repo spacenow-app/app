@@ -1,5 +1,5 @@
 import React from 'react'
-import { Grid, Cell } from 'components'
+import { Grid } from 'components'
 
 const RadioGroup = ({ children }) => {
   return (

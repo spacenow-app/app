@@ -4,7 +4,6 @@ import { Route, Redirect } from 'react-router-dom'
 
 const PublicRoute = ({ handlerCheckAuthentication, isAuthenticated, component: Component, ...rest }) => {
   useEffect(() => {
-    console.log('Enter Public Route')
     handlerCheckAuthentication()
   })
   return <Route {...rest} render={props => (!isAuthenticated ? <Component {...props} /> : <Redirect to="/" />)} />

@@ -1,6 +1,6 @@
 import React from 'react'
 import styled from 'styled-components'
-import { Title, Select, Input, Caption, Radio, Grid, Cell } from 'components'
+import { Title, Grid, Cell } from 'components'
 
 import GraphCancelattionImage from './graph_cancellation.png'
 
