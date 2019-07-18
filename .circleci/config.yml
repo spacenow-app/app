@@ -67,14 +67,10 @@ jobs:
       - run: sudo curl -O https://bootstrap.pypa.io/get-pip.py
       - run: sudo python get-pip.py
       - run: sudo pip install awscli --upgrade
-      - run: aws --version
-      - run: aws s3 ls
       - run:
           name: 'Deploy to S3'
           command: |
-            . venv/bin/activate
             export ACCOUNT_ID=159220020591
-            chmod +x ./scripts/assume-role.sh
             source ./scripts/assume-role.sh
             aws s3 sync dist/ s3://$AWS_BUCKET --delete --region $AWS_REGION
 
