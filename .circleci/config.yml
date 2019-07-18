@@ -73,8 +73,8 @@ jobs:
           name: 'Deploy to S3'
           command: |
             export ACCOUNT_ID=159220020591
-            chmod +x scripts/assume-role.sh
-            source scripts/assume-role.sh
+            chmod +x ./scripts/assume-role.sh
+            source ./scripts/assume-role.sh
             aws s3 sync dist/ s3://$AWS_BUCKET --delete --region $AWS_REGION
 
 workflows:
