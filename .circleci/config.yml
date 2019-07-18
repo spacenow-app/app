@@ -1,108 +1,98 @@
+defaults: &defaults
+  working_directory: ~/repo
+  docker:
+    - image: circleci/node:10.16.0
 version: 2
 jobs:
-  build:
-    docker:
-      - image: circleci/node:10.16.0
-    working_directory: ~/repo
+  checkout_code:
+    <<: *defaults
     steps:
-      - checkout
-      - setup_remote_docker
       - restore_cache:
           keys:
-            - v1-dependencies-{{ checksum "yarn.lock" }}
-            # fallback to using the latest cache if no exact match is found
-            - v1-dependencies-
-      - run:
-          name: Install Dependencies
-          command: yarn
-      - save_cache:
-          name: Save Yarn Package Cache
-          paths:
-            - ~/.cache/yarn
-          key: v1-dependencies-{{ checksum "yarn.lock" }}
-      - run:
-          name: Set convenience environment variables
-          command: |
-            echo 'export ECR_REPOSITORY_NAME="${AWS_RESOURCE_NAME_PREFIX}"' >> $BASH_ENV
-            echo 'export APP_SLICE="$(echo ${CIRCLE_BRANCH} | tr -dc '[:alnum:]\n\r' | tr '[:upper:]' '[:lower:]' )"' >> $BASH_ENV
-            echo 'export IMAGE_TAG="${APP_SLICE}-$(echo $CIRCLE_SHA1 | cut -c -7)"' >> $BASH_ENV
-            echo 'export FULL_IMAGE_NAME="${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_DEFAULT_REGION}.amazonaws.com/${ECR_REPOSITORY_NAME}:${IMAGE_TAG}"' >> $BASH_ENV
-      - run:
-          name: Build Production Docker
-          command: |
-            docker build -t $FULL_IMAGE_NAME .
-      - run:
-          name: Save image to an archive
-          command: |
-            mkdir docker-image
-            docker save -o docker-image/image.tar $FULL_IMAGE_NAME
-      - persist_to_workspace:
-          root: .
-          paths:
-            - docker-image
-            - scripts
+            - source-{{ .Branch }}-{{ .Revision }}
+            - source-{{ .Branch }}-
+            - source-
 
-  deploy-dev:
-    docker:
-      - image: circleci/python:3.6.1
-    environment:
-      AWS_DEFAULT_OUTPUT: json
-      TARGET_ENV: SANDPIT
-      STACK_NAME: ${CIRCLE_BRANCH}
-    steps:
-      - setup_remote_docker
-      - attach_workspace:
-          at: .
-      - restore_cache:
-          key: v1-awscli
-      - run:
-          name: Install awscli
-          command: |
-            python3 -m venv venv
-            . venv/bin/activate
-            pip install awscli
+      - checkout
+
       - save_cache:
-          key: v1-awscli
+          key: source-{{ .Branch }}-{{ .Revision }}
           paths:
-            - "venv"
+            - '~/repo'
+  install:
+    <<: *defaults
+    steps:
+      - restore_cache:
+          key: source-{{ .Branch }}-{{ .Revision }}
+      - restore_cache:
+          key: dependency-cache-{{ checksum "package.json" }}
       - run:
-          name: Load image
-          command: |
-            docker load --input docker-image/image.tar
+          name: 'Yarn install'
+          command: yarn install
+      - save_cache:
+          key: dependency-cache-{{ checksum "package.json" }}
+          paths:
+            - node_modules
+  test:
+    <<: *defaults
+    steps:
+      - restore_cache:
+          key: source-{{ .Branch }}-{{ .Revision }}
+      - restore_cache:
+          key: dependency-cache-{{ checksum "package.json" }}
       - run:
-          name: Setup common environment variables
-          command: |
-            echo 'export ECR_REPOSITORY_NAME="${AWS_RESOURCE_NAME_PREFIX}"' >> $BASH_ENV
-            echo 'export APP_SLICE="$(echo ${CIRCLE_BRANCH} | tr -dc '[:alnum:]\n\r' | tr '[:upper:]' '[:lower:]' )"' >> $BASH_ENV
-            echo 'export IMAGE_TAG="${APP_SLICE}-$(echo $CIRCLE_SHA1 | cut -c -7)"' >> $BASH_ENV
-            echo 'export FULL_IMAGE_NAME="${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_DEFAULT_REGION}.amazonaws.com/${ECR_REPOSITORY_NAME}:${IMAGE_TAG}"' >> $BASH_ENV
+          name: 'Test'
+          command: npm run test
+  build:
+    <<: *defaults
+    steps:
+      - restore_cache:
+          key: source-{{ .Branch }}-{{ .Revision }}
+      - restore_cache:
+          key: dependency-cache-{{ checksum "package.json" }}
       - run:
-          name: Push image
-          command: |
-            . venv/bin/activate
-            eval $(aws ecr get-login --region $AWS_DEFAULT_REGION --no-include-email)
-            docker push ${FULL_IMAGE_NAME}
-            if [ "${CIRCLE_BRANCH}" = "master" ]; then
-              docker tag  ${FULL_IMAGE_NAME} "${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_DEFAULT_REGION}.amazonaws.com/${ECR_REPOSITORY_NAME}:latest"
-              docker push "${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_DEFAULT_REGION}.amazonaws.com/${ECR_REPOSITORY_NAME}:latest"
-            fi
+          name: 'Build app'
+          command: npm run build
+      - persist_to_workspace:
+          root: ~/repo
+          paths:
+            - dist
+            - package.json
+  deploy:
+    <<: *defaults
+    environment:
+      - AWS_BUCKET: AWS_BUCKET
+      - STAGING_DISTRIBUTION_ID: YOUR_STAGING_DISTRIBUTION_ID
+    steps:
+      - attach_workspace:
+          at: ~/repo
+      - run: sudo apt-get update && sudo apt-get install -y python-dev
+      - run: sudo curl -O https://bootstrap.pypa.io/get-pip.py
+      - run: sudo python get-pip.py
+      - run: sudo pip install awscli --upgrade
+      - run: aws --version
+      - run: aws s3 ls
       - run:
-          name: Deploy
+          name: 'Deploy to S3'
           command: |
-            . venv/bin/activate
-            export ACCOUNT_ID=159220020591 #SANDPIT Account
-            source scripts/assume-role.sh
-            ./scripts/deploy.sh $AWS_DEFAULT_REGION ${TARGET_ENV} ${FULL_IMAGE_NAME} ${APP_SLICE}
-          no_output_timeout: 15m
+            aws s3 sync dist/ s3://${AWS_BUCKET} --delete
+            aws cloudfront create-invalidation --distribution-id "${STAGING_DISTREBUTION_ID}" --paths /index.html
+
 workflows:
   version: 2
-  build-deploy:
+  build_and_test:
     jobs:
-      - build:
-          filters:
-            branches:
-              only:
-                - master
-      - deploy-dev:
+      - checkout_code
+      - install:
           requires:
+            - checkout_code
+      - test:
+          requires:
+            - install
+      - build:
+          requires:
+            - install
+      - deploy:
+          requires:
+            - test
             - build
