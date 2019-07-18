@@ -60,9 +60,6 @@ jobs:
             - package.json
   deploy:
     <<: *defaults
-    environment:
-      - AWS_BUCKET: AWS_BUCKET
-      - AWS_DEFAULT_REGION: AWS_DEFAULT_REGION
     steps:
       - attach_workspace:
           at: ~/repo
@@ -75,8 +72,9 @@ jobs:
       - run:
           name: 'Deploy to S3'
           command: |
+            export ACCOUNT_ID=159220020591
             source scripts/assume-role.sh
-            aws s3 sync dist/ s3://${AWS_BUCKET} --delete --region ${AWS_DEFAULT_REGION}
+            aws s3 sync dist/ s3://$AWS_BUCKET --delete --region $AWS_DEFAULT_REGION
 
 workflows:
   version: 2
@@ -86,9 +84,9 @@ workflows:
       - install:
           requires:
             - checkout_code
-      - test:
-          requires:
-            - install
+      # - test:
+      #     requires:
+      #       - install
       - build:
           requires:
             - install
