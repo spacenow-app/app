@@ -28,21 +28,21 @@ jobs:
           key: dependency-cache-{{ checksum "package.json" }}
       - run:
           name: 'Yarn install'
-          command: yarn install
+          command: yarn
       - save_cache:
           key: dependency-cache-{{ checksum "package.json" }}
           paths:
             - node_modules
-  test:
-    <<: *defaults
-    steps:
-      - restore_cache:
-          key: source-{{ .Branch }}-{{ .Revision }}
-      - restore_cache:
-          key: dependency-cache-{{ checksum "package.json" }}
-      - run:
-          name: 'Test'
-          command: npm run test
+  # test:
+  #   <<: *defaults
+  #   steps:
+  #     - restore_cache:
+  #         key: source-{{ .Branch }}-{{ .Revision }}
+  #     - restore_cache:
+  #         key: dependency-cache-{{ checksum "package.json" }}
+  #     - run:
+  #         name: 'Test'
+  #         command: npm run test
   build:
     <<: *defaults
     steps:
@@ -52,7 +52,7 @@ jobs:
           key: dependency-cache-{{ checksum "package.json" }}
       - run:
           name: 'Build app'
-          command: npm run build
+          command: yarn build
       - persist_to_workspace:
           root: ~/repo
           paths:
@@ -62,7 +62,6 @@ jobs:
     <<: *defaults
     environment:
       - AWS_BUCKET: AWS_BUCKET
-      - STAGING_DISTRIBUTION_ID: YOUR_STAGING_DISTRIBUTION_ID
     steps:
       - attach_workspace:
           at: ~/repo
@@ -76,7 +75,6 @@ jobs:
           name: 'Deploy to S3'
           command: |
             aws s3 sync dist/ s3://${AWS_BUCKET} --delete
-            aws cloudfront create-invalidation --distribution-id "${STAGING_DISTREBUTION_ID}" --paths /index.html
 
 workflows:
   version: 2
@@ -94,5 +92,5 @@ workflows:
             - install
       - deploy:
           requires:
-            - test
+            # - test
             - build
