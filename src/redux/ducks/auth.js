@@ -1,5 +1,12 @@
+/* eslint-disable no-console */
 // import { login as loginApi, loginWithToken as loginWithTokenApi, logoutApi } from 'services/api/auth'
 // import setAuthorizationHeader from 'utils/setAuthorizationHeader'
+import { gql } from 'apollo-boost'
+
+import errToMsg from 'utils/errToMsg'
+
+import { getClient } from 'graphql/apolloClient'
+import getCookieByName from 'utils/getCookieByName'
 
 // Action Types
 export const Types = {
@@ -7,20 +14,31 @@ export const Types = {
   AUTH_SUCCESS: 'AUTH_SUCCESS',
   AUTH_FAILURE: 'AUTH_FAILURE',
   AUTH_CLEAN_ERROR: 'AUTH_CLEAN_ERROR',
-  AUTH_LOGOUT: 'AUTH_LOGOUT'
+  AUTH_LOGOUT: 'AUTH_LOGOUT',
+  AUTH_2019_SUCCESS: 'AUTH_2019_SUCCESS',
+  AUTH_2019_FAILED: 'AUTH_2019_FAILED'
 }
 
 // Reducer
 const initialState = {
   error: null,
   user: null,
-  isAuthenticated: true,
+  isAuthenticated: false,
   isAppLoading: true,
   isLoading: false
 }
 
 export default function reducer(state = initialState, action) {
   switch (action.type) {
+    case Types.AUTH_2019_SUCCESS:
+      return {
+        ...state,
+        isAuthenticated: true
+      }
+    case Types.AUTH_2019_FAILED:
+      return {
+        ...initialState
+      }
     case Types.AUTH_SUCCESS:
       return {
         ...state,
@@ -86,6 +104,37 @@ export const userLogout = error => ({
   payload: error
 })
 
+const authentication2019Success = () => ({ type: Types.AUTH_2019_SUCCESS })
+
+const authentication2019Failed = () => ({ type: Types.AUTH_2019_FAILED })
+
+export const onTokenValidation = () => async dispatch => {
+  try {
+    const idToken = getCookieByName('id_token')
+    console.log(idToken)
+    if (idToken) {
+      const { data } = await getClient().mutate({
+        variables: { token: idToken },
+        mutation: gql`
+          mutation tokenValidate($token: String!) {
+            tokenValidate(token: $token) {
+              status
+            }
+          }
+        `
+      })
+      if (data && data.tokenValidate) {
+        if (data.tokenValidate.status && data.tokenValidate.status === 'OK') {
+          return dispatch(authentication2019Success())
+        }
+      }
+    }
+    return dispatch(authentication2019Failed())
+  } catch (err) {
+    return dispatch(authentication2019Failed())
+  }
+}
+
 export const login = (email, password) => async dispatch => {
   dispatch(loginLoading(true))
   try {
@@ -93,8 +142,8 @@ export const login = (email, password) => async dispatch => {
     // window.localStorage.xcllusiveJWT = response.accessToken
     // setAuthorizationHeader(response.accessToken)
     // dispatch(loginSuccess(response.user))
-  } catch (error) {
-    dispatch(loginError(error.message))
+  } catch (err) {
+    dispatch(loginError(err.message))
   }
 }
 
@@ -102,10 +151,10 @@ export const loginWithToken = () => async dispatch => {
   try {
     // const response = await loginWithTokenApi()
     // dispatch(loginSuccess(response.user))
-  } catch (error) {
+  } catch (err) {
     window.localStorage.removeItem('xcllusiveJWT')
     // setAuthorizationHeader()
-    dispatch(loginError(error))
+    dispatch(loginError(err))
   }
 }
 
@@ -115,7 +164,7 @@ export const logout = (user, error = null) => async dispatch => {
     // window.localStorage.removeItem('xcllusiveJWT')
     // setAuthorizationHeader()
     // dispatch(userLogout(error))
-  } catch (error) {
-    dispatch(loginError(error))
+  } catch (err) {
+    dispatch(loginError(err))
   }
 }
