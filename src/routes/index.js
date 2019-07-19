@@ -1,9 +1,9 @@
-import React, { Suspense, lazy } from 'react'
+import React, { Suspense, lazy, useEffect } from 'react'
 import { BrowserRouter, Switch, Route } from 'react-router-dom'
 import { useSelector, useDispatch } from 'react-redux'
 import { NavBar } from 'components'
 
-import * as actions from 'redux/ducks/auth'
+import { onTokenValidation, onIsTokenExists } from 'redux/ducks/auth'
 import PrivateRoute from './PrivateRoute'
 import PublicRoute from './PublicRoute'
 
@@ -14,13 +14,15 @@ const Listing = lazy(() => import('routes/Listing'))
 const Routes = props => {
   const dispatch = useDispatch()
   const isAuthenticated = useSelector(state => state.auth.isAuthenticated)
-  const isAppLoading = useSelector(state => state.system.isAppLoading)
+  const isLoading = useSelector(state => state.auth.isLoading)
 
-  const _handlerCheckAuthentication = () => {
-    dispatch(actions.onTokenValidation())
-  }
+  const _handlerCheckAuthentication = () => dispatch(onIsTokenExists())
 
-  if (isAppLoading) {
+  useEffect(() => {
+    dispatch(onTokenValidation())
+  }, [dispatch, isAuthenticated])
+
+  if (isLoading) {
     return <div>Loading</div>
   }
 

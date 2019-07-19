@@ -1,6 +1,4 @@
 /* eslint-disable no-console */
-// import { login as loginApi, loginWithToken as loginWithTokenApi, logoutApi } from 'services/api/auth'
-// import setAuthorizationHeader from 'utils/setAuthorizationHeader'
 import { gql } from 'apollo-boost'
 
 import { getClient } from 'graphql/apolloClient'
@@ -13,6 +11,7 @@ export const Types = {
   AUTH_FAILURE: 'AUTH_FAILURE',
   AUTH_CLEAN_ERROR: 'AUTH_CLEAN_ERROR',
   AUTH_LOGOUT: 'AUTH_LOGOUT',
+  AUTH_2019_START: 'AUTH_2019_START',
   AUTH_2019_SUCCESS: 'AUTH_2019_SUCCESS',
   AUTH_2019_FAILED: 'AUTH_2019_FAILED'
 }
@@ -22,20 +21,34 @@ const initialState = {
   error: null,
   user: null,
   isAuthenticated: false,
-  isAppLoading: true,
-  isLoading: false
+  isLoading: true
 }
 
 export default function reducer(state = initialState, action) {
   switch (action.type) {
-    case Types.AUTH_2019_SUCCESS:
+    case Types.AUTH_2019_START:
       return {
         ...state,
-        isAuthenticated: true
+        isLoading: true
       }
+    case Types.AUTH_2019_SUCCESS: {
+      const userProfileObj = action.payload
+      return {
+        ...state,
+        isAuthenticated: true,
+        isLoading: false,
+        user: {
+          userId: userProfileObj.userId,
+          firstName: userProfileObj.firstName
+        }
+      }
+    }
     case Types.AUTH_2019_FAILED:
       return {
-        ...initialState
+        ...state,
+        isLoading: false,
+        isAuthenticated: false,
+        user: null
       }
     case Types.AUTH_SUCCESS:
       return {
@@ -47,16 +60,14 @@ export default function reducer(state = initialState, action) {
           roles: JSON.parse(action.payload.roles)
         },
         error: null,
-        isAuthenticated: true,
-        isAppLoading: false
+        isAuthenticated: true
       }
     case Types.AUTH_FAILURE:
       return {
         ...state,
         isLoading: false,
         isAuthenticated: false,
-        error: action.payload,
-        isAppLoading: false
+        error: action.payload
       }
     case Types.AUTH_CLEAN_ERROR:
       return {
@@ -66,7 +77,7 @@ export default function reducer(state = initialState, action) {
     case Types.AUTH_LOGOUT:
       return {
         ...initialState,
-        isAppLoading: false,
+        isLoading: false,
         error: action.payload
       }
     default:
@@ -102,11 +113,17 @@ export const userLogout = error => ({
   payload: error
 })
 
-const authentication2019Success = () => ({ type: Types.AUTH_2019_SUCCESS })
+const authentication2019Start = () => ({ type: Types.AUTH_2019_START })
+
+const authentication2019Success = userProfileObj => ({
+  type: Types.AUTH_2019_SUCCESS,
+  payload: userProfileObj
+})
 
 const authentication2019Failed = () => ({ type: Types.AUTH_2019_FAILED })
 
 export const onTokenValidation = () => async dispatch => {
+  dispatch(authentication2019Start())
   try {
     const idToken = getCookieByName('id_token')
     if (idToken) {
@@ -116,20 +133,28 @@ export const onTokenValidation = () => async dispatch => {
           mutation tokenValidate($token: String!) {
             tokenValidate(token: $token) {
               status
+              userId
+              firstName
             }
           }
         `
       })
       if (data && data.tokenValidate) {
         if (data.tokenValidate.status && data.tokenValidate.status === 'OK') {
-          return dispatch(authentication2019Success())
+          return dispatch(authentication2019Success(data.tokenValidate))
         }
       }
     }
     return dispatch(authentication2019Failed())
   } catch (err) {
+    console.error(err)
     return dispatch(authentication2019Failed())
   }
+}
+
+export const onIsTokenExists = () => dispatch => {
+  const idToken = getCookieByName('id_token')
+  if (!idToken || idToken.length <= 0) dispatch(authentication2019Failed())
 }
 
 export const login = (email, password) => async dispatch => {
