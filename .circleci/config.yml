@@ -71,7 +71,7 @@ jobs:
     <<: *defaults
     environment:
       - ACCOUNT_ID: 159220020591
-      - DISTRIBUTION_ID: E3O488TYXI70NY
+      - DISTRIBUTION_ID: EJBM66ARV7ZA9
     steps:
       - attach_workspace:
           at: ~/repo
