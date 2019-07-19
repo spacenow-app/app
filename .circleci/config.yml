@@ -2,6 +2,8 @@ defaults: &defaults
   working_directory: ~/repo
   docker:
     - image: circleci/node:10.16.0
+  environment:
+    SCRIPTS: /tmp/scripts
 version: 2
 jobs:
   checkout_code:
@@ -55,7 +57,9 @@ jobs:
           command: yarn build
       - run:
           name: 'Copy scripts'
-          command: cp ./scripts ./scripts
+          command: |
+            mkdir -p ${SCRIPTS}
+            cp ./scripts ${SCRIPTS}
       - persist_to_workspace:
           root: ~/repo
           paths:
