@@ -2,8 +2,6 @@ defaults: &defaults
   working_directory: ~/repo
   docker:
     - image: circleci/node:10.16.0
-  environment:
-    SCRIPTS: /tmp/scripts
 version: 2
 jobs:
   checkout_code:
@@ -45,6 +43,21 @@ jobs:
   #     - run:
   #         name: 'Test'
   #         command: npm run test
+  scripts:
+    <<: *defaults
+    steps:
+      - restore_cache:
+          key: source-{{ .Branch }}-{{ .Revision }}
+      - restore_cache:
+          key: dependency-cache-{{ checksum "package.json" }}
+      - run:
+          name: 'Copy scripts'
+          command: |
+            cp -v ./scripts ./scripts
+      - persist_to_workspace:
+          root: ~/repo
+          paths:
+            - scripts
   build:
     <<: *defaults
     steps:
@@ -55,16 +68,10 @@ jobs:
       - run:
           name: 'Build app'
           command: yarn build
-      - run:
-          name: 'Copy scripts'
-          command: |
-            mkdir -p ${SCRIPTS}
-            cp ./scripts ${SCRIPTS}
       - persist_to_workspace:
           root: ~/repo
           paths:
             - build
-            - scripts
             - package.json
   deploy:
     <<: *defaults
@@ -93,9 +100,12 @@ workflows:
       # - test:
       #     requires:
       #       - install
-      - build:
+      - scripts:
           requires:
             - install
+      - build:
+          requires:
+            - scripts
       - deploy:
           requires:
             # - test
