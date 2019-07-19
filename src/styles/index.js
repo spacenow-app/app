@@ -1,4 +1,4 @@
-import withTheme from './withTheme'
-import GlobalStyle from './global'
+import global from './global'
+import theme from './theme'
 
-export { withTheme, GlobalStyle }
+export { global, theme }

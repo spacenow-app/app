@@ -31,5 +31,5 @@ export default createGlobalStyle`
     @import url(${Boostrap});
   }
 }
-  
+
 `
