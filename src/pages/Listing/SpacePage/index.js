@@ -1,10 +1,10 @@
 import React from 'react'
 import { Switch, Route, Redirect } from 'react-router-dom'
+import { Wrapper, Tab, TabItem, StepButtons } from 'components'
 import CancellationTab from './CancellationTab'
 import BookingTab from './BookingTab'
 import SpecificationTab from './SpecificationTab'
 import AvailabilityTab from './AvailabilityTab'
-import { Wrapper, Tab, TabItem, StepButtons } from 'components'
 
 const SpacePage = ({ match, location, ...props }) => {
   return (

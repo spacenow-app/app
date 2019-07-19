@@ -15,12 +15,39 @@ const ItemSwitchStyled = styled.div`
   grid-template-columns: auto auto;
 `
 
+const timeTable = [
+  {
+    day: 1,
+    description: 'Monday',
+    active: false,
+    fulltime: false,
+    open: `${new Date()}`,
+    close: `${new Date()}`
+  },
+  {
+    day: 2,
+    description: 'Thuesday',
+    active: true,
+    fulltime: false,
+    open: `${new Date()}`,
+    close: `${new Date()}`
+  },
+  {
+    day: 3,
+    description: 'Thrusday',
+    active: false,
+    fulltime: true,
+    open: `${new Date()}`,
+    close: `${new Date()}`
+  }
+]
+
 const AvailabilityTab = () => {
   return (
     <Grid columns={1} rowGap="80px">
       <Cell>
         <Title type="h3" title="Timetable*" subtitle="Let guests know the times your space is open." />
-        <TimeTable editable />
+        <TimeTable editable data={timeTable} />
       </Cell>
       <Cell>
         <Title
@@ -41,111 +68,7 @@ const AvailabilityTab = () => {
             <ItemSwitchStyled>
               <span>Block all</span>
               <SwitchStyled>
-                <Switch name={123 + 1} />
-              </SwitchStyled>
-            </ItemSwitchStyled>
-          </Cell>
-          <Cell width={3}>
-            <ItemSwitchStyled>
-              <span>Open 24 / 7</span>
-              <SwitchStyled>
-                <Switch name={123 + 1} />
-              </SwitchStyled>
-            </ItemSwitchStyled>
-          </Cell>
-          <Cell width={3}>
-            <ItemSwitchStyled>
-              <span>Open 24 / 7</span>
-              <SwitchStyled>
-                <Switch name={123 + 1} />
-              </SwitchStyled>
-            </ItemSwitchStyled>
-          </Cell>
-          <Cell width={3}>
-            <ItemSwitchStyled>
-              <span>Open 24 / 7</span>
-              <SwitchStyled>
-                <Switch name={123 + 1} />
-              </SwitchStyled>
-            </ItemSwitchStyled>
-          </Cell>
-          <Cell width={3}>
-            <ItemSwitchStyled>
-              <span>Open 24 / 7</span>
-              <SwitchStyled>
-                <Switch name={123 + 1} />
-              </SwitchStyled>
-            </ItemSwitchStyled>
-          </Cell>
-          <Cell width={3}>
-            <ItemSwitchStyled>
-              <span>Open 24 / 7</span>
-              <SwitchStyled>
-                <Switch name={123 + 1} />
-              </SwitchStyled>
-            </ItemSwitchStyled>
-          </Cell>
-          <Cell width={3}>
-            <ItemSwitchStyled>
-              <span>Open 24 / 7</span>
-              <SwitchStyled>
-                <Switch name={123 + 1} />
-              </SwitchStyled>
-            </ItemSwitchStyled>
-          </Cell>
-          <Cell width={3}>
-            <ItemSwitchStyled>
-              <span>Open 24 / 7</span>
-              <SwitchStyled>
-                <Switch name={123 + 1} />
-              </SwitchStyled>
-            </ItemSwitchStyled>
-          </Cell>
-          <Cell width={3}>
-            <ItemSwitchStyled>
-              <span>Open 24 / 7</span>
-              <SwitchStyled>
-                <Switch name={123 + 1} />
-              </SwitchStyled>
-            </ItemSwitchStyled>
-          </Cell>
-          <Cell width={3}>
-            <ItemSwitchStyled>
-              <span>Open 24 / 7</span>
-              <SwitchStyled>
-                <Switch name={123 + 1} />
-              </SwitchStyled>
-            </ItemSwitchStyled>
-          </Cell>
-          <Cell width={3}>
-            <ItemSwitchStyled>
-              <span>Open 24 / 7</span>
-              <SwitchStyled>
-                <Switch name={123 + 1} />
-              </SwitchStyled>
-            </ItemSwitchStyled>
-          </Cell>
-          <Cell width={3}>
-            <ItemSwitchStyled>
-              <span>Open 24 / 7</span>
-              <SwitchStyled>
-                <Switch name={123 + 1} />
-              </SwitchStyled>
-            </ItemSwitchStyled>
-          </Cell>
-          <Cell width={3}>
-            <ItemSwitchStyled>
-              <span>Open 24 / 7</span>
-              <SwitchStyled>
-                <Switch name={123 + 1} />
-              </SwitchStyled>
-            </ItemSwitchStyled>
-          </Cell>
-          <Cell width={3}>
-            <ItemSwitchStyled>
-              <span>Open 24 / 7</span>
-              <SwitchStyled>
-                <Switch name={123 + 1} />
+                <Switch name="blockAll" disabled={false} handleCheckboxChange={() => {}} checked={false} />
               </SwitchStyled>
             </ItemSwitchStyled>
           </Cell>
