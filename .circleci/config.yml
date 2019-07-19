@@ -83,7 +83,7 @@ jobs:
           command: |
             export ACCOUNT_ID=159220020591
             source scripts/assume-role.sh
-            # aws s3 sync build/ s3://$AWS_BUCKET --delete --region $AWS_REGION
+            aws s3 sync build/ s3://$AWS_BUCKET --delete --region $AWS_REGION
 
 workflows:
   version: 2
