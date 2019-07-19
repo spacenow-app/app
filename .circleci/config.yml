@@ -53,10 +53,14 @@ jobs:
       - run:
           name: 'Build app'
           command: yarn build
+      - run:
+          name: 'Copy scripts'
+          command: cp ./scripts ./scripts
       - persist_to_workspace:
           root: ~/repo
           paths:
             - build
+            - scripts
             - package.json
   deploy:
     <<: *defaults
