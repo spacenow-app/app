@@ -78,11 +78,12 @@ jobs:
       - run: sudo pip install awscli --upgrade
       - run: aws --version
       - run: aws s3 ls
-      - run: sudo chmod +x scripts/assume-role.sh
-      - run: source scripts/assume-role.sh
       - run:
           name: 'Deploy to S3'
           command: |
+            export ACCOUNT_ID=159220020591
+            sudo chmod +x scripts/assume-role.sh
+            source scripts/assume-role.sh
             aws s3 sync build/ s3://$AWS_BUCKET --delete --region $AWS_REGION
 
 workflows:
