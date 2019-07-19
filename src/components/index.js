@@ -23,6 +23,10 @@ import TimePicker from './TimePicker'
 import Calendar from './Calendar'
 import PriceDetail from './PriceDetail'
 import SubTitle from './SubTitle'
+import Label from './Label'
+import Box from './Box'
+import Tag from './Tag'
+import Highlights from './Highlights'
 
 export {
   Modal,
@@ -52,5 +56,9 @@ export {
   TimePicker,
   Calendar,
   PriceDetail,
-  SubTitle
+  SubTitle,
+  Label,
+  Box,
+  Tag,
+  Highlights
 }
