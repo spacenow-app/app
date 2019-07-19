@@ -69,6 +69,9 @@ jobs:
             - package.json
   deploy:
     <<: *defaults
+    environment:
+      - ACCOUNT_ID: 159220020591
+      - DISTRIBUTION_ID: E3O488TYXI70NY
     steps:
       - attach_workspace:
           at: ~/repo
@@ -81,9 +84,10 @@ jobs:
       - run:
           name: 'Deploy to S3'
           command: |
-            export ACCOUNT_ID=159220020591
+            export ACCOUNT_ID="${ACCOUNT_ID}"
             source scripts/assume-role.sh
             aws s3 sync build/ s3://$AWS_BUCKET --delete --region $AWS_REGION
+            aws cloudfront create-invalidation --distribution-id "${DISTRIBUTION_ID}" --paths /index.html
 
 workflows:
   version: 2
