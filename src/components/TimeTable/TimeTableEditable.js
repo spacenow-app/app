@@ -41,9 +41,9 @@ const TimeTableEditable = ({ data, handleClickDay, handleClickOpen, handleClickC
   const onHandleClickOpen = (e, item) => {
     handleClickOpen(e, { item })
   }
-  const onHandleClickClose = (e, item) => {
-    handleClickClose(e, { item })
-  }
+  // const onHandleClickClose = (e, item) => {
+  //   handleClickClose(e, { item })
+  // }
   const onHandleClick24hours = (e, item) => {
     handleClick24hours(e, { item })
   }
