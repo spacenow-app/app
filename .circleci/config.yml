@@ -25,10 +25,16 @@ jobs:
       - restore_cache:
           key: source-{{ .Branch }}-{{ .Revision }}
       - restore_cache:
+          key: yarn-v1-{{ checksum "yarn.lock" }}-{{ arch }}
+      - restore_cache:
           key: dependency-cache-{{ checksum "package.json" }}
       - run:
           name: 'Yarn install'
           command: yarn
+      - save_cache:
+          key: yarn-v1-{{ checksum "yarn.lock" }}-{{ arch }}
+          paths:
+            - ~/.cache/yarn
       - save_cache:
           key: dependency-cache-{{ checksum "package.json" }}
           paths:
@@ -49,6 +55,8 @@ jobs:
       - restore_cache:
           key: source-{{ .Branch }}-{{ .Revision }}
       - restore_cache:
+          key: yarn-v1-{{ checksum "yarn.lock" }}-{{ arch }}
+      - restore_cache:
           key: dependency-cache-{{ checksum "package.json" }}
       - run:
           name: 'Build app'
@@ -57,6 +65,7 @@ jobs:
           root: ~/repo
           paths:
             - build
+            - scripts
             - package.json
   deploy:
     <<: *defaults
@@ -67,12 +76,15 @@ jobs:
       - run: sudo curl -O https://bootstrap.pypa.io/get-pip.py
       - run: sudo python get-pip.py
       - run: sudo pip install awscli --upgrade
+      - run: aws --version
+      - run: aws s3 ls
       - run:
           name: 'Deploy to S3'
           command: |
             export ACCOUNT_ID=159220020591
-            source ./scripts/assume-role.sh
+            source scripts/assume-role.sh
             aws s3 sync build/ s3://$AWS_BUCKET --delete --region $AWS_REGION
+            aws cloudfront create-invalidation --distribution-id "EJBM66ARV7ZA9" --paths /index.html
 
 workflows:
   version: 2
