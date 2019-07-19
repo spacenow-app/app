@@ -14,13 +14,9 @@ const Grid = styled.div`
 
 const Column = styled.div``
 
-const TimeTableView = ({ timeTable }) => {
-  if (!timeTable) {
-    return 'No Data'
-  }
-
+const TimeTableView = ({ data }) => {
   const renderOpeningData = weekDayIndex => {
-    const dayOf = timeTable.find(o => o.weekday === weekDayIndex)
+    const dayOf = data.find(o => o.weekday === weekDayIndex)
     if (dayOf && dayOf.allday) return '24 Hours'
     if (dayOf) {
       const hourOpen = format(dayOf.openHour, 'hh:mm a')
@@ -86,45 +82,10 @@ const TimeTableView = ({ timeTable }) => {
   )
 }
 
-TimeTableView.defaultProps = {
-  timeTable: [
-    {
-      weekday: 1,
-      allday: true,
-      openHour: new Date(),
-      closeHour: new Date()
-    },
-    {
-      weekday: 2,
-      allday: false,
-      openHour: new Date(),
-      closeHour: new Date()
-    },
-    {
-      weekday: 3,
-      allday: false,
-      openHour: new Date(),
-      closeHour: new Date()
-    },
-
-    {
-      weekday: 5,
-      allday: false,
-      openHour: new Date(),
-      closeHour: new Date()
-    },
-
-    {
-      weekday: 7,
-      allday: false,
-      openHour: new Date(),
-      closeHour: new Date()
-    }
-  ]
-}
+TimeTableView.defaultProps = {}
 
 TimeTableView.propTypes = {
-  timeTable: PropTypes.arrayOf(
+  data: PropTypes.arrayOf(
     PropTypes.shape({
       weekday: PropTypes.number.isRequired,
       allday: PropTypes.bool.isRequired,
