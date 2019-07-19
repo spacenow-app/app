@@ -1,47 +1,47 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import styled, { css } from 'styled-components'
+import { color } from 'styled-system'
 
 const SpanStyled = styled.div`
-  justify-self: center;
-  align-self: center;
-  background-color: #fff;
   border: 1px solid #cbcbcb;
   border-radius: 8px;
-  padding: 2px 10px;
-  margin-right: 10px;
-
-  color: ${props => props.theme.badge.textColor};
-
+  justify-items: center;
+  display: grid;
+  min-width: 110px;
+  grid-column-gap: 10px;
+  padding: 10px;
+  width: fit-content;
   ${props =>
     props.icon &&
     css`
-      display: inline-flex;
+      grid-template-columns: 20px 1fr;
     `}
+  ${color};
 `
 
 const TextStyled = styled.span`
-  font-size: 14px;
-  font-weight: 600;
-  line-height: 2.5;
+  font-family: 'Montserrat-Medium';
+  font-size: 12px;
+  align-self: center;
 `
 
-const Tag = ({ theme, icon, text }) => (
-  <SpanStyled theme={theme} icon={icon}>
+const Tag = ({ icon, children }) => (
+  <SpanStyled icon={icon}>
     {icon && icon}
-    <TextStyled text={text}>{text}</TextStyled>
+    <TextStyled>{children}</TextStyled>
   </SpanStyled>
 )
 
 Tag.defaultProps = {
   icon: null,
-  text: ' '
+  color: 'quartenary',
+  bg: 'white'
 }
 
 Tag.propTypes = {
-  theme: PropTypes.instanceOf(Object),
-  icon: PropTypes.object,
-  text: PropTypes.string
+  children: PropTypes.oneOfType([PropTypes.string, PropTypes.number, PropTypes.element]),
+  icon: PropTypes.element
 }
 
 export default Tag

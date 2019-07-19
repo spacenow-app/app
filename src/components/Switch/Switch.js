@@ -64,7 +64,7 @@ const Switch = ({ name, checked, handleCheckboxChange }) => {
 Switch.defaultProps = {}
 
 Switch.propTypes = {
-  name: PropTypes.string.isRequired,
+  name: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
   handleCheckboxChange: PropTypes.func.isRequired,
   checked: PropTypes.bool
 }
