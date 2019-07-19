@@ -1,6 +1,6 @@
 import React from 'react'
 import { storiesOf } from '@storybook/react'
 import { action } from '@storybook/addon-actions'
-import SubTitle from './SubTitle'
+import Subtitle from './Subtitle'
 
-storiesOf('SubTitle', module).add('Default', () => <SubTitle onClick={action('clicked')}>Hello Subtitle</SubTitle>)
+storiesOf('Subtitle', module).add('Default', () => <Subtitle onClick={action('clicked')}>Hello Subtitle</Subtitle>)

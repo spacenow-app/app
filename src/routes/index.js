@@ -1,7 +1,9 @@
-import React, { Suspense, lazy } from 'react'
+import React, { Suspense, lazy, useEffect } from 'react'
 import { BrowserRouter, Switch, Route } from 'react-router-dom'
-import { useSelector } from 'react-redux'
+import { useSelector, useDispatch } from 'react-redux'
 import { NavBar } from 'components'
+
+import { onTokenValidation, onIsTokenExists } from 'redux/ducks/auth'
 import PrivateRoute from './PrivateRoute'
 import PublicRoute from './PublicRoute'
 
@@ -10,10 +12,17 @@ const NotFoundPage = lazy(() => import('pages/NotFoundPage'))
 const Listing = lazy(() => import('routes/Listing'))
 
 const Routes = props => {
+  const dispatch = useDispatch()
   const isAuthenticated = useSelector(state => state.auth.isAuthenticated)
-  const isAppLoading = useSelector(state => state.system.isAppLoading)
+  const isLoading = useSelector(state => state.auth.isLoading)
 
-  if (isAppLoading) {
+  const _handlerCheckAuthentication = () => dispatch(onIsTokenExists())
+
+  useEffect(() => {
+    dispatch(onTokenValidation())
+  }, [dispatch, isAuthenticated])
+
+  if (isLoading) {
     return <div>Loading</div>
   }
 
@@ -21,10 +30,17 @@ const Routes = props => {
     <BrowserRouter>
       <Suspense fallback={<div>Loading...</div>}>
         <Switch>
-          <PublicRoute exact path="/auth" isAuthenticated={isAuthenticated} component={() => <h1>Login Page</h1>} />
+          <PublicRoute
+            exact
+            path="/auth"
+            handlerCheckAuthentication={_handlerCheckAuthentication}
+            isAuthenticated={isAuthenticated}
+            component={() => <h1>Login Page</h1>}
+          />
           <PrivateRoute
             {...props}
             path="/"
+            handlerCheckAuthentication={_handlerCheckAuthentication}
             isAuthenticated={isAuthenticated}
             component={otherProps => {
               return (

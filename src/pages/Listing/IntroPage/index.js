@@ -18,7 +18,6 @@ class IntroPage extends Component {
   }
 
   render() {
-    console.log('Intro ->', this.props)
     return (
       <Wrapper>
         <Title

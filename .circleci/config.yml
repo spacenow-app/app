@@ -1,0 +1,106 @@
+defaults: &defaults
+  working_directory: ~/repo
+  docker:
+    - image: circleci/node:10.16.0
+version: 2
+jobs:
+  checkout_code:
+    <<: *defaults
+    steps:
+      - restore_cache:
+          keys:
+            - source-{{ .Branch }}-{{ .Revision }}
+            - source-{{ .Branch }}-
+            - source-
+
+      - checkout
+
+      - save_cache:
+          key: source-{{ .Branch }}-{{ .Revision }}
+          paths:
+            - '~/repo'
+  install:
+    <<: *defaults
+    steps:
+      - restore_cache:
+          key: source-{{ .Branch }}-{{ .Revision }}
+      - restore_cache:
+          key: yarn-v1-{{ checksum "yarn.lock" }}-{{ arch }}
+      - restore_cache:
+          key: dependency-cache-{{ checksum "package.json" }}
+      - run:
+          name: 'Yarn install'
+          command: yarn
+      - save_cache:
+          key: yarn-v1-{{ checksum "yarn.lock" }}-{{ arch }}
+          paths:
+            - ~/.cache/yarn
+      - save_cache:
+          key: dependency-cache-{{ checksum "package.json" }}
+          paths:
+            - node_modules
+  # test:
+  #   <<: *defaults
+  #   steps:
+  #     - restore_cache:
+  #         key: source-{{ .Branch }}-{{ .Revision }}
+  #     - restore_cache:
+  #         key: dependency-cache-{{ checksum "package.json" }}
+  #     - run:
+  #         name: 'Test'
+  #         command: npm run test
+  build:
+    <<: *defaults
+    steps:
+      - restore_cache:
+          key: source-{{ .Branch }}-{{ .Revision }}
+      - restore_cache:
+          key: yarn-v1-{{ checksum "yarn.lock" }}-{{ arch }}
+      - restore_cache:
+          key: dependency-cache-{{ checksum "package.json" }}
+      - run:
+          name: 'Build app'
+          command: yarn build
+      - persist_to_workspace:
+          root: ~/repo
+          paths:
+            - build
+            - scripts
+            - package.json
+  deploy:
+    <<: *defaults
+    steps:
+      - attach_workspace:
+          at: ~/repo
+      - run: sudo apt-get update && sudo apt-get install -y python-dev
+      - run: sudo curl -O https://bootstrap.pypa.io/get-pip.py
+      - run: sudo python get-pip.py
+      - run: sudo pip install awscli --upgrade
+      - run: aws --version
+      - run: aws s3 ls
+      - run:
+          name: 'Deploy to S3'
+          command: |
+            export ACCOUNT_ID=159220020591
+            source scripts/assume-role.sh
+            aws s3 sync build/ s3://$AWS_BUCKET --delete --region $AWS_REGION
+            aws cloudfront create-invalidation --distribution-id "EJBM66ARV7ZA9" --paths /index.html
+
+workflows:
+  version: 2
+  build_and_test:
+    jobs:
+      - checkout_code
+      - install:
+          requires:
+            - checkout_code
+      # - test:
+      #     requires:
+      #       - install
+      - build:
+          requires:
+            - install
+      - deploy:
+          requires:
+            # - test
+            - build

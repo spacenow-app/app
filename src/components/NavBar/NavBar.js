@@ -1,9 +1,12 @@
 import React from 'react'
+import { useSelector } from 'react-redux'
 import { Link } from 'react-router-dom'
 import { Navbar, Nav, NavDropdown } from 'react-bootstrap'
+
 import logo from './spacenow_logo.png'
 
 function NavBar() {
+  const authUser = useSelector(state => state.auth.user)
   return (
     <Navbar>
       <Link to="/">
@@ -18,7 +21,7 @@ function NavBar() {
             List Your Space
           </Nav.Link>
           <Nav.Link href="">Help</Nav.Link>
-          <NavDropdown title="Usuario_Name" id="basic-nav-dropdown">
+          <NavDropdown title={authUser.firstName} id="basic-nav-dropdown">
             <NavDropdown.Item href="#action/3.1">Dashboard</NavDropdown.Item>
             <NavDropdown.Divider />
             <NavDropdown.Item href="#action/3.4">Logout</NavDropdown.Item>

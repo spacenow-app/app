@@ -1,14 +1,15 @@
 const path = require('path')
 const fs = require('fs')
+
 const directoryPath = path.join(__dirname, '../src/components/Icon/svg/sub-category')
 
 fs.readdir(directoryPath, function(err, files) {
   if (err) {
-    return console.log('Unable to scan directory: ' + err)
+    return console.warn(`Unable to scan directory: ${err}`)
   }
 
   if (fs.existsSync(`${directoryPath}/ori_bkp`)) {
-    return console.log('Folder backup really exists.')
+    return console.warn('Folder backup really exists.')
   }
 
   if (!fs.existsSync(`${directoryPath}/ori_bkp`)) {
@@ -25,12 +26,11 @@ fs.readdir(directoryPath, function(err, files) {
       .replace(/(class=\"[a-zA-Z0-9:;\.\s\(\)\-\,]*\")/g, '')
 
     fs.writeFile(`${directoryPath}/ori_bkp/${file}`, content, err => {
-      if (err) return console.log(err)
-      console.log('Successfully backup: ', file)
-
+      if (err) return console.error(err)
+      console.debug('Successfully backup: ', file)
       fs.writeFile(`${directoryPath}/${file}`, newContent, err => {
-        if (err) return console.log(err)
-        console.log('Successfully converted file: ', file)
+        if (err) return console.error(err)
+        console.debug('Successfully converted file: ', file)
       })
     })
   })
