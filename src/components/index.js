@@ -22,15 +22,11 @@ import Switch from './Switch'
 import TimePicker from './TimePicker'
 import Calendar from './Calendar'
 import PriceDetail from './PriceDetail'
-<<<<<<< HEAD
 import SubTitle from './SubTitle'
 import Label from './Label'
 import Box from './Box'
 import Tag from './Tag'
 import Highlights from './Highlights'
-=======
-import Subtitle from './Subtitle'
->>>>>>> a9ae7578c85eaba8ed571fa9f157bec6d4b0bd6e
 
 export {
   Modal,

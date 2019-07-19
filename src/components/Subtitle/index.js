@@ -1,3 +1,3 @@
-import Subtitle from './Subtitle'
+import SubTitle from './SubTitle'
 
-export default Subtitle
+export default SubTitle

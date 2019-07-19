@@ -2,7 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import styled from 'styled-components'
 import { format } from 'date-fns'
-import { Subtitle, Caption } from 'components'
+import { SubTitle, Caption } from 'components'
 
 const Grid = styled.div`
   display: grid;
@@ -31,52 +31,52 @@ const TimeTableView = ({ data }) => {
       <Column>
         <Caption type="large">Weekday</Caption>
         <br />
-        <Subtitle type="xSmall" color="#172439">
+        <SubTitle type="xSmall" color="#172439">
           Monday
-        </Subtitle>
-        <Subtitle type="xSmall" color="#172439">
+        </SubTitle>
+        <SubTitle type="xSmall" color="#172439">
           Tuesday
-        </Subtitle>
-        <Subtitle type="xSmall" color="#172439">
+        </SubTitle>
+        <SubTitle type="xSmall" color="#172439">
           Wednesday
-        </Subtitle>
-        <Subtitle type="xSmall" color="#172439">
+        </SubTitle>
+        <SubTitle type="xSmall" color="#172439">
           Thursday
-        </Subtitle>
-        <Subtitle type="xSmall" color="#172439">
+        </SubTitle>
+        <SubTitle type="xSmall" color="#172439">
           Friday
-        </Subtitle>
-        <Subtitle type="xSmall" color="#172439">
+        </SubTitle>
+        <SubTitle type="xSmall" color="#172439">
           Saturday
-        </Subtitle>
-        <Subtitle type="xSmall" color="#172439">
+        </SubTitle>
+        <SubTitle type="xSmall" color="#172439">
           Sunday
-        </Subtitle>
+        </SubTitle>
       </Column>
       <Column>
         <Caption type="large">Opening hours</Caption>
         <br />
-        <Subtitle type="xSmall" color="#172439">
+        <SubTitle type="xSmall" color="#172439">
           {renderOpeningData(1)}
-        </Subtitle>
-        <Subtitle type="xSmall" color="#172439">
+        </SubTitle>
+        <SubTitle type="xSmall" color="#172439">
           {renderOpeningData(2)}
-        </Subtitle>
-        <Subtitle type="xSmall" color="#172439">
+        </SubTitle>
+        <SubTitle type="xSmall" color="#172439">
           {renderOpeningData(3)}
-        </Subtitle>
-        <Subtitle type="xSmall" color="#172439">
+        </SubTitle>
+        <SubTitle type="xSmall" color="#172439">
           {renderOpeningData(4)}
-        </Subtitle>
-        <Subtitle type="xSmall" color="#172439">
+        </SubTitle>
+        <SubTitle type="xSmall" color="#172439">
           {renderOpeningData(5)}
-        </Subtitle>
-        <Subtitle type="xSmall" color="#172439">
+        </SubTitle>
+        <SubTitle type="xSmall" color="#172439">
           {renderOpeningData(6)}
-        </Subtitle>
-        <Subtitle type="xSmall" color="#172439">
+        </SubTitle>
+        <SubTitle type="xSmall" color="#172439">
           {renderOpeningData(0)}
-        </Subtitle>
+        </SubTitle>
       </Column>
     </Grid>
   )
