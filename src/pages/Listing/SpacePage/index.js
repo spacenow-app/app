@@ -7,6 +7,8 @@ import SpecificationTab from './SpecificationTab'
 import AvailabilityTab from './AvailabilityTab'
 
 const SpacePage = ({ match, location, ...props }) => {
+  console.log(match.params.id)
+
   return (
     <Wrapper>
       <Tab>
@@ -32,12 +34,6 @@ const SpacePage = ({ match, location, ...props }) => {
         <Route path={`${match.path}/cancellation`} component={CancellationTab} />
         <Route component={() => <h1>not found</h1>} />
       </Switch>
-      <StepButtons
-        prev={{ disabled: false, onClick: () => props.history.goBack() }}
-        next={{
-          onClick: () => props.history.push('/listing/pricing')
-        }}
-      />
     </Wrapper>
   )
 }
