@@ -1,13 +1,14 @@
 import React, { useEffect } from 'react'
 import PropTypes from 'prop-types'
 import { Route, Redirect } from 'react-router-dom'
+import { config } from 'contants'
 
 const PrivateRoute = ({ handlerCheckAuthentication, isAuthenticated, component: Component, location, ...rest }) => {
   useEffect(() => {
     handlerCheckAuthentication()
   })
   if (!isAuthenticated) {
-    window.location.href = 'https://www.spacenow.com/login'
+    window.location.href = `${config.legacy}/login`
     return null
   }
   return (
