@@ -61,10 +61,6 @@ jobs:
       - run:
           name: 'Build app'
           command: yarn build
-          environment:
-            REACT_APP_GOOGLE_MAPS_KEY: ${SANDPIT_REACT_APP_GOOGLE_MAPS_KEY}
-            REACT_APP_LEGACY: ${SANDPIT_REACT_APP_LEGACY}
-            REACT_APP_GRAPH_HOST: ${SANDPIT_REACT_APP_GRAPH_HOST}
       - persist_to_workspace:
           root: ~/repo
           paths:
@@ -86,6 +82,9 @@ jobs:
           name: 'Deploy to S3'
           command: |
             export ACCOUNT_ID=159220020591
+            export REACT_APP_GOOGLE_MAPS_KEY=${SANDPIT_REACT_APP_GOOGLE_MAPS_KEY}
+            export REACT_APP_LEGACY=${SANDPIT_REACT_APP_LEGACY}
+            export REACT_APP_GRAPH_HOST=${SANDPIT_REACT_APP_GRAPH_HOST}
             source scripts/assume-role.sh
             aws s3 sync build/ s3://$AWS_BUCKET --delete --region $AWS_REGION
             aws cloudfront create-invalidation --distribution-id "EJBM66ARV7ZA9" --paths /index.html
