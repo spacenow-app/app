@@ -60,7 +60,11 @@ jobs:
           key: dependency-cache-{{ checksum "package.json" }}
       - run:
           name: 'Build app'
-          command: yarn build
+          command: |
+            export REACT_APP_GOOGLE_MAPS_KEY=$SANDPIT_REACT_APP_GOOGLE_MAPS_KEY >> $BASH_ENV
+            export REACT_APP_GRAPH_HOST=$SANDPIT_REACT_APP_GRAPH_HOST >> $BASH_ENV
+            export REACT_APP_LEGACY=$SANDPIT_REACT_APP_LEGACY >> $BASH_ENV
+            yarn build
       - persist_to_workspace:
           root: ~/repo
           paths:
@@ -81,9 +85,6 @@ jobs:
       - run:
           name: 'Deploy to S3'
           command: |
-            export REACT_APP_GOOGLE_MAPS_KEY=${SANDPIT_REACT_APP_GOOGLE_MAPS_KEY}
-            export REACT_APP_GRAPH_HOST=${SANDPIT_REACT_APP_GRAPH_HOST}
-            export REACT_APP_LEGACY=${SANDPIT_REACT_APP_LEGACY}
             export ACCOUNT_ID=159220020591
             source scripts/assume-role.sh
             aws s3 sync build/ s3://$AWS_BUCKET --delete --region $AWS_REGION
