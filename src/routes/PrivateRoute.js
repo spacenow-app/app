@@ -6,6 +6,10 @@ const PrivateRoute = ({ handlerCheckAuthentication, isAuthenticated, component: 
   useEffect(() => {
     handlerCheckAuthentication()
   })
+  if (!isAuthenticated) {
+    window.location.href = 'https://www.spacenow.com/login'
+    return null
+  }
   return (
     <Route
       {...rest}
