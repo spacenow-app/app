@@ -85,19 +85,22 @@ const Label = styled.label`
   margin-left: 20px;
 `
 
-const Select = ({ label, children, value, size, ...props }) => {
+const Select = ({ label, options, children, value, size, ...props }) => {
   if (children) {
     return (
-      <SelectStyled {...props} value={value}>
-        {children}
-      </SelectStyled>
+      <WrapperInput>
+        {label && <Label>{label}</Label>}
+        <SelectStyled {...props} size={size} value={value}>
+          {children}
+        </SelectStyled>
+      </WrapperInput>
     )
   }
   return (
     <WrapperInput>
       {label && <Label>{label}</Label>}
       <SelectStyled {...props} size={size} value={value}>
-        {props.options.map(item => (
+        {options.map(item => (
           <option key={item.key} value={item.value}>
             {item.name}
           </option>
@@ -119,7 +122,8 @@ Select.propTypes = {
   children: PropTypes.element,
   options: PropTypes.instanceOf(Array),
   bgColor: PropTypes.string,
-  value: PropTypes.oneOfType([PropTypes.string, PropTypes.number])
+  value: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+  size: PropTypes.string
 }
 
 export default Select
