@@ -60,11 +60,10 @@ jobs:
           key: dependency-cache-{{ checksum "package.json" }}
       - run:
           name: 'Build app'
-          command: |
-            echo 'export REACT_APP_GOOGLE_MAPS_KEY=$SANDPIT_REACT_APP_GOOGLE_MAPS_KEY' >> $BASH_ENV
-            echo 'export REACT_APP_GRAPH_HOST=$SANDPIT_REACT_APP_GRAPH_HOST' >> $BASH_ENV
-            echo 'export REACT_APP_LEGACY=$SANDPIT_REACT_APP_LEGACY' >> $BASH_ENV
-            yarn build
+          command: yarn build
+          environment:
+            REACT_APP_GOOGLE_MAPS_KEY=${SANDPIT_REACT_APP_GOOGLE_MAPS_KEY} REACT_APP_LEGACY=${SANDPIT_REACT_APP_LEGACY}
+            REACT_APP_GRAPH_HOST=${SANDPIT_REACT_APP_GRAPH_HOST}
       - persist_to_workspace:
           root: ~/repo
           paths:
