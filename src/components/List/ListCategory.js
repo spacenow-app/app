@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react'
 import styled, { css } from 'styled-components'
 import { Icon } from 'components'
-import { checkPropTypes } from 'prop-types'
+// import { checkPropTypes } from 'prop-types'
 
 const List = styled.div`
   display: grid;
@@ -88,7 +88,7 @@ const TitleStyled = styled.span`
 `
 
 const ListCategory = ({ circular, data, handleItemClick, itemSelected }) => {
-  useEffect(() => {}, [data, itemSelected])
+  useEffect(() => { }, [data, itemSelected])
 
   const _parseIconName = (isSub, name) => {
     let prefix = 'category-'
@@ -117,11 +117,11 @@ const ListCategory = ({ circular, data, handleItemClick, itemSelected }) => {
               <TitleStyled circular>{item.itemName}</TitleStyled>
             </>
           ) : (
-            <>
-              <IconStyled name={_parseIconName(circular, item.otherItemName)} fill="#172439" />
-              <TitleStyled>{item.itemName}</TitleStyled>
-            </>
-          )}
+              <>
+                <IconStyled name={_parseIconName(circular, item.otherItemName)} fill="#172439" />
+                <TitleStyled>{item.itemName}</TitleStyled>
+              </>
+            )}
         </ListItem>
       ))}
     </List>
@@ -133,7 +133,7 @@ ListCategory.propsType = {}
 ListCategory.defaultProps = {
   circular: false,
   itemSelected: false,
-  handleItemClick: () => {}
+  handleItemClick: () => { }
 }
 
 export default ListCategory

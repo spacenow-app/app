@@ -1,7 +1,7 @@
 import { gql } from 'apollo-boost'
 
-import { getClientWithAuth } from 'graphql/apolloClient'
-import errToMsg from 'utils/errToMsg'
+// import { getClientWithAuth } from 'graphql/apolloClient'
+// import errToMsg from 'utils/errToMsg'
 
 // Actions
 export const Types = {
@@ -138,9 +138,9 @@ export default function reducer(state = initialState, action) {
 // Action Creators
 const createOrUpdateStart = () => ({ type: Types.CREATE_LISTING_START })
 
-const createOrUpdateSuccess = listing => ({ type: Types.CREATE_LISTING_SUCCESS, payload: listing })
+// const createOrUpdateSuccess = listing => ({ type: Types.CREATE_LISTING_SUCCESS, payload: listing })
 
-const createOrUpdateFailed = error => ({ type: Types.CREATE_LISTING_ERROR, payload: error })
+// const createOrUpdateFailed = error => ({ type: Types.CREATE_LISTING_ERROR, payload: error })
 
 // Side Effects
 export const onCreate = (location, category, subCategory) => async dispatch => {
