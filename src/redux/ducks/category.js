@@ -32,6 +32,14 @@ const queryGetAllCategories = gql`
         id
         itemName
         otherItemName
+        bookingPeriod {
+          id
+          listSettingsParentId
+          hourly
+          daily
+          weekly
+          monthly
+        }
       }
     }
   }

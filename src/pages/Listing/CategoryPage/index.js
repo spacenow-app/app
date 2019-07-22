@@ -3,9 +3,14 @@ import { useSelector, useDispatch } from 'react-redux'
 import { Wrapper, Title, StepButtons, List, Caption } from 'components'
 
 import { onGetAllCategories } from 'redux/ducks/category'
+import { onCreate } from 'redux/ducks/listing'
 
 const CategoryPage = props => {
   const dispatch = useDispatch()
+
+  const {
+    get: { location }
+  } = useSelector(state => state.location)
 
   const {
     isLoading,
@@ -27,6 +32,14 @@ const CategoryPage = props => {
 
   const _handleSubCategoryClick = (_, value) => {
     setSubCategorySelected(value)
+  }
+
+  const _handlerCreateDraft = () => dispatch(onCreate(location, categorySelected, subCategorySelected))
+
+  // Previous location object from Location Step...
+  if (!location) {
+    props.history.replace('/listing/location')
+    return <></>
   }
 
   if (isLoading) return <>Loading...</>
@@ -52,6 +65,10 @@ const CategoryPage = props => {
           />
         </>
       )}
+      <StepButtons
+        prev={{ disabled: false, onClick: () => props.history.push('/listing/location') }}
+        next={{ disabled: !location || !categorySelected || !subCategorySelected, onClick: _handlerCreateDraft }}
+      />
     </Wrapper>
   )
 }
