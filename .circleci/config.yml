@@ -61,9 +61,9 @@ jobs:
       - run:
           name: 'Build app'
           command: |
-            export REACT_APP_GOOGLE_MAPS_KEY=$SANDPIT_REACT_APP_GOOGLE_MAPS_KEY >> $BASH_ENV
-            export REACT_APP_GRAPH_HOST=$SANDPIT_REACT_APP_GRAPH_HOST >> $BASH_ENV
-            export REACT_APP_LEGACY=$SANDPIT_REACT_APP_LEGACY >> $BASH_ENV
+            echo 'export REACT_APP_GOOGLE_MAPS_KEY=$SANDPIT_REACT_APP_GOOGLE_MAPS_KEY' >> $BASH_ENV
+            echo 'export REACT_APP_GRAPH_HOST=$SANDPIT_REACT_APP_GRAPH_HOST' >> $BASH_ENV
+            echo 'export REACT_APP_LEGACY=$SANDPIT_REACT_APP_LEGACY' >> $BASH_ENV
             yarn build
       - persist_to_workspace:
           root: ~/repo
