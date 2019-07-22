@@ -3,14 +3,7 @@ import { Redirect } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
 import styled from 'styled-components'
 
-import {
-  Wrapper,
-  Title,
-  StepButtons,
-  Input,
-  Map,
-  AutoComplete
-} from 'components'
+import { Wrapper, Title, StepButtons, Input, Map, AutoComplete } from 'components'
 
 import * as actions from 'redux/ducks/location'
 
@@ -57,7 +50,7 @@ const LocationPage = props => {
 
   if (isLoading) return <div>Loading...</div>
 
-  if (get.location) return <Redirect to="/listing/category" />
+  if (get.location) return <Redirect to={{ pathname: '/listing/category' }} />
 
   return (
     <Wrapper>
@@ -72,12 +65,7 @@ const LocationPage = props => {
           closeButton={latLng && (latLng.lat || latLng.lng)}
           onClickCloseButton={_reset}
         />
-        <Input
-          label="Unit"
-          placeholder="E.g 128"
-          value={unit}
-          onChange={e => setUnit(e.target.value)}
-        />
+        <Input label="Unit" placeholder="E.g 128" value={unit} onChange={e => setUnit(e.target.value)} />
       </GroupInput>
       {error.message && <div className="text-danger">{error.message}</div>}
       {latLng && latLng.lat && latLng.lng && <Map position={latLng} />}

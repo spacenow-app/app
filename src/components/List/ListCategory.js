@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react'
 import styled, { css } from 'styled-components'
 import { Icon } from 'components'
+import { checkPropTypes } from 'prop-types'
 
 const List = styled.div`
   display: grid;
@@ -89,6 +90,12 @@ const TitleStyled = styled.span`
 const ListCategory = ({ circular, data, handleItemClick, itemSelected }) => {
   useEffect(() => {}, [data, itemSelected])
 
+  const _parseIconName = (isSub, name) => {
+    let prefix = 'category-'
+    if (isSub) prefix = 'sub-category-'
+    return prefix + name.replace(/([A-Z])/g, g => `-${g[0].toLowerCase()}`)
+  }
+
   if (!data || !data.length) {
     return null
   }
@@ -105,14 +112,14 @@ const ListCategory = ({ circular, data, handleItemClick, itemSelected }) => {
           {circular ? (
             <>
               <IconContainer active={itemSelected && item.id === itemSelected.id}>
-                <IconStyled name={item.icon} fill="#172439" />
+                <IconStyled name={_parseIconName(circular, item.otherItemName)} fill="#172439" />
               </IconContainer>
-              <TitleStyled circular>{item.title}</TitleStyled>
+              <TitleStyled circular>{item.itemName}</TitleStyled>
             </>
           ) : (
             <>
-              <IconStyled name={item.icon} fill="#172439" />
-              <TitleStyled>{item.title}</TitleStyled>
+              <IconStyled name={_parseIconName(circular, item.otherItemName)} fill="#172439" />
+              <TitleStyled>{item.itemName}</TitleStyled>
             </>
           )}
         </ListItem>
@@ -121,7 +128,10 @@ const ListCategory = ({ circular, data, handleItemClick, itemSelected }) => {
   )
 }
 
+ListCategory.propsType = {}
+
 ListCategory.defaultProps = {
+  circular: false,
   itemSelected: false,
   handleItemClick: () => {}
 }
