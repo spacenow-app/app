@@ -1,6 +1,6 @@
 import React from 'react'
 import { Switch, Route, Redirect } from 'react-router-dom'
-import { Wrapper, Tab, TabItem, StepButtons } from 'components'
+import { Wrapper, Tab, TabItem } from 'components'
 import CancellationTab from './CancellationTab'
 import BookingTab from './BookingTab'
 import SpecificationTab from './SpecificationTab'
