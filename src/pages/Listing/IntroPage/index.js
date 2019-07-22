@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import styled from 'styled-components'
 import { Wrapper, Card, Title } from 'components'
+import { config } from "contants"
 
 const WrapperStyled = styled.div`
   display: grid;
@@ -11,7 +12,7 @@ const WrapperStyled = styled.div`
 class IntroPage extends Component {
   _goTo = type => {
     if (type === 'multiple') {
-      window.location.href = 'https://www.spacenow.com/become-a-host'
+      window.location.href = `${config.legacy}/become-a-host`
       return
     }
     this.props.history.push('/listing/location')
