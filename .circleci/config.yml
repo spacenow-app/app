@@ -51,6 +51,11 @@ jobs:
   #         command: npm run test
   build:
     <<: *defaults
+    environment:
+      REACT_APP_GOOGLE_MAPS_KEY: ${SANDPIT_REACT_APP_GOOGLE_MAPS_KEY}
+      REACT_APP_LEGACY: ${SANDPIT_REACT_APP_LEGACY}
+      REACT_APP_GRAPH_HOST: ${SANDPIT_REACT_APP_GRAPH_HOST}
+      REACT_APP_ENV: production
     steps:
       - restore_cache:
           key: source-{{ .Branch }}-{{ .Revision }}
@@ -60,7 +65,9 @@ jobs:
           key: dependency-cache-{{ checksum "package.json" }}
       - run:
           name: 'Build app'
-          command: yarn build
+          command:
+            REACT_APP_ENV=$REACT_APP_ENV REACT_APP_GOOGLE_MAPS_KEY=$REACT_APP_GOOGLE_MAPS_KEY
+            REACT_APP_LEGACY=$REACT_APP_LEGACY REACT_APP_GRAPH_HOST=$REACT_APP_GRAPH_HOST yarn build
       - persist_to_workspace:
           root: ~/repo
           paths:
@@ -69,10 +76,6 @@ jobs:
             - package.json
   deploy:
     <<: *defaults
-    environment:
-      REACT_APP_GOOGLE_MAPS_KEY: ${SANDPIT_REACT_APP_GOOGLE_MAPS_KEY}
-      REACT_APP_LEGACY: ${SANDPIT_REACT_APP_LEGACY}
-      REACT_APP_GRAPH_HOST: ${SANDPIT_REACT_APP_GRAPH_HOST}
     steps:
       - attach_workspace:
           at: ~/repo
