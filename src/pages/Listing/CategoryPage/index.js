@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
+import { Redirect } from 'react-router-dom'
 import { Wrapper, Title, StepButtons, List, Caption } from 'components'
 
 import { onGetAllCategories } from 'redux/ducks/category'
@@ -16,6 +17,10 @@ const CategoryPage = props => {
     isLoading,
     get: { categories }
   } = useSelector(state => state.category)
+
+  const {
+    get: { listing }
+  } = useSelector(state => state.listing)
 
   useEffect(() => {
     if (!categories || categories.length <= 0) dispatch(onGetAllCategories())
@@ -34,13 +39,15 @@ const CategoryPage = props => {
     setSubCategorySelected(value)
   }
 
-  const _handlerCreateDraft = () => dispatch(onCreate(location, categorySelected, subCategorySelected))
+  const _handlerCreateDraft = () => dispatch(onCreate(location.id, subCategorySelected.bookingPeriod.listSettingsParentId))
 
   // Previous location object from Location Step...
   if (!location) {
     props.history.replace('/listing/location')
     return <></>
   }
+
+  if (listing) return <Redirect to={{ pathname: `/listing/space/${listing.id}/specification` }} />
 
   if (isLoading) return <>Loading...</>
 

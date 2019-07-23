@@ -1,7 +1,7 @@
-// import { gql } from 'apollo-boost'
+import { gql } from 'apollo-boost'
 
-// import { getClientWithAuth } from 'graphql/apolloClient'
-// import errToMsg from 'utils/errToMsg'
+import { getClientWithAuth } from 'graphql/apolloClient'
+import errToMsg from 'utils/errToMsg'
 
 // Actions
 export const Types = {
@@ -22,21 +22,20 @@ const initialState = {
 }
 
 // GraphQL
-// const mutationCreate = gql`
-//   mutation createOrUpdateListing {
-//     createOrUpdateListing(
-//       userId: "c4c77350-6c80-11e9-bfb6-55a34828950d"
-//       locationId: 56
-//       listSettingsParentId: 4
-//       bookingPeriod: "daily"
-//       title: "Test via Insominia rest service"
-//       coverPhotoId: null
-//       quantity: null
-//     ) {
-//       status
-//     }
-//   }
-// `
+const mutationCreate = gql`
+  mutation createOrUpdateListing(
+    $locationId: Int!
+    $listSettingsParentId: Int!
+  )
+  {
+    createOrUpdateListing(
+      locationId: $locationId
+      listSettingsParentId: $listSettingsParentId
+    ) {
+      status
+    }
+  }
+`
 
 // const mutationUpdate = gql`
 //   mutation createOrUpdateListing(
@@ -138,21 +137,23 @@ export default function reducer(state = initialState, action) {
 // Action Creators
 const createOrUpdateStart = () => ({ type: Types.CREATE_LISTING_START })
 
-// const createOrUpdateSuccess = listing => ({ type: Types.CREATE_LISTING_SUCCESS, payload: listing })
+const createOrUpdateSuccess = listing => ({ type: Types.CREATE_LISTING_SUCCESS, payload: listing })
 
-// const createOrUpdateFailed = error => ({ type: Types.CREATE_LISTING_ERROR, payload: error })
+const createOrUpdateFailed = error => ({ type: Types.CREATE_LISTING_ERROR, payload: error })
 
 // Side Effects
-export const onCreate = (location, category, subCategory) => async dispatch => {
+export const onCreate = (locationId, listSettingsParentId) => async dispatch => {
   dispatch(createOrUpdateStart())
-  console.log(location, category, subCategory)
-  // try {
-  //   const { data } = await getClientWithAuth().mudate({
-  //     mutation: mutationCreate,
-  //     variable: {}
-  //   })
-  //   dispatch(createOrUpdateSuccess(data.getCategoriesLegacy))
-  // } catch (err) {
-  //   dispatch(createOrUpdateFailed(errToMsg(err)))
-  // }
+  try {
+    const { data } = await getClientWithAuth().mutate({
+      mutation: mutationCreate,
+      variables: {
+        locationId,
+        listSettingsParentId
+      }
+    })
+    dispatch(createOrUpdateSuccess(data))
+  } catch (err) {
+    dispatch(createOrUpdateFailed(errToMsg(err)))
+  }
 }
