@@ -94,20 +94,22 @@ const ImageStyled = styled.img`
 `
 
 const Radio = ({ handleChange, box, value, name, checked, label, text, image }) => {
-  const handleRadioChange = (e, valueTarget) => {
+  const handleRadioChange = (e, obj) => {
     if (handleChange) {
-      if (valueTarget) {
-        handleChange(e, { valueTarget })
-        return
-      }
-      handleChange(e, { value: e.target.value })
+      handleChange(e, { value: obj.value, name: obj.name })
     }
   }
 
   return (
-    <RadioItem box={box} checked={checked} onClick={e => handleRadioChange(e, value)}>
+    <RadioItem box={box} checked={checked} onClick={e => handleRadioChange(e, { value, name })}>
       <RadioStyled>
-        <RadioButton type="radio" name={name} value={value} checked={checked} onChange={e => handleRadioChange(e)} />
+        <RadioButton
+          type="radio"
+          name={name}
+          value={value}
+          checked={checked}
+          onChange={e => handleRadioChange(e, { value, name })}
+        />
         <RadioButtonLabel />
         <div>{label}</div>
       </RadioStyled>
@@ -123,20 +125,13 @@ const Radio = ({ handleChange, box, value, name, checked, label, text, image }) 
 }
 
 Radio.defaultProps = {
-  // handleChange: () => {},
-  // box: false,
-  // value: '',
-  // name: '',
   checked: false
-  // label: '',
-  // text: '',
-  // image: ''
 }
 
 Radio.propTypes = {
   handleChange: PropTypes.func,
   box: PropTypes.bool,
-  value: PropTypes.string,
+  value: PropTypes.oneOfType([PropTypes.string, PropTypes.number, PropTypes.bool]),
   name: PropTypes.string,
   checked: PropTypes.bool,
   label: PropTypes.string,
