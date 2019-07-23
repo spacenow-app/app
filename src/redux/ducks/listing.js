@@ -199,6 +199,14 @@ const queryGetListingById = gql`
           updatedAt
           specData
         }
+        bookingPeriod {
+          id
+          listSettingsParentId
+          hourly
+          daily
+          weekly
+          monthly
+        }
       }
       accessDays {
         id
