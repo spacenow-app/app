@@ -19,14 +19,14 @@ export const Types = {
   LISTING_GET_SPACE_AMENITIES_FAILURE: 'LISTING_GET_SPACE_AMENITIES_FAILURE',
   CREATE_LISTING_START: 'CREATE_LISTING_START',
   CREATE_LISTING_SUCCESS: 'CREATE_LISTING_SUCCESS',
-  CREATE_LISTING_ERROR: 'CREATE_LISTING_ERROR'
+  CREATE_LISTING_FAILURE: 'CREATE_LISTING_FAILURE'
 }
 
 // Initial State
 const initialState = {
   isLoading: false,
   get: {
-    object: {},
+    object: null,
     isLoading: true,
     error: null
   },
@@ -47,191 +47,195 @@ const initialState = {
   }
 }
 
-// GraphQL
-const queryGetListingById = gql`
-  query getListingById($id: Int!) {
-    getListingById(id: $id) {
+const allListingFields = `
+  id
+  userId
+  title
+  coverPhotoId
+  bookingPeriod
+  isPublished
+  isReady
+  quantity
+  status
+  updatedAt
+  createdAt
+  count
+  listingData {
+    listingId
+    accessType
+    bookingNoticeTime
+    minTerm
+    maxTerm
+    description
+    basePrice
+    currency
+    isAbsorvedFee
+    capacity
+    size
+    meetingRooms
+    isFurnished
+    carSpace
+    sizeOfVehicle
+    maxEntranceHeight
+    bookingType
+    spaceType
+    listingAmenities
+    listingExceptionDates
+    listingRules
+    status
+  }
+  location {
+    id
+    userId
+    country
+    address1
+    address2
+    buildingName
+    city
+    state
+    zipcode
+    lat
+    lng
+    createdAt
+    updatedAt
+  }
+  amenities {
+    id
+    listingId
+    listSettingsId
+    amount
+    quantity
+    currency
+    settings
+    type
+    createdAt
+    updatedAt
+    settingsData {
       id
-      userId
-      title
-      coverPhotoId
-      bookingPeriod
-      isPublished
-      isReady
-      quantity
-      status
-      updatedAt
+      typeId
+      itemName
+      otherItemName
+      description
+      maximum
+      minimum
+      startValue
+      endValue
+      step
+      isEnable
+      photo
+      photoType
+      isSpecification
       createdAt
-      count
-      listingData {
-        listingId
-        accessType
-        bookingNoticeTime
-        minTerm
-        maxTerm
-        description
-        basePrice
-        currency
-        isAbsorvedFee
-        capacity
-        size
-        meetingRooms
-        isFurnished
-        carSpace
-        sizeOfVehicle
-        maxEntranceHeight
-        bookingType
-        spaceType
-        listingAmenities
-        listingExceptionDates
-        listingRules
-        status
-      }
-      location {
-        id
-        userId
-        country
-        address1
-        address2
-        buildingName
-        city
-        state
-        zipcode
-        lat
-        lng
-        createdAt
-        updatedAt
-      }
-      amenities {
-        id
-        listingId
-        listSettingsId
-        amount
-        quantity
-        currency
-        settings
-        type
-        createdAt
-        updatedAt
-        settingsData {
-          id
-          typeId
-          itemName
-          otherItemName
-          description
-          maximum
-          minimum
-          startValue
-          endValue
-          step
-          isEnable
-          photo
-          photoType
-          isSpecification
-          createdAt
-          updatedAt
-          specData
-        }
-      }
-      rules {
-        id
-        listingId
-        listSettingsId
-        createdAt
-        updatedAt
-        settingsData {
-          id
-          typeId
-          itemName
-          otherItemName
-          description
-          maximum
-          minimum
-          startValue
-          endValue
-          step
-          isEnable
-          photo
-          photoType
-          isSpecification
-          createdAt
-          updatedAt
-          specData
-        }
-      }
-      settingsParent {
-        id
-        category {
-          id
-          typeId
-          itemName
-          otherItemName
-          description
-          maximum
-          minimum
-          startValue
-          endValue
-          step
-          isEnable
-          photo
-          photoType
-          isSpecification
-          createdAt
-          updatedAt
-          specData
-        }
-        subcategory {
-          id
-          typeId
-          itemName
-          otherItemName
-          description
-          maximum
-          minimum
-          startValue
-          endValue
-          step
-          isEnable
-          photo
-          photoType
-          isSpecification
-          createdAt
-          updatedAt
-          specData
-        }
-      }
-      accessDays {
-        id
-        listingId
-        mon
-        tue
-        wed
-        thu
-        fri
-        sat
-        sun
-        all247
-        createdAt
-        updatedAt
-        listingAccessHours {
-          id
-          listingAccessDaysId
-          weekday
-          openHour
-          closeHour
-          allday
-          createdAt
-          updatedAt
-        }
-      }
+      updatedAt
+      specData
+    }
+  }
+  rules {
+    id
+    listingId
+    listSettingsId
+    createdAt
+    updatedAt
+    settingsData {
+      id
+      typeId
+      itemName
+      otherItemName
+      description
+      maximum
+      minimum
+      startValue
+      endValue
+      step
+      isEnable
+      photo
+      photoType
+      isSpecification
+      createdAt
+      updatedAt
+      specData
+    }
+  }
+  settingsParent {
+    id
+    category {
+      id
+      typeId
+      itemName
+      otherItemName
+      description
+      maximum
+      minimum
+      startValue
+      endValue
+      step
+      isEnable
+      photo
+      photoType
+      isSpecification
+      createdAt
+      updatedAt
+      specData
+    }
+    subcategory {
+      id
+      typeId
+      itemName
+      otherItemName
+      description
+      maximum
+      minimum
+      startValue
+      endValue
+      step
+      isEnable
+      photo
+      photoType
+      isSpecification
+      createdAt
+      updatedAt
+      specData
+    }
+    bookingPeriod {
+      id
+      listSettingsParentId
+      hourly
+      daily
+      weekly
+      monthly
+    }
+  }
+  accessDays {
+    id
+    listingId
+    mon
+    tue
+    wed
+    thu
+    fri
+    sat
+    sun
+    all247
+    createdAt
+    updatedAt
+    listingAccessHours {
+      id
+      listingAccessDaysId
+      weekday
+      openHour
+      closeHour
+      allday
+      createdAt
+      updatedAt
     }
   }
 `
 
-const mutationCreate = gql`
-  mutation createOrUpdateListing($locationId: Int!, $listSettingsParentId: Int!) {
-    createOrUpdateListing(locationId: $locationId, listSettingsParentId: $listSettingsParentId) {
-      status
+// GraphQL
+const queryGetListingById = gql`
+  query getListingById($id: Int!) {
+    getListingById(id: $id) {
+      ${allListingFields}
     }
   }
 `
@@ -261,6 +265,15 @@ const queryGetAllAmenities = gql`
     }
   }
 `
+
+const mutationCreate = gql`
+  mutation createOrUpdateListing($locationId: Int!, $listSettingsParentId: Int!) {
+    createOrUpdateListing(locationId: $locationId, listSettingsParentId: $listSettingsParentId) {
+      ${allListingFields}
+    }
+  }
+`
+
 // const mutationUpdate = gql`
 //   mutation createOrUpdateListing(
 //     $userId: String!
@@ -318,7 +331,7 @@ const queryGetAllAmenities = gql`
 //       listingExceptionDates: $listingExceptionDates
 //       listingRules: $listingRules
 //     ) {
-//       status
+//       ${allListingFields}
 //     }
 //   }
 // `
@@ -445,6 +458,33 @@ export default function reducer(state = initialState, action) {
         }
       }
     }
+    case Types.CREATE_LISTING_START: {
+      return {
+        ...state,
+        get: {
+          isLoading: true,
+          error: null
+        }
+      }
+    }
+    case Types.CREATE_LISTING_SUCCESS: {
+      return {
+        ...state,
+        get: {
+          isLoading: false,
+          object: action.payload
+        }
+      }
+    }
+    case Types.CREATE_LISTING_FAILURE: {
+      return {
+        ...state,
+        get: {
+          isLoading: false,
+          error: action.payload
+        }
+      }
+    }
     default:
       return state
   }
@@ -458,17 +498,11 @@ export const onGetListingById = id => async dispatch => {
   try {
     const { data } = await getClientWithAuth().query({
       query: queryGetListingById,
-      variables: { id: parseInt(id, 2) }
+      variables: { id: parseInt(id, 10) }
     })
-    dispatch({
-      type: Types.LISTING_GET_SPACE_SUCCESS,
-      payload: data.getListingById
-    })
+    dispatch({ type: Types.LISTING_GET_SPACE_SUCCESS, payload: data.getListingById })
   } catch (err) {
-    dispatch({
-      type: Types.LISTING_GET_SPACE_FAILURE,
-      payload: errToMsg(err)
-    })
+    dispatch({ type: Types.LISTING_GET_SPACE_FAILURE, payload: errToMsg(err) })
   }
 }
 
@@ -524,8 +558,8 @@ export const onCreate = (locationId, listSettingsParentId) => async dispatch => 
         listSettingsParentId
       }
     })
-    dispatch({ type: Types.CREATE_LISTING_SUCCESS, payload: data.getCategoriesLegacy })
+    dispatch({ type: Types.CREATE_LISTING_SUCCESS, payload: data.createOrUpdateListing })
   } catch (err) {
-    dispatch({ type: Types.CREATE_LISTING_ERROR, payload: errToMsg(err) })
+    dispatch({ type: Types.CREATE_LISTING_FAILURE, payload: errToMsg(err) })
   }
 }

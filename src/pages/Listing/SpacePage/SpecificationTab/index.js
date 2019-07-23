@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 import React, { useEffect } from 'react'
 import styled from 'styled-components'
 import { withFormik } from 'formik'
@@ -38,6 +39,7 @@ const SpecificationTab = ({
   ...props
 }) => {
   const dispatch = useDispatch()
+
   const { array: arrayRules, isLoading: isLoadingRules } = useSelector(state => state.listing.rules)
   const { array: arrayAccessTypes, isLoading: isLoadingAccessTypes } = useSelector(state => state.listing.accessTypes)
   const { array: arrayAmenities, isLoading: isLoadingAmenities } = useSelector(state => state.listing.amenities)
@@ -228,7 +230,7 @@ const formik = {
   displayName: 'ListingProcess_SpecificationForm',
   mapPropsToValues: props => {
     const { listing } = props
-    if (listing.id) {
+    if (listing && listing.id) {
       return {
         title: listing.title || '',
         capacity: listing.listingData.capacity || 0,
@@ -254,7 +256,7 @@ const formik = {
   }),
   handleSubmit: (values, { setSubmitting }) => {
     setTimeout(() => {
-      alert(JSON.stringify(values, null, 2))
+      console.warn(JSON.stringify(values, null, 2))
       setSubmitting(false)
     }, 1000)
   },

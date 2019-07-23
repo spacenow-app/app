@@ -19,7 +19,7 @@ const CategoryPage = props => {
   } = useSelector(state => state.category)
 
   const {
-    get: { listing }
+    get: { object }
   } = useSelector(state => state.listing)
 
   useEffect(() => {
@@ -39,7 +39,8 @@ const CategoryPage = props => {
     setSubCategorySelected(value)
   }
 
-  const _handlerCreateDraft = () => dispatch(onCreate(location.id, subCategorySelected.bookingPeriod.listSettingsParentId))
+  const _handlerCreateDraft = () =>
+    dispatch(onCreate(location.id, subCategorySelected.bookingPeriod.listSettingsParentId))
 
   // Previous location object from Location Step...
   if (!location) {
@@ -47,7 +48,7 @@ const CategoryPage = props => {
     return <></>
   }
 
-  if (listing) return <Redirect to={{ pathname: `/listing/space/${listing.id}/specification` }} />
+  if (object && object.id) return <Redirect to={{ pathname: `/listing/space/${object.id}/specification` }} />
 
   if (isLoading) return <>Loading...</>
 

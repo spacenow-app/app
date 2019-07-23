@@ -13,6 +13,7 @@ const Listing = lazy(() => import('routes/Listing'))
 
 const Routes = props => {
   const dispatch = useDispatch()
+
   const isAuthenticated = useSelector(state => state.auth.isAuthenticated)
   const isLoading = useSelector(state => state.auth.isLoading)
 

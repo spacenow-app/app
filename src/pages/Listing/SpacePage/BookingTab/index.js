@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 import React from 'react'
 import { withFormik } from 'formik'
 import * as Yup from 'yup'
@@ -232,7 +233,7 @@ const formik = {
   }),
   handleSubmit: (values, { setSubmitting }) => {
     setTimeout(() => {
-      alert(JSON.stringify(values, null, 2))
+      console.warn(JSON.stringify(values, null, 2))
       setSubmitting(false)
     }, 1000)
   },
