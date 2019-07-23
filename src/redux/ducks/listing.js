@@ -229,15 +229,8 @@ const queryGetListingById = gql`
 `
 
 const mutationCreate = gql`
-  mutation createOrUpdateListing(
-    $locationId: Int!
-    $listSettingsParentId: Int!
-  )
-  {
-    createOrUpdateListing(
-      locationId: $locationId
-      listSettingsParentId: $listSettingsParentId
-    ) {
+  mutation createOrUpdateListing($locationId: Int!, $listSettingsParentId: Int!) {
+    createOrUpdateListing(locationId: $locationId, listSettingsParentId: $listSettingsParentId) {
       status
     }
   }
@@ -517,7 +510,8 @@ export const onGetAllAmenities = subCategoryId => async dispatch => {
     dispatch({ type: Types.LISTING_GET_SPACE_AMENITIES_SUCCESS, payload: sorted })
   } catch (err) {
     dispatch({ type: Types.LISTING_GET_SPACE_AMENITIES_FAILURE, payload: errToMsg(err) })
-
+  }
+}
 
 // Side Effects
 export const onCreate = (locationId, listSettingsParentId) => async dispatch => {
@@ -530,7 +524,7 @@ export const onCreate = (locationId, listSettingsParentId) => async dispatch => 
         listSettingsParentId
       }
     })
-    dispatch({ type: Types.CREATE_LISTING_SUCCESS, payload: listing })
+    dispatch({ type: Types.CREATE_LISTING_SUCCESS, payload: data.getCategoriesLegacy })
   } catch (err) {
     dispatch({ type: Types.CREATE_LISTING_ERROR, payload: errToMsg(err) })
   }
