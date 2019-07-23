@@ -1,8 +1,11 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import styled from 'styled-components'
 import { withFormik } from 'formik'
 import * as Yup from 'yup'
-import { Title, Input, Checkbox, Select, TextArea } from 'components'
+import _ from 'lodash'
+import { useDispatch, useSelector } from 'react-redux'
+import { onGetAllRules, onGetAllAccessTypes, onGetAllAmenities } from 'redux/ducks/listing'
+import { Title, Input, Checkbox, Select, TextArea, StepButtons, Loader } from 'components'
 
 const WrapperStyled = styled.div`
   display: grid;
@@ -23,8 +26,45 @@ const CheckboxGroup = styled.div`
   grid-row-gap: 40px;
 `
 
-const SpecificationTab = props => {
-  const { values, touched, errors, handleChange, handleBlur, handleSubmit } = props
+const SpecificationTab = ({
+  values,
+  touched,
+  errors,
+  handleChange,
+  handleBlur,
+  handleSubmit,
+  setFieldValue,
+  listing,
+  ...props
+}) => {
+  const dispatch = useDispatch()
+  const { array: arrayRules, isLoading: isLoadingRules } = useSelector(state => state.listing.rules)
+  const { array: arrayAccessTypes, isLoading: isLoadingAccessTypes } = useSelector(state => state.listing.accessTypes)
+  const { array: arrayAmenities, isLoading: isLoadingAmenities } = useSelector(state => state.listing.amenities)
+
+  useEffect(() => {
+    dispatch(onGetAllRules())
+    dispatch(onGetAllAccessTypes())
+    dispatch(onGetAllAmenities(listing.settingsParent.subcategory.id))
+  }, [dispatch])
+
+  const _handleSelectChange = e => {
+    const { name, value } = e.target
+    setFieldValue(name, value)
+  }
+
+  const _handleCheckboxChange = (e, { name, checked }) => {
+    e.preventDefault()
+    const { value } = e.target
+    const find = _.find(values[name], item => item.listSettingsId === value)
+    if (find) {
+      const newArray = _.filter(values[name], item => item.listSettingsId !== value)
+      setFieldValue(name, newArray)
+      return
+    }
+    setFieldValue(name, [...values[name], { listSettingsId: value }])
+  }
+  console.log(values)
   return (
     <form onSubmit={handleSubmit}>
       <WrapperStyled>
@@ -34,7 +74,15 @@ const SpecificationTab = props => {
             title="Title*"
             subtitle="Your title sets the scene. Make it short, powerful and identify someone’s need for it."
           />
-          <Input label="Description" placeholder="e.g. Car park 100m walk to Central Station" />
+          <Input
+            label="Description"
+            placeholder="e.g. Car park 100m walk to Central Station"
+            name="title"
+            error={errors.title}
+            value={values.title}
+            onChange={handleChange}
+            onBlur={handleBlur}
+          />
         </SectionStyled>
         <SectionStyled>
           <Title
@@ -45,16 +93,32 @@ const SpecificationTab = props => {
           <InputGroup>
             <Input
               label="Capacity"
+              placeholder="Capacity"
               name="capacity"
-              placeholder="Specification"
-              error={errors.capacity && touched.capacity && errors.capacity}
+              error={errors.capacity}
               value={values.capacity}
               onChange={handleChange}
               onBlur={handleBlur}
             />
-            <Input label="Size" placeholder="Specification" />
-            <Input label="Car Space" placeholder="Specification" />
-            <Select label="Type" value={0} />
+            <Input
+              label="Size"
+              placeholder="Size"
+              name="size"
+              error={errors.size}
+              value={values.size}
+              onChange={handleChange}
+              onBlur={handleBlur}
+            />
+            <Input
+              label="Car Space"
+              placeholder="Car Space"
+              name="carSpace"
+              error={errors.carSpace}
+              value={values.carSpace}
+              onChange={handleChange}
+              onBlur={handleBlur}
+            />
+            <Select label="Type" value={0} onChange={_handleSelectChange} />
           </InputGroup>
         </SectionStyled>
         <SectionStyled>
@@ -63,42 +127,68 @@ const SpecificationTab = props => {
             title="About"
             subtitle="Sell ‘em the dream. Start broad, then get specific. Include features and details that make your space special. Don’t forget to mention the light, he ambience, the vibe plus any good transport options. Local food options or other local gems. Be honest, but be persuasive."
           />
-          <TextArea placeholder="Describe your space" />
+          <TextArea
+            placeholder="Describe your space"
+            name="description"
+            error={errors.description}
+            value={values.description}
+            onChange={handleChange}
+            onBlur={handleBlur}
+          />
         </SectionStyled>
         <SectionStyled>
           <Title type="h3" title="Amenities" subtitle="What features does your space offer guests?" />
           <CheckboxGroup>
-            <Checkbox label="Amenity name" />
-            <Checkbox label="Amenity name" />
-            <Checkbox label="Amenity name" />
-            <Checkbox label="Amenity name" />
-            <Checkbox label="Amenity name" />
-            <Checkbox label="Amenity name" />
-            <Checkbox label="Amenity name" />
-            <Checkbox label="Amenity name" />
-            <Checkbox label="Amenity name" />
-            <Checkbox label="Amenity name" />
+            {isLoadingAmenities ? (
+              <Loader />
+            ) : (
+              arrayAmenities.map(item => {
+                return (
+                  <Checkbox
+                    key={item.id}
+                    label={item.itemName}
+                    name="amenities"
+                    value={item.id}
+                    checked={values.amenities.some(amenitie => amenitie.listSettingsId === item.id)}
+                    handleCheckboxChange={_handleCheckboxChange}
+                  />
+                )
+              })
+            )}
           </CheckboxGroup>
         </SectionStyled>
         <SectionStyled>
           <Title type="h3" title="Space Rules" subtitle="Let guests know about the rules of the space." />
+          {}
           <CheckboxGroup>
-            <Checkbox label="Keep noise/music within regulations" />
-            <Checkbox label="Amenity name" />
-            <Checkbox label="Amenity name" />
-            <Checkbox label="Amenity name" />
-            <Checkbox label="Amenity name" />
-            <Checkbox label="Vacate space within time allocated" />
-            <Checkbox label="Not suitable for children" />
-            <Checkbox label="Amenity name" />
-            <Checkbox label="Amenity name" />
-            <Checkbox label="Remove rubbish" />
+            {isLoadingRules ? (
+              <Loader />
+            ) : (
+              arrayRules.map(item => {
+                return (
+                  <Checkbox
+                    key={item.id}
+                    label={item.itemName}
+                    name="rules"
+                    value={item.id}
+                    checked={values.rules.some(rule => rule.listSettingsId === item.id)}
+                    handleCheckboxChange={_handleCheckboxChange}
+                  />
+                )
+              })
+            )}
           </CheckboxGroup>
         </SectionStyled>
         <SectionStyled>
           <Title type="h3" title="Access Information*" subtitle="Let your guests know how they’ll get in." />
           <div style={{ width: '350px' }}>
-            <Select value={0} />
+            <Select value={values.accessType} name="accessType" onChange={_handleSelectChange}>
+              {arrayAccessTypes.map(item => (
+                <option key={item.id} value={item.itemName}>
+                  {item.itemName}
+                </option>
+              ))}
+            </Select>
           </div>
         </SectionStyled>
         <SectionStyled>
@@ -120,19 +210,44 @@ const SpecificationTab = props => {
             perspective. Spaces look best in natural light. Include all areas your guest can access.
           </p>
         </SectionStyled>
+        <StepButtons
+          prev={{ disabled: false, onClick: () => props.history.goBack() }}
+          next={{
+            onClick: () => props.history.push('booking')
+          }}
+        />
       </WrapperStyled>
     </form>
   )
 }
 
 const formik = {
-  displayName: 'SpecificationForm',
-  mapPropsToValues: props => ({
-    capacity: props.capacity || ''
-  }),
+  displayName: 'ListingProcess_SpecificationForm',
+  mapPropsToValues: props => {
+    const { listing } = props
+    if (listing.id) {
+      return {
+        title: listing.title || '',
+        capacity: listing.listingData.capacity || 0,
+        size: listing.listingData.size || 0,
+        carSpace: listing.listingData.carSpace || 0,
+        description: listing.listingData.description || '',
+        accessType: listing.listingData.accessType || '',
+        rules: listing.rules || [],
+        amenities: listing.amenities || []
+      }
+    }
+    return {}
+  },
   mapValuesToPayload: x => x,
   validationSchema: Yup.object().shape({
-    capacity: Yup.number('Capacity need to be number').required('Capacity is required!')
+    title: Yup.string()
+      .typeError('Title need to be String')
+      .max(25, 'Maximum characters for Title field must be 25'),
+    capacity: Yup.number().typeError('Capacity need to be number'),
+    size: Yup.number().typeError('Size need to be number'),
+    carSpace: Yup.number().typeError('Car Space need to be number'),
+    description: Yup.string().typeError('Description need to be string')
   }),
   handleSubmit: (values, { setSubmitting }) => {
     setTimeout(() => {
