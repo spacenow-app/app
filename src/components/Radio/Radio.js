@@ -22,6 +22,12 @@ const RadioItem = styled.div`
         transition: border 0.2s ease;
       }
     `}
+  ${props =>
+    props.disabled &&
+    css`
+      pointer-events: none;
+      opacity: 0.5;
+    `}
 `
 
 const RadioStyled = styled.div`
@@ -31,6 +37,7 @@ const RadioStyled = styled.div`
   align-items: center;
   justify-items: start;
   grid-column-gap: 20px;
+  color: #172439;
 `
 
 const RadioButtonLabel = styled.label`
@@ -81,7 +88,7 @@ const RadioContent = styled.div`
 `
 
 const RadioText = styled.span`
-  color: #172439;
+  color: #172439
   font-size: 14px;
   margin-top: 20px;
   font-family: 'Montserrat-Regular';
@@ -93,18 +100,19 @@ const ImageStyled = styled.img`
   border-radius: 100%;
 `
 
-const Radio = ({ handleChange, box, value, name, checked, label, text, image }) => {
+const Radio = ({ handleChange, box, value, name, checked, label, text, image, disabled }) => {
   const handleRadioChange = (e, obj) => {
     if (handleChange) {
-      handleChange(e, { value: obj.value, name: obj.name })
+      handleChange(e, { value: obj.value, name: obj.name, disabled })
     }
   }
 
   return (
-    <RadioItem box={box} checked={checked} onClick={e => handleRadioChange(e, { value, name })}>
-      <RadioStyled>
+    <RadioItem box={box} checked={checked} disabled={disabled} onClick={e => handleRadioChange(e, { value, name })}>
+      <RadioStyled disabled={disabled}>
         <RadioButton
           type="radio"
+          disabled={disabled}
           name={name}
           value={value}
           checked={checked}
@@ -136,7 +144,8 @@ Radio.propTypes = {
   checked: PropTypes.bool,
   label: PropTypes.string,
   text: PropTypes.string,
-  image: PropTypes.string
+  image: PropTypes.string,
+  disabled: PropTypes.bool
 }
 
 export default memo(Radio, (prevProps, nextProps) => {
