@@ -13,12 +13,12 @@ const ScrollToTop = ({ children, location: { pathname } }) => {
   useEffect(() => {
     window.scroll({ top: 0, left: 0, behavior: 'smooth' })
   }, [pathname])
-
   return children
 }
 
 const SpacePage = ({ match, location, ...props }) => {
   const dispatch = useDispatch()
+
   const { object, isLoading } = useSelector(state => state.listing.get)
 
   useEffect(() => {
