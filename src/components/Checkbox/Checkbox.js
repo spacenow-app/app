@@ -35,6 +35,7 @@ const StyledCheckbox = styled.div`
   border: 2px solid ${props => (props.checked ? '#6ADC91' : '#172439')};
   border-radius: 5px;
   transition: all 150ms;
+  cursor: pointer;
 
   ${HiddenCheckbox}:focus + & {
     box-shadow: 0 0 0 3px #6adc91;
@@ -58,6 +59,7 @@ const Checkbox = ({ className, name, checked, label, handleCheckboxChange, ...pr
     <label>
       <CheckboxContainer {...props} className={className}>
         <HiddenCheckbox
+          {...props}
           name={name}
           checked={checked}
           onChange={e => handleCheckboxChange(e, { checked: !e.target.checked, name })}
