@@ -46,7 +46,7 @@ const SpecificationTab = ({
     dispatch(onGetAllRules())
     dispatch(onGetAllAccessTypes())
     dispatch(onGetAllAmenities(listing.settingsParent.subcategory.id))
-  }, [dispatch])
+  }, [dispatch, listing.settingsParent.subcategory.id])
 
   const _handleSelectChange = e => {
     const { name, value } = e.target
@@ -54,17 +54,16 @@ const SpecificationTab = ({
   }
 
   const _handleCheckboxChange = (e, { name, checked }) => {
-    e.preventDefault()
     const { value } = e.target
-    const find = _.find(values[name], item => item.listSettingsId === value)
+    const find = _.find(values[name], item => item.listSettingsId === Number(value))
     if (find) {
-      const newArray = _.filter(values[name], item => item.listSettingsId !== value)
+      const newArray = _.filter(values[name], item => item.listSettingsId !== Number(value))
       setFieldValue(name, newArray)
       return
     }
-    setFieldValue(name, [...values[name], { listSettingsId: value }])
+    setFieldValue(name, [...values[name], { listSettingsId: Number(value) }])
   }
-  console.log(values)
+
   return (
     <form onSubmit={handleSubmit}>
       <WrapperStyled>
