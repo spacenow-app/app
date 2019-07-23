@@ -16,12 +16,11 @@ const Routes = props => {
   const isAuthenticated = useSelector(state => state.auth.isAuthenticated)
   const isLoading = useSelector(state => state.auth.isLoading)
 
-  // const _handlerCheckAuthentication = () => dispatch(onIsTokenExists())
-  const _handlerCheckAuthentication = () => console.log('login...')
+  const _handlerCheckAuthentication = () => dispatch(onIsTokenExists())
 
-  // useEffect(() => {
-  //   dispatch(onTokenValidation())
-  // }, [dispatch, isAuthenticated])
+  useEffect(() => {
+    dispatch(onTokenValidation())
+  }, [dispatch, isAuthenticated])
 
   if (isLoading) {
     return <Loader />

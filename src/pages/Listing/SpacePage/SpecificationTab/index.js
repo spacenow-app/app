@@ -141,19 +141,19 @@ const SpecificationTab = ({
             {isLoadingAmenities ? (
               <Loader />
             ) : (
-              arrayAmenities.map(item => {
-                return (
-                  <Checkbox
-                    key={item.id}
-                    label={item.itemName}
-                    name="amenities"
-                    value={item.id}
-                    checked={values.amenities.some(amenitie => amenitie.listSettingsId === item.id)}
-                    handleCheckboxChange={_handleCheckboxChange}
-                  />
-                )
-              })
-            )}
+                arrayAmenities.map(item => {
+                  return (
+                    <Checkbox
+                      key={item.id}
+                      label={item.itemName}
+                      name="amenities"
+                      value={item.id}
+                      checked={values.amenities.some(amenitie => amenitie.listSettingsId === item.id)}
+                      handleCheckboxChange={_handleCheckboxChange}
+                    />
+                  )
+                })
+              )}
           </CheckboxGroup>
         </SectionStyled>
         <SectionStyled>
@@ -163,31 +163,35 @@ const SpecificationTab = ({
             {isLoadingRules ? (
               <Loader />
             ) : (
-              arrayRules.map(item => {
-                return (
-                  <Checkbox
-                    key={item.id}
-                    label={item.itemName}
-                    name="rules"
-                    value={item.id}
-                    checked={values.rules.some(rule => rule.listSettingsId === item.id)}
-                    handleCheckboxChange={_handleCheckboxChange}
-                  />
-                )
-              })
-            )}
+                arrayRules.map(item => {
+                  return (
+                    <Checkbox
+                      key={item.id}
+                      label={item.itemName}
+                      name="rules"
+                      value={item.id}
+                      checked={values.rules.some(rule => rule.listSettingsId === item.id)}
+                      handleCheckboxChange={_handleCheckboxChange}
+                    />
+                  )
+                })
+              )}
           </CheckboxGroup>
         </SectionStyled>
         <SectionStyled>
           <Title type="h3" title="Access Information*" subtitle="Let your guests know how they’ll get in." />
           <div style={{ width: '350px' }}>
-            <Select value={values.accessType} name="accessType" onChange={_handleSelectChange}>
-              {arrayAccessTypes.map(item => (
-                <option key={item.id} value={item.itemName}>
-                  {item.itemName}
-                </option>
-              ))}
-            </Select>
+            {isLoadingAccessTypes ? (
+              <Loader />
+            ) : (
+                <Select value={values.accessType} name="accessType" onChange={_handleSelectChange}>
+                  {arrayAccessTypes.map(item => (
+                    <option key={item.id} value={item.itemName}>
+                      {item.itemName}
+                    </option>
+                  ))}
+                </Select>
+              )}
           </div>
         </SectionStyled>
         <SectionStyled>
