@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 import React, { useEffect } from 'react'
 import styled from 'styled-components'
 import { withFormik } from 'formik'
@@ -40,7 +41,7 @@ const SpecificationTab = ({
   const dispatch = useDispatch()
 
   const { array: arrayRules, isLoading: isLoadingRules } = useSelector(state => state.listing.rules)
-  const { array: arrayAccessTypes, isLoading: isLoadingAccessTypes } = useSelector(state => state.listing.accessTypes)
+  const { array: arrayAccessTypes } = useSelector(state => state.listing.accessTypes)
   const { array: arrayAmenities, isLoading: isLoadingAmenities } = useSelector(state => state.listing.amenities)
 
   useEffect(() => {
@@ -251,7 +252,7 @@ const formik = {
   }),
   handleSubmit: (values, { setSubmitting }) => {
     setTimeout(() => {
-      alert(JSON.stringify(values, null, 2))
+      console.warn(JSON.stringify(values, null, 2))
       setSubmitting(false)
     }, 1000)
   },

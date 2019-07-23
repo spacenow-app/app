@@ -274,67 +274,67 @@ const mutationCreate = gql`
   }
 `
 
-const mutationUpdate = gql`
-  mutation createOrUpdateListing(
-    $userId: String!
-    $locationId: Int!
-    $listSettingsParentId: Int!
-    $listingId: Int!
-    $title: String
-    $accessType: String
-    $bookingNoticeTime: String
-    $minTerm: Float
-    $maxTerm: Float
-    $description: String
-    $basePrice: Float
-    $currency: String
-    $isAbsorvedFee: Boolean
-    $capacity: Int
-    $size: Int
-    $meetingRooms: Int
-    $isFurnished: Boolean
-    $carSpace: Int
-    $sizeOfVehicle: String
-    $maxEntranceHeight: String
-    $spaceType: String
-    $bookingType: String
-    $listingAmenities: [Int]
-    $listingAccessDays: ListingAccessDaysInput
-    $listingExceptionDates: [String]
-    $listingRules: [Int]
-  ) {
-    createOrUpdateListing(
-      userId: $userId
-      locationId: $locationId
-      listSettingsParentId: $listSettingsParentId
-      listingId: $listingId
-      title: $title
-      accessType: $accessType
-      bookingNoticeTime: $bookingNoticeTime
-      minTerm: $minTerm
-      maxTerm: $maxTerm
-      description: $description
-      basePrice: $basePrice
-      currency: $currency
-      isAbsorvedFee: $isAbsorvedFee
-      capacity: $capacity
-      size: $size
-      meetingRooms: $meetingRooms
-      isFurnished: $isFurnished
-      carSpace: $carSpace
-      sizeOfVehicle: $sizeOfVehicle
-      maxEntranceHeight: $maxEntranceHeight
-      spaceType: $spaceType
-      bookingType: $bookingType
-      listingAmenities: $listingAmenities
-      listingAccessDays: $listingAccessDays
-      listingExceptionDates: $listingExceptionDates
-      listingRules: $listingRules
-    ) {
-      ${allListingFields}
-    }
-  }
-`
+// const mutationUpdate = gql`
+//   mutation createOrUpdateListing(
+//     $userId: String!
+//     $locationId: Int!
+//     $listSettingsParentId: Int!
+//     $listingId: Int!
+//     $title: String
+//     $accessType: String
+//     $bookingNoticeTime: String
+//     $minTerm: Float
+//     $maxTerm: Float
+//     $description: String
+//     $basePrice: Float
+//     $currency: String
+//     $isAbsorvedFee: Boolean
+//     $capacity: Int
+//     $size: Int
+//     $meetingRooms: Int
+//     $isFurnished: Boolean
+//     $carSpace: Int
+//     $sizeOfVehicle: String
+//     $maxEntranceHeight: String
+//     $spaceType: String
+//     $bookingType: String
+//     $listingAmenities: [Int]
+//     $listingAccessDays: ListingAccessDaysInput
+//     $listingExceptionDates: [String]
+//     $listingRules: [Int]
+//   ) {
+//     createOrUpdateListing(
+//       userId: $userId
+//       locationId: $locationId
+//       listSettingsParentId: $listSettingsParentId
+//       listingId: $listingId
+//       title: $title
+//       accessType: $accessType
+//       bookingNoticeTime: $bookingNoticeTime
+//       minTerm: $minTerm
+//       maxTerm: $maxTerm
+//       description: $description
+//       basePrice: $basePrice
+//       currency: $currency
+//       isAbsorvedFee: $isAbsorvedFee
+//       capacity: $capacity
+//       size: $size
+//       meetingRooms: $meetingRooms
+//       isFurnished: $isFurnished
+//       carSpace: $carSpace
+//       sizeOfVehicle: $sizeOfVehicle
+//       maxEntranceHeight: $maxEntranceHeight
+//       spaceType: $spaceType
+//       bookingType: $bookingType
+//       listingAmenities: $listingAmenities
+//       listingAccessDays: $listingAccessDays
+//       listingExceptionDates: $listingExceptionDates
+//       listingRules: $listingRules
+//     ) {
+//       ${allListingFields}
+//     }
+//   }
+// `
 
 // Reducer
 export default function reducer(state = initialState, action) {
