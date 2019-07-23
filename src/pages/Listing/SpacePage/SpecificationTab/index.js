@@ -5,7 +5,9 @@ import { withFormik } from 'formik'
 import * as Yup from 'yup'
 import _ from 'lodash'
 import { useDispatch, useSelector } from 'react-redux'
-import { onGetAllRules, onGetAllAccessTypes, onGetAllAmenities } from 'redux/ducks/listing'
+
+import { onGetAllRules, onGetAllAccessTypes, onGetAllAmenities, onUpdate } from 'redux/ducks/listing'
+
 import { Title, Input, Checkbox, Select, TextArea, StepButtons, Loader } from 'components'
 
 const WrapperStyled = styled.div`
@@ -66,8 +68,13 @@ const SpecificationTab = ({
     setFieldValue(name, [...values[name], { listSettingsId: Number(value) }])
   }
 
+  const _handleSave = async () => {
+    await dispatch(onUpdate(values))
+    props.history.push('booking')
+  }
+
   return (
-    <form onSubmit={handleSubmit}>
+    <form>
       <WrapperStyled>
         <SectionStyled>
           <Title
@@ -143,19 +150,19 @@ const SpecificationTab = ({
             {isLoadingAmenities ? (
               <Loader />
             ) : (
-                arrayAmenities.map(item => {
-                  return (
-                    <Checkbox
-                      key={item.id}
-                      label={item.itemName}
-                      name="amenities"
-                      value={item.id}
-                      checked={values.amenities.some(amenitie => amenitie.listSettingsId === item.id)}
-                      handleCheckboxChange={_handleCheckboxChange}
-                    />
-                  )
-                })
-              )}
+              arrayAmenities.map(item => {
+                return (
+                  <Checkbox
+                    key={item.id}
+                    label={item.itemName}
+                    name="amenities"
+                    value={item.id}
+                    checked={values.amenities.some(amenitie => amenitie.listSettingsId === item.id)}
+                    handleCheckboxChange={_handleCheckboxChange}
+                  />
+                )
+              })
+            )}
           </CheckboxGroup>
         </SectionStyled>
         <SectionStyled>
@@ -165,19 +172,19 @@ const SpecificationTab = ({
             {isLoadingRules ? (
               <Loader />
             ) : (
-                arrayRules.map(item => {
-                  return (
-                    <Checkbox
-                      key={item.id}
-                      label={item.itemName}
-                      name="rules"
-                      value={item.id}
-                      checked={values.rules.some(rule => rule.listSettingsId === item.id)}
-                      handleCheckboxChange={_handleCheckboxChange}
-                    />
-                  )
-                })
-              )}
+              arrayRules.map(item => {
+                return (
+                  <Checkbox
+                    key={item.id}
+                    label={item.itemName}
+                    name="rules"
+                    value={item.id}
+                    checked={values.rules.some(rule => rule.listSettingsId === item.id)}
+                    handleCheckboxChange={_handleCheckboxChange}
+                  />
+                )
+              })
+            )}
           </CheckboxGroup>
         </SectionStyled>
         <SectionStyled>
@@ -186,14 +193,14 @@ const SpecificationTab = ({
             {isLoadingAccessTypes ? (
               <Loader />
             ) : (
-                <Select value={values.accessType} name="accessType" onChange={_handleSelectChange}>
-                  {arrayAccessTypes.map(item => (
-                    <option key={item.id} value={item.itemName}>
-                      {item.itemName}
-                    </option>
-                  ))}
-                </Select>
-              )}
+              <Select value={values.accessType} name="accessType" onChange={_handleSelectChange}>
+                {arrayAccessTypes.map(item => (
+                  <option key={item.id} value={item.itemName}>
+                    {item.itemName}
+                  </option>
+                ))}
+              </Select>
+            )}
           </div>
         </SectionStyled>
         <SectionStyled>
@@ -217,9 +224,7 @@ const SpecificationTab = ({
         </SectionStyled>
         <StepButtons
           prev={{ disabled: false, onClick: () => props.history.goBack() }}
-          next={{
-            onClick: () => props.history.push('booking')
-          }}
+          next={{ onClick: _handleSave }}
         />
       </WrapperStyled>
     </form>
@@ -254,12 +259,6 @@ const formik = {
     carSpace: Yup.number().typeError('Car Space need to be number'),
     description: Yup.string().typeError('Description need to be string')
   }),
-  handleSubmit: (values, { setSubmitting }) => {
-    setTimeout(() => {
-      console.warn(JSON.stringify(values, null, 2))
-      setSubmitting(false)
-    }, 1000)
-  },
   enableReinitialize: true
 }
 

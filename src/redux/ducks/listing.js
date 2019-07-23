@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 import { gql } from 'apollo-boost'
 
 import { getClientWithAuth } from 'graphql/apolloClient'
@@ -19,7 +20,10 @@ export const Types = {
   LISTING_GET_SPACE_AMENITIES_FAILURE: 'LISTING_GET_SPACE_AMENITIES_FAILURE',
   CREATE_LISTING_START: 'CREATE_LISTING_START',
   CREATE_LISTING_SUCCESS: 'CREATE_LISTING_SUCCESS',
-  CREATE_LISTING_FAILURE: 'CREATE_LISTING_FAILURE'
+  CREATE_LISTING_FAILURE: 'CREATE_LISTING_FAILURE',
+  UPDATE_LISTING_START: 'UPDATE_LISTING_START',
+  UPDATE_LISTING_SUCCESS: 'UPDATE_LISTING_SUCCESS',
+  UPDATE_LISTING_FAILURE: 'UPDATE_LISTING_FAILURE'
 }
 
 // Initial State
@@ -561,5 +565,14 @@ export const onCreate = (locationId, listSettingsParentId) => async dispatch => 
     dispatch({ type: Types.CREATE_LISTING_SUCCESS, payload: data.createOrUpdateListing })
   } catch (err) {
     dispatch({ type: Types.CREATE_LISTING_FAILURE, payload: errToMsg(err) })
+  }
+}
+
+export const onUpdate = listingObj => async dispatch => {
+  dispatch({ type: Types.UPDATE_LISTING_START })
+  try {
+    console.log('onUpdate -> listingObj ->', listingObj)
+  } catch (err) {
+    dispatch({ type: Types.UPDATE_LISTING_FAILURE, payload: errToMsg(err) })
   }
 }
