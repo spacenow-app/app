@@ -1,122 +1,83 @@
-import React, { Component } from 'react'
+import React, { useEffect, useState } from 'react'
+import { useSelector, useDispatch } from 'react-redux'
+import { Redirect } from 'react-router-dom'
 import { Wrapper, Title, StepButtons, List, Caption } from 'components'
 
-class CategoryPage extends Component {
-  constructor(props) {
-    super(props)
-    this.state = {
-      category: [
-        {
-          id: 1,
-          title: 'Business',
-          icon: 'category-office',
-          subCategories: [
-            {
-              id: 1,
-              title: 'Private Room',
-              icon: 'business'
-            },
-            {
-              id: 2,
-              title: 'Entire Office',
-              icon: 'business'
-            },
-            {
-              id: 3,
-              title: 'Coworking',
-              icon: 'business'
-            }
-          ]
-        },
-        {
-          id: 2,
-          title: 'Coworking',
-          icon: 'category-coworking',
-          subCategories: []
-        },
-        {
-          id: 3,
-          title: 'Meeting',
-          icon: 'category-meeting-room'
-        },
-        {
-          id: 4,
-          title: 'Venue',
-          icon: 'category-events'
-        },
-        {
-          id: 5,
-          title: 'Parking',
-          icon: 'category-parking'
-        },
-        {
-          id: 6,
-          title: 'Storage',
-          icon: 'category-storage'
-        },
-        {
-          id: 7,
-          title: 'Desk',
-          icon: 'category-desk'
-        },
-        {
-          id: 8,
-          title: 'Hospitaly',
-          icon: 'category-hospitality'
-        }
-      ],
-      categorySelected: null,
-      subCategorySelected: null
-    }
+import { onGetAllCategories } from 'redux/ducks/category'
+import { onCreate } from 'redux/ducks/listing'
+
+const CategoryPage = props => {
+  const dispatch = useDispatch()
+
+  const {
+    get: { location }
+  } = useSelector(state => state.location)
+
+  const {
+    isLoading,
+    get: { categories }
+  } = useSelector(state => state.category)
+
+  const {
+    get: { listing }
+  } = useSelector(state => state.listing)
+
+  useEffect(() => {
+    if (!categories || categories.length <= 0) dispatch(onGetAllCategories())
+  }, [categories, dispatch])
+
+  const [categorySelected, setCategorySelected] = useState(null)
+
+  const [subCategorySelected, setSubCategorySelected] = useState(null)
+
+  const _handleCategoryClick = (_, value) => {
+    setCategorySelected(value)
+    setSubCategorySelected(null)
   }
 
-  _handleCategoryClick = (e, value) => {
-    this.setState({ categorySelected: value, subCategorySelected: null })
+  const _handleSubCategoryClick = (_, value) => {
+    setSubCategorySelected(value)
   }
 
-  _handleSubCategoryClick = (e, value) => {
-    this.setState({ subCategorySelected: value })
+  const _handlerCreateDraft = () => dispatch(onCreate(location.id, subCategorySelected.bookingPeriod.listSettingsParentId))
+
+  // Previous location object from Location Step...
+  if (!location) {
+    props.history.replace('/listing/location')
+    return <></>
   }
 
-  render() {
-    const { props } = this
-    return (
-      <Wrapper>
-        <Title
-          type="h3"
-          title="Choose one category"
-          subtitle="To list a space you’ll need to put it in the right category. The icons below all have categories drop down once selected. You can click on several to find the right category for your space."
-        />
+  if (listing) return <Redirect to={{ pathname: `/listing/space/${listing.id}/specification` }} />
 
-        <List
-          vertical
-          data={this.state.category}
-          handleItemClick={this._handleCategoryClick}
-          itemSelected={this.state.categorySelected}
-        />
+  if (isLoading) return <>Loading...</>
 
-        {this.state.categorySelected && this.state.categorySelected.subCategories && (
-          <>
-            <Caption large centered margin="50px 0">
-              Select a sub-category
-            </Caption>
-            <List
-              vertical
-              circular
-              data={this.state.categorySelected.subCategories}
-              handleItemClick={this._handleSubCategoryClick}
-              itemSelected={this.state.subCategorySelected}
-            />
-          </>
-        )}
-
-        <StepButtons
-          prev={{ disabled: false, onClick: () => props.history.goBack() }}
-          next={{ disabled: false, onClick: () => props.history.push('/listing/space/1') }}
-        />
-      </Wrapper>
-    )
-  }
+  return (
+    <Wrapper>
+      <Title
+        type="h3"
+        title="Choose one category"
+        subtitle="To list a space you’ll need to put it in the right category. The icons below all have categories drop down once selected. You can click on several to find the right category for your space."
+      />
+      <List data={categories} handleItemClick={_handleCategoryClick} itemSelected={categorySelected} />
+      {categorySelected && categorySelected.subCategories && (
+        <>
+          <Caption large centered margin="50px 0">
+            Select a sub-category
+          </Caption>
+          <List
+            circular
+            data={categorySelected.subCategories}
+            handleItemClick={_handleSubCategoryClick}
+            itemSelected={subCategorySelected}
+          />
+        </>
+      )}
+      <StepButtons
+        prev={{ disabled: false, onClick: () => props.history.push('/listing/location') }}
+        next={{ disabled: !location || !categorySelected || !subCategorySelected, onClick: _handlerCreateDraft }}
+      />
+    </Wrapper>
+  )
 }
 
 export default CategoryPage

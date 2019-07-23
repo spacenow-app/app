@@ -16,7 +16,10 @@ export const Types = {
   LISTING_GET_SPACE_ACCESSTYPES_FAILURE: 'LISTING_GET_SPACE_ACCESSTYPES_FAILURE',
   LISTING_GET_SPACE_AMENITIES_REQUEST: 'LISTING_GET_SPACE_AMENITIES_REQUEST',
   LISTING_GET_SPACE_AMENITIES_SUCCESS: 'LISTING_GET_SPACE_AMENITIES_SUCCESS',
-  LISTING_GET_SPACE_AMENITIES_FAILURE: 'LISTING_GET_SPACE_AMENITIES_FAILURE'
+  LISTING_GET_SPACE_AMENITIES_FAILURE: 'LISTING_GET_SPACE_AMENITIES_FAILURE',
+  CREATE_LISTING_START: 'CREATE_LISTING_START',
+  CREATE_LISTING_SUCCESS: 'CREATE_LISTING_SUCCESS',
+  CREATE_LISTING_ERROR: 'CREATE_LISTING_ERROR'
 }
 
 // Initial State
@@ -225,6 +228,21 @@ const queryGetListingById = gql`
   }
 `
 
+const mutationCreate = gql`
+  mutation createOrUpdateListing(
+    $locationId: Int!
+    $listSettingsParentId: Int!
+  )
+  {
+    createOrUpdateListing(
+      locationId: $locationId
+      listSettingsParentId: $listSettingsParentId
+    ) {
+      status
+    }
+  }
+`
+
 const queryGetAllRules = gql`
   query getAllRules {
     getAllRules {
@@ -250,6 +268,67 @@ const queryGetAllAmenities = gql`
     }
   }
 `
+// const mutationUpdate = gql`
+//   mutation createOrUpdateListing(
+//     $userId: String!
+//     $locationId: Int!
+//     $listSettingsParentId: Int!
+//     $listingId: Int!
+//     $title: String
+//     $accessType: String
+//     $bookingNoticeTime: String
+//     $minTerm: Float
+//     $maxTerm: Float
+//     $description: String
+//     $basePrice: Float
+//     $currency: String
+//     $isAbsorvedFee: Boolean
+//     $capacity: Int
+//     $size: Int
+//     $meetingRooms: Int
+//     $isFurnished: Boolean
+//     $carSpace: Int
+//     $sizeOfVehicle: String
+//     $maxEntranceHeight: String
+//     $spaceType: String
+//     $bookingType: String
+//     $listingAmenities: [Int]
+//     $listingAccessDays: ListingAccessDaysInput
+//     $listingExceptionDates: [String]
+//     $listingRules: [Int]
+//   ) {
+//     createOrUpdateListing(
+//       userId: $userId
+//       locationId: $locationId
+//       listSettingsParentId: $listSettingsParentId
+//       listingId: $listingId
+//       title: $title
+//       accessType: $accessType
+//       bookingNoticeTime: $bookingNoticeTime
+//       minTerm: $minTerm
+//       maxTerm: $maxTerm
+//       description: $description
+//       basePrice: $basePrice
+//       currency: $currency
+//       isAbsorvedFee: $isAbsorvedFee
+//       capacity: $capacity
+//       size: $size
+//       meetingRooms: $meetingRooms
+//       isFurnished: $isFurnished
+//       carSpace: $carSpace
+//       sizeOfVehicle: $sizeOfVehicle
+//       maxEntranceHeight: $maxEntranceHeight
+//       spaceType: $spaceType
+//       bookingType: $bookingType
+//       listingAmenities: $listingAmenities
+//       listingAccessDays: $listingAccessDays
+//       listingExceptionDates: $listingExceptionDates
+//       listingRules: $listingRules
+//     ) {
+//       status
+//     }
+//   }
+// `
 
 // Reducer
 export default function reducer(state = initialState, action) {
@@ -438,5 +517,21 @@ export const onGetAllAmenities = subCategoryId => async dispatch => {
     dispatch({ type: Types.LISTING_GET_SPACE_AMENITIES_SUCCESS, payload: sorted })
   } catch (err) {
     dispatch({ type: Types.LISTING_GET_SPACE_AMENITIES_FAILURE, payload: errToMsg(err) })
+
+
+// Side Effects
+export const onCreate = (locationId, listSettingsParentId) => async dispatch => {
+  dispatch({ type: Types.CREATE_LISTING_START })
+  try {
+    const { data } = await getClientWithAuth().mutate({
+      mutation: mutationCreate,
+      variables: {
+        locationId,
+        listSettingsParentId
+      }
+    })
+    dispatch({ type: Types.CREATE_LISTING_SUCCESS, payload: listing })
+  } catch (err) {
+    dispatch({ type: Types.CREATE_LISTING_ERROR, payload: errToMsg(err) })
   }
 }

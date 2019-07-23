@@ -19,9 +19,12 @@ export const Types = {
 // Reducer
 const initialState = {
   error: null,
-  user: null,
-  isAuthenticated: false,
-  isLoading: true
+  user: {
+    userId: 0,
+    firstName: ''
+  },
+  isAuthenticated: true,
+  isLoading: false
 }
 
 export default function reducer(state = initialState, action) {

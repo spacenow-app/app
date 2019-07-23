@@ -1,7 +1,7 @@
 import React, { Suspense, lazy, useEffect } from 'react'
 import { BrowserRouter, Switch, Route } from 'react-router-dom'
 import { useSelector, useDispatch } from 'react-redux'
-import { NavBar } from 'components'
+import { NavBar, Loader } from 'components'
 
 import { onTokenValidation, onIsTokenExists } from 'redux/ducks/auth'
 import PrivateRoute from './PrivateRoute'
@@ -16,19 +16,20 @@ const Routes = props => {
   const isAuthenticated = useSelector(state => state.auth.isAuthenticated)
   const isLoading = useSelector(state => state.auth.isLoading)
 
-  const _handlerCheckAuthentication = () => dispatch(onIsTokenExists())
+  // const _handlerCheckAuthentication = () => dispatch(onIsTokenExists())
+  const _handlerCheckAuthentication = () => console.log('login...')
 
-  useEffect(() => {
-    dispatch(onTokenValidation())
-  }, [dispatch, isAuthenticated])
+  // useEffect(() => {
+  //   dispatch(onTokenValidation())
+  // }, [dispatch, isAuthenticated])
 
   if (isLoading) {
-    return <div>Loading</div>
+    return <Loader />
   }
 
   return (
     <BrowserRouter>
-      <Suspense fallback={<div>Loading...</div>}>
+      <Suspense fallback={<Loader />}>
         <Switch>
           <PublicRoute
             exact

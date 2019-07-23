@@ -5,9 +5,9 @@ import errToMsg from 'utils/errToMsg'
 
 // Actions
 export const Types = {
-  GET_OR_CREATE_START: 'GET_OR_CREATE_START',
-  GET_OR_CREATE_SUCCESS: 'GET_OR_CREATE_SUCCESS',
-  GET_OR_CREATE_ERROR: 'GET_OR_CREATE_ERROR'
+  GET_OR_CREATE_LOCATION_START: 'GET_OR_CREATE_LOCATION_START',
+  GET_OR_CREATE_LOCATION_SUCCESS: 'GET_OR_CREATE_LOCATION_SUCCESS',
+  GET_OR_CREATE_LOCATION_ERROR: 'GET_OR_CREATE_LOCATION_ERROR'
 }
 
 // Initial State
@@ -45,13 +45,13 @@ const mutationGetOrCreateLocation = gql`
 // Reducer
 export default function reducer(state = initialState, action) {
   switch (action.type) {
-    case Types.GET_OR_CREATE_START: {
+    case Types.GET_OR_CREATE_LOCATION_START: {
       return {
         ...state,
         isLoading: true
       }
     }
-    case Types.GET_OR_CREATE_SUCCESS: {
+    case Types.GET_OR_CREATE_LOCATION_SUCCESS: {
       return {
         ...state,
         isLoading: false,
@@ -60,7 +60,7 @@ export default function reducer(state = initialState, action) {
         }
       }
     }
-    case Types.GET_OR_CREATE_ERROR: {
+    case Types.GET_OR_CREATE_LOCATION_ERROR: {
       return {
         ...state,
         isLoading: false,
@@ -76,19 +76,19 @@ export default function reducer(state = initialState, action) {
 
 // Action Creators
 const getOrCreateStart = () => {
-  return { type: Types.GET_OR_CREATE_START }
+  return { type: Types.GET_OR_CREATE_LOCATION_START }
 }
 
 const getOrCreateSuccess = locationResponse => {
   return {
-    type: Types.GET_OR_CREATE_SUCCESS,
+    type: Types.GET_OR_CREATE_LOCATION_SUCCESS,
     payload: locationResponse
   }
 }
 
 const getOrCreateError = error => {
   return {
-    type: Types.GET_OR_CREATE_ERROR,
+    type: Types.GET_OR_CREATE_LOCATION_ERROR,
     payload: error
   }
 }
