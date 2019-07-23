@@ -4,13 +4,24 @@ import * as Yup from 'yup'
 import numeral from 'numeral'
 import { Title, Select, Input, Caption, Radio, Grid, Cell, StepButtons } from 'components'
 
-const BookingTab = ({ values, touched, errors, handleChange, handleBlur, handleSubmit, setFieldValue, ...props }) => {
+const BookingTab = ({
+  values,
+  touched,
+  errors,
+  handleChange,
+  handleBlur,
+  handleSubmit,
+  setFieldValue,
+  listing,
+  ...props
+}) => {
   const handleSelectChange = e => {
     const { name, value } = e.target
     setFieldValue(name, value)
   }
 
-  const handleRadioChange = (e, { value, name }) => {
+  const handleRadioChange = (e, { value, name, disabled }) => {
+    if (disabled) return
     setFieldValue(name, value)
   }
 
@@ -28,6 +39,7 @@ const BookingTab = ({ values, touched, errors, handleChange, handleBlur, handleS
             value="hourly"
             name="bookingPeriod"
             checked={values.bookingPeriod === 'hourly'}
+            disabled={listing.settingsParent.bookingPeriod.hourly === 0}
             handleChange={handleRadioChange}
             label="Hourly"
             text="Before you list by the hour, make sure both you and your space are ready for high turnover and regularly
@@ -39,6 +51,7 @@ const BookingTab = ({ values, touched, errors, handleChange, handleBlur, handleS
             value="daily"
             name="bookingPeriod"
             checked={values.bookingPeriod === 'daily'}
+            disabled={listing.settingsParent.bookingPeriod.daily === 0}
             handleChange={handleRadioChange}
             label="Daily"
             text="From a guest perspective, daily spaces are a similar experience to a hotel; guests pay upfront for one-off stays. Spacenow transfers the money to you after 48 hours upon completion."
@@ -48,6 +61,7 @@ const BookingTab = ({ values, touched, errors, handleChange, handleBlur, handleS
             value="weekly"
             name="bookingPeriod"
             checked={values.bookingPeriod === 'weekly'}
+            disabled={listing.settingsParent.bookingPeriod.weekly === 0}
             handleChange={handleRadioChange}
             label="Weekly"
             text="A big advantage with weekly bookings is less admin for you, and recurring payments through direct deposit. Spacenow transfers the money to you 48 hours after completion of each week."
@@ -57,6 +71,7 @@ const BookingTab = ({ values, touched, errors, handleChange, handleBlur, handleS
             value="monthly"
             name="bookingPeriod"
             checked={values.bookingPeriod === 'monthly'}
+            disabled={listing.settingsParent.bookingPeriod.monthly === 0}
             handleChange={handleRadioChange}
             label="Monthly"
             text="Monthly spaces are the least effort to manage, but be sure you’re willing to commit to the longer length of time. Spacenow transfers the money to you 48 hours after completion of each month."
