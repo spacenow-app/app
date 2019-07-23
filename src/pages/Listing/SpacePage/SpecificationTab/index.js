@@ -5,7 +5,7 @@ import * as Yup from 'yup'
 import _ from 'lodash'
 import { useDispatch, useSelector } from 'react-redux'
 import { onGetAllRules, onGetAllAccessTypes, onGetAllAmenities } from 'redux/ducks/listing'
-import { Title, Input, Checkbox, Select, TextArea, StepButtons, Loader } from 'components'
+import { Title, Input, Checkbox, Select, TextArea, StepButtons, Loader, Box } from 'components'
 
 const WrapperStyled = styled.div`
   display: grid;
@@ -158,7 +158,6 @@ const SpecificationTab = ({
         </SectionStyled>
         <SectionStyled>
           <Title type="h3" title="Space Rules" subtitle="Let guests know about the rules of the space." />
-          {}
           <CheckboxGroup>
             {isLoadingRules ? (
               <Loader />
@@ -180,15 +179,19 @@ const SpecificationTab = ({
         </SectionStyled>
         <SectionStyled>
           <Title type="h3" title="Access Information*" subtitle="Let your guests know how they’ll get in." />
-          <div style={{ width: '350px' }}>
-            <Select value={values.accessType} name="accessType" onChange={_handleSelectChange}>
-              {arrayAccessTypes.map(item => (
-                <option key={item.id} value={item.itemName}>
-                  {item.itemName}
-                </option>
-              ))}
-            </Select>
-          </div>
+          <Box width="350px">
+            {isLoadingAccessTypes ? (
+              <Loader />
+            ) : (
+              <Select value={values.accessType} name="accessType" onChange={_handleSelectChange}>
+                {arrayAccessTypes.map(item => (
+                  <option key={item.id} value={item.itemName}>
+                    {item.itemName}
+                  </option>
+                ))}
+              </Select>
+            )}
+          </Box>
         </SectionStyled>
         <SectionStyled>
           <Title
