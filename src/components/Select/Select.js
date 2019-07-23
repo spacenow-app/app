@@ -119,7 +119,7 @@ Select.defaultProps = {
 }
 
 Select.propTypes = {
-  children: PropTypes.element,
+  children: PropTypes.oneOfType([PropTypes.element, PropTypes.instanceOf(Array)]),
   options: PropTypes.instanceOf(Array),
   bgColor: PropTypes.string,
   value: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
