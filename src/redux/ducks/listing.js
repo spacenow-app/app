@@ -562,7 +562,7 @@ export default function reducer(state = initialState, action) {
 export const onGetListingById = id => async dispatch => {
   dispatch({ type: Types.LISTING_GET_SPACE_REQUEST })
   try {
-    const { data } = await getClientWithAuth().query({
+    const { data } = await getClientWithAuth(dispatch).query({
       query: queryGetListingById,
       variables: { id: parseInt(id, 10) },
       fetchPolicy: 'network-only'
@@ -576,7 +576,7 @@ export const onGetListingById = id => async dispatch => {
 export const onGetAllRules = () => async dispatch => {
   dispatch({ type: Types.LISTING_GET_SPACE_RULES_REQUEST })
   try {
-    const { data } = await getClientWithAuth().query({
+    const { data } = await getClientWithAuth(dispatch).query({
       query: queryGetAllRules,
       fetchPolicy: 'network-only'
     })
@@ -590,7 +590,7 @@ export const onGetAllRules = () => async dispatch => {
 export const onGetAllAccessTypes = () => async dispatch => {
   dispatch({ type: Types.LISTING_GET_SPACE_ACCESSTYPES_REQUEST })
   try {
-    const { data } = await getClientWithAuth().query({
+    const { data } = await getClientWithAuth(dispatch).query({
       query: queryGetAllAccessTypes,
       fetchPolicy: 'network-only'
     })
@@ -603,7 +603,7 @@ export const onGetAllAccessTypes = () => async dispatch => {
 export const onGetAllAmenities = subCategoryId => async dispatch => {
   dispatch({ type: Types.LISTING_GET_SPACE_AMENITIES_REQUEST })
   try {
-    const { data } = await getClientWithAuth().query({
+    const { data } = await getClientWithAuth(dispatch).query({
       query: queryGetAllAmenities,
       variables: { subCategoryId },
       fetchPolicy: 'network-only'
@@ -618,7 +618,7 @@ export const onGetAllAmenities = subCategoryId => async dispatch => {
 export const onGetAllSpecifications = (listSettingsParentId, listingData) => async dispatch => {
   dispatch({ type: Types.LISTING_GET_SPACE_SPECIFICATIONS_REQUEST })
   try {
-    const { data } = await getClientWithAuth().query({
+    const { data } = await getClientWithAuth(dispatch).query({
       query: queryGetAllSpecifications,
       variables: { listSettingsParentId },
       fetchPolicy: 'network-only'
@@ -641,7 +641,7 @@ export const onUpdateSpecification = (name, value) => dispatch => {
 export const onCreate = (locationId, listSettingsParentId) => async dispatch => {
   dispatch({ type: Types.CREATE_LISTING_START })
   try {
-    const { data } = await getClientWithAuth().mutate({
+    const { data } = await getClientWithAuth(dispatch).mutate({
       mutation: mutationCreate,
       variables: {
         locationId,

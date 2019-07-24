@@ -103,7 +103,7 @@ const getAllCategoriesFailed = error => {
 export const onGetAllCategories = () => async dispatch => {
   dispatch(getAllCategoriesStart())
   try {
-    const { data } = await getClientWithAuth().query({
+    const { data } = await getClientWithAuth(dispatch).query({
       query: queryGetAllCategories,
       fetchPolicy: 'network-only'
     })

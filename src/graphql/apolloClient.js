@@ -5,16 +5,28 @@ import config from 'contants/config'
 
 import getCookieByName from 'utils/getCookieByName'
 
-export const getClientWithAuth = () => {
-  console.info('Creating a new connection with Authentication to Apollo GraphQL.')
+let apolloClientWithAuth
+export const getClientWithAuth = dispatch => {
   const idToken = getCookieByName('id_token')
-  return new ApolloClient({
-    uri: config.graphQlHost,
-    headers: { authorization: idToken ? `Bearer ${idToken}` : '' }
-  })
+  if (!idToken || idToken.length <= 0) {
+    apolloClientWithAuth = null
+    return dispatch({ type: 'AUTH_2019_FAILED' })
+  }
+  if (!apolloClientWithAuth) {
+    console.info('Creating a new connection with Authentication to Apollo GraphQL.')
+    apolloClientWithAuth = new ApolloClient({
+      uri: config.graphQlHost,
+      headers: { authorization: idToken ? `Bearer ${idToken}` : '' }
+    })
+  }
+  return apolloClientWithAuth
 }
 
+let apolloClient
 export const getClient = () => {
-  console.info('Creating a new connection to Apollo GraphQL.')
-  return new ApolloClient({ uri: config.graphQlHost })
+  if (!apolloClient) {
+    console.info('Creating a new connection to Apollo GraphQL.')
+    apolloClient = new ApolloClient({ uri: config.graphQlHost })
+  }
+  return apolloClient
 }

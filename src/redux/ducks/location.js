@@ -97,7 +97,7 @@ const getOrCreateError = error => {
 export const onGetOrCreateLocation = suggestAddress => async dispatch => {
   dispatch(getOrCreateStart())
   try {
-    const { data } = await getClientWithAuth().mutate({
+    const { data } = await getClientWithAuth(dispatch).mutate({
       mutation: mutationGetOrCreateLocation,
       variables: { suggestAddress }
     })
