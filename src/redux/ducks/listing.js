@@ -695,15 +695,15 @@ const getValues = (_, values) => {
     capacity: values.capacity || _.listingData.capacity,
     size: values.size || _.listingData.size,
     meetingRooms: values.meetingRooms || _.listingData.meetingRooms,
-    isFurnished: (values.isFurnished && Boolean(values.isFurnished)) || _.listingData.isFurnished,
+    isFurnished: values.isFurnished !== undefined ? /true/i.test(values.isFurnished) : _.listingData.isFurnished,
     carSpace: values.carSpace || _.listingData.carSpace,
     sizeOfVehicle: values.sizeOfVehicle || _.listingData.sizeOfVehicle,
     maxEntranceHeight: values.maxEntranceHeight || _.listingData.maxEntranceHeight,
     spaceType: values.spaceType || _.listingData.spaceType,
     bookingType: values.bookingType || _.listingData.bookingType,
-    listingAmenities: (values.amenities && values.amenities.map(o => o.listSettingsId)) || undefined,
+    listingAmenities: values.amenities !== undefined && values.amenities.length > 0 ? values.amenities.map(o => o.listSettingsId) : undefined,
     listingAccessDays: values.listingAccessDays || undefined,
     listingExceptionDates: values.listingExceptionDates || undefined,
-    listingRules: (values.rules && values.rules.map(o => o.listSettingsId)) || undefined
+    listingRules: values.rules !== undefined && values.rules.length > 0 ? values.rules.map(o => o.listSettingsId) : undefined
   }
 }
