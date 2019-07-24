@@ -13,7 +13,6 @@ const ScrollToTop = ({ children, location: { pathname } }) => {
   useEffect(() => {
     window.scroll({ top: 0, left: 0, behavior: 'smooth' })
   }, [pathname])
-
   return children
 }
 
@@ -45,7 +44,6 @@ const SpacePage = ({ match, location, ...props }) => {
           Cancelation Policy
         </TabItem>
       </Tab>
-
       <Switch>
         <Redirect exact from={match.path} to={`${match.path}/specification`} />
         <ScrollToTop>

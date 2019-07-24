@@ -1,10 +1,20 @@
+/* eslint-disable no-console */
 import React, { useEffect } from 'react'
 import styled from 'styled-components'
 import { withFormik } from 'formik'
 import * as Yup from 'yup'
 import _ from 'lodash'
 import { useDispatch, useSelector } from 'react-redux'
-import { onGetAllRules, onGetAllAccessTypes, onGetAllAmenities } from 'redux/ducks/listing'
+
+import {
+  onGetAllRules,
+  onGetAllAccessTypes,
+  onGetAllAmenities,
+  onGetAllSpecifications,
+  onUpdate,
+  onUpdateSpecification
+} from 'redux/ducks/listing'
+
 import { Title, Input, Checkbox, Select, TextArea, StepButtons, Loader, Box } from 'components'
 
 const WrapperStyled = styled.div`
@@ -38,15 +48,20 @@ const SpecificationTab = ({
   ...props
 }) => {
   const dispatch = useDispatch()
+
   const { array: arrayRules, isLoading: isLoadingRules } = useSelector(state => state.listing.rules)
   const { array: arrayAccessTypes, isLoading: isLoadingAccessTypes } = useSelector(state => state.listing.accessTypes)
   const { array: arrayAmenities, isLoading: isLoadingAmenities } = useSelector(state => state.listing.amenities)
+  const { object: objectSpecifications, isLoading: isLoadingSpecifications } = useSelector(
+    state => state.listing.specifications
+  )
 
   useEffect(() => {
+    dispatch(onGetAllSpecifications(listing.settingsParent.id, listing.listingData))
     dispatch(onGetAllRules())
     dispatch(onGetAllAccessTypes())
     dispatch(onGetAllAmenities(listing.settingsParent.subcategory.id))
-  }, [dispatch, listing.settingsParent.subcategory.id])
+  }, [dispatch, listing.listingData, listing.settingsParent.id, listing.settingsParent.subcategory.id])
 
   const _handleSelectChange = e => {
     const { name, value } = e.target
@@ -64,8 +79,105 @@ const SpecificationTab = ({
     setFieldValue(name, [...values[name], { listSettingsId: Number(value) }])
   }
 
+  const _renderSpecifications = o => {
+    let component
+    if (o.type) {
+      switch (o.type) {
+        case 'Integer': {
+          component = (
+            <Input
+              type="number"
+              name={o.field}
+              label={o.label}
+              value={o.value}
+              min={o.min}
+              max={o.max}
+              onChange={e => dispatch(onUpdateSpecification(o.field, e.target.value))}
+            />
+          )
+          break
+        }
+        case 'Boolean': {
+          component = (
+            <Select
+              name={o.field}
+              label={o.label}
+              value={o.value.toString()}
+              onChange={e => dispatch(onUpdateSpecification(o.field, e.target.value))}
+            >
+              <option defaultValue={o.value} value="true">
+                Yes
+              </option>
+              <option defaultValue={!o.value} value="false">
+                No
+              </option>
+            </Select>
+          )
+          break
+        }
+        case 'String': {
+          if (o.select) {
+            component = (
+              <Select
+                name={o.field}
+                label={o.label}
+                value={o.value}
+                onChange={e => dispatch(onUpdateSpecification(o.field, e.target.value))}
+              >
+                {o.values.map(e => (
+                  <option key={`elem-${e}`} value={e}>
+                    {e}
+                  </option>
+                ))}
+              </Select>
+            )
+          } else {
+            component = (
+              <Input
+                type="text"
+                name={o.field}
+                label={o.label}
+                value={o.value}
+                onChange={e => dispatch(onUpdateSpecification(o.field, e.target.value))}
+              />
+            )
+          }
+          break
+        }
+        default: {
+          component = (
+            <input
+              type="text"
+              label={o.label}
+              placeholder={o.label}
+              name={o.field}
+              value={o.value}
+              onChange={e => dispatch(onUpdateSpecification(o.field, e.target.value))}
+            />
+          )
+        }
+      }
+    } else {
+      component = (
+        <Input
+          type="text"
+          name={o.field}
+          label={o.label}
+          value={o.value}
+          onChange={e => dispatch(onUpdateSpecification(o.field, e.target.value))}
+        />
+      )
+    }
+    return component
+  }
+
+  const _handleSave = async () => {
+    await dispatch(onUpdate(values))
+    props.history.push('booking')
+  }
+
   return (
-    <form onSubmit={handleSubmit}>
+    <form>
       <WrapperStyled>
         <SectionStyled>
           <Title
@@ -89,36 +201,16 @@ const SpecificationTab = ({
             title="Specifications*"
             subtitle="Give users the quick highlights of the space. These are also important search criteria for guests to find their perfect space."
           />
-          <InputGroup>
-            <Input
-              label="Capacity"
-              placeholder="Capacity"
-              name="capacity"
-              error={errors.capacity}
-              value={values.capacity}
-              onChange={handleChange}
-              onBlur={handleBlur}
-            />
-            <Input
-              label="Size"
-              placeholder="Size"
-              name="size"
-              error={errors.size}
-              value={values.size}
-              onChange={handleChange}
-              onBlur={handleBlur}
-            />
-            <Input
-              label="Car Space"
-              placeholder="Car Space"
-              name="carSpace"
-              error={errors.carSpace}
-              value={values.carSpace}
-              onChange={handleChange}
-              onBlur={handleBlur}
-            />
-            <Select label="Type" value={0} onChange={_handleSelectChange} />
-          </InputGroup>
+          {isLoadingSpecifications ? (
+            <Loader />
+          ) : (
+            <InputGroup>
+              {Object.keys(objectSpecifications).map(k => {
+                const o = objectSpecifications[k]
+                return <span key={o.field}>{_renderSpecifications(o)}</span>
+              })}
+            </InputGroup>
+          )}
         </SectionStyled>
         <SectionStyled>
           <Title
@@ -214,9 +306,7 @@ const SpecificationTab = ({
         </SectionStyled>
         <StepButtons
           prev={{ disabled: false, onClick: () => props.history.goBack() }}
-          next={{
-            onClick: () => props.history.push('booking')
-          }}
+          next={{ onClick: _handleSave }}
         />
       </WrapperStyled>
     </form>
@@ -227,7 +317,7 @@ const formik = {
   displayName: 'ListingProcess_SpecificationForm',
   mapPropsToValues: props => {
     const { listing } = props
-    if (listing.id) {
+    if (listing && listing.id) {
       return {
         title: listing.title || '',
         capacity: listing.listingData.capacity || 0,
@@ -251,12 +341,6 @@ const formik = {
     carSpace: Yup.number().typeError('Car Space need to be number'),
     description: Yup.string().typeError('Description need to be string')
   }),
-  handleSubmit: (values, { setSubmitting }) => {
-    setTimeout(() => {
-      alert(JSON.stringify(values, null, 2))
-      setSubmitting(false)
-    }, 1000)
-  },
   enableReinitialize: true
 }
 
