@@ -27,7 +27,7 @@ const BookingTab = ({
     setFieldValue(name, value)
   }
 
-  const _handleRadioChange = (e, { value, name }) => {
+  const _handleRadioChange = (_, { value, name }) => {
     setFieldValue(name, value)
   }
 
@@ -244,9 +244,7 @@ const formik = {
     return {}
   },
   mapValuesToPayload: x => x,
-  validationSchema: Yup.object().shape({
-    bookingPeriod: Yup.string().typeError('Title need to be String')
-  }),
+  validationSchema: Yup.object().shape({}),
   enableReinitialize: true
 }
 

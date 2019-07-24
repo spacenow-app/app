@@ -535,6 +535,33 @@ export default function reducer(state = initialState, action) {
         }
       }
     }
+    case Types.UPDATE_LISTING_START: {
+      return {
+        ...state,
+        get: {
+          isLoading: true,
+          error: null
+        }
+      }
+    }
+    case Types.UPDATE_LISTING_SUCCESS: {
+      return {
+        ...state,
+        get: {
+          isLoading: false,
+          object: action.payload
+        }
+      }
+    }
+    case Types.UPDATE_LISTING_FAILURE: {
+      return {
+        ...state,
+        get: {
+          isLoading: false,
+          error: action.payload
+        }
+      }
+    }
     default:
       return state
   }
@@ -685,6 +712,7 @@ export const onUpdate = (listing, values) => async dispatch => {
 const getValues = (_, values) => {
   return {
     title: values.title || _.title,
+    // bookingPeriod: values.bookingPeriod || _.bookingPeriod, // TODO Booking period could be updated?
     accessType: values.accessType || _.listingData.accessType,
     bookingNoticeTime: values.bookingNoticeTime || _.listingData.bookingNoticeTime,
     minTerm: values.minTerm || _.listingData.minTerm,
@@ -692,7 +720,7 @@ const getValues = (_, values) => {
     description: values.description || _.listingData.description,
     basePrice: values.basePrice || _.listingData.basePrice,
     currency: values.currency || _.listingData.currency,
-    isAbsorvedFee: values.isAbsorvedFee || _.listingData.isAbsorvedFee,
+    isAbsorvedFee: values.isAbsorvedFee !== undefined ? values.isAbsorvedFee : _.listingData.isAbsorvedFee,
     capacity: values.capacity || _.listingData.capacity,
     size: values.size || _.listingData.size,
     meetingRooms: values.meetingRooms || _.listingData.meetingRooms,
