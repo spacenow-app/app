@@ -51,7 +51,9 @@ const SpecificationTab = ({
   const { array: arrayRules, isLoading: isLoadingRules } = useSelector(state => state.listing.rules)
   const { array: arrayAccessTypes, isLoading: isLoadingAccessTypes } = useSelector(state => state.listing.accessTypes)
   const { array: arrayAmenities, isLoading: isLoadingAmenities } = useSelector(state => state.listing.amenities)
-  const { object: objectSpecifications, isLoading: isLoadingSpecifications } = useSelector(state => state.listing.specifications)
+  const { object: objectSpecifications, isLoading: isLoadingSpecifications } = useSelector(
+    state => state.listing.specifications
+  )
 
   useEffect(() => {
     dispatch(onGetAllSpecifications(listing.settingsParent.id, listing.listingData))
@@ -308,10 +310,7 @@ const SpecificationTab = ({
             perspective. Spaces look best in natural light. Include all areas your guest can access.
           </p>
         </SectionStyled>
-        <StepButtons
-          prev={{ disabled: false, onClick: () => props.history.goBack() }}
-          next={{ onClick: _handleSave }}
-        />
+        <StepButtons next={{ onClick: _handleSave }} />
       </WrapperStyled>
     </form>
   )

@@ -665,6 +665,7 @@ export const onUpdate = (listing, values) => async dispatch => {
       listSettingsParentId: listing.settingsParent.id
     }
     requestFields = { ...requestFields, ...getValues(listing, values) }
+    console.log('onUpdate -> Request Body:', requestFields)
     const { data } = await getClientWithAuth(dispatch).mutate({
       mutation: mutationUpdate,
       variables: requestFields
