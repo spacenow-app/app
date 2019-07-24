@@ -6,7 +6,13 @@ import * as Yup from 'yup'
 import _ from 'lodash'
 import { useDispatch, useSelector } from 'react-redux'
 
-import { onGetAllRules, onGetAllAccessTypes, onGetAllAmenities, onUpdate } from 'redux/ducks/listing'
+import {
+  onGetAllRules,
+  onGetAllAccessTypes,
+  onGetAllAmenities,
+  onGetAllSpecifications,
+  onUpdate
+} from 'redux/ducks/listing'
 
 import { Title, Input, Checkbox, Select, TextArea, StepButtons, Loader } from 'components'
 
@@ -47,10 +53,11 @@ const SpecificationTab = ({
   const { array: arrayAmenities, isLoading: isLoadingAmenities } = useSelector(state => state.listing.amenities)
 
   useEffect(() => {
+    dispatch(onGetAllSpecifications(listing.settingsParent.id, listing.listingData))
     dispatch(onGetAllRules())
     dispatch(onGetAllAccessTypes())
     dispatch(onGetAllAmenities(listing.settingsParent.subcategory.id))
-  }, [dispatch, listing.settingsParent.subcategory.id])
+  }, [dispatch, listing.listingData, listing.settingsParent.id, listing.settingsParent.subcategory.id])
 
   const _handleSelectChange = e => {
     const { name, value } = e.target

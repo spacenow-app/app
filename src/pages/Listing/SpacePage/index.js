@@ -45,7 +45,6 @@ const SpacePage = ({ match, location, ...props }) => {
           Cancelation Policy
         </TabItem>
       </Tab>
-
       <Switch>
         <Redirect exact from={match.path} to={`${match.path}/specification`} />
         <ScrollToTop>

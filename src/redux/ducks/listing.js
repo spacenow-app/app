@@ -3,6 +3,7 @@ import { gql } from 'apollo-boost'
 
 import { getClientWithAuth } from 'graphql/apolloClient'
 import errToMsg from 'utils/errToMsg'
+import { mapTo, parseOutput } from 'utils/specificationsUtils'
 
 // Actions
 export const Types = {
@@ -18,6 +19,9 @@ export const Types = {
   LISTING_GET_SPACE_AMENITIES_REQUEST: 'LISTING_GET_SPACE_AMENITIES_REQUEST',
   LISTING_GET_SPACE_AMENITIES_SUCCESS: 'LISTING_GET_SPACE_AMENITIES_SUCCESS',
   LISTING_GET_SPACE_AMENITIES_FAILURE: 'LISTING_GET_SPACE_AMENITIES_FAILURE',
+  LISTING_GET_SPACE_SPECIFICATIONS_REQUEST: 'LISTING_GET_SPACE_SPECIFICATIONS_REQUEST',
+  LISTING_GET_SPACE_SPECIFICATIONS_SUCCESS: 'LISTING_GET_SPACE_SPECIFICATIONS_SUCCESS',
+  LISTING_GET_SPACE_SPECIFICATIONS_FAILURE: 'LISTING_GET_SPACE_SPECIFICATIONS_FAILURE',
   CREATE_LISTING_START: 'CREATE_LISTING_START',
   CREATE_LISTING_SUCCESS: 'CREATE_LISTING_SUCCESS',
   CREATE_LISTING_FAILURE: 'CREATE_LISTING_FAILURE',
@@ -45,6 +49,11 @@ const initialState = {
     error: null
   },
   amenities: {
+    array: [],
+    isLoading: true,
+    error: null
+  },
+  specifications: {
     array: [],
     isLoading: true,
     error: null
@@ -270,6 +279,16 @@ const queryGetAllAmenities = gql`
   }
 `
 
+const queryGetAllSpecifications = gql`
+  query getSpecifications($listSettingsParentId: Int!) {
+    getAllSpecificationsByParentId(listSettingsParentId: $listSettingsParentId) {
+      id
+      itemName
+      specData
+    }
+  }
+`
+
 const mutationCreate = gql`
   mutation createOrUpdateListing($locationId: Int!, $listSettingsParentId: Int!) {
     createOrUpdateListing(locationId: $locationId, listSettingsParentId: $listSettingsParentId) {
@@ -462,6 +481,36 @@ export default function reducer(state = initialState, action) {
         }
       }
     }
+    case Types.LISTING_GET_SPACE_SPECIFICATIONS_REQUEST: {
+      return {
+        ...state,
+        specifications: {
+          ...state.specifications,
+          isLoading: true,
+          error: null
+        }
+      }
+    }
+    case Types.LISTING_GET_SPACE_SPECIFICATIONS_SUCCESS: {
+      return {
+        ...state,
+        specifications: {
+          ...state.specifications,
+          isLoading: false,
+          array: action.payload
+        }
+      }
+    }
+    case Types.LISTING_GET_SPACE_SPECIFICATIONS_FAILURE: {
+      return {
+        ...state,
+        specifications: {
+          ...state.specifications,
+          isLoading: false,
+          error: action.payload
+        }
+      }
+    }
     case Types.CREATE_LISTING_START: {
       return {
         ...state,
@@ -502,7 +551,8 @@ export const onGetListingById = id => async dispatch => {
   try {
     const { data } = await getClientWithAuth().query({
       query: queryGetListingById,
-      variables: { id: parseInt(id, 10) }
+      variables: { id: parseInt(id, 10) },
+      fetchPolicy: 'network-only'
     })
     dispatch({ type: Types.LISTING_GET_SPACE_SUCCESS, payload: data.getListingById })
   } catch (err) {
@@ -514,7 +564,8 @@ export const onGetAllRules = () => async dispatch => {
   dispatch({ type: Types.LISTING_GET_SPACE_RULES_REQUEST })
   try {
     const { data } = await getClientWithAuth().query({
-      query: queryGetAllRules
+      query: queryGetAllRules,
+      fetchPolicy: 'network-only'
     })
     const sorted = data.getAllRules.map(o => o).sort((a, b) => a.itemName.localeCompare(b.itemName))
     dispatch({ type: Types.LISTING_GET_SPACE_RULES_SUCCESS, payload: sorted })
@@ -527,7 +578,8 @@ export const onGetAllAccessTypes = () => async dispatch => {
   dispatch({ type: Types.LISTING_GET_SPACE_ACCESSTYPES_REQUEST })
   try {
     const { data } = await getClientWithAuth().query({
-      query: queryGetAllAccessTypes
+      query: queryGetAllAccessTypes,
+      fetchPolicy: 'network-only'
     })
     dispatch({ type: Types.LISTING_GET_SPACE_ACCESSTYPES_SUCCESS, payload: data.getAllAccessTypes })
   } catch (err) {
@@ -540,14 +592,28 @@ export const onGetAllAmenities = subCategoryId => async dispatch => {
   try {
     const { data } = await getClientWithAuth().query({
       query: queryGetAllAmenities,
-      variables: {
-        subCategoryId
-      }
+      variables: { subCategoryId },
+      fetchPolicy: 'network-only'
     })
     const sorted = data.getAllAmenitiesBySubCategoryId.map(o => o).sort((a, b) => a.itemName.localeCompare(b.itemName))
     dispatch({ type: Types.LISTING_GET_SPACE_AMENITIES_SUCCESS, payload: sorted })
   } catch (err) {
     dispatch({ type: Types.LISTING_GET_SPACE_AMENITIES_FAILURE, payload: errToMsg(err) })
+  }
+}
+
+export const onGetAllSpecifications = (listSettingsParentId, listingData) => async dispatch => {
+  dispatch({ type: Types.LISTING_GET_SPACE_SPECIFICATIONS_REQUEST })
+  try {
+    const { data } = await getClientWithAuth().query({
+      query: queryGetAllSpecifications,
+      variables: { listSettingsParentId },
+      fetchPolicy: 'network-only'
+    })
+    const specificationsToView = mapTo(data.getAllSpecificationsByParentId, listingData)
+    dispatch({ type: Types.LISTING_GET_SPACE_SPECIFICATIONS_SUCCESS, payload: specificationsToView })
+  } catch (err) {
+    dispatch({ type: Types.LISTING_GET_SPACE_SPECIFICATIONS_FAILURE, payload: errToMsg(err) })
   }
 }
 
