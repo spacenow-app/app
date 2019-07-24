@@ -11,7 +11,8 @@ import {
   onGetAllAccessTypes,
   onGetAllAmenities,
   onGetAllSpecifications,
-  onUpdate
+  onUpdate,
+  onUpdateSpecification
 } from 'redux/ducks/listing'
 
 import { Title, Input, Checkbox, Select, TextArea, StepButtons, Loader } from 'components'
@@ -51,6 +52,9 @@ const SpecificationTab = ({
   const { array: arrayRules, isLoading: isLoadingRules } = useSelector(state => state.listing.rules)
   const { array: arrayAccessTypes, isLoading: isLoadingAccessTypes } = useSelector(state => state.listing.accessTypes)
   const { array: arrayAmenities, isLoading: isLoadingAmenities } = useSelector(state => state.listing.amenities)
+  const { object: objectSpecifications, isLoading: isLoadingSpecifications } = useSelector(
+    state => state.listing.specifications
+  )
 
   useEffect(() => {
     dispatch(onGetAllSpecifications(listing.settingsParent.id, listing.listingData))
@@ -73,6 +77,98 @@ const SpecificationTab = ({
       return
     }
     setFieldValue(name, [...values[name], { listSettingsId: Number(value) }])
+  }
+
+  const _renderSpecifications = o => {
+    let component
+    if (o.type) {
+      switch (o.type) {
+        case 'Integer': {
+          component = (
+            <Input
+              type="number"
+              name={o.field}
+              label={o.label}
+              value={o.value}
+              min={o.min}
+              max={o.max}
+              onChange={e => dispatch(onUpdateSpecification(o.field, e.target.value))}
+            />
+          )
+          break
+        }
+        case 'Boolean': {
+          component = (
+            <Select
+              name={o.field}
+              label={o.label}
+              value={o.value.toString()}
+              onChange={e => dispatch(onUpdateSpecification(o.field, e.target.value))}
+            >
+              <option defaultValue={o.value} value="true">
+                Yes
+              </option>
+              <option defaultValue={!o.value} value="false">
+                No
+              </option>
+            </Select>
+          )
+          break
+        }
+        case 'String': {
+          if (o.select) {
+            component = (
+              <Select
+                name={o.field}
+                label={o.label}
+                value={o.value}
+                onChange={e => dispatch(onUpdateSpecification(o.field, e.target.value))}
+              >
+                {o.values.map(e => (
+                  <option key={`elem-${e}`} value={e}>
+                    {e}
+                  </option>
+                ))}
+              </Select>
+            )
+          } else {
+            component = (
+              <Input
+                type="text"
+                name={o.field}
+                label={o.label}
+                value={o.value}
+                onChange={e => dispatch(onUpdateSpecification(o.field, e.target.value))}
+              />
+            )
+          }
+          break
+        }
+        default: {
+          component = (
+            <input
+              type="text"
+              label={o.label}
+              placeholder={o.label}
+              name={o.field}
+              value={o.value}
+              onChange={e => dispatch(onUpdateSpecification(o.field, e.target.value))}
+            />
+          )
+        }
+      }
+    } else {
+      component = (
+        <Input
+          type="text"
+          name={o.field}
+          label={o.label}
+          value={o.value}
+          onChange={e => dispatch(onUpdateSpecification(o.field, e.target.value))}
+        />
+      )
+    }
+    return component
   }
 
   const _handleSave = async () => {
@@ -105,36 +201,16 @@ const SpecificationTab = ({
             title="Specifications*"
             subtitle="Give users the quick highlights of the space. These are also important search criteria for guests to find their perfect space."
           />
-          <InputGroup>
-            <Input
-              label="Capacity"
-              placeholder="Capacity"
-              name="capacity"
-              error={errors.capacity}
-              value={values.capacity}
-              onChange={handleChange}
-              onBlur={handleBlur}
-            />
-            <Input
-              label="Size"
-              placeholder="Size"
-              name="size"
-              error={errors.size}
-              value={values.size}
-              onChange={handleChange}
-              onBlur={handleBlur}
-            />
-            <Input
-              label="Car Space"
-              placeholder="Car Space"
-              name="carSpace"
-              error={errors.carSpace}
-              value={values.carSpace}
-              onChange={handleChange}
-              onBlur={handleBlur}
-            />
-            <Select label="Type" value={0} onChange={_handleSelectChange} />
-          </InputGroup>
+          {isLoadingSpecifications ? (
+            <Loader />
+          ) : (
+            <InputGroup>
+              {Object.keys(objectSpecifications).map(k => {
+                const o = objectSpecifications[k]
+                return <span key={o.field}>{_renderSpecifications(o)}</span>
+              })}
+            </InputGroup>
+          )}
         </SectionStyled>
         <SectionStyled>
           <Title
