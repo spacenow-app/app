@@ -296,67 +296,65 @@ const mutationCreate = gql`
   }
 `
 
-// const mutationUpdate = gql`
-//   mutation createOrUpdateListing(
-//     $userId: String!
-//     $locationId: Int!
-//     $listSettingsParentId: Int!
-//     $listingId: Int!
-//     $title: String
-//     $accessType: String
-//     $bookingNoticeTime: String
-//     $minTerm: Float
-//     $maxTerm: Float
-//     $description: String
-//     $basePrice: Float
-//     $currency: String
-//     $isAbsorvedFee: Boolean
-//     $capacity: Int
-//     $size: Int
-//     $meetingRooms: Int
-//     $isFurnished: Boolean
-//     $carSpace: Int
-//     $sizeOfVehicle: String
-//     $maxEntranceHeight: String
-//     $spaceType: String
-//     $bookingType: String
-//     $listingAmenities: [Int]
-//     $listingAccessDays: ListingAccessDaysInput
-//     $listingExceptionDates: [String]
-//     $listingRules: [Int]
-//   ) {
-//     createOrUpdateListing(
-//       userId: $userId
-//       locationId: $locationId
-//       listSettingsParentId: $listSettingsParentId
-//       listingId: $listingId
-//       title: $title
-//       accessType: $accessType
-//       bookingNoticeTime: $bookingNoticeTime
-//       minTerm: $minTerm
-//       maxTerm: $maxTerm
-//       description: $description
-//       basePrice: $basePrice
-//       currency: $currency
-//       isAbsorvedFee: $isAbsorvedFee
-//       capacity: $capacity
-//       size: $size
-//       meetingRooms: $meetingRooms
-//       isFurnished: $isFurnished
-//       carSpace: $carSpace
-//       sizeOfVehicle: $sizeOfVehicle
-//       maxEntranceHeight: $maxEntranceHeight
-//       spaceType: $spaceType
-//       bookingType: $bookingType
-//       listingAmenities: $listingAmenities
-//       listingAccessDays: $listingAccessDays
-//       listingExceptionDates: $listingExceptionDates
-//       listingRules: $listingRules
-//     ) {
-//       ${allListingFields}
-//     }
-//   }
-// `
+const mutationUpdate = gql`
+  mutation createOrUpdateListing(
+    $locationId: Int!
+    $listSettingsParentId: Int!
+    $listingId: Int!
+    $title: String
+    $accessType: String
+    $bookingNoticeTime: String
+    $minTerm: Float
+    $maxTerm: Float
+    $description: String
+    $basePrice: Float
+    $currency: String
+    $isAbsorvedFee: Boolean
+    $capacity: Int
+    $size: Int
+    $meetingRooms: Int
+    $isFurnished: Boolean
+    $carSpace: Int
+    $sizeOfVehicle: String
+    $maxEntranceHeight: String
+    $spaceType: String
+    $bookingType: String
+    $listingAmenities: [Int]
+    $listingAccessDays: ListingAccessDaysInput
+    $listingExceptionDates: [String]
+    $listingRules: [Int]
+  ) {
+    createOrUpdateListing(
+      locationId: $locationId
+      listSettingsParentId: $listSettingsParentId
+      listingId: $listingId
+      title: $title
+      accessType: $accessType
+      bookingNoticeTime: $bookingNoticeTime
+      minTerm: $minTerm
+      maxTerm: $maxTerm
+      description: $description
+      basePrice: $basePrice
+      currency: $currency
+      isAbsorvedFee: $isAbsorvedFee
+      capacity: $capacity
+      size: $size
+      meetingRooms: $meetingRooms
+      isFurnished: $isFurnished
+      carSpace: $carSpace
+      sizeOfVehicle: $sizeOfVehicle
+      maxEntranceHeight: $maxEntranceHeight
+      spaceType: $spaceType
+      bookingType: $bookingType
+      listingAmenities: $listingAmenities
+      listingAccessDays: $listingAccessDays
+      listingExceptionDates: $listingExceptionDates
+      listingRules: $listingRules
+    ) {
+      ${allListingFields}
+    }
+  }
+`
 
 // Reducer
 export default function reducer(state = initialState, action) {
@@ -658,11 +656,54 @@ export const onCreate = (locationId, listSettingsParentId) => async dispatch => 
   }
 }
 
-export const onUpdate = listingObj => async dispatch => {
+export const onUpdate = (listing, values) => async dispatch => {
   dispatch({ type: Types.UPDATE_LISTING_START })
   try {
-    console.log('onUpdate -> listingObj ->', listingObj)
+    let requestFields = {
+      listingId: listing.id,
+      locationId: listing.location.id,
+      listSettingsParentId: listing.settingsParent.id
+    }
+    requestFields = { ...requestFields, ...getValues(listing, values) }
+    const { data } = await getClientWithAuth(dispatch).mutate({
+      mutation: mutationUpdate,
+      variables: requestFields
+    })
+    dispatch({ type: Types.UPDATE_LISTING_SUCCESS, payload: data.createOrUpdateListing })
   } catch (err) {
     dispatch({ type: Types.UPDATE_LISTING_FAILURE, payload: errToMsg(err) })
+  }
+}
+
+/**
+ * Return a proper object request to update Listing and Listing Data.
+ *
+ * @param {*} _ Original Listing already saved on store.
+ * @param {*} values New values to update.
+ */
+const getValues = (_, values) => {
+  return {
+    title: values.title || _.title,
+    accessType: values.accessType || _.listingData.accessType,
+    bookingNoticeTime: values.bookingNoticeTime || _.listingData.bookingNoticeTime,
+    minTerm: values.minTerm || _.listingData.minTerm,
+    maxTerm: values.maxTerm || _.listingData.maxTerm,
+    description: values.description || _.listingData.description,
+    basePrice: values.basePrice || _.listingData.basePrice,
+    currency: values.currency || _.listingData.currency,
+    isAbsorvedFee: values.isAbsorvedFee || _.listingData.isAbsorvedFee,
+    capacity: values.capacity || _.listingData.capacity,
+    size: values.size || _.listingData.size,
+    meetingRooms: values.meetingRooms || _.listingData.meetingRooms,
+    isFurnished: (values.isFurnished && Boolean(values.isFurnished)) || _.listingData.isFurnished,
+    carSpace: values.carSpace || _.listingData.carSpace,
+    sizeOfVehicle: values.sizeOfVehicle || _.listingData.sizeOfVehicle,
+    maxEntranceHeight: values.maxEntranceHeight || _.listingData.maxEntranceHeight,
+    spaceType: values.spaceType || _.listingData.spaceType,
+    bookingType: values.bookingType || _.listingData.bookingType,
+    listingAmenities: (values.amenities && values.amenities.map(o => o.listSettingsId)) || undefined,
+    listingAccessDays: values.listingAccessDays || undefined,
+    listingExceptionDates: values.listingExceptionDates || undefined,
+    listingRules: (values.rules && values.rules.map(o => o.listSettingsId)) || undefined
   }
 }

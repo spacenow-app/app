@@ -51,9 +51,7 @@ const SpecificationTab = ({
   const { array: arrayRules, isLoading: isLoadingRules } = useSelector(state => state.listing.rules)
   const { array: arrayAccessTypes, isLoading: isLoadingAccessTypes } = useSelector(state => state.listing.accessTypes)
   const { array: arrayAmenities, isLoading: isLoadingAmenities } = useSelector(state => state.listing.amenities)
-  const { object: objectSpecifications, isLoading: isLoadingSpecifications } = useSelector(
-    state => state.listing.specifications
-  )
+  const { object: objectSpecifications, isLoading: isLoadingSpecifications } = useSelector(state => state.listing.specifications)
 
   useEffect(() => {
     dispatch(onGetAllSpecifications(listing.settingsParent.id, listing.listingData))
@@ -76,28 +74,6 @@ const SpecificationTab = ({
       return
     }
     setFieldValue(name, [...values[name], { listSettingsId: Number(value) }])
-  }
-
-  const _parseSpecificationValue = (objectState, field) => {
-    const object = JSON.parse(JSON.stringify(objectState))
-    object[field.name].value = field.value
-    const fieldReference = object[field.name]
-    if (fieldReference.type && field.value) {
-      switch (fieldReference.type) {
-        case 'Integer': {
-          object[field.name].value = parseInt(field.value, 10)
-          break
-        }
-        case 'Boolean': {
-          object[field.name].value = field.value === 'true'
-          break
-        }
-        default: {
-          object[field.name].value = field.value
-        }
-      }
-    }
-    return object
   }
 
   const _renderSpecifications = o => {
@@ -199,7 +175,7 @@ const SpecificationTab = ({
   }
 
   const _handleSave = async () => {
-    await dispatch(onUpdate(values))
+    await dispatch(onUpdate(listing, values))
     props.history.push('booking')
   }
 
