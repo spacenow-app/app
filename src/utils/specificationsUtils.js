@@ -24,26 +24,26 @@ const mapTo = (originalArray, listingData) => {
   return specifications
 }
 
-const parseOutput = (state, field) => {
-  const newState = JSON.parse(JSON.stringify(state))
-  newState.data[field.name].value = field.value
-  const fieldReference = newState.data[field.name]
+const parseOutput = (objectState, field) => {
+  const object = JSON.parse(JSON.stringify(objectState))
+  object.data[field.name].value = field.value
+  const fieldReference = object.data[field.name]
   if (fieldReference.type && field.value) {
     switch (fieldReference.type) {
       case 'Integer': {
-        newState.data[field.name].value = parseInt(field.value, 10)
+        object.data[field.name].value = parseInt(field.value, 10)
         break
       }
       case 'Boolean': {
-        newState.data[field.name].value = field.value === 'true'
+        object.data[field.name].value = field.value === 'true'
         break
       }
       default: {
-        newState.data[field.name].value = field.value
+        object.data[field.name].value = field.value
       }
     }
   }
-  return newState
+  return object
 }
 
 export { mapTo, parseOutput }

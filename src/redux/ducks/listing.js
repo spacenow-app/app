@@ -22,6 +22,7 @@ export const Types = {
   LISTING_GET_SPACE_SPECIFICATIONS_REQUEST: 'LISTING_GET_SPACE_SPECIFICATIONS_REQUEST',
   LISTING_GET_SPACE_SPECIFICATIONS_SUCCESS: 'LISTING_GET_SPACE_SPECIFICATIONS_SUCCESS',
   LISTING_GET_SPACE_SPECIFICATIONS_FAILURE: 'LISTING_GET_SPACE_SPECIFICATIONS_FAILURE',
+  SPECIFICATION_CHANGE_ATT: 'SPECIFICATION_CHANGE_ATT',
   CREATE_LISTING_START: 'CREATE_LISTING_START',
   CREATE_LISTING_SUCCESS: 'CREATE_LISTING_SUCCESS',
   CREATE_LISTING_FAILURE: 'CREATE_LISTING_FAILURE',
@@ -54,7 +55,7 @@ const initialState = {
     error: null
   },
   specifications: {
-    array: [],
+    object: null,
     isLoading: true,
     error: null
   }
@@ -497,7 +498,7 @@ export default function reducer(state = initialState, action) {
         specifications: {
           ...state.specifications,
           isLoading: false,
-          array: action.payload
+          object: action.payload
         }
       }
     }
@@ -510,6 +511,18 @@ export default function reducer(state = initialState, action) {
           error: action.payload
         }
       }
+    }
+    case Types.SPECIFICATION_CHANGE_ATT: {
+      if (action.payload.value) {
+        return {
+          ...state,
+          specifications: {
+            ...state.specifications,
+            object: parseOutput(state.specifications.object, action.payload)
+          }
+        }
+      }
+      return { ...state }
     }
     case Types.CREATE_LISTING_START: {
       return {
@@ -615,6 +628,13 @@ export const onGetAllSpecifications = (listSettingsParentId, listingData) => asy
   } catch (err) {
     dispatch({ type: Types.LISTING_GET_SPACE_SPECIFICATIONS_FAILURE, payload: errToMsg(err) })
   }
+}
+
+export const onUpdateSpecification = (name, value) => dispatch => {
+  dispatch({
+    type: Types.SPECIFICATION_CHANGE_ATT,
+    payload: { name, value }
+  })
 }
 
 // Side Effects
