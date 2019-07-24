@@ -11,8 +11,7 @@ import {
   onGetAllAccessTypes,
   onGetAllAmenities,
   onGetAllSpecifications,
-  onUpdate,
-  onUpdateSpecification
+  onUpdate
 } from 'redux/ducks/listing'
 
 import { Title, Input, Checkbox, Select, TextArea, StepButtons, Loader } from 'components'
@@ -58,9 +57,9 @@ const SpecificationTab = ({
 
   useEffect(() => {
     dispatch(onGetAllSpecifications(listing.settingsParent.id, listing.listingData))
+    dispatch(onGetAllAmenities(listing.settingsParent.subcategory.id))
     dispatch(onGetAllRules())
     dispatch(onGetAllAccessTypes())
-    dispatch(onGetAllAmenities(listing.settingsParent.subcategory.id))
   }, [dispatch, listing.listingData, listing.settingsParent.id, listing.settingsParent.subcategory.id])
 
   const _handleSelectChange = e => {
@@ -68,7 +67,7 @@ const SpecificationTab = ({
     setFieldValue(name, value)
   }
 
-  const _handleCheckboxChange = (e, { name, checked }) => {
+  const _handleCheckboxChange = (e, { name }) => {
     const { value } = e.target
     const find = _.find(values[name], item => item.listSettingsId === Number(value))
     if (find) {
@@ -77,6 +76,28 @@ const SpecificationTab = ({
       return
     }
     setFieldValue(name, [...values[name], { listSettingsId: Number(value) }])
+  }
+
+  const _parseSpecificationValue = (objectState, field) => {
+    const object = JSON.parse(JSON.stringify(objectState))
+    object[field.name].value = field.value
+    const fieldReference = object[field.name]
+    if (fieldReference.type && field.value) {
+      switch (fieldReference.type) {
+        case 'Integer': {
+          object[field.name].value = parseInt(field.value, 10)
+          break
+        }
+        case 'Boolean': {
+          object[field.name].value = field.value === 'true'
+          break
+        }
+        default: {
+          object[field.name].value = field.value
+        }
+      }
+    }
+    return object
   }
 
   const _renderSpecifications = o => {
@@ -89,10 +110,11 @@ const SpecificationTab = ({
               type="number"
               name={o.field}
               label={o.label}
-              value={o.value}
+              value={values[o.field]}
               min={o.min}
               max={o.max}
-              onChange={e => dispatch(onUpdateSpecification(o.field, e.target.value))}
+              onChange={handleChange}
+              onBlur={handleBlur}
             />
           )
           break
@@ -102,13 +124,14 @@ const SpecificationTab = ({
             <Select
               name={o.field}
               label={o.label}
-              value={o.value.toString()}
-              onChange={e => dispatch(onUpdateSpecification(o.field, e.target.value))}
+              value={values[o.field].toString()}
+              onChange={handleChange}
+              onBlur={handleBlur}
             >
-              <option defaultValue={o.value} value="true">
+              <option defaultValue={values[o.field]} value="true">
                 Yes
               </option>
-              <option defaultValue={!o.value} value="false">
+              <option defaultValue={!values[o.field]} value="false">
                 No
               </option>
             </Select>
@@ -121,8 +144,9 @@ const SpecificationTab = ({
               <Select
                 name={o.field}
                 label={o.label}
-                value={o.value}
-                onChange={e => dispatch(onUpdateSpecification(o.field, e.target.value))}
+                value={values[o.field]}
+                onChange={handleChange}
+                onBlur={handleBlur}
               >
                 {o.values.map(e => (
                   <option key={`elem-${e}`} value={e}>
@@ -137,8 +161,9 @@ const SpecificationTab = ({
                 type="text"
                 name={o.field}
                 label={o.label}
-                value={o.value}
-                onChange={e => dispatch(onUpdateSpecification(o.field, e.target.value))}
+                value={values[o.field]}
+                onChange={handleChange}
+                onBlur={handleBlur}
               />
             )
           }
@@ -151,8 +176,9 @@ const SpecificationTab = ({
               label={o.label}
               placeholder={o.label}
               name={o.field}
-              value={o.value}
-              onChange={e => dispatch(onUpdateSpecification(o.field, e.target.value))}
+              value={values[o.field]}
+              onChange={handleChange}
+              onBlur={handleBlur}
             />
           )
         }
@@ -163,8 +189,9 @@ const SpecificationTab = ({
           type="text"
           name={o.field}
           label={o.label}
-          value={o.value}
-          onChange={e => dispatch(onUpdateSpecification(o.field, e.target.value))}
+          value={values[o.field]}
+          onChange={handleChange}
+          onBlur={handleBlur}
         />
       )
     }
@@ -323,11 +350,16 @@ const formik = {
         title: listing.title || '',
         capacity: listing.listingData.capacity || 0,
         size: listing.listingData.size || 0,
+        meetingRooms: listing.listingData.meetingRooms || 0,
+        isFurnished: listing.listingData.isFurnished || 'false',
         carSpace: listing.listingData.carSpace || 0,
+        sizeOfVehicle: listing.listingData.sizeOfVehicle || 'Small',
+        maxEntranceHeight: listing.listingData.maxEntranceHeight || 'Not Sure',
+        spaceType: listing.listingData.spaceType || 'Covered',
         description: listing.listingData.description || '',
         accessType: listing.listingData.accessType || '',
-        rules: listing.rules || [],
-        amenities: listing.amenities || []
+        amenities: listing.amenities || [],
+        rules: listing.rules || []
       }
     }
     return {}
@@ -339,7 +371,12 @@ const formik = {
       .max(25, 'Maximum characters for Title field must be 25'),
     capacity: Yup.number().typeError('Capacity need to be number'),
     size: Yup.number().typeError('Size need to be number'),
+    meetingRooms: Yup.number().typeError('Meeting Rooms need to be number'),
+    isFurnished: Yup.string().typeError('Furnished field is required'),
     carSpace: Yup.number().typeError('Car Space need to be number'),
+    sizeOfVehicle: Yup.string().typeError('Size Of Vehicle field is required'),
+    maxEntranceHeight: Yup.string().typeError('Max Entrance Height field is required'),
+    spaceType: Yup.string().typeError('Space Type field is required'),
     description: Yup.string().typeError('Description need to be string')
   }),
   enableReinitialize: true

@@ -3,7 +3,6 @@ import { gql } from 'apollo-boost'
 
 import { getClientWithAuth } from 'graphql/apolloClient'
 import errToMsg from 'utils/errToMsg'
-import { mapTo, parseOutput } from 'utils/specificationsUtils'
 
 // Actions
 export const Types = {
@@ -22,7 +21,6 @@ export const Types = {
   LISTING_GET_SPACE_SPECIFICATIONS_REQUEST: 'LISTING_GET_SPACE_SPECIFICATIONS_REQUEST',
   LISTING_GET_SPACE_SPECIFICATIONS_SUCCESS: 'LISTING_GET_SPACE_SPECIFICATIONS_SUCCESS',
   LISTING_GET_SPACE_SPECIFICATIONS_FAILURE: 'LISTING_GET_SPACE_SPECIFICATIONS_FAILURE',
-  SPECIFICATION_CHANGE_ATT: 'SPECIFICATION_CHANGE_ATT',
   CREATE_LISTING_START: 'CREATE_LISTING_START',
   CREATE_LISTING_SUCCESS: 'CREATE_LISTING_SUCCESS',
   CREATE_LISTING_FAILURE: 'CREATE_LISTING_FAILURE',
@@ -512,18 +510,6 @@ export default function reducer(state = initialState, action) {
         }
       }
     }
-    case Types.SPECIFICATION_CHANGE_ATT: {
-      if (action.payload.value) {
-        return {
-          ...state,
-          specifications: {
-            ...state.specifications,
-            object: parseOutput(state.specifications.object, action.payload)
-          }
-        }
-      }
-      return { ...state }
-    }
     case Types.CREATE_LISTING_START: {
       return {
         ...state,
@@ -630,14 +616,32 @@ export const onGetAllSpecifications = (listSettingsParentId, listingData) => asy
   }
 }
 
-export const onUpdateSpecification = (name, value) => dispatch => {
-  dispatch({
-    type: Types.SPECIFICATION_CHANGE_ATT,
-    payload: { name, value }
-  })
+const mapTo = (originalArray, listingData) => {
+  const specifications = {}
+  for (let i = 0, size = originalArray.length; i < size; i += 1) {
+    const { itemName, specData } = originalArray[i]
+    if (specData && specData.length > 0) {
+      const specDataObj = JSON.parse(specData)
+      specifications[specDataObj.field] = {
+        ...specDataObj,
+        value: listingData[specDataObj.field] || specDataObj.defaultValue
+      }
+    } else {
+      const fieldTarget = camalize(itemName)
+      specifications[fieldTarget] = {
+        label: itemName,
+        field: fieldTarget,
+        value: listingData[fieldTarget]
+      }
+    }
+  }
+  return specifications
 }
 
-// Side Effects
+const camalize = str => {
+  return str.toLowerCase().replace(/[^a-zA-Z0-9]+(.)/g, (_, chr) => chr.toUpperCase())
+}
+
 export const onCreate = (locationId, listSettingsParentId) => async dispatch => {
   dispatch({ type: Types.CREATE_LISTING_START })
   try {
