@@ -19,7 +19,7 @@ const ScrollToTop = ({ children, location: { pathname } }) => {
 
 const SpacePage = ({ match, location, ...props }) => {
   const dispatch = useDispatch()
-  const { object, isLoading } = useSelector(state => state.listing.get)
+  const { object: objectListing, isLoading } = useSelector(state => state.listing.get)
 
   useEffect(() => {
     dispatch(onGetListingById(match.params.id))
@@ -51,13 +51,16 @@ const SpacePage = ({ match, location, ...props }) => {
         <ScrollToTop>
           <Route
             path={`${match.path}/specification`}
-            render={routeProps => <SpecificationTab {...routeProps} {...props} listing={object} />}
+            render={routeProps => <SpecificationTab {...routeProps} {...props} listing={objectListing} />}
           />
           <Route
             path={`${match.path}/booking`}
-            render={routeProps => <BookingTab {...routeProps} {...props} listing={object} />}
+            render={routeProps => <BookingTab {...routeProps} {...props} listing={objectListing} />}
           />
-          <Route path={`${match.path}/availability`} component={AvailabilityTab} />
+          <Route
+            path={`${match.path}/availability`}
+            render={routeProps => <AvailabilityTab {...routeProps} {...props} listing={objectListing} />}
+          />
           <Route path={`${match.path}/cancellation`} component={CancellationTab} />
         </ScrollToTop>
         <Route component={() => <h1>not found</h1>} />
