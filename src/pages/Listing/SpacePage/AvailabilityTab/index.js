@@ -5,8 +5,11 @@ import styled from 'styled-components'
 import { format, isAfter, isBefore, isSameDay } from 'date-fns'
 import update from 'immutability-helper'
 
+import { nanDate } from 'contants/dates'
+
+import { onUpdate, onGetAvailabilitiesByListingId, onGetAllHolidays } from 'redux/ducks/listing'
+
 import { Title, Grid, Cell, TimeTable, Calendar, Switch, StepButtons } from 'components'
-import { onGetAvailabilitiesByListingId, onGetAllHolidays } from 'redux/ducks/listing'
 
 const SwitchStyled = styled.div`
   justify-self: end;
@@ -21,8 +24,21 @@ const ItemSwitchStyled = styled.div`
   grid-template-columns: auto auto;
 `
 
-const AvailabilityTab = ({ listing, ...props }) => {
+const timeTableInitialState = {
+  mon: false,
+  tue: false,
+  wed: false,
+  thu: false,
+  fri: false,
+  sat: false,
+  sun: false,
+  all247: false,
+  listingAccessHours: []
+}
+
+const AvailabilityTab = props => {
   const dispatch = useDispatch()
+
   const [timetable, setTimeTable] = useState([])
   const [fullTime, setFullTime] = useState(false)
   const [selectedDates, setSelectedDates] = useState([])
@@ -32,13 +48,10 @@ const AvailabilityTab = ({ listing, ...props }) => {
   const { array: holidaysArray } = useSelector(state => state.listing.holidays)
 
   useEffect(() => {
-    dispatch(onGetAvailabilitiesByListingId(listing.id))
+    setTimeTable(convertedDataToArrayTimetable(props.listing.accessDays))
+    dispatch(onGetAvailabilitiesByListingId(props.listing.id))
     dispatch(onGetAllHolidays())
-  }, [dispatch, listing.id])
-
-  useEffect(() => {
-    setTimeTable(convertedDataToArrayTimetable(listing.accessDays))
-  }, [listing.accessDays])
+  }, [dispatch, props])
 
   useEffect(() => {
     checkFullTime(timetable)
@@ -59,13 +72,6 @@ const AvailabilityTab = ({ listing, ...props }) => {
     const formatTime = date => {
       const time = format(date, 'HH:mm')
       return new Date(`${format(new Date(), 'MM/DD/YYYY')} ${time}`)
-    }
-
-    const nanDate = date => {
-      if (date && date !== 'Invalid Date') {
-        return new Date(date)
-      }
-      return new Date()
     }
 
     for (let i = 0; i <= 6; i += 1) {
@@ -149,6 +155,62 @@ const AvailabilityTab = ({ listing, ...props }) => {
 
   const _isOldHoliday = originalDate => Date.now() > originalDate.getTime()
 
+  const zero = reference => {
+    let i = reference
+    if (i < 10) {
+      i = `0${i}`
+    }
+    return i
+  }
+
+  const formatTime = time => {
+    const h = zero(time.getHours())
+    const m = zero(time.getMinutes())
+    const s = zero(time.getSeconds())
+    return `${h}:${m}:${s}`
+  }
+
+  const _getHours = (day, time) => {
+    if (!day.fulltime) {
+      const now = new Date()
+      if (time) {
+        const sTime = formatTime(time).split(':')
+        now.setHours(sTime[0], sTime[1], sTime[2])
+        return now.getTime().toString()
+      }
+      now.setHours(0, 0, 0, 0)
+      now.setSeconds(time)
+      return now.getTime().toString()
+    }
+    return Date.now().toString()
+  }
+
+  const _mapToAccessHourType = payload => {
+    const outputObj = JSON.parse(JSON.stringify(timeTableInitialState))
+    for (let i = 0, size = payload.length; i < size; i += 1) {
+      const elem = payload[i]
+      outputObj[elem.day] = elem.active
+      if (elem.active) {
+        outputObj.listingAccessHours.push({
+          weekday: i,
+          allday: elem.fulltime,
+          openHour: _getHours(elem, elem.open),
+          closeHour: _getHours(elem, elem.close)
+        })
+      }
+    }
+    return outputObj
+  }
+
+  const _handleSave = async () => {
+    const valuesToUpdate = {
+      ...props.listing,
+      listingAccessDays: _mapToAccessHourType(timetable)
+    }
+    await dispatch(onUpdate(props.listing, valuesToUpdate))
+    // props.history.push('cancellation')
+  }
+
   const _onClickSelectDay = (day, { selected }) => {
     const copySelectedDates = [...selectedDates]
     if (selected) {
@@ -164,7 +226,6 @@ const AvailabilityTab = ({ listing, ...props }) => {
     const newDate = new Date(name)
     const copyHolidays = [...holidays]
     const copyDisabledDays = [...disabledDays]
-
     if (!checked) {
       const selectedIndex = copyHolidays.findIndex(selectedDay => isSameDay(selectedDay, newDate))
       copyHolidays.splice(selectedIndex, 1)
@@ -176,11 +237,6 @@ const AvailabilityTab = ({ listing, ...props }) => {
     }
     setHolidays(copyHolidays)
     setDisabledDays(copyDisabledDays)
-  }
-
-  const _handleSave = async () => {
-    // await dispatch(onUpdate(listing, values))
-    // props.history.push('availability')
   }
 
   return (

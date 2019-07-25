@@ -790,7 +790,8 @@ export const onGetAllHolidays = () => async dispatch => {
     const holidaysReduced = data.getAllHolidays.map(i => {
       const date = new Date(i.date)
       const formatted = `${date.getDate()} ${monthNames[date.getMonth()]} ${date.getFullYear()}`
-      const shortDescription = i.description.length >= 2 && `${i.description.split(' ')[0]} ${i.description.split(' ')[1]}`
+      const shortDescription =
+        i.description.length >= 2 && `${i.description.split(' ')[0]} ${i.description.split(' ')[1]}`
       return { ...i, originalDate: date, dateFormatted: formatted, shortDescription }
     })
     dispatch({ type: Types.LISTING_GET_SPACE_HOLIDAYS_SUCCESS, payload: holidaysReduced })
