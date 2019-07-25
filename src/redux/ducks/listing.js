@@ -21,6 +21,12 @@ export const Types = {
   LISTING_GET_SPACE_SPECIFICATIONS_REQUEST: 'LISTING_GET_SPACE_SPECIFICATIONS_REQUEST',
   LISTING_GET_SPACE_SPECIFICATIONS_SUCCESS: 'LISTING_GET_SPACE_SPECIFICATIONS_SUCCESS',
   LISTING_GET_SPACE_SPECIFICATIONS_FAILURE: 'LISTING_GET_SPACE_SPECIFICATIONS_FAILURE',
+  LISTING_GET_SPACE_HOLIDAYS_REQUEST: 'LISTING_GET_SPACE_HOLIDAYS_REQUEST',
+  LISTING_GET_SPACE_HOLIDAYS_SUCCESS: 'LISTING_GET_SPACE_HOLIDAYS_SUCCESS',
+  LISTING_GET_SPACE_HOLIDAYS_FAILURE: 'LISTING_GET_SPACE_HOLIDAYS_FAILURE',
+  LISTING_GET_SPACE_AVAILABILITIES_REQUEST: 'LISTING_GET_SPACE_AVAILABILITIES_REQUEST',
+  LISTING_GET_SPACE_AVAILABILITIES_SUCCESS: 'LISTING_GET_SPACE_AVAILABILITIES_SUCCESS',
+  LISTING_GET_SPACE_AVAILABILITIES_FAILURE: 'LISTING_GET_SPACE_AVAILABILITIES_FAILURE',
   CREATE_LISTING_START: 'CREATE_LISTING_START',
   CREATE_LISTING_SUCCESS: 'CREATE_LISTING_SUCCESS',
   CREATE_LISTING_FAILURE: 'CREATE_LISTING_FAILURE',
@@ -284,6 +290,24 @@ const queryGetAllSpecifications = gql`
       id
       itemName
       specData
+    }
+  }
+`
+
+const queryGetAllHolidays = gql`
+  query getAllHolidays {
+    getAllHolidays(state: "NSW") {
+      date
+      description
+    }
+  }
+`
+
+const queryGetAvailabilities = gql`
+  query getAvailabilitiesByListingId($listingId: Int!) {
+    getAvailabilitiesByListingId(listingId: $listingId) {
+      bookingDates
+      exceptionDates
     }
   }
 `
@@ -667,6 +691,33 @@ const mapTo = (originalArray, listingData) => {
 
 const camalize = str => {
   return str.toLowerCase().replace(/[^a-zA-Z0-9]+(.)/g, (_, chr) => chr.toUpperCase())
+}
+
+export const onGetAvailabilitiesByListingId = listingId => async dispatch => {
+  dispatch({ type: Types.LISTING_GET_SPACE_AVAILABILITIES_REQUEST })
+  try {
+    const { data } = await getClientWithAuth(dispatch).query({
+      query: queryGetAvailabilities,
+      variables: { listingId },
+      fetchPolicy: 'network-only'
+    })
+    dispatch({ type: Types.LISTING_GET_SPACE_AVAILABILITIES_SUCCESS, payload: data.getAvailabilitiesByListingId })
+  } catch (err) {
+    dispatch({ type: Types.LISTING_GET_SPACE_AVAILABILITIES_FAILURE, payload: errToMsg(err) })
+  }
+}
+
+export const onGetAllHolidays = () => async dispatch => {
+  dispatch({ type: Types.LISTING_GET_SPACE_HOLIDAYS_REQUEST })
+  try {
+    const { data } = await getClientWithAuth(dispatch).query({
+      query: queryGetAllHolidays,
+      fetchPolicy: 'network-only'
+    })
+    dispatch({ type: Types.LISTING_GET_SPACE_HOLIDAYS_SUCCESS, payload: data.getAllHolidays })
+  } catch (err) {
+    dispatch({ type: Types.LISTING_GET_SPACE_HOLIDAYS_FAILURE, payload: errToMsg(err) })
+  }
 }
 
 export const onCreate = (locationId, listSettingsParentId) => async dispatch => {
