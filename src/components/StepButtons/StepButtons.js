@@ -21,7 +21,7 @@ const StepButtons = ({ prev, next }) => {
     <Footer>
       <Left>
         {prev && (
-          <Button disabled={prev.disabled} onClick={prev.onClick}>
+          <Button outline disabled={prev.disabled} onClick={prev.onClick}>
             Previous Step
           </Button>
         )}
