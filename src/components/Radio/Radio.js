@@ -36,7 +36,7 @@ const RadioStyled = styled.div`
   grid-template-columns: auto 1fr;
   align-items: center;
   justify-items: start;
-  grid-column-gap: 20px;
+  grid-column-gap: 12px;
   color: #172439;
 `
 
@@ -46,7 +46,7 @@ const RadioButtonLabel = styled.label`
   height: 24px;
   border-radius: 50%;
   background: white;
-  border: 1px solid #172439;
+  border: 2px solid #172439;
   margin: 0;
 `
 
