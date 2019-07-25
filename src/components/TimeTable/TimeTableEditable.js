@@ -62,10 +62,6 @@ const TimeTableEditable = ({
     handleClick24hours(e, obj)
   }
 
-  const onHandleClickOpenFullTime = (e, obj) => {
-    handleClickOpenFullTime(e, obj)
-  }
-
   return (
     <WrapperStyled>
       {/* <Grid columns={12} columnGap="40px" style={{ margin: '30px 0' }}>
