@@ -122,7 +122,7 @@ const BookingTab = ({
         </Grid>
       </Cell>
       <Cell>
-        <Title type="h3" title="Minimum Term" subtitle="How much notice do you need before a guest arrives?" />
+        <Title type="h3" title="Minimum Term" subtitle="The shortest time you required a guest to stay" />
         <Caption>Period</Caption>
         <Grid columns={12} columnGap="20px">
           <Cell width={2}>
