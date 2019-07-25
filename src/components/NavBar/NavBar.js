@@ -3,13 +3,18 @@ import { useSelector } from 'react-redux'
 import { Link } from 'react-router-dom'
 import { Navbar, Nav, NavDropdown } from 'react-bootstrap'
 
+import { config } from 'contants'
+
 import logo from './spacenow_logo.png'
 
 function NavBar() {
   const authUser = useSelector(state => state.auth.user)
+  const _handlerGoToLegancy = () => {
+    window.location.href = `${config.legacy}`
+  }
   return (
     <Navbar>
-      <Link to="/">
+      <Link onClick={_handlerGoToLegancy}>
         <Navbar.Brand>
           <img alt="" src={logo} width={230} className="d-inline-block align-top" />
         </Navbar.Brand>
