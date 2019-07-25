@@ -2,12 +2,11 @@ import React, { useEffect, useState } from 'react'
 import PropTypes from 'prop-types'
 import { useDispatch, useSelector } from 'react-redux'
 import styled from 'styled-components'
-import { format, isAfter, isBefore } from 'date-fns'
+import { format, isAfter, isBefore, isSameDay } from 'date-fns'
 import update from 'immutability-helper'
 
-import { onGetAvailabilitiesByListingId, onGetAllHolidays } from 'redux/ducks/listing'
-
 import { Title, Grid, Cell, TimeTable, Calendar, Switch } from 'components'
+import { onGetAvailabilitiesByListingId, onGetAllHolidays } from 'redux/ducks/listing'
 
 const SwitchStyled = styled.div`
   justify-self: end;
@@ -26,6 +25,9 @@ const AvailabilityTab = ({ listing }) => {
   const dispatch = useDispatch()
   const [timetable, setTimeTable] = useState([])
   const [fullTime, setFullTime] = useState(false)
+  const [selectedDates, setSelectedDates] = useState([])
+  const [disabledDays, setDisabledDays] = useState([])
+  const [holidays, setHolidays] = useState([])
   const { array: availabilitiesArray } = useSelector(state => state.listing.availabilities)
   const { array: holidaysArray } = useSelector(state => state.listing.holidays)
 
@@ -41,6 +43,13 @@ const AvailabilityTab = ({ listing }) => {
   useEffect(() => {
     checkFullTime(timetable)
   }, [timetable])
+
+  /* eslint-disable no-console */
+  useEffect(() => {
+    // if (disabledDays.length < 0) {
+    setDisabledDays(availabilitiesArray)
+    // }
+  }, [availabilitiesArray])
 
   const convertedDataToArrayTimetable = array => {
     const TIME_TABLE_SHORT_NAME = ['sun', 'mon', 'tue', 'wed', 'thu', 'fri', 'sat']
@@ -143,6 +152,35 @@ const AvailabilityTab = ({ listing }) => {
 
   const _isOldHoliday = originalDate => Date.now() > originalDate.getTime()
 
+  const _onClickSelectDay = (day, { selected }) => {
+    const copySelectedDates = [...selectedDates]
+    if (selected) {
+      const selectedIndex = copySelectedDates.findIndex(selectedDay => isSameDay(selectedDay, day))
+      copySelectedDates.splice(selectedIndex, 1)
+    } else {
+      copySelectedDates.push(day)
+    }
+    setSelectedDates(copySelectedDates)
+  }
+
+  const _onChangeHoliday = (e, { checked, name }) => {
+    const newDate = new Date(name)
+    const copyHolidays = [...holidays]
+    const copyDisabledDays = [...disabledDays]
+
+    if (!checked) {
+      const selectedIndex = copyHolidays.findIndex(selectedDay => isSameDay(selectedDay, newDate))
+      copyHolidays.splice(selectedIndex, 1)
+      const selectedIndexDisabledDays = copyDisabledDays.findIndex(selectedDay => isSameDay(selectedDay, newDate))
+      copyDisabledDays.splice(selectedIndexDisabledDays, 1)
+    } else {
+      copyHolidays.push(newDate)
+      copyDisabledDays.push(newDate)
+    }
+    setHolidays(copyHolidays)
+    setDisabledDays(copyDisabledDays)
+  }
+
   return (
     <Grid columns={1} rowGap="80px">
       <Cell>
@@ -163,7 +201,7 @@ const AvailabilityTab = ({ listing }) => {
           title="Blocked dates"
           subtitle="Block out times when the space is not available within business opening hours."
         />
-        <Calendar />
+        <Calendar handleDayClick={_onClickSelectDay} selectedDays={selectedDates} disabledDays={disabledDays} />
       </Cell>
       <Cell>
         <Title
@@ -172,25 +210,32 @@ const AvailabilityTab = ({ listing }) => {
           subtitle="Are you closed on all Australian holidays? Or Just a few of them?"
         />
         <Grid columns={12} gap="20px" columnGap="40px" style={{ margin: '30px 0' }}>
-          {holidaysArray.map((o, index) => {
-            return (
-              <Cell key={o.date} width={3}>
-                <ItemSwitchStyled>
-                  <span>{o.dateFormatted}</span>
-                  <SwitchStyled>
-                    <Switch
-                      id={index}
-                      name={o.date}
-                      value={o.date}
-                      // checked={availabilitiesArray.includes(o.date)}
-                      disabled={_isOldHoliday(o.originalDate)}
-                      handleCheckboxChange={() => {}}
-                    />
-                  </SwitchStyled>
-                </ItemSwitchStyled>
-              </Cell>
-            )
-          })}
+          {holidaysArray
+            .filter(el => {
+              if (isAfter(new Date(), new Date(el.date))) {
+                return false
+              }
+              return true
+            })
+            .map((o, index) => {
+              return (
+                <Cell key={o.date} width={3}>
+                  <ItemSwitchStyled>
+                    <span>{o.dateFormatted}</span>
+                    <SwitchStyled>
+                      <Switch
+                        id={index}
+                        name={o.date}
+                        value={o.date}
+                        // checked={availabilitiesArray.includes(o.date)}
+                        disabled={_isOldHoliday(o.originalDate)}
+                        handleCheckboxChange={_onChangeHoliday}
+                      />
+                    </SwitchStyled>
+                  </ItemSwitchStyled>
+                </Cell>
+              )
+            })}
         </Grid>
       </Cell>
     </Grid>
