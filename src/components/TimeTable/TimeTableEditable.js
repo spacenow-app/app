@@ -151,8 +151,8 @@ TimeTableEditable.propTypes = {
       description: PropTypes.string,
       active: PropTypes.bool,
       fulltime: PropTypes.bool,
-      open: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
-      close: PropTypes.oneOfType([PropTypes.string, PropTypes.number])
+      open: PropTypes.oneOfType([PropTypes.string, PropTypes.number, PropTypes.instanceOf(Date)]),
+      close: PropTypes.oneOfType([PropTypes.string, PropTypes.number, PropTypes.instanceOf(Date)])
     })
   ),
   fullTime: PropTypes.bool,
