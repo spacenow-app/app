@@ -69,7 +69,7 @@ const TimeTableEditable = ({
 
   return (
     <WrapperStyled>
-      <Grid columns={12} columnGap="40px" style={{ margin: '30px 0' }}>
+      {/* <Grid columns={12} columnGap="40px" style={{ margin: '30px 0' }}>
         <Cell width={4}>
           <ItemSwitchStyled>
             <span>Open 24 / 7</span>
@@ -78,7 +78,7 @@ const TimeTableEditable = ({
             </SwitchStyled>
           </ItemSwitchStyled>
         </Cell>
-      </Grid>
+      </Grid> */}
       <Grid columns={12} columnGap="40px" left>
         <Cell width={4} middle>
           <TitleStyled>Days</TitleStyled>
