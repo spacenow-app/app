@@ -5,7 +5,7 @@ import styled from 'styled-components'
 import { format, isAfter, isBefore, isSameDay } from 'date-fns'
 import update from 'immutability-helper'
 
-import { Title, Grid, Cell, TimeTable, Calendar, Switch } from 'components'
+import { Title, Grid, Cell, TimeTable, Calendar, Switch, StepButtons } from 'components'
 import { onGetAvailabilitiesByListingId, onGetAllHolidays } from 'redux/ducks/listing'
 
 const SwitchStyled = styled.div`
@@ -21,7 +21,7 @@ const ItemSwitchStyled = styled.div`
   grid-template-columns: auto auto;
 `
 
-const AvailabilityTab = ({ listing }) => {
+const AvailabilityTab = ({ listing, ...props }) => {
   const dispatch = useDispatch()
   const [timetable, setTimeTable] = useState([])
   const [fullTime, setFullTime] = useState(false)
@@ -44,12 +44,9 @@ const AvailabilityTab = ({ listing }) => {
     checkFullTime(timetable)
   }, [timetable])
 
-  /* eslint-disable no-console */
   useEffect(() => {
-    // if (disabledDays.length < 0) {
     setDisabledDays(availabilitiesArray)
-    // }
-  }, [availabilitiesArray])
+  }, [availabilitiesArray]) // eslint-disable-line no-console
 
   const convertedDataToArrayTimetable = array => {
     const TIME_TABLE_SHORT_NAME = ['sun', 'mon', 'tue', 'wed', 'thu', 'fri', 'sat']
@@ -181,6 +178,11 @@ const AvailabilityTab = ({ listing }) => {
     setDisabledDays(copyDisabledDays)
   }
 
+  const _handleSave = async () => {
+    // await dispatch(onUpdate(listing, values))
+    // props.history.push('availability')
+  }
+
   return (
     <Grid columns={1} rowGap="80px">
       <Cell>
@@ -238,6 +240,10 @@ const AvailabilityTab = ({ listing }) => {
             })}
         </Grid>
       </Cell>
+      <StepButtons
+        prev={{ disabled: false, onClick: () => props.history.push('booking') }}
+        next={{ onClick: _handleSave }}
+      />
     </Grid>
   )
 }
