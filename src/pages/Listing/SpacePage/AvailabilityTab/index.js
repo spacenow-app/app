@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import PropTypes from 'prop-types'
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import styled from 'styled-components'
 import { format, isAfter, isBefore } from 'date-fns'
 import update from 'immutability-helper'
@@ -148,6 +148,9 @@ const AvailabilityTab = ({ listing }) => {
   const [timetable, setTimeTable] = useState(teste())
   const [fullTime, setFullTime] = useState(false)
 
+  const { array: availabilitiesArray } = useSelector(state => state.listing.availabilities)
+  const { array: holidaysArray } = useSelector(state => state.listing.holidays)
+
   useEffect(() => {
     checkFullTime(timetable)
     dispatch(onGetAvailabilitiesByListingId(listing.id))
@@ -202,6 +205,8 @@ const AvailabilityTab = ({ listing }) => {
     setTimeTable(newArray)
   }
 
+  const _isOldHoliday = originalDate => Date.now() > originalDate.getTime()
+
   return (
     <Grid columns={1} rowGap="80px">
       <Cell>
@@ -231,14 +236,25 @@ const AvailabilityTab = ({ listing }) => {
           subtitle="Are you closed on all Australian holidays? Or Just a few of them?"
         />
         <Grid columns={12} gap="20px" columnGap="40px" style={{ margin: '30px 0' }}>
-          <Cell width={3}>
-            <ItemSwitchStyled>
-              <span>Block all</span>
-              <SwitchStyled>
-                <Switch name="blockAll" disabled={false} handleCheckboxChange={() => {}} checked={false} />
-              </SwitchStyled>
-            </ItemSwitchStyled>
-          </Cell>
+          {holidaysArray.map((o, index) => {
+            return (
+              <Cell key={o.date} width={3}>
+                <ItemSwitchStyled>
+                  <span>{o.dateFormatted}</span>
+                  <SwitchStyled>
+                    <Switch
+                      id={index}
+                      name={o.date}
+                      value={o.date}
+                      // checked={availabilitiesArray.includes(o.date)}
+                      disabled={_isOldHoliday(o.originalDate)}
+                      handleCheckboxChange={() => {}}
+                    />
+                  </SwitchStyled>
+                </ItemSwitchStyled>
+              </Cell>
+            )
+          })}
         </Grid>
       </Cell>
     </Grid>

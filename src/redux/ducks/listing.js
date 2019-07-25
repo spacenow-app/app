@@ -3,6 +3,7 @@ import { gql } from 'apollo-boost'
 
 import { getClientWithAuth } from 'graphql/apolloClient'
 import errToMsg from 'utils/errToMsg'
+import { monthNames } from 'contants/dates'
 
 // Actions
 export const Types = {
@@ -786,7 +787,13 @@ export const onGetAllHolidays = () => async dispatch => {
       query: queryGetAllHolidays,
       fetchPolicy: 'network-only'
     })
-    dispatch({ type: Types.LISTING_GET_SPACE_HOLIDAYS_SUCCESS, payload: data.getAllHolidays })
+    const holidaysReduced = data.getAllHolidays.map(i => {
+      const date = new Date(i.date)
+      const formatted = `${date.getDate()} ${monthNames[date.getMonth()]} ${date.getFullYear()}`
+      const shortDescription = i.description.length >= 2 && `${i.description.split(' ')[0]} ${i.description.split(' ')[1]}`
+      return { ...i, originalDate: date, dateFormatted: formatted, shortDescription }
+    })
+    dispatch({ type: Types.LISTING_GET_SPACE_HOLIDAYS_SUCCESS, payload: holidaysReduced })
   } catch (err) {
     dispatch({ type: Types.LISTING_GET_SPACE_HOLIDAYS_FAILURE, payload: errToMsg(err) })
   }
