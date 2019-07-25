@@ -2,6 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import styled from 'styled-components'
 import { Button as ButtonExternal, Spinner } from 'react-bootstrap'
+import { color } from 'styled-system'
 
 const ButtonStyled = styled(ButtonExternal)`
   &&& {
@@ -32,6 +33,7 @@ const ButtonStyled = styled(ButtonExternal)`
         border: #51c482;
       }
     }
+    ${color}
   }
 `
 
@@ -123,7 +125,7 @@ const ButtonStyled = styled(ButtonExternal)`
 //   }
 // `
 
-const Button = ({ children, isLoading, disabled, ...props }) => {
+const Button = ({ children, icon, isLoading, disabled, ...props }) => {
   return (
     <ButtonStyled {...props} disabled={disabled || isLoading}>
       {isLoading && (
@@ -132,6 +134,7 @@ const Button = ({ children, isLoading, disabled, ...props }) => {
           <span className="sr-only">Loading...</span>
         </>
       )}
+      {icon}
       {!isLoading && children}
     </ButtonStyled>
   )
@@ -143,7 +146,8 @@ Button.defaultProps = {
 }
 
 Button.propTypes = {
-  children: PropTypes.string.isRequired,
+  children: PropTypes.string,
+  icon: PropTypes.element,
   isLoading: PropTypes.bool,
   disabled: PropTypes.bool
 }

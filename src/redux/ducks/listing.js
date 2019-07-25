@@ -21,6 +21,9 @@ export const Types = {
   LISTING_GET_SPACE_SPECIFICATIONS_REQUEST: 'LISTING_GET_SPACE_SPECIFICATIONS_REQUEST',
   LISTING_GET_SPACE_SPECIFICATIONS_SUCCESS: 'LISTING_GET_SPACE_SPECIFICATIONS_SUCCESS',
   LISTING_GET_SPACE_SPECIFICATIONS_FAILURE: 'LISTING_GET_SPACE_SPECIFICATIONS_FAILURE',
+  LISTING_GET_PHOTOS_REQUEST: 'LISTING_GET_PHOTOS_REQUEST',
+  LISTING_GET_PHOTOS_SUCCESS: 'LISTING_GET_PHOTOS_SUCCESS',
+  LISTING_GET_PHOTOS_FAILURE: 'LISTING_GET_PHOTOS_FAILURE',
   CREATE_LISTING_START: 'CREATE_LISTING_START',
   CREATE_LISTING_SUCCESS: 'CREATE_LISTING_SUCCESS',
   CREATE_LISTING_FAILURE: 'CREATE_LISTING_FAILURE',
@@ -284,6 +287,14 @@ const queryGetAllSpecifications = gql`
       id
       itemName
       specData
+    }
+  }
+`
+
+const queryGetAsset = gql`
+  query getAsset($assetId: Int!) {
+    getAsset(assetId: $assetId) {
+      
     }
   }
 `
@@ -611,6 +622,19 @@ export const onGetAllSpecifications = (listSettingsParentId, listingData) => asy
     dispatch({ type: Types.LISTING_GET_SPACE_SPECIFICATIONS_SUCCESS, payload: specificationsToView })
   } catch (err) {
     dispatch({ type: Types.LISTING_GET_SPACE_SPECIFICATIONS_FAILURE, payload: errToMsg(err) })
+  }
+}
+
+export const onGetAllPhotos = () => async dispatch => {
+  dispatch({ type: Types.LISTING_GET_PHOTOS_REQUEST })
+  try {
+    const { data } = await getClientWithAuth(dispatch).query({
+      query: queryGetAllPhotos,
+      fetchPolicy: 'network-only'
+    })
+    dispatch({ type: Types.LISTING_GET_PHOTOS_SUCCESS, payload: data.getAllPhotos })
+  } catch (err) {
+    dispatch({ type: Types.LISTING_GET_PHOTOS_FAILURE, payload: errToMsg(err) })
   }
 }
 

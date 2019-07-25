@@ -28,6 +28,7 @@ import Box from './Box'
 import Tag from './Tag'
 import Highlights from './Highlights'
 import Loader from './Loader'
+import Photo from './Photo'
 
 export {
   Modal,
@@ -62,5 +63,6 @@ export {
   Box,
   Tag,
   Highlights,
-  Loader
+  Loader,
+  Photo
 }
