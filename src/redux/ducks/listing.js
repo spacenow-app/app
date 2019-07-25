@@ -319,6 +319,7 @@ const mutationUpdate = gql`
     $maxEntranceHeight: String
     $spaceType: String
     $bookingType: String
+    $bookingPeriod: String
     $listingAmenities: [Int]
     $listingAccessDays: ListingAccessDaysInput
     $listingExceptionDates: [String]
@@ -346,6 +347,7 @@ const mutationUpdate = gql`
       maxEntranceHeight: $maxEntranceHeight
       spaceType: $spaceType
       bookingType: $bookingType
+      bookingPeriod: $bookingPeriod
       listingAmenities: $listingAmenities
       listingAccessDays: $listingAccessDays
       listingExceptionDates: $listingExceptionDates
@@ -712,7 +714,7 @@ export const onUpdate = (listing, values) => async dispatch => {
 const getValues = (_, values) => {
   return {
     title: values.title || _.title,
-    // bookingPeriod: values.bookingPeriod || _.bookingPeriod, // TODO Booking period could be updated?
+    bookingPeriod: values.bookingPeriod || _.bookingPeriod,
     accessType: values.accessType || _.listingData.accessType,
     bookingNoticeTime: values.bookingNoticeTime || _.listingData.bookingNoticeTime,
     minTerm: values.minTerm || _.listingData.minTerm,
