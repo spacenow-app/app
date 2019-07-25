@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { memo } from 'react'
 import PropTypes from 'prop-types'
 import styled, { css } from 'styled-components'
 import DayPicker from 'react-day-picker'
@@ -46,6 +46,9 @@ const WrapperStyled = styled.div`
 
     .DayPicker-Day--today {
       color: #6adc91;
+      :hover {
+        color: #fff;
+      }
     }
 
     .DayPicker-Day--blockedDates {
@@ -126,23 +129,19 @@ const Caption = ({ date }) => {
   return null
 }
 
-const Calendar = props => {
-  const [selectedDates, setSelectedDates] = useState([])
-  const modifiers = {
-    disabled: { daysOfWeek: [1] },
-    blockedDates: [new Date(2019, 7, 30), new Date(2019, 7, 28)]
-  }
-
-  const handleDayClick = day => {
-    setSelectedDates([...selectedDates, day])
-  }
-
+const Calendar = ({ selectedDays, disabledDays, handleDayClick, ...props }) => {
   return (
     <WrapperStyled>
       <DayPicker
-        selectedDays={selectedDates}
+        {...props}
         numberOfMonths={2}
-        modifiers={modifiers}
+        disabledDays={[
+          ...disabledDays.map(el => new Date(el)),
+          {
+            before: new Date()
+          }
+        ]}
+        selectedDays={selectedDays}
         navbarElement={<Navbar />}
         captionElement={<Caption />}
         onDayClick={handleDayClick}
@@ -151,12 +150,19 @@ const Calendar = props => {
   )
 }
 
-Calendar.defaultProps = {
-  children: null
-}
-
 Calendar.propTypes = {
-  children: PropTypes.element
+  selectedDays: PropTypes.instanceOf(Array),
+  disabledDays: PropTypes.instanceOf(Array),
+  handleDayClick: PropTypes.func
 }
 
-export default Calendar
+export default memo(Calendar, (prevProps, nextProps) => {
+  if (
+    prevProps.selectedDays.length === nextProps.selectedDays.length ||
+    prevProps.disabledDays.length === nextProps.disabledDays.length
+  ) {
+    return false
+  }
+
+  return false
+})
