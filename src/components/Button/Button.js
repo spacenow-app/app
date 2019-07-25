@@ -5,31 +5,43 @@ import { Button as ButtonExternal, Spinner } from 'react-bootstrap'
 
 const ButtonStyled = styled(ButtonExternal)`
   &&& {
-    background-color: #6adc91;
-    border-color: #6adc91;
     height: 54px;
     border-radius: 37px;
     font-family: 'Montserrat-Medium';
     font-size: 14px;
     width: 180px;
+    font-weight: 600;
+    background-color: ${props => (props.outline && '#fff') || (props.disabled && '#fff') || '#6adc91'};
+    color: ${props => (props.outline && '#172439') || '#fff'};
+    border: ${props => (props.outline ? `1px solid #172439` : 'none')};
 
     :hover {
       &&& {
-        background-color: #51c482;
-        border: #51c482;
+        background-color: ${props => (props.outline && '#fff') || '#51c482'};
+        border: ${props => (props.outline ? `1px solid #6adc91` : 'none')};
+        color: ${props => (props.outline && '#6adc91') || '#fff'};
       }
     }
     :focus {
       &&& {
-        background-color: #51c482;
-        border: #51c482;
         box-shadow: 0 0 0 0.2rem rgba(106, 220, 145, 0.5);
+        background-color: ${props => (props.outline && '#6adc91') || '#2DA577'};
+        border: ${props => (props.outline ? `1px solid #6adc91` : 'none')};
+        color: #fff;
       }
     }
     :active {
       &&& {
         background-color: #51c482;
         border: #51c482;
+      }
+    }
+    :disabled {
+      &&& {
+        background-color: ${props => (props.outline ? `#fff` : '#E2E2E2')};
+        border: ${props => (props.outline ? `1px solid #CBCBCB` : 'none')};
+        color: ${props => (props.outline ? `#E2E2E2` : '#fff')};
+        cursor: not-allowed;
       }
     }
   }
