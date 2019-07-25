@@ -5,6 +5,7 @@ import { withFormik } from 'formik'
 import * as Yup from 'yup'
 import numeral from 'numeral'
 import pluralize from 'pluralize'
+import { capitalize } from 'utils/strings'
 
 import { onUpdate } from 'redux/ducks/listing'
 
@@ -36,6 +37,13 @@ const BookingTab = ({
   const _handleSave = async () => {
     await dispatch(onUpdate(listing, values))
     props.history.push('availability')
+  }
+
+  const _changeToPlural = (string, number) => {
+    if (string === 'daily') {
+      return pluralize(capitalize('day'), number, true)
+    }
+    return pluralize(capitalize(string.slice(0, -2)), number, true)
   }
 
   return (
@@ -95,7 +103,7 @@ const BookingTab = ({
         <Title type="h3" title="Price*" />
         <Grid columns={12} columnGap="20px">
           <Cell width={4}>
-            <Select label="Currecy" name="currency" value={values.currency} onChange={_handleSelectChange}>
+            <Select label="Currency" name="currency" value={values.currency} onChange={_handleSelectChange}>
               <option value="AUD">AUD</option>
             </Select>
           </Cell>
@@ -123,7 +131,7 @@ const BookingTab = ({
               value={1}
               checked={values.minTerm === 1}
               handleChange={_handleRadioChange}
-              label={`1 ${pluralize(values.bookingPeriod.slice(0, -2), 1)}`}
+              label={_changeToPlural(values.bookingPeriod, 1)}
             />
           </Cell>
           <Cell width={2}>
@@ -132,7 +140,7 @@ const BookingTab = ({
               value={2}
               checked={values.minTerm === 2}
               handleChange={_handleRadioChange}
-              label={`2 ${pluralize(values.bookingPeriod.slice(0, -2))}`}
+              label={_changeToPlural(values.bookingPeriod, 2)}
             />
           </Cell>
           <Cell width={2}>
@@ -141,7 +149,7 @@ const BookingTab = ({
               value={5}
               checked={values.minTerm === 5}
               handleChange={_handleRadioChange}
-              label={`5 ${pluralize(values.bookingPeriod.slice(0, -2))}`}
+              label={_changeToPlural(values.bookingPeriod, 5)}
             />
           </Cell>
           <Cell width={2}>
@@ -150,7 +158,7 @@ const BookingTab = ({
               value={7}
               checked={values.minTerm === 7}
               handleChange={_handleRadioChange}
-              label={`7 ${pluralize(values.bookingPeriod.slice(0, -2))}`}
+              label={_changeToPlural(values.bookingPeriod, 7)}
             />
           </Cell>
         </Grid>
