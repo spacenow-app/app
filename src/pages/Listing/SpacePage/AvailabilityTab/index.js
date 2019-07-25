@@ -5,7 +5,6 @@ import styled from 'styled-components'
 import { format, isAfter, isBefore, isSameDay } from 'date-fns'
 import update from 'immutability-helper'
 
-import { onGetAvailabilitiesByListingId, onGetAllHolidays } from 'redux/ducks/listing'
 import { nanDate } from 'contants/dates'
 
 import { onUpdate, onGetAvailabilitiesByListingId, onGetAllHolidays } from 'redux/ducks/listing'
@@ -230,7 +229,6 @@ const AvailabilityTab = props => {
     const newDate = new Date(name)
     const copyHolidays = [...holidays]
     const copyDisabledDays = [...disabledDays]
-
     if (!checked) {
       const selectedIndex = copyHolidays.findIndex(selectedDay => isSameDay(selectedDay, newDate))
       copyHolidays.splice(selectedIndex, 1)
