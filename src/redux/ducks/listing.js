@@ -62,6 +62,16 @@ const initialState = {
     object: null,
     isLoading: true,
     error: null
+  },
+  availabilities: {
+    array: [],
+    isLoading: true,
+    error: null
+  },
+  holidays: {
+    array: [],
+    isLoading: true,
+    error: null
   }
 }
 
@@ -534,6 +544,66 @@ export default function reducer(state = initialState, action) {
         }
       }
     }
+    case Types.LISTING_GET_SPACE_AVAILABILITIES_REQUEST: {
+      return {
+        ...state,
+        availabilities: {
+          ...state.availabilities,
+          isLoading: true,
+          error: null
+        }
+      }
+    }
+    case Types.LISTING_GET_SPACE_AVAILABILITIES_SUCCESS: {
+      return {
+        ...state,
+        availabilities: {
+          ...state.availabilities,
+          isLoading: false,
+          array: action.payload
+        }
+      }
+    }
+    case Types.LISTING_GET_SPACE_AVAILABILITIES_FAILURE: {
+      return {
+        ...state,
+        availabilities: {
+          ...state.availabilities,
+          isLoading: false,
+          error: action.payload
+        }
+      }
+    }
+    case Types.LISTING_GET_SPACE_HOLIDAYS_REQUEST: {
+      return {
+        ...state,
+        holidays: {
+          ...state.holidays,
+          isLoading: true,
+          error: null
+        }
+      }
+    }
+    case Types.LISTING_GET_SPACE_HOLIDAYS_SUCCESS: {
+      return {
+        ...state,
+        holidays: {
+          ...state.holidays,
+          isLoading: false,
+          array: action.payload
+        }
+      }
+    }
+    case Types.LISTING_GET_SPACE_HOLIDAYS_FAILURE: {
+      return {
+        ...state,
+        holidays: {
+          ...state.holidays,
+          isLoading: false,
+          error: action.payload
+        }
+      }
+    }
     case Types.CREATE_LISTING_START: {
       return {
         ...state,
@@ -701,7 +771,9 @@ export const onGetAvailabilitiesByListingId = listingId => async dispatch => {
       variables: { listingId },
       fetchPolicy: 'network-only'
     })
-    dispatch({ type: Types.LISTING_GET_SPACE_AVAILABILITIES_SUCCESS, payload: data.getAvailabilitiesByListingId })
+    const { bookingDates, exceptionDates } = data.getAvailabilitiesByListingId
+    const mergeAvailabilities = bookingDates.concat(exceptionDates)
+    dispatch({ type: Types.LISTING_GET_SPACE_AVAILABILITIES_SUCCESS, payload: mergeAvailabilities })
   } catch (err) {
     dispatch({ type: Types.LISTING_GET_SPACE_AVAILABILITIES_FAILURE, payload: errToMsg(err) })
   }

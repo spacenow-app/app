@@ -1,8 +1,13 @@
 import React, { useEffect, useState } from 'react'
+import PropTypes from 'prop-types'
+import { useDispatch } from 'react-redux'
 import styled from 'styled-components'
 import { format, isAfter, isBefore } from 'date-fns'
-import { Title, Grid, Cell, TimeTable, Calendar, Switch } from 'components'
 import update from 'immutability-helper'
+
+import { onGetAvailabilitiesByListingId, onGetAllHolidays } from 'redux/ducks/listing'
+
+import { Title, Grid, Cell, TimeTable, Calendar, Switch } from 'components'
 
 const SwitchStyled = styled.div`
   justify-self: end;
@@ -137,13 +142,17 @@ const teste = () => {
   return input
 }
 
-const AvailabilityTab = () => {
+const AvailabilityTab = ({ listing }) => {
+  const dispatch = useDispatch()
+
   const [timetable, setTimeTable] = useState(teste())
   const [fullTime, setFullTime] = useState(false)
 
   useEffect(() => {
     checkFullTime(timetable)
-  }, [timetable])
+    dispatch(onGetAvailabilitiesByListingId(listing.id))
+    dispatch(onGetAllHolidays())
+  }, [dispatch, listing.id, timetable])
 
   const checkFullTime = array => {
     const isFullTime = array.every(el => el.active === true)
@@ -234,6 +243,10 @@ const AvailabilityTab = () => {
       </Cell>
     </Grid>
   )
+}
+
+AvailabilityTab.propTypes = {
+  listing: PropTypes.instanceOf(Object).isRequired
 }
 
 export default AvailabilityTab
