@@ -4,6 +4,7 @@ import { useDispatch } from 'react-redux'
 import { withFormik } from 'formik'
 import * as Yup from 'yup'
 import numeral from 'numeral'
+import pluralize from 'pluralize'
 
 import { onUpdate } from 'redux/ducks/listing'
 
@@ -115,41 +116,41 @@ const BookingTab = ({
       <Cell>
         <Title type="h3" title="Minimum Term" subtitle="How much notice do you need before a guest arrives?" />
         <Caption>Period</Caption>
-        <Grid columns={8} columnGap="20px">
-          <Cell width={1}>
+        <Grid columns={12} columnGap="20px">
+          <Cell width={2}>
             <Radio
               name="minTerm"
               value={1}
               checked={values.minTerm === 1}
               handleChange={_handleRadioChange}
-              label="1 day"
+              label={`1 ${pluralize(values.bookingPeriod.slice(0, -2), 1)}`}
             />
           </Cell>
-          <Cell width={1}>
+          <Cell width={2}>
             <Radio
               name="minTerm"
               value={2}
               checked={values.minTerm === 2}
               handleChange={_handleRadioChange}
-              label="2 days"
+              label={`2 ${pluralize(values.bookingPeriod.slice(0, -2))}`}
             />
           </Cell>
-          <Cell width={1}>
+          <Cell width={2}>
             <Radio
               name="minTerm"
               value={5}
               checked={values.minTerm === 5}
               handleChange={_handleRadioChange}
-              label="5 days"
+              label={`5 ${pluralize(values.bookingPeriod.slice(0, -2))}`}
             />
           </Cell>
-          <Cell width={1}>
+          <Cell width={2}>
             <Radio
               name="minTerm"
               value={7}
               checked={values.minTerm === 7}
               handleChange={_handleRadioChange}
-              label="7 days"
+              label={`7 ${pluralize(values.bookingPeriod.slice(0, -2))}`}
             />
           </Cell>
         </Grid>
