@@ -17,133 +17,64 @@ const ItemSwitchStyled = styled.div`
   grid-template-columns: auto auto;
 `
 
-const data = {
-  accessDays: {
-    id: 42,
-    listingId: 1,
-    mon: true,
-    tue: true,
-    wed: true,
-    thu: true,
-    fri: true,
-    sat: false,
-    sun: false,
-    all247: false,
-    createdAt: '2019-04-24T01:39:36.000Z',
-    updatedAt: '2019-07-09T05:23:43.000Z',
-    listingAccessHours: [
-      {
-        id: 1054,
-        listingAccessDaysId: 42,
-        weekday: 1,
-        openHour: '2019-07-08T22:00:00.000Z',
-        closeHour: '2019-07-09T07:00:00.000Z',
-        allday: false,
-        createdAt: '2019-07-09T05:23:43.000Z',
-        updatedAt: '2019-07-09T05:23:43.000Z'
-      },
-      {
-        id: 1055,
-        listingAccessDaysId: 42,
-        weekday: 2,
-        openHour: '2019-07-09T05:23:30.000Z',
-        closeHour: '2019-07-09T05:23:30.000Z',
-        allday: true,
-        createdAt: '2019-07-09T05:23:43.000Z',
-        updatedAt: '2019-07-09T05:23:43.000Z'
-      },
-      {
-        id: 1056,
-        listingAccessDaysId: 42,
-        weekday: 3,
-        openHour: '2019-07-09T05:23:30.000Z',
-        closeHour: '2019-07-09T05:23:30.000Z',
-        allday: true,
-        createdAt: '2019-07-09T05:23:43.000Z',
-        updatedAt: '2019-07-09T05:23:43.000Z'
-      },
-      {
-        id: 1057,
-        listingAccessDaysId: 42,
-        weekday: 4,
-        openHour: '2019-07-09T05:23:30.000Z',
-        closeHour: '2019-07-09T05:23:30.000Z',
-        allday: true,
-        createdAt: '2019-07-09T05:23:43.000Z',
-        updatedAt: '2019-07-09T05:23:43.000Z'
-      },
-      {
-        id: 1058,
-        listingAccessDaysId: 42,
-        weekday: 5,
-        openHour: '2019-07-08T22:00:00.000Z',
-        closeHour: '2019-07-09T07:00:00.000Z',
-        allday: false,
-        createdAt: '2019-07-09T05:23:43.000Z',
-        updatedAt: '2019-07-09T05:23:43.000Z'
-      }
-    ]
-  }
-}
-
-const teste = () => {
-  const TIME_TABLE_SHORT_NAME = ['sun', 'mon', 'tue', 'wed', 'thu', 'fri', 'sat']
-  const TIME_TABLE_WEEK_DAYS = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday']
-
-  const accessHours = data.accessDays.listingAccessHours
-
-  const input = []
-
-  const formatTime = date => {
-    const time = format(date, 'HH:mm')
-    return new Date(`${format(new Date(), 'MM/DD/YYYY')} ${time}`)
-  }
-
-  const nanDate = date => {
-    if (date && date !== 'Invalid Date') {
-      return new Date(date)
-    }
-    return new Date()
-  }
-
-  for (let i = 0; i <= 6; i += 1) {
-    let elem = {}
-    const access = accessHours.find(l => l.weekday === i)
-    if (access) {
-      const openHour = nanDate(access.openHour)
-      const closeHour = nanDate(access.closeHour)
-      elem = {
-        day: TIME_TABLE_SHORT_NAME[i],
-        description: TIME_TABLE_WEEK_DAYS[i],
-        active: true,
-        fulltime: access.allday,
-        open: formatTime(access.allday ? new Date() : openHour),
-        close: formatTime(access.allday ? new Date() : closeHour),
-        error: {}
-      }
-    } else {
-      elem = {
-        day: TIME_TABLE_SHORT_NAME[i],
-        description: TIME_TABLE_WEEK_DAYS[i],
-        active: false,
-        fulltime: false,
-        open: new Date(),
-        close: new Date(),
-        error: {}
-      }
-    }
-    input.push(elem)
-  }
-  return input
-}
-
-const AvailabilityTab = () => {
-  const [timetable, setTimeTable] = useState(teste())
+const AvailabilityTab = ({ listing }) => {
+  const [timetable, setTimeTable] = useState(convertedDataToArrayTimetable(listing.accessDays))
   const [fullTime, setFullTime] = useState(false)
 
   useEffect(() => {
     checkFullTime(timetable)
   }, [timetable])
+
+  const convertedDataToArrayTimetable = array => {
+    const TIME_TABLE_SHORT_NAME = ['sun', 'mon', 'tue', 'wed', 'thu', 'fri', 'sat']
+    const TIME_TABLE_WEEK_DAYS = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday']
+
+    const accessHours = array.listingAccessHours
+
+    const arrayOutput = []
+
+    const formatTime = date => {
+      const time = format(date, 'HH:mm')
+      return new Date(`${format(new Date(), 'MM/DD/YYYY')} ${time}`)
+    }
+
+    const nanDate = date => {
+      if (date && date !== 'Invalid Date') {
+        return new Date(date)
+      }
+      return new Date()
+    }
+
+    for (let i = 0; i <= 6; i += 1) {
+      let elem = {}
+      const access = accessHours.find(l => l.weekday === i)
+      if (access) {
+        const openHour = nanDate(access.openHour)
+        const closeHour = nanDate(access.closeHour)
+        elem = {
+          day: TIME_TABLE_SHORT_NAME[i],
+          description: TIME_TABLE_WEEK_DAYS[i],
+          active: true,
+          fulltime: access.allday,
+          open: formatTime(access.allday ? new Date(`${format(new Date(), 'MM/DD/YYYY')} 08:00`) : openHour),
+          close: formatTime(access.allday ? new Date(`${format(new Date(), 'MM/DD/YYYY')} 17:00`) : closeHour),
+          error: {}
+        }
+      } else {
+        elem = {
+          day: TIME_TABLE_SHORT_NAME[i],
+          description: TIME_TABLE_WEEK_DAYS[i],
+          active: false,
+          fulltime: false,
+          open: new Date(`${format(new Date(), 'MM/DD/YYYY')} 08:00`),
+          close: new Date(`${format(new Date(), 'MM/DD/YYYY')} 17:00`),
+          error: {}
+        }
+      }
+      arrayOutput.push(elem)
+    }
+    return arrayOutput
+  }
 
   const checkFullTime = array => {
     const isFullTime = array.every(el => el.active === true)
