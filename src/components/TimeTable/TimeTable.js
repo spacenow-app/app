@@ -7,7 +7,6 @@ const TimeTable = ({ data, editable, ...props }) => {
   if (!data) {
     return 'No Data'
   }
-
   if (editable) {
     return <TimeTableEditable data={data} {...props} />
   }

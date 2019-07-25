@@ -13,4 +13,9 @@ const monthNames = [
   'December'
 ]
 
-export { monthNames }
+const nanDate = date => {
+  if (date && date !== 'Invalid Date') return new Date(date)
+  return new Date()
+}
+
+export { monthNames, nanDate }
