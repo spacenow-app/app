@@ -107,6 +107,7 @@ const Radio = ({ handleChange, box, value, name, checked, label, text, image, di
     }
   }
 
+  console.log('render')
   return (
     <RadioItem box={box} checked={checked} disabled={disabled} onClick={e => handleRadioChange(e, { value, name })}>
       <RadioStyled disabled={disabled}>
@@ -149,6 +150,9 @@ Radio.propTypes = {
 }
 
 export default memo(Radio, (prevProps, nextProps) => {
+  if (prevProps.label !== nextProps.label) {
+    return false
+  }
   if (prevProps.checked === nextProps.checked) {
     return true
   }
