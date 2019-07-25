@@ -1,7 +1,8 @@
-import React, { useEffect, useState, Fragment } from 'react'
+import React, { Fragment } from 'react'
 import PropTypes from 'prop-types'
 import styled, { css } from 'styled-components'
-import { isAfter, format } from 'date-fns'
+import { format } from 'date-fns'
+
 import { Grid, Cell, Switch, TimePicker } from 'components'
 
 const WrapperStyled = styled.div``

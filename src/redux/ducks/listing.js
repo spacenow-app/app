@@ -164,176 +164,6 @@ const allListingFields = `
       photoType
       isSpecification
       createdAt
-      count
-      listingData {
-        listingId
-        accessType
-        bookingNoticeTime
-        minTerm
-        maxTerm
-        description
-        basePrice
-        currency
-        isAbsorvedFee
-        capacity
-        size
-        meetingRooms
-        isFurnished
-        carSpace
-        sizeOfVehicle
-        maxEntranceHeight
-        bookingType
-        spaceType
-        listingAmenities
-        listingExceptionDates
-        listingRules
-        status
-      }
-      location {
-        id
-        userId
-        country
-        address1
-        address2
-        buildingName
-        city
-        state
-        zipcode
-        lat
-        lng
-        createdAt
-        updatedAt
-      }
-      amenities {
-        id
-        listingId
-        listSettingsId
-        amount
-        quantity
-        currency
-        settings
-        type
-        createdAt
-        updatedAt
-        settingsData {
-          id
-          typeId
-          itemName
-          otherItemName
-          description
-          maximum
-          minimum
-          startValue
-          endValue
-          step
-          isEnable
-          photo
-          photoType
-          isSpecification
-          createdAt
-          updatedAt
-          specData
-        }
-      }
-      rules {
-        id
-        listingId
-        listSettingsId
-        createdAt
-        updatedAt
-        settingsData {
-          id
-          typeId
-          itemName
-          otherItemName
-          description
-          maximum
-          minimum
-          startValue
-          endValue
-          step
-          isEnable
-          photo
-          photoType
-          isSpecification
-          createdAt
-          updatedAt
-          specData
-        }
-      }
-      settingsParent {
-        id
-        category {
-          id
-          typeId
-          itemName
-          otherItemName
-          description
-          maximum
-          minimum
-          startValue
-          endValue
-          step
-          isEnable
-          photo
-          photoType
-          isSpecification
-          createdAt
-          updatedAt
-          specData
-        }
-        subcategory {
-          id
-          typeId
-          itemName
-          otherItemName
-          description
-          maximum
-          minimum
-          startValue
-          endValue
-          step
-          isEnable
-          photo
-          photoType
-          isSpecification
-          createdAt
-          updatedAt
-          specData
-        }
-        bookingPeriod {
-          id
-          listSettingsParentId
-          hourly
-          daily
-          weekly
-          monthly
-        }
-      }
-      accessDays {
-        id
-        listingId
-        mon
-        tue
-        wed
-        thu
-        fri
-        sat
-        sun
-        all247
-        createdAt
-        updatedAt
-        listingAccessHours {
-          id
-          listingAccessDaysId
-          weekday
-          openHour
-          closeHour
-          allday
-          createdAt
-          updatedAt
-        }
-      }
       updatedAt
       specData
     }
@@ -381,10 +211,10 @@ const allListingFields = `
     bookingPeriod {
       id
       listSettingsParentId
-      hourly
-      daily
-      weekly
       monthly
+      weekly
+      daily
+      hourly
     }
   }
   accessDays {
@@ -900,9 +730,13 @@ const getValues = (_, values) => {
     maxEntranceHeight: values.maxEntranceHeight || _.listingData.maxEntranceHeight,
     spaceType: values.spaceType || _.listingData.spaceType,
     bookingType: values.bookingType || _.listingData.bookingType,
-    listingAmenities: values.amenities !== undefined && values.amenities.length > 0 ? values.amenities.map(o => o.listSettingsId) : undefined,
+    listingAmenities:
+      values.amenities !== undefined && values.amenities.length > 0
+        ? values.amenities.map(o => o.listSettingsId)
+        : undefined,
     listingAccessDays: values.listingAccessDays || undefined,
     listingExceptionDates: values.listingExceptionDates || undefined,
-    listingRules: values.rules !== undefined && values.rules.length > 0 ? values.rules.map(o => o.listSettingsId) : undefined
+    listingRules:
+      values.rules !== undefined && values.rules.length > 0 ? values.rules.map(o => o.listSettingsId) : undefined
   }
 }

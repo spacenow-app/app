@@ -90,7 +90,6 @@ const teste = () => {
   const TIME_TABLE_SHORT_NAME = ['sun', 'mon', 'tue', 'wed', 'thu', 'fri', 'sat']
   const TIME_TABLE_WEEK_DAYS = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday']
 
-  const { accessDays } = data
   const accessHours = data.accessDays.listingAccessHours
 
   const input = []
@@ -163,11 +162,9 @@ const AvailabilityTab = () => {
     if (options.name === 'close') {
       error[options.name] = isBefore(newTime, options.item.open)
     }
-
     const newArray = update(timetable, {
       [options.index]: { [options.name]: { $set: newTime }, error: { $set: error } }
     })
-
     setTimeTable(newArray)
   }
 
