@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 import React, { useEffect, useState } from 'react'
 import PropTypes from 'prop-types'
 import { useDispatch, useSelector } from 'react-redux'
@@ -42,8 +43,8 @@ const AvailabilityTab = props => {
   const [timetable, setTimeTable] = useState([])
   const [fullTime, setFullTime] = useState(false)
   const [selectedDates, setSelectedDates] = useState([])
-  const [disabledDays, setDisabledDays] = useState([])
   const [holidays, setHolidays] = useState([])
+
   const { array: availabilitiesArray } = useSelector(state => state.listing.availabilities)
   const { array: holidaysArray } = useSelector(state => state.listing.holidays)
 
@@ -58,8 +59,8 @@ const AvailabilityTab = props => {
   }, [timetable])
 
   useEffect(() => {
-    setDisabledDays(availabilitiesArray)
-  }, [availabilitiesArray]) // eslint-disable-line no-console
+    setSelectedDates(availabilitiesArray.map(o => new Date(o)))
+  }, [availabilitiesArray])
 
   const convertedDataToArrayTimetable = array => {
     const TIME_TABLE_SHORT_NAME = ['sun', 'mon', 'tue', 'wed', 'thu', 'fri', 'sat']
@@ -204,10 +205,11 @@ const AvailabilityTab = props => {
   const _handleSave = async () => {
     const valuesToUpdate = {
       ...props.listing,
-      listingAccessDays: _mapToAccessHourType(timetable)
+      listingAccessDays: _mapToAccessHourType(timetable),
+      listingExceptionDates: selectedDates
     }
     await dispatch(onUpdate(props.listing, valuesToUpdate))
-    props.history.push('cancellation')
+    // props.history.push('cancellation')
   }
 
   const _onClickSelectDay = (day, { selected }) => {
@@ -224,30 +226,30 @@ const AvailabilityTab = props => {
   const _onChangeHoliday = (e, { checked, name }) => {
     const newDate = new Date(name)
     const copyHolidays = [...holidays]
-    const copyDisabledDays = [...disabledDays]
+    const copySelectedDays = [...selectedDates]
     if (!checked) {
       const selectedIndex = copyHolidays.findIndex(selectedDay => isSameDay(selectedDay, newDate))
       copyHolidays.splice(selectedIndex, 1)
-      const selectedIndexDisabledDays = copyDisabledDays.findIndex(selectedDay => isSameDay(selectedDay, newDate))
-      copyDisabledDays.splice(selectedIndexDisabledDays, 1)
+      const selectedIndexDisabledDays = copySelectedDays.findIndex(selectedDay => isSameDay(selectedDay, newDate))
+      copySelectedDays.splice(selectedIndexDisabledDays, 1)
     } else {
       copyHolidays.push(newDate)
-      copyDisabledDays.push(newDate)
+      copySelectedDays.push(newDate)
     }
     setHolidays(copyHolidays)
-    setDisabledDays(copyDisabledDays)
+    setSelectedDates(copySelectedDays)
   }
 
-  const _onChangeHolidayBlockAll = (e, { checked, name }) => {
+  const _onChangeHolidayBlockAll = (_, { checked }) => {
     if (checked) {
       const newarray = holidaysArray.map(el => el.originalDate)
       setHolidays(newarray)
-      setDisabledDays([...disabledDays, ...newarray])
+      setSelectedDates([...selectedDates, ...newarray])
       return
     }
-    const newArrayDisabled = disabledDays.filter(el => holidaysArray.includes(el))
+    const newArraySelected = selectedDates.filter(el => !holidaysArray.some(hl => isSameDay(hl.originalDate, el)))
     setHolidays([])
-    setDisabledDays(newArrayDisabled)
+    setSelectedDates(newArraySelected)
   }
 
   return (
@@ -270,7 +272,7 @@ const AvailabilityTab = props => {
           title="Blocked dates"
           subtitle="Block out times when the space is not available within business opening hours."
         />
-        <Calendar handleDayClick={_onClickSelectDay} selectedDays={selectedDates} disabledDays={disabledDays} />
+        <Calendar handleDayClick={_onClickSelectDay} selectedDays={selectedDates} disabledDays={[]} />
       </Cell>
       <Cell>
         <Title
@@ -310,7 +312,7 @@ const AvailabilityTab = props => {
                           id={index}
                           name={o.date}
                           value={o.date}
-                          checked={holidays.some(selectedDay => isSameDay(selectedDay, o.originalDate))}
+                          checked={selectedDates.some(selectedDay => isSameDay(selectedDay, o.originalDate))}
                           handleCheckboxChange={_onChangeHoliday}
                         />
                       </SwitchStyled>
