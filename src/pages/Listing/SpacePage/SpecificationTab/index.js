@@ -63,6 +63,14 @@ const SpecificationTab = ({
     dispatch(onGetAllAccessTypes())
   }, [dispatch, listing.listingData, listing.settingsParent.id, listing.settingsParent.subcategory.id])
 
+  // Umount
+  // useEffect(
+  //   () => () => {
+  //     return _handleSave()
+  //   },
+  //   []
+  // )
+
   const _handleSelectChange = e => {
     const { name, value } = e.target
     setFieldValue(name, value)
