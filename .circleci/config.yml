@@ -2,7 +2,7 @@ defaults: &defaults
   working_directory: ~/repo
   docker:
     - image: circleci/node:10.16.0
-aws-install: &aws-install
+aws_install: &aws_install
   - attach_workspace:
       at: ~/repo
   - run: sudo apt-get update && sudo apt-get install -y python-dev
@@ -80,7 +80,7 @@ jobs:
   deploy:
     <<: *defaults
     steps:
-      <<: *aws-install
+      <<: *aws_install
       - run:
           name: 'SETUP ACCOUNT'
           command: |
@@ -115,7 +115,7 @@ jobs:
   deploy-qa:
     <<: *defaults
     steps:
-      <<: *aws-install
+      <<: *aws_install
       - run:
           name: 'SETUP ACCOUNT'
           command: |
@@ -150,7 +150,7 @@ jobs:
   deploy-prod:
     <<: *defaults
     steps:
-      <<: *aws-install
+      <<: *aws_install
       - run:
           name: 'SETUP ACCOUNT'
           command: |
