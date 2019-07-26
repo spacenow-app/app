@@ -47,7 +47,7 @@ const SpacePage = ({ match, location, ...props }) => {
               {objectListing.settingsParent.category.itemName}
             </Tag>
           </Cell>
-          <Cell width={1}>
+          <Cell width={2}>
             <Tag
               icon={
                 <Icon
