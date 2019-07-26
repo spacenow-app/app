@@ -44,6 +44,7 @@ const SpecificationTab = ({
   handleSubmit,
   setFieldValue,
   listing,
+  validateForm,
   ...props
 }) => {
   const dispatch = useDispatch()
@@ -61,6 +62,10 @@ const SpecificationTab = ({
     dispatch(onGetAllRules())
     dispatch(onGetAllAccessTypes())
   }, [dispatch, listing.listingData, listing.settingsParent.id, listing.settingsParent.subcategory.id])
+
+  useEffect(() => {
+    validateForm(values)
+  }, [validateForm, values])
 
   const _handleSelectChange = e => {
     const { name, value } = e.target
