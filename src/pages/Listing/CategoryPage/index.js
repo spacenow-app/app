@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import { Redirect } from 'react-router-dom'
-import { Wrapper, Title, StepButtons, List, Caption } from 'components'
+import { Wrapper, Title, StepButtons, List, Caption, Loader } from 'components'
 
 import { onGetAllCategories } from 'redux/ducks/category'
 import { onCreate } from 'redux/ducks/listing'
@@ -14,12 +14,13 @@ const CategoryPage = props => {
   } = useSelector(state => state.location)
 
   const {
-    isLoading,
+    isLoading: isLoadingCategories,
     get: { categories }
   } = useSelector(state => state.category)
 
   const {
-    get: { object }
+    get: { object },
+    create: { isLoading: isLoadingCreating }
   } = useSelector(state => state.listing)
 
   useEffect(() => {
@@ -40,17 +41,16 @@ const CategoryPage = props => {
   }
 
   const _handlerCreateDraft = () =>
-    dispatch(onCreate(location.id, subCategorySelected.bookingPeriod.listSettingsParentId))
+    dispatch(onCreate(location.id, subCategorySelected.bookingPeriod.listSettingsParentId, props.history))
 
   // Previous location object from Location Step...
   if (!location) {
     props.history.replace('/listing/location')
-    return <></>
+    return false
   }
 
-  if (object && object.id) return <Redirect to={{ pathname: `/listing/space/${object.id}/specification` }} />
-
-  if (isLoading) return <>Loading...</>
+  if (isLoadingCategories) {
+  }
 
   return (
     <Wrapper>
@@ -59,23 +59,33 @@ const CategoryPage = props => {
         title="Choose one category"
         subtitle="To list a space you’ll need to put it in the right category. The icons below all have categories drop down once selected. You can click on several to find the right category for your space."
       />
-      <List data={categories} handleItemClick={_handleCategoryClick} itemSelected={categorySelected} />
-      {categorySelected && categorySelected.subCategories && (
+      {isLoadingCategories ? (
+        <Loader text="Loading Categories..." />
+      ) : (
         <>
-          <Caption large centered margin="50px 0">
-            Select a sub-category
-          </Caption>
-          <List
-            circular
-            data={categorySelected.subCategories}
-            handleItemClick={_handleSubCategoryClick}
-            itemSelected={subCategorySelected}
-          />
+          <List data={categories} handleItemClick={_handleCategoryClick} itemSelected={categorySelected} />
+          {categorySelected && categorySelected.subCategories && (
+            <>
+              <Caption large centered margin="50px 0">
+                Select a sub-category
+              </Caption>
+              <List
+                circular
+                data={categorySelected.subCategories}
+                handleItemClick={_handleSubCategoryClick}
+                itemSelected={subCategorySelected}
+              />
+            </>
+          )}
         </>
       )}
       <StepButtons
-        prev={{ disabled: false, onClick: () => props.history.push('/listing/location') }}
-        next={{ disabled: !location || !categorySelected || !subCategorySelected, onClick: _handlerCreateDraft }}
+        prev={{ disabled: false, onClick: () => props.history.replace('/listing/location') }}
+        next={{
+          disabled: !location || !categorySelected || !subCategorySelected,
+          onClick: _handlerCreateDraft,
+          isLoading: isLoadingCreating
+        }}
       />
     </Wrapper>
   )

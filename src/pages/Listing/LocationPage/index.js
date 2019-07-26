@@ -45,12 +45,10 @@ const LocationPage = props => {
   }
 
   const _onNext = () => {
-    dispatch(actions.onGetOrCreateLocation(address))
+    dispatch(actions.onGetOrCreateLocation(address, props.history))
   }
 
-  if (isLoading) return <div>Loading...</div>
-
-  if (get.location) return <Redirect to={{ pathname: '/listing/category' }} />
+  // if (isLoading) return <div>Loading...</div>
 
   return (
     <Wrapper>
@@ -72,8 +70,9 @@ const LocationPage = props => {
       <StepButtons
         prev={{ disabled: false, onClick: () => props.history.goBack() }}
         next={{
-          disabled: !(latLng && (latLng.lat || latLng.lng)),
-          onClick: _onNext
+          disabled: !(latLng && (latLng.lat || latLng.lng)) || isLoading,
+          onClick: _onNext,
+          isLoading
         }}
       />
     </Wrapper>
