@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
-import { Redirect } from 'react-router-dom'
 import { Wrapper, Title, StepButtons, List, Caption, Loader } from 'components'
 
 import { onGetAllCategories } from 'redux/ducks/category'
@@ -19,7 +18,6 @@ const CategoryPage = props => {
   } = useSelector(state => state.category)
 
   const {
-    get: { object },
     create: { isLoading: isLoadingCreating }
   } = useSelector(state => state.listing)
 

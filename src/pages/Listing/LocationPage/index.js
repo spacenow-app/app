@@ -15,7 +15,7 @@ const GroupInput = styled.div`
 
 const LocationPage = props => {
   const dispatch = useDispatch()
-  const { isLoading, error, get } = useSelector(state => state.location)
+  const { isLoading, error } = useSelector(state => state.location)
   const [address, setAddress] = useState('')
   const [unit, setUnit] = useState('')
   const [latLng, setLatLng] = useState({})
