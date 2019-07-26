@@ -1,5 +1,4 @@
 import React, { useState } from 'react'
-import { Redirect } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
 import styled from 'styled-components'
 
@@ -16,7 +15,7 @@ const GroupInput = styled.div`
 
 const LocationPage = props => {
   const dispatch = useDispatch()
-  const { isLoading, error, get } = useSelector(state => state.location)
+  const { isLoading, error } = useSelector(state => state.location)
   const [address, setAddress] = useState('')
   const [unit, setUnit] = useState('')
   const [latLng, setLatLng] = useState({})
@@ -45,12 +44,8 @@ const LocationPage = props => {
   }
 
   const _onNext = () => {
-    dispatch(actions.onGetOrCreateLocation(address))
+    dispatch(actions.onGetOrCreateLocation(address, props.history))
   }
-
-  if (isLoading) return <div>Loading...</div>
-
-  if (get.location) return <Redirect to={{ pathname: '/listing/category' }} />
 
   return (
     <Wrapper>
@@ -65,15 +60,18 @@ const LocationPage = props => {
           closeButton={latLng && (latLng.lat || latLng.lng)}
           onClickCloseButton={_reset}
         />
-        <Input label="Unit" placeholder="E.g 128" value={unit} onChange={e => setUnit(e.target.value)} />
+        {latLng && (latLng.lat || latLng.lng) && (
+          <Input label="Unit" placeholder="E.g 128" value={unit} onChange={e => setUnit(e.target.value)} />
+        )}
       </GroupInput>
       {error.message && <div className="text-danger">{error.message}</div>}
       {latLng && latLng.lat && latLng.lng && <Map position={latLng} />}
       <StepButtons
         prev={{ disabled: false, onClick: () => props.history.goBack() }}
         next={{
-          disabled: !(latLng && (latLng.lat || latLng.lng)),
-          onClick: _onNext
+          disabled: !(latLng && (latLng.lat || latLng.lng)) || isLoading,
+          onClick: _onNext,
+          isLoading
         }}
       />
     </Wrapper>

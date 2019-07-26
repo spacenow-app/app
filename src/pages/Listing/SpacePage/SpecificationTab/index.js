@@ -181,6 +181,10 @@ const SpecificationTab = ({
     props.history.push('booking')
   }
 
+  const _goBack = () => {
+    alert('message')
+  }
+
   return (
     <form>
       <WrapperStyled>
@@ -309,7 +313,7 @@ const SpecificationTab = ({
             perspective. Spaces look best in natural light. Include all areas your guest can access.
           </p>
         </SectionStyled>
-        <StepButtons next={{ onClick: _handleSave }} />
+        <StepButtons prev={{ onClick: _goBack }} next={{ onClick: _handleSave }} />
       </WrapperStyled>
     </form>
   )

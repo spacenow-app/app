@@ -21,14 +21,14 @@ const StepButtons = ({ prev, next }) => {
     <Footer>
       <Left>
         {prev && (
-          <Button disabled={prev.disabled} onClick={prev.onClick}>
+          <Button outline="true" disabled={prev.disabled} onClick={prev.onClick} isLoading={prev.isLoading}>
             Previous Step
           </Button>
         )}
       </Left>
       <Right>
         {next && (
-          <Button disabled={next.disabled} onClick={next.onClick}>
+          <Button disabled={next.disabled} onClick={next.onClick} isLoading={next.isLoading}>
             Next Step
           </Button>
         )}
@@ -41,12 +41,14 @@ StepButtons.propTypes = {
   prev: PropTypes.shape({
     disabled: PropTypes.bool,
     onClick: PropTypes.func,
-    title: PropTypes.string
+    title: PropTypes.string,
+    isLoading: PropTypes.bool
   }),
   next: PropTypes.shape({
     disabled: PropTypes.bool,
     onClick: PropTypes.func,
-    title: PropTypes.string
+    title: PropTypes.string,
+    isLoading: PropTypes.bool
   })
 }
 

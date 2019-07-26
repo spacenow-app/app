@@ -94,7 +94,7 @@ const getOrCreateError = error => {
 }
 
 // Side Effects
-export const onGetOrCreateLocation = suggestAddress => async dispatch => {
+export const onGetOrCreateLocation = (suggestAddress, history) => async dispatch => {
   dispatch(getOrCreateStart())
   try {
     const { data } = await getClientWithAuth(dispatch).mutate({
@@ -102,6 +102,7 @@ export const onGetOrCreateLocation = suggestAddress => async dispatch => {
       variables: { suggestAddress }
     })
     dispatch(getOrCreateSuccess(data.getOrCreateLocation))
+    history.push('/listing/category')
   } catch (err) {
     dispatch(getOrCreateError(errToMsg(err)))
   }
