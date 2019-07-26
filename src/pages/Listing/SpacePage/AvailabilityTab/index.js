@@ -209,7 +209,7 @@ const AvailabilityTab = props => {
       listingExceptionDates: selectedDates
     }
     await dispatch(onUpdate(props.listing, valuesToUpdate))
-    // props.history.push('cancellation')
+    props.history.push('cancellation')
   }
 
   const _onClickSelectDay = (day, { selected }) => {

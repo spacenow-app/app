@@ -90,7 +90,10 @@ const SpacePage = ({ match, location, ...props }) => {
             path={`${match.path}/availability`}
             render={routeProps => <AvailabilityTab {...routeProps} {...props} listing={objectListing} />}
           />
-          <Route path={`${match.path}/cancellation`} component={CancellationTab} />
+          <Route
+            path={`${match.path}/cancellation`}
+            render={routeProps => <CancellationTab {...routeProps} {...props} listing={objectListing} />}
+          />
         </ScrollToTop>
         <Route component={() => <h1>not found</h1>} />
       </Switch>
