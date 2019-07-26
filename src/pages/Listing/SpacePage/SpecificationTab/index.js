@@ -323,7 +323,7 @@ const SpecificationTab = ({
               <Loader />
             ) : (
               <Select value={values.accessType} name="accessType" onChange={_handleSelectChange}>
-                {!values.accessType && <option value={null}>Select type of access</option>}
+                {!values.accessType && <option value="false">Select type of access</option>}
                 {arrayAccessTypes.map(item => (
                   <option key={item.id} value={item.itemName}>
                     {item.itemName}
@@ -374,7 +374,7 @@ const formik = {
         maxEntranceHeight: listing.listingData.maxEntranceHeight || 'Not Sure',
         spaceType: listing.listingData.spaceType || 'Covered',
         description: listing.listingData.description || '',
-        accessType: listing.listingData.accessType || null,
+        accessType: listing.listingData.accessType || 'false',
         amenities: listing.amenities || [],
         rules: listing.rules || []
       }
