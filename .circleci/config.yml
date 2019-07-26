@@ -2,8 +2,9 @@ defaults: &defaults
   working_directory: ~/repo
   docker:
     - image: circleci/node:10.16.0
+  steps:
     - run:
-        name: 'Build app'
+        name: 'Export AWS Variables'
         command: |
           export AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}
           export AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}
