@@ -65,6 +65,6 @@ export {
   Tag,
   Highlights,
   Loader,
-  ToolTip
+  ToolTip,
   Photo
 }
