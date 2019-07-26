@@ -87,6 +87,82 @@ jobs:
             source scripts/assume-role.sh
             aws s3 sync build/ s3://$AWS_BUCKET --delete --region $AWS_REGION
             aws cloudfront create-invalidation --distribution-id "EJBM66ARV7ZA9" --paths /index.html
+  build-qa:
+    <<: *defaults
+    steps:
+      - restore_cache:
+          key: source-{{ .Branch }}-{{ .Revision }}
+      - restore_cache:
+          key: yarn-v1-{{ checksum "yarn.lock" }}-{{ arch }}
+      - restore_cache:
+          key: dependency-cache-{{ checksum "package.json" }}
+      - run:
+          name: 'Build app'
+          command:
+            REACT_APP_ENV=production REACT_APP_GOOGLE_MAPS_KEY=${NONPROD_REACT_APP_GOOGLE_MAPS_KEY}
+            REACT_APP_LEGACY=${NONPROD_REACT_APP_LEGACY} REACT_APP_GRAPH_HOST=${NONPROD_REACT_APP_GRAPH_HOST} yarn build
+      - persist_to_workspace:
+          root: ~/repo
+          paths:
+            - build
+            - scripts
+            - package.json
+  deploy-qa:
+    <<: *defaults
+    steps:
+      - attach_workspace:
+          at: ~/repo
+      - run: sudo apt-get update && sudo apt-get install -y python-dev
+      - run: sudo curl -O https://bootstrap.pypa.io/get-pip.py
+      - run: sudo python get-pip.py
+      - run: sudo pip install awscli --upgrade
+      - run: aws --version
+      - run: aws s3 ls
+      - run:
+          name: 'Deploy to S3'
+          command: |
+            export ACCOUNT_ID=211853473677
+            source scripts/assume-role.sh
+            aws s3 sync build/ s3://$AWS_BUCKET --delete --region $AWS_REGION
+            aws cloudfront create-invalidation --distribution-id "E8T1Z3NYNLEPU" --paths /index.html
+  build-prod:
+    <<: *defaults
+    steps:
+      - restore_cache:
+          key: source-{{ .Branch }}-{{ .Revision }}
+      - restore_cache:
+          key: yarn-v1-{{ checksum "yarn.lock" }}-{{ arch }}
+      - restore_cache:
+          key: dependency-cache-{{ checksum "package.json" }}
+      - run:
+          name: 'Build app'
+          command:
+            REACT_APP_ENV=production REACT_APP_GOOGLE_MAPS_KEY=${PROD_REACT_APP_GOOGLE_MAPS_KEY}
+            REACT_APP_LEGACY=${PROD_REACT_APP_LEGACY} REACT_APP_GRAPH_HOST=${PROD_REACT_APP_GRAPH_HOST} yarn build
+      - persist_to_workspace:
+          root: ~/repo
+          paths:
+            - build
+            - scripts
+            - package.json
+  deploy-prod:
+    <<: *defaults
+    steps:
+      - attach_workspace:
+          at: ~/repo
+      - run: sudo apt-get update && sudo apt-get install -y python-dev
+      - run: sudo curl -O https://bootstrap.pypa.io/get-pip.py
+      - run: sudo python get-pip.py
+      - run: sudo pip install awscli --upgrade
+      - run: aws --version
+      - run: aws s3 ls
+      - run:
+          name: 'Deploy to S3'
+          command: |
+            export ACCOUNT_ID=985566274543
+            source scripts/assume-role.sh
+            aws s3 sync build/ s3://$AWS_BUCKET --delete --region $AWS_REGION
+            aws cloudfront create-invalidation --distribution-id "EJBM66ARV7ZA9" --paths /index.html
 
 workflows:
   version: 2
@@ -106,3 +182,39 @@ workflows:
           requires:
             # - test
             - build
+      - qa-approval:
+          type: approval
+          requires:
+            - deploy
+          filters:
+            branches:
+              only:
+                - master
+      - build-qa:
+          requires:
+            - qa-approval
+      - deploy-qa:
+          requires:
+            - build-qa
+          filters:
+            branches:
+              only:
+                - master
+      - prod-approval:
+          type: approval
+          requires:
+            - deploy-qa
+          filters:
+            branches:
+              only:
+                - master
+      - build-prod:
+          requires:
+            - prod-approval
+      - deploy-prod:
+          requires:
+            - build-prod
+          filters:
+            branches:
+              only:
+                - master

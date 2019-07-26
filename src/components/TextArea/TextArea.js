@@ -9,7 +9,6 @@ const TextAreaStyled = styled.textarea`
   min-height: 150px;
   border-radius: 15px;
   border: 1px solid #e2e2e2;
-  text-transform: capitalize;
 
   :focus {
     outline: 0px;

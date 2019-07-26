@@ -3,6 +3,7 @@ import { gql } from 'apollo-boost'
 
 import { getClientWithAuth } from 'graphql/apolloClient'
 import errToMsg from 'utils/errToMsg'
+import { monthNames } from 'contants/dates'
 
 // Actions
 export const Types = {
@@ -21,9 +22,15 @@ export const Types = {
   LISTING_GET_SPACE_SPECIFICATIONS_REQUEST: 'LISTING_GET_SPACE_SPECIFICATIONS_REQUEST',
   LISTING_GET_SPACE_SPECIFICATIONS_SUCCESS: 'LISTING_GET_SPACE_SPECIFICATIONS_SUCCESS',
   LISTING_GET_SPACE_SPECIFICATIONS_FAILURE: 'LISTING_GET_SPACE_SPECIFICATIONS_FAILURE',
-  LISTING_GET_PHOTOS_REQUEST: 'LISTING_GET_PHOTOS_REQUEST',
-  LISTING_GET_PHOTOS_SUCCESS: 'LISTING_GET_PHOTOS_SUCCESS',
-  LISTING_GET_PHOTOS_FAILURE: 'LISTING_GET_PHOTOS_FAILURE',
+  LISTING_GET_ASSETS_REQUEST: 'LISTING_GET_ASSETS_REQUEST',
+  LISTING_GET_ASSETS_SUCCESS: 'LISTING_GET_ASSETS_SUCCESS',
+  LISTING_GET_ASSETS_FAILURE: 'LISTING_GET_ASSETS_FAILURE',
+  LISTING_GET_SPACE_HOLIDAYS_REQUEST: 'LISTING_GET_SPACE_HOLIDAYS_REQUEST',
+  LISTING_GET_SPACE_HOLIDAYS_SUCCESS: 'LISTING_GET_SPACE_HOLIDAYS_SUCCESS',
+  LISTING_GET_SPACE_HOLIDAYS_FAILURE: 'LISTING_GET_SPACE_HOLIDAYS_FAILURE',
+  LISTING_GET_SPACE_AVAILABILITIES_REQUEST: 'LISTING_GET_SPACE_AVAILABILITIES_REQUEST',
+  LISTING_GET_SPACE_AVAILABILITIES_SUCCESS: 'LISTING_GET_SPACE_AVAILABILITIES_SUCCESS',
+  LISTING_GET_SPACE_AVAILABILITIES_FAILURE: 'LISTING_GET_SPACE_AVAILABILITIES_FAILURE',
   CREATE_LISTING_START: 'CREATE_LISTING_START',
   CREATE_LISTING_SUCCESS: 'CREATE_LISTING_SUCCESS',
   CREATE_LISTING_FAILURE: 'CREATE_LISTING_FAILURE',
@@ -57,6 +64,21 @@ const initialState = {
   },
   specifications: {
     object: null,
+    isLoading: true,
+    error: null
+  },
+  availabilities: {
+    array: [],
+    isLoading: true,
+    error: null
+  },
+  holidays: {
+    array: [],
+    isLoading: true,
+    error: null
+  },
+  assets: {
+    array: [],
     isLoading: true,
     error: null
   }
@@ -214,10 +236,10 @@ const allListingFields = `
     bookingPeriod {
       id
       listSettingsParentId
-      hourly
-      daily
-      weekly
       monthly
+      weekly
+      daily
+      hourly
     }
   }
   accessDays {
@@ -290,11 +312,28 @@ const queryGetAllSpecifications = gql`
     }
   }
 `
+const queryGetAllHolidays = gql`
+  query getAllHolidays {
+    getAllHolidays(state: "NSW") {
+      date
+      description
+    }
+  }
+`
 
-const queryGetAsset = gql`
-  query getAsset($assetId: Int!) {
-    getAsset(assetId: $assetId) {
-      
+const queryGetAllAssets = gql`
+  query getAllAssets($listingId: Int!) {
+    getAllAssets(listingId: $listingId) {
+      id
+    }
+  }
+`
+
+const queryGetAvailabilities = gql`
+  query getAvailabilitiesByListingId($listingId: Int!) {
+    getAvailabilitiesByListingId(listingId: $listingId) {
+      bookingDates
+      exceptionDates
     }
   }
 `
@@ -330,6 +369,7 @@ const mutationUpdate = gql`
     $maxEntranceHeight: String
     $spaceType: String
     $bookingType: String
+    $bookingPeriod: String
     $listingAmenities: [Int]
     $listingAccessDays: ListingAccessDaysInput
     $listingExceptionDates: [String]
@@ -357,6 +397,7 @@ const mutationUpdate = gql`
       maxEntranceHeight: $maxEntranceHeight
       spaceType: $spaceType
       bookingType: $bookingType
+      bookingPeriod: $bookingPeriod
       listingAmenities: $listingAmenities
       listingAccessDays: $listingAccessDays
       listingExceptionDates: $listingExceptionDates
@@ -519,6 +560,66 @@ export default function reducer(state = initialState, action) {
         }
       }
     }
+    case Types.LISTING_GET_SPACE_AVAILABILITIES_REQUEST: {
+      return {
+        ...state,
+        availabilities: {
+          ...state.availabilities,
+          isLoading: true,
+          error: null
+        }
+      }
+    }
+    case Types.LISTING_GET_SPACE_AVAILABILITIES_SUCCESS: {
+      return {
+        ...state,
+        availabilities: {
+          ...state.availabilities,
+          isLoading: false,
+          array: action.payload
+        }
+      }
+    }
+    case Types.LISTING_GET_SPACE_AVAILABILITIES_FAILURE: {
+      return {
+        ...state,
+        availabilities: {
+          ...state.availabilities,
+          isLoading: false,
+          error: action.payload
+        }
+      }
+    }
+    case Types.LISTING_GET_SPACE_HOLIDAYS_REQUEST: {
+      return {
+        ...state,
+        holidays: {
+          ...state.holidays,
+          isLoading: true,
+          error: null
+        }
+      }
+    }
+    case Types.LISTING_GET_SPACE_HOLIDAYS_SUCCESS: {
+      return {
+        ...state,
+        holidays: {
+          ...state.holidays,
+          isLoading: false,
+          array: action.payload
+        }
+      }
+    }
+    case Types.LISTING_GET_SPACE_HOLIDAYS_FAILURE: {
+      return {
+        ...state,
+        holidays: {
+          ...state.holidays,
+          isLoading: false,
+          error: action.payload
+        }
+      }
+    }
     case Types.CREATE_LISTING_START: {
       return {
         ...state,
@@ -538,6 +639,33 @@ export default function reducer(state = initialState, action) {
       }
     }
     case Types.CREATE_LISTING_FAILURE: {
+      return {
+        ...state,
+        get: {
+          isLoading: false,
+          error: action.payload
+        }
+      }
+    }
+    case Types.UPDATE_LISTING_START: {
+      return {
+        ...state,
+        get: {
+          isLoading: true,
+          error: null
+        }
+      }
+    }
+    case Types.UPDATE_LISTING_SUCCESS: {
+      return {
+        ...state,
+        get: {
+          isLoading: false,
+          object: action.payload
+        }
+      }
+    }
+    case Types.UPDATE_LISTING_FAILURE: {
       return {
         ...state,
         get: {
@@ -625,16 +753,16 @@ export const onGetAllSpecifications = (listSettingsParentId, listingData) => asy
   }
 }
 
-export const onGetAllPhotos = () => async dispatch => {
-  dispatch({ type: Types.LISTING_GET_PHOTOS_REQUEST })
+export const onGetAllAssets = () => async dispatch => {
+  dispatch({ type: Types.LISTING_GET_ASSETS_REQUEST })
   try {
     const { data } = await getClientWithAuth(dispatch).query({
-      query: queryGetAllPhotos,
+      query: queryGetAllAssets,
       fetchPolicy: 'network-only'
     })
-    dispatch({ type: Types.LISTING_GET_PHOTOS_SUCCESS, payload: data.getAllPhotos })
+    dispatch({ type: Types.LISTING_GET_ASSETS_SUCCESS, payload: data.getAllAssets })
   } catch (err) {
-    dispatch({ type: Types.LISTING_GET_PHOTOS_FAILURE, payload: errToMsg(err) })
+    dispatch({ type: Types.LISTING_GET_ASSETS_FAILURE, payload: errToMsg(err) })
   }
 }
 
@@ -664,6 +792,42 @@ const camalize = str => {
   return str.toLowerCase().replace(/[^a-zA-Z0-9]+(.)/g, (_, chr) => chr.toUpperCase())
 }
 
+export const onGetAvailabilitiesByListingId = listingId => async dispatch => {
+  dispatch({ type: Types.LISTING_GET_SPACE_AVAILABILITIES_REQUEST })
+  try {
+    const { data } = await getClientWithAuth(dispatch).query({
+      query: queryGetAvailabilities,
+      variables: { listingId },
+      fetchPolicy: 'network-only'
+    })
+    const { bookingDates, exceptionDates } = data.getAvailabilitiesByListingId
+    const mergeAvailabilities = bookingDates.concat(exceptionDates)
+    dispatch({ type: Types.LISTING_GET_SPACE_AVAILABILITIES_SUCCESS, payload: mergeAvailabilities })
+  } catch (err) {
+    dispatch({ type: Types.LISTING_GET_SPACE_AVAILABILITIES_FAILURE, payload: errToMsg(err) })
+  }
+}
+
+export const onGetAllHolidays = () => async dispatch => {
+  dispatch({ type: Types.LISTING_GET_SPACE_HOLIDAYS_REQUEST })
+  try {
+    const { data } = await getClientWithAuth(dispatch).query({
+      query: queryGetAllHolidays,
+      fetchPolicy: 'network-only'
+    })
+    const holidaysReduced = data.getAllHolidays.map(i => {
+      const date = new Date(i.date)
+      const formatted = `${date.getDate()} ${monthNames[date.getMonth()]} ${date.getFullYear()}`
+      const shortDescription =
+        i.description.length >= 2 && `${i.description.split(' ')[0]} ${i.description.split(' ')[1]}`
+      return { ...i, originalDate: date, dateFormatted: formatted, shortDescription }
+    })
+    dispatch({ type: Types.LISTING_GET_SPACE_HOLIDAYS_SUCCESS, payload: holidaysReduced })
+  } catch (err) {
+    dispatch({ type: Types.LISTING_GET_SPACE_HOLIDAYS_FAILURE, payload: errToMsg(err) })
+  }
+}
+
 export const onCreate = (locationId, listSettingsParentId) => async dispatch => {
   dispatch({ type: Types.CREATE_LISTING_START })
   try {
@@ -689,6 +853,7 @@ export const onUpdate = (listing, values) => async dispatch => {
       listSettingsParentId: listing.settingsParent.id
     }
     requestFields = { ...requestFields, ...getValues(listing, values) }
+    console.log('onUpdate -> Request Body:', requestFields)
     const { data } = await getClientWithAuth(dispatch).mutate({
       mutation: mutationUpdate,
       variables: requestFields
@@ -708,6 +873,7 @@ export const onUpdate = (listing, values) => async dispatch => {
 const getValues = (_, values) => {
   return {
     title: values.title || _.title,
+    bookingPeriod: values.bookingPeriod || _.bookingPeriod,
     accessType: values.accessType || _.listingData.accessType,
     bookingNoticeTime: values.bookingNoticeTime || _.listingData.bookingNoticeTime,
     minTerm: values.minTerm || _.listingData.minTerm,
@@ -715,7 +881,7 @@ const getValues = (_, values) => {
     description: values.description || _.listingData.description,
     basePrice: values.basePrice || _.listingData.basePrice,
     currency: values.currency || _.listingData.currency,
-    isAbsorvedFee: values.isAbsorvedFee || _.listingData.isAbsorvedFee,
+    isAbsorvedFee: values.isAbsorvedFee !== undefined ? values.isAbsorvedFee : _.listingData.isAbsorvedFee,
     capacity: values.capacity || _.listingData.capacity,
     size: values.size || _.listingData.size,
     meetingRooms: values.meetingRooms || _.listingData.meetingRooms,
@@ -725,9 +891,13 @@ const getValues = (_, values) => {
     maxEntranceHeight: values.maxEntranceHeight || _.listingData.maxEntranceHeight,
     spaceType: values.spaceType || _.listingData.spaceType,
     bookingType: values.bookingType || _.listingData.bookingType,
-    listingAmenities: values.amenities !== undefined && values.amenities.length > 0 ? values.amenities.map(o => o.listSettingsId) : undefined,
+    listingAmenities:
+      values.amenities !== undefined && values.amenities.length > 0
+        ? values.amenities.map(o => o.listSettingsId)
+        : undefined,
     listingAccessDays: values.listingAccessDays || undefined,
     listingExceptionDates: values.listingExceptionDates || undefined,
-    listingRules: values.rules !== undefined && values.rules.length > 0 ? values.rules.map(o => o.listSettingsId) : undefined
+    listingRules:
+      values.rules !== undefined && values.rules.length > 0 ? values.rules.map(o => o.listSettingsId) : undefined
   }
 }

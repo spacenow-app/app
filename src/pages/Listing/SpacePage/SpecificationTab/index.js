@@ -11,11 +11,10 @@ import {
   onGetAllAccessTypes,
   onGetAllAmenities,
   onGetAllSpecifications,
-  onGetAllPhotos,
   onUpdate
 } from 'redux/ducks/listing'
 
-import { Title, Input, Checkbox, Select, TextArea, StepButtons, Loader, Photo } from 'components'
+import { Title, Input, Checkbox, Select, TextArea, StepButtons, Loader, Photo, Box } from 'components'
 
 const WrapperStyled = styled.div`
   display: grid;
@@ -58,14 +57,15 @@ const SpecificationTab = ({
   const { array: arrayRules, isLoading: isLoadingRules } = useSelector(state => state.listing.rules)
   const { array: arrayAccessTypes, isLoading: isLoadingAccessTypes } = useSelector(state => state.listing.accessTypes)
   const { array: arrayAmenities, isLoading: isLoadingAmenities } = useSelector(state => state.listing.amenities)
-  const { object: objectSpecifications, isLoading: isLoadingSpecifications } = useSelector(state => state.listing.specifications)
+  const { object: objectSpecifications, isLoading: isLoadingSpecifications } = useSelector(
+    state => state.listing.specifications
+  )
 
   useEffect(() => {
     dispatch(onGetAllSpecifications(listing.settingsParent.id, listing.listingData))
     dispatch(onGetAllAmenities(listing.settingsParent.subcategory.id))
     dispatch(onGetAllRules())
     dispatch(onGetAllAccessTypes())
-    dispatch(onGetAllPhotos())
   }, [dispatch, listing.listingData, listing.settingsParent.id, listing.settingsParent.subcategory.id])
 
   const _handleSelectChange = e => {
@@ -265,29 +265,26 @@ const SpecificationTab = ({
         </SectionStyled>
         <SectionStyled>
           <Title type="h3" title="Space Rules" subtitle="Let guests know about the rules of the space." />
-          {}
           <CheckboxGroup>
             {isLoadingRules ? (
               <Loader />
             ) : (
-                arrayRules.map(item => {
-                  return (
-                    <Checkbox
-                      key={item.id}
-                      label={item.itemName}
-                      name="rules"
-                      value={item.id}
-                      checked={values.rules.some(rule => rule.listSettingsId === item.id)}
-                      handleCheckboxChange={_handleCheckboxChange}
-                    />
-                  )
-                })
+                arrayRules.map(item =>
+                  <Checkbox
+                    key={item.id}
+                    label={item.itemName}
+                    name="rules"
+                    value={item.id}
+                    checked={values.rules.some(rule => rule.listSettingsId === item.id)}
+                    handleCheckboxChange={_handleCheckboxChange}
+                  />
+                )
               )}
           </CheckboxGroup>
         </SectionStyled>
         <SectionStyled>
           <Title type="h3" title="Access Information*" subtitle="Let your guests know how they’ll get in." />
-          <div style={{ width: '350px' }}>
+          <Box width="350px">
             {isLoadingAccessTypes ? (
               <Loader />
             ) : (
@@ -299,7 +296,7 @@ const SpecificationTab = ({
                   ))}
                 </Select>
               )}
-          </div>
+          </Box>
         </SectionStyled>
         <SectionStyled>
           <Title
@@ -320,10 +317,7 @@ const SpecificationTab = ({
             perspective. Spaces look best in natural light. Include all areas your guest can access.
           </p>
         </SectionStyled>
-        <StepButtons
-          prev={{ disabled: false, onClick: () => props.history.goBack() }}
-          next={{ onClick: _handleSave }}
-        />
+        <StepButtons next={{ onClick: _handleSave }} />
       </WrapperStyled>
     </form>
   )

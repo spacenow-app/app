@@ -14,7 +14,7 @@ const CheckBoxLabel = styled.label`
   height: 22px;
   border-radius: 15px;
   background: #cbcbcb;
-  cursor: pointer;
+  cursor: ${props => (props.disabled ? 'not-allowed' : 'pointer')};
   &::after {
     content: '';
     display: block;
@@ -47,16 +47,17 @@ const CheckBox = styled.input`
   }
 `
 
-const Switch = ({ name, checked, handleCheckboxChange }) => {
+const Switch = ({ name, checked, handleCheckboxChange, disabled }) => {
   return (
     <CheckBoxWrapper>
       <CheckBox
         id={`checkbox-${name}`}
+        disabled={disabled}
         type="checkbox"
         checked={checked}
         onChange={e => handleCheckboxChange(e, { checked: e.target.checked, name })}
       />
-      <CheckBoxLabel htmlFor={`checkbox-${name}`} />
+      <CheckBoxLabel htmlFor={`checkbox-${name}`} disabled={disabled} />
     </CheckBoxWrapper>
   )
 }
@@ -66,7 +67,8 @@ Switch.defaultProps = {}
 Switch.propTypes = {
   name: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
   handleCheckboxChange: PropTypes.func.isRequired,
-  checked: PropTypes.bool
+  checked: PropTypes.bool,
+  disabled: PropTypes.bool
 }
 
 export default Switch

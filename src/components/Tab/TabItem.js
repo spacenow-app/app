@@ -45,7 +45,7 @@ const TabItem = ({ children, nav, ...props }) => {
   if (nav) {
     return (
       <TabItemStyled>
-        <NavLinkStyled {...props} activeClassName={'active'}>
+        <NavLinkStyled {...props} activeClassName="active">
           <BarStyled />
           <TitleStyled>{children}</TitleStyled>
         </NavLinkStyled>

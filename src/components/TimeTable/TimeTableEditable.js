@@ -1,6 +1,7 @@
 import React, { Fragment } from 'react'
 import PropTypes from 'prop-types'
-import styled from 'styled-components'
+import styled, { css } from 'styled-components'
+import { format } from 'date-fns'
 import { Grid, Cell, Switch, TimePicker } from 'components'
 
 const WrapperStyled = styled.div``
@@ -12,13 +13,20 @@ const TitleStyled = styled.span`
   padding: 0 0 0 20px;
   margin-bottom: 15px;
 `
+TitleStyled.displayName = 'Title'
 
 const ItemStyled = styled.div`
   height: 65px;
   border-radius: 75px;
-  border: 1px solid ${({ checked }) => (checked ? '#6adc91' : '#E2E2E2')};
+  border: 1px solid ${({ checked, disabled }) => (checked || !disabled ? '#6adc91' : '#E2E2E2')};
   padding: 20px;
   text-align: center;
+
+  ${props =>
+    props.error &&
+    css`
+      border-color: #e05252;
+    `}
 `
 
 const ItemSwitchStyled = styled.div`
@@ -34,35 +42,38 @@ const SwitchStyled = styled.div`
   justify-self: end;
 `
 
-const TimeTableEditable = ({ data, handleClickDay, handleClickOpen, handleClickClose, handleClick24hours }) => {
-  const onHandleClickDay = (e, item) => {
-    handleClickDay(e, { item })
+const TimeTableEditable = ({
+  data,
+  fullTime,
+  handleClickDay,
+  handleChangeTime,
+  handleClickOpenFullTime,
+  handleClick24hours
+}) => {
+  const onHandleClickDay = (e, obj) => {
+    handleClickDay(e, obj)
   }
-  const onHandleClickOpen = (e, item) => {
-    handleClickOpen(e, { item })
+
+  const onHandleChangeTime = (name, value, item, index) => {
+    handleChangeTime({ name, value, item, index })
   }
-  // const onHandleClickClose = (e, item) => {
-  //   handleClickClose(e, { item })
-  // }
-  const onHandleClick24hours = (e, item) => {
-    handleClick24hours(e, { item })
-  }
-  const onHandleClick247hours = (e, item) => {
-    handleClick24hours(e, { item })
+
+  const onHandleClick24hours = (e, obj) => {
+    handleClick24hours(e, obj)
   }
 
   return (
     <WrapperStyled>
-      <Grid columns={12} columnGap="40px" style={{ margin: '30px 0' }}>
+      {/* <Grid columns={12} columnGap="40px" style={{ margin: '30px 0' }}>
         <Cell width={4}>
           <ItemSwitchStyled>
             <span>Open 24 / 7</span>
             <SwitchStyled>
-              <Switch name="fulltime" disabled={false} handleCheckboxChange={onHandleClick247hours} checked={false} />
+              <Switch name="fulltime" handleCheckboxChange={onHandleClickOpenFullTime} checked={fullTime} />
             </SwitchStyled>
           </ItemSwitchStyled>
         </Cell>
-      </Grid>
+      </Grid> */}
       <Grid columns={12} columnGap="40px" left>
         <Cell width={4} middle>
           <TitleStyled>Days</TitleStyled>
@@ -78,7 +89,7 @@ const TimeTableEditable = ({ data, handleClickDay, handleClickOpen, handleClickC
         </Cell>
       </Grid>
       <Grid columns={12} rows={7} rowGap="20px" columnGap="40px">
-        {data.map(item => (
+        {data.map((item, index) => (
           <Fragment key={item.day}>
             <Cell width={4}>
               <ItemSwitchStyled checked={item.active}>
@@ -89,25 +100,21 @@ const TimeTableEditable = ({ data, handleClickDay, handleClickOpen, handleClickC
               </ItemSwitchStyled>
             </Cell>
             <Cell width={2}>
-              <ItemStyled disabled={item.active}>
+              <ItemStyled disabled={item.fulltime || !item.active} error={item.error.open}>
                 <TimePicker
+                  value={format(item.open, 'HH:mm')}
                   disabled={item.fulltime || !item.active}
-                  // defaultValue={new Date()}
-                  // value={new Date()}
-                  onChange={time => onHandleClickOpen(time, item)}
-                  format={24}
+                  onChange={time => onHandleChangeTime('open', time, item, index)}
                 />
               </ItemStyled>
             </Cell>
             <Cell width={2}>
-              <ItemStyled>
-                {/* <TimePicker
+              <ItemStyled disabled={item.fulltime || !item.active} error={item.error.close}>
+                <TimePicker
+                  value={format(item.close, 'HH:mm')}
                   disabled={item.fulltime || !item.active}
-                  defaultValue={item.open}
-                  value={item.open}
-                  onChange={time => onHandleClickOpen(time, item)}
-                  format={24}
-                /> */}
+                  onChange={time => onHandleChangeTime('close', time, item, index)}
+                />
               </ItemStyled>
             </Cell>
             <Cell width={4}>
@@ -115,8 +122,8 @@ const TimeTableEditable = ({ data, handleClickDay, handleClickOpen, handleClickC
                 <span>Open 24 hours</span>
                 <SwitchStyled>
                   <Switch
-                    name={item.day}
-                    disabled={item.active}
+                    name={`${item.day}-24h`}
+                    disabled={!item.active}
                     handleCheckboxChange={onHandleClick24hours}
                     checked={item.fulltime}
                   />
@@ -135,17 +142,18 @@ TimeTableEditable.defaultProps = {}
 TimeTableEditable.propTypes = {
   data: PropTypes.arrayOf(
     PropTypes.shape({
-      day: PropTypes.number,
+      day: PropTypes.string,
       description: PropTypes.string,
       active: PropTypes.bool,
       fulltime: PropTypes.bool,
-      open: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
-      close: PropTypes.oneOfType([PropTypes.string, PropTypes.number])
+      open: PropTypes.oneOfType([PropTypes.string, PropTypes.number, PropTypes.instanceOf(Date)]),
+      close: PropTypes.oneOfType([PropTypes.string, PropTypes.number, PropTypes.instanceOf(Date)])
     })
   ),
+  fullTime: PropTypes.bool,
   handleClickDay: PropTypes.func,
-  handleClickOpen: PropTypes.func,
-  handleClickClose: PropTypes.func,
+  handleChangeTime: PropTypes.func,
+  handleClickOpenFullTime: PropTypes.func,
   handleClick24hours: PropTypes.func
 }
 
