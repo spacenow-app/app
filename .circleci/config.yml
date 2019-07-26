@@ -123,7 +123,7 @@ jobs:
           command: |
             export ACCOUNT_ID=211853473677
             source scripts/assume-role.sh
-            aws s3 sync build/ s3://$AWS_BUCKET --delete --region $AWS_REGION
+            aws s3 sync build/ s3://${NONPROD_AWS_BUCKET} --delete --region $AWS_REGION
             aws cloudfront create-invalidation --distribution-id "E8T1Z3NYNLEPU" --paths /index.html
   build-prod:
     <<: *defaults
