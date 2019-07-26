@@ -2,15 +2,6 @@ defaults: &defaults
   working_directory: ~/repo
   docker:
     - image: circleci/node:10.16.0
-aws_install: &aws_install
-  steps:
-    - attach_workspace:
-        at: ~/repo
-    - run: sudo apt-get update && sudo apt-get install -y python-dev
-    - run: sudo curl -O https://bootstrap.pypa.io/get-pip.py
-    - run: sudo python get-pip.py
-    - run: sudo pip install awscli --upgrade
-    - run: aws --version
 version: 2
 jobs:
   checkout_code:
@@ -197,7 +188,7 @@ jobs:
           name: 'Deploy to S3 PROD'
           command: |
             aws s3 ls
-            aws s3 sync build/ s3://$AWS_BUCKET --delete --region $AWS_REGION
+            aws s3 sync build/ s3://${PROD_AWS_BUCKET} --delete --region $AWS_REGION
             aws cloudfront create-invalidation --distribution-id "EJBM66ARV7ZA9" --paths /index.html
 
 workflows:
