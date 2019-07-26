@@ -862,6 +862,7 @@ export const onUpdate = (listing, values) => async dispatch => {
     }
     requestFields = { ...requestFields, ...getValues(listing, values) }
     console.log('onUpdate -> Request Body:', requestFields)
+    console.log('onUpdate -> Request Body on String:', JSON.stringify(requestFields))
     const { data } = await getClientWithAuth(dispatch).mutate({
       mutation: mutationUpdate,
       variables: requestFields
