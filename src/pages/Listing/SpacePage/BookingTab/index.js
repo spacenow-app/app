@@ -108,6 +108,7 @@ const BookingTab = ({
           </Cell>
           <Cell width={2}>
             <Input
+              min="0"
               type="number"
               label="Price*"
               placeholder="100.00"

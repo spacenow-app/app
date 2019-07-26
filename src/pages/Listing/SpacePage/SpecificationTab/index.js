@@ -87,6 +87,7 @@ const SpecificationTab = ({
           component = (
             <Input
               type="number"
+              placeholder={0}
               name={o.field}
               label={o.label}
               value={values[o.field]}
@@ -137,7 +138,9 @@ const SpecificationTab = ({
           } else {
             component = (
               <Input
-                type="text"
+                type="number"
+                placeholder={0}
+                min="0"
                 name={o.field}
                 label={o.label}
                 value={values[o.field]}
@@ -151,7 +154,8 @@ const SpecificationTab = ({
         default: {
           component = (
             <input
-              type="text"
+              type="number"
+              min="0"
               label={o.label}
               placeholder={o.label}
               name={o.field}
@@ -165,7 +169,8 @@ const SpecificationTab = ({
     } else {
       component = (
         <Input
-          type="text"
+          type="number"
+          min="0"
           name={o.field}
           label={o.label}
           value={values[o.field]}
