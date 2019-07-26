@@ -3,13 +3,14 @@ defaults: &defaults
   docker:
     - image: circleci/node:10.16.0
 aws_install: &aws_install
-  - attach_workspace:
-      at: ~/repo
-  - run: sudo apt-get update && sudo apt-get install -y python-dev
-  - run: sudo curl -O https://bootstrap.pypa.io/get-pip.py
-  - run: sudo python get-pip.py
-  - run: sudo pip install awscli --upgrade
-  - run: aws --version
+  steps:
+    - attach_workspace:
+        at: ~/repo
+    - run: sudo apt-get update && sudo apt-get install -y python-dev
+    - run: sudo curl -O https://bootstrap.pypa.io/get-pip.py
+    - run: sudo python get-pip.py
+    - run: sudo pip install awscli --upgrade
+    - run: aws --version
 version: 2
 jobs:
   checkout_code:
@@ -79,8 +80,8 @@ jobs:
             - package.json
   deploy:
     <<: *defaults
+    <<: *aws_install
     steps:
-      <<: *aws_install
       - run:
           name: 'SETUP ACCOUNT'
           command: |
@@ -114,8 +115,8 @@ jobs:
             - package.json
   deploy-qa:
     <<: *defaults
+    <<: *aws_install
     steps:
-      <<: *aws_install
       - run:
           name: 'SETUP ACCOUNT'
           command: |
@@ -149,8 +150,8 @@ jobs:
             - package.json
   deploy-prod:
     <<: *defaults
+    <<: *aws_install
     steps:
-      <<: *aws_install
       - run:
           name: 'SETUP ACCOUNT'
           command: |
