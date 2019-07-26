@@ -74,11 +74,17 @@ jobs:
     steps:
       - attach_workspace:
           at: ~/repo
-      - run: sudo apt-get update && sudo apt-get install -y python-dev
-      - run: sudo curl -O https://bootstrap.pypa.io/get-pip.py
-      - run: sudo python get-pip.py
-      - run: sudo pip install awscli --upgrade
-      - run: aws --version
+      - run:
+          name: 'INSTALL PIP'
+          command: |
+            sudo apt-get update && sudo apt-get install -y python-dev
+            sudo curl -O https://bootstrap.pypa.io/get-pip.py
+            sudo python get-pip.py
+      - run:
+          name: 'INSTALL AWS CLI'
+          command: |
+            sudo pip install awscli --upgrade
+            aws --version
       - run:
           name: 'SETUP ACCOUNT'
           command: |
@@ -115,11 +121,17 @@ jobs:
     steps:
       - attach_workspace:
           at: ~/repo
-      - run: sudo apt-get update && sudo apt-get install -y python-dev
-      - run: sudo curl -O https://bootstrap.pypa.io/get-pip.py
-      - run: sudo python get-pip.py
-      - run: sudo pip install awscli --upgrade
-      - run: aws --version
+      - run:
+          name: 'INSTALL PIP'
+          command: |
+            sudo apt-get update && sudo apt-get install -y python-dev
+            sudo curl -O https://bootstrap.pypa.io/get-pip.py
+            sudo python get-pip.py
+      - run:
+          name: 'INSTALL AWS CLI'
+          command: |
+            sudo pip install awscli --upgrade
+            aws --version
       - run:
           name: 'SETUP ACCOUNT'
           command: |
@@ -156,11 +168,17 @@ jobs:
     steps:
       - attach_workspace:
           at: ~/repo
-      - run: sudo apt-get update && sudo apt-get install -y python-dev
-      - run: sudo curl -O https://bootstrap.pypa.io/get-pip.py
-      - run: sudo python get-pip.py
-      - run: sudo pip install awscli --upgrade
-      - run: aws --version
+      - run:
+          name: 'INSTALL PIP'
+          command: |
+            sudo apt-get update && sudo apt-get install -y python-dev
+            sudo curl -O https://bootstrap.pypa.io/get-pip.py
+            sudo python get-pip.py
+      - run:
+          name: 'INSTALL AWS CLI'
+          command: |
+            sudo pip install awscli --upgrade
+            aws --version
       - run:
           name: 'SETUP ACCOUNT'
           command: |
@@ -170,7 +188,7 @@ jobs:
           name: 'Deploy to S3 PROD'
           command: |
             aws s3 ls
-            aws s3 sync build/ s3://$AWS_BUCKET --delete --region $AWS_REGION
+            aws s3 sync build/ s3://${PROD_AWS_BUCKET} --delete --region $AWS_REGION
             aws cloudfront create-invalidation --distribution-id "EJBM66ARV7ZA9" --paths /index.html
 
 workflows:
