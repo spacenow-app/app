@@ -28,6 +28,7 @@ import Box from './Box'
 import Tag from './Tag'
 import Highlights from './Highlights'
 import Loader from './Loader'
+import ToolTip from './ToolTip'
 import Photo from './Photo'
 
 export {
@@ -64,5 +65,6 @@ export {
   Tag,
   Highlights,
   Loader,
+  ToolTip,
   Photo
 }

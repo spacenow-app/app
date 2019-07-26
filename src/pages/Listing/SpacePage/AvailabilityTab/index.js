@@ -9,7 +9,7 @@ import { nanDate } from 'contants/dates'
 
 import { onUpdate, onGetAvailabilitiesByListingId, onGetAllHolidays } from 'redux/ducks/listing'
 
-import { Title, Grid, Cell, TimeTable, Calendar, Switch, StepButtons } from 'components'
+import { Title, Grid, Cell, TimeTable, Calendar, Switch, StepButtons, ToolTip } from 'components'
 
 const SwitchStyled = styled.div`
   justify-self: end;
@@ -154,8 +154,6 @@ const AvailabilityTab = props => {
     setTimeTable(newArray)
   }
 
-  const _isOldHoliday = originalDate => Date.now() > originalDate.getTime()
-
   const zero = reference => {
     let i = reference
     if (i < 10) {
@@ -209,7 +207,7 @@ const AvailabilityTab = props => {
       listingAccessDays: _mapToAccessHourType(timetable)
     }
     await dispatch(onUpdate(props.listing, valuesToUpdate))
-    // props.history.push('cancellation')
+    props.history.push('cancellation')
   }
 
   const _onClickSelectDay = (day, { selected }) => {
@@ -238,6 +236,18 @@ const AvailabilityTab = props => {
     }
     setHolidays(copyHolidays)
     setDisabledDays(copyDisabledDays)
+  }
+
+  const _onChangeHolidayBlockAll = (e, { checked, name }) => {
+    if (checked) {
+      const newarray = holidaysArray.map(el => el.originalDate)
+      setHolidays(newarray)
+      setDisabledDays([...disabledDays, ...newarray])
+      return
+    }
+    const newArrayDisabled = disabledDays.filter(el => holidaysArray.includes(el))
+    setHolidays([])
+    setDisabledDays(newArrayDisabled)
   }
 
   return (
@@ -269,6 +279,19 @@ const AvailabilityTab = props => {
           subtitle="Are you closed on all Australian holidays? Or Just a few of them?"
         />
         <Grid columns={12} gap="20px" columnGap="40px" style={{ margin: '30px 0' }}>
+          <Cell width={3}>
+            <ItemSwitchStyled>
+              <span>Block all</span>
+              <SwitchStyled>
+                <Switch
+                  id="blockall"
+                  name="blockall"
+                  checked={holidaysArray.length === holidays.length}
+                  handleCheckboxChange={_onChangeHolidayBlockAll}
+                />
+              </SwitchStyled>
+            </ItemSwitchStyled>
+          </Cell>
           {holidaysArray
             .filter(el => {
               if (isAfter(new Date(), new Date(el.date))) {
@@ -279,19 +302,20 @@ const AvailabilityTab = props => {
             .map((o, index) => {
               return (
                 <Cell key={o.date} width={3}>
-                  <ItemSwitchStyled>
-                    <span>{o.dateFormatted}</span>
-                    <SwitchStyled>
-                      <Switch
-                        id={index}
-                        name={o.date}
-                        value={o.date}
-                        // checked={availabilitiesArray.includes(o.date)}
-                        disabled={_isOldHoliday(o.originalDate)}
-                        handleCheckboxChange={_onChangeHoliday}
-                      />
-                    </SwitchStyled>
-                  </ItemSwitchStyled>
+                  <ToolTip placement="bottom" content={o.description}>
+                    <ItemSwitchStyled>
+                      <span>{o.dateFormatted}</span>
+                      <SwitchStyled>
+                        <Switch
+                          id={index}
+                          name={o.date}
+                          value={o.date}
+                          checked={holidays.some(selectedDay => isSameDay(selectedDay, o.originalDate))}
+                          handleCheckboxChange={_onChangeHoliday}
+                        />
+                      </SwitchStyled>
+                    </ItemSwitchStyled>
+                  </ToolTip>
                 </Cell>
               )
             })}
