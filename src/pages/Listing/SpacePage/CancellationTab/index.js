@@ -1,6 +1,6 @@
 import React from 'react'
 import styled from 'styled-components'
-import { Title, Grid, Cell } from 'components'
+import { Title, Grid, Cell, StepButtons } from 'components'
 
 import GraphCancelattionImage from './graph_cancellation.png'
 
@@ -8,7 +8,7 @@ const ImageStyled = styled.img`
   width: 100%;
 `
 
-const CancellationTab = () => {
+const CancellationTab = props => {
   return (
     <Grid columns={1}>
       <Cell>
@@ -30,6 +30,10 @@ const CancellationTab = () => {
           </Cell>
         </Grid>
       </Cell>
+      <StepButtons
+        prev={{ disabled: false, onClick: () => props.history.push('booking') }}
+        next={{ onClick: () => props.history.push(`/listing/preview/${props.match.params.id}`) }}
+      />
     </Grid>
   )
 }
