@@ -3,11 +3,11 @@ import ApolloClient from 'apollo-boost'
 
 import config from 'contants/config'
 
-import getCookieByName from 'utils/getCookieByName'
+import { getByName } from 'utils/cookies'
 
 let apolloClientWithAuth
 export const getClientWithAuth = dispatch => {
-  const idToken = getCookieByName('id_token')
+  const idToken = getByName(config.token_name)
   if (!idToken || idToken.length <= 0) {
     apolloClientWithAuth = null
     return dispatch({ type: 'AUTH_2019_FAILED' })
