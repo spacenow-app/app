@@ -1,8 +1,8 @@
 import styled from 'styled-components'
-import { space, color, layout, grid, background, border, position, shadow } from 'styled-system'
+import { space, color, layout, grid, flexbox, background, border, position, shadow, typography } from 'styled-system'
 import propTypes from '@styled-system/prop-types'
 
-const Box = styled.div`${space} ${color} ${layout} ${grid} ${background} ${border} ${position} ${shadow}`
+const Box = styled.div`${space} ${color} ${layout} ${grid} ${background} ${border} ${position} ${shadow} ${flexbox} ${typography}`
 
 Box.propTypes = {
   ...propTypes.space,
@@ -12,7 +12,9 @@ Box.propTypes = {
   ...propTypes.background,
   ...propTypes.border,
   ...propTypes.position,
-  ...propTypes.shadow
+  ...propTypes.shadow,
+  ...propTypes.flexbox,
+  ...propTypes.typography
 }
 
 export default Box
