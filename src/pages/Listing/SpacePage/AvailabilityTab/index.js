@@ -153,8 +153,6 @@ const AvailabilityTab = props => {
     setTimeTable(newArray)
   }
 
-  const _isOldHoliday = originalDate => Date.now() > originalDate.getTime()
-
   const zero = reference => {
     let i = reference
     if (i < 10) {
@@ -208,7 +206,7 @@ const AvailabilityTab = props => {
       listingAccessDays: _mapToAccessHourType(timetable)
     }
     await dispatch(onUpdate(props.listing, valuesToUpdate))
-    // props.history.push('cancellation')
+    props.history.push('cancellation')
   }
 
   const _onClickSelectDay = (day, { selected }) => {
@@ -237,6 +235,18 @@ const AvailabilityTab = props => {
     }
     setHolidays(copyHolidays)
     setDisabledDays(copyDisabledDays)
+  }
+
+  const _onChangeHolidayBlockAll = (e, { checked, name }) => {
+    if (checked) {
+      const newarray = holidaysArray.map(el => el.originalDate)
+      setHolidays(newarray)
+      setDisabledDays([...disabledDays, ...newarray])
+      return
+    }
+    const newArrayDisabled = disabledDays.filter(el => holidaysArray.includes(el))
+    setHolidays([])
+    setDisabledDays(newArrayDisabled)
   }
 
   return (
@@ -268,6 +278,19 @@ const AvailabilityTab = props => {
           subtitle="Are you closed on all Australian holidays? Or Just a few of them?"
         />
         <Grid columns={12} gap="20px" columnGap="40px" style={{ margin: '30px 0' }}>
+          <Cell width={3}>
+            <ItemSwitchStyled>
+              <span>Block all</span>
+              <SwitchStyled>
+                <Switch
+                  id="blockall"
+                  name="blockall"
+                  checked={holidaysArray.length === holidays.length}
+                  handleCheckboxChange={_onChangeHolidayBlockAll}
+                />
+              </SwitchStyled>
+            </ItemSwitchStyled>
+          </Cell>
           {holidaysArray
             .filter(el => {
               if (isAfter(new Date(), new Date(el.date))) {
@@ -285,8 +308,7 @@ const AvailabilityTab = props => {
                         id={index}
                         name={o.date}
                         value={o.date}
-                        // checked={availabilitiesArray.includes(o.date)}
-                        disabled={_isOldHoliday(o.originalDate)}
+                        checked={holidays.some(selectedDay => isSameDay(selectedDay, o.originalDate))}
                         handleCheckboxChange={_onChangeHoliday}
                       />
                     </SwitchStyled>
