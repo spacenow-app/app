@@ -9,7 +9,7 @@ import { nanDate } from 'contants/dates'
 
 import { onUpdate, onGetAvailabilitiesByListingId, onGetAllHolidays } from 'redux/ducks/listing'
 
-import { Title, Grid, Cell, TimeTable, Calendar, Switch, StepButtons } from 'components'
+import { Title, Grid, Cell, TimeTable, Calendar, Switch, StepButtons, ToolTip } from 'components'
 
 const SwitchStyled = styled.div`
   justify-self: end;
@@ -301,18 +301,20 @@ const AvailabilityTab = props => {
             .map((o, index) => {
               return (
                 <Cell key={o.date} width={3}>
-                  <ItemSwitchStyled>
-                    <span>{o.dateFormatted}</span>
-                    <SwitchStyled>
-                      <Switch
-                        id={index}
-                        name={o.date}
-                        value={o.date}
-                        checked={holidays.some(selectedDay => isSameDay(selectedDay, o.originalDate))}
-                        handleCheckboxChange={_onChangeHoliday}
-                      />
-                    </SwitchStyled>
-                  </ItemSwitchStyled>
+                  <ToolTip placement="bottom" content={o.description}>
+                    <ItemSwitchStyled>
+                      <span>{o.dateFormatted}</span>
+                      <SwitchStyled>
+                        <Switch
+                          id={index}
+                          name={o.date}
+                          value={o.date}
+                          checked={holidays.some(selectedDay => isSameDay(selectedDay, o.originalDate))}
+                          handleCheckboxChange={_onChangeHoliday}
+                        />
+                      </SwitchStyled>
+                    </ItemSwitchStyled>
+                  </ToolTip>
                 </Cell>
               )
             })}
