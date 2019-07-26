@@ -22,10 +22,6 @@ function NavBar() {
       <Navbar.Toggle />
       <Navbar.Collapse className="justify-content-end">
         <Nav>
-          <Nav.Link as={Link} to="/listing">
-            List Your Space
-          </Nav.Link>
-          <Nav.Link href="">Help</Nav.Link>
           <NavDropdown title={authUser.firstName} id="basic-nav-dropdown">
             <NavDropdown.Item href="#action/3.1">Dashboard</NavDropdown.Item>
             <NavDropdown.Divider />
