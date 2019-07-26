@@ -31,7 +31,7 @@ const CancellationTab = props => {
         </Grid>
       </Cell>
       <StepButtons
-        prev={{ disabled: false, onClick: () => props.history.push('booking') }}
+        prev={{ onClick: () => props.history.push('booking') }}
         next={{ onClick: () => props.history.push(`/listing/preview/${props.match.params.id}`) }}
       />
     </Grid>
