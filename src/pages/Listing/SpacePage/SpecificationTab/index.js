@@ -1,7 +1,7 @@
 /* eslint-disable no-console */
 import React, { useEffect } from 'react'
 import styled from 'styled-components'
-import { withFormik, yupToFormErrors } from 'formik'
+import { withFormik } from 'formik'
 import * as Yup from 'yup'
 import _ from 'lodash'
 import { useDispatch, useSelector } from 'react-redux'
