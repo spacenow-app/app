@@ -22,14 +22,14 @@ const StepButtons = ({ prev, next }) => {
       <Left>
         {prev && (
           <Button outline="true" disabled={prev.disabled} onClick={prev.onClick} isLoading={prev.isLoading}>
-            Previous Step
+            {prev.title ? prev.title : 'Previous Step'}
           </Button>
         )}
       </Left>
       <Right>
         {next && (
           <Button disabled={next.disabled} onClick={next.onClick} isLoading={next.isLoading}>
-            Next Step
+            {next.title ? next.title : 'Next Step'}
           </Button>
         )}
       </Right>
