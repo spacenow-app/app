@@ -2,7 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import styled from 'styled-components'
 import { useDropzone } from 'react-dropzone'
-import { Button, Icon } from 'components';
+import { Icon } from 'components';
 
 const WrapperStyled = styled.div`
   display: grid;
@@ -26,9 +26,9 @@ const StyledDiv = styled.div`
   border-radius: 10px;
   border: dashed 1px #cbcbcb;
 `
-const FooterButton = styled.div`
-  display: grid;
-`
+// const FooterButton = styled.div`
+//   display: grid;
+// `
 
 const Photo = ({ onDrop, ...props }) => {
 
