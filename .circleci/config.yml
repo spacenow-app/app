@@ -39,16 +39,6 @@ jobs:
           key: dependency-cache-{{ checksum "package.json" }}
           paths:
             - node_modules
-  # test:
-  #   <<: *defaults
-  #   steps:
-  #     - restore_cache:
-  #         key: source-{{ .Branch }}-{{ .Revision }}
-  #     - restore_cache:
-  #         key: dependency-cache-{{ checksum "package.json" }}
-  #     - run:
-  #         name: 'Test'
-  #         command: npm run test
   build:
     <<: *defaults
     steps:
@@ -199,15 +189,11 @@ workflows:
       - install:
           requires:
             - checkout_code
-      # - test:
-      #     requires:
-      #       - install
       - build:
           requires:
             - install
       - deploy:
           requires:
-            # - test
             - build
       - qa-approval:
           type: approval

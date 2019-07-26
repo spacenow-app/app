@@ -69,7 +69,7 @@ const PreviewPage = ({ match, location, ...props }) => {
       console.log('path ->', match.params.id)
       // props.history.push(`/listing/space/${match.params.id}`)
     }
-  }, [])
+  }, [objectListing.id, match.params.id])
 
   return (
     <Wrapper>

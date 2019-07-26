@@ -21,7 +21,8 @@ const SpacePage = ({ match, location, ...props }) => {
   const { object: objectListing, isLoading } = useSelector(state => state.listing.get)
 
   useEffect(() => {
-    dispatch(onGetListingById(match.params.id, props.history))
+    // dispatch(onGetListingById(match.params.id, props.history))
+    dispatch(onGetListingById(match.params.id))
   }, [dispatch, match.params.id])
 
   if (isLoading) {
