@@ -1,7 +1,8 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import styled from 'styled-components'
+import { useSelector } from 'react-redux'
 import Carousel from 'react-images'
-import { Wrapper, Title, Grid, Cell, TimeTable, Map, Tag, Box, Icon, Highlights } from 'components'
+import { Wrapper, Title, Grid, Cell, TimeTable, Map, Tag, Box, Icon, Highlights, StepButtons } from 'components'
 
 import GraphCancelattionImage from 'pages/Listing/SpacePage/CancellationTab/graph_cancellation.png'
 
@@ -59,7 +60,17 @@ const timeTable = [
   }
 ]
 
-const PreviewPage = () => {
+const PreviewPage = ({ match, location, ...props }) => {
+  const { object: objectListing } = useSelector(state => state.listing.get)
+
+  useEffect(() => {
+    if (objectListing.id !== match.params.id) {
+      console.log('listing -> ', objectListing.id)
+      console.log('path ->', match.params.id)
+      // props.history.push(`/listing/space/${match.params.id}`)
+    }
+  }, [])
+
   return (
     <Wrapper>
       <Title type="h2" title="Just one more thing, review your space!" />
@@ -163,6 +174,10 @@ const PreviewPage = () => {
           </Grid>
         </Cell>
       </Grid>
+      <StepButtons
+        prev={{ onClick: () => props.history.push(`/listing/space/${match.params.id}`) }}
+        next={{ onClick: () => {}, title: 'Publish' }}
+      />
     </Wrapper>
   )
 }
