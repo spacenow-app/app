@@ -106,7 +106,7 @@ const AvailabilityTab = props => {
   }
 
   const checkFullTime = array => {
-    const isFullTime = array.every(el => el.active === true)
+    const isFullTime = array.every(el => el.active === true && el.fulltime === true)
     setFullTime(isFullTime)
   }
 
@@ -145,10 +145,11 @@ const AvailabilityTab = props => {
   }
 
   const _handleClickOpenFullTime = (e, options) => {
+    const is = options.checked
     const newArray = timetable.map(el => ({
       ...el,
-      active: options.checked,
-      fulltime: false
+      active: is,
+      fulltime: is
     }))
     setTimeTable(newArray)
   }

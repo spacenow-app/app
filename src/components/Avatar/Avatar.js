@@ -28,6 +28,7 @@ const AvatarStyled = styled.div`
 const Avatar = ({ theme, image, small, large }) => {
   return <AvatarStyled theme={theme} src={image} small={small} large={large} />
 }
+
 Avatar.defaultProps = {
   small: false,
   large: false,

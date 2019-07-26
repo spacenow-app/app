@@ -42,6 +42,12 @@ import { ReactComponent as SubCategoryVenue } from './svg/sub-category/sub_categ
 import { ReactComponent as SubCategoryWeddingVenue } from './svg/sub-category/sub_category_wedding_venue.svg'
 import { ReactComponent as SubCategoryWineStorage } from './svg/sub-category/sub_category_wine_storage.svg'
 
+//Generic
+import { ReactComponent as Bin } from './svg/generic/bin.svg'
+import { ReactComponent as Camera } from './svg/generic/camera.svg'
+import { ReactComponent as StarFull } from './svg/generic/star-full.svg'
+import { ReactComponent as StarOutline } from './svg/generic/star-outline.svg'
+
 const Icons = {
   'single-space': <SingleSpace />,
   'multiple-space': <MultipleSpace />,
@@ -83,7 +89,11 @@ const Icons = {
   'sub-category-trainning-room': <SubCategoryTrainingRoom />,
   'sub-category-venue': <SubCategoryVenue />,
   'sub-category-wedding': <SubCategoryWeddingVenue />,
-  'sub-category-wine-storage': <SubCategoryWineStorage />
+  'sub-category-wine-storage': <SubCategoryWineStorage />,
+  'bin': <Bin />,
+  'camera': <Camera />,
+  'star-full': <StarFull />,
+  'star-outline': <StarOutline />
 }
 
 const Icon = props => {

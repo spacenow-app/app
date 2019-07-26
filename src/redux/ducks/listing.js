@@ -22,6 +22,9 @@ export const Types = {
   LISTING_GET_SPACE_SPECIFICATIONS_REQUEST: 'LISTING_GET_SPACE_SPECIFICATIONS_REQUEST',
   LISTING_GET_SPACE_SPECIFICATIONS_SUCCESS: 'LISTING_GET_SPACE_SPECIFICATIONS_SUCCESS',
   LISTING_GET_SPACE_SPECIFICATIONS_FAILURE: 'LISTING_GET_SPACE_SPECIFICATIONS_FAILURE',
+  LISTING_GET_ASSETS_REQUEST: 'LISTING_GET_ASSETS_REQUEST',
+  LISTING_GET_ASSETS_SUCCESS: 'LISTING_GET_ASSETS_SUCCESS',
+  LISTING_GET_ASSETS_FAILURE: 'LISTING_GET_ASSETS_FAILURE',
   LISTING_GET_SPACE_HOLIDAYS_REQUEST: 'LISTING_GET_SPACE_HOLIDAYS_REQUEST',
   LISTING_GET_SPACE_HOLIDAYS_SUCCESS: 'LISTING_GET_SPACE_HOLIDAYS_SUCCESS',
   LISTING_GET_SPACE_HOLIDAYS_FAILURE: 'LISTING_GET_SPACE_HOLIDAYS_FAILURE',
@@ -75,6 +78,11 @@ const initialState = {
     error: null
   },
   holidays: {
+    array: [],
+    isLoading: true,
+    error: null
+  },
+  assets: {
     array: [],
     isLoading: true,
     error: null
@@ -309,12 +317,19 @@ const queryGetAllSpecifications = gql`
     }
   }
 `
-
 const queryGetAllHolidays = gql`
   query getAllHolidays {
     getAllHolidays(state: "NSW") {
       date
       description
+    }
+  }
+`
+
+const queryGetAllAssets = gql`
+  query getAllAssets($listingId: Int!) {
+    getAllAssets(listingId: $listingId) {
+      id
     }
   }
 `
@@ -742,6 +757,19 @@ export const onGetAllSpecifications = (listSettingsParentId, listingData) => asy
     dispatch({ type: Types.LISTING_GET_SPACE_SPECIFICATIONS_SUCCESS, payload: specificationsToView })
   } catch (err) {
     dispatch({ type: Types.LISTING_GET_SPACE_SPECIFICATIONS_FAILURE, payload: errToMsg(err) })
+  }
+}
+
+export const onGetAllAssets = () => async dispatch => {
+  dispatch({ type: Types.LISTING_GET_ASSETS_REQUEST })
+  try {
+    const { data } = await getClientWithAuth(dispatch).query({
+      query: queryGetAllAssets,
+      fetchPolicy: 'network-only'
+    })
+    dispatch({ type: Types.LISTING_GET_ASSETS_SUCCESS, payload: data.getAllAssets })
+  } catch (err) {
+    dispatch({ type: Types.LISTING_GET_ASSETS_FAILURE, payload: errToMsg(err) })
   }
 }
 

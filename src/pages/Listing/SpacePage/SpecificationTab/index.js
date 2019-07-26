@@ -1,5 +1,5 @@
 /* eslint-disable no-console */
-import React, { useEffect } from 'react'
+import React, { useEffect, useCallback } from 'react'
 import styled from 'styled-components'
 import { withFormik } from 'formik'
 import * as Yup from 'yup'
@@ -14,7 +14,7 @@ import {
   onUpdate
 } from 'redux/ducks/listing'
 
-import { Title, Input, Checkbox, Select, TextArea, StepButtons, Loader, Box } from 'components'
+import { Title, Input, Checkbox, Select, TextArea, StepButtons, Loader, Photo, Box } from 'components'
 
 const WrapperStyled = styled.div`
   display: grid;
@@ -33,6 +33,12 @@ const CheckboxGroup = styled.div`
   display: grid;
   grid-template-columns: 1fr 1fr 1fr;
   grid-row-gap: 40px;
+`
+
+const PhotosGroup = styled.div`
+  display: grid;
+  grid-template-columns: repeat( auto-fit, minmax(160px, 1fr) );
+  grid-column-gap: 30px;
 `
 
 const SpecificationTab = ({
@@ -200,6 +206,10 @@ const SpecificationTab = ({
     props.history.push('booking')
   }
 
+  const _handleOnDrop = useCallback(() => {
+    console.log("test")
+  }, [])
+  
   const _goBack = () => {
     alert('message')
   }
@@ -232,13 +242,13 @@ const SpecificationTab = ({
           {isLoadingSpecifications ? (
             <Loader />
           ) : (
-            <InputGroup>
-              {Object.keys(objectSpecifications).map(k => {
-                const o = objectSpecifications[k]
-                return <span key={o.field}>{_renderSpecifications(o)}</span>
-              })}
-            </InputGroup>
-          )}
+              <InputGroup>
+                {Object.keys(objectSpecifications).map(k => {
+                  const o = objectSpecifications[k]
+                  return <span key={o.field}>{_renderSpecifications(o)}</span>
+                })}
+              </InputGroup>
+            )}
         </SectionStyled>
         <SectionStyled>
           <Title
@@ -261,19 +271,19 @@ const SpecificationTab = ({
             {isLoadingAmenities ? (
               <Loader />
             ) : (
-              arrayAmenities.map(item => {
-                return (
-                  <Checkbox
-                    key={item.id}
-                    label={item.itemName}
-                    name="amenities"
-                    value={item.id}
-                    checked={values.amenities.some(amenitie => amenitie.listSettingsId === item.id)}
-                    handleCheckboxChange={_handleCheckboxChange}
-                  />
-                )
-              })
-            )}
+                arrayAmenities.map(item => {
+                  return (
+                    <Checkbox
+                      key={item.id}
+                      label={item.itemName}
+                      name="amenities"
+                      value={item.id}
+                      checked={values.amenities.some(amenitie => amenitie.listSettingsId === item.id)}
+                      handleCheckboxChange={_handleCheckboxChange}
+                    />
+                  )
+                })
+              )}
           </CheckboxGroup>
         </SectionStyled>
         <SectionStyled>
@@ -282,8 +292,7 @@ const SpecificationTab = ({
             {isLoadingRules ? (
               <Loader />
             ) : (
-              arrayRules.map(item => {
-                return (
+                arrayRules.map(item =>
                   <Checkbox
                     key={item.id}
                     label={item.itemName}
@@ -293,8 +302,7 @@ const SpecificationTab = ({
                     handleCheckboxChange={_handleCheckboxChange}
                   />
                 )
-              })
-            )}
+              )}
           </CheckboxGroup>
         </SectionStyled>
         <SectionStyled>
@@ -320,14 +328,14 @@ const SpecificationTab = ({
             title="Photos*"
             subtitle="Photos help guests imagine using your space. You can start with one and add more after you publish."
           />
-          <div style={{ display: 'grid', gridTemplateColumns: 'auto auto auto auto auto auto' }}>
-            <div style={{ width: '150px', height: '150px', border: '1px solid black' }} />
-            <div style={{ width: '150px', height: '150px', border: '1px solid black' }} />
-            <div style={{ width: '150px', height: '150px', border: '1px solid black' }} />
-            <div style={{ width: '150px', height: '150px', border: '1px solid black' }} />
-            <div style={{ width: '150px', height: '150px', border: '1px solid black' }} />
-            <div style={{ width: '150px', height: '150px', border: '1px solid black' }} />
-          </div>
+          <PhotosGroup>
+            <Photo onDrop={_handleOnDrop} />
+            <Photo onDrop={_handleOnDrop} />
+            <Photo onDrop={_handleOnDrop} />
+            <Photo onDrop={_handleOnDrop} />
+            <Photo onDrop={_handleOnDrop} />
+            <Photo onDrop={_handleOnDrop} />
+          </PhotosGroup>
           <p>
             TIP: Take photos in landscape mode to capture as much of your space as possible. Shoot from corners to add
             perspective. Spaces look best in natural light. Include all areas your guest can access.
