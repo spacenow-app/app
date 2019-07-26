@@ -33,8 +33,16 @@ const ButtonStyled = styled(ButtonExternal)`
     }
     :active {
       &&& {
-        background-color: #51c482;
         border: #51c482;
+      }
+    }
+
+    :disabled {
+      &&& {
+        background-color: ${props => (props.outline ? `#fff` : '#E2E2E2')};
+        border: ${props => (props.outline ? `1px solid #CBCBCB` : 'none')};
+        color: ${props => (props.outline ? `#E2E2E2` : '#fff')};
+        cursor: not-allowed;
       }
     }
     ${color}

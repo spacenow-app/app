@@ -13,6 +13,7 @@ import {
   onGetAllSpecifications,
   onUpdate
 } from 'redux/ducks/listing'
+import { openModal, TypesModal } from 'redux/ducks/modal'
 
 import { Title, Input, Checkbox, Select, TextArea, StepButtons, Loader, Photo, Box } from 'components'
 
@@ -37,7 +38,7 @@ const CheckboxGroup = styled.div`
 
 const PhotosGroup = styled.div`
   display: grid;
-  grid-template-columns: repeat( auto-fit, minmax(160px, 1fr) );
+  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
   grid-column-gap: 30px;
 `
 
@@ -207,11 +208,21 @@ const SpecificationTab = ({
   }
 
   const _handleOnDrop = useCallback(() => {
-    console.log("test")
+    console.log('test')
   }, [])
-  
+
   const _goBack = () => {
-    alert('message')
+    const options = {
+      options: {
+        title: 'Confirm',
+        text: 'Are you sure you want to return to the category page? If yes, all space details will be lost.'
+      },
+      onConfirm: () => {
+        props.history.replace('/listing/category')
+        // call action to delete
+      }
+    }
+    dispatch(openModal(TypesModal.MODAL_TYPE_CONFIRM, options))
   }
 
   return (
@@ -242,13 +253,13 @@ const SpecificationTab = ({
           {isLoadingSpecifications ? (
             <Loader />
           ) : (
-              <InputGroup>
-                {Object.keys(objectSpecifications).map(k => {
-                  const o = objectSpecifications[k]
-                  return <span key={o.field}>{_renderSpecifications(o)}</span>
-                })}
-              </InputGroup>
-            )}
+            <InputGroup>
+              {Object.keys(objectSpecifications).map(k => {
+                const o = objectSpecifications[k]
+                return <span key={o.field}>{_renderSpecifications(o)}</span>
+              })}
+            </InputGroup>
+          )}
         </SectionStyled>
         <SectionStyled>
           <Title
@@ -271,19 +282,19 @@ const SpecificationTab = ({
             {isLoadingAmenities ? (
               <Loader />
             ) : (
-                arrayAmenities.map(item => {
-                  return (
-                    <Checkbox
-                      key={item.id}
-                      label={item.itemName}
-                      name="amenities"
-                      value={item.id}
-                      checked={values.amenities.some(amenitie => amenitie.listSettingsId === item.id)}
-                      handleCheckboxChange={_handleCheckboxChange}
-                    />
-                  )
-                })
-              )}
+              arrayAmenities.map(item => {
+                return (
+                  <Checkbox
+                    key={item.id}
+                    label={item.itemName}
+                    name="amenities"
+                    value={item.id}
+                    checked={values.amenities.some(amenitie => amenitie.listSettingsId === item.id)}
+                    handleCheckboxChange={_handleCheckboxChange}
+                  />
+                )
+              })
+            )}
           </CheckboxGroup>
         </SectionStyled>
         <SectionStyled>
@@ -292,17 +303,17 @@ const SpecificationTab = ({
             {isLoadingRules ? (
               <Loader />
             ) : (
-                arrayRules.map(item =>
-                  <Checkbox
-                    key={item.id}
-                    label={item.itemName}
-                    name="rules"
-                    value={item.id}
-                    checked={values.rules.some(rule => rule.listSettingsId === item.id)}
-                    handleCheckboxChange={_handleCheckboxChange}
-                  />
-                )
-              )}
+              arrayRules.map(item => (
+                <Checkbox
+                  key={item.id}
+                  label={item.itemName}
+                  name="rules"
+                  value={item.id}
+                  checked={values.rules.some(rule => rule.listSettingsId === item.id)}
+                  handleCheckboxChange={_handleCheckboxChange}
+                />
+              ))
+            )}
           </CheckboxGroup>
         </SectionStyled>
         <SectionStyled>
@@ -312,7 +323,7 @@ const SpecificationTab = ({
               <Loader />
             ) : (
               <Select value={values.accessType} name="accessType" onChange={_handleSelectChange}>
-                {!values.accessType && <option value={null}>Select type of access</option>}
+                {!values.accessType && <option value="false">Select type of access</option>}
                 {arrayAccessTypes.map(item => (
                   <option key={item.id} value={item.itemName}>
                     {item.itemName}
@@ -363,7 +374,7 @@ const formik = {
         maxEntranceHeight: listing.listingData.maxEntranceHeight || 'Not Sure',
         spaceType: listing.listingData.spaceType || 'Covered',
         description: listing.listingData.description || '',
-        accessType: listing.listingData.accessType || null,
+        accessType: listing.listingData.accessType || 'false',
         amenities: listing.amenities || [],
         rules: listing.rules || []
       }
