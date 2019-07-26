@@ -30,6 +30,11 @@ const CategoryPage = props => {
   const [subCategorySelected, setSubCategorySelected] = useState(null)
 
   const _handleCategoryClick = (_, value) => {
+    if (value.itemName === 'Office') {
+      setCategorySelected(value)
+      setSubCategorySelected(value.subCategories[1])
+      return
+    }
     setCategorySelected(value)
     setSubCategorySelected(null)
   }
@@ -41,13 +46,9 @@ const CategoryPage = props => {
   const _handlerCreateDraft = () =>
     dispatch(onCreate(location.id, subCategorySelected.bookingPeriod.listSettingsParentId, props.history))
 
-  // Previous location object from Location Step...
   if (!location) {
     props.history.replace('/listing/location')
     return false
-  }
-
-  if (isLoadingCategories) {
   }
 
   return (
@@ -62,7 +63,7 @@ const CategoryPage = props => {
       ) : (
         <>
           <List data={categories} handleItemClick={_handleCategoryClick} itemSelected={categorySelected} />
-          {categorySelected && categorySelected.subCategories && (
+          {categorySelected && categorySelected.subCategories && categorySelected.itemName !== 'Office' && (
             <>
               <Caption large centered margin="50px 0">
                 Select a sub-category
