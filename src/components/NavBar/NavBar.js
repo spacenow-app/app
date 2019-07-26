@@ -12,6 +12,9 @@ function NavBar() {
   const _handlerGoToLegancy = () => {
     window.location.href = `${config.legacy}`
   }
+  const _handlerLogout = () => {
+    window.location.href = `${config.legacy}/logout`
+  }
   return (
     <Navbar>
       <Link onClick={_handlerGoToLegancy}>
@@ -22,10 +25,12 @@ function NavBar() {
       <Navbar.Toggle />
       <Navbar.Collapse className="justify-content-end">
         <Nav>
-          <NavDropdown title={authUser.firstName} id="basic-nav-dropdown">
-            <NavDropdown.Item href="#action/3.1">Dashboard</NavDropdown.Item>
+          <NavDropdown alignRight title={authUser.firstName} id="basic-nav-dropdown">
+            <NavDropdown.Item href={`${config.legacy}/dashboard/profile`}>Profile</NavDropdown.Item>
             <NavDropdown.Divider />
-            <NavDropdown.Item href="#action/3.4">Logout</NavDropdown.Item>
+            <NavDropdown.Item href={`${config.legacy}/dashboard`}>Dashboard</NavDropdown.Item>
+            <NavDropdown.Divider />
+            <NavDropdown.Item onClick={_handlerLogout}>Logout</NavDropdown.Item>
           </NavDropdown>
         </Nav>
       </Navbar.Collapse>

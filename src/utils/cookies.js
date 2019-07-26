@@ -1,4 +1,4 @@
-export default cname => {
+const getByName = cname => {
   const name = `${cname}=`
   const ca = document.cookie.split(';')
   for (let i = 0; i < ca.length; i += 1) {
@@ -12,3 +12,15 @@ export default cname => {
   }
   return ''
 }
+
+/**
+ * @deprecated
+ */
+const deleteByName = cname => {
+  const value = getByName(cname)
+  if (value) {
+    document.cookie = `${cname}=${value}; expires=Thu, 01 Jan 1970 00:00:00 GMT`
+  }
+}
+
+export { getByName, deleteByName }
