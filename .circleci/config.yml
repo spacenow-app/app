@@ -79,12 +79,15 @@ jobs:
       - run: sudo python get-pip.py
       - run: sudo pip install awscli --upgrade
       - run: aws --version
-      - run: aws s3 ls
       - run:
-          name: 'Deploy to S3'
+          name: 'SETUP ACCOUNT'
           command: |
             export ACCOUNT_ID=159220020591
             source scripts/assume-role.sh
+      - run:
+          name: 'Deploy to S3 DEV'
+          command: |
+            aws s3 ls
             aws s3 sync build/ s3://$AWS_BUCKET --delete --region $AWS_REGION
             aws cloudfront create-invalidation --distribution-id "EJBM66ARV7ZA9" --paths /index.html
   build-qa:
@@ -117,12 +120,15 @@ jobs:
       - run: sudo python get-pip.py
       - run: sudo pip install awscli --upgrade
       - run: aws --version
-      - run: aws s3 ls
       - run:
-          name: 'Deploy to S3'
+          name: 'SETUP ACCOUNT'
           command: |
             export ACCOUNT_ID=211853473677
             source scripts/assume-role.sh
+      - run:
+          name: 'Deploy to S3 QA'
+          command: |
+            aws s3 ls
             aws s3 sync build/ s3://${NONPROD_AWS_BUCKET} --delete --region $AWS_REGION
             aws cloudfront create-invalidation --distribution-id "E8T1Z3NYNLEPU" --paths /index.html
   build-prod:
@@ -155,12 +161,15 @@ jobs:
       - run: sudo python get-pip.py
       - run: sudo pip install awscli --upgrade
       - run: aws --version
-      - run: aws s3 ls
       - run:
-          name: 'Deploy to S3'
+          name: 'SETUP ACCOUNT'
           command: |
             export ACCOUNT_ID=985566274543
             source scripts/assume-role.sh
+      - run:
+          name: 'Deploy to S3 PROD'
+          command: |
+            aws s3 ls
             aws s3 sync build/ s3://$AWS_BUCKET --delete --region $AWS_REGION
             aws cloudfront create-invalidation --distribution-id "EJBM66ARV7ZA9" --paths /index.html
 
