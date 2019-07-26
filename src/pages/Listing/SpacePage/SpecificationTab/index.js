@@ -50,6 +50,7 @@ const SpecificationTab = ({
   handleSubmit,
   setFieldValue,
   listing,
+  validateForm,
   ...props
 }) => {
   const dispatch = useDispatch()
@@ -67,6 +68,14 @@ const SpecificationTab = ({
     dispatch(onGetAllRules())
     dispatch(onGetAllAccessTypes())
   }, [dispatch, listing.listingData, listing.settingsParent.id, listing.settingsParent.subcategory.id])
+
+  // Umount
+  // useEffect(
+  //   () => () => {
+  //     return _handleSave()
+  //   },
+  //   []
+  // )
 
   const _handleSelectChange = e => {
     const { name, value } = e.target
@@ -92,6 +101,7 @@ const SpecificationTab = ({
           component = (
             <Input
               type="number"
+              placeholder={0}
               name={o.field}
               label={o.label}
               value={values[o.field]}
@@ -142,7 +152,9 @@ const SpecificationTab = ({
           } else {
             component = (
               <Input
-                type="text"
+                type="number"
+                placeholder={0}
+                min="0"
                 name={o.field}
                 label={o.label}
                 value={values[o.field]}
@@ -156,7 +168,8 @@ const SpecificationTab = ({
         default: {
           component = (
             <input
-              type="text"
+              type="number"
+              min="0"
               label={o.label}
               placeholder={o.label}
               name={o.field}
@@ -170,7 +183,8 @@ const SpecificationTab = ({
     } else {
       component = (
         <Input
-          type="text"
+          type="number"
+          min="0"
           name={o.field}
           label={o.label}
           value={values[o.field]}
@@ -182,6 +196,11 @@ const SpecificationTab = ({
     return component
   }
 
+  const _handleChangeTitle = e => {
+    const { name, value } = e.target
+    setFieldValue(name, value.substring(0, 25))
+  }
+
   const _handleSave = async () => {
     await dispatch(onUpdate(listing, values))
     props.history.push('booking')
@@ -190,6 +209,10 @@ const SpecificationTab = ({
   const _handleOnDrop = useCallback(() => {
     console.log("test")
   }, [])
+  
+  const _goBack = () => {
+    alert('message')
+  }
 
   return (
     <form>
@@ -206,7 +229,7 @@ const SpecificationTab = ({
             name="title"
             error={errors.title}
             value={values.title}
-            onChange={handleChange}
+            onChange={_handleChangeTitle}
             onBlur={handleBlur}
           />
         </SectionStyled>
@@ -288,14 +311,15 @@ const SpecificationTab = ({
             {isLoadingAccessTypes ? (
               <Loader />
             ) : (
-                <Select value={values.accessType} name="accessType" onChange={_handleSelectChange}>
-                  {arrayAccessTypes.map(item => (
-                    <option key={item.id} value={item.itemName}>
-                      {item.itemName}
-                    </option>
-                  ))}
-                </Select>
-              )}
+              <Select value={values.accessType} name="accessType" onChange={_handleSelectChange}>
+                {!values.accessType && <option value={null}>Select type of access</option>}
+                {arrayAccessTypes.map(item => (
+                  <option key={item.id} value={item.itemName}>
+                    {item.itemName}
+                  </option>
+                ))}
+              </Select>
+            )}
           </Box>
         </SectionStyled>
         <SectionStyled>
@@ -317,7 +341,7 @@ const SpecificationTab = ({
             perspective. Spaces look best in natural light. Include all areas your guest can access.
           </p>
         </SectionStyled>
-        <StepButtons next={{ onClick: _handleSave }} />
+        <StepButtons prev={{ onClick: _goBack }} next={{ onClick: _handleSave }} />
       </WrapperStyled>
     </form>
   )
@@ -339,7 +363,7 @@ const formik = {
         maxEntranceHeight: listing.listingData.maxEntranceHeight || 'Not Sure',
         spaceType: listing.listingData.spaceType || 'Covered',
         description: listing.listingData.description || '',
-        accessType: listing.listingData.accessType || '',
+        accessType: listing.listingData.accessType || null,
         amenities: listing.amenities || [],
         rules: listing.rules || []
       }
@@ -359,7 +383,8 @@ const formik = {
     sizeOfVehicle: Yup.string().typeError('Size Of Vehicle field is required'),
     maxEntranceHeight: Yup.string().typeError('Max Entrance Height field is required'),
     spaceType: Yup.string().typeError('Space Type field is required'),
-    description: Yup.string().typeError('Description need to be string')
+    description: Yup.string().typeError('Description need to be string'),
+    accessType: Yup.string()
   }),
   enableReinitialize: true
 }

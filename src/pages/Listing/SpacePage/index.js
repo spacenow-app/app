@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react'
 import PropTypes from 'prop-types'
 import { Switch, Route, Redirect } from 'react-router-dom'
-import { Wrapper, Tab, TabItem, Loader } from 'components'
+import { Wrapper, Tab, TabItem, Loader, Tag, Icon, Grid, Cell, Box } from 'components'
 import { onGetListingById } from 'redux/ducks/listing'
 import { useDispatch, useSelector } from 'react-redux'
 import CancellationTab from './CancellationTab'
@@ -28,8 +28,39 @@ const SpacePage = ({ match, location, ...props }) => {
     return <Loader text="Loading listing process" />
   }
 
+  const _parseIconName = (name, isSub) => {
+    let prefix = 'category-'
+    if (isSub) prefix = 'sub-category-'
+    return prefix + name.replace(/([A-Z])/g, g => `-${g[0].toLowerCase()}`)
+  }
+
   return (
     <Wrapper>
+      <Box mb="50px" mt="50px">
+        <Grid justifyContent="start" columns={7}>
+          <Cell width={1}>
+            <Tag
+              icon={
+                <Icon width="24px" name={_parseIconName(objectListing.settingsParent.category.otherItemName, false)} />
+              }
+            >
+              {objectListing.settingsParent.category.itemName}
+            </Tag>
+          </Cell>
+          <Cell width={1}>
+            <Tag
+              icon={
+                <Icon
+                  width="24px"
+                  name={_parseIconName(objectListing.settingsParent.subcategory.otherItemName, true)}
+                />
+              }
+            >
+              {objectListing.settingsParent.subcategory.itemName}
+            </Tag>
+          </Cell>
+        </Grid>
+      </Box>
       <Tab>
         <TabItem nav to={`${match.url}/specification`}>
           Specification

@@ -2,7 +2,8 @@
 import { gql } from 'apollo-boost'
 
 import { getClient } from 'graphql/apolloClient'
-import getCookieByName from 'utils/getCookieByName'
+import { getByName } from 'utils/cookies'
+import config from 'contants/config'
 
 // Action Types
 export const Types = {
@@ -128,7 +129,7 @@ const authentication2019Failed = () => ({ type: Types.AUTH_2019_FAILED })
 export const onTokenValidation = () => async dispatch => {
   dispatch(authentication2019Start())
   try {
-    const idToken = getCookieByName('id_token')
+    const idToken = getByName(config.token_name)
     if (idToken) {
       const { data } = await getClient().mutate({
         variables: { token: idToken },
@@ -156,7 +157,7 @@ export const onTokenValidation = () => async dispatch => {
 }
 
 export const onIsTokenExists = () => dispatch => {
-  const idToken = getCookieByName('id_token')
+  const idToken = getByName(config.token_name)
   if (!idToken || idToken.length <= 0) dispatch(authentication2019Failed())
 }
 

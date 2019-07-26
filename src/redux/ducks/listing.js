@@ -47,6 +47,11 @@ const initialState = {
     isLoading: true,
     error: null
   },
+  create: {
+    object: null,
+    isLoading: false,
+    error: null
+  },
   rules: {
     array: [],
     isLoading: true,
@@ -623,7 +628,7 @@ export default function reducer(state = initialState, action) {
     case Types.CREATE_LISTING_START: {
       return {
         ...state,
-        get: {
+        create: {
           isLoading: true,
           error: null
         }
@@ -633,15 +638,17 @@ export default function reducer(state = initialState, action) {
       return {
         ...state,
         get: {
-          isLoading: false,
           object: action.payload
+        },
+        create: {
+          isLoading: false
         }
       }
     }
     case Types.CREATE_LISTING_FAILURE: {
       return {
         ...state,
-        get: {
+        create: {
           isLoading: false,
           error: action.payload
         }
@@ -828,7 +835,7 @@ export const onGetAllHolidays = () => async dispatch => {
   }
 }
 
-export const onCreate = (locationId, listSettingsParentId) => async dispatch => {
+export const onCreate = (locationId, listSettingsParentId, history) => async dispatch => {
   dispatch({ type: Types.CREATE_LISTING_START })
   try {
     const { data } = await getClientWithAuth(dispatch).mutate({
@@ -839,6 +846,7 @@ export const onCreate = (locationId, listSettingsParentId) => async dispatch => 
       }
     })
     dispatch({ type: Types.CREATE_LISTING_SUCCESS, payload: data.createOrUpdateListing })
+    history.push(`/listing/space/${data.createOrUpdateListing.id}/specification`)
   } catch (err) {
     dispatch({ type: Types.CREATE_LISTING_FAILURE, payload: errToMsg(err) })
   }

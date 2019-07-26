@@ -1,5 +1,5 @@
 import React, { Suspense, lazy, useEffect } from 'react'
-import { BrowserRouter, Switch, Route } from 'react-router-dom'
+import { BrowserRouter, Switch, Route, Redirect } from 'react-router-dom'
 import { useSelector, useDispatch } from 'react-redux'
 import { NavBar, Loader } from 'components'
 
@@ -31,6 +31,7 @@ const Routes = props => {
     <BrowserRouter>
       <Suspense fallback={<Loader />}>
         <Switch>
+          <Redirect exact from="/" to="/listing/intro" />
           <PublicRoute
             exact
             path="/auth"

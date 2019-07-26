@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import styled from 'styled-components'
 import { Wrapper, Card, Title } from 'components'
-import { config } from "contants"
+import { config } from 'contants'
 
 const WrapperStyled = styled.div`
   display: grid;
@@ -33,7 +33,7 @@ class IntroPage extends Component {
             type="icon"
             icon="single-space"
             title="Single Space"
-            description="If you’re only listing one space this is for you. Ie. a single car space, meeting room, event space, or storage area. TIP: If you’re a coworking space please use the multiple spaces link to the right."
+            description="If you’re only listing one space this is for you. Ie. a single car space, meeting room, event space, or storage area.<separate>TIP: If you’re a coworking space please use the multiple spaces link to the right."
             buttonText="Create"
             buttonHandleClick={() => this._goTo('single')}
           />
@@ -43,7 +43,7 @@ class IntroPage extends Component {
             type="icon"
             icon="multiple-space"
             title="Multiple spaces"
-            description="If you’re listing a couple of spaces or several this option is for you. Ie. an office space, meeting room, and a car spot. TIP: If you have more than 20 please contact us."
+            description="If you’re listing a couple of spaces or several this option is for you. Ie. an office space, meeting room, and a car spot.<separate>TIP: If you have more than 20 please contact us."
             buttonText="Create Spaces"
             buttonHandleClick={() => this._goTo('multiple')}
           />

@@ -9,7 +9,7 @@ const Wrapper = styled.div`
   padding: 50px;
   border: 1px solid #e2e2e2;
   border-radius: 15px;
-  grid-row-gap: 35px;
+  grid-row-gap: 45px;
 `
 const Title = styled.div`
   text-align: center;
@@ -22,23 +22,34 @@ const Description = styled.div`
   font-size: 14px;
   text-align: center;
   max-height: 85px;
-  height: 80px;
 `
 
 const IconStyled = styled(Icon)`
-  max-height: 250px;
+  max-height: 270px;
 `
 
 const ButtonStyled = styled(Button)`
   justify-self: center;
 `
 
+const addLineBreaks = description => {
+  return description.split('<separate>').map((text, index) => {
+    return (
+      <React.Fragment key={`${text}-${index + 1}`}>
+        {text}
+        <br />
+        <br />
+      </React.Fragment>
+    )
+  })
+}
+
 const CardIcon = ({ icon, title, description, buttonText, buttonHandleClick }) => {
   return (
     <Wrapper>
       <IconStyled name={icon} />
       <Title>{title}</Title>
-      <Description>{description}</Description>
+      <Description>{addLineBreaks(description)}</Description>
       <ButtonStyled onClick={buttonHandleClick}>{buttonText}</ButtonStyled>
     </Wrapper>
   )

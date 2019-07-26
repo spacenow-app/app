@@ -93,7 +93,7 @@ Link.propTypes = {
   className: PropTypes.string,
   small: PropTypes.bool,
   large: PropTypes.bool,
-  to: PropTypes.string.isRequired,
+  to: PropTypes.string,
   align: PropTypes.string
 }
 

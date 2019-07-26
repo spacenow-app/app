@@ -1,16 +1,24 @@
 import React from 'react'
+import styled from 'styled-components'
+import { Box } from 'components'
+import { ReactComponent as BackGround } from './bg.svg'
+
+const TitleStyled = styled.h1`
+  text-align: center;
+`
 
 const NotFoundPage = props => {
   return (
-    <div style={{ border: '1px solid red' }}>
-      <h1>Not Found</h1>
-      <h3>Location</h3>
-      <p>Pathname: {props.location.pathname}</p>
-      <h3>Match</h3>
-      <p>isExact: {props.match.isExact ? 'Yes' : 'No'}</p>
-      <p>Path: {props.match.path}</p>
-      <p>Url: {props.match.url}</p>
-    </div>
+    <Box display="grid">
+      <TitleStyled>Uh-oh!</TitleStyled>
+      <Box width="100%" height="auto" maxWidth="100vh" justifySelf="center">
+        <BackGround />
+      </Box>
+      <Box textAlign="center">
+        <h3>ERROR CODE: 404</h3>
+        <p>Path: {props.location.pathname}</p>
+      </Box>
+    </Box>
   )
 }
 
