@@ -1,6 +1,8 @@
 #!/bin/bash
 unset  AWS_SESSION_TOKEN
 
+echo $ACCOUNT_ID
+
 temp_role=$(aws sts assume-role \
   --role-arn "arn:aws:iam::$ACCOUNT_ID:role/spacenow-role-api-cicd_role" \
   --role-session-name "spacenow-cli" \
