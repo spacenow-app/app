@@ -1,7 +1,7 @@
 /* eslint-disable no-console */
 import React, { useEffect } from 'react'
 import styled from 'styled-components'
-import { withFormik } from 'formik'
+import { withFormik, yupToFormErrors } from 'formik'
 import * as Yup from 'yup'
 import _ from 'lodash'
 import { useDispatch, useSelector } from 'react-redux'
@@ -290,6 +290,7 @@ const SpecificationTab = ({
               <Loader />
             ) : (
               <Select value={values.accessType} name="accessType" onChange={_handleSelectChange}>
+                {!values.accessType && <option value={null}>Select type of access</option>}
                 {arrayAccessTypes.map(item => (
                   <option key={item.id} value={item.itemName}>
                     {item.itemName}
@@ -340,7 +341,7 @@ const formik = {
         maxEntranceHeight: listing.listingData.maxEntranceHeight || 'Not Sure',
         spaceType: listing.listingData.spaceType || 'Covered',
         description: listing.listingData.description || '',
-        accessType: listing.listingData.accessType || '',
+        accessType: listing.listingData.accessType || null,
         amenities: listing.amenities || [],
         rules: listing.rules || []
       }
@@ -360,7 +361,8 @@ const formik = {
     sizeOfVehicle: Yup.string().typeError('Size Of Vehicle field is required'),
     maxEntranceHeight: Yup.string().typeError('Max Entrance Height field is required'),
     spaceType: Yup.string().typeError('Space Type field is required'),
-    description: Yup.string().typeError('Description need to be string')
+    description: Yup.string().typeError('Description need to be string'),
+    accessType: Yup.string()
   }),
   enableReinitialize: true
 }
