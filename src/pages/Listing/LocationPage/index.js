@@ -63,7 +63,9 @@ const LocationPage = props => {
           closeButton={latLng && (latLng.lat || latLng.lng)}
           onClickCloseButton={_reset}
         />
-        <Input label="Unit" placeholder="E.g 128" value={unit} onChange={e => setUnit(e.target.value)} />
+        {latLng && (latLng.lat || latLng.lng) && (
+          <Input label="Unit" placeholder="E.g 128" value={unit} onChange={e => setUnit(e.target.value)} />
+        )}
       </GroupInput>
       {error.message && <div className="text-danger">{error.message}</div>}
       {latLng && latLng.lat && latLng.lng && <Map position={latLng} />}
