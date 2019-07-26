@@ -17,7 +17,7 @@ function NavBar() {
   }
   return (
     <Navbar>
-      <Link to='' onClick={_handlerGoToLegancy}>
+      <Link to="" onClick={_handlerGoToLegancy}>
         <Navbar.Brand>
           <img alt="" src={logo} width={230} className="d-inline-block align-top" />
         </Navbar.Brand>
