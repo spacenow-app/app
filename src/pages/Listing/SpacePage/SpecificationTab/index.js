@@ -63,10 +63,6 @@ const SpecificationTab = ({
     dispatch(onGetAllAccessTypes())
   }, [dispatch, listing.listingData, listing.settingsParent.id, listing.settingsParent.subcategory.id])
 
-  useEffect(() => {
-    validateForm(values)
-  }, [validateForm, values])
-
   const _handleSelectChange = e => {
     const { name, value } = e.target
     setFieldValue(name, value)
@@ -181,6 +177,11 @@ const SpecificationTab = ({
     return component
   }
 
+  const _handleChangeTitle = e => {
+    const { name, value } = e.target
+    setFieldValue(name, value.substring(0, 25))
+  }
+
   const _handleSave = async () => {
     await dispatch(onUpdate(listing, values))
     props.history.push('booking')
@@ -205,7 +206,7 @@ const SpecificationTab = ({
             name="title"
             error={errors.title}
             value={values.title}
-            onChange={handleChange}
+            onChange={_handleChangeTitle}
             onBlur={handleBlur}
           />
         </SectionStyled>
