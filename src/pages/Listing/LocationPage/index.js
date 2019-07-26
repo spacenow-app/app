@@ -1,5 +1,4 @@
 import React, { useState } from 'react'
-import { Redirect } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
 import styled from 'styled-components'
 
@@ -47,8 +46,6 @@ const LocationPage = props => {
   const _onNext = () => {
     dispatch(actions.onGetOrCreateLocation(address, props.history))
   }
-
-  // if (isLoading) return <div>Loading...</div>
 
   return (
     <Wrapper>
