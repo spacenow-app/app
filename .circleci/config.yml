@@ -86,6 +86,12 @@ jobs:
             export ACCOUNT_ID=159220020591
             source scripts/assume-role.sh
       - run:
+          name: 'PRINTING AWS CREDENTIALS AFTER ASSUME ROLE'
+          command: |
+            echo ${AWS_ACCESS_KEY_ID}
+            echo ${AWS_SECRET_ACCESS_KEY}
+            echo ${AWS_SESSION_TOKEN}
+      - run:
           name: 'Deploy to S3 DEV'
           command: |
             aws s3 ls
