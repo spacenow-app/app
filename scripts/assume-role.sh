@@ -1,7 +1,5 @@
 #!/bin/bash
 unset AWS_SESSION_TOKEN
-echo AWS_ACCESS_KEY_ID
-echo AWS_SECRET_ACCESS_KEY
 
 temp_role=$(aws sts assume-role \
   --role-arn "arn:aws:iam::$ACCOUNT_ID:role/spacenow-role-api-cicd_role" \
