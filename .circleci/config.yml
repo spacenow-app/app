@@ -65,25 +65,15 @@ jobs:
       - attach_workspace:
           at: ~/repo
       - run:
-          name: 'PRINTING AWS CREDENTIALS'
-          command: |
-            echo ${AWS_ACCESS_KEY_ID}
-            echo ${AWS_SECRET_ACCESS_KEY}
-      - run:
-          name: 'INSTALL PIP'
-          command: |
-            sudo apt-get update && sudo apt-get install -y python-dev
-            sudo curl -O https://bootstrap.pypa.io/get-pip.py
-            sudo python get-pip.py
-      - run:
           name: 'INSTALL AWS CLI'
           command: |
-            sudo pip install awscli --upgrade
+            sudo apt-get install awscli --upgrade
             aws --version
       - run:
           name: 'SETUP ACCOUNT'
           command: |
             export ACCOUNT_ID=159220020591
+            chmod +x scripts/assume-role.sh
             source scripts/assume-role.sh
       - run:
           name: 'PRINTING AWS CREDENTIALS AFTER ASSUME ROLE'
