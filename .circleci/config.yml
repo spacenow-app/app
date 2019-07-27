@@ -65,6 +65,11 @@ jobs:
       - attach_workspace:
           at: ~/repo
       - run:
+          name: 'PRINTING AWS CREDENTIALS'
+          command: |
+            echo ${AWS_ACCESS_KEY_ID}
+            echo ${AWS_SECRET_ACCESS_KEY}
+      - run:
           name: 'INSTALL PIP'
           command: |
             sudo apt-get update && sudo apt-get install -y python-dev
@@ -75,11 +80,6 @@ jobs:
           command: |
             sudo pip install awscli --upgrade
             aws --version
-      - run:
-          name: SETUP ENVIRONMENT VARIABLES
-          command: |
-            echo 'export AWS_ACCESS_KEY_ID="${AWS_ACCESS_KEY_ID}"' >> $BASH_ENV
-            echo 'export AWS_SECRET_ACCESS_KEY="${AWS_SECRET_ACCESS_KEY}"' >> $BASH_ENV
       - run:
           name: 'SETUP ACCOUNT'
           command: |
