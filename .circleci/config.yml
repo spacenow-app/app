@@ -65,9 +65,15 @@ jobs:
       - attach_workspace:
           at: ~/repo
       - run:
+          name: 'INSTALL PIP'
+          command: |
+            sudo apt-get update && sudo apt-get install -y python-dev
+            sudo curl -O https://bootstrap.pypa.io/get-pip.py
+            sudo python get-pip.py
+      - run:
           name: 'INSTALL AWS CLI'
           command: |
-            sudo apt-get install awscli --upgrade
+            sudo pip install awscli --upgrade
             aws --version
       - run:
           name: 'SETUP ACCOUNT'
