@@ -23,9 +23,7 @@ const Image = props => (
         width={props.width}
         height={props.height}
         xmlns="http://www.w3.org/2000/svg"
-        aria-label={`A generic square placeholder image with a white border around it, making it resemble a photograph taken with an old instant camera: ${
-          props.width
-        }x${props.height}`}
+        aria-label={`A generic square placeholder image with a white border around it, making it resemble a photograph taken with an old instant camera: ${props.width}x${props.height}`}
       >
         <rect width="100%" height="100%" fill="#868e96" />
         <text x="50%" y="50%" fill="#dee2e6" dy=".3em">
@@ -46,7 +44,6 @@ Image.defaultProps = {
 
 Image.propTypes = {
   // eslint-disable-next-line react/no-unused-prop-types
-  theme: PropTypes.instanceOf(Object).isRequired,
   handleClick: PropTypes.func,
   src: PropTypes.string,
   alt: PropTypes.string,

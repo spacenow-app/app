@@ -7,6 +7,7 @@ import Card from './Card'
 import Title from './Title'
 import StepButtons from './StepButtons'
 import Input from './Input'
+import Image from './Image'
 import Map from './Map'
 import AutoComplete from './AutoComplete'
 import List from './List'
@@ -41,6 +42,7 @@ export {
   Title,
   StepButtons,
   Input,
+  Image,
   Map,
   AutoComplete,
   List,

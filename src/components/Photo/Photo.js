@@ -2,7 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import styled from 'styled-components'
 import { useDropzone } from 'react-dropzone'
-import { Icon } from 'components';
+import { Icon, Image } from 'components'
 
 const WrapperStyled = styled.div`
   display: grid;
@@ -25,25 +25,31 @@ const StyledDiv = styled.div`
   font-size: 14px;
   border-radius: 10px;
   border: dashed 1px #cbcbcb;
+  overflow: hidden;
 `
 // const FooterButton = styled.div`
 //   display: grid;
 // `
 
-const Photo = ({ onDrop, ...props }) => {
-
-  const { getRootProps, getInputProps, isDragActive } = useDropzone({ onDrop })
+const Photo = ({ onDrop, url, ...props }) => {
+  const { getRootProps, getInputProps, isDragActive } = useDropzone({ onDrop, accept: 'image/jpeg, image/png' })
 
   return (
     <WrapperStyled>
       <ContentStyled>
-        <StyledDiv {...getRootProps({ refKey: 'innerRef' })}>
-          <input {...getInputProps()} />
-          {
-            isDragActive ?
-              <Icon width="40px" fill="#CBCBCB" name="camera" /> :
-              <Icon width="40px" fill="#6ADD92" name="camera" />
-          }
+        <StyledDiv {...getRootProps()}>
+          {url !== null ? (
+            <Image src={url} />
+          ) : (
+            <>
+              <input {...getInputProps()} />
+              {isDragActive ? (
+                <Icon width="40px" fill="#CBCBCB" name="camera" />
+              ) : (
+                <Icon width="40px" fill="#6ADD92" name="camera" />
+              )}
+            </>
+          )}
           {/* {
             isDragAccept ?
               <FooterButton>
@@ -59,7 +65,8 @@ const Photo = ({ onDrop, ...props }) => {
 
 Photo.propTypes = {
   // eslint-disable-next-line react/require-default-props
-  onDrop: PropTypes.func.isRequired
+  onDrop: PropTypes.func.isRequired,
+  url: PropTypes.string
 }
 
 export default Photo

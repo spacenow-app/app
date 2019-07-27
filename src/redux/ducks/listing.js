@@ -22,9 +22,9 @@ export const Types = {
   LISTING_GET_SPACE_SPECIFICATIONS_REQUEST: 'LISTING_GET_SPACE_SPECIFICATIONS_REQUEST',
   LISTING_GET_SPACE_SPECIFICATIONS_SUCCESS: 'LISTING_GET_SPACE_SPECIFICATIONS_SUCCESS',
   LISTING_GET_SPACE_SPECIFICATIONS_FAILURE: 'LISTING_GET_SPACE_SPECIFICATIONS_FAILURE',
-  LISTING_GET_ASSETS_REQUEST: 'LISTING_GET_ASSETS_REQUEST',
-  LISTING_GET_ASSETS_SUCCESS: 'LISTING_GET_ASSETS_SUCCESS',
-  LISTING_GET_ASSETS_FAILURE: 'LISTING_GET_ASSETS_FAILURE',
+  LISTING_GET_PHOTOS_REQUEST: 'LISTING_GET_PHOTOS_REQUEST',
+  LISTING_GET_PHOTOS_SUCCESS: 'LISTING_GET_PHOTOS_SUCCESS',
+  LISTING_GET_PHOTOS_FAILURE: 'LISTING_GET_PHOTOS_FAILURE',
   LISTING_GET_SPACE_HOLIDAYS_REQUEST: 'LISTING_GET_SPACE_HOLIDAYS_REQUEST',
   LISTING_GET_SPACE_HOLIDAYS_SUCCESS: 'LISTING_GET_SPACE_HOLIDAYS_SUCCESS',
   LISTING_GET_SPACE_HOLIDAYS_FAILURE: 'LISTING_GET_SPACE_HOLIDAYS_FAILURE',
@@ -82,8 +82,8 @@ const initialState = {
     isLoading: true,
     error: null
   },
-  assets: {
-    array: [],
+  photos: {
+    array: new Array(6),
     isLoading: true,
     error: null
   }
@@ -271,6 +271,18 @@ const allListingFields = `
       updatedAt
     }
   }
+  photos {
+    id
+		listingId
+		name
+		isCover
+		bucket
+		region
+		key
+		type
+		createdAt
+		updatedAt
+  }
 `
 
 // GraphQL
@@ -326,10 +338,17 @@ const queryGetAllHolidays = gql`
   }
 `
 
-const queryGetAllAssets = gql`
-  query getAllAssets($listingId: Int!) {
-    getAllAssets(listingId: $listingId) {
+const queryGetPhotosByListingId = gql`
+  query getPhotosByListingId($listingId: Int!) {
+    getPhotosByListingId(listingId: $listingId) {
       id
+      listingId
+      name
+      isCover
+      bucket
+      region
+      key
+      type
     }
   }
 `
@@ -595,6 +614,36 @@ export default function reducer(state = initialState, action) {
         }
       }
     }
+    case Types.LISTING_GET_PHOTOS_REQUEST: {
+      return {
+        ...state,
+        photos: {
+          ...state.photos,
+          isLoading: true,
+          error: null
+        }
+      }
+    }
+    case Types.LISTING_GET_PHOTOS_SUCCESS: {
+      return {
+        ...state,
+        photos: {
+          ...state.photos,
+          isLoading: false,
+          array: [...Array(6 - action.payload.length).concat(action.payload)].reverse()
+        }
+      }
+    }
+    case Types.LISTING_GET_PHOTOS_FAILURE: {
+      return {
+        ...state,
+        photos: {
+          ...state.photos,
+          isLoading: false,
+          error: action.payload
+        }
+      }
+    }
     case Types.LISTING_GET_SPACE_HOLIDAYS_REQUEST: {
       return {
         ...state,
@@ -766,16 +815,17 @@ export const onGetAllSpecifications = (listSettingsParentId, listingData) => asy
   }
 }
 
-export const onGetAllAssets = () => async dispatch => {
-  dispatch({ type: Types.LISTING_GET_ASSETS_REQUEST })
+export const onGetPhotosByListingId = listingId => async dispatch => {
+  dispatch({ type: Types.LISTING_GET_PHOTOS_REQUEST })
   try {
     const { data } = await getClientWithAuth(dispatch).query({
-      query: queryGetAllAssets,
+      query: queryGetPhotosByListingId,
+      variables: { listingId },
       fetchPolicy: 'network-only'
     })
-    dispatch({ type: Types.LISTING_GET_ASSETS_SUCCESS, payload: data.getAllAssets })
+    dispatch({ type: Types.LISTING_GET_PHOTOS_SUCCESS, payload: data.getPhotosByListingId })
   } catch (err) {
-    dispatch({ type: Types.LISTING_GET_ASSETS_FAILURE, payload: errToMsg(err) })
+    dispatch({ type: Types.LISTING_GET_PHOTOS_FAILURE, payload: errToMsg(err) })
   }
 }
 

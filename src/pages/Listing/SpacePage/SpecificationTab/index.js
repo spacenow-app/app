@@ -11,6 +11,7 @@ import {
   onGetAllAccessTypes,
   onGetAllAmenities,
   onGetAllSpecifications,
+  onGetPhotosByListingId,
   onUpdate
 } from 'redux/ducks/listing'
 import { openModal, TypesModal } from 'redux/ducks/modal'
@@ -59,6 +60,7 @@ const SpecificationTab = ({
   const { array: arrayRules, isLoading: isLoadingRules } = useSelector(state => state.listing.rules)
   const { array: arrayAccessTypes, isLoading: isLoadingAccessTypes } = useSelector(state => state.listing.accessTypes)
   const { array: arrayAmenities, isLoading: isLoadingAmenities } = useSelector(state => state.listing.amenities)
+  const { array: arrayPhotos, isLoading: isLoadingPhotos } = useSelector(state => state.listing.photos)
   const { object: objectSpecifications, isLoading: isLoadingSpecifications } = useSelector(
     state => state.listing.specifications
   )
@@ -68,15 +70,8 @@ const SpecificationTab = ({
     dispatch(onGetAllAmenities(listing.settingsParent.subcategory.id))
     dispatch(onGetAllRules())
     dispatch(onGetAllAccessTypes())
-  }, [dispatch, listing.listingData, listing.settingsParent.id, listing.settingsParent.subcategory.id])
-
-  // Umount
-  // useEffect(
-  //   () => () => {
-  //     return _handleSave()
-  //   },
-  //   []
-  // )
+    dispatch(onGetPhotosByListingId(listing.id))
+  }, [dispatch, listing.id, listing.listingData, listing.settingsParent.id, listing.settingsParent.subcategory.id])
 
   const _handleSelectChange = e => {
     const { name, value } = e.target
@@ -207,7 +202,7 @@ const SpecificationTab = ({
     props.history.push('booking')
   }
 
-  const _handleOnDrop = useCallback(() => {
+  const _handleOnDrop = useCallback(acceptedFiles => {
     console.log('test')
   }, [])
 
@@ -340,12 +335,15 @@ const SpecificationTab = ({
             subtitle="Photos help guests imagine using your space. You can start with one and add more after you publish."
           />
           <PhotosGroup>
-            <Photo onDrop={_handleOnDrop} />
-            <Photo onDrop={_handleOnDrop} />
-            <Photo onDrop={_handleOnDrop} />
-            <Photo onDrop={_handleOnDrop} />
-            <Photo onDrop={_handleOnDrop} />
-            <Photo onDrop={_handleOnDrop} />
+            {isLoadingPhotos ? (
+              <Loader />
+            ) : (
+              <>
+                {arrayPhotos.map((item, index) => (
+                  <Photo key={index} onDrop={_handleOnDrop} url={item ? item.name : null} />
+                ))}
+              </>
+            )}
           </PhotosGroup>
           <p>
             TIP: Take photos in landscape mode to capture as much of your space as possible. Shoot from corners to add
@@ -376,6 +374,7 @@ const formik = {
         description: listing.listingData.description || '',
         accessType: listing.listingData.accessType || 'false',
         amenities: listing.amenities || [],
+        photos: listing.photos || [],
         rules: listing.rules || []
       }
     }
