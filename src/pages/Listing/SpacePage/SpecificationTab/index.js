@@ -209,6 +209,7 @@ const SpecificationTab = ({
     acceptedFiles => {
       acceptedFiles.map(async file => {
         await dispatch(onUploadPhoto(file, listing.id))
+        await dispatch(onGetPhotosByListingId(listing.id))
       })
     },
     [dispatch, listing.id]
