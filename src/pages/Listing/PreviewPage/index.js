@@ -1,9 +1,24 @@
-import React, { useEffect } from 'react'
+import React, { useState, useEffect } from 'react'
+import { Redirect } from 'react-router-dom'
 import styled from 'styled-components'
 import { useSelector } from 'react-redux'
 import Carousel from 'react-images'
-import { Wrapper, Title, Grid, Cell, TimeTable, Map, Tag, Box, Icon, Highlights, StepButtons } from 'components'
-
+import {
+  Wrapper,
+  Title,
+  Grid,
+  Cell,
+  TimeTable,
+  Map,
+  Tag,
+  Box,
+  Icon,
+  Highlights,
+  StepButtons,
+  Loader,
+  Checkbox
+} from 'components'
+import { capitalize, formatterCurrency, toPlural } from 'utils/strings'
 import GraphCancelattionImage from 'pages/Listing/SpacePage/CancellationTab/graph_cancellation.png'
 
 const ImageStyled = styled.img`
@@ -25,51 +40,50 @@ const images = [
   }
 ]
 
-const timeTable = [
-  {
-    weekday: 1,
-    allday: true,
-    openHour: `${new Date()}`,
-    closeHour: `${new Date()}`
-  },
-  {
-    weekday: 2,
-    allday: false,
-    openHour: `${new Date()}`,
-    closeHour: `${new Date()}`
-  },
-  {
-    weekday: 3,
-    allday: false,
-    openHour: `${new Date()}`,
-    closeHour: `${new Date()}`
-  },
-
-  {
-    weekday: 5,
-    allday: false,
-    openHour: `${new Date()}`,
-    closeHour: `${new Date()}`
-  },
-
-  {
-    weekday: 7,
-    allday: false,
-    openHour: `${new Date()}`,
-    closeHour: `${new Date()}`
-  }
-]
-
 const PreviewPage = ({ match, location, ...props }) => {
   const { object: objectListing } = useSelector(state => state.listing.get)
+  const { array: arrayRules, isLoading: isLoadingRules } = useSelector(state => state.listing.rules)
 
   useEffect(() => {
-    if (objectListing.id !== match.params.id) {
-      console.log('listing -> ', objectListing.id)
-      console.log('path ->', match.params.id)
-      // props.history.push(`/listing/space/${match.params.id}`)
+    console.log('Mount Preview page')
+  })
+
+  useEffect(() => {
+    if (!objectListing || Number(objectListing.id) !== Number(match.params.id)) {
+      props.history.replace(`/listing/space/${match.params.id}`)
     }
-  }, [objectListing.id, match.params.id])
+  })
+
+  const _getAddress = address => {
+    const { address1, city, zipcode, state, country } = address
+    const convertedAddress = `${address1}, ${city}, ${zipcode}, ${state}, ${country}`
+    return convertedAddress.replace(/\0.*$/g, '')
+  }
+
+  const _parseIconName = (name, isSub) => {
+    let prefix = 'category-'
+    if (isSub) prefix = 'sub-category-'
+    return prefix + name.replace(/([A-Z])/g, g => `-${g[0].toLowerCase()}`)
+  }
+
+  const _changeToPlural = (string, number) => {
+    if (string === 'daily') {
+      return toPlural(capitalize('day'), number)
+    }
+    return toPlural(capitalize(string.slice(0, -2)), number)
+  }
+
+  const _getWeekName = days => {
+    const { mon, tue, wed, thu, fri, sat, sun } = days
+    if (mon && tue && wed && thu && fri & !sat && !sun) return 'Weekdays'
+    if (!mon && !tue && !wed && !thu && !fri & sat && sun) return 'Weekends'
+    if (mon && tue && wed && thu && fri & sat && sun) return 'Everyday'
+    return 'Custom'
+  }
+
+  if (!objectListing) {
+    return null
+  }
 
   return (
     <Wrapper>
@@ -100,14 +114,32 @@ const PreviewPage = ({ match, location, ...props }) => {
         <Grid justifyContent="space-between" columnGap="10px" columns={2}>
           <Grid justifyContent="start" columns="160px 160px">
             <Cell>
-              <Tag icon={<Icon name="category-coworking" />}>Category</Tag>
+              <Tag
+                icon={
+                  <Icon
+                    width="24px"
+                    name={_parseIconName(objectListing.settingsParent.category.otherItemName, false)}
+                  />
+                }
+              >
+                {objectListing.settingsParent.category.itemName}
+              </Tag>
             </Cell>
             <Cell>
-              <Tag icon={<Icon name="sub-category-business" />}>Sub Category</Tag>
+              <Tag
+                icon={
+                  <Icon
+                    width="24px"
+                    name={_parseIconName(objectListing.settingsParent.subcategory.otherItemName, true)}
+                  />
+                }
+              >
+                {objectListing.settingsParent.subcategory.itemName}
+              </Tag>
             </Cell>
           </Grid>
           <Cell style={{ justifySelf: 'end' }}>
-            <Tag>Type Booking</Tag>
+            <Tag>{`${capitalize(objectListing.listingData.bookingType)} Booking`}</Tag>
           </Cell>
         </Grid>
       </Box>
@@ -115,20 +147,32 @@ const PreviewPage = ({ match, location, ...props }) => {
         <Cell width={3}>
           <Title
             type="h3"
-            title="Desk 01 - Alexandria Office Headquarters"
-            subtitle="Sydney, Australia"
+            title={objectListing.title}
+            subtitle={_getAddress(objectListing.location)}
             subTitleSize={18}
             noMargin
           />
         </Cell>
         <Cell width={1} center>
-          <Title type="h4" title="$100.00 Daily" noMargin right style={{ marginTop: '5px' }} />
+          <Title
+            type="h4"
+            title={`${formatterCurrency('en-UK', 'AUD').format(objectListing.listingData.basePrice)} ${
+              objectListing.bookingPeriod
+            }`}
+            noMargin
+            right
+            style={{ marginTop: '5px' }}
+          />
         </Cell>
       </Grid>
       <Title type="h4" title="Highlights" />
       <Grid columns={5}>
-        <Highlights title="Minimum term" name="3 days" icon="category-desk" />
-        <Highlights title="Opening Days" name="Weekdays" icon="category-desk" />
+        <Highlights
+          title="Minimum term"
+          name={_changeToPlural(objectListing.bookingPeriod, objectListing.listingData.minTerm)}
+          icon="category-desk"
+        />
+        <Highlights title="Opening Days" name={_getWeekName(objectListing.accessDays)} icon="category-desk" />
         <Highlights title="Capacity" name="1 person" icon="category-desk" />
         <Highlights title="Size" name="120 sqm" icon="category-desk" />
         <Highlights title="Car Space" name="2 Uncovered" icon="category-desk" last />
@@ -137,21 +181,32 @@ const PreviewPage = ({ match, location, ...props }) => {
       <Title type="h4" title="Access Information" />
 
       <Title type="h4" title="Description" />
-      <p>
-        Lorem ipsum dolor sit amet, cons ectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet
-        dolore magna aliquam erat volutpat. Ut wisi enim ad minim veniam, quis nostrud exerci tation ullamcorper
-        suscipit lobortis nisl ut aliquip ex ea commodo consequat. Lorem ipsum dolor sit amet, cons ectetuer adipiscing
-        elit, sed diam nonummy nibh euismod
-      </p>
+      <p>{objectListing.listingData.description}</p>
       <Title type="h4" title="Amenities" subtitle="Lorem ipsum dolor sit amet, consectetur adipiscing elit" />
 
       <Title type="h4" title="Space Rules" subtitle="Lorem ipsum dolor sit amet, consectetur adipiscing elite" />
+      <Box display="grid" gridTemplateColumns="1fr 1fr 1fr" gridRowGap="40px">
+        {isLoadingRules ? (
+          <Loader />
+        ) : (
+          arrayRules.map(item => (
+            <Checkbox
+              disabled
+              key={item.id}
+              label={item.itemName}
+              name="rules"
+              value={item.id}
+              checked={objectListing.rules.some(rule => rule.listSettingsId === item.id)}
+            />
+          ))
+        )}
+      </Box>
 
       <Title type="h4" title="Availability" />
-      <TimeTable data={timeTable} />
+      <TimeTable data={objectListing.accessDays.listingAccessHours} />
 
       <Title type="h4" title="Location" />
-      <Map />
+      <Map position={{ lat: Number(objectListing.location.lat), lng: Number(objectListing.location.lng) }} />
 
       <Grid columns={1}>
         <Cell>
