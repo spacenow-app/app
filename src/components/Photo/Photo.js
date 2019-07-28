@@ -39,7 +39,7 @@ const FooterButton = styled.div`
   z-index: 1;
 `
 
-const Photo = ({ onDrop, onCover, onDelete, url, ...props }) => {
+const Photo = ({ onDrop, onCover, onDelete, url, isCover, ...props }) => {
   const { getRootProps, getInputProps, isDragActive } = useDropzone({ onDrop, accept: 'image/jpeg, image/png' })
 
   return (
@@ -52,7 +52,19 @@ const Photo = ({ onDrop, onCover, onDelete, url, ...props }) => {
               <FooterButton>
                 <Button
                   outline="true"
-                  icon={<Icon width="18px" fill="#6ADD92" name="star-full" style={{ paddingRight: '5px' }} />}
+                  icon={
+                    !isCover ? (
+                      <Icon
+                        width="18px"
+                        stroke="#6ADD92"
+                        fill="#FFFFFF"
+                        name="star-outline"
+                        style={{ paddingRight: '5px' }}
+                      />
+                    ) : (
+                      <Icon width="18px" fill="#6ADD92" name="star-full" style={{ paddingRight: '5px' }} />
+                    )
+                  }
                   style={{ width: 'max-content', height: '40px' }}
                   onClick={onCover}
                 >
@@ -94,7 +106,8 @@ Photo.propTypes = {
   onDrop: PropTypes.func.isRequired,
   onDelete: PropTypes.func,
   onCover: PropTypes.func,
-  url: PropTypes.string
+  url: PropTypes.string,
+  isCover: PropTypes.bool
 }
 
 export default Photo

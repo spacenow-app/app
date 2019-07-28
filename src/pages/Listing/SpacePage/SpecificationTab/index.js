@@ -15,7 +15,7 @@ import {
   onUpdate
 } from 'redux/ducks/listing'
 
-import { onUploadPhoto } from 'redux/ducks/photo'
+import { onUploadPhoto, onSetCoverPhoto, onDeletePhoto } from 'redux/ducks/photo'
 
 import { openModal, TypesModal } from 'redux/ducks/modal'
 
@@ -215,6 +215,16 @@ const SpecificationTab = ({
     [dispatch, listing.id]
   )
 
+  const _handleSetCoverPhoto = photoId => async () => {
+    await dispatch(onSetCoverPhoto(listing.id, photoId))
+    await dispatch(onGetPhotosByListingId(listing.id))
+  }
+
+  const _handleDeletePhoto = photoId => async () => {
+    await dispatch(onDeletePhoto(listing.id, photoId))
+    await dispatch(onGetPhotosByListingId(listing.id))
+  }
+
   const _goBack = () => {
     const options = {
       options: {
@@ -349,7 +359,14 @@ const SpecificationTab = ({
             ) : (
               <>
                 {arrayPhotos.map((item, index) => (
-                  <Photo key={index} onDrop={_handleOnDrop} url={item ? item.name : null} />
+                  <Photo
+                    key={index}
+                    onDrop={_handleOnDrop}
+                    url={item ? item.name : null}
+                    isCover={item ? item.isCover : false}
+                    onCover={_handleSetCoverPhoto(item ? item.id : '')}
+                    onDelete={_handleDeletePhoto(item ? item.id : '')}
+                  />
                 ))}
               </>
             )}
