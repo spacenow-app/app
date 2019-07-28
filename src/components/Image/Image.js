@@ -3,9 +3,9 @@ import PropTypes from 'prop-types'
 import styled from 'styled-components'
 
 const ImageStyled = styled.div`
-  width: ${props => props.width}px;
-  height: ${props => props.height}px;
-  max-height: ${props => props.height}px;
+  width: ${props => props.width};
+  height: ${props => props.height};
+  max-height: ${props => props.height};
   overflow: hidden;
   object-fit: cover;
 
@@ -38,8 +38,8 @@ Image.defaultProps = {
   handleClick: null,
   src: '',
   alt: '...',
-  width: 250,
-  height: 200
+  width: '250px',
+  height: '200px'
 }
 
 Image.propTypes = {
@@ -47,8 +47,8 @@ Image.propTypes = {
   handleClick: PropTypes.func,
   src: PropTypes.string,
   alt: PropTypes.string,
-  width: PropTypes.number,
-  height: PropTypes.number
+  width: PropTypes.string,
+  height: PropTypes.string
 }
 
 export default Image

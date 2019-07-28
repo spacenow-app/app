@@ -14,6 +14,9 @@ import {
   onGetPhotosByListingId,
   onUpdate
 } from 'redux/ducks/listing'
+
+import { onUploadPhoto } from 'redux/ducks/photo'
+
 import { openModal, TypesModal } from 'redux/ducks/modal'
 
 import { Title, Input, Checkbox, Select, TextArea, StepButtons, Loader, Photo, Box } from 'components'
@@ -202,9 +205,14 @@ const SpecificationTab = ({
     props.history.push('booking')
   }
 
-  const _handleOnDrop = useCallback(acceptedFiles => {
-    console.log('test')
-  }, [])
+  const _handleOnDrop = useCallback(
+    acceptedFiles => {
+      acceptedFiles.map(async file => {
+        await dispatch(onUploadPhoto(file, listing.id))
+      })
+    },
+    [dispatch, listing.id]
+  )
 
   const _goBack = () => {
     const options = {

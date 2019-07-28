@@ -2,7 +2,6 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import styled from 'styled-components'
 import { Button as ButtonExternal, Spinner } from 'react-bootstrap'
-import { color } from 'styled-system'
 
 const ButtonStyled = styled(ButtonExternal)`
   &&& {
@@ -10,8 +9,8 @@ const ButtonStyled = styled(ButtonExternal)`
     border-radius: 37px;
     font-family: 'Montserrat-Medium';
     font-size: 14px;
-    width: 180px;
     font-weight: 600;
+    width: 180px;
     background-color: ${props => (props.outline && '#fff') || (props.disabled && '#fff') || '#6adc91'};
     color: ${props => (props.outline && '#172439') || '#fff'};
     border: ${props => (props.outline ? `1px solid #172439` : 'none')};
@@ -45,7 +44,6 @@ const ButtonStyled = styled(ButtonExternal)`
         cursor: not-allowed;
       }
     }
-    ${color}
   }
 `
 
