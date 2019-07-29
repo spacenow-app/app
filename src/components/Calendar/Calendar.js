@@ -82,14 +82,37 @@ const NavBatItem = styled.div`
   display: grid;
   align-content: center
     ${props =>
-      props.left &&
-      css`
+    props.left &&
+    css`
         grid-template-columns: auto 1fr;
+        > button {
+          display: grid;
+          grid-column-start: 1;
+          grid-row-start: 1;
+        }
+        > span {
+          display: grid;
+          grid-column-start: 1;
+          grid-column-end: 3;
+          grid-row-start: 1;
+        }
       `}
     ${props =>
-      props.right &&
-      css`
+    props.right &&
+    css`
         grid-template-columns: 1fr auto;
+        > button {
+          display: grid;
+          grid-column-start: 2;
+          grid-column-end: 3;
+          grid-row-start: 1;
+        }
+        > span {
+          display: grid;
+          grid-column-start: 1;
+          grid-column-end: 3;
+          grid-row-start: 1;
+        }
       `};
 `
 
