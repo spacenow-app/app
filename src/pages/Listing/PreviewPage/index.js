@@ -19,7 +19,7 @@ import {
   Checkbox
 } from 'components'
 
-import { capitalize, formatterCurrency, toPlural } from 'utils/strings'
+import { capitalize, toPlural } from 'utils/strings'
 
 import {
   onGetListingById,
@@ -65,8 +65,8 @@ const PreviewPage = ({ match, location, ...props }) => {
   }, [dispatch, listing])
 
   const _getAddress = address => {
-    const { address1, city, zipcode, state, country } = address
-    const convertedAddress = `${address1}, ${city}, ${zipcode}, ${state}, ${country}`
+    const { address1 = '', city = '', zipcode = '', state = '', country = '' } = address
+    const convertedAddress = `${address1 ? `${address1  }, ` : ''} ${city ? `${city  }, ` : ''} ${zipcode ? `${zipcode  }, ` : ''} ${state ? `${state  }, ` : ''} ${country ? `${country}` : ''}`
     return convertedAddress.replace(/\0.*$/g, '')
   }
 
@@ -264,7 +264,9 @@ const PreviewPage = ({ match, location, ...props }) => {
         <Cell width={2} center>
           <Title
             type="h4"
-            title={`${listing.listingData.currency}$ ${Math.round((listing.listingData.basePrice || 0) * 100) / 100} ${listing.bookingPeriod}`}
+            title={`${listing.listingData.currency}$ ${Math.round((listing.listingData.basePrice || 0) * 100) / 100} ${
+              listing.bookingPeriod
+            }`}
             noMargin
             right
             style={{ marginTop: '5px' }}
