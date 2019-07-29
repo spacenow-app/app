@@ -91,7 +91,8 @@ const initialState = {
     error: null
   },
   publishing: {
-    isLoading: true,
+    isLoading: false,
+    isPublished: false,
     error: null
   }
 }
@@ -752,6 +753,7 @@ export default function reducer(state = initialState, action) {
         ...state,
         publishing: {
           isLoading: true,
+          isPublished: false,
           error: null
         }
       }
@@ -760,7 +762,8 @@ export default function reducer(state = initialState, action) {
       return {
         ...state,
         publishing: {
-          isLoading: false
+          isLoading: false,
+          isPublished: true
         }
       }
     }
@@ -769,6 +772,7 @@ export default function reducer(state = initialState, action) {
         ...state,
         publishing: {
           isLoading: false,
+          isPublished: false,
           error: action.payload
         }
       }
@@ -1010,14 +1014,14 @@ const getValues = (_, values) => {
   }
 }
 
-export const onPublish = (listingId, isOrNot) => async dispatch => {
+export const onPublish = (listingId, history) => async dispatch => {
   dispatch({ type: Types.PUBLISH_LISTING_START })
   try {
     const { data } = await getClientWithAuth(dispatch).mutate({
       mutation: mutationPublish,
-      variables: { listingId, status: isOrNot }
+      variables: { listingId, status: true }
     })
-    dispatch({ type: Types.PUBLISH_LISTING_SUCCESS, payload: data.createOrUpdateListing })
+    dispatch({ type: Types.PUBLISH_LISTING_SUCCESS, payload: data.mutationPublish })
   } catch (err) {
     dispatch({ type: Types.PUBLISH_LISTING_FAILURE, payload: errToMsg(err) })
   }
