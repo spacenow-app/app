@@ -66,7 +66,9 @@ const PreviewPage = ({ match, location, ...props }) => {
 
   const _getAddress = address => {
     const { address1 = '', city = '', zipcode = '', state = '', country = '' } = address
-    const convertedAddress = `${address1 ? `${address1  }, ` : ''} ${city ? `${city  }, ` : ''} ${zipcode ? `${zipcode  }, ` : ''} ${state ? `${state  }, ` : ''} ${country ? `${country}` : ''}`
+    const convertedAddress = `${address1 ? `${address1}, ` : ''} ${city ? `${city}, ` : ''} ${
+      zipcode ? `${zipcode}, ` : ''
+    } ${state ? `${state}, ` : ''} ${country ? `${country}` : ''}`
     return convertedAddress.replace(/\0.*$/g, '')
   }
 
@@ -219,8 +221,8 @@ const PreviewPage = ({ match, location, ...props }) => {
       />
       <Box my="40px">
         <Grid justifyContent="space-between" columnGap="10px" columns={2}>
-          <Grid justifyContent="start" columns="160px 160px">
-            <Cell>
+          <Box display="flex" justifyContent="start">
+            <Box>
               <Tag
                 icon={
                   <Icon
@@ -231,8 +233,8 @@ const PreviewPage = ({ match, location, ...props }) => {
               >
                 {listing.settingsParent.category.itemName}
               </Tag>
-            </Cell>
-            <Cell>
+            </Box>
+            <Box margin="0 10px">
               <Tag
                 icon={
                   <Icon
@@ -243,8 +245,8 @@ const PreviewPage = ({ match, location, ...props }) => {
               >
                 {listing.settingsParent.subcategory.itemName}
               </Tag>
-            </Cell>
-          </Grid>
+            </Box>
+          </Box>
           <Cell style={{ justifySelf: 'end' }}>
             <Tag>
               {listing.listingData.bookingType ? `${capitalize(listing.listingData.bookingType)} Booking` : 'No data'}
