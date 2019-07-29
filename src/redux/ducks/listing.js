@@ -928,8 +928,7 @@ export const onGetAllHolidays = () => async dispatch => {
     const holidaysReduced = data.getAllHolidays.map(i => {
       const date = new Date(i.date)
       const formatted = `${date.getDate()} ${monthNames[date.getMonth()]} ${date.getFullYear()}`
-      const shortDescription =
-        i.description.length >= 2 && `${i.description.split(' ')[0]} ${i.description.split(' ')[1]}`
+      const shortDescription = i.description.length >= 2 && `${i.description.split(' ')[0]} ${i.description.split(' ')[1]}`
       return { ...i, originalDate: date, dateFormatted: formatted, shortDescription }
     })
     dispatch({ type: Types.LISTING_GET_SPACE_HOLIDAYS_SUCCESS, payload: holidaysReduced })
@@ -965,7 +964,6 @@ export const onUpdate = (listing, values) => async dispatch => {
     }
     requestFields = { ...requestFields, ...getValues(listing, values) }
     console.log('onUpdate -> Request Body:', requestFields)
-    console.log('onUpdate -> Request Body on String:', JSON.stringify(requestFields))
     const { data } = await getClientWithAuth(dispatch).mutate({
       mutation: mutationUpdate,
       variables: requestFields
@@ -1003,14 +1001,10 @@ const getValues = (_, values) => {
     maxEntranceHeight: values.maxEntranceHeight || _.listingData.maxEntranceHeight,
     spaceType: values.spaceType || _.listingData.spaceType,
     bookingType: values.bookingType || _.listingData.bookingType,
-    listingAmenities:
-      values.amenities !== undefined && values.amenities.length > 0
-        ? values.amenities.map(o => o.listSettingsId)
-        : undefined,
-    listingAccessDays: values.listingAccessDays || undefined,
+    listingAmenities: values.amenities !== undefined && values.amenities.length > 0 ? values.amenities.map(o => o.listSettingsId) : undefined,
+    listingAccessDays: values.listingAccessDays,
     listingExceptionDates: values.listingExceptionDates || undefined,
-    listingRules:
-      values.rules !== undefined && values.rules.length > 0 ? values.rules.map(o => o.listSettingsId) : undefined
+    listingRules: values.rules !== undefined && values.rules.length > 0 ? values.rules.map(o => o.listSettingsId) : undefined
   }
 }
 
