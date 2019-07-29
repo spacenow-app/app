@@ -3,8 +3,7 @@ import { useDispatch } from 'react-redux'
 import { withFormik } from 'formik'
 import * as Yup from 'yup'
 import numeral from 'numeral'
-import pluralize from 'pluralize'
-import { capitalize } from 'utils/strings'
+import { capitalize, toPlural } from 'utils/strings'
 
 import { onUpdate } from 'redux/ducks/listing'
 
@@ -40,9 +39,9 @@ const BookingTab = ({
 
   const _changeToPlural = (string, number) => {
     if (string === 'daily') {
-      return pluralize(capitalize('day'), number, true)
+      return toPlural(capitalize('day'), number)
     }
-    return pluralize(capitalize(string.slice(0, -2)), number, true)
+    return toPlural(capitalize(string.slice(0, -2)), number)
   }
 
   return (
