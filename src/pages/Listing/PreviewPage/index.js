@@ -110,7 +110,7 @@ const PreviewPage = ({ match, location, ...props }) => {
         return <Highlights key={el.field} title={el.label} name={value} icon="specification-size" last={index === 2} />
       }
       if (el.field === 'meetingRooms') {
-        const value = el.value === 0 ? 'None available’' : `${el.value} available`
+        const value = el.value === 0 ? 'None available' : `${el.value} available`
         return (
           <Highlights
             key={el.field}
@@ -122,8 +122,9 @@ const PreviewPage = ({ match, location, ...props }) => {
         )
       }
       if (el.field === 'isFurnished') {
-        // const value = el.value === 0 ? 'None available’' : `${el.value} available`
-        // return <Highlights title={el.label} name={value} icon="category-desk" last={index === 2} />
+        const value = el.value === 0 ? 'No’' : 'Yes'
+        const icon = el.value === 0 ? 'specification-furnished-no' : 'specification-furnished-yes'
+        return <Highlights key={el.field} title={el.label} name={value} icon={icon} last={index === 2} />
       }
       if (el.field === 'carSpace') {
         // const value = el.value === 0 ? 'None available’' : `${el.value} available`
@@ -279,9 +280,9 @@ const PreviewPage = ({ match, location, ...props }) => {
           <Highlights
             title="Minimum term"
             name={_changeToPlural(listing.bookingPeriod, listing.listingData.minTerm)}
-            icon="specification-capacity"
+            icon="specification-minimum-term"
           />
-          <Highlights title="Opening Days" name={_getWeekName(listing.accessDays)} icon="category-desk" />
+          <Highlights title="Opening Days" name={_getWeekName(listing.accessDays)} icon="specification-opening-days" />
           {objectSpecifications && _renderHighLights(objectSpecifications)}
         </Grid>
       </Box>
@@ -297,13 +298,13 @@ const PreviewPage = ({ match, location, ...props }) => {
           justifyContent="center"
           textAlign="center"
           fontFamily="MontSerrat-SemiBold"
-          fontSize="16px"
+          fontSize="14px"
           color="quartenary"
         >
           {listing.listingData.accessType ? (
             <>
               <Icon
-                style={{ alignSelf: 'center' }}
+                style={{ alignSelf: 'center', justifySelf: 'center' }}
                 width="50px"
                 fill="#6ADC91"
                 name={`access-type-${listing.listingData.accessType
