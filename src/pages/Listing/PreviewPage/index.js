@@ -43,9 +43,7 @@ const PreviewPage = ({ match, location, ...props }) => {
   const { array: arrayPhotos } = useSelector(state => state.listing.photos)
 
   useEffect(() => {
-    if (!listing) {
-      dispatch(onGetListingById(match.params.id))
-    }
+    dispatch(onGetListingById(match.params.id))
   }, [dispatch, match.params.id])
 
   useEffect(() => {
