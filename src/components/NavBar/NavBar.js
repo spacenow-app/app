@@ -25,7 +25,7 @@ function NavBar() {
       <Navbar.Toggle />
       <Navbar.Collapse className="justify-content-end">
         <Nav>
-          <NavDropdown alignRight title={authUser.firstName} id="basic-nav-dropdown">
+          <NavDropdown alignRight title={authUser.profile.firstName} id="basic-nav-dropdown">
             <NavDropdown.Item href={`${config.legacy}/dashboard/profile`}>Profile</NavDropdown.Item>
             <NavDropdown.Divider />
             <NavDropdown.Item href={`${config.legacy}/dashboard`}>Dashboard</NavDropdown.Item>

@@ -21,8 +21,15 @@ export const Types = {
 const initialState = {
   error: null,
   user: {
-    userId: 0,
-    firstName: ''
+    id: null,
+    email: null,
+    emailConfirmed: false,
+    profile: {
+      profileId: null,
+      firstName: null,
+      lastName: null,
+      picture: null
+    }
   },
   isAuthenticated: true,
   isLoading: false
@@ -41,10 +48,7 @@ export default function reducer(state = initialState, action) {
         ...state,
         isAuthenticated: true,
         isLoading: false,
-        user: {
-          userId: userProfileObj.userId,
-          firstName: userProfileObj.firstName
-        }
+        user: userProfileObj
       }
     }
     case Types.AUTH_2019_FAILED:
@@ -121,7 +125,7 @@ const authentication2019Start = () => ({ type: Types.AUTH_2019_START })
 
 const authentication2019Success = userProfileObj => ({
   type: Types.AUTH_2019_SUCCESS,
-  payload: userProfileObj
+  payload: userProfileObj.user
 })
 
 const authentication2019Failed = () => ({ type: Types.AUTH_2019_FAILED })
@@ -137,8 +141,17 @@ export const onTokenValidation = () => async dispatch => {
           mutation tokenValidate($token: String!) {
             tokenValidate(token: $token) {
               status
-              userId
-              firstName
+              user {
+                id
+                email
+                emailConfirmed
+                profile {
+                  profileId
+                  firstName
+                  lastName
+                  picture
+                }
+              }
             }
           }
         `

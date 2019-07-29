@@ -1,7 +1,7 @@
 import React, { cloneElement } from 'react'
 import { ReactComponent as SingleSpace } from './svg/single-space.svg'
 import { ReactComponent as MultipleSpace } from './svg/multiple-space.svg'
-//Category
+// Category
 import { ReactComponent as CategoryCoworking } from './svg/category/category_coworking.svg'
 import { ReactComponent as CategoryDesk } from './svg/category/category_desk.svg'
 import { ReactComponent as CategoryEvents } from './svg/category/category_events.svg'
@@ -10,7 +10,7 @@ import { ReactComponent as CategoryMeetingRoom } from './svg/category/category_m
 import { ReactComponent as CategoryOffice } from './svg/category/category_office.svg'
 import { ReactComponent as CategoryParking } from './svg/category/category_parking.svg'
 import { ReactComponent as CategoryStorage } from './svg/category/category_storage.svg'
-//Sub-Category
+// Sub-Category
 import { ReactComponent as SubCategoryBoardRoom } from './svg/sub-category/sub_category_board_room.svg'
 import { ReactComponent as SubCategoryBusiness } from './svg/sub-category/sub_category_business.svg'
 import { ReactComponent as SubCategoryCafe } from './svg/sub-category/sub_category_cafe.svg'
@@ -42,11 +42,17 @@ import { ReactComponent as SubCategoryVenue } from './svg/sub-category/sub_categ
 import { ReactComponent as SubCategoryWeddingVenue } from './svg/sub-category/sub_category_wedding_venue.svg'
 import { ReactComponent as SubCategoryWineStorage } from './svg/sub-category/sub_category_wine_storage.svg'
 
-//Generic
+// Generic
 import { ReactComponent as Bin } from './svg/generic/bin.svg'
 import { ReactComponent as Camera } from './svg/generic/camera.svg'
 import { ReactComponent as StarFull } from './svg/generic/star-full.svg'
 import { ReactComponent as StarOutline } from './svg/generic/star-outline.svg'
+
+// Access Type
+import { ReactComponent as AccessTypeKeys } from './svg/access-type/access_type_keys.svg'
+import { ReactComponent as AccessTypePerson } from './svg/access-type/access_type_person.svg'
+import { ReactComponent as AccessTypeSmartLock } from './svg/access-type/access_type_smart_lock.svg'
+import { ReactComponent as AccessTypSwipeCard } from './svg/access-type/access_type_swipe_card.svg'
 
 const Icons = {
   'single-space': <SingleSpace />,
@@ -90,10 +96,14 @@ const Icons = {
   'sub-category-venue': <SubCategoryVenue />,
   'sub-category-wedding': <SubCategoryWeddingVenue />,
   'sub-category-wine-storage': <SubCategoryWineStorage />,
-  'bin': <Bin />,
-  'camera': <Camera />,
+  bin: <Bin />,
+  camera: <Camera />,
   'star-full': <StarFull />,
-  'star-outline': <StarOutline />
+  'star-outline': <StarOutline />,
+  'access-type-keys': <AccessTypeKeys />,
+  'access-type-person': <AccessTypePerson />,
+  'access-type-smart-lock': <AccessTypeSmartLock />,
+  'access-type-swipe-card': <AccessTypSwipeCard />
 }
 
 const Icon = props => {

@@ -1,3 +1,4 @@
+/* eslint-disable react/no-array-index-key */
 /* eslint-disable no-console */
 import React, { useEffect, useCallback } from 'react'
 import styled from 'styled-components'
@@ -337,7 +338,7 @@ const SpecificationTab = ({
               <Loader />
             ) : (
               <Select value={values.accessType} name="accessType" onChange={_handleSelectChange}>
-                {!values.accessType && <option value="false">Select type of access</option>}
+                {!values.accessType && <option>Select type of access</option>}
                 {arrayAccessTypes.map(item => (
                   <option key={item.id} value={item.itemName}>
                     {item.itemName}
@@ -360,7 +361,7 @@ const SpecificationTab = ({
               <>
                 {arrayPhotos.map((item, index) => (
                   <Photo
-                    key={index}
+                    key={`photo-${index}`}
                     onDrop={_handleOnDrop}
                     url={item ? item.name : null}
                     isCover={item ? item.isCover : false}
@@ -398,7 +399,7 @@ const formik = {
         maxEntranceHeight: listing.listingData.maxEntranceHeight || 'Not Sure',
         spaceType: listing.listingData.spaceType || 'Covered',
         description: listing.listingData.description || '',
-        accessType: listing.listingData.accessType || 'false',
+        accessType: listing.listingData.accessType || '',
         amenities: listing.amenities || [],
         photos: listing.photos || [],
         rules: listing.rules || []
