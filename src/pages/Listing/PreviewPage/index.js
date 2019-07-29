@@ -251,7 +251,7 @@ const PreviewPage = ({ match, location, ...props }) => {
           </Cell>
         </Grid>
       </Box>
-      <Grid columns={4}>
+      <Grid columns={5}>
         <Cell width={3}>
           <Title
             type="h3"
@@ -261,12 +261,10 @@ const PreviewPage = ({ match, location, ...props }) => {
             noMargin
           />
         </Cell>
-        <Cell width={1} center>
+        <Cell width={2} center>
           <Title
             type="h4"
-            title={`${formatterCurrency('en-UK', 'AUD').format(listing.listingData.basePrice)} ${
-              listing.bookingPeriod
-            }`}
+            title={`${listing.listingData.currency}$ ${Math.round((listing.listingData.basePrice || 0) * 100) / 100} ${listing.bookingPeriod}`}
             noMargin
             right
             style={{ marginTop: '5px' }}
