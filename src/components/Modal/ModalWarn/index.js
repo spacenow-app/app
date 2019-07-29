@@ -1,11 +1,13 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import { Modal } from 'react-bootstrap'
-import { Button } from 'components'
+
+import Button from 'components/Button'
+
 import { useDispatch } from 'react-redux'
 import { closeModal } from 'redux/ducks/modal'
 
-const ModalConfirm = ({ onConfirm, options }) => {
+const ModalWarn = ({ onConfirm, options }) => {
   const dispatch = useDispatch()
 
   const handleConfirm = isConfirmed => {
@@ -24,21 +26,22 @@ const ModalConfirm = ({ onConfirm, options }) => {
       )}
       {options.text && <Modal.Body>{options.text}</Modal.Body>}
       <Modal.Footer>
-        <Button outline="true" onClick={() => handleConfirm(false)}>
-          No
+        <Button outline="true" onClick={() => handleConfirm(options.handlerCallback)}>
+          {options.handlerTitle}
         </Button>
-        <Button onClick={() => handleConfirm(true)}>Yes</Button>
       </Modal.Footer>
     </Modal>
   )
 }
 
-ModalConfirm.propTypes = {
-  onConfirm: PropTypes.func.isRequired,
+ModalWarn.propTypes = {
+  onConfirm: PropTypes.func,
   options: PropTypes.shape({
     title: PropTypes.string,
-    text: PropTypes.string.isRequired
+    handlerTitle: PropTypes.string.isRequired,
+    text: PropTypes.string.isRequired,
+    handlerCallback: PropTypes.bool.isRequired
   }).isRequired
 }
 
-export default ModalConfirm
+export default ModalWarn

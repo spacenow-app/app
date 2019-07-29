@@ -124,21 +124,10 @@ jobs:
             sudo pip install awscli --upgrade
             aws --version
       - run:
-          name: 'PRINTING AWS CREDENTIALS'
-          command: |
-            echo ${AWS_ACCESS_KEY_ID}
-            echo ${AWS_SECRET_ACCESS_KEY}
-      - run:
           name: 'SETUP ACCOUNT'
           command: |
             export ACCOUNT_ID=211853473677
             source scripts/assume-role.sh
-      - run:
-          name: 'PRINTING AWS CREDENTIALS AFTER ASSUME ROLE'
-          command: |
-            echo ${AWS_ACCESS_KEY_ID}
-            echo ${AWS_SECRET_ACCESS_KEY}
-            echo ${AWS_SESSION_TOKEN}
       - run:
           name: 'Deploy to S3 QA'
           command: |
