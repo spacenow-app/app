@@ -197,88 +197,108 @@ const PreviewPage = ({ match, location, ...props }) => {
           />
         </Cell>
       </Grid>
-      <Title type="h4" title="Highlights" />
-      <Grid columns={5}>
-        <Highlights
-          title="Minimum term"
-          name={_changeToPlural(listing.bookingPeriod, listing.listingData.minTerm)}
-          icon="category-desk"
-        />
-        <Highlights title="Opening Days" name={_getWeekName(listing.accessDays)} icon="category-desk" />
-        <Highlights title="Capacity" name="1 person" icon="category-desk" />
-        <Highlights title="Size" name="120 sqm" icon="category-desk" />
-        <Highlights title="Car Space" name="2 Uncovered" icon="category-desk" last />
-      </Grid>
-
-      <Title type="h4" title="Access Information" />
-      <Box
-        display="grid"
-        border="1px solid #EBEBEB"
-        borderRadius="10px"
-        width="110px"
-        height="130px"
-        justifyContent="center"
-        textAlign="center"
-        fontFamily="MontSerrat-SemiBold"
-        fontSize="16px"
-      >
-        {listing.listingData.accessType ? (
-          <>
-            <Icon
-              style={{ alignSelf: 'center' }}
-              width="50px"
-              fill="#6ADC91"
-              name={`access-type-${listing.listingData.accessType
-                .toLowerCase()
-                .split(' ')
-                .join('-')}`}
-            />
-            {listing.listingData.accessType}
-          </>
-        ) : (
-          'No Data'
-        )}
+      <Box my="100px">
+        <Title type="h4" title="Highlights" />
+        <Grid columns={5}>
+          <Highlights
+            title="Minimum term"
+            name={_changeToPlural(listing.bookingPeriod, listing.listingData.minTerm)}
+            icon="category-desk"
+          />
+          <Highlights title="Opening Days" name={_getWeekName(listing.accessDays)} icon="category-desk" />
+          <Highlights title="Capacity" name="1 person" icon="category-desk" />
+          <Highlights title="Size" name="120 sqm" icon="category-desk" />
+          <Highlights title="Car Space" name="2 Uncovered" icon="category-desk" last />
+        </Grid>
       </Box>
 
-      <Title type="h4" title="Description" />
-      <p>{listing.listingData.description}</p>
-      <Title type="h4" title="Amenities" />
-      <Box display="grid" gridTemplateColumns="1fr 1fr 1fr" gridRowGap="40px">
-        {listing.amenities.map(item => {
-          return (
-            <Box display="grid" gridTemplateColumns="auto 1fr" gridColumnGap="20px">
-              <Box width="54px" height="54px" borderRadius="100%" bg="primary">
-                <Icon name="category-desk" width="70%" height="100%" style={{ display: 'block', margin: 'auto' }} />
+      <Box my="100px">
+        <Title type="h4" title="Access Information" />
+        <Box
+          display="grid"
+          border="1px solid #EBEBEB"
+          borderRadius="10px"
+          width="110px"
+          height="130px"
+          justifyContent="center"
+          textAlign="center"
+          fontFamily="MontSerrat-SemiBold"
+          fontSize="16px"
+        >
+          {listing.listingData.accessType ? (
+            <>
+              <Icon
+                style={{ alignSelf: 'center' }}
+                width="50px"
+                fill="#6ADC91"
+                name={`access-type-${listing.listingData.accessType
+                  .toLowerCase()
+                  .split(' ')
+                  .join('-')}`}
+              />
+              {listing.listingData.accessType}
+            </>
+          ) : (
+            'No Data'
+          )}
+        </Box>
+      </Box>
+
+      <Box my="100px">
+        <Title type="h4" title="Description" />
+        <p>{listing.listingData.description}</p>
+      </Box>
+
+      <Box my="100px">
+        <Title type="h4" title="Amenities" />
+        <Box display="grid" gridTemplateColumns="1fr 1fr 1fr" gridRowGap="40px">
+          {listing.amenities.map(item => {
+            return (
+              <Box key={item.id} display="grid" gridTemplateColumns="auto 1fr" gridColumnGap="20px">
+                <Box width="54px" height="54px" borderRadius="100%" bg="primary">
+                  <Icon
+                    name={`amenitie-${item.settingsData.otherItemName}`}
+                    width="70%"
+                    height="100%"
+                    style={{ display: 'block', margin: 'auto' }}
+                  />
+                </Box>
+                <span style={{ alignSelf: 'center' }}>{item.settingsData.itemName}</span>
               </Box>
-              <span style={{ alignSelf: 'center' }}>{item.settingsData.itemName}</span>
-            </Box>
-          )
-        })}
+            )
+          })}
+        </Box>
       </Box>
 
-      <Title type="h4" title="Space Rules" />
-      <Box display="grid" gridTemplateColumns="1fr 1fr 1fr" gridRowGap="20px">
-        {isLoadingRules ? (
-          <Loader />
-        ) : (
-          arrayRules.map(item => (
-            <Checkbox
-              disabled
-              key={item.id}
-              label={item.itemName}
-              name="rules"
-              value={item.id}
-              checked={listing.rules.some(rule => rule.listSettingsId === item.id)}
-            />
-          ))
-        )}
+      <Box my="100px">
+        <Title type="h4" title="Space Rules" />
+        <Box display="grid" gridTemplateColumns="1fr 1fr 1fr" gridRowGap="20px">
+          {isLoadingRules ? (
+            <Loader />
+          ) : (
+            arrayRules.map(item => (
+              <Checkbox
+                disabled
+                key={item.id}
+                label={item.itemName}
+                name="rules"
+                value={item.id}
+                checked={listing.rules.some(rule => rule.listSettingsId === item.id)}
+              />
+            ))
+          )}
+        </Box>
       </Box>
 
-      <Title type="h4" title="Availability" />
-      <TimeTable data={listing.accessDays.listingAccessHours} />
+      <Box my="100px">
+        <Title type="h4" title="Availability" />
+        <TimeTable data={listing.accessDays.listingAccessHours} />
+      </Box>
 
-      <Title type="h4" title="Location" />
-      <Map position={{ lat: Number(listing.location.lat), lng: Number(listing.location.lng) }} />
+      <Box my="100px">
+        <Title type="h4" title="Location" />
+        <Map position={{ lat: Number(listing.location.lat), lng: Number(listing.location.lng) }} />
+      </Box>
 
       <Grid columns={1}>
         <Cell>
@@ -301,6 +321,7 @@ const PreviewPage = ({ match, location, ...props }) => {
           </Grid>
         </Cell>
       </Grid>
+
       <StepButtons
         prev={{ onClick: () => props.history.push(`/listing/space/${match.params.id}`) }}
         next={{ onClick: () => {}, title: 'Publish' }}
