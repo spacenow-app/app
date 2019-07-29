@@ -2,7 +2,6 @@ import React, { useEffect } from 'react'
 import styled from 'styled-components'
 import { useSelector, useDispatch } from 'react-redux'
 import Carousel from 'react-images'
-import { Redirect } from 'react-router-dom'
 
 import {
   Wrapper,
