@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react'
 import styled from 'styled-components'
-import { useSelector } from 'react-redux'
+import { useSelector, useDispatch } from 'react-redux'
 import Carousel from 'react-images'
 import {
   Wrapper,
@@ -17,7 +17,18 @@ import {
   Loader,
   Checkbox
 } from 'components'
+
 import { capitalize, formatterCurrency, toPlural } from 'utils/strings'
+
+import {
+  onGetListingById,
+  onGetAllRules,
+  onGetAllAccessTypes,
+  onGetAllAmenities,
+  onGetAllSpecifications,
+  onGetPhotosByListingId
+} from 'redux/ducks/listing'
+
 import GraphCancelattionImage from 'pages/Listing/SpacePage/CancellationTab/graph_cancellation.png'
 import NoPreviewBackgroundImage from './no-img-preview.jpg'
 
@@ -26,19 +37,25 @@ const ImageStyled = styled.img`
 `
 
 const PreviewPage = ({ match, location, ...props }) => {
-  const { object: objectListing } = useSelector(state => state.listing.get)
+  const dispatch = useDispatch()
+
+  const { object: listing, isLoading: isListingLoading } = useSelector(state => state.listing.get)
   const { array: arrayRules, isLoading: isLoadingRules } = useSelector(state => state.listing.rules)
   const { array: arrayPhotos } = useSelector(state => state.listing.photos)
 
   useEffect(() => {
-    console.log('Mount Preview page')
-  })
+    dispatch(onGetListingById(match.params.id))
+  }, [dispatch, match.params.id])
 
   useEffect(() => {
-    if (!objectListing || Number(objectListing.id) !== Number(match.params.id)) {
-      props.history.replace(`/listing/space/${match.params.id}`)
+    if (listing) {
+      dispatch(onGetAllSpecifications(listing.settingsParent.id, listing.listingData))
+      dispatch(onGetAllAmenities(listing.settingsParent.subcategory.id))
+      dispatch(onGetAllRules())
+      dispatch(onGetAllAccessTypes())
+      dispatch(onGetPhotosByListingId(listing.id))
     }
-  })
+  }, [dispatch, listing])
 
   const _getAddress = address => {
     const { address1, city, zipcode, state, country } = address
@@ -71,8 +88,8 @@ const PreviewPage = ({ match, location, ...props }) => {
     return 'Custom'
   }
 
-  if (!objectListing) {
-    return null
+  if (isListingLoading) {
+    return <Loader text="Loading listing preview" />
   }
 
   return (
@@ -133,11 +150,11 @@ const PreviewPage = ({ match, location, ...props }) => {
                 icon={
                   <Icon
                     width="24px"
-                    name={_parseCategoryIconName(objectListing.settingsParent.category.otherItemName, false)}
+                    name={_parseCategoryIconName(listing.settingsParent.category.otherItemName, false)}
                   />
                 }
               >
-                {objectListing.settingsParent.category.itemName}
+                {listing.settingsParent.category.itemName}
               </Tag>
             </Cell>
             <Cell>
@@ -145,19 +162,17 @@ const PreviewPage = ({ match, location, ...props }) => {
                 icon={
                   <Icon
                     width="24px"
-                    name={_parseCategoryIconName(objectListing.settingsParent.subcategory.otherItemName, true)}
+                    name={_parseCategoryIconName(listing.settingsParent.subcategory.otherItemName, true)}
                   />
                 }
               >
-                {objectListing.settingsParent.subcategory.itemName}
+                {listing.settingsParent.subcategory.itemName}
               </Tag>
             </Cell>
           </Grid>
           <Cell style={{ justifySelf: 'end' }}>
             <Tag>
-              {objectListing.listingData.bookingType
-                ? `${capitalize(objectListing.listingData.bookingType)} Booking`
-                : 'No data'}
+              {listing.listingData.bookingType ? `${capitalize(listing.listingData.bookingType)} Booking` : 'No data'}
             </Tag>
           </Cell>
         </Grid>
@@ -166,8 +181,8 @@ const PreviewPage = ({ match, location, ...props }) => {
         <Cell width={3}>
           <Title
             type="h3"
-            title={objectListing.title ? objectListing.title : 'No Data'}
-            subtitle={_getAddress(objectListing.location)}
+            title={listing.title ? listing.title : 'No Data'}
+            subtitle={_getAddress(listing.location)}
             subTitleSize={18}
             noMargin
           />
@@ -175,8 +190,8 @@ const PreviewPage = ({ match, location, ...props }) => {
         <Cell width={1} center>
           <Title
             type="h4"
-            title={`${formatterCurrency('en-UK', 'AUD').format(objectListing.listingData.basePrice)} ${
-              objectListing.bookingPeriod
+            title={`${formatterCurrency('en-UK', 'AUD').format(listing.listingData.basePrice)} ${
+              listing.bookingPeriod
             }`}
             noMargin
             right
@@ -188,10 +203,10 @@ const PreviewPage = ({ match, location, ...props }) => {
       <Grid columns={5}>
         <Highlights
           title="Minimum term"
-          name={_changeToPlural(objectListing.bookingPeriod, objectListing.listingData.minTerm)}
+          name={_changeToPlural(listing.bookingPeriod, listing.listingData.minTerm)}
           icon="category-desk"
         />
-        <Highlights title="Opening Days" name={_getWeekName(objectListing.accessDays)} icon="category-desk" />
+        <Highlights title="Opening Days" name={_getWeekName(listing.accessDays)} icon="category-desk" />
         <Highlights title="Capacity" name="1 person" icon="category-desk" />
         <Highlights title="Size" name="120 sqm" icon="category-desk" />
         <Highlights title="Car Space" name="2 Uncovered" icon="category-desk" last />
@@ -209,18 +224,18 @@ const PreviewPage = ({ match, location, ...props }) => {
         fontFamily="MontSerrat-SemiBold"
         fontSize="16px"
       >
-        {objectListing.listingData.accessType ? (
+        {listing.listingData.accessType ? (
           <>
             <Icon
               style={{ alignSelf: 'center' }}
               width="50px"
               fill="#6ADC91"
-              name={`access-type-${objectListing.listingData.accessType
+              name={`access-type-${listing.listingData.accessType
                 .toLowerCase()
                 .split(' ')
                 .join('-')}`}
             />
-            {objectListing.listingData.accessType}
+            {listing.listingData.accessType}
           </>
         ) : (
           'No Data'
@@ -228,10 +243,10 @@ const PreviewPage = ({ match, location, ...props }) => {
       </Box>
 
       <Title type="h4" title="Description" />
-      <p>{objectListing.listingData.description}</p>
+      <p>{listing.listingData.description}</p>
       <Title type="h4" title="Amenities" />
       <Box display="grid" gridTemplateColumns="1fr 1fr 1fr" gridRowGap="40px">
-        {objectListing.amenities.map(item => {
+        {listing.amenities.map(item => {
           return <span>{item.settingsData.itemName}</span>
         })}
       </Box>
@@ -248,17 +263,17 @@ const PreviewPage = ({ match, location, ...props }) => {
               label={item.itemName}
               name="rules"
               value={item.id}
-              checked={objectListing.rules.some(rule => rule.listSettingsId === item.id)}
+              checked={listing.rules.some(rule => rule.listSettingsId === item.id)}
             />
           ))
         )}
       </Box>
 
       <Title type="h4" title="Availability" />
-      <TimeTable data={objectListing.accessDays.listingAccessHours} />
+      <TimeTable data={listing.accessDays.listingAccessHours} />
 
       <Title type="h4" title="Location" />
-      <Map position={{ lat: Number(objectListing.location.lat), lng: Number(objectListing.location.lng) }} />
+      <Map position={{ lat: Number(listing.location.lat), lng: Number(listing.location.lng) }} />
 
       <Grid columns={1}>
         <Cell>
