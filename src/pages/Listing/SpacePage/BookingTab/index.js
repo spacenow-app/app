@@ -258,7 +258,7 @@ const formik = {
         bookingPeriod: listing.bookingPeriod || bookingPeriodDefault,
         currency: listing.currency || 'AUD',
         basePrice: listing.listingData.basePrice || 0,
-        minTerm: listing.listingData.minTerm || 0,
+        minTerm: listing.listingData.minTerm || 1,
         bookingType: listing.listingData.bookingType || 'instant',
         isAbsorvedFee: listing.listingData.isAbsorvedFee || false
       }
