@@ -44,7 +44,9 @@ const PreviewPage = ({ match, location, ...props }) => {
   const { array: arrayPhotos } = useSelector(state => state.listing.photos)
 
   useEffect(() => {
-    dispatch(onGetListingById(match.params.id))
+    if (!listing) {
+      dispatch(onGetListingById(match.params.id))
+    }
   }, [dispatch, match.params.id])
 
   useEffect(() => {
@@ -52,7 +54,6 @@ const PreviewPage = ({ match, location, ...props }) => {
       dispatch(onGetAllSpecifications(listing.settingsParent.id, listing.listingData))
       dispatch(onGetAllAmenities(listing.settingsParent.subcategory.id))
       dispatch(onGetAllRules())
-      dispatch(onGetAllAccessTypes())
       dispatch(onGetPhotosByListingId(listing.id))
     }
   }, [dispatch, listing])
