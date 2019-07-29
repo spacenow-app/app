@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react'
 import PropTypes from 'prop-types'
 import { Switch, Route, Redirect } from 'react-router-dom'
-import { Wrapper, Tab, TabItem, Loader, Tag, Icon, Grid, Cell, Box } from 'components'
+import { Wrapper, Tab, TabItem, Loader, Tag, Icon, Box } from 'components'
 import { onGetListingById } from 'redux/ducks/listing'
 import { useDispatch, useSelector } from 'react-redux'
 import CancellationTab from './CancellationTab'
