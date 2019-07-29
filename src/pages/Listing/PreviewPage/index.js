@@ -30,6 +30,8 @@ import {
   onPublish
 } from 'redux/ducks/listing'
 
+import { openModal, TypesModal } from 'redux/ducks/modal'
+
 import { config } from 'contants'
 
 import GraphCancelattionImage from 'pages/Listing/SpacePage/CancellationTab/graph_cancellation.png'
@@ -46,7 +48,7 @@ const PreviewPage = ({ match, location, ...props }) => {
   const { array: arrayRules, isLoading: isLoadingRules } = useSelector(state => state.listing.rules)
   const { array: arrayPhotos } = useSelector(state => state.listing.photos)
   const { isLoading: isPublishLoading, isPublished } = useSelector(state => state.listing.publishing)
-  // const { emailConfirmed } = useSelector(state => state.auth.user)
+  const { isEmailConfirmed } = useSelector(state => state.auth.user.verification)
 
   useEffect(() => {
     dispatch(onGetListingById(match.params.id))
@@ -93,7 +95,23 @@ const PreviewPage = ({ match, location, ...props }) => {
   }
 
   const _handlerPublish = () => {
-    dispatch(onPublish(listing.id))
+    if (isEmailConfirmed) {
+      dispatch(onPublish(listing.id))
+    } else {
+      dispatch(
+        openModal(TypesModal.MODAL_TYPE_WARN, {
+          options: {
+            title: '',
+            text: 'Before continuing, verify your email address.',
+            handlerCallback: true,
+            handlerTitle: 'Profile'
+          },
+          onConfirm: () => {
+            window.location.href = `${config.legacy}/dashboard/profile`
+          }
+        })
+      )
+    }
   }
 
   if (isListingLoading || isPublishLoading) {

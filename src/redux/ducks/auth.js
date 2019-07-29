@@ -23,12 +23,14 @@ const initialState = {
   user: {
     id: null,
     email: null,
-    emailConfirmed: false,
     profile: {
       profileId: null,
       firstName: null,
       lastName: null,
       picture: null
+    },
+    verification: {
+      isEmailVerification: false
     }
   },
   isAuthenticated: true,
@@ -144,12 +146,15 @@ export const onTokenValidation = () => async dispatch => {
               user {
                 id
                 email
-                emailConfirmed
                 profile {
                   profileId
                   firstName
                   lastName
                   picture
+                }
+                verification {
+                  id
+                  isEmailConfirmed
                 }
               }
             }
