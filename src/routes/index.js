@@ -1,7 +1,7 @@
 import React, { Suspense, lazy, useEffect } from 'react'
 import { BrowserRouter, Switch, Route, Redirect } from 'react-router-dom'
 import { useSelector, useDispatch } from 'react-redux'
-import { NavBar, Loader, Modal } from 'components'
+import { NavBar, Modal, Loader } from 'components'
 
 import { onTokenValidation, onIsTokenExists } from 'redux/ducks/auth'
 import PrivateRoute from './PrivateRoute'
