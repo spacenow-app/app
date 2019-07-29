@@ -41,6 +41,7 @@ const PreviewPage = ({ match, location, ...props }) => {
   const { object: listing, isLoading: isListingLoading } = useSelector(state => state.listing.get)
   const { array: arrayRules, isLoading: isLoadingRules } = useSelector(state => state.listing.rules)
   const { array: arrayPhotos } = useSelector(state => state.listing.photos)
+  const { object: objectSpecifications } = useSelector(state => state.listing.specifications)
 
   useEffect(() => {
     dispatch(onGetListingById(match.params.id))
@@ -84,6 +85,48 @@ const PreviewPage = ({ match, location, ...props }) => {
     if (mon && tue && wed && thu && fri & sat && sun) return 'Everyday'
     if (!mon && !tue && !wed && !thu && !fri & !sat && !sun) return 'No Data'
     return 'Custom'
+  }
+
+  const _renderHighLights = obj => {
+    const array = Object.keys(obj).map(i => obj[i])
+
+    return array.slice(0, 3).map((el, index) => {
+      if (el.field === 'capacity') {
+        const value = el.value === 0 ? 'Not mentioned' : `${toPlural('Person', el.value)}`
+        return (
+          <Highlights key={el.field} title={el.label} name={value} icon="specification-capacity" last={index === 2} />
+        )
+      }
+      if (el.field === 'size') {
+        const value = el.value === 0 ? 'Not mentioned' : `${el.value} sqm`
+        return <Highlights key={el.field} title={el.label} name={value} icon="specification-size" last={index === 2} />
+      }
+      if (el.field === 'meetingRooms') {
+        const value = el.value === 0 ? 'None available’' : `${el.value} available`
+        return (
+          <Highlights
+            key={el.field}
+            title={el.label}
+            name={value}
+            icon="specification-meetingroom-quantity"
+            last={index === 2}
+          />
+        )
+      }
+      if (el.field === 'isFurnished') {
+        // const value = el.value === 0 ? 'None available’' : `${el.value} available`
+        // return <Highlights title={el.label} name={value} icon="category-desk" last={index === 2} />
+      }
+      if (el.field === 'carSpace') {
+        // const value = el.value === 0 ? 'None available’' : `${el.value} available`
+        // return <Highlights title={el.label} name={value} icon="category-desk" last={index === 2} />
+      }
+      if (el.field === 'isFurnished') {
+        // const value = el.value === 0 ? 'None available’' : `${el.value} available`
+        // return <Highlights title={el.label} name={value} icon="category-desk" last={index === 2} />
+      }
+      return <Highlights key={el.field} title={el.label} name={el.value} icon="category-desk" last={index === 2} />
+    })
   }
 
   if (isListingLoading) {
@@ -203,12 +246,10 @@ const PreviewPage = ({ match, location, ...props }) => {
           <Highlights
             title="Minimum term"
             name={_changeToPlural(listing.bookingPeriod, listing.listingData.minTerm)}
-            icon="category-desk"
+            icon="specification-capacity"
           />
           <Highlights title="Opening Days" name={_getWeekName(listing.accessDays)} icon="category-desk" />
-          <Highlights title="Capacity" name="1 person" icon="category-desk" />
-          <Highlights title="Size" name="120 sqm" icon="category-desk" />
-          <Highlights title="Car Space" name="2 Uncovered" icon="category-desk" last />
+          {objectSpecifications && _renderHighLights(objectSpecifications)}
         </Grid>
       </Box>
 
