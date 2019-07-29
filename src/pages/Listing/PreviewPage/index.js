@@ -23,7 +23,6 @@ import { capitalize, formatterCurrency, toPlural } from 'utils/strings'
 import {
   onGetListingById,
   onGetAllRules,
-  onGetAllAccessTypes,
   onGetAllAmenities,
   onGetAllSpecifications,
   onGetPhotosByListingId
