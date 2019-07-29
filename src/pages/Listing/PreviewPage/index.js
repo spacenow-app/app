@@ -244,7 +244,7 @@ const PreviewPage = ({ match, location, ...props }) => {
       <p>{listing.listingData.description}</p>
       <Title type="h4" title="Amenities" />
       <Box display="grid" gridTemplateColumns="1fr 1fr 1fr" gridRowGap="40px">
-        {objectListing.amenities.map(item => {
+        {listing.amenities.map(item => {
           return (
             <Box display="grid" gridTemplateColumns="auto 1fr" gridColumnGap="20px">
               <Box width="54px" height="54px" borderRadius="100%" bg="primary">
