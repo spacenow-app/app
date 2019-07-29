@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react'
-import { Redirect } from 'react-router-dom'
 import styled from 'styled-components'
 import { useSelector } from 'react-redux'
 import Carousel from 'react-images'
@@ -20,29 +19,16 @@ import {
 } from 'components'
 import { capitalize, formatterCurrency, toPlural } from 'utils/strings'
 import GraphCancelattionImage from 'pages/Listing/SpacePage/CancellationTab/graph_cancellation.png'
+import NoPreviewBackgroundImage from './no-img-preview.jpg'
 
 const ImageStyled = styled.img`
   width: 100%;
 `
 
-const images = [
-  {
-    source:
-      'https://images.unsplash.com/photo-1558981420-87aa9dad1c89?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=2550&q=80'
-  },
-  {
-    source:
-      'https://images.unsplash.com/photo-1563387852576-964bc31b73af?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=2582&q=80'
-  },
-  {
-    source:
-      'https://images.unsplash.com/photo-1563387920443-6f3171e4793b?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=2550&q=80'
-  }
-]
-
 const PreviewPage = ({ match, location, ...props }) => {
   const { object: objectListing } = useSelector(state => state.listing.get)
   const { array: arrayRules, isLoading: isLoadingRules } = useSelector(state => state.listing.rules)
+  const { array: arrayPhotos } = useSelector(state => state.listing.photos)
 
   useEffect(() => {
     console.log('Mount Preview page')
@@ -60,13 +46,16 @@ const PreviewPage = ({ match, location, ...props }) => {
     return convertedAddress.replace(/\0.*$/g, '')
   }
 
-  const _parseIconName = (name, isSub) => {
+  const _parseCategoryIconName = (name, isSub) => {
     let prefix = 'category-'
     if (isSub) prefix = 'sub-category-'
     return prefix + name.replace(/([A-Z])/g, g => `-${g[0].toLowerCase()}`)
   }
 
   const _changeToPlural = (string, number) => {
+    if (!string) {
+      return 'No Data'
+    }
     if (string === 'daily') {
       return toPlural(capitalize('day'), number)
     }
@@ -78,6 +67,7 @@ const PreviewPage = ({ match, location, ...props }) => {
     if (mon && tue && wed && thu && fri & !sat && !sun) return 'Weekdays'
     if (!mon && !tue && !wed && !thu && !fri & sat && sun) return 'Weekends'
     if (mon && tue && wed && thu && fri & sat && sun) return 'Everyday'
+    if (!mon && !tue && !wed && !thu && !fri & !sat && !sun) return 'No Data'
     return 'Custom'
   }
 
@@ -89,7 +79,15 @@ const PreviewPage = ({ match, location, ...props }) => {
     <Wrapper>
       <Title type="h2" title="Just one more thing, review your space!" />
       <Carousel
-        views={images}
+        views={
+          arrayPhotos.filter(el => el !== undefined).length > 0
+            ? arrayPhotos
+                .filter(el => el !== undefined)
+                .map(el => ({
+                  source: el.name
+                }))
+            : [{ source: NoPreviewBackgroundImage }]
+        }
         currentIndex={0}
         styles={{
           container: base => ({
@@ -101,8 +99,25 @@ const PreviewPage = ({ match, location, ...props }) => {
             height: 500,
             width: '100%',
             borderRadius: '15px',
+            border: '1px solid #E2E2E2',
             '& > img': {
-              borderRadius: '15px'
+              borderRadius: '15px',
+              width: '100%',
+              height: '100%'
+            }
+          }),
+          navigationPrev: base => ({
+            ...base,
+            background: '#fff',
+            '& > svg': {
+              fill: '#6DDE94'
+            }
+          }),
+          navigationNext: base => ({
+            ...base,
+            background: '#fff',
+            '& > svg': {
+              fill: '#6DDE94'
             }
           })
         }}
@@ -118,7 +133,7 @@ const PreviewPage = ({ match, location, ...props }) => {
                 icon={
                   <Icon
                     width="24px"
-                    name={_parseIconName(objectListing.settingsParent.category.otherItemName, false)}
+                    name={_parseCategoryIconName(objectListing.settingsParent.category.otherItemName, false)}
                   />
                 }
               >
@@ -130,7 +145,7 @@ const PreviewPage = ({ match, location, ...props }) => {
                 icon={
                   <Icon
                     width="24px"
-                    name={_parseIconName(objectListing.settingsParent.subcategory.otherItemName, true)}
+                    name={_parseCategoryIconName(objectListing.settingsParent.subcategory.otherItemName, true)}
                   />
                 }
               >
@@ -139,7 +154,11 @@ const PreviewPage = ({ match, location, ...props }) => {
             </Cell>
           </Grid>
           <Cell style={{ justifySelf: 'end' }}>
-            <Tag>{`${capitalize(objectListing.listingData.bookingType)} Booking`}</Tag>
+            <Tag>
+              {objectListing.listingData.bookingType
+                ? `${capitalize(objectListing.listingData.bookingType)} Booking`
+                : 'No data'}
+            </Tag>
           </Cell>
         </Grid>
       </Box>
@@ -147,7 +166,7 @@ const PreviewPage = ({ match, location, ...props }) => {
         <Cell width={3}>
           <Title
             type="h3"
-            title={objectListing.title}
+            title={objectListing.title ? objectListing.title : 'No Data'}
             subtitle={_getAddress(objectListing.location)}
             subTitleSize={18}
             noMargin
@@ -179,13 +198,46 @@ const PreviewPage = ({ match, location, ...props }) => {
       </Grid>
 
       <Title type="h4" title="Access Information" />
+      <Box
+        display="grid"
+        border="1px solid #EBEBEB"
+        borderRadius="10px"
+        width="110px"
+        height="130px"
+        justifyContent="center"
+        textAlign="center"
+        fontFamily="MontSerrat-SemiBold"
+        fontSize="16px"
+      >
+        {objectListing.listingData.accessType ? (
+          <>
+            <Icon
+              style={{ alignSelf: 'center' }}
+              width="50px"
+              fill="#6ADC91"
+              name={`access-type-${objectListing.listingData.accessType
+                .toLowerCase()
+                .split(' ')
+                .join('-')}`}
+            />
+            {objectListing.listingData.accessType}
+          </>
+        ) : (
+          'No Data'
+        )}
+      </Box>
 
       <Title type="h4" title="Description" />
       <p>{objectListing.listingData.description}</p>
-      <Title type="h4" title="Amenities" subtitle="Lorem ipsum dolor sit amet, consectetur adipiscing elit" />
-
-      <Title type="h4" title="Space Rules" subtitle="Lorem ipsum dolor sit amet, consectetur adipiscing elite" />
+      <Title type="h4" title="Amenities" />
       <Box display="grid" gridTemplateColumns="1fr 1fr 1fr" gridRowGap="40px">
+        {objectListing.amenities.map(item => {
+          return <span>{item.settingsData.itemName}</span>
+        })}
+      </Box>
+
+      <Title type="h4" title="Space Rules" />
+      <Box display="grid" gridTemplateColumns="1fr 1fr 1fr" gridRowGap="20px">
         {isLoadingRules ? (
           <Loader />
         ) : (
