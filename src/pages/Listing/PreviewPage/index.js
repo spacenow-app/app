@@ -137,7 +137,6 @@ const PreviewPage = ({ match, location, ...props }) => {
     })
   }
 
-  if (isListingLoading) {
   const _handlerPublish = () => {
     if (isEmailConfirmed) {
       dispatch(onPublish(listing.id))
