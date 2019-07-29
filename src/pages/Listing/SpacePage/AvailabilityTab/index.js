@@ -63,8 +63,8 @@ const AvailabilityTab = props => {
   }, [availabilitiesArray])
 
   const convertedDataToArrayTimetable = array => {
-    const TIME_TABLE_SHORT_NAME = ['sun', 'mon', 'tue', 'wed', 'thu', 'fri', 'sat']
-    const TIME_TABLE_WEEK_DAYS = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday']
+    const TIME_TABLE_SHORT_NAME = ['mon', 'tue', 'wed', 'thu', 'fri', 'sat', 'sun']
+    const TIME_TABLE_WEEK_DAYS = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday']
 
     const accessHours = array.listingAccessHours
 
