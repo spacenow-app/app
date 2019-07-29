@@ -54,6 +54,20 @@ import { ReactComponent as AccessTypePerson } from './svg/access-type/access_typ
 import { ReactComponent as AccessTypeSmartLock } from './svg/access-type/access_type_smart_lock.svg'
 import { ReactComponent as AccessTypSwipeCard } from './svg/access-type/access_type_swipe_card.svg'
 
+// Specifications
+import { ReactComponent as SpecificationCapacity } from './svg/specifications/specification_capacity.svg'
+import { ReactComponent as SpecificationCarLarge } from './svg/specifications/specification_car_large.svg'
+import { ReactComponent as SpecificationCarMedium } from './svg/specifications/specification_car_medium.svg'
+import { ReactComponent as SpecificationCarPark } from './svg/specifications/specification_car_park.svg'
+import { ReactComponent as SpecificationCarSmall } from './svg/specifications/specification_car_small.svg'
+import { ReactComponent as SpecificationCovered } from './svg/specifications/specification_covered.svg'
+import { ReactComponent as SpecificationEntranceHeight } from './svg/specifications/specification_entrance_height.svg'
+import { ReactComponent as SpecificationFurnishedNo } from './svg/specifications/specification_furnished_no.svg'
+import { ReactComponent as SpecificationFurnishedYes } from './svg/specifications/specification_furnished_yes.svg'
+import { ReactComponent as SpecificationMeetingRoomQuantity } from './svg/specifications/specification_meetingroom_quantity.svg'
+import { ReactComponent as SpecificationSize } from './svg/specifications/specification_size.svg'
+import { ReactComponent as SpecificationUncovered } from './svg/specifications/specification_uncovered.svg'
+
 const Icons = {
   'single-space': <SingleSpace />,
   'multiple-space': <MultipleSpace />,
@@ -103,7 +117,19 @@ const Icons = {
   'access-type-keys': <AccessTypeKeys />,
   'access-type-person': <AccessTypePerson />,
   'access-type-smart-lock': <AccessTypeSmartLock />,
-  'access-type-swipe-card': <AccessTypSwipeCard />
+  'access-type-swipe-card': <AccessTypSwipeCard />,
+  'specification-capacity': <SpecificationCapacity />,
+  'specification-car-large': <SpecificationCarLarge />,
+  'specification-car-medium': <SpecificationCarMedium />,
+  'specification-car-park': <SpecificationCarPark />,
+  'specification-car-small': <SpecificationCarSmall />,
+  'specification-covered': <SpecificationCovered />,
+  'specification-entrance-height': <SpecificationEntranceHeight />,
+  'specification-furnished-no': <SpecificationFurnishedNo />,
+  'specification-furnished-yes': <SpecificationFurnishedYes />,
+  'specification-meetingroom-quantity': <SpecificationMeetingRoomQuantity />,
+  'specification-size': <SpecificationSize />,
+  'specification-uncovered': <SpecificationUncovered />
 }
 
 const Icon = props => {
