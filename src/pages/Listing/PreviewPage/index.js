@@ -298,6 +298,7 @@ const PreviewPage = ({ match, location, ...props }) => {
           textAlign="center"
           fontFamily="MontSerrat-SemiBold"
           fontSize="16px"
+          color="quartenary"
         >
           {listing.listingData.accessType ? (
             <>
