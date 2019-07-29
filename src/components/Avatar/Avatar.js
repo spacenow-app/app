@@ -10,23 +10,17 @@ const AvatarStyled = styled.div`
   background-blend-mode: multiply;
   background-repeat: no-repeat;
   background-size: cover
-  width: ${props =>
-    (props.small && props.theme.avatar.size.small.width) ||
-    (props.large && props.theme.avatar.size.large.width) ||
-    props.theme.avatar.size.medium.width};
-  height: ${props =>
-    (props.small && props.theme.avatar.size.small.height) ||
-    (props.large && props.theme.avatar.size.large.height) ||
-    props.theme.avatar.size.medium.height};
+  width: ${props => (props.small && '50px') || (props.large && '300px') || '150px'};
+  height: ${props => (props.small && '50px') || (props.large && '300px') || '150px'};
 
      @media (max-width: 680px) {
        margin: 0 auto;
-   
+
   }
 `
 
-const Avatar = ({ theme, image, small, large }) => {
-  return <AvatarStyled theme={theme} src={image} small={small} large={large} />
+const Avatar = ({ image, small, large, ...props }) => {
+  return <AvatarStyled {...props} src={image} small={small} large={large} />
 }
 
 Avatar.defaultProps = {

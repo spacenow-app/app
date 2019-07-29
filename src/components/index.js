@@ -31,6 +31,7 @@ import Highlights from './Highlights'
 import Loader from './Loader'
 import ToolTip from './ToolTip'
 import Photo from './Photo'
+import Avatar from './Avatar'
 
 export {
   Modal,
@@ -68,5 +69,6 @@ export {
   Highlights,
   Loader,
   ToolTip,
-  Photo
+  Photo,
+  Avatar
 }

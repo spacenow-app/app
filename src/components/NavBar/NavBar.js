@@ -1,11 +1,21 @@
 import React from 'react'
 import { useSelector } from 'react-redux'
 import { Link } from 'react-router-dom'
+import styled from 'styled-components'
 import { Navbar, Nav, NavDropdown } from 'react-bootstrap'
+import { Avatar, Box } from 'components'
 
 import { config } from 'contants'
 
 import logo from './spacenow_logo.png'
+
+const NavDropdownStyled = styled(NavDropdown)`
+  &&& {
+    .dropdown-toggle::after {
+      display: none;
+    }
+  }
+`
 
 function NavBar() {
   const authUser = useSelector(state => state.auth.user)
@@ -15,6 +25,7 @@ function NavBar() {
   const _handlerLogout = () => {
     window.location.href = `${config.legacy}/logout`
   }
+
   return (
     <Navbar>
       <Link to="" onClick={_handlerGoToLegancy}>
@@ -25,13 +36,22 @@ function NavBar() {
       <Navbar.Toggle />
       <Navbar.Collapse className="justify-content-end">
         <Nav>
-          <NavDropdown alignRight title={authUser.profile.firstName} id="basic-nav-dropdown">
+          <NavDropdownStyled
+            alignRight
+            title={
+              <Box display="grid" gridTemplateColumns="auto auto" gridColumnGap="10px" color="quartenary">
+                <span style={{ alignSelf: 'center' }}>{authUser.profile.firstName || 'User Profile'}</span>
+                <Avatar style={{ width: '30px', height: '30px' }} src={authUser.profile.picture} />
+              </Box>
+            }
+            id="basic-nav-dropdown"
+          >
             <NavDropdown.Item href={`${config.legacy}/dashboard/profile`}>Profile</NavDropdown.Item>
             <NavDropdown.Divider />
             <NavDropdown.Item href={`${config.legacy}/dashboard`}>Dashboard</NavDropdown.Item>
             <NavDropdown.Divider />
             <NavDropdown.Item onClick={_handlerLogout}>Logout</NavDropdown.Item>
-          </NavDropdown>
+          </NavDropdownStyled>
         </Nav>
       </Navbar.Collapse>
     </Navbar>
