@@ -232,7 +232,14 @@ const PreviewPage = ({ match, location, ...props }) => {
       <Title type="h4" title="Amenities" />
       <Box display="grid" gridTemplateColumns="1fr 1fr 1fr" gridRowGap="40px">
         {objectListing.amenities.map(item => {
-          return <span>{item.settingsData.itemName}</span>
+          return (
+            <Box display="grid" gridTemplateColumns="auto 1fr" gridColumnGap="20px">
+              <Box width="54px" height="54px" borderRadius="100%" bg="primary">
+                <Icon name="category-desk" width="70%" height="100%" style={{ display: 'block', margin: 'auto' }} />
+              </Box>
+              <span style={{ alignSelf: 'center' }}>{item.settingsData.itemName}</span>
+            </Box>
+          )
         })}
       </Box>
 
