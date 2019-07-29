@@ -1,3 +1,4 @@
+/* eslint-disable react/no-array-index-key */
 /* eslint-disable no-console */
 import React, { useEffect, useCallback } from 'react'
 import styled from 'styled-components'
@@ -360,7 +361,7 @@ const SpecificationTab = ({
               <>
                 {arrayPhotos.map((item, index) => (
                   <Photo
-                    key={index}
+                    key={`photo-${index}`}
                     onDrop={_handleOnDrop}
                     url={item ? item.name : null}
                     isCover={item ? item.isCover : false}
