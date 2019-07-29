@@ -36,7 +36,10 @@ export const Types = {
   CREATE_LISTING_FAILURE: 'CREATE_LISTING_FAILURE',
   UPDATE_LISTING_START: 'UPDATE_LISTING_START',
   UPDATE_LISTING_SUCCESS: 'UPDATE_LISTING_SUCCESS',
-  UPDATE_LISTING_FAILURE: 'UPDATE_LISTING_FAILURE'
+  UPDATE_LISTING_FAILURE: 'UPDATE_LISTING_FAILURE',
+  PUBLISH_LISTING_START: 'PUBLISH_LISTING_START',
+  PUBLISH_LISTING_SUCCESS: 'PUBLISH_LISTING_SUCCESS',
+  PUBLISH_LISTING_FAILURE: 'PUBLISH_LISTING_FAILURE'
 }
 
 // Initial State
@@ -84,6 +87,10 @@ const initialState = {
   },
   photos: {
     array: new Array(6),
+    isLoading: true,
+    error: null
+  },
+  publishing: {
     isLoading: true,
     error: null
   }
@@ -432,6 +439,16 @@ const mutationUpdate = gql`
   }
 `
 
+const mutationPublish = gql`
+  mutation publish($listingId: Int!, $status: Boolean!) {
+    publish(listingId: $listingId, status: $status) {
+      id
+      isReady
+      isPublished
+    }
+  }
+`
+
 // Reducer
 export default function reducer(state = initialState, action) {
   switch (action.type) {
@@ -730,6 +747,32 @@ export default function reducer(state = initialState, action) {
         }
       }
     }
+    case Types.PUBLISH_LISTING_START: {
+      return {
+        ...state,
+        publishing: {
+          isLoading: true,
+          error: null
+        }
+      }
+    }
+    case Types.PUBLISH_LISTING_SUCCESS: {
+      return {
+        ...state,
+        publishing: {
+          isLoading: false
+        }
+      }
+    }
+    case Types.PUBLISH_LISTING_FAILURE: {
+      return {
+        ...state,
+        publishing: {
+          isLoading: false,
+          error: action.payload
+        }
+      }
+    }
     default:
       return state
   }
@@ -964,5 +1007,18 @@ const getValues = (_, values) => {
     listingExceptionDates: values.listingExceptionDates || undefined,
     listingRules:
       values.rules !== undefined && values.rules.length > 0 ? values.rules.map(o => o.listSettingsId) : undefined
+  }
+}
+
+export const onPublish = (listingId, isOrNot) => async dispatch => {
+  dispatch({ type: Types.PUBLISH_LISTING_START })
+  try {
+    const { data } = await getClientWithAuth(dispatch).mutate({
+      mutation: mutationPublish,
+      variables: { listingId, status: isOrNot }
+    })
+    dispatch({ type: Types.PUBLISH_LISTING_SUCCESS, payload: data.createOrUpdateListing })
+  } catch (err) {
+    dispatch({ type: Types.PUBLISH_LISTING_FAILURE, payload: errToMsg(err) })
   }
 }
