@@ -41,7 +41,7 @@ function NavBar() {
             title={
               <Box display="grid" gridTemplateColumns="auto auto" gridColumnGap="10px" color="quartenary">
                 <span style={{ alignSelf: 'center' }}>{authUser.profile.firstName || 'User Profile'}</span>
-                <Avatar style={{ width: '30px', height: '30px' }} src={authUser.profile.picture} />
+                <Avatar style={{ width: '30px', height: '30px' }} image={authUser.profile.picture || null} />
               </Box>
             }
             id="basic-nav-dropdown"
