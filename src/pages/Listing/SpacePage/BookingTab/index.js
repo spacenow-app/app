@@ -3,7 +3,6 @@ import { useDispatch } from 'react-redux'
 import { withFormik } from 'formik'
 import * as Yup from 'yup'
 import numeral from 'numeral'
-import pluralize from 'pluralize'
 import { capitalize, toPlural } from 'utils/strings'
 
 import { onUpdate } from 'redux/ducks/listing'
