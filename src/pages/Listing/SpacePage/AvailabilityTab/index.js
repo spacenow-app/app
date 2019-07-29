@@ -26,11 +26,11 @@ const ItemSwitchStyled = styled.div`
 `
 
 const timeTableInitialState = {
-  mon: false,
-  tue: false,
-  wed: false,
-  thu: false,
-  fri: false,
+  mon: true,
+  tue: true,
+  wed: true,
+  thu: true,
+  fri: true,
   sat: false,
   sun: false,
   all247: false,
@@ -94,7 +94,7 @@ const AvailabilityTab = props => {
         elem = {
           day: TIME_TABLE_SHORT_NAME[i],
           description: TIME_TABLE_WEEK_DAYS[i],
-          active: false,
+          active: (TIME_TABLE_SHORT_NAME[i] !== 'sat') && (TIME_TABLE_SHORT_NAME[i] !== 'sun'),
           fulltime: false,
           open: new Date(`${format(new Date(), 'MM/DD/YYYY')} 08:00`),
           close: new Date(`${format(new Date(), 'MM/DD/YYYY')} 17:00`),
