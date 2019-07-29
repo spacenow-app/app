@@ -1,9 +1,9 @@
 const path = require('path')
 const fs = require('fs')
 
-const directoryPath = path.join(__dirname, '../src/components/Icon/svg/generic')
+const directoryPath = path.join(__dirname, '../src/components/Icon/svg/access-type')
 
-fs.readdir(directoryPath, function (err, files) {
+fs.readdir(directoryPath, function(err, files) {
   if (err) {
     return console.warn(`Unable to scan directory: ${err}`)
   }
@@ -16,7 +16,7 @@ fs.readdir(directoryPath, function (err, files) {
     fs.mkdirSync(`${directoryPath}/ori_bkp`)
   }
 
-  files.forEach(function (file) {
+  files.forEach(function(file) {
     const content = fs.readFileSync(`${directoryPath}/${file}`, 'utf8')
 
     const newContent = content
