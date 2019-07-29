@@ -1014,7 +1014,7 @@ const getValues = (_, values) => {
   }
 }
 
-export const onPublish = (listingId, history) => async dispatch => {
+export const onPublish = listingId => async dispatch => {
   dispatch({ type: Types.PUBLISH_LISTING_START })
   try {
     const { data } = await getClientWithAuth(dispatch).mutate({
