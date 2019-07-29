@@ -29,7 +29,7 @@ const SpacePage = ({ match, location, ...props }) => {
     return <Loader text="Loading listing process" />
   }
 
-  const _parseIconName = (name, isSub) => {
+  const _parseCategoryIconName = (name, isSub) => {
     let prefix = 'category-'
     if (isSub) prefix = 'sub-category-'
     return prefix + name.replace(/([A-Z])/g, g => `-${g[0].toLowerCase()}`)
@@ -38,29 +38,32 @@ const SpacePage = ({ match, location, ...props }) => {
   return (
     <Wrapper>
       <Box mb="50px" mt="50px">
-        <Grid justifyContent="start" columns={7}>
-          <Cell width={1}>
-            <Tag
-              icon={
-                <Icon width="24px" name={_parseIconName(objectListing.settingsParent.category.otherItemName, false)} />
-              }
-            >
-              {objectListing.settingsParent.category.itemName}
-            </Tag>
-          </Cell>
-          <Cell width={2}>
+        <Box display="flex" justifyContent="start">
+          <Box>
             <Tag
               icon={
                 <Icon
                   width="24px"
-                  name={_parseIconName(objectListing.settingsParent.subcategory.otherItemName, true)}
+                  name={_parseCategoryIconName(objectListing.settingsParent.category.otherItemName, false)}
+                />
+              }
+            >
+              {objectListing.settingsParent.category.itemName}
+            </Tag>
+          </Box>
+          <Box margin="0 10px">
+            <Tag
+              icon={
+                <Icon
+                  width="24px"
+                  name={_parseCategoryIconName(objectListing.settingsParent.subcategory.otherItemName, true)}
                 />
               }
             >
               {objectListing.settingsParent.subcategory.itemName}
             </Tag>
-          </Cell>
-        </Grid>
+          </Box>
+        </Box>
       </Box>
       <Tab>
         <TabItem nav to={`${match.url}/specification`}>
