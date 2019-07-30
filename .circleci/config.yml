@@ -52,7 +52,8 @@ jobs:
           name: 'Build app'
           command:
             REACT_APP_ENV=production REACT_APP_GOOGLE_MAPS_KEY=${SANDPIT_REACT_APP_GOOGLE_MAPS_KEY}
-            REACT_APP_LEGACY=${SANDPIT_REACT_APP_LEGACY} REACT_APP_GRAPH_HOST=${SANDPIT_REACT_APP_GRAPH_HOST} yarn build
+            GENERATE_SOURCEMAP=false INLINE_RUNTIME_CHUNK=false REACT_APP_LEGACY=${SANDPIT_REACT_APP_LEGACY}
+            REACT_APP_GRAPH_HOST=${SANDPIT_REACT_APP_GRAPH_HOST} yarn build
       - persist_to_workspace:
           root: ~/repo
           paths:
@@ -100,7 +101,8 @@ jobs:
           name: 'Build app'
           command:
             REACT_APP_ENV=production REACT_APP_GOOGLE_MAPS_KEY=${NONPROD_REACT_APP_GOOGLE_MAPS_KEY}
-            REACT_APP_LEGACY=${NONPROD_REACT_APP_LEGACY} REACT_APP_GRAPH_HOST=${NONPROD_REACT_APP_GRAPH_HOST} yarn build
+            GENERATE_SOURCEMAP=false INLINE_RUNTIME_CHUNK=false REACT_APP_LEGACY=${NONPROD_REACT_APP_LEGACY}
+            REACT_APP_GRAPH_HOST=${NONPROD_REACT_APP_GRAPH_HOST} yarn build
       - persist_to_workspace:
           root: ~/repo
           paths:
@@ -147,7 +149,8 @@ jobs:
           name: 'Build app'
           command:
             REACT_APP_ENV=production REACT_APP_GOOGLE_MAPS_KEY=${PROD_REACT_APP_GOOGLE_MAPS_KEY}
-            REACT_APP_LEGACY=${PROD_REACT_APP_LEGACY} REACT_APP_GRAPH_HOST=${PROD_REACT_APP_GRAPH_HOST} yarn build
+            GENERATE_SOURCEMAP=false INLINE_RUNTIME_CHUNK=false REACT_APP_LEGACY=${PROD_REACT_APP_LEGACY}
+            REACT_APP_GRAPH_HOST=${PROD_REACT_APP_GRAPH_HOST} yarn build
       - persist_to_workspace:
           root: ~/repo
           paths:

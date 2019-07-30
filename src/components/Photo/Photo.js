@@ -48,7 +48,7 @@ const Photo = ({ onDrop, onCover, onDelete, url, isCover, ...props }) => {
         <StyledDiv {...getRootProps()}>
           {url !== null ? (
             <>
-              <Image src={url} width="100%" height="100%" style={{ gridRow: '1/2', gridColumn: '1/2' }} />
+              <Image src={url} width="100%" height="100%" style={{ gridRow: '1/2', gridColumn: '1/2' }} handleClick={onCover} />
               <FooterButton>
                 <Button
                   outline="true"
@@ -62,8 +62,8 @@ const Photo = ({ onDrop, onCover, onDelete, url, isCover, ...props }) => {
                         style={{ paddingRight: '5px' }}
                       />
                     ) : (
-                      <Icon width="18px" fill="#6ADD92" name="star-full" style={{ paddingRight: '5px' }} />
-                    )
+                        <Icon width="18px" fill="#6ADD92" name="star-full" style={{ paddingRight: '5px' }} />
+                      )
                   }
                   style={{ width: 'max-content', height: '40px' }}
                   onClick={onCover}
@@ -79,15 +79,15 @@ const Photo = ({ onDrop, onCover, onDelete, url, isCover, ...props }) => {
               </FooterButton>
             </>
           ) : (
-            <>
-              <input {...getInputProps()} />
-              {isDragActive ? (
-                <Icon width="40px" fill="#CBCBCB" name="camera" />
-              ) : (
-                <Icon width="40px" fill="#6ADD92" name="camera" />
-              )}
-            </>
-          )}
+              <>
+                <input {...getInputProps()} />
+                {isDragActive ? (
+                  <Icon width="40px" fill="#CBCBCB" name="camera" />
+                ) : (
+                    <Icon width="40px" fill="#6ADD92" name="camera" />
+                  )}
+              </>
+            )}
           {/* {
             isDragAccept ?
               <FooterButton>
