@@ -268,7 +268,12 @@ const AvailabilityTab = ({ listing, history, setFatherValues }) => {
           title="Blocked dates"
           subtitle="Block out times when the space is not available within business opening hours."
         />
-        <Calendar handleDayClick={_onClickSelectDay} selectedDays={selectedDates} disabledDays={[]} />
+        <Calendar
+          fromMonth={new Date()}
+          handleDayClick={_onClickSelectDay}
+          selectedDays={selectedDates}
+          disabledDays={[]}
+        />
       </Cell>
       <Cell>
         <Title
