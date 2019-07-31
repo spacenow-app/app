@@ -15,3 +15,7 @@ export const formatterCurrency = (country, currency) =>
 export const toPlural = (string, number) => {
   return pluralize(string, number, true)
 }
+
+export const camalize = str => {
+  return str.toLowerCase().replace(/[^a-zA-Z0-9]+(.)/g, (_, chr) => chr.toUpperCase())
+}

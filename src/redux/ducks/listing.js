@@ -4,6 +4,7 @@ import { gql } from 'apollo-boost'
 import { getClientWithAuth } from 'graphql/apolloClient'
 import errToMsg from 'utils/errToMsg'
 import { monthNames } from 'contants/dates'
+import { camalize } from 'utils/strings'
 
 // Actions
 export const Types = {
@@ -898,10 +899,6 @@ const mapTo = (originalArray, listingData) => {
   return specifications
 }
 
-const camalize = str => {
-  return str.toLowerCase().replace(/[^a-zA-Z0-9]+(.)/g, (_, chr) => chr.toUpperCase())
-}
-
 export const onGetAvailabilitiesByListingId = listingId => async dispatch => {
   dispatch({ type: Types.LISTING_GET_SPACE_AVAILABILITIES_REQUEST })
   try {
@@ -928,7 +925,8 @@ export const onGetAllHolidays = () => async dispatch => {
     const holidaysReduced = data.getAllHolidays.map(i => {
       const date = new Date(i.date)
       const formatted = `${date.getDate()} ${monthNames[date.getMonth()]} ${date.getFullYear()}`
-      const shortDescription = i.description.length >= 2 && `${i.description.split(' ')[0]} ${i.description.split(' ')[1]}`
+      const shortDescription =
+        i.description.length >= 2 && `${i.description.split(' ')[0]} ${i.description.split(' ')[1]}`
       return { ...i, originalDate: date, dateFormatted: formatted, shortDescription }
     })
     dispatch({ type: Types.LISTING_GET_SPACE_HOLIDAYS_SUCCESS, payload: holidaysReduced })
@@ -1001,10 +999,14 @@ const getValues = (_, values) => {
     maxEntranceHeight: values.maxEntranceHeight || _.listingData.maxEntranceHeight,
     spaceType: values.spaceType || _.listingData.spaceType,
     bookingType: values.bookingType || _.listingData.bookingType,
-    listingAmenities: values.amenities !== undefined && values.amenities.length > 0 ? values.amenities.map(o => o.listSettingsId) : undefined,
+    listingAmenities:
+      values.amenities !== undefined && values.amenities.length > 0
+        ? values.amenities.map(o => o.listSettingsId)
+        : undefined,
     listingAccessDays: values.listingAccessDays,
     listingExceptionDates: values.listingExceptionDates || undefined,
-    listingRules: values.rules !== undefined && values.rules.length > 0 ? values.rules.map(o => o.listSettingsId) : undefined
+    listingRules:
+      values.rules !== undefined && values.rules.length > 0 ? values.rules.map(o => o.listSettingsId) : undefined
   }
 }
 
