@@ -5,7 +5,7 @@ import styled from 'styled-components'
 import { withFormik } from 'formik'
 import * as Yup from 'yup'
 import _ from 'lodash'
-import { useDispatch, useSelector } from 'react-redux'
+import { useSelector } from 'react-redux'
 
 import {
   onGetAllRules,
@@ -57,10 +57,10 @@ const SpecificationTab = ({
   setFieldValue,
   listing,
   validateForm,
+  dispatch,
+  setFatherValues,
   ...props
 }) => {
-  const dispatch = useDispatch()
-
   const { array: arrayRules, isLoading: isLoadingRules } = useSelector(state => state.listing.rules)
   const { array: arrayAccessTypes, isLoading: isLoadingAccessTypes } = useSelector(state => state.listing.accessTypes)
   const { array: arrayAmenities, isLoading: isLoadingAmenities } = useSelector(state => state.listing.amenities)
@@ -76,6 +76,10 @@ const SpecificationTab = ({
     dispatch(onGetAllAccessTypes())
     dispatch(onGetPhotosByListingId(listing.id))
   }, [dispatch, listing.id, listing.listingData, listing.settingsParent.id, listing.settingsParent.subcategory.id])
+
+  useEffect(() => {
+    setFatherValues(values)
+  }, [setFatherValues, values])
 
   const _handleSelectChange = e => {
     const { name, value } = e.target
@@ -199,11 +203,6 @@ const SpecificationTab = ({
   const _handleChangeTitle = e => {
     const { name, value } = e.target
     setFieldValue(name, value.substring(0, 25))
-  }
-
-  const _handleSave = async () => {
-    await dispatch(onUpdate(listing, values))
-    props.history.push('booking')
   }
 
   const _handleOnDrop = useCallback(
@@ -377,7 +376,7 @@ const SpecificationTab = ({
             perspective. Spaces look best in natural light. Include all areas your guest can access.
           </p>
         </SectionStyled>
-        <StepButtons prev={{ onClick: _goBack }} next={{ onClick: _handleSave }} />
+        <StepButtons prev={{ onClick: _goBack }} next={{ onClick: () => props.history.push('booking') }} />
       </WrapperStyled>
     </form>
   )
@@ -423,7 +422,10 @@ const formik = {
     description: Yup.string().typeError('Description need to be string'),
     accessType: Yup.string()
   }),
-  enableReinitialize: true
+  enableReinitialize: true,
+  handleSubmit: (values, { props: { dispatch, listing } }) => {
+    dispatch(onUpdate(listing, values))
+  }
 }
 
 SpecificationTab.propTypes = {

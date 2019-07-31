@@ -1,5 +1,4 @@
-import React from 'react'
-import { useDispatch } from 'react-redux'
+import React, { useEffect } from 'react'
 import { withFormik } from 'formik'
 import * as Yup from 'yup'
 import numeral from 'numeral'
@@ -18,9 +17,13 @@ const BookingTab = ({
   handleSubmit,
   setFieldValue,
   listing,
+  dispatch,
+  setFatherValues,
   ...props
 }) => {
-  const dispatch = useDispatch()
+  useEffect(() => {
+    setFatherValues(values)
+  }, [setFatherValues, values])
 
   const _handleSelectChange = e => {
     const { name, value } = e.target
@@ -30,11 +33,6 @@ const BookingTab = ({
   const _handleRadioChange = (e, { value, name, disabled }) => {
     if (disabled) return
     setFieldValue(name, value)
-  }
-
-  const _handleSave = async () => {
-    await dispatch(onUpdate(listing, values))
-    props.history.push('availability')
   }
 
   const _changeToPlural = (string, number) => {
@@ -233,8 +231,8 @@ const BookingTab = ({
         </Grid>
       </Cell>
       <StepButtons
-        prev={{ disabled: false, onClick: () => props.history.push('specification') }}
-        next={{ onClick: _handleSave }}
+        prev={{ onClick: () => props.history.push('specification') }}
+        next={{ onClick: () => props.history.push('availability') }}
       />
     </Grid>
   )
@@ -264,9 +262,11 @@ const formik = {
     }
     return {}
   },
-  mapValuesToPayload: x => x,
   validationSchema: Yup.object().shape({}),
-  enableReinitialize: true
+  enableReinitialize: false,
+  handleSubmit: (values, { props: { dispatch, listing } }) => {
+    dispatch(onUpdate(listing, values))
+  }
 }
 
 BookingTab.propTypes = {

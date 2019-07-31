@@ -1,8 +1,8 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import PropTypes from 'prop-types'
 import { Switch, Route, Redirect } from 'react-router-dom'
 import { Wrapper, Tab, TabItem, Loader, Tag, Icon, Box } from 'components'
-import { onGetListingById } from 'redux/ducks/listing'
+import { onGetListingById, onUpdate } from 'redux/ducks/listing'
 import { useDispatch, useSelector } from 'react-redux'
 import CancellationTab from './CancellationTab'
 import BookingTab from './BookingTab'
@@ -16,14 +16,26 @@ const ScrollToTop = ({ children, location: { pathname } }) => {
   return children
 }
 
-const SpacePage = ({ match, location, ...props }) => {
+const SpacePage = ({ match, history, location, ...props }) => {
   const dispatch = useDispatch()
   const { object: objectListing, isLoading } = useSelector(state => state.listing.get)
+  const [values, setValues] = useState({})
 
   useEffect(() => {
     // dispatch(onGetListingById(match.params.id, props.history))
     dispatch(onGetListingById(match.params.id))
   }, [dispatch, match.params.id])
+
+  useEffect(() => {
+    if (history.action === 'PUSH') {
+      dispatch(onUpdate(objectListing, values))
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [history.location.key])
+
+  const _setFatherValues = obj => {
+    setValues(obj)
+  }
 
   if (isLoading) {
     return <Loader text="Loading listing process" />
@@ -84,19 +96,39 @@ const SpacePage = ({ match, location, ...props }) => {
         <ScrollToTop>
           <Route
             path={`${match.path}/specification`}
-            render={routeProps => <SpecificationTab {...routeProps} {...props} listing={objectListing} />}
+            render={routeProps => (
+              <SpecificationTab
+                {...routeProps}
+                {...props}
+                listing={objectListing}
+                dispatch={dispatch}
+                setFatherValues={_setFatherValues}
+              />
+            )}
           />
           <Route
             path={`${match.path}/booking`}
-            render={routeProps => <BookingTab {...routeProps} {...props} listing={objectListing} />}
+            render={routeProps => (
+              <BookingTab
+                {...routeProps}
+                {...props}
+                listing={objectListing}
+                dispatch={dispatch}
+                setFatherValues={_setFatherValues}
+              />
+            )}
           />
           <Route
             path={`${match.path}/availability`}
-            render={routeProps => <AvailabilityTab {...routeProps} {...props} listing={objectListing} />}
+            render={routeProps => (
+              <AvailabilityTab {...routeProps} {...props} listing={objectListing} dispatch={dispatch} />
+            )}
           />
           <Route
             path={`${match.path}/cancellation`}
-            render={routeProps => <CancellationTab {...routeProps} {...props} listing={objectListing} />}
+            render={routeProps => (
+              <CancellationTab {...routeProps} {...props} listing={objectListing} dispatch={dispatch} />
+            )}
           />
         </ScrollToTop>
         <Route component={() => <h1>not found</h1>} />
