@@ -1,4 +1,5 @@
 import React from 'react'
+import PropTypes from 'prop-types'
 import styled from 'styled-components'
 import { Title, Grid, Cell, StepButtons } from 'components'
 
@@ -31,11 +32,16 @@ const CancellationTab = props => {
         </Grid>
       </Cell>
       <StepButtons
-        prev={{ onClick: () => props.history.push('booking') }}
+        prev={{ onClick: () => props.history.push('availability') }}
         next={{ onClick: () => props.history.push(`/listing/preview/${props.match.params.id}`) }}
       />
     </Grid>
   )
+}
+
+CancellationTab.propTypes = {
+  history: PropTypes.instanceOf(Object).isRequired,
+  match: PropTypes.instanceOf(Object).isRequired
 }
 
 export default CancellationTab
