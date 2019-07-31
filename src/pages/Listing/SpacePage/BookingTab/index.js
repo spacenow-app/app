@@ -47,7 +47,7 @@ const BookingTab = ({
       <Cell>
         <Title
           type="h3"
-          title="Payment Period"
+          title="Booking Period"
           subtitle="Spacenow have four payment options: hourly, daily, weekly and monthly. These payment options determine more than just the displayed price for your guests. As a host, selecting the right option is important because it will manage your availability, payouts, and payment options for your guests."
         />
         <Grid columns={4} columnGap="20px">

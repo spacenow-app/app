@@ -6,7 +6,7 @@ import styled from 'styled-components'
 import { format, isAfter, isBefore, isSameDay } from 'date-fns'
 import update from 'immutability-helper'
 
-import { nanDate } from 'contants/dates'
+import { nanDate, weekTimeTable } from 'contants/dates'
 
 import { onUpdate, onGetAvailabilitiesByListingId, onGetAllHolidays } from 'redux/ducks/listing'
 
@@ -25,7 +25,7 @@ const ItemSwitchStyled = styled.div`
   grid-template-columns: auto auto;
 `
 
-const timeTableInitialState = {
+const TIME_TABLE_INIT_STATE = {
   mon: true,
   tue: true,
   wed: true,
@@ -37,7 +37,7 @@ const timeTableInitialState = {
   listingAccessHours: []
 }
 
-const AvailabilityTab = props => {
+const AvailabilityTab = ({ listing, history }) => {
   const dispatch = useDispatch()
 
   const [timetable, setTimeTable] = useState([])
@@ -49,64 +49,59 @@ const AvailabilityTab = props => {
   const { array: holidaysArray } = useSelector(state => state.listing.holidays)
 
   useEffect(() => {
-    setTimeTable(convertedDataToArrayTimetable(props.listing.accessDays))
-    dispatch(onGetAvailabilitiesByListingId(props.listing.id))
-    dispatch(onGetAllHolidays())
-  }, [dispatch, props])
+    const { accessDays } = listing
+    const arrayOutput = []
+    for (let i = 0, size = weekTimeTable.length; i < size; i += 1) {
+      const o = weekTimeTable[i]
+      let elem = {
+        day: o.short,
+        description: o.name,
+        active: false,
+        fulltime: false,
+        open: new Date(`${format(new Date(), 'MM/DD/YYYY')} 08:00`),
+        close: new Date(`${format(new Date(), 'MM/DD/YYYY')} 17:00`),
+        error: {}
+      }
+      if (/true/i.test(accessDays[o.short])) {
+        const hoursElem = accessDays.listingAccessHours.find(h => h.weekday === o.index)
+        if (hoursElem) {
+          const openHour = nanDate(hoursElem.openHour)
+          const closeHour = nanDate(hoursElem.closeHour)
+          elem = {
+            day: o.short,
+            description: o.name,
+            active: true,
+            fulltime: hoursElem.allday,
+            open: _formatTime(hoursElem.allday ? new Date(`${format(new Date(), 'MM/DD/YYYY')} 08:00`) : openHour),
+            close: _formatTime(hoursElem.allday ? new Date(`${format(new Date(), 'MM/DD/YYYY')} 17:00`) : closeHour),
+            error: {}
+          }
+        }
+      }
+      arrayOutput.push(elem)
+    }
+    setTimeTable(arrayOutput)
+  }, [listing])
 
   useEffect(() => {
-    checkFullTime(timetable)
+    dispatch(onGetAvailabilitiesByListingId(listing))
+    dispatch(onGetAllHolidays())
+  }, [dispatch, listing])
+
+  useEffect(() => {
+    _checkFullTime(timetable)
   }, [timetable])
 
   useEffect(() => {
     setSelectedDates(availabilitiesArray.map(o => new Date(o)))
   }, [availabilitiesArray])
 
-  const convertedDataToArrayTimetable = array => {
-    const TIME_TABLE_SHORT_NAME = ['mon', 'tue', 'wed', 'thu', 'fri', 'sat', 'sun']
-    const TIME_TABLE_WEEK_DAYS = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday']
-
-    const accessHours = array.listingAccessHours
-
-    const arrayOutput = []
-
-    const formatTime = date => {
-      const time = format(date, 'HH:mm')
-      return new Date(`${format(new Date(), 'MM/DD/YYYY')} ${time}`)
-    }
-
-    for (let i = 0; i <= 6; i += 1) {
-      let elem = {}
-      const access = accessHours.find(l => l.weekday === i)
-      if (access) {
-        const openHour = nanDate(access.openHour)
-        const closeHour = nanDate(access.closeHour)
-        elem = {
-          day: TIME_TABLE_SHORT_NAME[i],
-          description: TIME_TABLE_WEEK_DAYS[i],
-          active: true,
-          fulltime: access.allday,
-          open: formatTime(access.allday ? new Date(`${format(new Date(), 'MM/DD/YYYY')} 08:00`) : openHour),
-          close: formatTime(access.allday ? new Date(`${format(new Date(), 'MM/DD/YYYY')} 17:00`) : closeHour),
-          error: {}
-        }
-      } else {
-        elem = {
-          day: TIME_TABLE_SHORT_NAME[i],
-          description: TIME_TABLE_WEEK_DAYS[i],
-          active: (TIME_TABLE_SHORT_NAME[i] !== 'sat') && (TIME_TABLE_SHORT_NAME[i] !== 'sun'),
-          fulltime: false,
-          open: new Date(`${format(new Date(), 'MM/DD/YYYY')} 08:00`),
-          close: new Date(`${format(new Date(), 'MM/DD/YYYY')} 17:00`),
-          error: {}
-        }
-      }
-      arrayOutput.push(elem)
-    }
-    return arrayOutput
+  const _formatTime = date => {
+    const time = format(date, 'HH:mm')
+    return new Date(`${format(new Date(), 'MM/DD/YYYY')} ${time}`)
   }
 
-  const checkFullTime = array => {
+  const _checkFullTime = array => {
     const isFullTime = array.every(el => el.active === true && el.fulltime === true)
     setFullTime(isFullTime)
   }
@@ -129,7 +124,7 @@ const AvailabilityTab = props => {
     setTimeTable(newArray)
   }
 
-  const _handleChangeDay = (e, options) => {
+  const _handleChangeDay = (_, options) => {
     const index = timetable.findIndex(el => el.day === options.name)
     const newArray = update(timetable, {
       [index]: { active: { $set: options.checked }, fulltime: { $set: false } }
@@ -137,7 +132,7 @@ const AvailabilityTab = props => {
     setTimeTable(newArray)
   }
 
-  const _handleClick24hours = (e, options) => {
+  const _handleClick24hours = (_, options) => {
     const index = timetable.findIndex(el => `${el.day}-24h` === options.name)
     const newArray = update(timetable, {
       [index]: { fulltime: { $set: options.checked } }
@@ -145,7 +140,7 @@ const AvailabilityTab = props => {
     setTimeTable(newArray)
   }
 
-  const _handleClickOpenFullTime = (e, options) => {
+  const _handleClickOpenFullTime = (_, options) => {
     const is = options.checked
     const newArray = timetable.map(el => ({
       ...el,
@@ -155,7 +150,7 @@ const AvailabilityTab = props => {
     setTimeTable(newArray)
   }
 
-  const zero = reference => {
+  const _zero = reference => {
     let i = reference
     if (i < 10) {
       i = `0${i}`
@@ -163,10 +158,10 @@ const AvailabilityTab = props => {
     return i
   }
 
-  const formatTime = time => {
-    const h = zero(time.getHours())
-    const m = zero(time.getMinutes())
-    const s = zero(time.getSeconds())
+  const _timeToString = time => {
+    const h = _zero(time.getHours())
+    const m = _zero(time.getMinutes())
+    const s = _zero(time.getSeconds())
     return `${h}:${m}:${s}`
   }
 
@@ -174,7 +169,7 @@ const AvailabilityTab = props => {
     if (!day.fulltime) {
       const now = new Date()
       if (time) {
-        const sTime = formatTime(time).split(':')
+        const sTime = _timeToString(time).split(':')
         now.setHours(sTime[0], sTime[1], sTime[2])
         return now.getTime().toString()
       }
@@ -186,13 +181,14 @@ const AvailabilityTab = props => {
   }
 
   const _mapToAccessHourType = payload => {
-    const outputObj = JSON.parse(JSON.stringify(timeTableInitialState))
+    const outputObj = JSON.parse(JSON.stringify(TIME_TABLE_INIT_STATE))
     for (let i = 0, size = payload.length; i < size; i += 1) {
       const elem = payload[i]
       outputObj[elem.day] = elem.active
       if (elem.active) {
+        const weekDay = weekTimeTable.find(o => o.short === elem.day)
         outputObj.listingAccessHours.push({
-          weekday: i,
+          weekday: weekDay.index,
           allday: elem.fulltime,
           openHour: _getHours(elem, elem.open),
           closeHour: _getHours(elem, elem.close)
@@ -204,12 +200,12 @@ const AvailabilityTab = props => {
 
   const _handleSave = async () => {
     const valuesToUpdate = {
-      ...props.listing,
+      ...listing,
       listingAccessDays: _mapToAccessHourType(timetable),
       listingExceptionDates: selectedDates
     }
-    await dispatch(onUpdate(props.listing, valuesToUpdate))
-    props.history.push('cancellation')
+    await dispatch(onUpdate(listing, valuesToUpdate))
+    history.push('cancellation')
   }
 
   const _onClickSelectDay = (day, { selected }) => {
@@ -223,7 +219,7 @@ const AvailabilityTab = props => {
     setSelectedDates(copySelectedDates)
   }
 
-  const _onChangeHoliday = (e, { checked, name }) => {
+  const _onChangeHoliday = (_, { checked, name }) => {
     const newDate = new Date(name)
     const copyHolidays = [...holidays]
     const copySelectedDays = [...selectedDates]
@@ -323,16 +319,14 @@ const AvailabilityTab = props => {
             })}
         </Grid>
       </Cell>
-      <StepButtons
-        prev={{ disabled: false, onClick: () => props.history.push('booking') }}
-        next={{ onClick: _handleSave }}
-      />
+      <StepButtons prev={{ disabled: false, onClick: () => history.push('booking') }} next={{ onClick: _handleSave }} />
     </Grid>
   )
 }
 
 AvailabilityTab.propTypes = {
-  listing: PropTypes.instanceOf(Object).isRequired
+  listing: PropTypes.instanceOf(Object).isRequired,
+  history: PropTypes.instanceOf(Object).isRequired
 }
 
 export default AvailabilityTab
