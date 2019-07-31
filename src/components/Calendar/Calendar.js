@@ -1,7 +1,7 @@
 import React, { memo } from 'react'
 import PropTypes from 'prop-types'
 import styled, { css } from 'styled-components'
-import DayPicker from 'react-day-picker'
+import DayPicker, { DateUtils } from 'react-day-picker'
 import 'react-day-picker/lib/style.css'
 
 const WrapperStyled = styled.div`
@@ -82,8 +82,8 @@ const NavBatItem = styled.div`
   display: grid;
   align-content: center
     ${props =>
-    props.left &&
-    css`
+      props.left &&
+      css`
         grid-template-columns: auto 1fr;
         > button {
           display: grid;
@@ -98,8 +98,8 @@ const NavBatItem = styled.div`
         }
       `}
     ${props =>
-    props.right &&
-    css`
+      props.right &&
+      css`
         grid-template-columns: 1fr auto;
         > button {
           display: grid;
@@ -132,17 +132,16 @@ const TitleTemp = styled.span`
   font-family: 'Montserrat-Bold';
 `
 
-const Navbar = ({ month, nextMonth, previousMonth, onPreviousClick, onNextClick, className, localeUtils }) => {
-  const months = localeUtils.getMonths()
+const Navbar = ({ month, onPreviousClick, onNextClick, localeUtils, showPreviousButton, showNextButton }) => {
   return (
     <NavBarContainer>
       <NavBatItem left>
-        <ButtonTemp onClick={() => onPreviousClick()}>←</ButtonTemp>
-        <TitleTemp>{months[month.getMonth()]}</TitleTemp>
+        {showPreviousButton && <ButtonTemp onClick={() => onPreviousClick()}>←</ButtonTemp>}
+        <TitleTemp>{localeUtils.formatMonthTitle(month)}</TitleTemp>
       </NavBatItem>
       <NavBatItem right>
-        <TitleTemp>{months[month.getMonth() + 1]}</TitleTemp>
-        <ButtonTemp onClick={() => onNextClick()}>→</ButtonTemp>
+        <TitleTemp>{localeUtils.formatMonthTitle(DateUtils.addMonths(month, 1))}</TitleTemp>
+        {showNextButton && <ButtonTemp onClick={() => onNextClick()}>→</ButtonTemp>}
       </NavBatItem>
     </NavBarContainer>
   )
