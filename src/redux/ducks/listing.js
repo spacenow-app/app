@@ -9,6 +9,7 @@ import { camalize } from 'utils/strings'
 // Actions
 export const Types = {
   LISTING_GET_SPACE_REQUEST: 'LISTING_GET_SPACE_REQUEST',
+  LISTING_GET_SPACE_DENIED: 'LISTING_GET_SPACE_DENIED',
   LISTING_GET_SPACE_SUCCESS: 'LISTING_GET_SPACE_SUCCESS',
   LISTING_GET_SPACE_FAILURE: 'LISTING_GET_SPACE_FAILURE',
   LISTING_GET_SPACE_RULES_REQUEST: 'LISTING_GET_SPACE_RULES_REQUEST',
@@ -49,6 +50,7 @@ const initialState = {
   get: {
     object: null,
     isLoading: true,
+    isNotOwner: false,
     error: null
   },
   create: {
@@ -459,6 +461,7 @@ export default function reducer(state = initialState, action) {
         ...state,
         get: {
           ...state.get,
+          isNotOwner: false,
           isLoading: true
         }
       }
@@ -470,6 +473,17 @@ export default function reducer(state = initialState, action) {
           ...state.get,
           object: action.payload,
           isLoading: false
+        }
+      }
+    }
+    case Types.LISTING_GET_SPACE_DENIED: {
+      return {
+        ...state,
+        get: {
+          ...state.get,
+          object: action.payload,
+          isLoading: false,
+          isNotOwner: true
         }
       }
     }
@@ -786,7 +800,7 @@ export default function reducer(state = initialState, action) {
 // Action Creators
 
 // Side Effects
-export const onGetListingById = id => async dispatch => {
+export const onGetListingById = (id, authID) => async dispatch => {
   dispatch({ type: Types.LISTING_GET_SPACE_REQUEST })
   try {
     const { data } = await getClientWithAuth(dispatch).query({
@@ -794,6 +808,11 @@ export const onGetListingById = id => async dispatch => {
       variables: { id: parseInt(id, 10) },
       fetchPolicy: 'network-only'
     })
+    const { userId } = data.getListingById
+    if (authID !== userId) {
+      dispatch({ type: Types.LISTING_GET_SPACE_DENIED, payload: data.getListingById })
+      return
+    }
     dispatch({ type: Types.LISTING_GET_SPACE_SUCCESS, payload: data.getListingById })
   } catch (err) {
     dispatch({ type: Types.LISTING_GET_SPACE_FAILURE, payload: errToMsg(err) })

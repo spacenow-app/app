@@ -1,9 +1,14 @@
 import React, { useEffect, useState } from 'react'
 import PropTypes from 'prop-types'
 import { Switch, Route, Redirect } from 'react-router-dom'
-import { Wrapper, Tab, TabItem, Loader, Tag, Icon, Box } from 'components'
-import { onGetListingById, onUpdate } from 'redux/ducks/listing'
 import { useDispatch, useSelector } from 'react-redux'
+import { Wrapper, Tab, TabItem, Loader, Tag, Icon, Box } from 'components'
+
+import { onGetListingById, onUpdate } from 'redux/ducks/listing'
+import { openModal, TypesModal } from 'redux/ducks/modal'
+
+import { config } from 'contants'
+
 import CancellationTab from './CancellationTab'
 import BookingTab from './BookingTab'
 import SpecificationTab from './SpecificationTab'
@@ -18,17 +23,18 @@ const ScrollToTop = ({ children, location: { pathname } }) => {
 
 const SpacePage = ({ match, history, location, ...props }) => {
   const dispatch = useDispatch()
-  const { object: objectListing, isLoading } = useSelector(state => state.listing.get)
+
+  const { object: objectListing, isLoading, isNotOwner } = useSelector(state => state.listing.get)
+  const { user } = useSelector(state => state.auth)
+
   const [values, setValues] = useState({})
 
   useEffect(() => {
-    dispatch(onGetListingById(match.params.id))
-  }, [dispatch, match.params.id])
+    dispatch(onGetListingById(match.params.id, user.id))
+  }, [dispatch, match.params.id, user])
 
   useEffect(() => {
-    if (history.action === 'PUSH') {
-      dispatch(onUpdate(objectListing, values))
-    }
+    if (history.action === 'PUSH') dispatch(onUpdate(objectListing, values))
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [history.location.key])
 
@@ -38,6 +44,22 @@ const SpacePage = ({ match, history, location, ...props }) => {
 
   if (isLoading) {
     return <Loader text="Loading listing process" />
+  }
+
+  if (isNotOwner) {
+    dispatch(
+      openModal(TypesModal.MODAL_TYPE_WARN, {
+        options: {
+          title: 'Access denied',
+          text: `This space does not belong to the logged in user.`,
+          handlerCallback: true,
+          handlerTitle: 'OK'
+        },
+        onConfirm: () => {
+          window.location.href = `${config.legacy}/dashboard`
+        }
+      })
+    )
   }
 
   const _parseCategoryIconName = (name, isSub) => {

@@ -1,6 +1,8 @@
 import React, { useEffect } from 'react'
+import PropTypes from 'prop-types'
 import styled from 'styled-components'
 import { useSelector, useDispatch } from 'react-redux'
+
 import Carousel from 'react-images'
 
 import {
@@ -44,16 +46,17 @@ const ImageStyled = styled.img`
 const PreviewPage = ({ match, location, ...props }) => {
   const dispatch = useDispatch()
 
-  const { object: listing, isLoading: isListingLoading } = useSelector(state => state.listing.get)
+  const { object: listing, isLoading: isListingLoading, isNotOwner } = useSelector(state => state.listing.get)
   const { array: arrayRules, isLoading: isLoadingRules } = useSelector(state => state.listing.rules)
   const { array: arrayPhotos } = useSelector(state => state.listing.photos)
   const { object: objectSpecifications } = useSelector(state => state.listing.specifications)
   const { isLoading: isPublishLoading, isPublished } = useSelector(state => state.listing.publishing)
   const { isEmailConfirmed } = useSelector(state => state.auth.user.verification)
+  const { user } = useSelector(state => state.auth)
 
   useEffect(() => {
-    dispatch(onGetListingById(match.params.id))
-  }, [dispatch, match.params.id])
+    dispatch(onGetListingById(match.params.id, user.id))
+  }, [dispatch, match.params.id, user])
 
   useEffect(() => {
     if (listing) {
@@ -167,6 +170,22 @@ const PreviewPage = ({ match, location, ...props }) => {
   if (isPublished) {
     window.location.href = `${config.legacy}/dashboard`
     return null
+  }
+
+  if (isNotOwner) {
+    dispatch(
+      openModal(TypesModal.MODAL_TYPE_WARN, {
+        options: {
+          title: 'Access denied',
+          text: `This space does not belong to the logged in user.`,
+          handlerCallback: true,
+          handlerTitle: 'OK'
+        },
+        onConfirm: () => {
+          window.location.href = `${config.legacy}/dashboard`
+        }
+      })
+    )
   }
 
   return (
@@ -406,6 +425,12 @@ const PreviewPage = ({ match, location, ...props }) => {
       />
     </Wrapper>
   )
+}
+
+PreviewPage.propTypes = {
+  history: PropTypes.instanceOf(Object).isRequired,
+  location: PropTypes.instanceOf(Object).isRequired,
+  match: PropTypes.instanceOf(Object).isRequired
 }
 
 export default PreviewPage
