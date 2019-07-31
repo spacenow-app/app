@@ -37,7 +37,7 @@ const TIME_TABLE_INIT_STATE = {
   listingAccessHours: []
 }
 
-const AvailabilityTab = props => {
+const AvailabilityTab = ({ listing, history }) => {
   const dispatch = useDispatch()
 
   const [timetable, setTimeTable] = useState([])
@@ -49,25 +49,7 @@ const AvailabilityTab = props => {
   const { array: holidaysArray } = useSelector(state => state.listing.holidays)
 
   useEffect(() => {
-    setTimeTable(_convertedDataToArrayTimetable(props.listing.accessDays))
-    dispatch(onGetAvailabilitiesByListingId(props.listing.id))
-    dispatch(onGetAllHolidays())
-  }, [dispatch, props])
-
-  useEffect(() => {
-    _checkFullTime(timetable)
-  }, [timetable])
-
-  useEffect(() => {
-    setSelectedDates(availabilitiesArray.map(o => new Date(o)))
-  }, [availabilitiesArray])
-
-  const _formatTime = date => {
-    const time = format(date, 'HH:mm')
-    return new Date(`${format(new Date(), 'MM/DD/YYYY')} ${time}`)
-  }
-
-  const _convertedDataToArrayTimetable = array => {
+    const { accessDays } = listing
     const arrayOutput = []
     for (let i = 0, size = weekTimeTable.length; i < size; i += 1) {
       const o = weekTimeTable[i]
@@ -80,8 +62,8 @@ const AvailabilityTab = props => {
         close: new Date(`${format(new Date(), 'MM/DD/YYYY')} 17:00`),
         error: {}
       }
-      if (/true/i.test(array[o.short])) {
-        const hoursElem = array.listingAccessHours.find(h => h.weekday === o.index)
+      if (/true/i.test(accessDays[o.short])) {
+        const hoursElem = accessDays.listingAccessHours.find(h => h.weekday === o.index)
         if (hoursElem) {
           const openHour = nanDate(hoursElem.openHour)
           const closeHour = nanDate(hoursElem.closeHour)
@@ -98,7 +80,25 @@ const AvailabilityTab = props => {
       }
       arrayOutput.push(elem)
     }
-    return arrayOutput
+    setTimeTable(arrayOutput)
+  }, [listing])
+
+  useEffect(() => {
+    dispatch(onGetAvailabilitiesByListingId(listing))
+    dispatch(onGetAllHolidays())
+  }, [dispatch, listing])
+
+  useEffect(() => {
+    _checkFullTime(timetable)
+  }, [timetable])
+
+  useEffect(() => {
+    setSelectedDates(availabilitiesArray.map(o => new Date(o)))
+  }, [availabilitiesArray])
+
+  const _formatTime = date => {
+    const time = format(date, 'HH:mm')
+    return new Date(`${format(new Date(), 'MM/DD/YYYY')} ${time}`)
   }
 
   const _checkFullTime = array => {
@@ -200,12 +200,12 @@ const AvailabilityTab = props => {
 
   const _handleSave = async () => {
     const valuesToUpdate = {
-      ...props.listing,
+      ...listing,
       listingAccessDays: _mapToAccessHourType(timetable),
       listingExceptionDates: selectedDates
     }
-    await dispatch(onUpdate(props.listing, valuesToUpdate))
-    props.history.push('cancellation')
+    await dispatch(onUpdate(listing, valuesToUpdate))
+    history.push('cancellation')
   }
 
   const _onClickSelectDay = (day, { selected }) => {
@@ -319,16 +319,14 @@ const AvailabilityTab = props => {
             })}
         </Grid>
       </Cell>
-      <StepButtons
-        prev={{ disabled: false, onClick: () => props.history.push('booking') }}
-        next={{ onClick: _handleSave }}
-      />
+      <StepButtons prev={{ disabled: false, onClick: () => history.push('booking') }} next={{ onClick: _handleSave }} />
     </Grid>
   )
 }
 
 AvailabilityTab.propTypes = {
-  listing: PropTypes.instanceOf(Object).isRequired
+  listing: PropTypes.instanceOf(Object).isRequired,
+  history: PropTypes.instanceOf(Object).isRequired
 }
 
 export default AvailabilityTab

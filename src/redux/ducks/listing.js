@@ -902,12 +902,12 @@ const camalize = str => {
   return str.toLowerCase().replace(/[^a-zA-Z0-9]+(.)/g, (_, chr) => chr.toUpperCase())
 }
 
-export const onGetAvailabilitiesByListingId = listingId => async dispatch => {
+export const onGetAvailabilitiesByListingId = listing => async dispatch => {
   dispatch({ type: Types.LISTING_GET_SPACE_AVAILABILITIES_REQUEST })
   try {
     const { data } = await getClientWithAuth(dispatch).query({
       query: queryGetAvailabilities,
-      variables: { listingId },
+      variables: { listingId: listing.id },
       fetchPolicy: 'network-only'
     })
     const { bookingDates, exceptionDates } = data.getAvailabilitiesByListingId
