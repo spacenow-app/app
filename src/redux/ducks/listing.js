@@ -786,7 +786,6 @@ export default function reducer(state = initialState, action) {
 // Action Creators
 
 // Side Effects
-// export const onGetListingById = (id, history) => async dispatch => {
 export const onGetListingById = id => async dispatch => {
   dispatch({ type: Types.LISTING_GET_SPACE_REQUEST })
   try {
@@ -797,11 +796,6 @@ export const onGetListingById = id => async dispatch => {
     })
     dispatch({ type: Types.LISTING_GET_SPACE_SUCCESS, payload: data.getListingById })
   } catch (err) {
-    if (err.message.indexOf('does not belong') > 0) {
-      console.error(err.message)
-      // history.push('/')
-      return
-    }
     dispatch({ type: Types.LISTING_GET_SPACE_FAILURE, payload: errToMsg(err) })
   }
 }

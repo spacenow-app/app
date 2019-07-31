@@ -233,7 +233,7 @@ const SpecificationTab = ({
       },
       onConfirm: () => {
         props.history.replace('/listing/category')
-        // call action to delete
+        // TODO: call action to delete
       }
     }
     dispatch(openModal(TypesModal.MODAL_TYPE_CONFIRM, options))

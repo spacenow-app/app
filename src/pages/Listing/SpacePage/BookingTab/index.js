@@ -245,12 +245,8 @@ const formik = {
     const {
       settingsParent: { bookingPeriod }
     } = listing
-
     if (listing.listingData) {
-      const bookingPeriodDefault = ['hourly', 'daily', 'weekly', 'monthly'].find(el => {
-        return bookingPeriod[el] === 1
-      })
-
+      const bookingPeriodDefault = ['hourly', 'daily', 'weekly', 'monthly'].find(el => bookingPeriod[el] === 1)
       return {
         bookingPeriod: listing.bookingPeriod || bookingPeriodDefault,
         currency: listing.currency || 'AUD',

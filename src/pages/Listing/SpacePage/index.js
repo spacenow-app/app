@@ -22,7 +22,6 @@ const SpacePage = ({ match, history, location, ...props }) => {
   const [values, setValues] = useState({})
 
   useEffect(() => {
-    // dispatch(onGetListingById(match.params.id, props.history))
     dispatch(onGetListingById(match.params.id))
   }, [dispatch, match.params.id])
 
@@ -139,7 +138,8 @@ const SpacePage = ({ match, history, location, ...props }) => {
 
 SpacePage.propTypes = {
   match: PropTypes.instanceOf(Object).isRequired,
-  location: PropTypes.instanceOf(Object).isRequired
+  location: PropTypes.instanceOf(Object).isRequired,
+  history: PropTypes.instanceOf(Object).isRequired
 }
 
 export default SpacePage
