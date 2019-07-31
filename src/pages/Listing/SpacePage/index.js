@@ -47,19 +47,18 @@ const SpacePage = ({ match, history, location, ...props }) => {
   }
 
   if (isNotOwner) {
+    history.replace('/')
     dispatch(
       openModal(TypesModal.MODAL_TYPE_WARN, {
         options: {
           title: 'Access denied',
           text: `This space does not belong to the logged in user.`,
-          handlerCallback: true,
+          handlerCallback: false,
           handlerTitle: 'OK'
-        },
-        onConfirm: () => {
-          window.location.href = `${config.legacy}/dashboard`
         }
       })
     )
+    return null
   }
 
   const _parseCategoryIconName = (name, isSub) => {
