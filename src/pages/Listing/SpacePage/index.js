@@ -120,7 +120,13 @@ const SpacePage = ({ match, history, location, ...props }) => {
           <Route
             path={`${match.path}/availability`}
             render={routeProps => (
-              <AvailabilityTab {...routeProps} {...props} listing={objectListing} dispatch={dispatch} />
+              <AvailabilityTab
+                {...routeProps}
+                {...props}
+                listing={objectListing}
+                dispatch={dispatch}
+                setFatherValues={_setFatherValues}
+              />
             )}
           />
           <Route

@@ -8,7 +8,7 @@ import update from 'immutability-helper'
 
 import { nanDate, weekTimeTable } from 'contants/dates'
 
-import { onUpdate, onGetAvailabilitiesByListingId, onGetAllHolidays } from 'redux/ducks/listing'
+import { onGetAvailabilitiesByListingId, onGetAllHolidays } from 'redux/ducks/listing'
 
 import { Title, Grid, Cell, TimeTable, Calendar, Switch, StepButtons, ToolTip } from 'components'
 
@@ -37,7 +37,7 @@ const TIME_TABLE_INIT_STATE = {
   listingAccessHours: []
 }
 
-const AvailabilityTab = ({ listing, history }) => {
+const AvailabilityTab = ({ listing, history, setFatherValues }) => {
   const dispatch = useDispatch()
 
   const [timetable, setTimeTable] = useState([])
@@ -47,6 +47,16 @@ const AvailabilityTab = ({ listing, history }) => {
 
   const { array: availabilitiesArray } = useSelector(state => state.listing.availabilities)
   const { array: holidaysArray } = useSelector(state => state.listing.holidays)
+
+  useEffect(() => {
+    const valuesToUpdate = {
+      ...listing,
+      listingAccessDays: _mapToAccessHourType(timetable),
+      listingExceptionDates: selectedDates
+    }
+    setFatherValues(valuesToUpdate)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [setFatherValues])
 
   useEffect(() => {
     const { accessDays } = listing
@@ -198,16 +208,6 @@ const AvailabilityTab = ({ listing, history }) => {
     return outputObj
   }
 
-  const _handleSave = async () => {
-    const valuesToUpdate = {
-      ...listing,
-      listingAccessDays: _mapToAccessHourType(timetable),
-      listingExceptionDates: selectedDates
-    }
-    await dispatch(onUpdate(listing, valuesToUpdate))
-    history.push('cancellation')
-  }
-
   const _onClickSelectDay = (day, { selected }) => {
     const copySelectedDates = [...selectedDates]
     if (selected) {
@@ -319,14 +319,18 @@ const AvailabilityTab = ({ listing, history }) => {
             })}
         </Grid>
       </Cell>
-      <StepButtons prev={{ disabled: false, onClick: () => history.push('booking') }} next={{ onClick: _handleSave }} />
+      <StepButtons
+        prev={{ onClick: () => history.push('booking') }}
+        next={{ onClick: () => history.push('cancellation') }}
+      />
     </Grid>
   )
 }
 
 AvailabilityTab.propTypes = {
   listing: PropTypes.instanceOf(Object).isRequired,
-  history: PropTypes.instanceOf(Object).isRequired
+  history: PropTypes.instanceOf(Object).isRequired,
+  setFatherValues: PropTypes.instanceOf(Function).isRequired
 }
 
 export default AvailabilityTab
