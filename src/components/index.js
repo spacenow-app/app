@@ -32,6 +32,7 @@ import Loader from './Loader'
 import ToolTip from './ToolTip'
 import Photo from './Photo'
 import Avatar from './Avatar'
+import Carousel from './Carousel'
 
 export {
   Modal,
@@ -70,5 +71,6 @@ export {
   Loader,
   ToolTip,
   Photo,
-  Avatar
+  Avatar,
+  Carousel
 }

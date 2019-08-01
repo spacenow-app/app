@@ -3,8 +3,6 @@ import PropTypes from 'prop-types'
 import styled from 'styled-components'
 import { useSelector, useDispatch } from 'react-redux'
 
-import Carousel from 'react-images'
-
 import {
   Wrapper,
   Title,
@@ -18,7 +16,8 @@ import {
   Highlights,
   StepButtons,
   Loader,
-  Checkbox
+  Checkbox,
+  Carousel
 } from 'components'
 
 import { capitalize, toPlural } from 'utils/strings'
@@ -37,7 +36,6 @@ import { openModal, TypesModal } from 'redux/ducks/modal'
 import { config } from 'contants'
 
 import GraphCancelattionImage from 'pages/Listing/SpacePage/CancellationTab/graph_cancellation.png'
-import NoPreviewBackgroundImage from './no-img-preview.jpg'
 
 const ImageStyled = styled.img`
   width: 100%;
@@ -96,7 +94,7 @@ const PreviewPage = ({ match, location, ...props }) => {
     if (mon && tue && wed && thu && fri & !sat && !sun) return 'Weekdays'
     if (!mon && !tue && !wed && !thu && !fri & sat && sun) return 'Weekends'
     if (mon && tue && wed && thu && fri & sat && sun) return 'Everyday'
-    if (!mon && !tue && !wed && !thu && !fri & !sat && !sun) return 'No Data'
+    if (!mon && !tue && !wed && !thu && !fri & !sat && !sun) return 'Closed'
     return 'Custom'
   }
 
@@ -163,6 +161,12 @@ const PreviewPage = ({ match, location, ...props }) => {
     }
   }
 
+  const _convertedArrayPhotos = array => {
+    return array.filter(el => el !== undefined).length > 0
+      ? array.filter(el => el !== undefined).map(el => ({ source: el.name }))
+      : []
+  }
+
   if (isListingLoading || isPublishLoading) {
     return <Loader text="Loading listing preview" />
   }
@@ -191,53 +195,7 @@ const PreviewPage = ({ match, location, ...props }) => {
   return (
     <Wrapper>
       <Title type="h2" title="Just one more thing, review your space!" />
-      <Carousel
-        views={
-          arrayPhotos.filter(el => el !== undefined).length > 0
-            ? arrayPhotos
-                .filter(el => el !== undefined)
-                .map(el => ({
-                  source: el.name
-                }))
-            : [{ source: NoPreviewBackgroundImage }]
-        }
-        currentIndex={0}
-        styles={{
-          container: base => ({
-            ...base,
-            backgroundColor: '#fafafa',
-            borderRadius: '15px'
-          }),
-          view: () => ({
-            height: 500,
-            width: '100%',
-            borderRadius: '15px',
-            border: '1px solid #E2E2E2',
-            '& > img': {
-              borderRadius: '15px',
-              width: '100%',
-              height: '100%'
-            }
-          }),
-          navigationPrev: base => ({
-            ...base,
-            background: '#fff',
-            '& > svg': {
-              fill: '#6DDE94'
-            }
-          }),
-          navigationNext: base => ({
-            ...base,
-            background: '#fff',
-            '& > svg': {
-              fill: '#6DDE94'
-            }
-          })
-        }}
-        components={{
-          Footer: null
-        }}
-      />
+      <Carousel photos={_convertedArrayPhotos(arrayPhotos)} />
       <Box my="40px">
         <Grid justifyContent="space-between" columnGap="10px" columns={2}>
           <Box display="flex" justifyContent="start">
@@ -277,7 +235,8 @@ const PreviewPage = ({ match, location, ...props }) => {
         <Cell width={3}>
           <Title
             type="h3"
-            title={listing.title ? listing.title : 'No Data'}
+            title={listing.title ? listing.title : 'Input Title'}
+            color={!listing.title ? '#E05252' : null}
             subtitle={_getAddress(listing.location)}
             subTitleSize={18}
             noMargin
@@ -289,6 +248,7 @@ const PreviewPage = ({ match, location, ...props }) => {
             title={`${listing.listingData.currency}$ ${Math.round((listing.listingData.basePrice || 0) * 100) / 100} ${
               listing.bookingPeriod
             }`}
+            color={listing.listingData.basePrice === 0 || listing.listingData.basePrice === null ? '#E05252' : null}
             noMargin
             right
             style={{ marginTop: '5px' }}
@@ -303,7 +263,12 @@ const PreviewPage = ({ match, location, ...props }) => {
             name={_changeToPlural(listing.bookingPeriod, listing.listingData.minTerm)}
             icon="specification-minimum-term"
           />
-          <Highlights title="Opening Days" name={_getWeekName(listing.accessDays)} icon="specification-opening-days" />
+          <Highlights
+            title="Opening Days"
+            name={_getWeekName(listing.accessDays)}
+            icon="specification-opening-days"
+            error={_getWeekName(listing.accessDays) === 'Closed'}
+          />
           {objectSpecifications && _renderHighLights(objectSpecifications)}
         </Grid>
       </Box>
@@ -312,7 +277,7 @@ const PreviewPage = ({ match, location, ...props }) => {
         <Title type="h4" title="Access Information" />
         <Box
           display="grid"
-          border="1px solid #EBEBEB"
+          border="1px solid"
           borderRadius="10px"
           width="110px"
           height="130px"
@@ -320,76 +285,82 @@ const PreviewPage = ({ match, location, ...props }) => {
           textAlign="center"
           fontFamily="MontSerrat-SemiBold"
           fontSize="14px"
-          color="quartenary"
+          color={listing.listingData.accessType ? 'quartenary' : 'error'}
+          borderColor={listing.listingData.accessType ? 'greyscale.4' : 'error'}
         >
-          {listing.listingData.accessType ? (
-            <>
-              <Icon
-                style={{ alignSelf: 'center', justifySelf: 'center' }}
-                width="50px"
-                fill="#6ADC91"
-                name={`access-type-${listing.listingData.accessType
-                  .toLowerCase()
-                  .split(' ')
-                  .join('-')}`}
-              />
-              {listing.listingData.accessType}
-            </>
-          ) : (
-            'No Data'
-          )}
+          <Icon
+            style={{ alignSelf: 'center', justifySelf: 'center' }}
+            width="50px"
+            fill={listing.listingData.accessType ? '#6ADC91' : '#E05252'}
+            name={
+              listing.listingData.accessType &&
+              `access-type-${listing.listingData.accessType
+                .toLowerCase()
+                .split(' ')
+                .join('-')}`
+            }
+          />
+          {listing.listingData.accessType ? <>{listing.listingData.accessType}</> : 'No Data'}
         </Box>
       </Box>
 
       <Box my="100px">
-        <Title type="h4" title="Description" />
+        <Title type="h4" title="Description" color={!listing.listingData.description ? '#E05252' : null} />
         <p>{listing.listingData.description}</p>
       </Box>
 
-      <Box my="100px">
-        <Title type="h4" title="Amenities" />
-        <Box display="grid" gridTemplateColumns="1fr 1fr 1fr" gridRowGap="40px">
-          {listing.amenities.map(item => {
-            return (
-              <Box key={item.id} display="grid" gridTemplateColumns="auto 1fr" gridColumnGap="20px">
-                <Box width="54px" height="54px" borderRadius="100%" bg="primary">
-                  <Icon
-                    name={`amenitie-${item.settingsData.otherItemName}`}
-                    width="70%"
-                    height="100%"
-                    style={{ display: 'block', margin: 'auto' }}
-                  />
+      {listing.amenities.length > 0 && (
+        <Box my="100px">
+          <Title type="h4" title="Amenities" />
+          <Box display="grid" gridTemplateColumns="1fr 1fr 1fr" gridRowGap="40px">
+            {listing.amenities.map(item => {
+              return (
+                <Box key={item.id} display="grid" gridTemplateColumns="auto 1fr" gridColumnGap="20px">
+                  <Box width="54px" height="54px" borderRadius="100%" bg="primary">
+                    <Icon
+                      name={`amenitie-${item.settingsData.otherItemName}`}
+                      width="70%"
+                      height="100%"
+                      style={{ display: 'block', margin: 'auto' }}
+                    />
+                  </Box>
+                  <span style={{ alignSelf: 'center' }}>{item.settingsData.itemName}</span>
                 </Box>
-                <span style={{ alignSelf: 'center' }}>{item.settingsData.itemName}</span>
-              </Box>
-            )
-          })}
+              )
+            })}
+          </Box>
         </Box>
-      </Box>
+      )}
+
+      {listing.rules.length > 0 && (
+        <Box my="100px">
+          <Title type="h4" title="Space Rules" />
+          <Box display="grid" gridTemplateColumns="1fr 1fr 1fr" gridRowGap="20px">
+            {isLoadingRules ? (
+              <Loader />
+            ) : (
+              arrayRules.map(item => (
+                <Checkbox
+                  disabled
+                  key={item.id}
+                  label={item.itemName}
+                  name="rules"
+                  value={item.id}
+                  checked={listing.rules.some(rule => rule.listSettingsId === item.id)}
+                />
+              ))
+            )}
+          </Box>
+        </Box>
+      )}
 
       <Box my="100px">
-        <Title type="h4" title="Space Rules" />
-        <Box display="grid" gridTemplateColumns="1fr 1fr 1fr" gridRowGap="20px">
-          {isLoadingRules ? (
-            <Loader />
-          ) : (
-            arrayRules.map(item => (
-              <Checkbox
-                disabled
-                key={item.id}
-                label={item.itemName}
-                name="rules"
-                value={item.id}
-                checked={listing.rules.some(rule => rule.listSettingsId === item.id)}
-              />
-            ))
-          )}
-        </Box>
-      </Box>
-
-      <Box my="100px">
-        <Title type="h4" title="Availability" />
-        <TimeTable data={listing.accessDays.listingAccessHours} />
+        <Title
+          type="h4"
+          title="Availability"
+          color={_getWeekName(listing.accessDays) === 'Closed' ? '#E05252' : null}
+        />
+        <TimeTable data={listing.accessDays.listingAccessHours} error={_getWeekName(listing.accessDays) === 'Closed'} />
       </Box>
 
       <Box my="100px">

@@ -1,6 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import styled, { css } from 'styled-components'
+import { color } from 'styled-system'
 
 const large = css`
   font-size: 16px;
@@ -22,9 +23,9 @@ const Container = styled.div`
 
 const CaptionStyled = styled.span`
   font-family: 'Montserrat-Medium';
-  color: #1f252a;
   font-size: 14px;
   ${props => (props.small && small) || (props.medium && medium) || (props.large && large)}
+  ${color}
 `
 
 const Caption = props => {
@@ -38,7 +39,8 @@ const Caption = props => {
 Caption.defaultProps = {
   small: false,
   medium: false,
-  large: false
+  large: false,
+  color: '#1f252a'
 }
 
 Caption.propTypes = {
