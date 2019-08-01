@@ -37,6 +37,8 @@ const TIME_TABLE_INIT_STATE = {
   listingAccessHours: []
 }
 
+const WEEKEND = ['sun', 'mon', 'tue', 'wed', 'thu', 'fri', 'sat', 'sun']
+
 const AvailabilityTab = ({ listing, history, setFatherValues }) => {
   const dispatch = useDispatch()
 
@@ -44,6 +46,7 @@ const AvailabilityTab = ({ listing, history, setFatherValues }) => {
   const [fullTime, setFullTime] = useState(false)
   const [selectedDates, setSelectedDates] = useState([])
   const [holidays, setHolidays] = useState([])
+  const [timeTableWeek, setTimeTableWeek] = useState([])
 
   const { array: availabilitiesArray } = useSelector(state => state.listing.availabilities)
   const { array: holidaysArray } = useSelector(state => state.listing.holidays)
@@ -105,6 +108,15 @@ const AvailabilityTab = ({ listing, history, setFatherValues }) => {
   useEffect(() => {
     setSelectedDates(availabilitiesArray.map(o => new Date(o)))
   }, [availabilitiesArray])
+
+  useEffect(() => {
+    const teste = timetable.map(item => {
+      if (!item.active) {
+        return weekTimeTable.find(el => el.short === item.day).index
+      }
+    })
+    setTimeTableWeek(teste.filter(el => el !== undefined))
+  }, [timetable])
 
   const _formatTime = date => {
     const time = format(date, 'HH:mm')
@@ -273,6 +285,7 @@ const AvailabilityTab = ({ listing, history, setFatherValues }) => {
           handleDayClick={_onClickSelectDay}
           selectedDays={selectedDates}
           disabledDays={[]}
+          daysOfWeek={timeTableWeek}
         />
       </Cell>
       <Cell>
