@@ -7,8 +7,6 @@ import { Wrapper, Tab, TabItem, Loader, Tag, Icon, Box } from 'components'
 import { onGetListingById, onUpdate } from 'redux/ducks/listing'
 import { openModal, TypesModal } from 'redux/ducks/modal'
 
-import { config } from 'contants'
-
 import CancellationTab from './CancellationTab'
 import BookingTab from './BookingTab'
 import SpecificationTab from './SpecificationTab'
