@@ -2,11 +2,12 @@ import React, { useEffect } from 'react'
 import { withFormik } from 'formik'
 import * as Yup from 'yup'
 import numeral from 'numeral'
+import { Title, Select, Input, Caption, Radio, Grid, Cell, StepButtons } from 'components'
 import { capitalize, toPlural } from 'utils/strings'
-
 import { onUpdate } from 'redux/ducks/listing'
 
-import { Title, Select, Input, Caption, Radio, Grid, Cell, StepButtons } from 'components'
+import GuestFeeIcon from './guest_fee_icon.svg'
+import HostFeeIcon from './host_fee_icon.svg'
 
 const BookingTab = ({
   values,
@@ -211,7 +212,7 @@ const BookingTab = ({
               text=" Incur the 10% service fee and the guest will not be passed an extra
                 10% on top of your rate. Ie. List your space for $100 and you will
                 receive $90. The guest will pay $100."
-              image="https://www.sccpre.cat/mypng/full/65-650780_stock-vector-woman-user-smartphone-design-flat-computer.png"
+              image={HostFeeIcon}
             />
           </Cell>
           <Cell width={1}>
@@ -225,7 +226,7 @@ const BookingTab = ({
               text="The guest pays the 10% service fee and you, the host, will receive
                 the full rate. Ie. List your space for $100 and you will receive
                 $100. The guest will pay $110."
-              image="https://cdn.dribbble.com/users/1338391/screenshots/6044614/building_dribbble.jpg"
+              image={GuestFeeIcon}
             />
           </Cell>
         </Grid>
