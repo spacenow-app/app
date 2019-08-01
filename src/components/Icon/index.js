@@ -43,6 +43,7 @@ import { ReactComponent as SubCategoryWeddingVenue } from './svg/sub-category/su
 import { ReactComponent as SubCategoryWineStorage } from './svg/sub-category/sub_category_wine_storage.svg'
 
 // Generic
+import { ReactComponent as QuestionMark } from './svg/generic/question_mark.svg'
 import { ReactComponent as Bin } from './svg/generic/bin.svg'
 import { ReactComponent as Camera } from './svg/generic/camera.svg'
 import { ReactComponent as StarFull } from './svg/generic/star-full.svg'
@@ -146,6 +147,7 @@ import { ReactComponent as AmenitieWhiteboard } from './svg/amenities/amenities_
 import { ReactComponent as AmenitieWifi } from './svg/amenities/amenities_wifi.svg'
 
 const Icons = {
+  'question-mark': <QuestionMark />,
   'single-space': <SingleSpace />,
   'multiple-space': <MultipleSpace />,
   'category-coworking': <CategoryCoworking />,
@@ -286,7 +288,7 @@ const Icons = {
 
 const Icon = props => {
   if (!Icons[props.name]) {
-    return null
+    return cloneElement(Icons['question-mark'], props)
   }
   return cloneElement(Icons[props.name], props)
 }
