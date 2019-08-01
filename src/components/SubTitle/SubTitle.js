@@ -39,17 +39,17 @@ const ExtraSmallBold = styled.div`
 const SubTitle = props => {
   switch (props.type) {
     case 'large':
-      return <Large>{props.children}</Large>
+      return <Large {...props}>{props.children}</Large>
     case 'medium':
-      return <Medium>{props.children}</Medium>
+      return <Medium {...props}>{props.children}</Medium>
     case 'small':
-      return <Small>{props.children}</Small>
+      return <Small {...props}>{props.children}</Small>
     case 'xSmall':
-      return <ExtraSmall>{props.children}</ExtraSmall>
+      return <ExtraSmall {...props}>{props.children}</ExtraSmall>
     case 'xSmallBold':
-      return <ExtraSmallBold>{props.children}</ExtraSmallBold>
+      return <ExtraSmallBold {...props}>{props.children}</ExtraSmallBold>
     default:
-      return <Medium>{props.children}</Medium>
+      return <Medium {...props}>{props.children}</Medium>
   }
 }
 
