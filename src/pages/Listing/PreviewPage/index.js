@@ -236,7 +236,7 @@ const PreviewPage = ({ match, location, ...props }) => {
           <Title
             type="h3"
             title={listing.title ? listing.title : 'Input Title'}
-            color={!listing.title && '#E05252'}
+            color={!listing.title ? '#E05252' : null}
             subtitle={_getAddress(listing.location)}
             subTitleSize={18}
             noMargin
@@ -248,7 +248,7 @@ const PreviewPage = ({ match, location, ...props }) => {
             title={`${listing.listingData.currency}$ ${Math.round((listing.listingData.basePrice || 0) * 100) / 100} ${
               listing.bookingPeriod
             }`}
-            color={(listing.listingData.basePrice === 0 || listing.listingData.basePrice === null) && '#E05252'}
+            color={listing.listingData.basePrice === 0 || listing.listingData.basePrice === null ? '#E05252' : null}
             noMargin
             right
             style={{ marginTop: '5px' }}
@@ -305,7 +305,7 @@ const PreviewPage = ({ match, location, ...props }) => {
       </Box>
 
       <Box my="100px">
-        <Title type="h4" title="Description" color={!listing.listingData.description && '#E05252'} />
+        <Title type="h4" title="Description" color={!listing.listingData.description ? '#E05252' : null} />
         <p>{listing.listingData.description}</p>
       </Box>
 
@@ -355,7 +355,11 @@ const PreviewPage = ({ match, location, ...props }) => {
       )}
 
       <Box my="100px">
-        <Title type="h4" title="Availability" color={_getWeekName(listing.accessDays) === 'Closed' && '#E05252'} />
+        <Title
+          type="h4"
+          title="Availability"
+          color={_getWeekName(listing.accessDays) === 'Closed' ? '#E05252' : null}
+        />
         <TimeTable data={listing.accessDays.listingAccessHours} error={_getWeekName(listing.accessDays) === 'Closed'} />
       </Box>
 
