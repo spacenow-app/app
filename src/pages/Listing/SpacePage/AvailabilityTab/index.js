@@ -37,8 +37,6 @@ const TIME_TABLE_INIT_STATE = {
   listingAccessHours: []
 }
 
-const WEEKEND = ['sun', 'mon', 'tue', 'wed', 'thu', 'fri', 'sat', 'sun']
-
 const AvailabilityTab = ({ listing, history, setFatherValues }) => {
   const dispatch = useDispatch()
 
