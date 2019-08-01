@@ -108,12 +108,13 @@ const AvailabilityTab = ({ listing, history, setFatherValues }) => {
   }, [availabilitiesArray])
 
   useEffect(() => {
-    const teste = timetable.map(item => {
+    const newTimeTableWeek = timetable.map(item => {
       if (!item.active) {
         return weekTimeTable.find(el => el.short === item.day).index
       }
+      return undefined
     })
-    setTimeTableWeek(teste.filter(el => el !== undefined))
+    setTimeTableWeek(newTimeTableWeek.filter(el => el !== undefined))
   }, [timetable])
 
   const _formatTime = date => {
