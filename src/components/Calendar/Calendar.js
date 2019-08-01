@@ -151,7 +151,7 @@ const Caption = ({ date }) => {
   return null
 }
 
-const Calendar = ({ selectedDays, disabledDays, handleDayClick, ...props }) => {
+const Calendar = ({ selectedDays, disabledDays, daysOfWeek, handleDayClick, ...props }) => {
   return (
     <WrapperStyled>
       <DayPicker
@@ -161,6 +161,9 @@ const Calendar = ({ selectedDays, disabledDays, handleDayClick, ...props }) => {
           ...disabledDays.map(el => new Date(el)),
           {
             before: new Date()
+          },
+          {
+            daysOfWeek
           }
         ]}
         selectedDays={selectedDays}
@@ -175,6 +178,7 @@ const Calendar = ({ selectedDays, disabledDays, handleDayClick, ...props }) => {
 Calendar.propTypes = {
   selectedDays: PropTypes.instanceOf(Array),
   disabledDays: PropTypes.instanceOf(Array),
+  daysOfWeek: PropTypes.instanceOf(Array),
   handleDayClick: PropTypes.func
 }
 
