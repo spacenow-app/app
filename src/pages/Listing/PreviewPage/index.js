@@ -176,21 +176,21 @@ const PreviewPage = ({ match, location, ...props }) => {
     return null
   }
 
-  // if (isNotOwner) {
-  //   dispatch(
-  //     openModal(TypesModal.MODAL_TYPE_WARN, {
-  //       options: {
-  //         title: 'Access denied',
-  //         text: `This space does not belong to the logged in user.`,
-  //         handlerCallback: true,
-  //         handlerTitle: 'OK'
-  //       },
-  //       onConfirm: () => {
-  //         window.location.href = `${config.legacy}/dashboard`
-  //       }
-  //     })
-  //   )
-  // }
+  if (isNotOwner) {
+    dispatch(
+      openModal(TypesModal.MODAL_TYPE_WARN, {
+        options: {
+          title: 'Access denied',
+          text: `This space does not belong to the logged in user.`,
+          handlerCallback: true,
+          handlerTitle: 'OK'
+        },
+        onConfirm: () => {
+          window.location.href = `${config.legacy}/dashboard`
+        }
+      })
+    )
+  }
 
   return (
     <Wrapper>
