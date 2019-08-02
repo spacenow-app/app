@@ -15,16 +15,16 @@ const BookingTab = ({
   errors,
   handleChange,
   handleBlur,
-  handleSubmit,
   setFieldValue,
   listing,
   dispatch,
   setFatherValues,
+  isValid,
   ...props
 }) => {
   useEffect(() => {
-    setFatherValues(values)
-  }, [setFatherValues, values])
+    setFatherValues({ ...values, isValid })
+  }, [setFatherValues, values, isValid])
 
   const _handleSelectChange = e => {
     const { name, value } = e.target
@@ -259,11 +259,13 @@ const formik = {
     }
     return {}
   },
-  validationSchema: Yup.object().shape({}),
+  validationSchema: Yup.object().shape({
+    basePrice: Yup.number()
+      .positive('Must be above 0.')
+      .typeError('Need to be number.')
+  }),
   enableReinitialize: false,
-  handleSubmit: (values, { props: { dispatch, listing } }) => {
-    dispatch(onUpdate(listing, values))
-  }
+  isInitialValid: true
 }
 
 BookingTab.propTypes = {
