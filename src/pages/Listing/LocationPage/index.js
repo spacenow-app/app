@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
+import Helmet from 'react-helmet'
 import styled from 'styled-components'
 
 import { Wrapper, Title, StepButtons, Input, Map, AutoComplete } from 'components'
@@ -49,6 +50,7 @@ const LocationPage = props => {
 
   return (
     <Wrapper>
+      <Helmet title="Listing Location - Spacenow" />
       <Title type="h3" title="Location" />
       <GroupInput>
         <AutoComplete

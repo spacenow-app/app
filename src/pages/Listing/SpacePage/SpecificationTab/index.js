@@ -2,6 +2,7 @@
 /* eslint-disable no-console */
 import React, { useEffect, useCallback } from 'react'
 import styled from 'styled-components'
+import Helmet from 'react-helmet'
 import { withFormik } from 'formik'
 import * as Yup from 'yup'
 import _ from 'lodash'
@@ -12,8 +13,7 @@ import {
   onGetAllAccessTypes,
   onGetAllAmenities,
   onGetAllSpecifications,
-  onGetPhotosByListingId,
-  onUpdate
+  onGetPhotosByListingId
 } from 'redux/ducks/listing'
 
 import { onUploadPhoto, onSetCoverPhoto, onDeletePhoto } from 'redux/ducks/photo'
@@ -242,6 +242,7 @@ const SpecificationTab = ({
   return (
     <form>
       <WrapperStyled>
+        <Helmet title="Listing Space Specification - Spacenow" />
         <SectionStyled>
           <Title
             type="h3"

@@ -1,10 +1,10 @@
 import React, { useEffect } from 'react'
+import Helmet from 'react-helmet'
 import { withFormik } from 'formik'
 import * as Yup from 'yup'
 import numeral from 'numeral'
 import { Title, Select, Input, Caption, Radio, Grid, Cell, StepButtons } from 'components'
 import { capitalize, toPlural } from 'utils/strings'
-import { onUpdate } from 'redux/ducks/listing'
 
 import GuestFeeIcon from './guest_fee_icon.svg'
 import HostFeeIcon from './host_fee_icon.svg'
@@ -45,6 +45,7 @@ const BookingTab = ({
 
   return (
     <Grid columns={1} rowGap="80px">
+      <Helmet title="Listing Space Booking - Spacenow" />
       <Cell>
         <Title
           type="h3"

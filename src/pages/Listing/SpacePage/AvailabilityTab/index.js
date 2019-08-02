@@ -1,6 +1,7 @@
 /* eslint-disable no-console */
 import React, { useEffect, useState } from 'react'
 import PropTypes from 'prop-types'
+import Helmet from 'react-helmet'
 import { useDispatch, useSelector } from 'react-redux'
 import styled from 'styled-components'
 import { format, isAfter, isBefore, isSameDay } from 'date-fns'
@@ -261,87 +262,90 @@ const AvailabilityTab = ({ listing, history, setFatherValues }) => {
   }
 
   return (
-    <Grid columns={1} rowGap="80px">
-      <Cell>
-        <Title type="h3" title="Timetable*" subtitle="Let guests know the times your space is open." />
-        <TimeTable
-          editable
-          data={timetable}
-          fullTime={fullTime}
-          handleChangeTime={_handleChangeTime}
-          handleClickDay={_handleChangeDay}
-          handleClick24hours={_handleClick24hours}
-          handleClickOpenFullTime={_handleClickOpenFullTime}
+    <>
+      <Helmet title="Listing Space Availability - Spacenow" />
+      <Grid columns={1} rowGap="80px">
+        <Cell>
+          <Title type="h3" title="Timetable*" subtitle="Let guests know the times your space is open." />
+          <TimeTable
+            editable
+            data={timetable}
+            fullTime={fullTime}
+            handleChangeTime={_handleChangeTime}
+            handleClickDay={_handleChangeDay}
+            handleClick24hours={_handleClick24hours}
+            handleClickOpenFullTime={_handleClickOpenFullTime}
+          />
+        </Cell>
+        <Cell>
+          <Title
+            type="h3"
+            title="Blocked dates"
+            subtitle="Block out times when the space is not available within business opening hours."
+          />
+          <Calendar
+            fromMonth={new Date()}
+            handleDayClick={_onClickSelectDay}
+            selectedDays={selectedDates}
+            disabledDays={[]}
+            daysOfWeek={timeTableWeek}
+          />
+        </Cell>
+        <Cell>
+          <Title
+            type="h3"
+            title="Holidays"
+            subtitle="Are you closed on all Australian holidays? Or Just a few of them?"
+          />
+          <Grid columns={12} gap="20px" columnGap="40px" style={{ margin: '30px 0' }}>
+            <Cell width={3}>
+              <ItemSwitchStyled>
+                <span>Block all</span>
+                <SwitchStyled>
+                  <Switch
+                    id="blockall"
+                    name="blockall"
+                    checked={holidaysArray.length === holidays.length}
+                    handleCheckboxChange={_onChangeHolidayBlockAll}
+                  />
+                </SwitchStyled>
+              </ItemSwitchStyled>
+            </Cell>
+            {holidaysArray
+              .filter(el => {
+                if (isAfter(new Date(), new Date(el.date))) {
+                  return false
+                }
+                return true
+              })
+              .map((o, index) => {
+                return (
+                  <Cell key={o.date} width={3}>
+                    <ToolTip placement="bottom" content={o.description}>
+                      <ItemSwitchStyled>
+                        <span>{o.dateFormatted}</span>
+                        <SwitchStyled>
+                          <Switch
+                            id={index}
+                            name={o.date}
+                            value={o.date}
+                            checked={selectedDates.some(selectedDay => isSameDay(selectedDay, o.originalDate))}
+                            handleCheckboxChange={_onChangeHoliday}
+                          />
+                        </SwitchStyled>
+                      </ItemSwitchStyled>
+                    </ToolTip>
+                  </Cell>
+                )
+              })}
+          </Grid>
+        </Cell>
+        <StepButtons
+          prev={{ onClick: () => history.push('booking') }}
+          next={{ onClick: () => history.push('cancellation') }}
         />
-      </Cell>
-      <Cell>
-        <Title
-          type="h3"
-          title="Blocked dates"
-          subtitle="Block out times when the space is not available within business opening hours."
-        />
-        <Calendar
-          fromMonth={new Date()}
-          handleDayClick={_onClickSelectDay}
-          selectedDays={selectedDates}
-          disabledDays={[]}
-          daysOfWeek={timeTableWeek}
-        />
-      </Cell>
-      <Cell>
-        <Title
-          type="h3"
-          title="Holidays"
-          subtitle="Are you closed on all Australian holidays? Or Just a few of them?"
-        />
-        <Grid columns={12} gap="20px" columnGap="40px" style={{ margin: '30px 0' }}>
-          <Cell width={3}>
-            <ItemSwitchStyled>
-              <span>Block all</span>
-              <SwitchStyled>
-                <Switch
-                  id="blockall"
-                  name="blockall"
-                  checked={holidaysArray.length === holidays.length}
-                  handleCheckboxChange={_onChangeHolidayBlockAll}
-                />
-              </SwitchStyled>
-            </ItemSwitchStyled>
-          </Cell>
-          {holidaysArray
-            .filter(el => {
-              if (isAfter(new Date(), new Date(el.date))) {
-                return false
-              }
-              return true
-            })
-            .map((o, index) => {
-              return (
-                <Cell key={o.date} width={3}>
-                  <ToolTip placement="bottom" content={o.description}>
-                    <ItemSwitchStyled>
-                      <span>{o.dateFormatted}</span>
-                      <SwitchStyled>
-                        <Switch
-                          id={index}
-                          name={o.date}
-                          value={o.date}
-                          checked={selectedDates.some(selectedDay => isSameDay(selectedDay, o.originalDate))}
-                          handleCheckboxChange={_onChangeHoliday}
-                        />
-                      </SwitchStyled>
-                    </ItemSwitchStyled>
-                  </ToolTip>
-                </Cell>
-              )
-            })}
-        </Grid>
-      </Cell>
-      <StepButtons
-        prev={{ onClick: () => history.push('booking') }}
-        next={{ onClick: () => history.push('cancellation') }}
-      />
-    </Grid>
+      </Grid>
+    </>
   )
 }
 
