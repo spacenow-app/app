@@ -1,5 +1,6 @@
 import React, { useEffect } from 'react'
 import PropTypes from 'prop-types'
+import Helmet from 'react-helmet'
 import styled from 'styled-components'
 import { useSelector, useDispatch } from 'react-redux'
 
@@ -194,6 +195,7 @@ const PreviewPage = ({ match, location, ...props }) => {
 
   return (
     <Wrapper>
+      <Helmet title="Listing Preview - Spacenow" />
       <Title type="h2" title="Just one more thing, review your space!" />
       <Carousel photos={_convertedArrayPhotos(arrayPhotos)} />
       <Box my="40px">

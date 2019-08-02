@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import styled from 'styled-components'
+import Helmet from 'react-helmet'
 import { Wrapper, Card, Title } from 'components'
 import { config } from 'contants'
 
@@ -21,6 +22,7 @@ class IntroPage extends Component {
   render() {
     return (
       <Wrapper>
+        <Helmet title="Listing Intro - Spacenow" />
         <Title
           type="h3"
           title="Are you creating a single space or managing multiple?"
