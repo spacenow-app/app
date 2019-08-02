@@ -53,7 +53,8 @@ const AvailabilityTab = ({ listing, history, setFatherValues }) => {
     const valuesToUpdate = {
       ...listing,
       listingAccessDays: _mapToAccessHourType(timetable),
-      listingExceptionDates: selectedDates
+      listingExceptionDates: selectedDates,
+      isValid: true
     }
     setFatherValues(valuesToUpdate)
     // eslint-disable-next-line react-hooks/exhaustive-deps

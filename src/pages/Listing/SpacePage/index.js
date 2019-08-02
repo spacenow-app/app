@@ -32,7 +32,8 @@ const SpacePage = ({ match, history, location, ...props }) => {
   }, [dispatch, match.params.id, user])
 
   useEffect(() => {
-    if (history.action === 'PUSH') dispatch(onUpdate(objectListing, values))
+    if (history.action === 'PUSH' && values.isValid) dispatch(onUpdate(objectListing, values))
+
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [history.location.key])
 

@@ -53,12 +53,12 @@ const SpecificationTab = ({
   errors,
   handleChange,
   handleBlur,
-  handleSubmit,
   setFieldValue,
   listing,
   validateForm,
   dispatch,
   setFatherValues,
+  isValid,
   ...props
 }) => {
   const { array: arrayRules, isLoading: isLoadingRules } = useSelector(state => state.listing.rules)
@@ -78,8 +78,8 @@ const SpecificationTab = ({
   }, [dispatch, listing.id, listing.listingData, listing.settingsParent.id, listing.settingsParent.subcategory.id])
 
   useEffect(() => {
-    setFatherValues(values)
-  }, [setFatherValues, values])
+    setFatherValues({ ...values, isValid })
+  }, [setFatherValues, values, isValid])
 
   const _handleSelectChange = e => {
     const { name, value } = e.target
@@ -423,9 +423,7 @@ const formik = {
     accessType: Yup.string()
   }),
   enableReinitialize: true,
-  handleSubmit: (values, { props: { dispatch, listing } }) => {
-    dispatch(onUpdate(listing, values))
-  }
+  isInitialValid: true
 }
 
 SpecificationTab.propTypes = {
