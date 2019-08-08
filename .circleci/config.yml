@@ -199,6 +199,10 @@ workflows:
       - deploy:
           requires:
             - build
+          filters:
+            branches:
+              only:
+                - master
       - qa-approval:
           type: approval
           requires:
