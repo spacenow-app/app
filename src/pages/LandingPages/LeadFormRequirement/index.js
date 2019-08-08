@@ -127,10 +127,10 @@ const LeadFormRequirement = ({ ...props }) => {
           <Caption margin="10px 0">Budget</Caption>
           <Box display="grid" gridTemplateColumns="auto auto auto" gridColumnGap="20px">
             <Box display="flex" justifyContent="center" alignItems="center">
-              <Radio label="I don’t know" />
+              <Radio label="I don’t know" fontSize="14px" />
             </Box>
             <Box display="flex" justifyContent="center" alignItems="center">
-              <Radio label="I have an allocated budget" />
+              <Radio label="I have an allocated budget" fontSize="14px" />
             </Box>
             <Box mt="-31px">
               <Input label="What is your budget?" placeholder="Ie. $5,000" />
