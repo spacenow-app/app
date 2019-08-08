@@ -16,7 +16,7 @@ export const Types = {
 
 // Initial State
 const initialState = {
-  isLoading: false,
+  isLoading: true,
   error: {
     message: null
   },
@@ -26,7 +26,7 @@ const initialState = {
 }
 
 // GraphQL
-const queryGetPaymentAccount = gql`
+const getPaymentAccount = gql`
   query getPaymentAccount {
     getPaymentAccount {
       __typename
@@ -48,51 +48,51 @@ const queryGetPaymentAccount = gql`
   }
 `
 
-const mutationCreatePaymentAccount = gql`
-  mutationCreatePaymentAccount(
-    type: String!
-    email: String!
-    country: String!
-    object: String!
-    external_account_country: String!
-    currency: String!
-    routing_number: String!
-    account_number: String!
-    personal_id_number: String!
-    first_name: String!
-    last_name: String!
-    legal_entity_type: String!
-    business_tax_id: String!
-    business_name: String!
-    city: String!
-    line1: String!
-    postal_code: Int!
-    state: String!
-    day: Int!
-    month: Int!
-    year: Int!
+const createPaymentAccount = gql`
+  mutation createPaymentAccount(
+    $type: String!
+    $email: String!
+    $country: String!
+    $object: String!
+    $external_account_country: String!
+    $currency: String!
+    $routing_number: String!
+    $account_number: String!
+    $personal_id_number: String!
+    $first_name: String!
+    $last_name: String!
+    $legal_entity_type: String!
+    $business_tax_id: String!
+    $business_name: String!
+    $city: String!
+    $line1: String!
+    $postal_code: Int!
+    $state: String!
+    $day: Int!
+    $month: Int!
+    $year: Int!
   ) {
     createPaymentAccount(
-      type: $type,
-      email: $email,
-      country: $country,
-      object: $object,
-      external_account_country: $external_account_country,
-      currency: $currency,
-      routing_number: $routing_number,
-      account_number: $account_number,
-      personal_id_number: $personal_id_number,
-      first_name: $first_name,
-      last_name: $last_name,
-      legal_entity_type: $legal_entity_type,
-      business_tax_id: $business_tax_id,
-      business_name: $business_name,
-      city: $city,
-      line1: $line1,
-      postal_code: $postal_code,
-      state: $state,
-      day: $day,
-      month: $month,
+      type: $type
+      email: $email
+      country: $country
+      object: $object
+      external_account_country: $external_account_country
+      currency: $currency
+      routing_number: $routing_number
+      account_number: $account_number
+      personal_id_number: $personal_id_number
+      first_name: $first_name
+      last_name: $last_name
+      legal_entity_type: $legal_entity_type
+      business_tax_id: $business_tax_id
+      business_name: $business_name
+      city: $city
+      line1: $line1
+      postal_code: $postal_code
+      state: $state
+      day: $day
+      month: $month
       year: $year
     ) {
       __typename
@@ -114,7 +114,7 @@ const mutationCreatePaymentAccount = gql`
   }
 `
 
-const mutationDeletePaymentAccount = gql`
+const removePaymentAccount = gql`
   mutation removePaymentAccount {
     removePaymentAccount {
       id
@@ -198,19 +198,42 @@ export default function reducer(state = initialState, action) {
 export const onGetPaymentAccount = () => async dispatch => {
   dispatch({ type: Types.ON_PROCESSING_PAYMENT })
   try {
-    const { data } = await getClientWithAuth(dispatch).query({ query: queryGetPaymentAccount })
+    const { data } = await getClientWithAuth(dispatch).query({ query: getPaymentAccount })
     dispatch({ type: Types.GET_PAYMENT_ACCOUNT_SUCCESS, payload: data.getPaymentAccount })
   } catch (err) {
     dispatch({ type: Types.GET_PAYMENT_ACCOUNT_ERROR, payload: errToMsg(err) })
   }
 }
 
-export const onCreatePaymentAccount = () => async dispatch => {
+export const onCreatePaymentAccount = details => async dispatch => {
   dispatch({ type: Types.ON_PROCESSING_PAYMENT })
   try {
+    const paymentDetails = {
+      type: 'custom',
+      email: 'arthemus.moreira@gmail.com',
+      country: 'AU',
+      object: 'bank_account',
+      external_account_country: 'AU',
+      currency: 'AUD',
+      routing_number: '110000',
+      account_number: '000123456',
+      personal_id_number: 'c4c77350-6c80-11e9-bfb6-55a34828950d',
+      first_name: 'Arthemus',
+      last_name: 'Moreira',
+      legal_entity_type: 'company',
+      business_tax_id: '000000000',
+      business_name: 'Spacenow',
+      city: 'Sydney',
+      line1: '19/14 Botany Street',
+      postal_code: 2022,
+      state: 'NSW',
+      day: 25,
+      month: 8,
+      year: 1987
+    }
     const { data } = await getClientWithAuth(dispatch).mutate({
-      mutation: mutationCreatePaymentAccount,
-      variable: {}
+      mutation: createPaymentAccount,
+      variable: paymentDetails
     })
     dispatch({ type: Types.CREATE_PAYMENT_ACCOUNT_SUCCESS, payload: data.createPaymentAccount })
   } catch (err) {
@@ -221,7 +244,7 @@ export const onCreatePaymentAccount = () => async dispatch => {
 export const onDeletePaymentAccount = () => async dispatch => {
   dispatch({ type: Types.ON_PROCESSING_PAYMENT })
   try {
-    const { data } = await getClientWithAuth(dispatch).mutate({ mutation: mutationDeletePaymentAccount })
+    const { data } = await getClientWithAuth(dispatch).mutate({ mutation: removePaymentAccount })
     dispatch({ type: Types.DELETE_PAYMENT_ACCOUNT_SUCCESS, payload: data.removePaymentAccount })
   } catch (err) {
     dispatch({ type: Types.DELETE_PAYMENT_ACCOUNT_ERROR, payload: errToMsg(err) })
