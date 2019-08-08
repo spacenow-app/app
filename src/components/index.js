@@ -33,6 +33,9 @@ import ToolTip from './ToolTip'
 import Photo from './Photo'
 import Avatar from './Avatar'
 import Carousel from './Carousel'
+import Text from './Text'
+import UserDetails from './UserDetails'
+import BookingCard from './BookingCard'
 
 export {
   Modal,
@@ -72,5 +75,8 @@ export {
   ToolTip,
   Photo,
   Avatar,
-  Carousel
+  Carousel,
+  Text,
+  UserDetails,
+  BookingCard
 }

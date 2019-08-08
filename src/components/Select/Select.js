@@ -115,7 +115,8 @@ Select.defaultProps = {
   children: null,
   options: [{ key: 0, value: 0, name: 'Select one option' }],
   value: null,
-  bgColor: null
+  bgColor: null,
+  label: null
 }
 
 Select.propTypes = {
@@ -123,7 +124,8 @@ Select.propTypes = {
   options: PropTypes.instanceOf(Array),
   bgColor: PropTypes.string,
   value: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
-  size: PropTypes.string
+  size: PropTypes.string,
+  label: PropTypes.string
 }
 
 export default Select

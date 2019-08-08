@@ -10,6 +10,7 @@ import PublicRoute from './PublicRoute'
 const HomePage = lazy(() => import('pages/HomePage'))
 const NotFoundPage = lazy(() => import('pages/NotFoundPage'))
 const Listing = lazy(() => import('routes/Listing'))
+const Space = lazy(() => import('routes/Space'))
 
 const Routes = props => {
   const dispatch = useDispatch()
@@ -62,6 +63,12 @@ const Routes = props => {
                       path={`${otherProps.match.path}listing`}
                       isAuthenticated={isAuthenticated}
                       component={Listing}
+                    />
+                    <Route
+                      {...otherProps}
+                      path={`${otherProps.match.path}space`}
+                      isAuthenticated={isAuthenticated}
+                      component={Space}
                     />
                     <Route component={NotFoundPage} />
                   </Switch>

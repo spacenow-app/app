@@ -294,6 +294,14 @@ const allListingFields = `
 		createdAt
 		updatedAt
   }
+  user {
+    id
+    email
+    profile {
+      displayName
+      picture
+    }
+  }
 `
 
 // GraphQL
