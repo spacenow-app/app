@@ -34,6 +34,7 @@ import Photo from './Photo'
 import Avatar from './Avatar'
 import Carousel from './Carousel'
 import Text from './Text'
+import DatePicker from './DatePicker'
 
 export {
   Modal,
@@ -74,5 +75,6 @@ export {
   Photo,
   Avatar,
   Carousel,
-  Text
+  Text,
+  DatePicker
 }
