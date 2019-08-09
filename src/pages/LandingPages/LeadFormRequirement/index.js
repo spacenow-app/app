@@ -1,4 +1,4 @@
-import React, {useRef} from 'react'
+import React, { useRef } from 'react'
 import styled, { css } from 'styled-components'
 import { withFormik } from 'formik'
 import * as Yup from 'yup'
@@ -95,8 +95,6 @@ const LeadFormRequirement = ({
     setFieldValue('typeOfSpace', value)
   }
 
-  console.log(inputTo)
-
   return (
     <div>
       <NavBar />
@@ -174,19 +172,32 @@ const LeadFormRequirement = ({
         </Box>
 
         <Box my="60px" display="grid" gridTemplateColumns="auto auto" gridColumnGap="20px">
-          <DatePicker label="Start date" placeholder="Select a date" value={values.startDate} handleDateChange={(date) => setFieldValue('startDate', date)} dayPickerProps={{
-        selectedDays: [values.startDate, { from:values.startDate , to: values.endDate }],
-        disabledDays: [{ before: new Date(), after: values.endDate }],
-        toMonth: values.endDate || new Date(),
-        modifiers: { start: values.startDate, end: values.endDate },
-        onDayClick: () => inputTo.current.handleInputFocus()
-      }}/>
-          <DatePicker ref={inputTo} label="End date" placeholder="Select a date" value={values.endDate} handleDateChange={(date) => setFieldValue('endDate', date)} dayPickerProps={{
-        selectedDays: [values.startDate, { from:values.startDate , to: values.endDate }],
-        disabledDays: { before: values.startDate },
-        month: values.endDate,
-        modifiers: { start: values.startDate, end: values.endDate },
-      }}/>
+          <DatePicker
+            label="Start date"
+            placeholder="Select a date"
+            value={values.startDate}
+            handleDateChange={date => setFieldValue('startDate', date)}
+            dayPickerProps={{
+              selectedDays: [values.startDate, { from: values.startDate, to: values.endDate }],
+              disabledDays: [{ before: new Date(), after: values.endDate }],
+              toMonth: values.endDate || new Date(),
+              modifiers: { start: values.startDate, end: values.endDate },
+              onDayClick: () => inputTo.current.handleInputFocus()
+            }}
+          />
+          <DatePicker
+            ref={inputTo}
+            label="End date"
+            placeholder="Select a date"
+            value={values.endDate}
+            handleDateChange={date => setFieldValue('endDate', date)}
+            dayPickerProps={{
+              selectedDays: [values.startDate, { from: values.startDate, to: values.endDate }],
+              disabledDays: { before: values.startDate },
+              month: values.endDate,
+              modifiers: { start: values.startDate, end: values.endDate }
+            }}
+          />
         </Box>
 
         <Box my="60px">
@@ -230,7 +241,17 @@ const LeadFormRequirement = ({
                 handleChange={_handleRadioChange}
               />
             </Box>
-            <Box mt="-31px">{values.budget !== false && <Input label="What is your budget?" placeholder="Ie. $5,000" name="budget" value={numeral(values.budget).format('$ 0,0[.]00')} onChange={handleChange} />}</Box>
+            <Box mt="-31px">
+              {values.budget !== false && (
+                <Input
+                  label="What is your budget?"
+                  placeholder="Ie. $5,000"
+                  name="budget"
+                  value={numeral(values.budget).format('$ 0,0[.]00')}
+                  onChange={handleChange}
+                />
+              )}
+            </Box>
           </Box>
         </Box>
 
