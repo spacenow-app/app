@@ -16,7 +16,12 @@ const Text = ({ children, ...props }) => <TextStyled {...props}>{children}</Text
 Text.defaultProps = {}
 
 Text.propTypes = {
-  children: PropTypes.element.isRequired
+  children: PropTypes.PropTypes.oneOfType([
+    PropTypes.string,
+    PropTypes.number,
+    PropTypes.instanceOf(Array),
+    PropTypes.element
+  ]).isRequired
 }
 
 export default Text
