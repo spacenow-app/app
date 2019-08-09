@@ -205,10 +205,38 @@ export const onGetPaymentAccount = () => async dispatch => {
   }
 }
 
-export const onCreatePaymentAccount = details => async dispatch => {
+/**
+ * @param {*} account Details from 'Payment Preference Form'.
+ * @param {*} user User data from 'Store' (auth)
+ */
+export const onCreatePaymentAccount = (account, user) => async dispatch => {
   dispatch({ type: Types.ON_PROCESSING_PAYMENT })
   try {
+    // eslint-disable-next-line no-unused-vars
     const paymentDetails = {
+      type: 'custom',
+      email: user.email,
+      country: 'AU',
+      object: 'bank_account',
+      external_account_country: 'AU',
+      currency: 'AUD',
+      routing_number: account.bsb,
+      account_number: account.number,
+      personal_id_number: user.id,
+      first_name: account.firstName,
+      last_name: account.lastName,
+      legal_entity_type: account.entityType,
+      business_tax_id: account.businessTaxId,
+      business_name: account.businessName,
+      city: account.city,
+      line1: account.address,
+      postal_code: account.postalCode,
+      state: account.state,
+      day: Number(account.dayOfBirthday),
+      month: Number(account.monthOfBirthday),
+      year: Number(account.yearOfBirthday)
+    }
+    const mockDetails = {
       type: 'custom',
       email: 'arthemus.moreira@gmail.com',
       country: 'AU',
@@ -233,7 +261,7 @@ export const onCreatePaymentAccount = details => async dispatch => {
     }
     const { data } = await getClientWithAuth(dispatch).mutate({
       mutation: createPaymentAccount,
-      variable: paymentDetails
+      variable: mockDetails
     })
     dispatch({ type: Types.CREATE_PAYMENT_ACCOUNT_SUCCESS, payload: data.createPaymentAccount })
   } catch (err) {

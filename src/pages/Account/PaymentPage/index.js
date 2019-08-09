@@ -1,3 +1,4 @@
+/* eslint-disable jsx-a11y/anchor-is-valid */
 import React, { useEffect } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import styled from 'styled-components'
@@ -54,7 +55,7 @@ const PaymentPage = () => {
           <AccountName>{details.legal_entity.first_name}</AccountName>
           <BSB>{details.external_accounts.data[0].routing_number}</BSB>
           <AccountNumber>{details.external_accounts.data[0].last4}</AccountNumber>
-          <a href onClick={_handleRemoveAccount}>
+          <a href="#" onClick={_handleRemoveAccount}>
             <Icon name="bin" width="25px" />
           </a>
         </ListItem>
