@@ -1,5 +1,8 @@
-import React from 'react'
+import React, {useRef} from 'react'
 import styled, { css } from 'styled-components'
+import { withFormik } from 'formik'
+import * as Yup from 'yup'
+import numeral from 'numeral'
 import {
   Wrapper,
   Box,
@@ -8,12 +11,12 @@ import {
   Text,
   Caption,
   List,
-  Select,
   Radio,
   Input,
   TextArea,
   Button,
-  Avatar
+  Avatar,
+  DatePicker
 } from 'components'
 
 import heroImage from './images/hero_img.png'
@@ -25,17 +28,17 @@ const data = [
     otherItemName: 'office'
   },
   {
-    id: 1,
+    id: 2,
     itemName: 'Meeting Rooms',
     otherItemName: 'meetings'
   },
   {
-    id: 1,
+    id: 3,
     itemName: 'Event Space',
     otherItemName: 'events'
   },
   {
-    id: 1,
+    id: 4,
     itemName: 'Hospitality & Retail',
     otherItemName: 'hospitality-retail'
   }
@@ -59,20 +62,41 @@ const ItemSelected = styled.div`
   ${props =>
     props.selected &&
     css`
-      border: none;
+      border-color: #6adc91;
       background-color: #6adc91;
       color: #fff;
     `}
 
   :hover {
-    border: none;
+    border-color: #6adc91;
     background-color: #6adc91;
     color: #fff;
     cursor: pointer;
   }
 `
 
-const LeadFormRequirement = ({ ...props }) => {
+const LeadFormRequirement = ({
+  values,
+  touched,
+  errors,
+  handleChange,
+  handleBlur,
+  handleSubmit,
+  setFieldValue,
+  ...props
+}) => {
+  const inputTo = useRef()
+
+  const _handleRadioChange = (e, { value, name }) => {
+    setFieldValue(name, value && '')
+  }
+
+  const _handleTypeOfSpaceClick = (e, value) => {
+    setFieldValue('typeOfSpace', value)
+  }
+
+  console.log(inputTo)
+
   return (
     <div>
       <NavBar />
@@ -90,57 +114,135 @@ const LeadFormRequirement = ({ ...props }) => {
         <Box my="60px">
           <Caption margin="10px 0">Type of space</Caption>
           <Box>
-            <List data={data} bgItem="#fff" shadow spaceBetween />
+            <List
+              data={data}
+              bgItem="#fff"
+              shadow
+              spaceBetween
+              handleItemClick={_handleTypeOfSpaceClick}
+              itemSelected={values.typeOfSpace}
+            />
           </Box>
         </Box>
 
         <Box my="60px">
           <Caption margin="10px 0">Location</Caption>
           <Box display="grid" gridTemplateColumns="auto auto auto auto" gridColumnGap="20px" gridRowGap="40px">
-            <ItemSelected selected>Sydney</ItemSelected>
-            <ItemSelected>Melbourne</ItemSelected>
-            <ItemSelected>Brisbane</ItemSelected>
-            <ItemSelected>Adelaide</ItemSelected>
-            <ItemSelected>Adelaide</ItemSelected>
-            <ItemSelected>Canberra</ItemSelected>
-            <ItemSelected>Newcastle</ItemSelected>
-            <ItemSelected>Wollongong</ItemSelected>
+            <ItemSelected selected={values.location === 'Sydney'} onClick={e => setFieldValue('location', 'Sydney')}>
+              Sydney
+            </ItemSelected>
+            <ItemSelected
+              selected={values.location === 'Melbourne'}
+              onClick={() => setFieldValue('location', 'Melbourne')}
+            >
+              Melbourne
+            </ItemSelected>
+            <ItemSelected
+              selected={values.location === 'Brisbane'}
+              onClick={() => setFieldValue('location', 'Brisbane')}
+            >
+              Brisbane
+            </ItemSelected>
+            <ItemSelected
+              selected={values.location === 'Adelaide'}
+              onClick={() => setFieldValue('location', 'Adelaide')}
+            >
+              Adelaide
+            </ItemSelected>
+            <ItemSelected selected={values.location === 'Perth'} onClick={() => setFieldValue('location', 'Perth')}>
+              Perth
+            </ItemSelected>
+            <ItemSelected
+              selected={values.location === 'Canberra'}
+              onClick={() => setFieldValue('location', 'Canberra')}
+            >
+              Canberra
+            </ItemSelected>
+            <ItemSelected
+              selected={values.location === 'Newcastle'}
+              onClick={() => setFieldValue('location', 'Newcastle')}
+            >
+              Newcastle
+            </ItemSelected>
+            <ItemSelected
+              selected={values.location === 'Wollongong'}
+              onClick={() => setFieldValue('location', 'Wollongong')}
+            >
+              Wollongong
+            </ItemSelected>
           </Box>
         </Box>
 
         <Box my="60px" display="grid" gridTemplateColumns="auto auto" gridColumnGap="20px">
-          <Select />
-          <Select />
+          <DatePicker label="Start date" placeholder="Select a date" value={values.startDate} handleDateChange={(date) => setFieldValue('startDate', date)} dayPickerProps={{
+        selectedDays: [values.startDate, { from:values.startDate , to: values.endDate }],
+        disabledDays: [{ before: new Date(), after: values.endDate }],
+        toMonth: values.endDate || new Date(),
+        modifiers: { start: values.startDate, end: values.endDate },
+        onDayClick: () => inputTo.current.handleInputFocus()
+      }}/>
+          <DatePicker ref={inputTo} label="End date" placeholder="Select a date" value={values.endDate} handleDateChange={(date) => setFieldValue('endDate', date)} dayPickerProps={{
+        selectedDays: [values.startDate, { from:values.startDate , to: values.endDate }],
+        disabledDays: { before: values.startDate },
+        month: values.endDate,
+        modifiers: { start: values.startDate, end: values.endDate },
+      }}/>
         </Box>
 
         <Box my="60px">
           <Caption margin="10px 0">Size Requirement</Caption>
           <Box display="grid" gridTemplateColumns="auto auto auto auto" gridColumnGap="20px" gridRowGap="40px">
-            <ItemSelected>1 - 10 People</ItemSelected>
-            <ItemSelected selected>11- 100 People</ItemSelected>
-            <ItemSelected>101 - 500 People</ItemSelected>
-            <ItemSelected>500+ People</ItemSelected>
+            <ItemSelected selected={values.size === 1} onClick={e => setFieldValue('size', 1)}>
+              1 - 10 People
+            </ItemSelected>
+            <ItemSelected selected={values.size === 2} onClick={e => setFieldValue('size', 2)}>
+              11 - 100 People
+            </ItemSelected>
+            <ItemSelected selected={values.size === 3} onClick={e => setFieldValue('size', 3)}>
+              101 - 500 People
+            </ItemSelected>
+            <ItemSelected selected={values.size === 4} onClick={e => setFieldValue('size', 4)}>
+              500+ People
+            </ItemSelected>
           </Box>
         </Box>
 
         <Box my="60px">
           <Caption margin="10px 0">Budget</Caption>
-          <Box display="grid" gridTemplateColumns="auto auto auto" gridColumnGap="20px">
-            <Box display="flex" justifyContent="center" alignItems="center">
-              <Radio label="I don’t know" fontSize="14px" />
+          <Box display="grid" gridTemplateColumns="auto auto 1fr" gridColumnGap="20px">
+            <Box display="flex" justifyContent="center" alignItems="center" height="50px">
+              <Radio
+                label="I don’t know"
+                fontSize="14px"
+                value={false}
+                name="budget"
+                checked={values.budget === false}
+                handleChange={_handleRadioChange}
+              />
             </Box>
-            <Box display="flex" justifyContent="center" alignItems="center">
-              <Radio label="I have an allocated budget" fontSize="14px" />
+            <Box display="flex" justifyContent="center" alignItems="center" height="50px">
+              <Radio
+                label="I have an allocated budget"
+                fontSize="14px"
+                value
+                name="budget"
+                checked={values.budget !== false}
+                handleChange={_handleRadioChange}
+              />
             </Box>
-            <Box mt="-31px">
-              <Input label="What is your budget?" placeholder="Ie. $5,000" />
-            </Box>
+            <Box mt="-31px">{values.budget !== false && <Input label="What is your budget?" placeholder="Ie. $5,000" name="budget" value={numeral(values.budget).format('$ 0,0[.]00')} onChange={handleChange} />}</Box>
           </Box>
         </Box>
 
         <Box my="60px">
           <Caption margin="10px 0">Message</Caption>
-          <TextArea placeholder="Anything else required?" />
+          <TextArea
+            placeholder="Anything else required?"
+            name="message"
+            value={values.message}
+            onChange={handleChange}
+            onBlur={handleBlur}
+          />
         </Box>
         <Button block>Submit</Button>
         <Box my="60px" display="grid" gridTemplateColumns="auto auto auto" gridColumnGap="40px" alignItems="center">
@@ -158,4 +260,25 @@ const LeadFormRequirement = ({ ...props }) => {
   )
 }
 
-export default LeadFormRequirement
+const formik = {
+  displayName: 'LandingPage_LeadFormRequirement',
+  mapPropsToValues: props => ({
+    typeOfSpace: '',
+    location: '',
+    startDate: '',
+    endDate: '',
+    size: '',
+    budget: false,
+    message: ''
+  }),
+  mapValuesToPayload: x => x,
+  validationSchema: Yup.object().shape({
+    title: Yup.string()
+      .typeError('Title need to be String')
+      .max(25, 'Maximum characters for Title field must be 25')
+  }),
+  enableReinitialize: true,
+  isInitialValid: true
+}
+
+export default withFormik(formik)(LeadFormRequirement)
