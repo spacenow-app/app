@@ -1,4 +1,4 @@
-import React, {forwardRef} from 'react'
+import React, { forwardRef } from 'react'
 import PropTypes from 'prop-types'
 import styled, { css } from 'styled-components'
 import DayPickerInput from 'react-day-picker/DayPickerInput'
@@ -33,6 +33,70 @@ const sizeStyle = {
 
 const WrapperStyled = styled.div`
   &&& {
+    .DayPickerInput-Overlay {
+      left: 3px;
+      right: 2px;
+      top: 0px;
+      // border-bottom-left-radius: 28px;
+      // border-bottom-right-radius: 28px;
+      border-radius: 28px;
+    }
+
+    .DayPicker,
+    .DayPicker-wrapper {
+      :focus {
+        outline: none;
+      }
+    }
+
+    .DayPicker-Weekday {
+      color: #6adc91;
+      font-size: 16px;
+      font-family: 'Montserrat-SemiBold';
+    }
+
+    .DayPicker-Day {
+      width: 40px;
+      height: 40px;
+      max-height: 40px;
+      max-width: 40px;
+      font-family: 'Montserrat-Medium';
+      font-size: 14px;
+    }
+
+    .DayPicker:not(.DayPicker--interactionDisabled)
+      .DayPicker-Day:not(.DayPicker-Day--disabled):not(.DayPicker-Day--selected):not(.DayPicker-Day--outside):hover {
+      background-color: #6adc91;
+    }
+
+    .DayPicker-Day--selected:not(.DayPicker-Day--disabled):not(.DayPicker-Day--outside) {
+      position: relative;
+      background-color: #6adc91;
+      color: #fff;
+    }
+
+    .DayPicker-Day--today {
+      color: #6adc91;
+      :hover {
+        color: #fff;
+      }
+    }
+
+    .DayPicker-Day--blockedDates {
+      color: #fff;
+      background-color: #e05252;
+    }
+
+    .DayPicker-Day--disabled {
+      color: #1c3942;
+      background-color: #ebebeb;
+    }
+
+    .DayPicker-Day--outside {
+      color: #1c3942;
+      background-color: #fff;
+    }
+
     .DayPickerInput {
       display: block;
 
@@ -65,27 +129,29 @@ const WrapperStyled = styled.div`
   }
 `
 
-const DatePicker = forwardRef(({ label, handleDateChange, dayPickerProps, format, placeholder, value,...props }, ref) => {
-  function formatDate(date, format, locale) {
-    return dateFnsFormat(date, format, { locale })
-  }
+const DatePicker = forwardRef(
+  ({ label, handleDateChange, dayPickerProps, format, placeholder, value, ...props }, ref) => {
+    function formatDate(date, format, locale) {
+      return dateFnsFormat(date, format, { locale })
+    }
 
-  return (
-    <WrapperStyled {...props}>
-      {label && <Caption margin="10px 0">{label}</Caption>}
-      <DayPickerInput
-        ref={ref}
-        value={value}
-        placeholder={placeholder}
-        format={format}
-        formatDate={formatDate}
-        // parseDate={parseDate}
-        dayPickerProps={dayPickerProps}
-        onDayChange={handleDateChange}
-      />
-    </WrapperStyled>
-  )
-})
+    return (
+      <WrapperStyled {...props}>
+        {label && <Caption margin="10px 0">{label}</Caption>}
+        <DayPickerInput
+          ref={ref}
+          value={value}
+          placeholder={placeholder}
+          format={format}
+          formatDate={formatDate}
+          // parseDate={parseDate}
+          dayPickerProps={dayPickerProps}
+          onDayChange={handleDateChange}
+        />
+      </WrapperStyled>
+    )
+  }
+)
 
 DatePicker.defaultProps = {
   size: 'md',
