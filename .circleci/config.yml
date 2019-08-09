@@ -190,10 +190,6 @@ workflows:
   build_and_test:
     jobs:
       - checkout_code
-          filters:
-              branches:
-                only:
-                  - master
       - install:
           requires:
             - checkout_code
