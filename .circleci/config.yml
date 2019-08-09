@@ -193,9 +193,17 @@ workflows:
       - install:
           requires:
             - checkout_code
+          filters:
+            branches:
+              only:
+                - master
       - build:
           requires:
             - install
+          filters:
+            branches:
+              only:
+                - master
       - deploy:
           requires:
             - build
@@ -214,6 +222,10 @@ workflows:
       - build-qa:
           requires:
             - qa-approval
+          filters:
+            branches:
+              only:
+                - master
       - deploy-qa:
           requires:
             - build-qa
@@ -232,6 +244,10 @@ workflows:
       - build-prod:
           requires:
             - prod-approval
+          filters:
+            branches:
+              only:
+                - master
       - deploy-prod:
           requires:
             - build-prod
