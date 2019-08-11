@@ -6,7 +6,7 @@ import Helmet from 'react-helmet'
 
 import { onGetPaymentAccount, onDeletePaymentAccount } from 'redux/ducks/payment'
 
-import { Wrapper, Title, Icon, Loader } from 'components'
+import { Wrapper, Title, Icon, Loader, Box, Input, Select, Button, Grid, Cell } from 'components'
 
 const ListGroup = styled.div`
   margin: 50px;
@@ -42,9 +42,7 @@ const PaymentPage = () => {
     dispatch(onDeletePaymentAccount())
   }
 
-  if (isLoading) return <Loader text="Loading listing process" />
-
-  if (!details) return <Loader text="Loading listing process" /> // TODO Render form...
+  if (isLoading || !details) return <Loader text="Loading listing process" />
 
   return (
     <Wrapper>
@@ -60,6 +58,47 @@ const PaymentPage = () => {
           </a>
         </ListItem>
       </ListGroup>
+      <Box width="800px" border="1px solid" borderColor="greyscale.3" borderRadius="37px" padding="60px">
+        <Grid columns="12">
+          <Cell width="12">
+            <Select label="Account type" />
+          </Cell>
+          <Cell width="6">
+            <Input label="BSB" />
+          </Cell>
+          <Cell width="6">
+            <Input label="Account" />
+          </Cell>
+          <Cell width="12">
+            <span>Beneficiary details</span> {/* replace for Text components  */}
+          </Cell>
+
+          <Cell width="6">
+            <Input label="First Name" />
+          </Cell>
+          <Cell width="6">
+            <Input label="Last Name" />
+          </Cell>
+          <Cell width="12">
+            <Input label="Date of Birthday " /> {/* replace for DatePicker components  */}
+          </Cell>
+          <Cell width="12">
+            <Input label="Address" />
+          </Cell>
+          <Cell width="4">
+            <Input label="City" />
+          </Cell>
+          <Cell width="4">
+            <Input label="State" />
+          </Cell>
+          <Cell width="4">
+            <Input label="Zip" />
+          </Cell>
+          <Cell width="12">
+            <Button small>Save</Button>
+          </Cell>
+        </Grid>
+      </Box>
     </Wrapper>
   )
 }
