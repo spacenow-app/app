@@ -1,8 +1,7 @@
 import React from 'react'
-import styled, { css } from 'styled-components'
+import styled from 'styled-components'
 import { withFormik } from 'formik'
 import * as Yup from 'yup'
-import numeral from 'numeral'
 import { Wrapper, Box, NavBar, Title, Text, Select, Input, Button, Icon } from 'components'
 
 import heroImage from './images/hero_img.png'
