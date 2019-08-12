@@ -33,6 +33,8 @@ import ToolTip from './ToolTip'
 import Photo from './Photo'
 import Avatar from './Avatar'
 import Carousel from './Carousel'
+import Text from './Text'
+import DatePicker from './DatePicker'
 
 export {
   Modal,
@@ -72,5 +74,7 @@ export {
   ToolTip,
   Photo,
   Avatar,
-  Carousel
+  Carousel,
+  Text,
+  DatePicker
 }

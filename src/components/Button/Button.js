@@ -10,7 +10,7 @@ const ButtonStyled = styled(ButtonExternal)`
     font-family: 'Montserrat-Medium';
     font-size: 14px;
     font-weight: 600;
-    width: 180px;
+    width: ${props => !props.block && '180px'};
     background-color: ${props => (props.outline && '#fff') || (props.disabled && '#fff') || '#6adc91'};
     color: ${props => (props.outline && '#172439') || '#fff'};
     border: ${props => (props.outline ? `1px solid #172439` : 'none')};

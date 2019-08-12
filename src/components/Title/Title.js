@@ -142,7 +142,12 @@ Title.defaultProps = {
 
 Title.propTypes = {
   type: PropTypes.oneOf(['h1', 'h2', 'h3', 'h4']),
-  title: PropTypes.string.isRequired,
+  title: PropTypes.PropTypes.oneOfType([
+    PropTypes.string,
+    PropTypes.number,
+    PropTypes.instanceOf(Array),
+    PropTypes.element
+  ]).isRequired,
   subtitle: PropTypes.string,
   subTitleSize: PropTypes.number,
   className: PropTypes.string,
