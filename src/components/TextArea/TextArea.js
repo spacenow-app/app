@@ -36,9 +36,9 @@ const ErrorMessage = styled.small`
 
 const TextArea = ({ size, label, error, loading, ...props }) => {
   return (
-    <WrapperTextArea>
+    <WrapperTextArea >
       {label && <Label>{label}</Label>}
-      <TextAreaStyled/>
+      <TextAreaStyled {...props}/>
       {error && <ErrorMessage>{error}</ErrorMessage>}
     </WrapperTextArea>
   )

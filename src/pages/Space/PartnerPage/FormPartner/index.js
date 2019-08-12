@@ -8,6 +8,7 @@ import * as Yup from 'yup'
 import { Title, Input, Select, TextArea, Button } from 'components'
 
 import { onCreateWeWorkReferral } from 'redux/ducks/partner'
+import Listing from 'routes/Listing';
 
 const WrapperStyled = styled.div`
   display: grid;
@@ -42,16 +43,22 @@ const FormPartner = ({
     setFieldValue(name, value)
   }
 
-  // const _handleSubmit = () => {
-  //   console.log(values)
-  //   console.log('isValid', isValid)
-  //   console.log('errors', errors)
-  //   dispatch(onCreateWeWorkReferral(values))
-  // }
+  const _handleSubmit = () => {
+    console.log(values)
+    console.log('isValid', isValid)
+    dispatch(onCreateWeWorkReferral(values))
+  }
 
+  const arrayDesks = [
+    "1-10",
+    "10-20",
+    "20-50",
+    "50-100",
+    "100-1000"
+  ]
 
   return (
-    <form onSubmit={handleSubmit}>
+    <form>
       <WrapperStyled>
         <SectionStyled>
           <Input
@@ -67,7 +74,7 @@ const FormPartner = ({
 
         <SectionStyled>
           <Input
-            label="Email"
+            label="Email*"
             placeholder="Email Address"
             name="email"
             error={errors.email}
@@ -97,7 +104,7 @@ const FormPartner = ({
           <Input
             label="Company"
             placeholder="Company Name"
-            name="company"
+            name="company_name"
             error={errors.company}
             value={values.company}
             onChange={handleChange}
@@ -106,21 +113,21 @@ const FormPartner = ({
         </SectionStyled>
 
         <SectionStyled>
-          {/* <Select value={values.accessType} name="desks" onChange={_handleSelectChange} label="Number of Desks needed">
-            <option>Select a range</option> */}
-            {/* {arrayAccessTypes.map(item => (
-              <option key={item.id} value={item.itemName}>
-                {item.itemName}
+          <Select value={values.desks_estimated} name="desks_estimated" onChange={_handleSelectChange} label="Number of Desks needed">
+            <option>Select a range</option>
+            {arrayDesks.map(item => (
+              <option key={item} value={item}>
+                {item}
               </option>
-            ))} */}
-          {/* </Select> */}
+            ))}
+          </Select>
         </SectionStyled>
 
         <SectionStyled>
           {/* <DatePicker name="date" label="Number of Desks needed" /> */}
           <Input 
             label="Requested Move In Date" 
-            name="date"
+            name="requested_move_in_date"
             placeholder="date"
             error={errors.company}
             value={values.company}
@@ -133,14 +140,14 @@ const FormPartner = ({
           <TextArea
             label="Additional notes"
             name="notes"
-            error={errors.description}
-            value={values.description}
+            error={errors.notes}
+            value={values.notes}
             onChange={handleChange}
             onBlur={handleBlur}
           />
         </SectionStyled>
 
-        <Button width="100%" type="submit" disabled={!isValid}>SUBMIT INTRODUCTION</Button>
+        <Button width="100%" onClick={() => _handleSubmit()} disabled={!isValid}>SUBMIT INTRODUCTION</Button>
 
       </WrapperStyled>
     </form>
@@ -149,31 +156,38 @@ const FormPartner = ({
 
 const formik = {
   displayName: 'Partner_WeWorkForm',
-  mapValuesToPayload: x => x,
+  mapPropsToValues: props => {
+    const { listing } = props
+    if (listing && listing.id) {
+      return {
+        email: '',
+        name:  '',
+        phone:  '',
+        city: listing.location.city,
+        // requested_location:  '',
+        company_name:  '',
+        requested_move_in_date:  '',
+        desks_estimated:  '',
+        contact_allowed:  true,
+        notes:  '',
+      }
+    }
+    return {}
+  },
   validationSchema: Yup.object().shape({
-    email: Yup.string().typeError('Email field is required'),
-    name: Yup.string().typeError('Name field is required'),
-    phone: Yup.number(),
-    city: Yup.string().typeError('City field is required'),
-    requested_location: Yup.string(),
+    email: Yup.string().required('Email field is required'),
+    name: Yup.string().required('Name field is required'),
+    phone: Yup.number().typeError('Need to be number.'),
+    city: Yup.string(),
+    // requested_location: Yup.string(),
     company_name: Yup.string(),
     requested_move_in_date: Yup.string(),
     desks_estimated: Yup.string(),
     contact_allowed: Yup.string(),
     notes: Yup.string(),
   }),
-  validate: {
-
-  },
-  handleSubmit: (values, { setSubmitting }) => {
-    // dispatch(onCreateWeWorkReferral(values))
-    setTimeout(() => {
-      alert(JSON.stringify(values, null, 2));
-      setSubmitting(false);
-    }, 1000);
-  },
   enableReinitialize: true,
-  isInitialValid: true
+  isInitialValid: false
 }
 
 FormPartner.propTypes = {
