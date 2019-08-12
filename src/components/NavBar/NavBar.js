@@ -19,6 +19,8 @@ const NavDropdownStyled = styled(NavDropdown)`
 
 function NavBar() {
   const authUser = useSelector(state => state.auth.user)
+  const isAuthenticated = useSelector(state => state.auth.isAuthenticated)
+
   const _handlerGoToLegancy = () => {
     window.location.href = `${config.legacy}`
   }
@@ -34,26 +36,28 @@ function NavBar() {
         </Navbar.Brand>
       </Link>
       <Navbar.Toggle />
-      <Navbar.Collapse className="justify-content-end">
-        <Nav>
-          <NavDropdownStyled
-            alignRight
-            title={
-              <Box display="grid" gridTemplateColumns="auto auto" gridColumnGap="10px" color="quartenary">
-                <span style={{ alignSelf: 'center' }}>{authUser.profile.firstName || 'User Profile'}</span>
-                <Avatar style={{ width: '30px', height: '30px' }} image={authUser.profile.picture || null} />
-              </Box>
-            }
-            id="basic-nav-dropdown"
-          >
-            <NavDropdown.Item href={`${config.legacy}/dashboard/profile`}>Profile</NavDropdown.Item>
-            <NavDropdown.Divider />
-            <NavDropdown.Item href={`${config.legacy}/dashboard`}>Dashboard</NavDropdown.Item>
-            <NavDropdown.Divider />
-            <NavDropdown.Item onClick={_handlerLogout}>Logout</NavDropdown.Item>
-          </NavDropdownStyled>
-        </Nav>
-      </Navbar.Collapse>
+      {isAuthenticated && (
+        <Navbar.Collapse className="justify-content-end">
+          <Nav>
+            <NavDropdownStyled
+              alignRight
+              title={
+                <Box display="grid" gridTemplateColumns="auto auto" gridColumnGap="10px" color="quartenary">
+                  <span style={{ alignSelf: 'center' }}>{authUser.profile.firstName || 'User Profile'}</span>
+                  <Avatar style={{ width: '30px', height: '30px' }} image={authUser.profile.picture || null} />
+                </Box>
+              }
+              id="basic-nav-dropdown"
+            >
+              <NavDropdown.Item href={`${config.legacy}/dashboard/profile`}>Profile</NavDropdown.Item>
+              <NavDropdown.Divider />
+              <NavDropdown.Item href={`${config.legacy}/dashboard`}>Dashboard</NavDropdown.Item>
+              <NavDropdown.Divider />
+              <NavDropdown.Item onClick={_handlerLogout}>Logout</NavDropdown.Item>
+            </NavDropdownStyled>
+          </Nav>
+        </Navbar.Collapse>
+      )}
     </Navbar>
   )
 }
