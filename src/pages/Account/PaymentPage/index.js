@@ -4,14 +4,21 @@ import { useSelector, useDispatch } from 'react-redux'
 import styled from 'styled-components'
 import Helmet from 'react-helmet'
 
-import { onGetPaymentAccount, onDeletePaymentAccount } from 'redux/ducks/payment'
+import { onGetPaymentAccount, onDeletePaymentAccount, onCreatePaymentAccount } from 'redux/ducks/payment'
 
-import { Wrapper, Title, Icon, Loader, Box, Input, Select, Button, Grid, Cell } from 'components'
+import { Wrapper, Title, Icon, Loader, BackgroundImage, Button, Grid, Cell, Caption } from 'components'
+import { TypesModal, openModal } from 'redux/ducks/modal'
 
 const ListGroup = styled.div`
   margin: 50px;
   display: grid;
   grid-row-gap: 15px;
+`
+
+const ListHeader = styled.div`
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr auto;
+  padding: 15px;
 `
 
 const ListItem = styled.div`
@@ -20,6 +27,10 @@ const ListItem = styled.div`
   padding: 15px;
   border: 1px solid #ececec;
   border-radius: 15px;
+`
+
+const Options = styled.div`
+  width: 70px;
 `
 
 const AccountName = styled.span``
@@ -31,6 +42,7 @@ const AccountNumber = styled.span``
 const PaymentPage = () => {
   const dispatch = useDispatch()
 
+  const { user } = useSelector(state => state.auth)
   const { isLoading } = useSelector(state => state.payment)
   const { object: details } = useSelector(state => state.payment.get)
 
@@ -42,63 +54,56 @@ const PaymentPage = () => {
     dispatch(onDeletePaymentAccount())
   }
 
-  if (isLoading || !details) return <Loader text="Loading listing process" />
+  const _addAccount = () => {
+    dispatch(
+      openModal(TypesModal.MODAL_ADD_BANK_DETAILS, {
+        onConfirm: values => {
+          dispatch(onCreatePaymentAccount(values, user))
+        }
+      })
+    )
+  }
+
+  if (isLoading) return <Loader text="Loading listing process" />
 
   return (
     <Wrapper>
       <Helmet title="Payment Preferences - Spacenow" />
-      <Title type="h3" title="Payment Preferences" />
-      <ListGroup>
-        <ListItem>
-          <AccountName>{details.legal_entity.first_name}</AccountName>
-          <BSB>{details.external_accounts.data[0].routing_number}</BSB>
-          <AccountNumber>{details.external_accounts.data[0].last4}</AccountNumber>
-          <a href="#" onClick={_handleRemoveAccount}>
-            <Icon name="bin" width="25px" />
-          </a>
-        </ListItem>
-      </ListGroup>
-      <Box width="800px" border="1px solid" borderColor="greyscale.3" borderRadius="37px" padding="60px">
-        <Grid columns="12">
-          <Cell width="12">
-            <Select label="Account type" />
-          </Cell>
-          <Cell width="6">
-            <Input label="BSB" />
-          </Cell>
-          <Cell width="6">
-            <Input label="Account" />
-          </Cell>
-          <Cell width="12">
-            <span>Beneficiary details</span> {/* replace for Text components  */}
-          </Cell>
+      <Grid column="12">
+        <Cell width={6}>
+          <Title type="h3" title="Payment Preferences" />
+        </Cell>
+        <Cell width={6} center middle left="none">
+          <Button size="sm" onClick={() => _addAccount()}>
+            Add Account
+          </Button>
+        </Cell>
+      </Grid>
 
-          <Cell width="6">
-            <Input label="First Name" />
-          </Cell>
-          <Cell width="6">
-            <Input label="Last Name" />
-          </Cell>
-          <Cell width="12">
-            <Input label="Date of Birthday " /> {/* replace for DatePicker components  */}
-          </Cell>
-          <Cell width="12">
-            <Input label="Address" />
-          </Cell>
-          <Cell width="4">
-            <Input label="City" />
-          </Cell>
-          <Cell width="4">
-            <Input label="State" />
-          </Cell>
-          <Cell width="4">
-            <Input label="Zip" />
-          </Cell>
-          <Cell width="12">
-            <Button small>Save</Button>
-          </Cell>
-        </Grid>
-      </Box>
+      {!details || !details.id ? (
+        <BackgroundImage text="We didn't find any accounts :(" />
+      ) : (
+        <ListGroup>
+          <ListHeader>
+            <Caption>First Name</Caption>
+            <Caption>BSB</Caption>
+            <Caption>Account</Caption>
+            <Options>
+              <Caption>Options</Caption>
+            </Options>
+          </ListHeader>
+          <ListItem>
+            <AccountName>{details.legal_entity.first_name}</AccountName>
+            <BSB>{details.external_accounts.data[0].routing_number}</BSB>
+            <AccountNumber>{details.external_accounts.data[0].last4}</AccountNumber>
+            <Options>
+              <a href="#" onClick={_handleRemoveAccount}>
+                <Icon name="bin" width="25px" />
+              </a>
+            </Options>
+          </ListItem>
+        </ListGroup>
+      )}
     </Wrapper>
   )
 }

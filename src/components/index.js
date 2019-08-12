@@ -33,6 +33,7 @@ import ToolTip from './ToolTip'
 import Photo from './Photo'
 import Avatar from './Avatar'
 import Carousel from './Carousel'
+import BackgroundImage from './BackgroundImage'
 
 export {
   Modal,
@@ -72,5 +73,6 @@ export {
   ToolTip,
   Photo,
   Avatar,
-  Carousel
+  Carousel,
+  BackgroundImage
 }

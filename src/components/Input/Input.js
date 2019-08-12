@@ -4,17 +4,18 @@ import styled, { css } from 'styled-components'
 
 const sizeStyle = {
   sm: css`
-    padding: 0.25rem 0.5rem;
+    padding: 10px 20px;
     font-size: 12px;
     line-height: 1.5;
     border-radius: 37px;
+    height: 42px;
   `,
   md: css`
     padding: 10px 20px;
     font-size: 14px;
     line-height: 1.5;
     border-radius: 37px;
-    height: 50px;
+    height: 54px;
   `,
   lg: css`
     padding: 0.5rem 1rem;
@@ -29,7 +30,7 @@ const WrapperInput = styled.div`
 `
 
 const InputStyled = styled.input`
-  display: inline-block;
+  display: block;
   width: 100%;
   color: rgb(33, 37, 41);
   background-color: ${props => (props.error ? 'rgba(224, 82, 82, 0.1);' : '#ffffff')};
@@ -144,10 +145,12 @@ const Input = ({ size, label, error, loading, closeButton, onClickCloseButton, .
     <WrapperInput>
       {label && <Label>{label}</Label>}
       <InputStyled {...props} size={size} error={error} />
-      <RightContent closeButton={closeButton}>
-        {loading && <LoaderIcon />}
-        {closeButton && <Button onClick={onClickCloseButton}>x</Button>}
-      </RightContent>
+      {(loading || closeButton) && (
+        <RightContent closeButton={closeButton}>
+          {loading && <LoaderIcon />}
+          {closeButton && <Button onClick={onClickCloseButton}>x</Button>}
+        </RightContent>
+      )}
       {error && <ErrorMessage>{error}</ErrorMessage>}
     </WrapperInput>
   )

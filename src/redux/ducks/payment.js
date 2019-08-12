@@ -1,5 +1,5 @@
 import { gql } from 'apollo-boost'
-
+import { getDate, getMonth, getYear } from 'date-fns'
 import { getClientWithAuth } from 'graphql/apolloClient'
 import errToMsg from 'utils/errToMsg'
 
@@ -211,6 +211,8 @@ export const onGetPaymentAccount = () => async dispatch => {
  */
 export const onCreatePaymentAccount = (account, user) => async dispatch => {
   dispatch({ type: Types.ON_PROCESSING_PAYMENT })
+
+  const dateOfBirthday = new Date(account.dateOfBirthday)
   try {
     // eslint-disable-next-line no-unused-vars
     const paymentDetails = {
@@ -221,47 +223,24 @@ export const onCreatePaymentAccount = (account, user) => async dispatch => {
       external_account_country: 'AU',
       currency: 'AUD',
       routing_number: account.bsb,
-      account_number: account.number,
+      account_number: account.account,
       personal_id_number: user.id,
       first_name: account.firstName,
       last_name: account.lastName,
-      legal_entity_type: account.entityType,
+      legal_entity_type: account.accountType,
       business_tax_id: account.businessTaxId,
       business_name: account.businessName,
       city: account.city,
       line1: account.address,
-      postal_code: account.postalCode,
+      postal_code: Number(account.zip),
       state: account.state,
-      day: Number(account.dayOfBirthday),
-      month: Number(account.monthOfBirthday),
-      year: Number(account.yearOfBirthday)
-    }
-    const mockDetails = {
-      type: 'custom',
-      email: 'arthemus.moreira@gmail.com',
-      country: 'AU',
-      object: 'bank_account',
-      external_account_country: 'AU',
-      currency: 'AUD',
-      routing_number: '110000',
-      account_number: '000123456',
-      personal_id_number: 'c4c77350-6c80-11e9-bfb6-55a34828950d',
-      first_name: 'Arthemus',
-      last_name: 'Moreira',
-      legal_entity_type: 'company',
-      business_tax_id: '000000000',
-      business_name: 'Spacenow',
-      city: 'Sydney',
-      line1: '19/14 Botany Street',
-      postal_code: 2022,
-      state: 'NSW',
-      day: 25,
-      month: 8,
-      year: 1987
+      day: getDate(dateOfBirthday),
+      month: getMonth(dateOfBirthday),
+      year: getYear(dateOfBirthday)
     }
     const { data } = await getClientWithAuth(dispatch).mutate({
       mutation: createPaymentAccount,
-      variable: mockDetails
+      variables: { ...paymentDetails }
     })
     dispatch({ type: Types.CREATE_PAYMENT_ACCOUNT_SUCCESS, payload: data.createPaymentAccount })
   } catch (err) {
