@@ -161,7 +161,9 @@ Button.propTypes = {
   isLoading: PropTypes.bool,
   disabled: PropTypes.bool,
   outline: PropTypes.string,
-  width: PropTypes.string
+  width: PropTypes.string,
+  type: PropTypes.string,
+  onClick: PropTypes.func
 }
 
 export default Button
