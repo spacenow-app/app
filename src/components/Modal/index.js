@@ -3,7 +3,6 @@ import PropTypes from 'prop-types'
 import { useSelector } from 'react-redux'
 
 import { TypesModal } from 'redux/ducks/modal'
-
 import ModalConfirm from 'components/Modal/ModalConfirm'
 import ModalWarn from 'components/Modal/ModalWarn'
 import ModalAddBankDetails from 'components/Modal/ModalAddBankDetails'
@@ -20,6 +19,7 @@ const Modal = () => {
     return null
   }
   const ModalComponent = MODAL_COMPONENTS[type]
+
   return <ModalComponent {...props} />
 }
 

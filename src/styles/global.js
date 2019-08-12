@@ -37,6 +37,14 @@ export default createGlobalStyle`
       line-height: 1.5;
       color: #172439;
     }
+
+    .modal-content {
+      border: none !important;
+      border-radius: 15px !important;
+    }
+    .modal-footer {
+      border: none !important;
+    }
   }
 
 `

@@ -1,9 +1,9 @@
-import React from 'react'
+import React, { useState } from 'react'
 import PropTypes from 'prop-types'
 import { Modal } from 'react-bootstrap'
 import { withFormik } from 'formik'
 import * as Yup from 'yup'
-import { Button, Box, Grid, Cell, Select, Input } from 'components'
+import { Button, Box, Grid, Cell, Select, Input, DatePicker } from 'components'
 
 import { useDispatch } from 'react-redux'
 import { closeModal } from 'redux/ducks/modal'
@@ -25,6 +25,11 @@ const ModalAddBankDetails = ({
 }) => {
   const dispatch = useDispatch()
 
+  const currentYear = new Date().getFullYear()
+  const fromMonth = new Date(currentYear, 0)
+  const toMonth = new Date(currentYear + 10, 11)
+  const [month, setMonth] = useState(fromMonth)
+
   const handleConfirm = isConfirmed => {
     dispatch(closeModal())
     if (isConfirmed) {
@@ -37,7 +42,38 @@ const ModalAddBankDetails = ({
     setFieldValue(name, value)
   }
 
-  console.log(values, errors)
+  const YearMonthForm = ({ date, localeUtils, onChange }) => {
+    const months = localeUtils.getMonths()
+
+    const years = []
+    for (let i = fromMonth.getFullYear(); i <= toMonth.getFullYear(); i += 1) {
+      years.push(i)
+    }
+
+    const handleChange = function handleChange(e) {
+      const { year, month } = e.target.form
+      onChange(new Date(year.value, month.value))
+    }
+
+    return (
+      <form className="DayPicker-Caption">
+        <select name="month" onChange={handleChange} value={date.getMonth()}>
+          {months.map((month, i) => (
+            <option key={month} value={i}>
+              {month}
+            </option>
+          ))}
+        </select>
+        <select name="year" onChange={handleChange} value={date.getFullYear()}>
+          {years.map(year => (
+            <option key={year} value={year}>
+              {year}
+            </option>
+          ))}
+        </select>
+      </form>
+    )
+  }
 
   return (
     <Modal show centered size="lg" onHide={() => handleConfirm(false)}>
@@ -47,7 +83,7 @@ const ModalAddBankDetails = ({
       <Modal.Body>
         <Box>
           <Grid columns="12">
-            <Cell width="12">
+            <Cell width={12}>
               <Select
                 size="sm"
                 label="Account type"
@@ -59,7 +95,7 @@ const ModalAddBankDetails = ({
                 <option value="company">Company</option>
               </Select>
             </Cell>
-            <Cell width="6">
+            <Cell width={6}>
               <Input
                 size="sm"
                 label="BSB"
@@ -71,7 +107,7 @@ const ModalAddBankDetails = ({
                 onBlur={handleBlur}
               />
             </Cell>
-            <Cell width="6">
+            <Cell width={6}>
               <Input
                 size="sm"
                 label="Account"
@@ -83,11 +119,11 @@ const ModalAddBankDetails = ({
                 onBlur={handleBlur}
               />
             </Cell>
-            <Cell width="12">
+            <Cell width={12}>
               <span>Beneficiary details</span> {/* replace for Text components  */}
             </Cell>
 
-            <Cell width="6">
+            <Cell width={6}>
               <Input
                 size="sm"
                 label="First Name"
@@ -99,7 +135,7 @@ const ModalAddBankDetails = ({
                 onBlur={handleBlur}
               />
             </Cell>
-            <Cell width="6">
+            <Cell width={6}>
               <Input
                 size="sm"
                 label="Last Name"
@@ -111,21 +147,25 @@ const ModalAddBankDetails = ({
                 onBlur={handleBlur}
               />
             </Cell>
-            <Cell width="12">
-              <Input
+            <Cell width={12}>
+              <DatePicker
                 size="sm"
                 label="Date of Birthday "
                 name="dateOfBirthday"
+                month={month}
+                fromMonth={fromMonth}
+                toMonth={toMonth}
                 error={touched.dateOfBirthday && errors.dateOfBirthday}
                 value={values.dateOfBirthday}
-                onChange={handleChange}
-                onBlur={handleBlur}
-              />{' '}
-              {/* replace for DatePicker components  */}
+                handleDateChange={date => setFieldValue('dateOfBirthday', date)}
+                captionElement={({ date, localeUtils }) => (
+                  <YearMonthForm date={date} localeUtils={localeUtils} onChange={m => setMonth(m)} />
+                )}
+              />
             </Cell>
             {values.accountType === 'company' && (
               <>
-                <Cell width="6">
+                <Cell width={6}>
                   <Input
                     size="sm"
                     label="Business name"
@@ -137,7 +177,7 @@ const ModalAddBankDetails = ({
                     onBlur={handleBlur}
                   />
                 </Cell>
-                <Cell width="6">
+                <Cell width={6}>
                   <Input
                     size="sm"
                     label="Business Tax ID"
@@ -151,7 +191,7 @@ const ModalAddBankDetails = ({
                 </Cell>
               </>
             )}
-            <Cell width="12">
+            <Cell width={12}>
               <Input
                 size="sm"
                 label="Address"
@@ -163,7 +203,7 @@ const ModalAddBankDetails = ({
                 onBlur={handleBlur}
               />
             </Cell>
-            <Cell width="4">
+            <Cell width={4}>
               <Input
                 size="sm"
                 label="City"
@@ -175,7 +215,7 @@ const ModalAddBankDetails = ({
                 onBlur={handleBlur}
               />
             </Cell>
-            <Cell width="4">
+            <Cell width={4}>
               <Input
                 size="sm"
                 label="State"
@@ -187,7 +227,7 @@ const ModalAddBankDetails = ({
                 onBlur={handleBlur}
               />
             </Cell>
-            <Cell width="4">
+            <Cell width={4}>
               <Input
                 size="sm"
                 label="Zip"
