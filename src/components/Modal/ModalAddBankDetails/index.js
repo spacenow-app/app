@@ -1,9 +1,9 @@
-import React from 'react'
+import React, { useState } from 'react'
 import PropTypes from 'prop-types'
 import { Modal } from 'react-bootstrap'
 import { withFormik } from 'formik'
 import * as Yup from 'yup'
-import { Button, Box, Grid, Cell, Select, Input } from 'components'
+import { Button, Box, Grid, Cell, Select, Input, DatePicker } from 'components'
 
 import { useDispatch } from 'react-redux'
 import { closeModal } from 'redux/ducks/modal'
@@ -37,17 +37,15 @@ const ModalAddBankDetails = ({
     setFieldValue(name, value)
   }
 
-  console.log(values, errors)
-
   return (
-    <Modal show centered size="lg" onHide={() => handleConfirm(false)}>
+    <Modal show centered size="lg" onHide={() => {}}>
       <Modal.Header>
         <Modal.Title>Add Bank Details</Modal.Title>
       </Modal.Header>
       <Modal.Body>
         <Box>
           <Grid columns="12">
-            <Cell width="12">
+            <Cell width={12}>
               <Select
                 size="sm"
                 label="Account type"
@@ -59,7 +57,7 @@ const ModalAddBankDetails = ({
                 <option value="company">Company</option>
               </Select>
             </Cell>
-            <Cell width="6">
+            <Cell width={6}>
               <Input
                 size="sm"
                 label="BSB"
@@ -71,7 +69,7 @@ const ModalAddBankDetails = ({
                 onBlur={handleBlur}
               />
             </Cell>
-            <Cell width="6">
+            <Cell width={6}>
               <Input
                 size="sm"
                 label="Account"
@@ -83,11 +81,11 @@ const ModalAddBankDetails = ({
                 onBlur={handleBlur}
               />
             </Cell>
-            <Cell width="12">
+            <Cell width={12}>
               <span>Beneficiary details</span> {/* replace for Text components  */}
             </Cell>
 
-            <Cell width="6">
+            <Cell width={6}>
               <Input
                 size="sm"
                 label="First Name"
@@ -99,7 +97,7 @@ const ModalAddBankDetails = ({
                 onBlur={handleBlur}
               />
             </Cell>
-            <Cell width="6">
+            <Cell width={6}>
               <Input
                 size="sm"
                 label="Last Name"
@@ -111,21 +109,19 @@ const ModalAddBankDetails = ({
                 onBlur={handleBlur}
               />
             </Cell>
-            <Cell width="12">
-              <Input
+            <Cell width={12}>
+              <DatePicker
                 size="sm"
                 label="Date of Birthday "
                 name="dateOfBirthday"
                 error={touched.dateOfBirthday && errors.dateOfBirthday}
                 value={values.dateOfBirthday}
-                onChange={handleChange}
-                onBlur={handleBlur}
-              />{' '}
-              {/* replace for DatePicker components  */}
+                handleDateChange={date => setFieldValue('dateOfBirthday', date)}
+              />
             </Cell>
             {values.accountType === 'company' && (
               <>
-                <Cell width="6">
+                <Cell width={6}>
                   <Input
                     size="sm"
                     label="Business name"
@@ -137,7 +133,7 @@ const ModalAddBankDetails = ({
                     onBlur={handleBlur}
                   />
                 </Cell>
-                <Cell width="6">
+                <Cell width={6}>
                   <Input
                     size="sm"
                     label="Business Tax ID"
@@ -151,7 +147,7 @@ const ModalAddBankDetails = ({
                 </Cell>
               </>
             )}
-            <Cell width="12">
+            <Cell width={12}>
               <Input
                 size="sm"
                 label="Address"
@@ -163,7 +159,7 @@ const ModalAddBankDetails = ({
                 onBlur={handleBlur}
               />
             </Cell>
-            <Cell width="4">
+            <Cell width={4}>
               <Input
                 size="sm"
                 label="City"
@@ -175,7 +171,7 @@ const ModalAddBankDetails = ({
                 onBlur={handleBlur}
               />
             </Cell>
-            <Cell width="4">
+            <Cell width={4}>
               <Input
                 size="sm"
                 label="State"
@@ -187,7 +183,7 @@ const ModalAddBankDetails = ({
                 onBlur={handleBlur}
               />
             </Cell>
-            <Cell width="4">
+            <Cell width={4}>
               <Input
                 size="sm"
                 label="Zip"
