@@ -62,8 +62,8 @@ const createPaymentAccount = gql`
     $first_name: String!
     $last_name: String!
     $legal_entity_type: String!
-    $business_tax_id: String!
-    $business_name: String!
+    $business_tax_id: String
+    $business_name: String
     $city: String!
     $line1: String!
     $postal_code: Int!
