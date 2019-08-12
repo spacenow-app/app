@@ -37,7 +37,6 @@ import BackgroundImage from './BackgroundImage'
 import Text from './Text'
 import DatePicker from './DatePicker'
 
-
 export {
   Modal,
   NavBar,
@@ -77,7 +76,7 @@ export {
   Photo,
   Avatar,
   Carousel,
-  BackgroundImage
+  BackgroundImage,
   Text,
   DatePicker
 }
