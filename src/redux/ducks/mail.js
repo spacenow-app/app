@@ -64,7 +64,7 @@ export const sendMailForm = values => async dispatch => {
 
   try {
     const emailOptions = {
-      to: 'bruno@spacenow.com',
+      to: 'barrett@spacenow.com, team@spacenow.com',
       subject: 'Spacenow Landing Page - Lead Requirements Form ',
       html: `
         <html>
