@@ -48,6 +48,7 @@ import { ReactComponent as Bin } from './svg/generic/bin.svg'
 import { ReactComponent as Camera } from './svg/generic/camera.svg'
 import { ReactComponent as StarFull } from './svg/generic/star-full.svg'
 import { ReactComponent as StarOutline } from './svg/generic/star-outline.svg'
+import { ReactComponent as Calendar } from './svg/generic/calendar.svg'
 
 // Access Type
 import { ReactComponent as AccessTypeKeys } from './svg/access-type/access_type_keys.svg'
@@ -150,6 +151,11 @@ const Icons = {
   'question-mark': <QuestionMark />,
   'single-space': <SingleSpace />,
   'multiple-space': <MultipleSpace />,
+  bin: <Bin />,
+  camera: <Camera />,
+  'star-full': <StarFull />,
+  'star-outline': <StarOutline />,
+  calendar: <Calendar />,
   'category-coworking': <CategoryCoworking />,
   'category-desk': <CategoryDesk />,
   'category-events': <CategoryEvents />,
@@ -189,10 +195,7 @@ const Icons = {
   'sub-category-venue': <SubCategoryVenue />,
   'sub-category-wedding': <SubCategoryWeddingVenue />,
   'sub-category-wine-storage': <SubCategoryWineStorage />,
-  bin: <Bin />,
-  camera: <Camera />,
-  'star-full': <StarFull />,
-  'star-outline': <StarOutline />,
+
   'access-type-keys': <AccessTypeKeys />,
   'access-type-person': <AccessTypePerson />,
   'access-type-smart-lock': <AccessTypeSmartLock />,

@@ -1,6 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import styled from 'styled-components'
+import { layout } from 'styled-system'
 import defaultPic from './defaultPic.png'
 
 const AvatarStyled = styled.div`
@@ -17,6 +18,8 @@ const AvatarStyled = styled.div`
        margin: 0 auto;
 
   }
+
+  ${layout}
 `
 
 const Avatar = ({ image, small, large, ...props }) => {

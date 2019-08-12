@@ -64,7 +64,7 @@ const Title = ({ type, title, subtitle, subTitleSize, subTitleMargin, subTitleCo
         <H1Styled right={right} center={center} {...props}>
           {title}
         </H1Styled>
-        <SubtitleStyled subTitleSize={subTitleSize} subTitleMargin={subTitleMargin} subTitleColor={subTitleColor}>{subtitle}</SubtitleStyled>
+        {subtitle && <SubtitleStyled subTitleSize={subTitleSize} subTitleMargin={subTitleMargin} subTitleColor={subTitleColor}>{subtitle}</SubtitleStyled>}
       </TitleStyled>
     )
   }
@@ -74,7 +74,7 @@ const Title = ({ type, title, subtitle, subTitleSize, subTitleMargin, subTitleCo
         <H2Styled right={right} center={center} {...props}>
           {title}
         </H2Styled>
-        <SubtitleStyled subTitleSize={subTitleSize} subTitleMargin={subTitleMargin} subTitleColor={subTitleColor}>{subtitle}</SubtitleStyled>
+        {subtitle && <SubtitleStyled subTitleSize={subTitleSize} subTitleMargin={subTitleMargin} subTitleColor={subTitleColor}>{subtitle}</SubtitleStyled>}
       </TitleStyled>
     )
   }
@@ -84,7 +84,7 @@ const Title = ({ type, title, subtitle, subTitleSize, subTitleMargin, subTitleCo
         <H3Styled right={right} center={center} {...props}>
           {title}
         </H3Styled>
-        <SubtitleStyled subTitleSize={subTitleSize} subTitleMargin={subTitleMargin} subTitleColor={subTitleColor}>{subtitle}</SubtitleStyled>
+        {subtitle && <SubtitleStyled subTitleSize={subTitleSize} subTitleMargin={subTitleMargin} subTitleColor={subTitleColor}>{subtitle}</SubtitleStyled>}
       </TitleStyled>
     )
   }
@@ -94,7 +94,7 @@ const Title = ({ type, title, subtitle, subTitleSize, subTitleMargin, subTitleCo
         <H4Styled right={right} center={center} {...props}>
           {title}
         </H4Styled>
-        <SubtitleStyled subTitleSize={subTitleSize} subTitleMargin={subTitleMargin} subTitleColor={subTitleColor}>{subtitle}</SubtitleStyled>
+        {subtitle && <SubtitleStyled subTitleSize={subTitleSize} subTitleMargin={subTitleMargin} subTitleColor={subTitleColor}>{subtitle}</SubtitleStyled>}
       </TitleStyled>
     )
   }
@@ -104,7 +104,7 @@ const Title = ({ type, title, subtitle, subTitleSize, subTitleMargin, subTitleCo
         <H5Styled right={right} center={center} {...props}>
           {title}
         </H5Styled>
-        <SubtitleStyled subTitleSize={subTitleSize} subTitleMargin={subTitleMargin} subTitleColor={subTitleColor}>{subtitle}</SubtitleStyled>
+        {subtitle && <SubtitleStyled subTitleSize={subTitleSize} subTitleMargin={subTitleMargin} subTitleColor={subTitleColor}>{subtitle}</SubtitleStyled>}
       </TitleStyled>
     )
   }
@@ -114,7 +114,7 @@ const Title = ({ type, title, subtitle, subTitleSize, subTitleMargin, subTitleCo
         <H6Styled right={right} center={center} {...props}>
           {title}
         </H6Styled>
-        <SubtitleStyled subTitleSize={subTitleSize} subTitleMargin={subTitleMargin} subTitleColor={subTitleColor}>{subtitle}</SubtitleStyled>
+        {subtitle && <SubtitleStyled subTitleSize={subTitleSize} subTitleMargin={subTitleMargin} subTitleColor={subTitleColor}>{subtitle}</SubtitleStyled>}
       </TitleStyled>
     )
   }
@@ -123,7 +123,7 @@ const Title = ({ type, title, subtitle, subTitleSize, subTitleMargin, subTitleCo
       <H1Styled right={right} center={center} {...props}>
         {title}
       </H1Styled>
-      <SubtitleStyled subTitleSize={subTitleSize} subTitleMargin={subTitleMargin} subTitleColor={subTitleColor}>{subtitle}</SubtitleStyled>
+      {subtitle && <SubtitleStyled subTitleSize={subTitleSize} subTitleMargin={subTitleMargin} subTitleColor={subTitleColor}>{subtitle}</SubtitleStyled>}
     </TitleStyled>
   )
 }
@@ -143,7 +143,12 @@ Title.defaultProps = {
 
 Title.propTypes = {
   type: PropTypes.oneOf(['h1', 'h2', 'h3', 'h4', 'h5', 'h6']),
-  title: PropTypes.string.isRequired,
+  title: PropTypes.PropTypes.oneOfType([
+    PropTypes.string,
+    PropTypes.number,
+    PropTypes.instanceOf(Array),
+    PropTypes.element
+  ]).isRequired,
   subtitle: PropTypes.string,
   subTitleSize: PropTypes.number,
   subTitleColor: PropTypes.string,

@@ -36,6 +36,8 @@ import Carousel from './Carousel'
 import Text from './Text'
 import UserDetails from './UserDetails'
 import BookingCard from './BookingCard'
+import BackgroundImage from './BackgroundImage'
+import DatePicker from './DatePicker'
 
 export {
   Modal,
@@ -76,7 +78,9 @@ export {
   Photo,
   Avatar,
   Carousel,
-  Text,
   UserDetails,
-  BookingCard
+  BookingCard,
+  BackgroundImage,
+  Text,
+  DatePicker
 }

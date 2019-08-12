@@ -11,6 +11,8 @@ const HomePage = lazy(() => import('pages/HomePage'))
 const NotFoundPage = lazy(() => import('pages/NotFoundPage'))
 const Listing = lazy(() => import('routes/Listing'))
 const Space = lazy(() => import('routes/Space'))
+const Account = lazy(() => import('routes/Account'))
+const LandingPages = lazy(() => import('routes/LandingPages'))
 
 const Routes = props => {
   const dispatch = useDispatch()
@@ -40,6 +42,13 @@ const Routes = props => {
             isAuthenticated={isAuthenticated}
             component={() => <h1>Login Page</h1>}
           />
+          <PublicRoute
+            {...props}
+            path="/landing-page"
+            handlerCheckAuthentication={() => {}}
+            // isAuthenticated={isAuthenticated}
+            component={LandingPages}
+          />
           <PrivateRoute
             {...props}
             path="/"
@@ -63,6 +72,12 @@ const Routes = props => {
                       path={`${otherProps.match.path}listing`}
                       isAuthenticated={isAuthenticated}
                       component={Listing}
+                    />
+                    <Route
+                      {...otherProps}
+                      path={`${otherProps.match.path}account`}
+                      isAuthenticated={isAuthenticated}
+                      component={Account}
                     />
                     <Route
                       {...otherProps}

@@ -26,10 +26,12 @@ const ModalConfirm = ({ onConfirm, options }) => {
       )}
       {options.text && <Modal.Body>{options.text}</Modal.Body>}
       <Modal.Footer>
-        <Button outline="true" onClick={() => handleConfirm(false)}>
+        <Button sm outline="true" onClick={() => handleConfirm(false)}>
           No
         </Button>
-        <Button onClick={() => handleConfirm(true)}>Yes</Button>
+        <Button sm onClick={() => handleConfirm(true)}>
+          Yes
+        </Button>
       </Modal.Footer>
     </Modal>
   )

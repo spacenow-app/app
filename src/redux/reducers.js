@@ -8,6 +8,7 @@ import category from './ducks/category'
 import listing from './ducks/listing'
 import photo from './ducks/photo'
 import partner from './ducks/partner'
+import payment from './ducks/payment'
 
 export default combineReducers({
   modal,
@@ -17,5 +18,6 @@ export default combineReducers({
   category,
   listing,
   photo,
-  partner
+  partner,
+  payment
 })
