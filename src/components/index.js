@@ -77,7 +77,7 @@ export {
   Photo,
   Avatar,
   Carousel,
-  BackgroundImage
+  BackgroundImage,
   Text,
   DatePicker
 }
