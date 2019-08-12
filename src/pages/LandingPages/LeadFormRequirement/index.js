@@ -3,6 +3,8 @@ import styled, { css } from 'styled-components'
 import { withFormik } from 'formik'
 import * as Yup from 'yup'
 import numeral from 'numeral'
+import { useDispatch, useSelector } from 'react-redux'
+import { sendMailForm } from 'redux/ducks/mail'
 import {
   Wrapper,
   Box,
@@ -86,6 +88,8 @@ const LeadFormRequirement = ({
   ...props
 }) => {
   const inputTo = useRef()
+  const dispatch = useDispatch()
+  const { isLoading } = useSelector(state => state.mail)
 
   const _handleRadioChange = (e, { value, name }) => {
     setFieldValue(name, value && '')
@@ -93,6 +97,10 @@ const LeadFormRequirement = ({
 
   const _handleTypeOfSpaceClick = (e, value) => {
     setFieldValue('typeOfSpace', value)
+  }
+
+  const _handleSubmit = () => {
+    dispatch(sendMailForm(values))
   }
 
   return (
@@ -265,7 +273,9 @@ const LeadFormRequirement = ({
             onBlur={handleBlur}
           />
         </Box>
-        <Button block>Submit</Button>
+        <Button fluid onClick={_handleSubmit} isLoading={isLoading}>
+          Submit
+        </Button>
         <Box my="60px" display="grid" gridTemplateColumns="auto auto auto" gridColumnGap="40px" alignItems="center">
           <Avatar width="100px" height="100px" />
           <Text>
