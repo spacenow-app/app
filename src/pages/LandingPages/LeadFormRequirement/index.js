@@ -22,6 +22,7 @@ import {
 } from 'components'
 
 import heroImage from './images/hero_img.png'
+import guestUserImage from './images/guest_user.png'
 
 const data = [
   {
@@ -273,11 +274,11 @@ const LeadFormRequirement = ({
             onBlur={handleBlur}
           />
         </Box>
-        <Button fluid onClick={_handleSubmit} isLoading={isLoading}>
+        <Button fluid="true" onClick={_handleSubmit} isLoading={isLoading}>
           Submit
         </Button>
         <Box my="60px" display="grid" gridTemplateColumns="auto auto auto" gridColumnGap="40px" alignItems="center">
-          <Avatar width="100px" height="100px" />
+          <Avatar width="100px" height="100px" image={guestUserImage} />
           <Text>
             Prefer to speak to a team member? Call one of our friendly staff on:
             <br />
