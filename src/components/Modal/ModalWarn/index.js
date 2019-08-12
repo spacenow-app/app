@@ -26,7 +26,7 @@ const ModalWarn = ({ onConfirm, options }) => {
       )}
       {options.text && <Modal.Body>{options.text}</Modal.Body>}
       <Modal.Footer>
-        <Button outline="true" onClick={() => handleConfirm(options.handlerCallback)}>
+        <Button sm outline="true" onClick={() => handleConfirm(options.handlerCallback)}>
           {options.handlerTitle}
         </Button>
       </Modal.Footer>

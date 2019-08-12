@@ -6,7 +6,8 @@ export const Types = {
 
 export const TypesModal = {
   MODAL_TYPE_CONFIRM: 'MODAL_TYPE_CONFIRM',
-  MODAL_TYPE_WARN: 'MODAL_TYPE_WARN'
+  MODAL_TYPE_WARN: 'MODAL_TYPE_WARN',
+  MODAL_ADD_BANK_DETAILS: 'MODAL_ADD_BANK_DETAILS'
 }
 
 // Initial State

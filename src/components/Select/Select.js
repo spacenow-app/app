@@ -5,17 +5,18 @@ import arrowSVG from './arrow.svg'
 
 const sizeStyle = {
   sm: css`
-    padding: 0.25rem 0.5rem;
+    padding: 0 40px 0 20px;
     font-size: 12px;
     line-height: 1.5;
     border-radius: 37px;
+    height: 42px;
   `,
   md: css`
     padding: 0 40px 0 20px;
     font-size: 14px;
     line-height: 1.5;
     border-radius: 37px;
-    height: 50px;
+    height: 54px;
   `,
   lg: css`
     padding: 0.5rem 1rem;

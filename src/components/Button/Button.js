@@ -6,11 +6,13 @@ import { Button as ButtonExternal, Spinner } from 'react-bootstrap'
 const ButtonStyled = styled(ButtonExternal)`
   &&& {
     height: 54px;
+    height: ${props => (props.height && props.height) || (props.size === 'sm' && '42px') || '54px'};
+    width: ${props =>
+      (props.fluid && '100%') || (props.width && props.width) || (props.size === 'sm' && '144px') || '180px'};
     border-radius: 37px;
     font-family: 'Montserrat-Medium';
     font-size: 14px;
     font-weight: 600;
-    width: ${props => !props.block && '180px'};
     background-color: ${props => (props.outline && '#fff') || (props.disabled && '#fff') || '#6adc91'};
     color: ${props => (props.outline && '#172439') || '#fff'};
     border: ${props => (props.outline ? `1px solid #172439` : 'none')};
@@ -152,7 +154,8 @@ const Button = ({ children, icon, isLoading, disabled, ...props }) => {
 
 Button.defaultProps = {
   isLoading: false,
-  disabled: false
+  disabled: false,
+  size: 'md'
 }
 
 Button.propTypes = {
@@ -160,7 +163,8 @@ Button.propTypes = {
   icon: PropTypes.element,
   isLoading: PropTypes.bool,
   disabled: PropTypes.bool,
-  outline: PropTypes.string
+  outline: PropTypes.string,
+  size: PropTypes.oneOf(['sm', 'md'])
 }
 
 export default Button
