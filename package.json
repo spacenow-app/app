@@ -45,9 +45,9 @@
   },
   "scripts": {
     "start": "PORT=3003 react-scripts start",
-    "build": "PORT=3003 react-scripts build",
-    "test": "PORT=3003 react-scripts test",
-    "eject": "PORT=3003 react-scripts eject",
+    "build": "react-scripts build",
+    "test": "react-scripts test",
+    "eject": "react-scripts eject",
     "storybook": "start-storybook",
     "svg": "node ./scripts/remove_style_svg_icons.js"
   },
