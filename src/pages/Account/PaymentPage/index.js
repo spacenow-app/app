@@ -1,3 +1,4 @@
+
 /* eslint-disable jsx-a11y/anchor-is-valid */
 import React, { useEffect } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
@@ -9,11 +10,13 @@ import { onGetPaymentAccount, onDeletePaymentAccount, onCreatePaymentAccount } f
 import { Wrapper, Title, Icon, Loader, BackgroundImage, Button, Grid, Cell, Caption } from 'components'
 import { TypesModal, openModal } from 'redux/ducks/modal'
 
+
 const ListGroup = styled.div`
   margin: 50px;
   display: grid;
   grid-row-gap: 15px;
 `
+
 
 const ListHeader = styled.div`
   display: grid;
@@ -105,6 +108,7 @@ const PaymentPage = () => {
         </ListGroup>
       )}
     </Wrapper>
+
   )
 }
 

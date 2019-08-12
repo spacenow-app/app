@@ -65,7 +65,7 @@ const Title = ({ type, title, subtitle, subTitleSize, noMargin, right, center, .
         <H1Styled right={right} center={center} {...props}>
           {title}
         </H1Styled>
-        <SubtitleStyled subTitleSize={subTitleSize}>{subtitle}</SubtitleStyled>
+        {subtitle && <SubtitleStyled subTitleSize={subTitleSize}>{subtitle}</SubtitleStyled>}
       </TitleStyled>
     )
   }
@@ -75,7 +75,7 @@ const Title = ({ type, title, subtitle, subTitleSize, noMargin, right, center, .
         <H2Styled right={right} center={center} {...props}>
           {title}
         </H2Styled>
-        <SubtitleStyled subTitleSize={subTitleSize}>{subtitle}</SubtitleStyled>
+        {subtitle && <SubtitleStyled subTitleSize={subTitleSize}>{subtitle}</SubtitleStyled>}
       </TitleStyled>
     )
   }
@@ -85,7 +85,7 @@ const Title = ({ type, title, subtitle, subTitleSize, noMargin, right, center, .
         <H3Styled right={right} center={center} {...props}>
           {title}
         </H3Styled>
-        <SubtitleStyled subTitleSize={subTitleSize}>{subtitle}</SubtitleStyled>
+        {subtitle && <SubtitleStyled subTitleSize={subTitleSize}>{subtitle}</SubtitleStyled>}
       </TitleStyled>
     )
   }
@@ -95,7 +95,7 @@ const Title = ({ type, title, subtitle, subTitleSize, noMargin, right, center, .
         <H4Styled right={right} center={center} {...props}>
           {title}
         </H4Styled>
-        <SubtitleStyled subTitleSize={subTitleSize}>{subtitle}</SubtitleStyled>
+        {subtitle && <SubtitleStyled subTitleSize={subTitleSize}>{subtitle}</SubtitleStyled>}
       </TitleStyled>
     )
   }
@@ -105,7 +105,7 @@ const Title = ({ type, title, subtitle, subTitleSize, noMargin, right, center, .
         <H5Styled right={right} center={center} {...props}>
           {title}
         </H5Styled>
-        <SubtitleStyled subTitleSize={subTitleSize}>{subtitle}</SubtitleStyled>
+        {subtitle && <SubtitleStyled subTitleSize={subTitleSize}>{subtitle}</SubtitleStyled>}
       </TitleStyled>
     )
   }
@@ -115,7 +115,7 @@ const Title = ({ type, title, subtitle, subTitleSize, noMargin, right, center, .
         <H6Styled right={right} center={center} {...props}>
           {title}
         </H6Styled>
-        <SubtitleStyled subTitleSize={subTitleSize}>{subtitle}</SubtitleStyled>
+        {subtitle && <SubtitleStyled subTitleSize={subTitleSize}>{subtitle}</SubtitleStyled>}
       </TitleStyled>
     )
   }
@@ -124,7 +124,7 @@ const Title = ({ type, title, subtitle, subTitleSize, noMargin, right, center, .
       <H1Styled right={right} center={center} {...props}>
         {title}
       </H1Styled>
-      <SubtitleStyled subTitleSize={subTitleSize}>{subtitle}</SubtitleStyled>
+      {subtitle && <SubtitleStyled subTitleSize={subTitleSize}>{subtitle}</SubtitleStyled>}
     </TitleStyled>
   )
 }
@@ -142,7 +142,12 @@ Title.defaultProps = {
 
 Title.propTypes = {
   type: PropTypes.oneOf(['h1', 'h2', 'h3', 'h4']),
-  title: PropTypes.string.isRequired,
+  title: PropTypes.PropTypes.oneOfType([
+    PropTypes.string,
+    PropTypes.number,
+    PropTypes.instanceOf(Array),
+    PropTypes.element
+  ]).isRequired,
   subtitle: PropTypes.string,
   subTitleSize: PropTypes.number,
   className: PropTypes.string,

@@ -38,6 +38,7 @@ const RadioStyled = styled.div`
   justify-items: start;
   grid-column-gap: 12px;
   color: #172439;
+  font-size: ${props => props.fontSize};
 `
 
 const RadioButtonLabel = styled.label`
@@ -100,7 +101,7 @@ const ImageStyled = styled.img`
   border-radius: 100%;
 `
 
-const Radio = ({ handleChange, box, value, name, checked, label, text, image, disabled }) => {
+const Radio = ({ handleChange, box, value, name, checked, label, text, image, disabled, fontSize }) => {
   const handleRadioChange = (e, obj) => {
     if (handleChange) {
       handleChange(e, { value: obj.value, name: obj.name, disabled })
@@ -109,7 +110,7 @@ const Radio = ({ handleChange, box, value, name, checked, label, text, image, di
 
   return (
     <RadioItem box={box} checked={checked} disabled={disabled} onClick={e => handleRadioChange(e, { value, name })}>
-      <RadioStyled disabled={disabled}>
+      <RadioStyled disabled={disabled} fontSize={fontSize}>
         <RadioButton
           type="radio"
           disabled={disabled}
@@ -133,7 +134,8 @@ const Radio = ({ handleChange, box, value, name, checked, label, text, image, di
 }
 
 Radio.defaultProps = {
-  checked: false
+  checked: false,
+  fontSize: '16px'
 }
 
 Radio.propTypes = {
@@ -145,7 +147,8 @@ Radio.propTypes = {
   label: PropTypes.string,
   text: PropTypes.string,
   image: PropTypes.string,
-  disabled: PropTypes.bool
+  disabled: PropTypes.bool,
+  fontSize: PropTypes.string
 }
 
 export default memo(Radio, (prevProps, nextProps) => {

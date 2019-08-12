@@ -1,13 +1,14 @@
 import React, { useEffect } from 'react'
 import styled, { css } from 'styled-components'
 import { Icon } from 'components'
+import { between } from 'polished'
 // import { checkPropTypes } from 'prop-types'
 
 const List = styled.div`
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(130px, 130px));
   grid-column-gap: 10px;
-  justify-content: center;
+  justify-content: ${props => (props.spaceBetween ? 'space-between' : 'center')};
 
   ${props =>
     props.circular &&
@@ -26,10 +27,12 @@ const ListItem = styled.div`
   ${props =>
     !props.circular &&
     css`
-      background-color: #f7f7f7;
+      background-color: ${props.bgItem ? props.bgItem : '#f7f7f7'};
       width: 130px;
       height: 130px;
       border-radius: 8px;
+      border: ${props.border && props.border};
+      box-shadow: ${props.shadow && '0px 1px 3px 0px rgba(0, 0, 0, 0.1)'};
 
       :hover {
         background-color: #6adc91;
@@ -87,8 +90,18 @@ const TitleStyled = styled.span`
     `}
 `
 
-const ListCategory = ({ circular, data, handleItemClick, itemSelected }) => {
-  useEffect(() => { }, [data, itemSelected])
+const ListCategory = ({
+  circular,
+  data,
+  bgItem,
+  border,
+  shadow,
+  handleItemClick,
+  itemSelected,
+  spaceBetween,
+  ...props
+}) => {
+  useEffect(() => {}, [data, itemSelected])
 
   const _parseIconName = (isSub, name) => {
     let prefix = 'category-'
@@ -101,10 +114,13 @@ const ListCategory = ({ circular, data, handleItemClick, itemSelected }) => {
   }
 
   return (
-    <List circular={circular}>
+    <List circular={circular} spaceBetween={spaceBetween}>
       {data.map(item => (
         <ListItem
           key={item.id}
+          shadow={shadow}
+          bgItem={bgItem}
+          border={border}
           circular={circular}
           onClick={e => handleItemClick(e, item)}
           active={itemSelected && item.id === itemSelected.id}
@@ -117,11 +133,11 @@ const ListCategory = ({ circular, data, handleItemClick, itemSelected }) => {
               <TitleStyled circular>{item.itemName}</TitleStyled>
             </>
           ) : (
-              <>
-                <IconStyled name={_parseIconName(circular, item.otherItemName)} fill="#172439" />
-                <TitleStyled>{item.itemName}</TitleStyled>
-              </>
-            )}
+            <>
+              <IconStyled name={_parseIconName(circular, item.otherItemName)} fill="#172439" />
+              <TitleStyled>{item.itemName}</TitleStyled>
+            </>
+          )}
         </ListItem>
       ))}
     </List>
@@ -133,7 +149,7 @@ ListCategory.propsType = {}
 ListCategory.defaultProps = {
   circular: false,
   itemSelected: false,
-  handleItemClick: () => { }
+  handleItemClick: () => {}
 }
 
 export default ListCategory

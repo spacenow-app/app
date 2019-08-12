@@ -8,5 +8,11 @@ export default {
     white: '#FFFFFF',
     greyLight: '#E2E2E2',
     greyscale: ['#646464', '#939393', '#CBCBCB', '#EBEBEB', '#F7F7F7', '#FFFFFF']
+  },
+  fonts: {
+    regular: 'Montserrat-Regular',
+    medium: 'Montserrat-Medium',
+    bold: 'Montserrat-Bold',
+    semiBold: 'Montserrat-SemiBold'
   }
 }
