@@ -7,7 +7,6 @@ import { Button, Box, Grid, Cell, Select, Input } from 'components'
 
 import { useDispatch } from 'react-redux'
 import { closeModal } from 'redux/ducks/modal'
-import { onCreatePaymentAccount } from 'redux/ducks/payment'
 
 const ModalAddBankDetails = ({
   onConfirm,
