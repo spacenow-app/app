@@ -25,11 +25,6 @@ const ModalAddBankDetails = ({
 }) => {
   const dispatch = useDispatch()
 
-  const currentYear = new Date().getFullYear()
-  const fromMonth = new Date(currentYear, 0)
-  const toMonth = new Date(currentYear + 10, 11)
-  const [month, setMonth] = useState(fromMonth)
-
   const handleConfirm = isConfirmed => {
     dispatch(closeModal())
     if (isConfirmed) {
@@ -42,41 +37,8 @@ const ModalAddBankDetails = ({
     setFieldValue(name, value)
   }
 
-  const YearMonthForm = ({ date, localeUtils, onChange }) => {
-    const months = localeUtils.getMonths()
-
-    const years = []
-    for (let i = fromMonth.getFullYear(); i <= toMonth.getFullYear(); i += 1) {
-      years.push(i)
-    }
-
-    const handleChange = function handleChange(e) {
-      const { year, month } = e.target.form
-      onChange(new Date(year.value, month.value))
-    }
-
-    return (
-      <form className="DayPicker-Caption">
-        <select name="month" onChange={handleChange} value={date.getMonth()}>
-          {months.map((month, i) => (
-            <option key={month} value={i}>
-              {month}
-            </option>
-          ))}
-        </select>
-        <select name="year" onChange={handleChange} value={date.getFullYear()}>
-          {years.map(year => (
-            <option key={year} value={year}>
-              {year}
-            </option>
-          ))}
-        </select>
-      </form>
-    )
-  }
-
   return (
-    <Modal show centered size="lg" onHide={() => handleConfirm(false)}>
+    <Modal show centered size="lg" onHide={() => {}}>
       <Modal.Header>
         <Modal.Title>Add Bank Details</Modal.Title>
       </Modal.Header>
@@ -152,15 +114,9 @@ const ModalAddBankDetails = ({
                 size="sm"
                 label="Date of Birthday "
                 name="dateOfBirthday"
-                month={month}
-                fromMonth={fromMonth}
-                toMonth={toMonth}
                 error={touched.dateOfBirthday && errors.dateOfBirthday}
                 value={values.dateOfBirthday}
                 handleDateChange={date => setFieldValue('dateOfBirthday', date)}
-                captionElement={({ date, localeUtils }) => (
-                  <YearMonthForm date={date} localeUtils={localeUtils} onChange={m => setMonth(m)} />
-                )}
               />
             </Cell>
             {values.accountType === 'company' && (

@@ -1,10 +1,11 @@
 import React, { forwardRef } from 'react'
 import PropTypes from 'prop-types'
 import styled, { css } from 'styled-components'
-import DayPicker from 'react-day-picker/DayPickerInput'
+import { DateUtils } from 'react-day-picker'
+import DayPickerInput from 'react-day-picker/DayPickerInput'
 import 'react-day-picker/lib/style.css'
 
-import dateFnsFormat from 'date-fns/format'
+import { format as dateFnsFormat, parse as dateFnsParse } from 'date-fns'
 
 import { Caption } from 'components'
 import CalendarIcon from 'components/Icon/svg/generic/calendar.svg'
@@ -132,19 +133,32 @@ const WrapperStyled = styled.div`
 
 const DatePicker = forwardRef(
   ({ label, handleDateChange, dayPickerProps, format, placeholder, value, ...props }, ref) => {
-    function formatDate(date, formatFunc, locale) {
+    const formatDate = (date, formatFunc, locale) => {
       return dateFnsFormat(date, formatFunc, { locale })
+    }
+
+    const parseDate = (str, formatFunc, locale) => {
+      const date = str.split('/')
+      if (str.length >= 10) {
+        const parsed = dateFnsParse(`${date[2]}-${date[1]}-${date[0]}`, formatFunc, { locale })
+        if (DateUtils.isDate(parsed)) {
+          return parsed
+        }
+        return undefined
+      }
+      return undefined
     }
 
     return (
       <WrapperStyled {...props}>
         {label && <Caption margin="10px 0">{label}</Caption>}
-        <DayPicker
+        <DayPickerInput
           {...props}
           ref={ref}
           value={value}
           placeholder={placeholder}
           format={format}
+          parseDate={parseDate}
           formatDate={formatDate}
           dayPickerProps={dayPickerProps}
           onDayChange={handleDateChange}
