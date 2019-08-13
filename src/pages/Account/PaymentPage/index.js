@@ -1,22 +1,20 @@
-
 /* eslint-disable jsx-a11y/anchor-is-valid */
 import React, { useEffect } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import styled from 'styled-components'
 import Helmet from 'react-helmet'
+import { toast } from 'react-toastify'
 
 import { onGetPaymentAccount, onDeletePaymentAccount, onCreatePaymentAccount } from 'redux/ducks/payment'
 
 import { Wrapper, Title, Icon, Loader, BackgroundImage, Button, Grid, Cell, Caption } from 'components'
 import { TypesModal, openModal } from 'redux/ducks/modal'
 
-
 const ListGroup = styled.div`
   margin: 50px;
   display: grid;
   grid-row-gap: 15px;
 `
-
 
 const ListHeader = styled.div`
   display: grid;
@@ -58,6 +56,10 @@ const PaymentPage = () => {
   }
 
   const _addAccount = () => {
+    if (details && details.id) {
+      toast.warn('You already have a account create.')
+      return
+    }
     dispatch(
       openModal(TypesModal.MODAL_ADD_BANK_DETAILS, {
         onConfirm: values => {
@@ -108,7 +110,6 @@ const PaymentPage = () => {
         </ListGroup>
       )}
     </Wrapper>
-
   )
 }
 
