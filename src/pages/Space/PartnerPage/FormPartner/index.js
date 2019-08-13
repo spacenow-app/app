@@ -4,11 +4,12 @@ import React, { useEffect } from 'react'
 import styled from 'styled-components'
 import { withFormik } from 'formik'
 import * as Yup from 'yup'
+import {format} from 'date-fns'
 
-import { Title, Input, Select, TextArea, Button } from 'components'
+import { Title, Input, Select, TextArea, Button, DatePicker } from 'components'
 
 import { onCreateWeWorkReferral } from 'redux/ducks/partner'
-import Listing from 'routes/Listing';
+// import Listing from 'routes/Listing';
 
 const WrapperStyled = styled.div`
   display: grid;
@@ -124,16 +125,13 @@ const FormPartner = ({
         </SectionStyled>
 
         <SectionStyled>
-          {/* <DatePicker name="date" label="Number of Desks needed" /> */}
-          <Input 
-            label="Requested Move In Date" 
-            name="requested_move_in_date"
-            placeholder="date"
-            error={errors.company}
-            value={values.company}
-            onChange={handleChange}
-            onBlur={handleBlur}
-          />
+          <DatePicker
+            label="Requested Move In Date"
+            handleDateChange={date => setFieldValue('requested_move_in_date',  format(date, 'YYYY-MM-DD'))}
+            dayPickerProps={{
+              disabledDays: [{ before: new Date()}],
+            }}
+            />
         </SectionStyled>
 
         <SectionStyled>
@@ -166,7 +164,7 @@ const formik = {
         city: listing.location.city,
         // requested_location:  '',
         company_name:  '',
-        requested_move_in_date:  '',
+        requested_move_in_date:  null,
         desks_estimated:  '',
         contact_allowed:  true,
         notes:  '',

@@ -130,7 +130,7 @@ const PartnerPage = ({ match, location, ...props }) => {
               </Box>
             </Box>
             <Cell style={{ justifySelf: 'end' }}>
-              <UserDetails hostname="WeWork AU" />
+              <UserDetails hostname={listing.user.profile.displayName} imageProfile={listing.user.profile.picture} />
             </Cell>
           </Grid>
 
@@ -160,8 +160,8 @@ const PartnerPage = ({ match, location, ...props }) => {
             </Cell>
           </Grid>
 
-          <Box mt="25px">
-            <Title type="h5" title="Highlights" noMargin />
+          <Box>
+            <Title type="h5" title="Highlights" />
             <Grid columns={5}>
               <Highlights
                 title="Opening Days"
@@ -172,8 +172,8 @@ const PartnerPage = ({ match, location, ...props }) => {
             </Grid>
           </Box>
               
-          <Box mt="25px">
-            <Title type="h5" title="Access Type" noMargin/>
+          <Box>
+            <Title type="h5" title="Access Type" />
             <Box
               display="grid"
               border="1px solid"
@@ -205,15 +205,15 @@ const PartnerPage = ({ match, location, ...props }) => {
 
           {
             listing.listingData.description ? 
-              <Box mt="25px">
-                <Title type="h5" title="Description" noMargin />
+              <Box>
+                <Title type="h5" title="Description" />
                 <p>{listing.listingData.description}</p>
               </Box> : null
           }
           {
             listing.amenities.length > 0 && (
-              <Box mt="25px">
-                <Title type="h5" title="Amenities" noMargin />
+              <Box>
+                <Title type="h5" title="Amenities" />
                 <Box display="grid" gridTemplateColumns="1fr 1fr 1fr" gridRowGap="40px">
                   {listing.amenities.map(item => {
                     return (
@@ -233,12 +233,11 @@ const PartnerPage = ({ match, location, ...props }) => {
                 </Box>
               </Box>
           )}
-          <Box mt="25px">
+          <Box>
             <Title
               type="h5"
               title="Availability"
               color={_getWeekName(listing.accessDays) === 'Closed' ? '#E05252' : null}
-              noMargin
             />
             <TimeTable data={listing.accessDays.listingAccessHours} error={_getWeekName(listing.accessDays) === 'Closed'} />
           </Box>
