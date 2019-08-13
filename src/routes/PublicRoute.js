@@ -10,9 +10,15 @@ const PublicRoute = ({ handlerCheckAuthentication, isAuthenticated, component: C
 }
 
 PublicRoute.propTypes = {
-  component: PropTypes.func.isRequired,
+  component: PropTypes.oneOfType([
+    PropTypes.func,
+    PropTypes.element,
+    PropTypes.elementType,
+    PropTypes.instanceOf(Array),
+    PropTypes.instanceOf(Object)
+  ]).isRequired,
   handlerCheckAuthentication: PropTypes.func.isRequired,
-  isAuthenticated: PropTypes.bool.isRequired
+  isAuthenticated: PropTypes.bool
 }
 
 export default PublicRoute

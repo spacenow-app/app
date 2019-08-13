@@ -3,6 +3,11 @@ import styled, { css } from 'styled-components'
 import { withFormik } from 'formik'
 import * as Yup from 'yup'
 import numeral from 'numeral'
+import { useDispatch, useSelector } from 'react-redux'
+import { format } from 'date-fns'
+
+import { sendMailForm } from 'redux/ducks/mail'
+
 import {
   Wrapper,
   Box,
@@ -20,6 +25,7 @@ import {
 } from 'components'
 
 import heroImage from './images/hero_img.png'
+import guestUserImage from './images/guest_user.png'
 
 const data = [
   {
@@ -86,6 +92,8 @@ const LeadFormRequirement = ({
   ...props
 }) => {
   const inputTo = useRef()
+  const dispatch = useDispatch()
+  const { isLoading } = useSelector(state => state.mail)
 
   const _handleRadioChange = (e, { value, name }) => {
     setFieldValue(name, value && '')
@@ -95,8 +103,36 @@ const LeadFormRequirement = ({
     setFieldValue('typeOfSpace', value)
   }
 
+  const _handleSubmit = () => {
+    const sizeType = {
+      1: '1-10 People',
+      2: '11 - 100 People',
+      3: '101 - 500 People',
+      4: '500+ People'
+    }
+
+    const emailOptions = {
+      to: 'barrett@spacenow.com, team@spacenow.com',
+      subject: 'Spacenow Landing Page - Lead Requirements Form',
+      html: `
+          <html>
+          <body>
+            <p>Type Of Space: ${values.typeOfSpace.itemName}</p>
+            <p>Location: ${values.location}</p>
+            <p>Start Date: ${format(values.startDate, 'DD/MM/YYYY')}</p>
+            <p>End Date: ${format(values.endDate, 'DD/MM/YYYY')}</p>
+            <p>Size: ${sizeType[values.size]}</p>
+            <p>Budget: ${values.budget || 'I don’t know'}</p>
+            <p>Message: ${values.message}</p>
+          </body>
+          </html>
+        `
+    }
+    dispatch(sendMailForm(emailOptions))
+  }
+
   return (
-    <div>
+    <>
       <NavBar />
       <ImageHero />
       <Wrapper width="700px">
@@ -265,9 +301,11 @@ const LeadFormRequirement = ({
             onBlur={handleBlur}
           />
         </Box>
-        <Button block>Submit</Button>
+        <Button fluid="true" onClick={_handleSubmit} isLoading={isLoading}>
+          Submit
+        </Button>
         <Box my="60px" display="grid" gridTemplateColumns="auto auto auto" gridColumnGap="40px" alignItems="center">
-          <Avatar width="100px" height="100px" />
+          <Avatar width="100px" height="100px" image={guestUserImage} />
           <Text>
             Prefer to speak to a team member? Call one of our friendly staff on:
             <br />
@@ -277,7 +315,7 @@ const LeadFormRequirement = ({
           </Text>
         </Box>
       </Wrapper>
-    </div>
+    </>
   )
 }
 

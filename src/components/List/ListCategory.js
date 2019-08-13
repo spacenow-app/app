@@ -1,8 +1,6 @@
 import React, { useEffect } from 'react'
 import styled, { css } from 'styled-components'
 import { Icon } from 'components'
-import { between } from 'polished'
-// import { checkPropTypes } from 'prop-types'
 
 const List = styled.div`
   display: grid;

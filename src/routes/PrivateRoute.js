@@ -31,7 +31,13 @@ const PrivateRoute = ({ handlerCheckAuthentication, isAuthenticated, component: 
 }
 
 PrivateRoute.propTypes = {
-  component: PropTypes.func.isRequired,
+  component: PropTypes.oneOfType([
+    PropTypes.func,
+    PropTypes.element,
+    PropTypes.elementType,
+    PropTypes.instanceOf(Array),
+    PropTypes.instanceOf(Object)
+  ]).isRequired,
   isAuthenticated: PropTypes.bool.isRequired,
   handlerCheckAuthentication: PropTypes.func.isRequired,
   location: PropTypes.instanceOf(Object)

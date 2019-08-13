@@ -2,6 +2,7 @@ import React, { Suspense, lazy, useEffect } from 'react'
 import { BrowserRouter, Switch, Route, Redirect } from 'react-router-dom'
 import { useSelector, useDispatch } from 'react-redux'
 import { NavBar, Modal, Loader } from 'components'
+import { ToastContainer } from 'react-toastify'
 
 import { onTokenValidation, onIsTokenExists } from 'redux/ducks/auth'
 import PrivateRoute from './PrivateRoute'
@@ -33,6 +34,7 @@ const Routes = props => {
   return (
     <BrowserRouter>
       <Suspense fallback={<Loader />}>
+        <ToastContainer hideProgressBar />
         <Switch>
           <Redirect exact from="/" to="/listing/intro" />
           <PublicRoute

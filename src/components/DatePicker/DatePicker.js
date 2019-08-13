@@ -1,27 +1,29 @@
 import React, { forwardRef } from 'react'
 import PropTypes from 'prop-types'
 import styled, { css } from 'styled-components'
+import { DateUtils } from 'react-day-picker'
 import DayPickerInput from 'react-day-picker/DayPickerInput'
 import 'react-day-picker/lib/style.css'
 
-import dateFnsFormat from 'date-fns/format'
+import { format as dateFnsFormat, parse as dateFnsParse } from 'date-fns'
 
 import { Caption } from 'components'
 import CalendarIcon from 'components/Icon/svg/generic/calendar.svg'
 
 const sizeStyle = {
   sm: css`
-    padding: 0.25rem 0.5rem;
+    padding: 10px 20px;
     font-size: 12px;
     line-height: 1.5;
     border-radius: 37px;
+    height: 42px;
   `,
   md: css`
     padding: 10px 20px;
     font-size: 14px;
     line-height: 1.5;
     border-radius: 37px;
-    height: 50px;
+    height: 54px;
   `,
   lg: css`
     padding: 0.5rem 1rem;
@@ -131,22 +133,36 @@ const WrapperStyled = styled.div`
 
 const DatePicker = forwardRef(
   ({ label, handleDateChange, dayPickerProps, format, placeholder, value, ...props }, ref) => {
-    function formatDate(date, format, locale) {
-      return dateFnsFormat(date, format, { locale })
+    const formatDate = (date, formatFunc, locale) => {
+      return dateFnsFormat(date, formatFunc, { locale })
+    }
+
+    const parseDate = (str, formatFunc, locale) => {
+      const date = str.split('/')
+      if (str.length >= 10) {
+        const parsed = dateFnsParse(`${date[2]}-${date[1]}-${date[0]}`, formatFunc, { locale })
+        if (DateUtils.isDate(parsed)) {
+          return parsed
+        }
+        return undefined
+      }
+      return undefined
     }
 
     return (
       <WrapperStyled {...props}>
         {label && <Caption margin="10px 0">{label}</Caption>}
         <DayPickerInput
+          {...props}
           ref={ref}
           value={value}
           placeholder={placeholder}
           format={format}
+          parseDate={parseDate}
           formatDate={formatDate}
-          // parseDate={parseDate}
           dayPickerProps={dayPickerProps}
           onDayChange={handleDateChange}
+          captionElement={({ date, localeUtils }) => <div>test</div>}
         />
       </WrapperStyled>
     )
