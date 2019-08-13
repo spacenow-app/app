@@ -1,6 +1,6 @@
 /* eslint-disable react/no-array-index-key */
 /* eslint-disable no-console */
-import React, { useEffect } from 'react'
+import React from 'react'
 import styled from 'styled-components'
 import { withFormik } from 'formik'
 import * as Yup from 'yup'
@@ -45,9 +45,7 @@ const FormPartner = ({
   }
 
   const _handleSubmit = () => {
-    console.log(values)
-    console.log('isValid', isValid)
-    dispatch(onCreateWeWorkReferral(values))
+    // dispatch(onCreateWeWorkReferral(values))
   }
 
   const arrayDesks = [
@@ -164,7 +162,7 @@ const formik = {
         city: listing.location.city,
         // requested_location:  '',
         company_name:  '',
-        requested_move_in_date:  null,
+        requested_move_in_date:  '',
         desks_estimated:  '',
         contact_allowed:  true,
         notes:  '',

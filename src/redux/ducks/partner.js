@@ -16,9 +16,6 @@ const initialState = {
   error: {
     message: null
   },
-  get: {
-    wework: null
-  }
 }
 
 // GraphQL
@@ -52,9 +49,6 @@ export default function reducer(state = initialState, action) {
       return {
         ...state,
         isLoading: false,
-        get: {
-          wework: action.payload
-        }
       }
     }
     case Types.CREATE_WEWORK_REFERRAL_ERROR: {
@@ -76,10 +70,10 @@ const createWeWorkStart = () => {
   return { type: Types.CREATE_WEWORK_REFERRAL_START }
 }
 
-const createWeWorkSuccess = weworkResponse => {
+const createWeWorkSuccess = () => {
   return {
     type: Types.CREATE_WEWORK_REFERRAL_SUCCESS,
-    payload: weworkResponse
+    // payload: weworkResponse
   }
 }
 
@@ -99,9 +93,8 @@ export const onCreateWeWorkReferral = (values) => async dispatch => {
       mutation: mutationCreateWeWorkReferral,
       variables: { values }
     })
-    dispatch(createWeWorkSuccess(data.createWeWorkReferral))
-    // history.push('/listing/category') // Open a modal or a toasr message
+    dispatch(createWeWorkSuccess(data.createWeWorkReferral))  // check the wework response
   } catch (err) {
-    dispatch(createWeWorkError(errToMsg(err)))
+    dispatch(createWeWorkError(errToMsg(err))) // send the error in the payload
   }
 }

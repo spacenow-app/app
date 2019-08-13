@@ -6,6 +6,7 @@ const PartnerPage = lazy(() => import('pages/Space/PartnerPage'))
 const NotFoundPage = lazy(() => import('pages/NotFoundPage'))
 
 const Space = ({ match, ...props }) => {
+
   return (
     <Suspense fallback={<div>Loading...</div>}>
       <Switch>

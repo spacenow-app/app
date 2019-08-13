@@ -29,6 +29,8 @@ import {
   onGetPhotosByListingId,
 } from 'redux/ducks/listing'
 
+import { onGetProviderByListingId } from 'redux/ducks/space'
+
 import { config } from 'contants'
 
 
@@ -36,16 +38,13 @@ const PartnerPage = ({ match, location, ...props }) => {
   const dispatch = useDispatch()
 
   const { object: listing, isLoading: isListingLoading } = useSelector(state => state.listing.get)
-  // const { array: arrayRules, isLoading: isLoadingRules } = useSelector(state => state.listing.rules)
   const { array: arrayPhotos } = useSelector(state => state.listing.photos)
-  // const { object: objectSpecifications } = useSelector(state => state.listing.specifications)
-  const { isLoading: isPublishLoading, isPublished } = useSelector(state => state.listing.publishing)
-  // const { isEmailConfirmed } = useSelector(state => state.auth.user.verification)
-  const { user } = useSelector(state => state.auth)
+  const { data } = useSelector(state => state.space.provider)
 
   useEffect(() => {
-    dispatch(onGetListingById(match.params.id, user.id))
-  }, [dispatch, match.params.id, user])
+    dispatch(onGetProviderByListingId(match.params.id))
+    dispatch(onGetListingById(match.params.id))
+  }, [dispatch, match.params.id])
 
   useEffect(() => {
     if (listing) {
@@ -85,13 +84,15 @@ const PartnerPage = ({ match, location, ...props }) => {
       : []
   }
 
-  if (isListingLoading || isPublishLoading) {
-    return <Loader text="Loading listing preview" />
-  }
-
-  if (isPublished) {
-    window.location.href = `${config.legacy}/dashboard`
+  // Load the legacy app with regular listing view
+  if(data && data.provider === 'spacenow') {
+    let route = `view-listing/${match.params.id}`
+    window.location.href = `${config.legacy}${route}`
     return null
+  } 
+
+  if (isListingLoading) {
+    return <Loader text="Loading listing view" />
   }
 
   return (
