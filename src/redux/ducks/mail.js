@@ -1,5 +1,6 @@
 import { gql } from 'apollo-boost'
 import { getClientWithAuth } from 'graphql/apolloClient'
+import { toast } from 'react-toastify'
 import errToMsg from 'utils/errToMsg'
 
 // Graphql
@@ -53,39 +54,17 @@ export default function reducer(state = initialState, action) {
 }
 
 // Action Creators
-export const sendMailForm = values => async dispatch => {
+export const sendMailForm = emailOptions => async dispatch => {
   dispatch({ type: Types.SEND_EMAIL_FORM_REQUEST })
-  const sizeType = {
-    1: '1-10 People',
-    2: '11 - 100 People',
-    3: '101 - 500 People',
-    4: '500+ People'
-  }
-
   try {
-    const emailOptions = {
-      to: 'barrett@spacenow.com, team@spacenow.com',
-      subject: 'Spacenow Landing Page - Lead Requirements Form ',
-      html: `
-        <html>
-        <body>
-          <p>Type Of Space: ${values.typeOfSpace.itemName}</p>
-          <p>Location: ${values.location}</p>
-          <p>Start Date: ${values.startDate}</p>
-          <p>End Date: ${values.endDate}</p>
-          <p>Size: ${sizeType[values.size]}</p>
-          <p>Budget: ${values.budget || 'I don’t know'}</p>
-          <p>Message: ${values.message}</p>
-        </body>
-        </html>
-      `
-    }
     const { data } = await getClientWithAuth(dispatch).mutate({
       mutation: sendMail,
       variables: { ...emailOptions }
     })
+    toast.success('Email Sent!')
     dispatch({ type: Types.SEND_EMAIL_FORM_SUCCESS, payload: data.sendMail })
   } catch (err) {
+    toast.error(errToMsg(err))
     dispatch({ type: Types.SEND_EMAIL_FORM_ERROR, payload: errToMsg(err) })
   }
 }
