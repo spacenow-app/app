@@ -1,6 +1,8 @@
 import { gql } from 'apollo-boost'
 import { getDate, getMonth, getYear } from 'date-fns'
 import { getClientWithAuth } from 'graphql/apolloClient'
+import { toast } from 'react-toastify'
+
 import errToMsg from 'utils/errToMsg'
 
 // Actions
@@ -211,10 +213,8 @@ export const onGetPaymentAccount = () => async dispatch => {
  */
 export const onCreatePaymentAccount = (account, user) => async dispatch => {
   dispatch({ type: Types.ON_PROCESSING_PAYMENT })
-
   const dateOfBirthday = new Date(account.dateOfBirthday)
   try {
-    // eslint-disable-next-line no-unused-vars
     const paymentDetails = {
       type: 'custom',
       email: user.email,
@@ -242,8 +242,10 @@ export const onCreatePaymentAccount = (account, user) => async dispatch => {
       mutation: createPaymentAccount,
       variables: { ...paymentDetails }
     })
+    toast.success('Payment Preferences details saved successfully.')
     dispatch({ type: Types.CREATE_PAYMENT_ACCOUNT_SUCCESS, payload: data.createPaymentAccount })
   } catch (err) {
+    toast.error(`Error on create a new bank account! ${errToMsg(err)}`)
     dispatch({ type: Types.CREATE_PAYMENT_ACCOUNT_ERROR, payload: errToMsg(err) })
   }
 }
@@ -252,8 +254,10 @@ export const onDeletePaymentAccount = () => async dispatch => {
   dispatch({ type: Types.ON_PROCESSING_PAYMENT })
   try {
     const { data } = await getClientWithAuth(dispatch).mutate({ mutation: removePaymentAccount })
+    toast.success('Bank details removed successfully.')
     dispatch({ type: Types.DELETE_PAYMENT_ACCOUNT_SUCCESS, payload: data.removePaymentAccount })
   } catch (err) {
+    toast.error(`Error on remove your bank account! ${errToMsg(err)}`)
     dispatch({ type: Types.DELETE_PAYMENT_ACCOUNT_ERROR, payload: errToMsg(err) })
   }
 }
