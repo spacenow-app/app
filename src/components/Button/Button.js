@@ -1,6 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import styled from 'styled-components'
+import { color, typography } from 'styled-system'
 import { Button as ButtonExternal, Spinner } from 'react-bootstrap'
 
 const ButtonStyled = styled(ButtonExternal)`
@@ -16,6 +17,9 @@ const ButtonStyled = styled(ButtonExternal)`
     background-color: ${props => (props.outline && '#fff') || (props.disabled && '#fff') || '#6adc91'};
     color: ${props => (props.outline && '#172439') || '#fff'};
     border: ${props => (props.outline ? `1px solid #172439` : 'none')};
+
+    ${color}
+    ${typography}
 
     :hover {
       &&& {
