@@ -10,7 +10,7 @@ const Space = ({ match, ...props }) => {
 
   return (
     <Suspense fallback={<div>Loading...</div>}>
-    <NavBar />
+    {/* <NavBar /> */}
       <Switch>
         <Route exact component={PartnerPage} path={`${match.path}/partner/:id`} />
         <Route component={NotFoundPage} />
