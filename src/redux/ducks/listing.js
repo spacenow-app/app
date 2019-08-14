@@ -294,6 +294,14 @@ const allListingFields = `
 		createdAt
 		updatedAt
   }
+  user {
+    id
+    email
+    profile {
+      displayName
+      picture
+    }
+  }
 `
 
 // GraphQL
@@ -808,10 +816,12 @@ export const onGetListingById = (id, authID) => async dispatch => {
       variables: { id: parseInt(id, 10) },
       fetchPolicy: 'network-only'
     })
-    const { userId } = data.getListingById
-    if (authID !== userId) {
-      dispatch({ type: Types.LISTING_GET_SPACE_DENIED, payload: data.getListingById })
-      return
+    if (authID) {
+      const { userId } = data.getListingById
+      if (authID !== userId) {
+        dispatch({ type: Types.LISTING_GET_SPACE_DENIED, payload: data.getListingById })
+        return
+      }
     }
     dispatch({ type: Types.LISTING_GET_SPACE_SUCCESS, payload: data.getListingById })
   } catch (err) {

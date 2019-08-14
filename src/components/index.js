@@ -33,8 +33,10 @@ import ToolTip from './ToolTip'
 import Photo from './Photo'
 import Avatar from './Avatar'
 import Carousel from './Carousel'
-import BackgroundImage from './BackgroundImage'
 import Text from './Text'
+import UserDetails from './UserDetails'
+import BookingCard from './BookingCard'
+import BackgroundImage from './BackgroundImage'
 import DatePicker from './DatePicker'
 
 export {
@@ -76,6 +78,8 @@ export {
   Photo,
   Avatar,
   Carousel,
+  UserDetails,
+  BookingCard,
   BackgroundImage,
   Text,
   DatePicker

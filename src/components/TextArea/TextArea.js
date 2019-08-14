@@ -1,4 +1,10 @@
+import React from 'react'
+import PropTypes from 'prop-types'
 import styled from 'styled-components'
+
+const WrapperTextArea = styled.div`
+  position: relative;
+`
 
 const TextAreaStyled = styled.textarea`
   font-family: 'Montserrat-Regular';
@@ -17,4 +23,33 @@ const TextAreaStyled = styled.textarea`
   }
 `
 
-export default TextAreaStyled
+const Label = styled.label`
+  font-size: 14px;
+  font-family: 'Montserrat-Medium';
+  margin-left: 20px;
+`
+
+const ErrorMessage = styled.small`
+  color: #e05252;
+  margin-left: 20px;
+`
+
+const TextArea = ({ size, label, error, loading, ...props }) => {
+  return (
+    <WrapperTextArea >
+      {label && <Label>{label}</Label>}
+      <TextAreaStyled {...props}/>
+      {error && <ErrorMessage>{error}</ErrorMessage>}
+    </WrapperTextArea>
+  )
+}
+
+TextArea.defaultProps = {
+  label: null
+}
+
+TextArea.propTypes = {
+  label: PropTypes.string
+}
+
+export default TextArea

@@ -36,8 +36,8 @@ const sizeStyle = {
 const WrapperStyled = styled.div`
   &&& {
     .DayPickerInput-Overlay {
-      left: 3px;
-      right: 2px;
+      // left: 3px;
+      // right: 2px;
       top: 0px;
       // border-bottom-left-radius: 28px;
       // border-bottom-right-radius: 28px;
@@ -106,7 +106,7 @@ const WrapperStyled = styled.div`
         display: inline-block;
         width: 100%;
         color: rgb(33, 37, 41);
-        background-color: ${props => (props.error ? 'rgba(224, 82, 82, 0.1);' : '#ffffff')};
+        background-color: ${props => (props.error ? 'rgba(224, 82, 82, 0.1);' : '#ffffff !important')};
         border-width: 1px;
         border-color: ${props => (props.error ? '#e05252' : '#ebebeb')};
         border-style: solid;

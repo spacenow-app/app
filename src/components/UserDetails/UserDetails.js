@@ -5,7 +5,7 @@ import Avatar from '../Avatar'
 
 const WrapperStyled = styled.div`
   display: grid;
-  grid-row-gap: 15px;
+  grid-row-gap: 10px;
 `
 
 const TopStyled = styled.div`
@@ -25,8 +25,9 @@ const UserContainer = styled.div`
 `
 
 const BottomStyled = styled.div`
-  font-family: 'Montserrat-Medium';
+  font-family: 'Montserrat-SemiBold';
   line-height: 25px;
+  margin-top: 10px;
   @media (max-width: 680px) {
     text-align: center;
   }
@@ -47,9 +48,14 @@ const TextCity = styled(TextDefaultStyled)`
 `
 
 const TextJoined = styled(TextDefaultStyled)`
-  color: #2da577;
-  font-size: 14px;
+  color: #172439;
+  font-size: 10px;
 `
+
+const TextBottom = styled.span`
+  color: #172439;
+  font-size: 12px;
+`;
 
 const UserDetails = props => (
   <WrapperStyled>
@@ -57,12 +63,19 @@ const UserDetails = props => (
       <Avatar small image={props.imageProfile} />
       <UserContainer>
         <TextName>{props.hostname}</TextName>
-        <TextCity>{props.address}</TextCity>
+        { props.address && 
+          <TextCity>{props.address}</TextCity>
+        }
       </UserContainer>
     </TopStyled>
-    <BottomStyled>
-      <TextJoined>{`Joined in ${props.joined}`}</TextJoined>
-    </BottomStyled>
+    { props.joined && 
+      <BottomStyled>
+        <TextJoined>{`Joined in ${props.joined}`}</TextJoined>
+      </BottomStyled>
+    }
+    { props.text && 
+        <TextBottom>{props.text}</TextBottom>
+    }
   </WrapperStyled>
 )
 
@@ -72,9 +85,10 @@ UserDetails.defaultProps = {
 
 UserDetails.propTypes = {
   hostname: PropTypes.string.isRequired,
-  address: PropTypes.string.isRequired,
-  joined: PropTypes.string.isRequired,
-  imageProfile: PropTypes.string
+  address: PropTypes.string,
+  joined: PropTypes.string,
+  imageProfile: PropTypes.string,
+  text: PropTypes.string
 }
 
 export default UserDetails

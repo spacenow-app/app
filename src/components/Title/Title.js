@@ -49,23 +49,22 @@ const H6Styled = styled.h6`
 `
 
 const SubtitleStyled = styled.p`
-  color: #707070;
   font-size: ${props => `${props.subTitleSize}px`};
-  margin-top: 30px;
-  color: ${props => (props.subTitlecolor ? props.subTitlecolor : '#172439')};
+  margin-top: ${props => `${props.subTitleMargin}px`};
+  color: ${props => (props.subTitleColor ? props.subTitleColor : '#172439')};
   width: 80%;
   margin-bottom: 0px;
   line-height: 26px;
 `
 
-const Title = ({ type, title, subtitle, subTitleSize, noMargin, right, center, ...props }) => {
+const Title = ({ type, title, subtitle, subTitleSize, subTitleMargin, subTitleColor, noMargin, right, center, ...props }) => {
   if (type === 'h1') {
     return (
       <TitleStyled className={props.className} noMargin={noMargin}>
         <H1Styled right={right} center={center} {...props}>
           {title}
         </H1Styled>
-        {subtitle && <SubtitleStyled subTitleSize={subTitleSize}>{subtitle}</SubtitleStyled>}
+        {subtitle && <SubtitleStyled subTitleSize={subTitleSize} subTitleMargin={subTitleMargin} subTitleColor={subTitleColor}>{subtitle}</SubtitleStyled>}
       </TitleStyled>
     )
   }
@@ -75,7 +74,7 @@ const Title = ({ type, title, subtitle, subTitleSize, noMargin, right, center, .
         <H2Styled right={right} center={center} {...props}>
           {title}
         </H2Styled>
-        {subtitle && <SubtitleStyled subTitleSize={subTitleSize}>{subtitle}</SubtitleStyled>}
+        {subtitle && <SubtitleStyled subTitleSize={subTitleSize} subTitleMargin={subTitleMargin} subTitleColor={subTitleColor}>{subtitle}</SubtitleStyled>}
       </TitleStyled>
     )
   }
@@ -85,7 +84,7 @@ const Title = ({ type, title, subtitle, subTitleSize, noMargin, right, center, .
         <H3Styled right={right} center={center} {...props}>
           {title}
         </H3Styled>
-        {subtitle && <SubtitleStyled subTitleSize={subTitleSize}>{subtitle}</SubtitleStyled>}
+        {subtitle && <SubtitleStyled subTitleSize={subTitleSize} subTitleMargin={subTitleMargin} subTitleColor={subTitleColor}>{subtitle}</SubtitleStyled>}
       </TitleStyled>
     )
   }
@@ -95,7 +94,7 @@ const Title = ({ type, title, subtitle, subTitleSize, noMargin, right, center, .
         <H4Styled right={right} center={center} {...props}>
           {title}
         </H4Styled>
-        {subtitle && <SubtitleStyled subTitleSize={subTitleSize}>{subtitle}</SubtitleStyled>}
+        {subtitle && <SubtitleStyled subTitleSize={subTitleSize} subTitleMargin={subTitleMargin} subTitleColor={subTitleColor}>{subtitle}</SubtitleStyled>}
       </TitleStyled>
     )
   }
@@ -105,7 +104,7 @@ const Title = ({ type, title, subtitle, subTitleSize, noMargin, right, center, .
         <H5Styled right={right} center={center} {...props}>
           {title}
         </H5Styled>
-        {subtitle && <SubtitleStyled subTitleSize={subTitleSize}>{subtitle}</SubtitleStyled>}
+        {subtitle && <SubtitleStyled subTitleSize={subTitleSize} subTitleMargin={subTitleMargin} subTitleColor={subTitleColor}>{subtitle}</SubtitleStyled>}
       </TitleStyled>
     )
   }
@@ -115,7 +114,7 @@ const Title = ({ type, title, subtitle, subTitleSize, noMargin, right, center, .
         <H6Styled right={right} center={center} {...props}>
           {title}
         </H6Styled>
-        {subtitle && <SubtitleStyled subTitleSize={subTitleSize}>{subtitle}</SubtitleStyled>}
+        {subtitle && <SubtitleStyled subTitleSize={subTitleSize} subTitleMargin={subTitleMargin} subTitleColor={subTitleColor}>{subtitle}</SubtitleStyled>}
       </TitleStyled>
     )
   }
@@ -124,7 +123,7 @@ const Title = ({ type, title, subtitle, subTitleSize, noMargin, right, center, .
       <H1Styled right={right} center={center} {...props}>
         {title}
       </H1Styled>
-      {subtitle && <SubtitleStyled subTitleSize={subTitleSize}>{subtitle}</SubtitleStyled>}
+      {subtitle && <SubtitleStyled subTitleSize={subTitleSize} subTitleMargin={subTitleMargin} subTitleColor={subTitleColor}>{subtitle}</SubtitleStyled>}
     </TitleStyled>
   )
 }
@@ -133,15 +132,17 @@ Title.defaultProps = {
   type: 'h1',
   subtitle: null,
   subTitleSize: 14,
+  subTitleMargin: 30,
   className: null,
   noMargin: null,
   right: null,
   center: null,
-  color: null
+  color: null,
+  subTitleColor: null
 }
 
 Title.propTypes = {
-  type: PropTypes.oneOf(['h1', 'h2', 'h3', 'h4']),
+  type: PropTypes.oneOf(['h1', 'h2', 'h3', 'h4', 'h5', 'h6']),
   title: PropTypes.PropTypes.oneOfType([
     PropTypes.string,
     PropTypes.number,
@@ -155,6 +156,8 @@ Title.propTypes = {
     PropTypes.element
   ]),
   subTitleSize: PropTypes.number,
+  subTitleColor: PropTypes.string,
+  subTitleMargin: PropTypes.number,
   className: PropTypes.string,
   noMargin: PropTypes.bool,
   right: PropTypes.bool,
