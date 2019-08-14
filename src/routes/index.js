@@ -51,13 +51,6 @@ const Routes = props => {
             // isAuthenticated={isAuthenticated}
             component={LandingPages}
           />
-           <PublicRoute
-            {...props}
-            path={`/space`}
-            handlerCheckAuthentication={() => {}}
-            // isAuthenticated={isAuthenticated}
-            component={Space}
-          />
           <PrivateRoute
             {...props}
             path="/"
@@ -87,6 +80,12 @@ const Routes = props => {
                       path={`${otherProps.match.path}account`}
                       isAuthenticated={isAuthenticated}
                       component={Account}
+                    />
+                    <Route
+                      {...otherProps}
+                      path={`${otherProps.match.path}space`}
+                      // isAuthenticated={isAuthenticated}
+                      component={Space}
                     />
                     <Route component={NotFoundPage} />
                   </Switch>
