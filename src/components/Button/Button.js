@@ -164,7 +164,10 @@ Button.propTypes = {
   isLoading: PropTypes.bool,
   disabled: PropTypes.bool,
   outline: PropTypes.string,
-  size: PropTypes.oneOf(['sm', 'md'])
+  type: PropTypes.string,
+  onClick: PropTypes.func,
+  size: PropTypes.oneOf(['sm', 'md']),
+  width: PropTypes.string
 }
 
 export default Button
