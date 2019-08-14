@@ -35,6 +35,7 @@ const Routes = props => {
     <BrowserRouter>
       <Suspense fallback={<Loader />}>
         <ToastContainer hideProgressBar />
+        <Modal />
         <Switch>
           <Redirect exact from="/" to="/listing/intro" />
           <PublicRoute
@@ -51,7 +52,7 @@ const Routes = props => {
             // isAuthenticated={isAuthenticated}
             component={LandingPages}
           />
-            <PublicRoute
+          <PublicRoute
             {...props}
             path="/space"
             handlerCheckAuthentication={() => {}}
@@ -67,7 +68,6 @@ const Routes = props => {
               return (
                 <>
                   <NavBar />
-                  <Modal />
                   <Switch>
                     <Route
                       {...otherProps}
