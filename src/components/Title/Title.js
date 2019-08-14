@@ -149,7 +149,12 @@ Title.propTypes = {
     PropTypes.instanceOf(Array),
     PropTypes.element
   ]).isRequired,
-  subtitle: PropTypes.string,
+  subtitle: PropTypes.PropTypes.oneOfType([
+    PropTypes.string,
+    PropTypes.number,
+    PropTypes.instanceOf(Array),
+    PropTypes.element
+  ]),
   subTitleSize: PropTypes.number,
   subTitleColor: PropTypes.string,
   subTitleMargin: PropTypes.number,
