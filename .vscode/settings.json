@@ -31,7 +31,6 @@
   "files.associations": {
     "*.js": "javascriptreact"
   },
-  "files.autoSave": "onFocusChange",
   "prettier.eslintIntegration": false,
   "prettier.printWidth": 120,
   "prettier.semi": false,
