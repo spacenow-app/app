@@ -9,7 +9,7 @@ import heroImage from './images/hero_img.png'
 const ImageHero = styled.div`
   background: linear-gradient(rgba(23, 36, 57, 0.61), rgba(23, 36, 57, 0.61)), url(${heroImage});
   background-size: cover;
-  height: 750px;
+  height: 480px;
 `
 
 const HeaderContainer = styled.div`
@@ -20,31 +20,17 @@ const HeaderContainer = styled.div`
 
 const ImageHeroLeft = styled.div`
   width: 410px;
-  margin-top: 100px;
 `
 
 const ImageHeroRight = styled.div`
   display: grid;
   width: 500px;
-  height: 600px;
   background-color: #fff;
-  margin-top: 70px;
-  padding: 50px 70px;
+  margin-top: 30px;
+  padding: 30px 70px;
   grid-row-gap: 15px;
-`
-
-const WhyContainer = styled.div`
-  display: grid;
-  grid-template-columns: auto auto auto;
-  align-content: space-between;
-  grid-column-gap: 160px;
-  grid-row-gap: 80px;
-  margin-top: 80px;
-`
-
-const WhyItem = styled.div`
-  display: grid;
-  justify-items: center;
+  box-shadow: 0px 1px 6px #000000;
+  border-radius: 5px;
 `
 
 const RentMyOfficeSpace = ({
@@ -63,104 +49,98 @@ const RentMyOfficeSpace = ({
       <ImageHero>
         <Wrapper>
           <HeaderContainer>
-            <ImageHeroLeft>
-              <Title
-                title={
-                  <Text color="white">
-                    Are you sitting on a goldmine<Text color="primary">?</Text>
-                  </Text>
-                }
-                subtitle={
-                  <Text color="white" fontSize="24px" fontFamily="medium">
-                    Turn unused workspace into money.
-                  </Text>
-                }
-              />
-            </ImageHeroLeft>
+            <ImageHeroLeft />
             <ImageHeroRight>
-              <Title type="h4" title="What could you earn?" noMargin center />
+              <Title
+                noMargin
+                type="h2"
+                title="Turn your car spot into money"
+                subtitle="Anytime your car space is empty you’re missing out on profit."
+              />
               <Select label="State" placeholder="New South Wales" />
               <Select label="Suburb" placeholder="e.g. Bondi Junction" />
-              <Select label="Capacity for your space?" placeholder="Select" />
-              <Input label="Estimated" value="$3,330 Monthly" />
-              <Button block>Get started now</Button>
+              <Box mt="20px" textAlign="center" display="grid" gridRowGap="10px">
+                <Text fontSize="12px">You could earn up to</Text>
+                <Text color="quartenary" fontSize="36px" fontFamily="bold">
+                  $3,330 per month
+                </Text>
+                <Button fluid>Sign up and start earning.</Button>
+                <Text fontSize="12px">T&C’s apply</Text>
+              </Box>
             </ImageHeroRight>
           </HeaderContainer>
         </Wrapper>
       </ImageHero>
-      <Wrapper width="970px">
-        <Box my="60px">
+
+      <Box bg="#F7FDF8" height="130px" display="grid" gridTemplateRows="auto 1fr" padding="20px">
+        <Text ml="10%">Trusted by:</Text>
+        <Box
+          ml="10%"
+          display="grid"
+          gridTemplateColumns="auto auto auto auto"
+          width="500px"
+          alignContent="center"
+          alignItems="center"
+        >
+          <Box width="50px" height="50px" border="1px solid" />
+          <Box width="50px" height="50px" border="1px solid" />
+          <Box width="50px" height="50px" border="1px solid" />
+          <Box width="50px" height="50px" border="1px solid" />
+        </Box>
+      </Box>
+
+      <Box width="1169px">
+        <Text>Australian's love Spacenow:</Text>
+        <Box>
+          <Box>a</Box>
+          <Box>b</Box>
+          <Box>c</Box>
+        </Box>
+      </Box>
+
+      <Wrapper width="1169px">
+        <Box bg="quartenary">
           <Title
-            type="h3"
-            title={
-              <Text>
-                Do you have a work space that’s not generating profit<Text color="primary">?</Text> Put it to work.
-              </Text>
-            }
+            title="Are you parked on a goldmine?"
+            subtitle="People are out there looking for car spaces to rent by the day, week or month. List yours simply with Spacenow and start earning money from your parking spot."
           />
-          <Text fontSize="20px" lineHeight="2">
-            List office space by the hour, day, week or month for thousands of guests to search for and hire. The
-            process is quick and easy and all guests are verified.
-          </Text>
-          <Text display="block" fontSize="20px" mt="40px" lineHeight="2">
-            Spacenow handles the booking, payment and even offers simple insurance options so you’re covered. Open up a
-            whole new revenue stream for your business.
+          <Button>Get started now</Button>
+          <Box>
+            <Box>img</Box>
+            <Box>
+              <Box>a</Box>
+              <Box>b</Box>
+              <Box>c</Box>
+            </Box>
+          </Box>
+        </Box>
+
+        <Box>
+          <Title title="A new revenue stream could be right under your tyres." />
+          <Text>
+            People are out there looking for car spaces to rent by the day, week or month - listing yours on Spacenow is
+            the quickest and easiest way to find guests - and start earning extra cash. You could be missing out on
+            hundreds of dollars a week while your car space at work or home sits empty. Why not put it to work? Spacenow
+            handles the booking, payment and even gives you simple insurance options so you’re covered.
           </Text>
         </Box>
-        <Box my="80px">
-          <Title
-            center
-            type="h3"
-            title={
-              <Text>
-                Why list your space on Spacenow<Text color="primary">?</Text>
-              </Text>
-            }
-          />
-          <WhyContainer>
-            <WhyItem>
-              <Icon name="category-office" width="50px" fill="#6ADC91" />
-              <Text color="primary" fontSize="20px">
-                We have the guests.
-              </Text>
-              <Text fontSize="20px">Thousands of people are looking for car spaces right now</Text>
-            </WhyItem>
-            <WhyItem>
-              <Icon name="category-office" width="50px" fill="#6ADC91" />
-              <Text color="primary" fontSize="20px">
-                We have the guests.
-              </Text>
-              <Text fontSize="20px">Thousands of people are looking for car spaces right now</Text>
-            </WhyItem>
-            <WhyItem>
-              <Icon name="category-office" width="50px" fill="#6ADC91" />
-              <Text color="primary" fontSize="20px">
-                We have the guests.
-              </Text>
-              <Text fontSize="20px">Thousands of people are looking for car spaces right now</Text>
-            </WhyItem>
-            <WhyItem>
-              <Icon name="category-office" width="50px" fill="#6ADC91" />
-              <Text color="primary" fontSize="20px">
-                We have the guests.
-              </Text>
-              <Text fontSize="20px">Thousands of people are looking for car spaces right now</Text>
-            </WhyItem>
-            <WhyItem>
-              <Icon name="category-office" width="50px" fill="#6ADC91" />
-              <Text color="primary" fontSize="20px">
-                We have the guests.
-              </Text>
-              <Text fontSize="20px">Thousands of people are looking for car spaces right now</Text>
-            </WhyItem>
-            <WhyItem>
-              <Icon name="category-office" width="50px" fill="#6ADC91" />
-              <Text color="primary" fontSize="20px">
-                We have the guests.
-              </Text>
-              <Text fontSize="20px">Thousands of people are looking for car spaces right now</Text>
-            </WhyItem>
-          </WhyContainer>
+
+        <Box>
+          <Box>a</Box>
+          <Box>b</Box>
+          <Box>c</Box>
+        </Box>
+
+        <Box bg="quartenary">
+          <Box>
+            <Title title="Hosting is easy." />
+            <Text>
+              Spacenow handles the booking, payment and even offers simple insurance options so you’re covered. Open up
+              a whole new revenue stream for your business.
+            </Text>
+            <Button>Get started now</Button>
+          </Box>
+          <Box>img</Box>
         </Box>
       </Wrapper>
     </>
