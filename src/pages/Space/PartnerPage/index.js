@@ -43,7 +43,7 @@ const PartnerPage = ({ match, location, ...props }) => {
 
   useEffect(() => {
     dispatch(onGetProviderByListingId(match.params.id))
-    dispatch(onGetListingById(match.params.id))
+    dispatch(onGetListingById(match.params.id))   // create a new action for this with no auth
   }, [dispatch, match.params.id])
 
   useEffect(() => {

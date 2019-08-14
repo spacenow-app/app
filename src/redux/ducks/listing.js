@@ -819,7 +819,7 @@ export const onGetListingById = (id, authID) => async dispatch => {
     if (authID) {
       const { userId } = data.getListingById
       if (authID !== userId) {
-        dispatch({ type: Types.LISTING_GET_SPACE_DENIED, payload: data.getListingById })
+        dispatch({ type: Types.LISTING_GET_SPACE_DENIED, payload: null })
         return
       }
     }
