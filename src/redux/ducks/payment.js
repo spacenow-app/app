@@ -240,7 +240,7 @@ export const onCreatePaymentAccount = (account, user) => async dispatch => {
     }
     const { data } = await getClientWithAuth(dispatch).mutate({
       mutation: createPaymentAccount,
-      variables: { ...paymentDetails }
+      variables: paymentDetails
     })
     toast.success('Payment Preferences details saved successfully.')
     dispatch({ type: Types.CREATE_PAYMENT_ACCOUNT_SUCCESS, payload: data.createPaymentAccount })

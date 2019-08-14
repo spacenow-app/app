@@ -126,9 +126,9 @@ const ModalAddBankDetails = ({
                     size="sm"
                     label="Business name"
                     placeholder="Business name"
-                    name="bussinessName"
-                    error={touched.bussinessName && errors.bussinessName}
-                    value={values.bussinessName}
+                    name="businessName"
+                    error={touched.businessName && errors.businessName}
+                    value={values.businessName}
                     onChange={handleChange}
                     onBlur={handleBlur}
                   />
@@ -138,9 +138,9 @@ const ModalAddBankDetails = ({
                     size="sm"
                     label="Business Tax ID"
                     placeholder="Business Tax ID"
-                    name="bussinessTaxId"
-                    error={touched.bussinessTaxId && errors.bussinessTaxId}
-                    value={values.bussinessTaxId}
+                    name="businessTaxId"
+                    error={touched.businessTaxId && errors.businessTaxId}
+                    value={values.businessTaxId}
                     onChange={handleChange}
                     onBlur={handleBlur}
                   />
@@ -223,8 +223,8 @@ const formik = {
     city: '',
     state: '',
     zip: '',
-    bussinessName: '',
-    bussinessTaxId: ''
+    businessName: '',
+    businessTaxId: ''
   }),
   mapValuesToPayload: x => x,
   validationSchema: Yup.object().shape({
