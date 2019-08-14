@@ -8,8 +8,7 @@ import {format} from 'date-fns'
 
 import { Title, Input, Select, TextArea, Button, DatePicker } from 'components'
 
-import { onCreateWeWorkReferral } from 'redux/ducks/partner'
-// import Listing from 'routes/Listing';
+// import { onCreateWeWorkReferral } from 'redux/ducks/partner'
 
 const WrapperStyled = styled.div`
   display: grid;
