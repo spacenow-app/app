@@ -5,6 +5,7 @@ import { Switch, Route } from 'react-router-dom'
 const LeadFormRequirement = lazy(() => import('pages/LandingPages/LeadFormRequirement'))
 const RentMyOfficeSpace = lazy(() => import('pages/LandingPages/RentMyOfficeSpace'))
 const RentMyCarSpace = lazy(() => import('pages/LandingPages/RentMyCarSpace'))
+const BecomeHost = lazy(() => import('pages/LandingPages/BecomeHost'))
 const NotFoundPage = lazy(() => import('pages/NotFoundPage'))
 
 const Landingpages = ({ match, ...props }) => {
@@ -14,6 +15,7 @@ const Landingpages = ({ match, ...props }) => {
         <Route exact component={LeadFormRequirement} path={`${match.path}/lead-form-requirement`} />
         <Route exact component={RentMyOfficeSpace} path={`${match.path}/rent-my-office-space`} />
         <Route exact component={RentMyCarSpace} path={`${match.path}/rent-my-car-space`} />
+        <Route exact component={BecomeHost} path={`${match.path}/become-a-host`} />
         <Route component={NotFoundPage} />
       </Switch>
     </Suspense>
