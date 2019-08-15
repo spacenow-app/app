@@ -43,8 +43,8 @@ const ImageHeroRight = styled.div`
   margin-top: 30px;
   padding: 30px 70px;
   grid-row-gap: 15px;
-  box-shadow: 0px 1px 6px #000000;
   border-radius: 5px;
+  border: 1px solid #ebebeb;
 `
 
 const TrustedLogo = styled.img`
