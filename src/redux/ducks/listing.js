@@ -313,6 +313,7 @@ const queryGetListingById = gql`
   }
 `
 
+
 const queryGetAllRules = gql`
   query getAllRules {
     getAllRules {
@@ -808,16 +809,12 @@ export default function reducer(state = initialState, action) {
 // Action Creators
 
 // Side Effects
-export const onGetListingById = (id, authID, isPublic) => async dispatch => {
+export const onGetListingById = (id, authID, isPublic = false) => async dispatch => {
   dispatch({ type: Types.LISTING_GET_SPACE_REQUEST })
   try {
-    let sendPublic = true;
-    if (!isPublic) 
-      sendPublic = false
-      
     const { data } = await getClientWithAuth(dispatch).query({
       query: queryGetListingById,
-      variables: { id: parseInt(id, 10), isPublic: sendPublic },
+      variables: { id: parseInt(id, 10), isPublic: true },
       fetchPolicy: 'network-only'
     })
     if (authID) {

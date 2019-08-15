@@ -11,8 +11,8 @@ export const Types = {
 }
 
 const queryGetProviderByListingId =gql`
-  query getListingById($id: Int!) {
-    getListingById(id: $id) {
+  query getListingById($id: Int!, $isPublic: Boolean) {
+    getListingById(id: $id, isPublic: $isPublic) {
       id
       user {
         id
@@ -70,12 +70,12 @@ export default function reducer(state = initialState, action) {
 // Action Creators
 
 // Side Effects
-export const onGetProviderByListingId = (id, authID) => async dispatch => {
+export const onGetProviderByListingId = (id, isPublic = true) => async dispatch => {
   dispatch({ type: Types.GET_PROVIDER_BY_LISTING_REQUEST })
   try {
     const { data } = await getClientWithAuth(dispatch).query({
       query: queryGetProviderByListingId,
-      variables: { id: parseInt(id, 10) },
+      variables: { id: parseInt(id, 10), isPublic },
       fetchPolicy: 'network-only'
     })
     const { user } = data.getListingById
