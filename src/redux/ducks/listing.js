@@ -306,8 +306,8 @@ const allListingFields = `
 
 // GraphQL
 const queryGetListingById = gql`
-  query getListingById($id: Int!) {
-    getListingById(id: $id) {
+  query getListingById($id: Int!, $isPublic: Boolean) {
+    getListingById(id: $id, isPublic: $isPublic) {
       ${allListingFields}
     }
   }
@@ -808,18 +808,22 @@ export default function reducer(state = initialState, action) {
 // Action Creators
 
 // Side Effects
-export const onGetListingById = (id, authID) => async dispatch => {
+export const onGetListingById = (id, authID, isPublic) => async dispatch => {
   dispatch({ type: Types.LISTING_GET_SPACE_REQUEST })
   try {
+    let sendPublic = true;
+    if (!isPublic) 
+      sendPublic = false
+      
     const { data } = await getClientWithAuth(dispatch).query({
       query: queryGetListingById,
-      variables: { id: parseInt(id, 10) },
+      variables: { id: parseInt(id, 10), isPublic: sendPublic },
       fetchPolicy: 'network-only'
     })
     if (authID) {
       const { userId } = data.getListingById
       if (authID !== userId) {
-        dispatch({ type: Types.LISTING_GET_SPACE_DENIED, payload: null })
+        dispatch({ type: Types.LISTING_GET_SPACE_DENIED, payload: data.getListingById })
         return
       }
     }

@@ -43,7 +43,7 @@ const PartnerPage = ({ match, location, ...props }) => {
 
   useEffect(() => {
     dispatch(onGetProviderByListingId(match.params.id))
-    dispatch(onGetListingById(match.params.id))   // create a new action for this with no auth
+    dispatch(onGetListingById(match.params.id, null, true))
   }, [dispatch, match.params.id])
 
   useEffect(() => {
@@ -140,7 +140,6 @@ const PartnerPage = ({ match, location, ...props }) => {
               <Title
                 type="h4"
                 title={listing.title ? listing.title : 'Input Title'}
-                color={!listing.title ? '#E05252' : null}
                 subtitle={_getAddress(listing.location)}
                 subTitleSize={18}
                 subTitleMargin={20}
@@ -153,7 +152,6 @@ const PartnerPage = ({ match, location, ...props }) => {
                 title={`$ ${Math.round((listing.listingData.basePrice || 0) * 100) / 100} ${
                   listing.bookingPeriod
                 }`}
-                color={listing.listingData.basePrice === 0 || listing.listingData.basePrice === null ? '#E05252' : null}
                 noMargin
                 right
                 style={{ marginTop: '5px' }}
