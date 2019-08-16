@@ -3,6 +3,8 @@ import { gql } from 'apollo-boost'
 import { getClientWithAuth } from 'graphql/apolloClient'
 import errToMsg from 'utils/errToMsg'
 
+import { toast } from 'react-toastify'
+
 // Actions
 export const Types = {
   CREATE_WEWORK_REFERRAL_START: 'CREATE_WEWORK_REFERRAL_START',
@@ -147,7 +149,9 @@ export const onSendHubSpotForm = (hubspot) => async dispatch => {
       variables: { hubspot }
     })
     dispatch(sendHubSpotSuccess(data.sendHubSpotForm))
+    toast.success("Your request was sent successfully.")
   } catch (err) {
     dispatch(sendHubSpotFailed(errToMsg(err)))
+    toast.success("Your request could not been sent.")
   }
 }
