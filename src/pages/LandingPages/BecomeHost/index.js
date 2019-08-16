@@ -18,7 +18,7 @@ import { ReactComponent as IconForm } from './images/Icon_Form.svg'
 import { ReactComponent as IconKey } from './images/Icon_Key.svg'
 import { ReactComponent as IconMagnifier } from './images/Icon_Magnifier.svg'
 
-import './style.css'
+import './modal_video_style.css'
 
 const ImageHero = styled.div`
   background: url(${heroImage});
