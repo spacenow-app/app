@@ -129,7 +129,6 @@ const sendHubSpotFailed = error => {
 export const onCreateWeWorkReferral = (wework) => async dispatch => {
   dispatch(createWeWorkStart())
   try {
-    console.log('form values', wework)
     const { data } = await getClientWithAuth(dispatch).mutate({
       mutation: mutationCreateWeWorkReferral,
       variables: { wework }
@@ -147,7 +146,6 @@ export const onSendHubSpotForm = (hubspot) => async dispatch => {
       mutation: mutationSendHubSpotForm,
       variables: { hubspot }
     })
-    console.log(data.sendHubSpotForm)
     dispatch(sendHubSpotSuccess(data.sendHubSpotForm))
   } catch (err) {
     dispatch(sendHubSpotFailed(errToMsg(err)))
