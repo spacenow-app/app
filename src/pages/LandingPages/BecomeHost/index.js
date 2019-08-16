@@ -1,6 +1,7 @@
-import React from 'react'
+import React, { useState } from 'react'
 import styled, { css } from 'styled-components'
-import { Wrapper, Box, NavBar, Title, Text, Button } from 'components'
+import { Wrapper, Box, NavBar, Title, Text, Button, Icon } from 'components'
+import ModalVideo from 'react-modal-video'
 
 import heroImage from './images/hero_img.png'
 import gregImage from './images/greg_image.png'
@@ -16,6 +17,8 @@ import { ReactComponent as PeopleImage } from './images/banner_peoples.svg'
 import { ReactComponent as IconForm } from './images/Icon_Form.svg'
 import { ReactComponent as IconKey } from './images/Icon_Key.svg'
 import { ReactComponent as IconMagnifier } from './images/Icon_Magnifier.svg'
+
+import './style.css'
 
 const ImageHero = styled.div`
   background: url(${heroImage});
@@ -37,7 +40,7 @@ const ImageHeroRight = styled.div`
   display: grid;
   width: 450px;
   background-color: #fff;
-  margin-top: 30px;
+  margin-top: 200px;
   padding: 30px 70px;
   grid-row-gap: 15px;
   border-radius: 5px;
@@ -45,7 +48,7 @@ const ImageHeroRight = styled.div`
 `
 
 const TrustedLogo = styled.img`
-  width: 70px;
+  width: ${props => props.width || '70px'};
 `
 
 /* Testimonial */
@@ -89,6 +92,7 @@ const ImageVideo = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
+  cursor: pointer;
 `
 
 const testimonials = [
@@ -164,52 +168,53 @@ const RentMyOfficeSpace = ({
   setFieldValue,
   ...props
 }) => {
+  const [showVideo, setShowVideo] = useState(false)
   return (
     <>
       <NavBar />
-      <ImageHero>
-        <Wrapper>
-          <HeaderContainer>
-            <ImageHeroLeft />
-            <ImageHeroRight>
-              <Title noMargin type="h2" title="Why host with Spacenow." />
-              <Text color="#172439">
-                No matter what type of space you have to share, Spacenow makes it simple and secure to rent your space.
-                You’re in full control of your availability, prices and more.
-              </Text>
-              <Box mt="20px" textAlign="center" display="grid" gridRowGap="10px">
-                <Text fontSize="12px">You could be earning up to</Text>
-                <Text color="quartenary" fontSize="30px" fontFamily="bold">
-                  $450 per week*
-                </Text>
-                <Button fluid>Sign up and start earning.</Button>
-                <Text fontSize="12px">T&C’s apply - $450 is a weekly average across all categories</Text>
-              </Box>
-            </ImageHeroRight>
-          </HeaderContainer>
-        </Wrapper>
-      </ImageHero>
-
-      <Box bg="#F7FDF8" height="130px" display="grid" gridTemplateRows="auto 1fr" padding="20px">
-        <Text display="block" ml="10%" fontSize="12px" mb="10px">
-          Trusted by:
-        </Text>
-        <Box
-          ml="10%"
-          display="grid"
-          gridTemplateColumns="auto auto auto auto"
-          width="500px"
-          alignContent="center"
-          alignItems="center"
-        >
-          <TrustedLogo src={canvaLogo} />
-          <TrustedLogo src={weWorkLogo} />
-          <TrustedLogo src={uberEatsLogo} />
-          <TrustedLogo src={tfeHotelsLogo} />
-        </Box>
-      </Box>
-
       <Wrapper width="1169px">
+        <ImageHero>
+          <Wrapper>
+            <HeaderContainer>
+              <ImageHeroLeft />
+              <ImageHeroRight>
+                <Title noMargin type="h2" title="Why host with Spacenow." />
+                <Text color="#172439">
+                  No matter what type of space you have to share, Spacenow makes it simple and secure to rent your
+                  space. You’re in full control of your availability, prices and more.
+                </Text>
+                <Box mt="20px" textAlign="center" display="grid" gridRowGap="10px">
+                  <Text fontSize="12px">You could be earning up to</Text>
+                  <Text color="quartenary" fontSize="30px" fontFamily="bold">
+                    $450 per week*
+                  </Text>
+                  <Button fluid>Sign up and start earning.</Button>
+                  <Text fontSize="12px">T&C’s apply - $450 is a weekly average across all categories</Text>
+                </Box>
+              </ImageHeroRight>
+            </HeaderContainer>
+          </Wrapper>
+        </ImageHero>
+
+        <Box bg="#F7FDF8" height="130px" display="grid" gridTemplateRows="auto 1fr" padding="20px">
+          <Text display="block" ml="40px" fontSize="12px" mb="10px">
+            Trusted by:
+          </Text>
+          <Box
+            ml="40px"
+            display="grid"
+            gridTemplateColumns="auto auto auto auto"
+            width="500px"
+            alignContent="center"
+            alignItems="center"
+          >
+            <TrustedLogo src={canvaLogo} />
+            <TrustedLogo width="100px" src={weWorkLogo} />
+            <TrustedLogo src={uberEatsLogo} />
+            <TrustedLogo src={tfeHotelsLogo} />
+          </Box>
+        </Box>
+
         <Box mt="150px">
           <Text color="greyscale.2" my="20px" display="block">
             Australian&rsquo;s love Spacenow:
@@ -257,11 +262,15 @@ const RentMyOfficeSpace = ({
         </Box>
 
         <Box my="180px">
-          <Title center title="Learn why they host." />
-          <ImageVideo src={videoThumb}>
-            <Text color="white" fontFamily="semiBold" fontSize="18px">
-              Watch the video
-            </Text>
+          <Title type="h2" center title="Learn why they host." />
+          <ModalVideo channel="youtube" isOpen={showVideo} videoId="L61p2uyiMSo" onClose={() => setShowVideo(false)} />
+          <ImageVideo src={videoThumb} onClick={() => setShowVideo(true)}>
+            <Box textAlign="center">
+              <Icon name="play" />
+              <Text display="block" color="white" fontFamily="semiBold" fontSize="18px">
+                Watch the video
+              </Text>
+            </Box>
           </ImageVideo>
         </Box>
 
