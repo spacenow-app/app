@@ -48,7 +48,7 @@ const ImageHeroRight = styled.div`
 `
 
 const TrustedLogo = styled.img`
-  width: 70px;
+  width: ${props => props.width || '70px'};
 `
 
 /* Testimonial */
@@ -139,53 +139,53 @@ const RentMyOfficeSpace = ({
   return (
     <>
       <NavBar />
-      <ImageHero>
-        <Wrapper>
-          <HeaderContainer>
-            <ImageHeroLeft />
-            <ImageHeroRight>
-              <Title
-                noMargin
-                type="h2"
-                title="Turn your car spot into money"
-                subtitle="Anytime your car space is empty you’re missing out on profit."
-              />
-              <Select label="State" placeholder="New South Wales" />
-              <Select label="Suburb" placeholder="e.g. Bondi Junction" />
-              <Box mt="20px" textAlign="center" display="grid" gridRowGap="10px">
-                <Text fontSize="12px">You could earn up to</Text>
-                <Text color="quartenary" fontSize="30px" fontFamily="bold">
-                  $3,330 per month
-                </Text>
-                <Button fluid>Sign up and start earning.</Button>
-                <Text fontSize="12px">T&C’s apply</Text>
-              </Box>
-            </ImageHeroRight>
-          </HeaderContainer>
-        </Wrapper>
-      </ImageHero>
-
-      <Box bg="#F7FDF8" height="130px" display="grid" gridTemplateRows="auto 1fr" padding="20px">
-        <Text display="block" ml="10%" fontSize="12px" mb="10px">
-          Trusted by:
-        </Text>
-        <Box
-          ml="10%"
-          display="grid"
-          gridTemplateColumns="auto auto auto auto"
-          width="500px"
-          alignContent="center"
-          alignItems="center"
-        >
-          <TrustedLogo src={canvaLogo} />
-          <TrustedLogo src={weWorkLogo} />
-          <TrustedLogo src={uberEatsLogo} />
-          <TrustedLogo src={tfeHotelsLogo} />
-        </Box>
-      </Box>
-
       <Wrapper width="1169px">
-        <Box mt="150px">
+        <ImageHero>
+          <Wrapper>
+            <HeaderContainer>
+              <ImageHeroLeft />
+              <ImageHeroRight>
+                <Title
+                  noMargin
+                  type="h2"
+                  title="Turn your car spot into money"
+                  subtitle="Anytime your car space is empty you’re missing out on profit."
+                />
+                <Select label="State" placeholder="New South Wales" />
+                <Select label="Suburb" placeholder="e.g. Bondi Junction" />
+                <Box mt="20px" textAlign="center" display="grid" gridRowGap="10px">
+                  <Text fontSize="12px">You could earn up to</Text>
+                  <Text color="quartenary" fontSize="30px" fontFamily="bold">
+                    $3,330 per month
+                  </Text>
+                  <Button fluid>Sign up and start earning.</Button>
+                  <Text fontSize="12px">T&C’s apply</Text>
+                </Box>
+              </ImageHeroRight>
+            </HeaderContainer>
+          </Wrapper>
+        </ImageHero>
+
+        <Box bg="#F7FDF8" height="130px" display="grid" gridTemplateRows="auto 1fr" padding="20px">
+          <Text display="block" ml="40px" fontSize="12px" mb="10px">
+            Trusted by:
+          </Text>
+          <Box
+            ml="40px"
+            display="grid"
+            gridTemplateColumns="auto auto auto auto"
+            width="500px"
+            alignContent="center"
+            alignItems="center"
+          >
+            <TrustedLogo src={canvaLogo} />
+            <TrustedLogo src={weWorkLogo} />
+            <TrustedLogo src={uberEatsLogo} />
+            <TrustedLogo src={tfeHotelsLogo} />
+          </Box>
+        </Box>
+
+        <Box my="200px">
           <Text color="greyscale.2" my="20px" display="block">
             Australian&rsquo;s love Spacenow:
           </Text>
@@ -209,10 +209,10 @@ const RentMyOfficeSpace = ({
           </TestimonialContainer>
         </Box>
 
-        <Box my="100px" bg="quartenary" height="870px">
+        <Box my="100px" bg="quartenary" height="900px">
           <Box width="450px" m="0 auto" display="grid" gridRowGap="20px" pt="40px" justifyItems="center">
             <Title center noMargin color="white" title="Are you parked on a goldmine?" />
-            <Text display="block" color="white" textAlign="center">
+            <Text display="block" color="white" textAlign="center" mb="30px">
               People are out there looking for car spaces to rent by the day, week or month. List yours simply with
               Spacenow and start earning money from your parking spot.
             </Text>
