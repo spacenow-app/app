@@ -2,7 +2,7 @@ import React from 'react'
 import styled from 'styled-components'
 import { withFormik } from 'formik'
 import * as Yup from 'yup'
-import { Wrapper, Box, NavBar, Title, Text, Select, Input, Button } from 'components'
+import { Wrapper, Box, NavBar, Title, Text, Select, Button } from 'components'
 
 import heroImage from './images/hero_img.png'
 import JamesImage from './images/james_harvey.png'
@@ -148,7 +148,7 @@ const RentMyOfficeSpace = ({
               <Text color="quartenary" fontSize="30px" fontFamily="bold" textAlign="center">
                 $3,330 per month
               </Text>
-              <Button block>Get started now</Button>
+              <Button fluid>Get started now</Button>
             </ImageHeroRight>
           </HeaderContainer>
         </Wrapper>
