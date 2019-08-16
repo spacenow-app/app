@@ -27,9 +27,8 @@ import {
   onGetAllAmenities,
   onGetAllSpecifications,
   onGetPhotosByListingId,
+  onGetProviderByListingId
 } from 'redux/ducks/listing'
-
-import { onGetProviderByListingId } from 'redux/ducks/space'
 
 import { config } from 'contants'
 
@@ -39,7 +38,7 @@ const PartnerPage = ({ match, location, ...props }) => {
 
   const { object: listing, isLoading: isListingLoading } = useSelector(state => state.listing.get)
   const { array: arrayPhotos } = useSelector(state => state.listing.photos)
-  const { data } = useSelector(state => state.space.provider)
+  const { data } = useSelector(state => state.listing.provider)
 
   useEffect(() => {
     dispatch(onGetProviderByListingId(match.params.id))

@@ -41,7 +41,10 @@ export const Types = {
   UPDATE_LISTING_FAILURE: 'UPDATE_LISTING_FAILURE',
   PUBLISH_LISTING_START: 'PUBLISH_LISTING_START',
   PUBLISH_LISTING_SUCCESS: 'PUBLISH_LISTING_SUCCESS',
-  PUBLISH_LISTING_FAILURE: 'PUBLISH_LISTING_FAILURE'
+  PUBLISH_LISTING_FAILURE: 'PUBLISH_LISTING_FAILURE',
+  GET_PROVIDER_BY_LISTING_REQUEST: 'GET_PROVIDER_BY_LISTING_REQUEST',
+  GET_PROVIDER_BY_LISTING_SUCCESS: 'GET_PROVIDER_BY_LISTING_SUCCESS',
+  GET_PROVIDER_BY_LISTING_FAILURE: 'GET_PROVIDER_BY_LISTING_FAILURE',
 }
 
 // Initial State
@@ -97,6 +100,10 @@ const initialState = {
     isLoading: false,
     isPublished: false,
     error: null
+  },
+  provider: {
+    isLoading: false,
+    data: null
   }
 }
 
@@ -313,6 +320,7 @@ const queryGetListingById = gql`
   }
 `
 
+
 const queryGetAllRules = gql`
   query getAllRules {
     getAllRules {
@@ -457,6 +465,18 @@ const mutationPublish = gql`
       id
       isReady
       isPublished
+    }
+  }
+`
+
+const queryGetProviderByListingId =gql`
+  query getListingById($id: Int!, $isPublic: Boolean) {
+    getListingById(id: $id, isPublic: $isPublic) {
+      id
+      user {
+        id
+        provider
+      }
     }
   }
 `
@@ -800,6 +820,34 @@ export default function reducer(state = initialState, action) {
         }
       }
     }
+    case Types.GET_PROVIDER_BY_LISTING_REQUEST: {
+      return {
+        ...state,
+        provider: {
+          ...state.provider,
+          isLoading: true
+        }
+      }
+    }
+    case Types.GET_PROVIDER_BY_LISTING_SUCCESS: {
+      return {
+        ...state,
+        provider: {
+          ...state.provider,
+          isLoading: false,
+          data: action.payload
+        }
+      }
+    }
+    case Types.GET_PROVIDER_BY_LISTING_FAILURE: {
+      return {
+        ...state,
+        provider: {
+          ...state.provider,
+          isLoading: false
+        }
+      }
+    }
     default:
       return state
   }
@@ -808,16 +856,12 @@ export default function reducer(state = initialState, action) {
 // Action Creators
 
 // Side Effects
-export const onGetListingById = (id, authID, isPublic) => async dispatch => {
+export const onGetListingById = (id, authID, isPublic = false) => async dispatch => {
   dispatch({ type: Types.LISTING_GET_SPACE_REQUEST })
   try {
-    let sendPublic = true;
-    if (!isPublic) 
-      sendPublic = false
-      
     const { data } = await getClientWithAuth(dispatch).query({
       query: queryGetListingById,
-      variables: { id: parseInt(id, 10), isPublic: sendPublic },
+      variables: { id: parseInt(id, 10), isPublic: true },
       fetchPolicy: 'network-only'
     })
     if (authID) {
@@ -1047,5 +1091,20 @@ export const onPublish = listingId => async dispatch => {
     dispatch({ type: Types.PUBLISH_LISTING_SUCCESS, payload: data.mutationPublish })
   } catch (err) {
     dispatch({ type: Types.PUBLISH_LISTING_FAILURE, payload: errToMsg(err) })
+  }
+}
+
+export const onGetProviderByListingId = (id, isPublic = true) => async dispatch => {
+  dispatch({ type: Types.GET_PROVIDER_BY_LISTING_REQUEST })
+  try {
+    const { data } = await getClientWithAuth(dispatch).query({
+      query: queryGetProviderByListingId,
+      variables: { id: parseInt(id, 10), isPublic },
+      fetchPolicy: 'network-only'
+    })
+    const { user } = data.getListingById
+    dispatch({ type: Types.GET_PROVIDER_BY_LISTING_SUCCESS, payload: user })
+  } catch (err) {
+    dispatch({ type: Types.GET_PROVIDER_BY_LISTING_FAILURE })
   }
 }
