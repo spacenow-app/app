@@ -21,7 +21,7 @@ const HeaderContainer = styled.div`
 
 const ImageHeroLeft = styled.div`
   width: 410px;
-  margin-top: 100px;
+  margin-top: 200px;
 `
 
 const ImageHeroRight = styled.div`
