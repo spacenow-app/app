@@ -83,7 +83,12 @@ const RentMyOfficeSpace = ({
               <Select label="State" placeholder="New South Wales" />
               <Select label="Suburb" placeholder="e.g. Bondi Junction" />
               <Select label="Capacity for your space?" placeholder="Select" />
-              <Input label="Estimated" value="$3,330 Monthly" />
+              <Text fontSize="12px" textAlign="center">
+                You could earn up to
+              </Text>
+              <Text color="quartenary" fontSize="30px" fontFamily="bold" textAlign="center">
+                $3,330 per month
+              </Text>
               <Button block>Get started now</Button>
             </ImageHeroRight>
           </HeaderContainer>
