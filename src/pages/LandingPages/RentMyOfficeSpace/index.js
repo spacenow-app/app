@@ -2,7 +2,7 @@ import React from 'react'
 import styled from 'styled-components'
 import { withFormik } from 'formik'
 import * as Yup from 'yup'
-import { Wrapper, Box, NavBar, Title, Text, Select, Input, Button } from 'components'
+import { Wrapper, Box, NavBar, Title, Text, Select, Button } from 'components'
 
 import heroImage from './images/hero_img.png'
 import JamesImage from './images/james_harvey.png'
@@ -30,7 +30,7 @@ const HeaderContainer = styled.div`
 
 const ImageHeroLeft = styled.div`
   width: 410px;
-  margin-top: 100px;
+  margin-top: 200px;
 `
 
 const ImageHeroRight = styled.div`
@@ -142,8 +142,13 @@ const RentMyOfficeSpace = ({
               <Select label="State" placeholder="New South Wales" />
               <Select label="Suburb" placeholder="e.g. Bondi Junction" />
               <Select label="Capacity for your space?" placeholder="Select" />
-              <Input label="Estimated" value="$3,330 Monthly" />
-              <Button block>Get started now</Button>
+              <Text fontSize="12px" textAlign="center">
+                You could earn up to
+              </Text>
+              <Text color="quartenary" fontSize="30px" fontFamily="bold" textAlign="center">
+                $3,330 per month
+              </Text>
+              <Button fluid>Get started now</Button>
             </ImageHeroRight>
           </HeaderContainer>
         </Wrapper>

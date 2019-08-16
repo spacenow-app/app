@@ -235,7 +235,7 @@ export const onCreatePaymentAccount = (account, user) => async dispatch => {
       postal_code: Number(account.zip),
       state: account.state,
       day: getDate(dateOfBirthday),
-      month: getMonth(dateOfBirthday),
+      month: getMonth(dateOfBirthday) + 1,
       year: getYear(dateOfBirthday)
     }
     const { data } = await getClientWithAuth(dispatch).mutate({
