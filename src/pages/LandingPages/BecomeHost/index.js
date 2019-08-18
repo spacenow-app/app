@@ -3,6 +3,8 @@ import styled, { css } from 'styled-components'
 import { Wrapper, Box, NavBar, Title, Text, Button, Icon } from 'components'
 import ModalVideo from 'react-modal-video'
 
+import { config } from 'contants'
+
 import heroImage from './images/hero_img.png'
 import gregImage from './images/greg_image.png'
 import jamesImage from './images/james_image.png'
@@ -45,6 +47,10 @@ const ImageHeroRight = styled.div`
   grid-row-gap: 15px;
   border-radius: 5px;
   border: 1px solid #ebebeb;
+
+  a {
+    color: #172439;
+  }
 `
 
 const TrustedLogo = styled.img`
@@ -158,17 +164,13 @@ const ourServices = [
   }
 ]
 
-const RentMyOfficeSpace = ({
-  values,
-  touched,
-  errors,
-  handleChange,
-  handleBlur,
-  handleSubmit,
-  setFieldValue,
-  ...props
-}) => {
+const RentMyOfficeSpace = ({ history, ...props }) => {
   const [showVideo, setShowVideo] = useState(false)
+
+  const _goToListing = () => {
+    history.push('/listing')
+  }
+
   return (
     <>
       <NavBar />
@@ -188,8 +190,12 @@ const RentMyOfficeSpace = ({
                   <Text color="quartenary" fontSize="30px" fontFamily="bold">
                     $450 per week*
                   </Text>
-                  <Button fluid>Sign up and start earning.</Button>
-                  <Text fontSize="12px">T&C’s apply - $450 is a weekly average across all categories</Text>
+                  <Button fluid onClick={_goToListing}>
+                    Sign up and start earning.
+                  </Button>
+                  <a href={`${config.legacy}/terms`}>
+                    <Text fontSize="12px">T&C’s apply - $450 is a weekly average across all categories</Text>
+                  </a>
                 </Box>
               </ImageHeroRight>
             </HeaderContainer>
@@ -263,7 +269,14 @@ const RentMyOfficeSpace = ({
 
         <Box my="180px">
           <Title type="h2" center title="Learn why they host." />
-          <ModalVideo channel="youtube" isOpen={showVideo} videoId="L61p2uyiMSo" onClose={() => setShowVideo(false)} />
+          <ModalVideo
+            channel="youtube"
+            isOpen={showVideo}
+            videoId="L61p2uyiMSo"
+            autoplay
+            controls={0}
+            onClose={() => setShowVideo(false)}
+          />
           <ImageVideo src={videoThumb} onClick={() => setShowVideo(true)}>
             <Box textAlign="center">
               <Icon name="play" />
@@ -333,7 +346,9 @@ const RentMyOfficeSpace = ({
               Spacenow handles the booking, payment and even offers simple insurance options so you’re covered. Open up
               a whole new revenue stream for your business.
             </Text>
-            <Button width="270px">Get started now</Button>
+            <Button width="270px" onClick={_goToListing}>
+              Get started now
+            </Button>
           </Box>
           <Box
             backgroundImage={`url(${kafnu})`}
@@ -400,7 +415,7 @@ const RentMyOfficeSpace = ({
             <PeopleImage />
           </Box>
           <Box>
-            <Button width="234px" color="quartenary" fontFamily="MontSerrat-Bold">
+            <Button width="234px" color="quartenary" fontFamily="MontSerrat-Bold" onClick={_goToListing}>
               Get started
             </Button>
           </Box>
