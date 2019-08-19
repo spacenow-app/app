@@ -4,28 +4,30 @@ import errToMsg from 'utils/errToMsg'
 
 // Actions
 export const Types = {
-  GET_CAR_PRICE_ESTIMATION_REQUEST: 'GET_CAR_PRICE_ESTIMATION_REQUEST',
-  GET_CAR_PRICE_ESTIMATION_SUCCESS: 'GET_CAR_PRICE_ESTIMATION_SUCCESS',
-  GET_CAR_PRICE_ESTIMATION_FAILURE: 'GET_CAR_PRICE_ESTIMATION_FAILURE'
+  GET_OFFICE_PRICE_ESTIMATION_REQUEST: 'GET_OFFICE_PRICE_ESTIMATION_REQUEST',
+  GET_OFFICE_PRICE_ESTIMATION_SUCCESS: 'GET_OFFICE_PRICE_ESTIMATION_SUCCESS',
+  GET_OFFICE_PRICE_ESTIMATION_FAILURE: 'GET_OFFICE_PRICE_ESTIMATION_FAILURE'
 }
 
 // Initial State
 const initialState = {
   isLoading: false,
   carPriceEstimation: [],
+  officePriceEstimation: [],
   error: null
 }
 
 // GraphQL
 const queryGetPricesEstimation = gql`
-  query getPricesEstimation {
-    getPricesEstimation {
+  query getPricesEstimation($type: String!) {
+    getPricesEstimation(type: $type) {
       priceEstimationId
       state
       suburb
       postcode
       estimate
       term
+      type
     }
   }
 `
@@ -33,20 +35,20 @@ const queryGetPricesEstimation = gql`
 // Reducer
 export default function reducer(state = initialState, action) {
   switch (action.type) {
-    case Types.GET_CAR_PRICE_ESTIMATION_REQUEST: {
+    case Types.GET_OFFICE_PRICE_ESTIMATION_REQUEST: {
       return {
         ...state,
         isLoading: true
       }
     }
-    case Types.GET_CAR_PRICE_ESTIMATION_SUCCESS: {
+    case Types.GET_OFFICE_PRICE_ESTIMATION_SUCCESS: {
       return {
         ...state,
         isLoading: false,
-        carPriceEstimation: action.payload
+        officePriceEstimation: action.payload
       }
     }
-    case Types.GET_CAR_PRICE_ESTIMATION_FAILURE: {
+    case Types.GET_OFFICE_PRICE_ESTIMATION_FAILURE: {
       return {
         ...state,
         isLoading: false,
@@ -59,14 +61,55 @@ export default function reducer(state = initialState, action) {
 }
 
 // Side Effects
-export const getPricesEstimation = () => async dispatch => {
+export const getOfficePricesEstimation = () => async dispatch => {
   dispatch({
-    type: Types.GET_CAR_PRICE_ESTIMATION_REQUEST
+    type: Types.GET_OFFICE_PRICE_ESTIMATION_REQUEST
   })
   try {
     const { data } = await getClientWithAuth(dispatch).query({
       query: queryGetPricesEstimation,
-      fetchPolicy: 'network-only'
+      fetchPolicy: 'network-only',
+      variables: {
+        type: 'office'
+      }
+    })
+
+    const arraySeparate = data.getPricesEstimation.reduce((acumulator, currentValue, currentIndex, array) => {
+      if (acumulator.find(res => res.state === currentValue.state)) {
+        return acumulator
+      }
+      return [
+        ...acumulator,
+        {
+          state: currentValue.state,
+          suburbs: array.filter(res => res.state === currentValue.state)
+        }
+      ]
+    }, [])
+
+    dispatch({
+      type: Types.GET_OFFICE_PRICE_ESTIMATION_SUCCESS,
+      payload: arraySeparate
+    })
+  } catch (err) {
+    dispatch({
+      type: Types.GET_OFFICE_PRICE_ESTIMATION_FAILURE,
+      payload: errToMsg(err)
+    })
+  }
+}
+
+export const getPricesEstimation = () => async dispatch => {
+  dispatch({
+    type: Types.GET_OFFICE_PRICE_ESTIMATION_REQUEST
+  })
+  try {
+    const { data } = await getClientWithAuth(dispatch).query({
+      query: queryGetPricesEstimation,
+      fetchPolicy: 'network-only',
+      variables: {
+        type: 'office'
+      }
     })
 
     const arraySeparate = data.queryGetPricesEstimation.map((el, index) => {
@@ -77,12 +120,12 @@ export const getPricesEstimation = () => async dispatch => {
     })
 
     dispatch({
-      type: Types.GET_CAR_PRICE_ESTIMATION_SUCCESS,
+      type: Types.GET_OFFICE_PRICE_ESTIMATION_SUCCESS,
       payload: arraySeparate
     })
   } catch (err) {
     dispatch({
-      type: Types.GET_CAR_PRICE_ESTIMATION_FAILURE,
+      type: Types.GET_OFFICE_PRICE_ESTIMATION_FAILURE,
       payload: errToMsg(err)
     })
   }

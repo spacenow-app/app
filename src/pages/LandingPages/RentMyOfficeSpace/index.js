@@ -1,9 +1,11 @@
-import React from 'react'
+import React, { useState, useEffect } from 'react'
 import styled from 'styled-components'
-import { withFormik } from 'formik'
-import * as Yup from 'yup'
+import { useSelector, useDispatch } from 'react-redux'
+import numeral from 'numeral'
 import { Wrapper, Box, NavBar, Title, Text, Select, Button } from 'components'
+import { getOfficePricesEstimation } from 'redux/ducks/landing'
 
+import { set } from 'store2'
 import heroImage from './images/hero_img.png'
 import JamesImage from './images/james_harvey.png'
 import PaulImage from './images/paul_walker.png'
@@ -108,8 +110,43 @@ const TestimonialImage = styled.div`
 `
 
 const RentMyOfficeSpace = ({ history, ...props }) => {
+  const dispatch = useDispatch()
+  const [state, setState] = useState('')
+  const [suburb, setSuburb] = useState('')
+  const [objectPrice, setObjectPrice] = useState('')
+  const [quantity, setQuantity] = useState(1)
+  const { officePriceEstimation } = useSelector(state => state.landing)
+
+  useEffect(() => {
+    dispatch(getOfficePricesEstimation())
+  }, [])
+
   const _goToListing = () => {
     history.push('/listing')
+  }
+
+  const _onChangeSelectState = e => {
+    setState(e.target.value)
+    setSuburb('')
+    setObjectPrice('')
+  }
+
+  const _onChangeSelectSuburb = e => {
+    const sub = officePriceEstimation.find(el => el.state === state).suburbs.find(el => el.suburb === e.target.value)
+    setSuburb(e.target.value)
+    setObjectPrice(sub)
+  }
+
+  const _createQuantity = () => {
+    const options = []
+    for (let i = 1; i <= 12; i += 1) {
+      options.push(
+        <option key={i} value={i}>
+          {i}
+        </option>
+      )
+    }
+    return options
   }
 
   return (
@@ -134,14 +171,40 @@ const RentMyOfficeSpace = ({ history, ...props }) => {
             </ImageHeroLeft>
             <ImageHeroRight>
               <Title type="h4" title="What could you earn?" noMargin center />
-              <Select label="State" placeholder="New South Wales" />
-              <Select label="Suburb" placeholder="e.g. Bondi Junction" />
-              <Select label="Capacity for your space?" placeholder="Select" />
+              <Select label="State" placeholder="New South Wales" value={state} onChange={_onChangeSelectState}>
+                <option value="">Select one option</option>
+                {officePriceEstimation.map(item => (
+                  <option key={item.state} value={item.state}>
+                    {item.state}
+                  </option>
+                ))}
+              </Select>
+              <Select label="Suburb" placeholder="e.g. Bondi Junction" value={suburb} onChange={_onChangeSelectSuburb}>
+                <option value="">Select one option</option>
+                {state &&
+                  officePriceEstimation
+                    .find(el => el.state === state)
+                    .suburbs.map(item => (
+                      <option key={item.suburb} value={item.suburb}>
+                        {item.suburb}
+                      </option>
+                    ))}
+              </Select>
+              <Select
+                label="Capacity for your space?"
+                placeholder="Select"
+                value={quantity}
+                onChange={e => setQuantity(e.target.value)}
+              >
+                {_createQuantity()}
+              </Select>
               <Text fontSize="12px" textAlign="center">
                 You could earn up to
               </Text>
               <Text color="quartenary" fontSize="30px" fontFamily="bold" textAlign="center">
-                $3,330 per month
+                {objectPrice
+                  ? `${numeral(quantity * objectPrice.estimate).format('$0,0.00')} per ${objectPrice.term}`
+                  : ' $3,330 per month'}
               </Text>
               <Button fluid onClick={_goToListing}>
                 Get started now
@@ -280,25 +343,4 @@ const RentMyOfficeSpace = ({ history, ...props }) => {
   )
 }
 
-const formik = {
-  displayName: 'LandingPage_RentMyOfficeSpace',
-  mapPropsToValues: props => ({
-    typeOfSpace: '',
-    location: '',
-    startDate: '',
-    endDate: '',
-    size: '',
-    budget: false,
-    message: ''
-  }),
-  mapValuesToPayload: x => x,
-  validationSchema: Yup.object().shape({
-    title: Yup.string()
-      .typeError('Title need to be String')
-      .max(25, 'Maximum characters for Title field must be 25')
-  }),
-  enableReinitialize: true,
-  isInitialValid: true
-}
-
-export default withFormik(formik)(RentMyOfficeSpace)
+export default RentMyOfficeSpace
