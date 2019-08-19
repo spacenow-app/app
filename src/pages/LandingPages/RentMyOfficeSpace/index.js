@@ -5,7 +5,6 @@ import numeral from 'numeral'
 import { Wrapper, Box, NavBar, Title, Text, Select, Button } from 'components'
 import { getOfficePricesEstimation } from 'redux/ducks/landing'
 
-import { set } from 'store2'
 import heroImage from './images/hero_img.png'
 import JamesImage from './images/james_harvey.png'
 import PaulImage from './images/paul_walker.png'
@@ -119,7 +118,7 @@ const RentMyOfficeSpace = ({ history, ...props }) => {
 
   useEffect(() => {
     dispatch(getOfficePricesEstimation())
-  }, [])
+  }, [dispatch])
 
   const _goToListing = () => {
     history.push('/listing')
