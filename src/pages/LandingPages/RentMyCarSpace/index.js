@@ -1,9 +1,10 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import PropTypes from 'prop-types'
 import styled, { css } from 'styled-components'
-import { useDispatch } from 'react-redux'
+import { useSelector, useDispatch } from 'react-redux'
+import numeral from 'numeral'
 import { Wrapper, Box, NavBar, Title, Text, Select, Button } from 'components'
-import { getPricesEstimation } from 'redux/ducks/landing'
+import { getCarParkPricesEstimation } from 'redux/ducks/landing'
 import { config } from 'contants'
 
 import heroImage from './images/hero_img.png'
@@ -136,13 +137,29 @@ const testimonials = [
 
 const RentMyOfficeSpace = ({ history }) => {
   const dispatch = useDispatch()
+  const [state, setState] = useState('')
+  const [suburb, setSuburb] = useState('')
+  const [objectPrice, setObjectPrice] = useState('')
+  const { carPriceEstimation } = useSelector(state => state.landing)
 
   useEffect(() => {
-    dispatch(getPricesEstimation())
+    dispatch(getCarParkPricesEstimation())
   }, [dispatch])
 
   const _goToListing = () => {
     history.push('/listing')
+  }
+
+  const _onChangeSelectState = e => {
+    setState(e.target.value)
+    setSuburb('')
+    setObjectPrice('')
+  }
+
+  const _onChangeSelectSuburb = e => {
+    const sub = carPriceEstimation.find(el => el.state === state).suburbs.find(el => el.suburb === e.target.value)
+    setSuburb(e.target.value)
+    setObjectPrice(sub)
   }
 
   return (
@@ -160,12 +177,36 @@ const RentMyOfficeSpace = ({ history }) => {
                   title="Turn your car spot into money"
                   subtitle="Anytime your car space is empty you’re missing out on profit."
                 />
-                <Select label="State" placeholder="New South Wales" />
-                <Select label="Suburb" placeholder="e.g. Bondi Junction" />
+                <Select label="State" placeholder="New South Wales" value={state} onChange={_onChangeSelectState}>
+                  <option value="">Select one option</option>
+                  {carPriceEstimation.map(item => (
+                    <option key={item.state} value={item.state}>
+                      {item.state}
+                    </option>
+                  ))}
+                </Select>
+                <Select
+                  label="Suburb"
+                  placeholder="e.g. Bondi Junction"
+                  value={suburb}
+                  onChange={_onChangeSelectSuburb}
+                >
+                  <option value="">Select one option</option>
+                  {state &&
+                    carPriceEstimation
+                      .find(el => el.state === state)
+                      .suburbs.map(item => (
+                        <option key={item.suburb} value={item.suburb}>
+                          {item.suburb}
+                        </option>
+                      ))}
+                </Select>
                 <Box mt="20px" textAlign="center" display="grid" gridRowGap="10px">
                   <Text fontSize="12px">You could earn up to</Text>
                   <Text color="quartenary" fontSize="30px" fontFamily="bold">
-                    $3,330 per month
+                    {objectPrice
+                      ? `${numeral(objectPrice.estimate).format('$0,0.00')} per ${objectPrice.term}`
+                      : ' $3,330 per month'}
                   </Text>
                   <Button fluid onClick={_goToListing}>
                     Sign up and start earning.

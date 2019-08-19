@@ -6,7 +6,10 @@ import errToMsg from 'utils/errToMsg'
 export const Types = {
   GET_OFFICE_PRICE_ESTIMATION_REQUEST: 'GET_OFFICE_PRICE_ESTIMATION_REQUEST',
   GET_OFFICE_PRICE_ESTIMATION_SUCCESS: 'GET_OFFICE_PRICE_ESTIMATION_SUCCESS',
-  GET_OFFICE_PRICE_ESTIMATION_FAILURE: 'GET_OFFICE_PRICE_ESTIMATION_FAILURE'
+  GET_OFFICE_PRICE_ESTIMATION_FAILURE: 'GET_OFFICE_PRICE_ESTIMATION_FAILURE',
+  GET_CARPARK_PRICE_ESTIMATION_REQUEST: 'GET_CARPARK_PRICE_ESTIMATION_REQUEST',
+  GET_CARPARK_PRICE_ESTIMATION_SUCCESS: 'GET_CARPARK_PRICE_ESTIMATION_SUCCESS',
+  GET_CARPARK_PRICE_ESTIMATION_FAILURE: 'GET_CARPARK_PRICE_ESTIMATION_FAILURE'
 }
 
 // Initial State
@@ -49,6 +52,26 @@ export default function reducer(state = initialState, action) {
       }
     }
     case Types.GET_OFFICE_PRICE_ESTIMATION_FAILURE: {
+      return {
+        ...state,
+        isLoading: false,
+        error: action.payload
+      }
+    }
+    case Types.GET_CARPARK_PRICE_ESTIMATION_REQUEST: {
+      return {
+        ...state,
+        isLoading: true
+      }
+    }
+    case Types.GET_CARPARK_PRICE_ESTIMATION_SUCCESS: {
+      return {
+        ...state,
+        isLoading: false,
+        carPriceEstimation: action.payload
+      }
+    }
+    case Types.GET_CARPARK_PRICE_ESTIMATION_FAILURE: {
       return {
         ...state,
         isLoading: false,
@@ -99,33 +122,39 @@ export const getOfficePricesEstimation = () => async dispatch => {
   }
 }
 
-export const getPricesEstimation = () => async dispatch => {
+export const getCarParkPricesEstimation = () => async dispatch => {
   dispatch({
-    type: Types.GET_OFFICE_PRICE_ESTIMATION_REQUEST
+    type: Types.GET_CARPARK_PRICE_ESTIMATION_REQUEST
   })
   try {
     const { data } = await getClientWithAuth(dispatch).query({
       query: queryGetPricesEstimation,
       fetchPolicy: 'network-only',
       variables: {
-        type: 'office'
+        type: 'carpark'
       }
     })
 
-    const arraySeparate = data.queryGetPricesEstimation.map((el, index) => {
-      return {
-        state: el.state,
-        suburbs: data.queryGetPricesEstimation.filter(res => res.state === el.state)
+    const arraySeparate = data.getPricesEstimation.reduce((acumulator, currentValue, currentIndex, array) => {
+      if (acumulator.find(res => res.state === currentValue.state)) {
+        return acumulator
       }
-    })
+      return [
+        ...acumulator,
+        {
+          state: currentValue.state,
+          suburbs: array.filter(res => res.state === currentValue.state)
+        }
+      ]
+    }, [])
 
     dispatch({
-      type: Types.GET_OFFICE_PRICE_ESTIMATION_SUCCESS,
+      type: Types.GET_CARPARK_PRICE_ESTIMATION_SUCCESS,
       payload: arraySeparate
     })
   } catch (err) {
     dispatch({
-      type: Types.GET_OFFICE_PRICE_ESTIMATION_FAILURE,
+      type: Types.GET_CARPARK_PRICE_ESTIMATION_FAILURE,
       payload: errToMsg(err)
     })
   }
