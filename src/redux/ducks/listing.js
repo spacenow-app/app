@@ -5,6 +5,7 @@ import { getClientWithAuth } from 'graphql/apolloClient'
 import errToMsg from 'utils/errToMsg'
 import { monthNames } from 'contants/dates'
 import { camalize } from 'utils/strings'
+import { toast } from 'react-toastify'
 
 // Actions
 export const Types = {
@@ -767,6 +768,7 @@ export default function reducer(state = initialState, action) {
       return {
         ...state,
         get: {
+          ...state.get,
           isLoading: true,
           error: null
         }
@@ -776,6 +778,7 @@ export default function reducer(state = initialState, action) {
       return {
         ...state,
         get: {
+          ...state.get,
           isLoading: false,
           object: action.payload
         }
@@ -785,6 +788,7 @@ export default function reducer(state = initialState, action) {
       return {
         ...state,
         get: {
+          ...state.get,
           isLoading: false,
           error: action.payload
         }
@@ -1037,6 +1041,7 @@ export const onUpdate = (listing, values) => async dispatch => {
     })
     dispatch({ type: Types.UPDATE_LISTING_SUCCESS, payload: data.createOrUpdateListing })
   } catch (err) {
+    toast.error(errToMsg(err))
     dispatch({ type: Types.UPDATE_LISTING_FAILURE, payload: errToMsg(err) })
   }
 }
