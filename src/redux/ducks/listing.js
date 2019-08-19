@@ -44,7 +44,7 @@ export const Types = {
   PUBLISH_LISTING_FAILURE: 'PUBLISH_LISTING_FAILURE',
   GET_PROVIDER_BY_LISTING_REQUEST: 'GET_PROVIDER_BY_LISTING_REQUEST',
   GET_PROVIDER_BY_LISTING_SUCCESS: 'GET_PROVIDER_BY_LISTING_SUCCESS',
-  GET_PROVIDER_BY_LISTING_FAILURE: 'GET_PROVIDER_BY_LISTING_FAILURE',
+  GET_PROVIDER_BY_LISTING_FAILURE: 'GET_PROVIDER_BY_LISTING_FAILURE'
 }
 
 // Initial State
@@ -320,7 +320,6 @@ const queryGetListingById = gql`
   }
 `
 
-
 const queryGetAllRules = gql`
   query getAllRules {
     getAllRules {
@@ -469,7 +468,7 @@ const mutationPublish = gql`
   }
 `
 
-const queryGetProviderByListingId =gql`
+const queryGetProviderByListingId = gql`
   query getListingById($id: Int!, $isPublic: Boolean) {
     getListingById(id: $id, isPublic: $isPublic) {
       id
@@ -1032,7 +1031,6 @@ export const onUpdate = (listing, values) => async dispatch => {
       listSettingsParentId: listing.settingsParent.id
     }
     requestFields = { ...requestFields, ...getValues(listing, values) }
-    console.log('onUpdate -> Request Body:', requestFields)
     const { data } = await getClientWithAuth(dispatch).mutate({
       mutation: mutationUpdate,
       variables: requestFields
