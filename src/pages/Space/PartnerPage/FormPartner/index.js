@@ -8,7 +8,9 @@ import {format} from 'date-fns'
 
 import { Title, Input, Select, TextArea, Button, DatePicker } from 'components'
 
-// import { onCreateWeWorkReferral } from 'redux/ducks/partner'
+import  { onSendHubSpotForm, 
+          // onCreateWeWorkReferral 
+        } from 'redux/ducks/integration'
 
 const WrapperStyled = styled.div`
   display: grid;
@@ -44,7 +46,9 @@ const FormPartner = ({
   }
 
   const _handleSubmit = () => {
+    // TODO: Uncoment when WEWORK API ready
     // dispatch(onCreateWeWorkReferral(values))
+    dispatch(onSendHubSpotForm(values))
   }
 
   const arrayDesks = [
@@ -159,7 +163,7 @@ const formik = {
         name:  '',
         phone:  '',
         city: listing.location.city,
-        // requested_location:  '',
+        requested_location:  '',
         company_name:  '',
         requested_move_in_date:  '',
         desks_estimated:  '',
@@ -174,7 +178,7 @@ const formik = {
     name: Yup.string().required('Name field is required'),
     phone: Yup.number().typeError('Need to be number.'),
     city: Yup.string(),
-    // requested_location: Yup.string(),
+    requested_location: Yup.string(),
     company_name: Yup.string(),
     requested_move_in_date: Yup.string(),
     desks_estimated: Yup.string(),
