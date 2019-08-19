@@ -47,7 +47,7 @@ const Routes = props => {
           />
           <PublicRoute
             {...props}
-            path="/l-p"
+            path="/lp"
             handlerCheckAuthentication={() => {}}
             // isAuthenticated={isAuthenticated}
             component={LandingPages}
