@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react'
+import PropTypes from 'prop-types'
 import styled, { css } from 'styled-components'
-import { useSelector, useDispatch } from 'react-redux'
+import { useDispatch } from 'react-redux'
 import { Wrapper, Box, NavBar, Title, Text, Select, Button } from 'components'
 import { getPricesEstimation } from 'redux/ducks/landing'
 import { config } from 'contants'
@@ -133,9 +134,8 @@ const testimonials = [
   }
 ]
 
-const RentMyOfficeSpace = ({ history, ...props }) => {
+const RentMyOfficeSpace = ({ history }) => {
   const dispatch = useDispatch()
-  const { carPriceEstimation } = useSelector(state => state.landing)
 
   useEffect(() => {
     dispatch(getPricesEstimation())
@@ -354,6 +354,10 @@ const RentMyOfficeSpace = ({ history, ...props }) => {
       </Wrapper>
     </>
   )
+}
+
+RentMyOfficeSpace.propTypes = {
+  history: PropTypes.instanceOf(Object).isRequired
 }
 
 export default RentMyOfficeSpace
