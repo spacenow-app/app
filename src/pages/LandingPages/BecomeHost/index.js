@@ -1,7 +1,6 @@
 import React, { useState } from 'react'
 import styled, { css } from 'styled-components'
-import { Wrapper, Box, NavBar, Title, Text, Button, Icon } from 'components'
-import ModalVideo from 'react-modal-video'
+import { Wrapper, Box, NavBar, Title, Text, Button, Icon, VideoModal } from 'components'
 
 import { config } from 'contants'
 
@@ -19,8 +18,6 @@ import { ReactComponent as PeopleImage } from './images/banner_peoples.svg'
 import { ReactComponent as IconForm } from './images/Icon_Form.svg'
 import { ReactComponent as IconKey } from './images/Icon_Key.svg'
 import { ReactComponent as IconMagnifier } from './images/Icon_Magnifier.svg'
-
-import './modal_video_style.css'
 
 const ImageHero = styled.div`
   background: url(${heroImage});
@@ -269,7 +266,7 @@ const RentMyOfficeSpace = ({ history, ...props }) => {
 
         <Box my="180px">
           <Title type="h2" center title="Learn why they host." />
-          <ModalVideo
+          <VideoModal
             channel="youtube"
             isOpen={showVideo}
             videoId="L61p2uyiMSo"
