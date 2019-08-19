@@ -5,6 +5,7 @@ import { getClientWithAuth } from 'graphql/apolloClient'
 import errToMsg from 'utils/errToMsg'
 import { monthNames } from 'contants/dates'
 import { camalize } from 'utils/strings'
+import { toast } from 'react-toastify'
 
 // Actions
 export const Types = {
@@ -44,7 +45,7 @@ export const Types = {
   PUBLISH_LISTING_FAILURE: 'PUBLISH_LISTING_FAILURE',
   GET_PROVIDER_BY_LISTING_REQUEST: 'GET_PROVIDER_BY_LISTING_REQUEST',
   GET_PROVIDER_BY_LISTING_SUCCESS: 'GET_PROVIDER_BY_LISTING_SUCCESS',
-  GET_PROVIDER_BY_LISTING_FAILURE: 'GET_PROVIDER_BY_LISTING_FAILURE',
+  GET_PROVIDER_BY_LISTING_FAILURE: 'GET_PROVIDER_BY_LISTING_FAILURE'
 }
 
 // Initial State
@@ -320,7 +321,6 @@ const queryGetListingById = gql`
   }
 `
 
-
 const queryGetAllRules = gql`
   query getAllRules {
     getAllRules {
@@ -469,7 +469,7 @@ const mutationPublish = gql`
   }
 `
 
-const queryGetProviderByListingId =gql`
+const queryGetProviderByListingId = gql`
   query getListingById($id: Int!, $isPublic: Boolean) {
     getListingById(id: $id, isPublic: $isPublic) {
       id
@@ -768,6 +768,7 @@ export default function reducer(state = initialState, action) {
       return {
         ...state,
         get: {
+          ...state.get,
           isLoading: true,
           error: null
         }
@@ -777,6 +778,7 @@ export default function reducer(state = initialState, action) {
       return {
         ...state,
         get: {
+          ...state.get,
           isLoading: false,
           object: action.payload
         }
@@ -786,6 +788,7 @@ export default function reducer(state = initialState, action) {
       return {
         ...state,
         get: {
+          ...state.get,
           isLoading: false,
           error: action.payload
         }
@@ -1032,13 +1035,13 @@ export const onUpdate = (listing, values) => async dispatch => {
       listSettingsParentId: listing.settingsParent.id
     }
     requestFields = { ...requestFields, ...getValues(listing, values) }
-    console.log('onUpdate -> Request Body:', requestFields)
     const { data } = await getClientWithAuth(dispatch).mutate({
       mutation: mutationUpdate,
       variables: requestFields
     })
     dispatch({ type: Types.UPDATE_LISTING_SUCCESS, payload: data.createOrUpdateListing })
   } catch (err) {
+    toast.error(errToMsg(err))
     dispatch({ type: Types.UPDATE_LISTING_FAILURE, payload: errToMsg(err) })
   }
 }

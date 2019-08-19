@@ -1,6 +1,9 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import styled, { css } from 'styled-components'
+import { useSelector, useDispatch } from 'react-redux'
 import { Wrapper, Box, NavBar, Title, Text, Select, Button } from 'components'
+import { getPricesEstimation } from 'redux/ducks/landing'
+import { config } from 'contants'
 
 import heroImage from './images/hero_img.png'
 import gregImage from './images/greg_image.png'
@@ -45,6 +48,10 @@ const ImageHeroRight = styled.div`
   grid-row-gap: 15px;
   border-radius: 5px;
   border: 1px solid #ebebeb;
+
+  a {
+    color: #172439;
+  }
 `
 
 const TrustedLogo = styled.img`
@@ -126,16 +133,18 @@ const testimonials = [
   }
 ]
 
-const RentMyOfficeSpace = ({
-  values,
-  touched,
-  errors,
-  handleChange,
-  handleBlur,
-  handleSubmit,
-  setFieldValue,
-  ...props
-}) => {
+const RentMyOfficeSpace = ({ history, ...props }) => {
+  const dispatch = useDispatch()
+  const { carPriceEstimation } = useSelector(state => state.landing)
+
+  useEffect(() => {
+    dispatch(getPricesEstimation())
+  }, [dispatch])
+
+  const _goToListing = () => {
+    history.push('/listing')
+  }
+
   return (
     <>
       <NavBar />
@@ -158,8 +167,13 @@ const RentMyOfficeSpace = ({
                   <Text color="quartenary" fontSize="30px" fontFamily="bold">
                     $3,330 per month
                   </Text>
-                  <Button fluid>Sign up and start earning.</Button>
-                  <Text fontSize="12px">T&C’s apply</Text>
+                  <Button fluid onClick={_goToListing}>
+                    Sign up and start earning.
+                  </Button>
+
+                  <a href={`${config.legacy}/terms`}>
+                    <Text fontSize="12px">T&C’s apply</Text>
+                  </a>
                 </Box>
               </ImageHeroRight>
             </HeaderContainer>
@@ -216,7 +230,9 @@ const RentMyOfficeSpace = ({
               People are out there looking for car spaces to rent by the day, week or month. List yours simply with
               Spacenow and start earning money from your parking spot.
             </Text>
-            <Button width="270px">Get started now</Button>
+            <Button width="270px" onClick={_goToListing}>
+              Get started now
+            </Button>
           </Box>
           <GoldMineContainer>
             <Box>
@@ -323,7 +339,9 @@ const RentMyOfficeSpace = ({
               Spacenow handles the booking, payment and even offers simple insurance options so you’re covered. Open up
               a whole new revenue stream for your business.
             </Text>
-            <Button width="270px">Get started now</Button>
+            <Button width="270px" onClick={_goToListing}>
+              Get started now
+            </Button>
           </Box>
           <Box
             backgroundImage={`url(${womanDriving})`}

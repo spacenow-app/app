@@ -10,6 +10,8 @@ import photo from './ducks/photo'
 import integration from './ducks/integration'
 import payment from './ducks/payment'
 import mail from './ducks/mail'
+import space from './ducks/space'
+import landing from './ducks/landing'
 
 export default combineReducers({
   modal,
@@ -21,5 +23,7 @@ export default combineReducers({
   photo,
   integration,
   payment,
-  mail
+  mail,
+  space,
+  landing
 })
