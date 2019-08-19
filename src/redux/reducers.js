@@ -11,6 +11,7 @@ import partner from './ducks/partner'
 import payment from './ducks/payment'
 import mail from './ducks/mail'
 import space from './ducks/space'
+import landing from './ducks/landing'
 
 export default combineReducers({
   modal,
@@ -23,5 +24,6 @@ export default combineReducers({
   partner,
   payment,
   mail,
-  space
+  space,
+  landing
 })
