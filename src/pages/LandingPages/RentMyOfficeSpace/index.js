@@ -107,16 +107,11 @@ const TestimonialImage = styled.div`
   align-self: center;
 `
 
-const RentMyOfficeSpace = ({
-  values,
-  touched,
-  errors,
-  handleChange,
-  handleBlur,
-  handleSubmit,
-  setFieldValue,
-  ...props
-}) => {
+const RentMyOfficeSpace = ({ history, ...props }) => {
+  const _goToListing = () => {
+    history.push('/listing')
+  }
+
   return (
     <>
       <NavBar />
@@ -148,7 +143,9 @@ const RentMyOfficeSpace = ({
               <Text color="quartenary" fontSize="30px" fontFamily="bold" textAlign="center">
                 $3,330 per month
               </Text>
-              <Button fluid>Get started now</Button>
+              <Button fluid onClick={_goToListing}>
+                Get started now
+              </Button>
             </ImageHeroRight>
           </HeaderContainer>
         </Wrapper>
@@ -273,7 +270,7 @@ const RentMyOfficeSpace = ({
             <PeopleImage />
           </Box>
           <Box>
-            <Button width="234px" color="quartenary" fontFamily="MontSerrat-Bold">
+            <Button width="234px" color="quartenary" fontFamily="MontSerrat-Bold" onClick={_goToListing}>
               List your office space
             </Button>
           </Box>
