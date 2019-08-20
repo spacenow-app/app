@@ -5,7 +5,7 @@ import { Wrapper, Box, NavBar, Title, Text, Button, Icon, VideoModal } from 'com
 import { config } from 'contants'
 
 import heroImage from './images/hero_img.png'
-import gregImage from './images/greg_image.png'
+import paulImage from './images/paul_image.png'
 import jamesImage from './images/james_image.png'
 import stewartImage from './images/stewart_image.png'
 import canvaLogo from './images/canva_logo.png'
@@ -20,7 +20,7 @@ import { ReactComponent as IconKey } from './images/Icon_Key.svg'
 import { ReactComponent as IconMagnifier } from './images/Icon_Magnifier.svg'
 
 const ImageHero = styled.div`
-  background: url(${heroImage});
+  background: linear-gradient(rgba(23, 36, 57, 0.61), rgba(23, 36, 57, 0.61)), url(${heroImage});
   background-size: cover;
   height: 480px;
 `
@@ -104,7 +104,7 @@ const testimonials = [
     author: 'Paul Walker',
     city: ' CEO - Walker Development',
     text: '“Sharing our office has turned on an unexpected revenue stream for our business.”',
-    photo: gregImage
+    photo: paulImage
   },
   {
     id: 2,
@@ -219,7 +219,7 @@ const RentMyOfficeSpace = ({ history, ...props }) => {
         </Box>
 
         <Box mt="150px">
-          <Text color="greyscale.2" my="20px" display="block">
+          <Text color="greyscale.2" my="48px" display="block" ml="20px">
             Australian&rsquo;s love Spacenow:
           </Text>
           <TestimonialContainer>
@@ -242,7 +242,7 @@ const RentMyOfficeSpace = ({ history, ...props }) => {
           </TestimonialContainer>
         </Box>
 
-        <Box my="180px" width="940px" ml="auto" mr="auto">
+        <Box my="110px" width="940px" ml="auto" mr="auto">
           <Title
             center
             title={
@@ -251,20 +251,23 @@ const RentMyOfficeSpace = ({ history, ...props }) => {
               </Text>
             }
           />
-          <Text display="block" lineHeight="2" fontSize="20px">
+          <Text display="block" lineHeight="24px" fontSize="20px" mt="60px">
             Spacenow is an online peer-to-peer marketplace where you can rent any space on demand, in a flexible way.
             The platform connects people who need space with people who have it.
           </Text>
-          <Text display="block" lineHeight="2" fontSize="20px" mt="10px">
+          <Text display="block" lineHeight="24px" fontSize="20px" mt="20px">
             Spacenow provides access to under-utilised assets which provides economic, environmental social and
             practical benefits to users and hosts.
           </Text>
-          <Text fontSize="20px" display="block" mt="40px">
-            Need help call us on 02 9310 9214
+          <Text fontSize="20px" display="block" mt="20px">
+            Need help call us on{' '}
+            <a href="tel:0293109214">
+              <u>02 9310 9214</u>
+            </a>
           </Text>
         </Box>
 
-        <Box my="180px">
+        <Box my="130px">
           <Title type="h2" center title="Learn why they host." />
           <VideoModal
             channel="youtube"
