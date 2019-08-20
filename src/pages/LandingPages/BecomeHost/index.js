@@ -269,7 +269,7 @@ const RentMyOfficeSpace = ({ history, ...props }) => {
           <VideoModal
             channel="youtube"
             isOpen={showVideo}
-            videoId="L61p2uyiMSo"
+            videoId="Ro9PdC3IPjg"
             autoplay
             controls={0}
             onClose={() => setShowVideo(false)}
