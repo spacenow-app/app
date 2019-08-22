@@ -10,6 +10,7 @@ import PublicRoute from './PublicRoute'
 
 const HomePage = lazy(() => import('pages/HomePage'))
 const NotFoundPage = lazy(() => import('pages/NotFoundPage'))
+const Authentication = lazy(() => import('routes/Authentication'))
 const Listing = lazy(() => import('routes/Listing'))
 const Space = lazy(() => import('routes/Space'))
 const Account = lazy(() => import('routes/Account'))
@@ -39,11 +40,10 @@ const Routes = props => {
         <Switch>
           <Redirect exact from="/" to="/listing/intro" />
           <PublicRoute
-            exact
             path="/auth"
             handlerCheckAuthentication={_handlerCheckAuthentication}
-            isAuthenticated={isAuthenticated}
-            component={() => <h1>Login Page</h1>}
+            // isAuthenticated={isAuthenticated}
+            component={Authentication}
           />
           <PublicRoute
             {...props}
