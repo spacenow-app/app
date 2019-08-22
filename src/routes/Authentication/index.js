@@ -1,4 +1,4 @@
-import React, { Suspense, lazy } from 'react'
+import React, { Suspense } from 'react'
 import PropTypes from 'prop-types'
 import { Route } from 'react-router-dom'
 import { Loader } from 'components'
