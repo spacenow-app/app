@@ -26,6 +26,8 @@
     "react-day-picker": "^7.3.0",
     "react-dom": "^16.8.6",
     "react-dropzone": "^10.1.6",
+    "react-facebook-login": "^4.1.1",
+    "react-google-login": "^5.0.5",
     "react-google-maps": "^9.4.5",
     "react-helmet": "^5.2.1",
     "react-images": "^1.0.0",
@@ -45,7 +47,7 @@
     "yup": "^0.27.0"
   },
   "scripts": {
-    "start": "PORT=3003 react-scripts start",
+    "start": "HTTPS=true PORT=3003 react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
