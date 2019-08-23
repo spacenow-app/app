@@ -13,6 +13,13 @@ const getByName = cname => {
   return ''
 }
 
+const setToken = (token, expires) => {
+  document.cookie = `id_token=${token};expires=${expires};domain=.localhost:3003;path=/`
+}
+
+const deleteToken = () => {
+  document.cookie = 'id_token= ; expires = Thu, 01 Jan 1970 00:00:00 GMT'
+}
 /**
  * @deprecated
  */
@@ -23,4 +30,4 @@ const deleteByName = cname => {
   }
 }
 
-export { getByName, deleteByName }
+export { getByName, setToken, deleteToken, deleteByName }

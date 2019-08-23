@@ -1,10 +1,40 @@
 /* eslint-disable no-console */
 import { gql } from 'apollo-boost'
-
+import { toast } from 'react-toastify'
 import { getClient } from 'graphql/apolloClient'
-import { getByName } from 'utils/cookies'
+import { getByName, setToken, deleteToken } from 'utils/cookies'
 import config from 'contants/config'
 
+const mutationTokenValidate = gql`
+  mutation tokenValidate($token: String!) {
+    tokenValidate(token: $token) {
+      status
+      user {
+        id
+        email
+        profile {
+          profileId
+          firstName
+          lastName
+          picture
+        }
+        verification {
+          id
+          isEmailConfirmed
+        }
+      }
+    }
+  }
+`
+
+const mutatioLogin = gql`
+  mutation login($email: String, $password: String) {
+    login(email: $email, password: $password) {
+      token
+      expiresIn
+    }
+  }
+`
 // Action Types
 export const Types = {
   AUTH_REQUEST: 'AUTH_REQUEST',
@@ -12,9 +42,8 @@ export const Types = {
   AUTH_FAILURE: 'AUTH_FAILURE',
   AUTH_CLEAN_ERROR: 'AUTH_CLEAN_ERROR',
   AUTH_LOGOUT: 'AUTH_LOGOUT',
-  AUTH_2019_START: 'AUTH_2019_START',
-  AUTH_2019_SUCCESS: 'AUTH_2019_SUCCESS',
-  AUTH_2019_FAILED: 'AUTH_2019_FAILED'
+  AUTH_TOKEN_VERIFY_SUCCESS: 'AUTH_TOKEN_VERIFY_SUCCESS',
+  AUTH_TOKEN_VERIFY_FAILURE: 'AUTH_TOKEN_VERIFY_FAILURE'
 }
 
 // Reducer
@@ -33,51 +62,46 @@ const initialState = {
       isEmailVerification: false
     }
   },
-  isAuthenticated: true,
+  isAuthenticated: false,
   isLoading: false
 }
 
 export default function reducer(state = initialState, action) {
   switch (action.type) {
-    case Types.AUTH_2019_START:
+    case Types.AUTH_REQUEST:
       return {
         ...state,
         isLoading: true
       }
-    case Types.AUTH_2019_SUCCESS: {
-      const userProfileObj = action.payload
+    case Types.AUTH_SUCCESS: {
       return {
         ...state,
         isAuthenticated: true,
         isLoading: false,
-        user: userProfileObj
+        user: action.payload
       }
     }
-    case Types.AUTH_2019_FAILED:
-      return {
-        ...state,
-        isLoading: false,
-        isAuthenticated: false,
-        user: null
-      }
-    case Types.AUTH_SUCCESS:
-      return {
-        ...state,
-        isLoading: false,
-        user: {
-          ...action.payload,
-          userObj: action.payload,
-          roles: JSON.parse(action.payload.roles)
-        },
-        error: null,
-        isAuthenticated: true
-      }
     case Types.AUTH_FAILURE:
       return {
         ...state,
         isLoading: false,
         isAuthenticated: false,
+        user: initialState.user,
         error: action.payload
+      }
+    case Types.AUTH_TOKEN_VERIFY_SUCCESS:
+      return {
+        ...state,
+        isAuthenticated: true,
+        isLoading: false,
+        user: action.payload
+      }
+    case Types.AUTH_TOKEN_VERIFY_FAILURE:
+      return {
+        ...state,
+        isLoading: false,
+        isAuthenticated: false,
+        user: initialState.user
       }
     case Types.AUTH_CLEAN_ERROR:
       return {
@@ -86,9 +110,7 @@ export default function reducer(state = initialState, action) {
       }
     case Types.AUTH_LOGOUT:
       return {
-        ...initialState,
-        isLoading: false,
-        error: action.payload
+        ...initialState
       }
     default:
       return state
@@ -96,119 +118,57 @@ export default function reducer(state = initialState, action) {
 }
 
 // Action Creators
-function loginError(error) {
-  return {
-    type: Types.AUTH_FAILURE,
-    payload: error
-  }
-}
-
-export const loginLoading = value => ({
-  type: Types.AUTH_LOADING,
-  payload: value
-})
-
-export const loginAppLoading = value => ({
-  type: Types.AUTH_APP_LOADING,
-  payload: value
-})
-
-export const loginSuccess = obj => ({
-  type: Types.AUTH_SUCCESS,
-  payload: obj
-})
-
-export const userLogout = error => ({
-  type: Types.AUTH_LOGOUT,
-  payload: error
-})
-
-const authentication2019Start = () => ({ type: Types.AUTH_2019_START })
-
-const authentication2019Success = userProfileObj => ({
-  type: Types.AUTH_2019_SUCCESS,
-  payload: userProfileObj.user
-})
-
-const authentication2019Failed = () => ({ type: Types.AUTH_2019_FAILED })
-
 export const onTokenValidation = () => async dispatch => {
-  dispatch(authentication2019Start())
+  const idToken = getByName(config.token_name)
+  if (!idToken) {
+    return
+  }
   try {
-    const idToken = getByName(config.token_name)
-    if (idToken) {
-      const { data } = await getClient().mutate({
-        variables: { token: idToken },
-        mutation: gql`
-          mutation tokenValidate($token: String!) {
-            tokenValidate(token: $token) {
-              status
-              user {
-                id
-                email
-                profile {
-                  profileId
-                  firstName
-                  lastName
-                  picture
-                }
-                verification {
-                  id
-                  isEmailConfirmed
-                }
-              }
-            }
-          }
-        `
-      })
-      if (data && data.tokenValidate) {
-        if (data.tokenValidate.status && data.tokenValidate.status === 'OK') {
-          return dispatch(authentication2019Success(data.tokenValidate))
-        }
+    const { data } = await getClient().mutate({
+      variables: { token: idToken },
+      mutation: mutationTokenValidate
+    })
+    if (data && data.tokenValidate) {
+      if (data.tokenValidate.status && data.tokenValidate.status === 'OK') {
+        dispatch({
+          type: Types.AUTH_TOKEN_VERIFY_SUCCESS,
+          payload: data.tokenValidate.user
+        })
+        return
       }
     }
-    return dispatch(authentication2019Failed())
+    dispatch({ type: Types.AUTH_TOKEN_VERIFY_FAILURE })
   } catch (err) {
-    console.error(err)
-    return dispatch(authentication2019Failed())
+    dispatch({ type: Types.AUTH_TOKEN_VERIFY_FAILURE })
   }
 }
 
 export const onIsTokenExists = () => dispatch => {
   const idToken = getByName(config.token_name)
-  if (!idToken || idToken.length <= 0) dispatch(authentication2019Failed())
+  if (!idToken || idToken.length <= 0) dispatch({ type: Types.AUTH_TOKEN_VERIFY_FAILURE, payload: 'No token found' })
 }
 
-export const login = (email, password) => async dispatch => {
-  dispatch(loginLoading(true))
+export const signin = (email, password) => async dispatch => {
+  dispatch({ type: Types.AUTH_REQUEST })
   try {
-    // const response = await loginApi(email, password)
-    // window.localStorage.xcllusiveJWT = response.accessToken
-    // setAuthorizationHeader(response.accessToken)
-    // dispatch(loginSuccess(response.user))
+    const { data } = await getClient().mutate({
+      variables: { email, password },
+      mutation: mutatioLogin
+    })
+    setToken(data.login.token)
+    dispatch({ type: Types.AUTH_SUCCESS, payload: {} })
   } catch (err) {
-    dispatch(loginError(err.message))
+    toast.error(`Error: ${err}`)
+    dispatch({
+      type: Types.AUTH_FAILURE,
+      payload: err
+    })
   }
 }
 
-export const loginWithToken = () => async dispatch => {
-  try {
-    // const response = await loginWithTokenApi()
-    // dispatch(loginSuccess(response.user))
-  } catch (err) {
-    window.localStorage.removeItem('xcllusiveJWT')
-    // setAuthorizationHeader()
-    dispatch(loginError(err))
-  }
-}
-
-export const logout = (user, error = null) => async dispatch => {
-  try {
-    // await logoutApi(user)
-    // window.localStorage.removeItem('xcllusiveJWT')
-    // setAuthorizationHeader()
-    // dispatch(userLogout(error))
-  } catch (err) {
-    dispatch(loginError(err))
-  }
+export const logout = () => async dispatch => {
+  deleteToken()
+  dispatch({
+    type: Types.AUTH_LOGOUT
+  })
 }

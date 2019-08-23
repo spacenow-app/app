@@ -27,6 +27,7 @@ const sizeStyle = {
 
 const WrapperInput = styled.div`
   position: relative;
+  text-align: left;
 `
 
 const InputStyled = styled.input`

@@ -26,11 +26,13 @@ const Routes = props => {
 
   useEffect(() => {
     dispatch(onTokenValidation())
-  }, [dispatch, isAuthenticated])
+  }, [dispatch])
 
   if (isLoading) {
     return <Loader />
   }
+
+  console.log('isAuthenticated ->', isAuthenticated)
 
   return (
     <BrowserRouter>
@@ -41,8 +43,8 @@ const Routes = props => {
           <Redirect exact from="/" to="/listing/intro" />
           <PublicRoute
             path="/auth"
-            handlerCheckAuthentication={_handlerCheckAuthentication}
-            // isAuthenticated={isAuthenticated}
+            handlerCheckAuthentication={() => {}}
+            isAuthenticated={isAuthenticated}
             component={Authentication}
           />
           <PublicRoute
