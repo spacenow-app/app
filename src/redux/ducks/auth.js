@@ -63,7 +63,7 @@ const initialState = {
     }
   },
   isAuthenticated: false,
-  isLoading: false
+  isLoading: true
 }
 
 export default function reducer(state = initialState, action) {
@@ -110,7 +110,8 @@ export default function reducer(state = initialState, action) {
       }
     case Types.AUTH_LOGOUT:
       return {
-        ...initialState
+        ...initialState,
+        isLoading: false
       }
     default:
       return state
@@ -121,6 +122,7 @@ export default function reducer(state = initialState, action) {
 export const onTokenValidation = () => async dispatch => {
   const idToken = getByName(config.token_name)
   if (!idToken) {
+    dispatch({ type: Types.AUTH_TOKEN_VERIFY_FAILURE })
     return
   }
   try {
@@ -137,8 +139,10 @@ export const onTokenValidation = () => async dispatch => {
         return
       }
     }
+    deleteToken()
     dispatch({ type: Types.AUTH_TOKEN_VERIFY_FAILURE })
   } catch (err) {
+    deleteToken()
     dispatch({ type: Types.AUTH_TOKEN_VERIFY_FAILURE })
   }
 }
@@ -155,7 +159,7 @@ export const signin = (email, password) => async dispatch => {
       variables: { email, password },
       mutation: mutatioLogin
     })
-    setToken(data.login.token)
+    setToken(data.login.token, data.login.expiresIn)
     dispatch({ type: Types.AUTH_SUCCESS, payload: {} })
   } catch (err) {
     toast.error(`Error: ${err}`)

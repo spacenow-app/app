@@ -32,8 +32,6 @@ const Routes = props => {
     return <Loader />
   }
 
-  console.log('isAuthenticated ->', isAuthenticated)
-
   return (
     <BrowserRouter>
       <Suspense fallback={<Loader />}>
