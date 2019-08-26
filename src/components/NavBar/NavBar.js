@@ -6,7 +6,7 @@ import { Navbar, Nav, NavDropdown } from 'react-bootstrap'
 import { Avatar, Box } from 'components'
 import { logout } from 'redux/ducks/auth'
 
-import { config } from 'contants'
+import { config } from 'variables'
 
 import logo from './spacenow_logo.png'
 

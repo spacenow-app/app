@@ -3,7 +3,7 @@ import { gql } from 'apollo-boost'
 import { toast } from 'react-toastify'
 import { getClient } from 'graphql/apolloClient'
 import { getByName, setToken, deleteToken } from 'utils/cookies'
-import config from 'contants/config'
+import { config } from 'variables'
 
 const mutationTokenValidate = gql`
   mutation tokenValidate($token: String!) {

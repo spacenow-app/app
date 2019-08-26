@@ -1,6 +1,7 @@
 import React from 'react'
 import FacebookLogin from 'react-facebook-login/dist/facebook-login-render-props'
 import styled from 'styled-components'
+import { config } from 'variables'
 import { ReactComponent as FacebookLogo } from './images/svg_logo_facebook.svg'
 
 const ButtonStyled = styled.button`
@@ -23,7 +24,7 @@ const ButtonStyled = styled.button`
 
 const ButtonSocial = ({ onResponse }) => (
   <FacebookLogin
-    appId="2347344758915821" // APP ID NOT CREATED YET
+    appId={config.facebook_app_id}
     fields="name,email,picture"
     callback={onResponse}
     render={renderProps => (

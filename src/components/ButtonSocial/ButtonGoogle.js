@@ -1,6 +1,7 @@
 import React from 'react'
 import GoogleLogin from 'react-google-login'
 import styled from 'styled-components'
+import { config } from 'variables'
 import { ReactComponent as GoogleLogo } from './images/svg_logo_google.svg'
 
 const ButtonStyled = styled.button`
@@ -23,7 +24,7 @@ const ButtonStyled = styled.button`
 
 const ButtonSocial = ({ onResponse, onFailure }) => (
   <GoogleLogin
-    clientId="152762597368-njh605ktr9eljaloen7nj6pq0lt6mlil.apps.googleusercontent.com" //
+    clientId={config.google_app_id}
     onSuccess={onResponse}
     onFailure={onFailure}
     render={renderProps => (
