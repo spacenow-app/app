@@ -233,7 +233,6 @@ export const googleSignin = googleResponse => async dispatch => {
 export const facebookSignin = facebookResponse => async dispatch => {
   dispatch({ type: Types.AUTH_REQUEST })
   try {
-    console.log(facebookResponse)
     const { data } = await getClient().mutate({
       variables: { token: facebookResponse.accessToken },
       mutation: mutationFacebookLogin
