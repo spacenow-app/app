@@ -3,7 +3,31 @@ import { gql } from 'apollo-boost'
 import { toast } from 'react-toastify'
 import { getClient } from 'graphql/apolloClient'
 import { getByName, setToken, deleteToken } from 'utils/cookies'
+import errToMsg from 'utils/errToMsg'
 import { config } from 'variables'
+
+const loginBaseFields = `
+  status
+  token
+  expiresIn
+  user {
+    id
+    email
+    emailConfirmed
+    profile {
+      profileId
+      firstName
+      lastName
+      picture
+    }
+    verification {
+      id
+      isEmailConfirmed
+      isFacebookConnected
+      isGoogleConnected
+    }
+  }
+`
 
 const mutationTokenValidate = gql`
   mutation tokenValidate($token: String!) {
@@ -27,14 +51,30 @@ const mutationTokenValidate = gql`
   }
 `
 
-const mutatioLogin = gql`
+const mutationLogin = gql`
   mutation login($email: String, $password: String) {
     login(email: $email, password: $password) {
-      token
-      expiresIn
+      ${loginBaseFields}
     }
   }
 `
+
+const mutationGoogleLogin = gql`
+  mutation tokenGoogleValidate($token: String!) {
+    tokenGoogleValidate(token: $token) {
+      ${loginBaseFields}
+    }
+  }
+`
+
+const mutationFacebookLogin = gql`
+  mutation tokenFacebookValidate($token: String!) {
+    tokenFacebookValidate(token: $token) {
+      ${loginBaseFields}
+    }
+  }
+`
+
 // Action Types
 export const Types = {
   AUTH_REQUEST: 'AUTH_REQUEST',
@@ -157,12 +197,52 @@ export const signin = (email, password) => async dispatch => {
   try {
     const { data } = await getClient().mutate({
       variables: { email, password },
-      mutation: mutatioLogin
+      mutation: mutationLogin
     })
-    setToken(data.login.token, data.login.expiresIn)
-    dispatch({ type: Types.AUTH_SUCCESS, payload: {} })
+    const signinReturn = data.login
+    setToken(signinReturn.token, signinReturn.expiresIn)
+    dispatch({ type: Types.AUTH_SUCCESS, payload: signinReturn.user })
   } catch (err) {
-    toast.error(`Error: ${err}`)
+    toast.error(errToMsg(err))
+    dispatch({
+      type: Types.AUTH_FAILURE,
+      payload: err
+    })
+  }
+}
+
+export const googleSignin = googleResponse => async dispatch => {
+  dispatch({ type: Types.AUTH_REQUEST })
+  try {
+    const { data } = await getClient().mutate({
+      variables: { token: googleResponse.tokenId },
+      mutation: mutationGoogleLogin
+    })
+    const signinReturn = data.tokenGoogleValidate
+    setToken(signinReturn.token, signinReturn.expiresIn)
+    dispatch({ type: Types.AUTH_SUCCESS, payload: signinReturn.user })
+  } catch (err) {
+    toast.error(errToMsg(err))
+    dispatch({
+      type: Types.AUTH_FAILURE,
+      payload: err
+    })
+  }
+}
+
+export const facebookSignin = facebookResponse => async dispatch => {
+  dispatch({ type: Types.AUTH_REQUEST })
+  try {
+    console.log(facebookResponse)
+    const { data } = await getClient().mutate({
+      variables: { token: facebookResponse.accessToken },
+      mutation: mutationFacebookLogin
+    })
+    const signinReturn = data.tokenFacebookValidate
+    setToken(signinReturn.token, signinReturn.expiresIn)
+    dispatch({ type: Types.AUTH_SUCCESS, payload: signinReturn.user })
+  } catch (err) {
+    toast.error(errToMsg(err))
     dispatch({
       type: Types.AUTH_FAILURE,
       payload: err
