@@ -172,7 +172,7 @@ const DatePicker = forwardRef(
 DatePicker.defaultProps = {
   size: 'md',
   format: 'DD/MM/YYYY',
-  placeholder: `${dateFnsFormat(new Date(), 'DD/MM/YYYY')}`
+  placeholder: 'Choose Date'
 }
 
 DatePicker.propTypes = {

@@ -3,5 +3,6 @@ import NotFoundPage from './NotFoundPage'
 import { IntroPage, LocationPage, CategoryPage, SpacePage } from './Listing'
 import { ProfilePage, PaymentPage } from './Account'
 import { PartnerPage } from './Space'
+import { SpacePage } from './Space'
 
-export { HomePage, NotFoundPage, IntroPage, LocationPage, CategoryPage, SpacePage, PartnerPage, ProfilePage, PaymentPage }
+export { HomePage, NotFoundPage, IntroPage, LocationPage, CategoryPage, SpacePage, PartnerPage, ProfilePage, PaymentPage, SpacePage }
