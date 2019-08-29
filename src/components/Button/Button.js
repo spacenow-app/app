@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { forwardRef } from 'react'
 import PropTypes from 'prop-types'
 import styled from 'styled-components'
 import { color, typography } from 'styled-system'
@@ -141,9 +141,9 @@ const ButtonStyled = styled(ButtonExternal)`
 //   }
 // `
 
-const Button = ({ children, icon, isLoading, disabled, ...props }) => {
+const Button = forwardRef(({ children, icon, isLoading, outline, disabled, ...props }, ref) => {
   return (
-    <ButtonStyled {...props} disabled={disabled || isLoading}>
+    <ButtonStyled {...props} ref={ref} outline={outline ? 'true' : null} disabled={disabled || isLoading}>
       {isLoading && (
         <>
           <Spinner as="span" animation="border" size="sm" role="status" aria-hidden="true" />
@@ -154,7 +154,7 @@ const Button = ({ children, icon, isLoading, disabled, ...props }) => {
       {!isLoading && children}
     </ButtonStyled>
   )
-}
+})
 
 Button.defaultProps = {
   isLoading: false,
@@ -167,7 +167,7 @@ Button.propTypes = {
   icon: PropTypes.element,
   isLoading: PropTypes.bool,
   disabled: PropTypes.bool,
-  outline: PropTypes.string,
+  outline: PropTypes.bool,
   type: PropTypes.string,
   onClick: PropTypes.func,
   size: PropTypes.oneOf(['sm', 'md']),
