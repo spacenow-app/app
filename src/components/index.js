@@ -9,6 +9,7 @@ import StepButtons from './StepButtons'
 import Input from './Input'
 import Image from './Image'
 import Map from './Map'
+import MapSearch from './MapSearch'
 import AutoComplete from './AutoComplete'
 import List from './List'
 import Caption from './Caption'
@@ -55,6 +56,7 @@ export {
   Input,
   Image,
   Map,
+  MapSearch,
   AutoComplete,
   List,
   Caption,
