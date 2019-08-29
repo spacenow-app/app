@@ -1,6 +1,9 @@
-import React from 'react'
+import React, { useState } from 'react'
 import styled from 'styled-components'
-import { NavBar, Line, Title, Text, Input, Button, Box, Checkbox, Map } from 'components'
+import { NavBar, Line, Title, Text, Input, Button, Box, Checkbox, MapSearch } from 'components'
+import { Manager, Reference, Popper } from 'react-popper'
+
+import ListResults from './ListResults'
 
 const SearchBar = styled(Box)`
   display: grid;
@@ -19,25 +22,33 @@ const FilterBar = styled.div`
 
 const ContainerResults = styled.div`
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: auto 1fr;
   grid-column-gap: 40px;
   width: 100%;
-  height: calc(100vh - 300px);
-  top: 300px;
+  height: calc(100vh - 312px);
+  top: 312px;
   padding: 0 20px;
+
+  @media (max-width: 945px) {
+    grid-template-columns: auto;
+  }
 `
 
-const ContainerList = styled.div`
-  display: grid;
-  grid-template-columns: auto auto;
-  grid-column-gap: 25px;
-  grid-row-gap: 25px;
-  overflow-y: scroll;
-  height: 100%;
-`
 const ContainerMap = styled.div`
   background: tomato;
   margin-bottom: 20px;
+
+  .gm-style-iw-c {
+    padding: 0 !important;
+  }
+
+  .gm-style-iw-d {
+    overflow: hidden !important;
+  }
+
+  @media (max-width: 945px) {
+    display: none;
+  }
 `
 
 const markesTemp = [
@@ -99,26 +110,190 @@ const markesTemp = [
 ]
 
 const SearchPage = () => {
+  const [selectedSpace, setSelectedSpace] = useState(null)
+  const [shouldShowFilter, setShouldShowFilter] = useState(false)
+
+  const _toggleHover = e => {
+    if (!e) {
+      setSelectedSpace(null)
+      return
+    }
+    setSelectedSpace(e)
+  }
+
+  const _onClickMarkerMap = e => {
+    setSelectedSpace(e)
+  }
+
+  const modifiers = {
+    flip: { enabled: false },
+    preventOverflow: { enabled: false },
+    hide: { enabled: false }
+  }
+
   return (
     <>
       <Box>
         <NavBar />
         <SearchBar>
-          <Input placeholder="Sydney, Australia" />
-          <Button>Search</Button>
+          <Input size="sm" placeholder="Sydney, Australia" />
+          <Button size="sm">Search</Button>
         </SearchBar>
         <Line />
         <FilterBar>
-          <Button outline size="sm">
-            Category
-          </Button>
-          <Button outline size="sm">
-            Frequency
-          </Button>
-          <Button outline size="sm">
-            Price
-          </Button>
-          <Checkbox label="Instant bookings" />
+          <Manager>
+            <Reference>
+              {({ ref }) => {
+                return (
+                  <Button outline size="sm" ref={ref} onClick={() => setShouldShowFilter('category')}>
+                    Category
+                  </Button>
+                )
+              }}
+            </Reference>
+            {shouldShowFilter === 'category' && (
+              <Popper placement="bottom" modifiers={modifiers}>
+                {({ ref, style, placement, arrowProps }) => {
+                  return (
+                    <div ref={ref} style={{ ...style, zIndex: 5000000 }} data-placement={placement}>
+                      <div ref={arrowProps.ref} style={arrowProps.style} />
+                      <Box
+                        borderRadius="6px"
+                        bg="white"
+                        border="1px solid #cbcbcb"
+                        padding="30px"
+                        margin="10px"
+                        marginLeft="100px"
+                        zIndex="2000001"
+                      >
+                        <ul>
+                          <li>Workspace</li>
+                          <li>Meeting space</li>
+                          <li>Event space</li>
+                          <li>Parking</li>
+                          <li>Storage</li>
+                          <li>Retail & Hospitality</li>
+                        </ul>
+                        <button type="button" onClick={() => setShouldShowFilter(null)}>
+                          Save
+                        </button>
+                      </Box>
+                    </div>
+                  )
+                }}
+              </Popper>
+            )}
+          </Manager>
+
+          <Manager>
+            <Reference>
+              {({ ref }) => {
+                return (
+                  <Button outline size="sm" ref={ref} onClick={() => setShouldShowFilter('duration')}>
+                    Duration
+                  </Button>
+                )
+              }}
+            </Reference>
+            {shouldShowFilter === 'duration' && (
+              <Popper placement="bottom" modifiers={modifiers}>
+                {({ ref, style, placement, arrowProps }) => {
+                  return (
+                    <div ref={ref} style={{ ...style, zIndex: 5000000 }} data-placement={placement}>
+                      <div ref={arrowProps.ref} style={arrowProps.style} />
+                      <Box
+                        borderRadius="6px"
+                        bg="white"
+                        border="1px solid #cbcbcb"
+                        padding="30px"
+                        margin="10px"
+                        zIndex="2000001"
+                      >
+                        <ul>
+                          <li>teste</li>
+                        </ul>
+                        <button type="button" onClick={() => setShouldShowFilter(null)}>
+                          Save
+                        </button>
+                      </Box>
+                    </div>
+                  )
+                }}
+              </Popper>
+            )}
+          </Manager>
+
+          <Manager>
+            <Reference>
+              {({ ref }) => {
+                return (
+                  <Button outline size="sm" ref={ref} onClick={() => setShouldShowFilter('price')}>
+                    Price
+                  </Button>
+                )
+              }}
+            </Reference>
+            {shouldShowFilter === 'price' && (
+              <Popper placement="bottom" modifiers={modifiers}>
+                {({ ref, style, placement, arrowProps }) => {
+                  return (
+                    <div ref={ref} style={{ ...style, zIndex: 5000000 }} data-placement={placement}>
+                      <div ref={arrowProps.ref} style={arrowProps.style} />
+                      <Box
+                        borderRadius="6px"
+                        bg="white"
+                        border="1px solid #cbcbcb"
+                        padding="30px"
+                        margin="10px"
+                        zIndex="2000001"
+                      >
+                        Price
+                        <button type="button" onClick={() => setShouldShowFilter(null)}>
+                          Save
+                        </button>
+                      </Box>
+                    </div>
+                  )
+                }}
+              </Popper>
+            )}
+          </Manager>
+
+          <Manager>
+            <Reference>
+              {({ ref }) => {
+                return (
+                  <Button outline size="sm" ref={ref} onClick={() => setShouldShowFilter('instantBooking')}>
+                    Instant Booking
+                  </Button>
+                )
+              }}
+            </Reference>
+            {shouldShowFilter === 'instantBooking' && (
+              <Popper placement="bottom" modifiers={modifiers}>
+                {({ ref, style, placement, arrowProps }) => {
+                  return (
+                    <div ref={ref} style={{ ...style, zIndex: 5000000 }} data-placement={placement}>
+                      <div ref={arrowProps.ref} style={arrowProps.style} />
+                      <Box
+                        borderRadius="6px"
+                        bg="white"
+                        border="1px solid #cbcbcb"
+                        padding="30px"
+                        margin="10px"
+                        zIndex="2000001"
+                      >
+                        <Checkbox label="Instant bookings" />
+                        <button type="button" onClick={() => setShouldShowFilter(null)}>
+                          Save
+                        </button>
+                      </Box>
+                    </div>
+                  )
+                }}
+              </Popper>
+            )}
+          </Manager>
         </FilterBar>
         <Line />
         <Title
@@ -130,18 +305,22 @@ const SearchPage = () => {
           }
         />
       </Box>
+      {shouldShowFilter && (
+        <Box
+          height="100vh"
+          width="100%"
+          top="223px"
+          zIndex="2000000"
+          bg="rgba(255, 255, 255, 0.85)"
+          left="0"
+          right="0"
+          position="fixed"
+        />
+      )}
       <ContainerResults>
-        <ContainerList>
-          <Box height="520px" bg="quartenary" />
-          <Box height="520px" bg="quartenary" />
-          <Box height="520px" bg="quartenary" />
-          <Box height="520px" bg="quartenary" />
-          <Box height="520px" bg="quartenary" />
-          <Box height="520px" bg="quartenary" />
-          <Box height="520px" bg="quartenary" />
-        </ContainerList>
+        <ListResults markers={markesTemp} onHoverItem={_toggleHover} />
         <ContainerMap>
-          <Map isMarkerShown={false} containerElement={<div style={{ height: `100%` }} />} markers={markesTemp} />
+          <MapSearch markers={markesTemp} onClickMarker={_onClickMarkerMap} selectedMarker={selectedSpace} />
         </ContainerMap>
       </ContainerResults>
     </>
