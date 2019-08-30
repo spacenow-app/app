@@ -4,11 +4,11 @@ import { toast } from 'react-toastify'
 import errToMsg from 'utils/errToMsg'
 
 // Graphql
-const sendMail = gql`
-  mutation sendMail($to: String!, $subject: String!, $html: String!) {
-    sendMail(to: $to, subject: $subject, html: $html) {
-      __typename
-      messageId
+const sendEmail = gql`
+  mutation sendEmail($template: String!, $data: String!) {
+    sendEmail(template: $template, data: $data) {
+      template
+      data
     }
   }
 `
@@ -54,15 +54,15 @@ export default function reducer(state = initialState, action) {
 }
 
 // Action Creators
-export const sendMailForm = emailOptions => async dispatch => {
+export const sendEmailForm = emailOptions => async dispatch => {
   dispatch({ type: Types.SEND_EMAIL_FORM_REQUEST })
   try {
     const { data } = await getClientWithAuth(dispatch).mutate({
-      mutation: sendMail,
+      mutation: sendEmail,
       variables: { ...emailOptions }
     })
     toast.success('Email Sent!')
-    dispatch({ type: Types.SEND_EMAIL_FORM_SUCCESS, payload: data.sendMail })
+    dispatch({ type: Types.SEND_EMAIL_FORM_SUCCESS, payload: data.sendEmail })
   } catch (err) {
     toast.error(errToMsg(err))
     dispatch({ type: Types.SEND_EMAIL_FORM_ERROR, payload: errToMsg(err) })

@@ -14,7 +14,7 @@ const ButtonStyled = styled(ButtonExternal)`
     font-family: 'Montserrat-Medium';
     font-size: 14px;
     font-weight: 600;
-    background-color: ${props => (props.outline && '#fff') || (props.disabled && '#fff') || '#6adc91'};
+    background-color: ${props => (props.outline && '#fff') || (props.disabled && '#fff') || (props.error && '#dd4b39') || '#6adc91'};
     color: ${props => (props.outline && '#172439') || '#fff'};
     border: ${props => (props.outline ? `1px solid #172439` : 'none')};
 
@@ -23,15 +23,15 @@ const ButtonStyled = styled(ButtonExternal)`
 
     :hover {
       &&& {
-        background-color: ${props => (props.outline && '#fff') || '#51c482'};
+        background-color: ${props => (props.outline && '#fff') || (props.error && '#c23321') || '#51c482'};
         border: ${props => (props.outline ? `1px solid #6adc91` : 'none')};
         color: ${props => (props.outline && '#6adc91') || '#fff'};
       }
     }
     :focus {
       &&& {
-        box-shadow: 0 0 0 0.2rem rgba(106, 220, 145, 0.5);
-        background-color: ${props => (props.outline && '#6adc91') || '#2DA577'};
+        box-shadow: ${props => (props.error && '0 0 0 0.2rem rgba(194, 51, 33, 0.5)') || '0 0 0 0.2rem rgba(106, 220, 145, 0.5)'};
+        background-color: ${props => (props.outline && '#6adc91') || (props.error && '#c23321') || '#2DA577'};
         border: ${props => (props.outline ? `1px solid #6adc91` : 'none')};
         color: #fff;
       }
@@ -141,9 +141,9 @@ const ButtonStyled = styled(ButtonExternal)`
 //   }
 // `
 
-const Button = ({ children, icon, isLoading, disabled, ...props }) => {
+const Button = ({ children, icon, isLoading, disabled, fluid, error, ...props }) => {
   return (
-    <ButtonStyled {...props} disabled={disabled || isLoading}>
+    <ButtonStyled {...props} disabled={disabled || isLoading} fluid={fluid ? 'true' : null} error={error ? 'true' : null}>
       {isLoading && (
         <>
           <Spinner as="span" animation="border" size="sm" role="status" aria-hidden="true" />
@@ -159,7 +159,9 @@ const Button = ({ children, icon, isLoading, disabled, ...props }) => {
 Button.defaultProps = {
   isLoading: false,
   disabled: false,
-  size: 'md'
+  size: 'md',
+  fluid: false,
+  error: false
 }
 
 Button.propTypes = {
@@ -171,7 +173,9 @@ Button.propTypes = {
   type: PropTypes.string,
   onClick: PropTypes.func,
   size: PropTypes.oneOf(['sm', 'md']),
-  width: PropTypes.string
+  width: PropTypes.string,
+  fluid: PropTypes.bool,
+  error: PropTypes.bool
 }
 
 export default Button

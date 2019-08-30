@@ -33,6 +33,7 @@ const DailyBooking = ({
       date={null}
       handleDateChange={onDateChange}
       hideOnDayClick={focus}
+      placeholder={'Choose Dates'}
       dayPickerProps={{
         selectedDays: [...datesSelected.map(el => new Date(el))],
         modifiers: {

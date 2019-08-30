@@ -7,13 +7,16 @@ import Button from 'components/Button'
 import { useDispatch } from 'react-redux'
 import { closeModal } from 'redux/ducks/modal'
 
-const ModalConfirm = ({ onConfirm, options }) => {
+const ModalConfirm = ({ onConfirm, onCancel, options }) => {
   const dispatch = useDispatch()
 
   const handleConfirm = isConfirmed => {
     dispatch(closeModal())
     if (isConfirmed) {
       onConfirm()
+    }
+    if (!isConfirmed) {
+      onCancel && onCancel()
     }
   }
 
@@ -27,21 +30,25 @@ const ModalConfirm = ({ onConfirm, options }) => {
       {options.text && <Modal.Body>{options.text}</Modal.Body>}
       <Modal.Footer>
         <Button sm outline="true" onClick={() => handleConfirm(false)}>
-          No
+          {options.buttonCancelText || 'No'}
         </Button>
         <Button sm onClick={() => handleConfirm(true)}>
-          Yes
+          {options.buttonConfirmText || 'Yes'}
         </Button>
       </Modal.Footer>
     </Modal>
   )
 }
 
+
 ModalConfirm.propTypes = {
   onConfirm: PropTypes.func.isRequired,
+  onCancel: PropTypes.func,
   options: PropTypes.shape({
     title: PropTypes.string,
-    text: PropTypes.string.isRequired
+    text: PropTypes.string.isRequired,
+    buttonConfirmText: PropTypes.string,
+    buttonCancelText: PropTypes.string
   }).isRequired
 }
 

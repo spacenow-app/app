@@ -26,9 +26,12 @@ import {
   Checkbox,
   Button
 } from 'components'
+
 import DailyBooking from './DailyBooking'
 import WeeklyBooking from './WeeklyBooking'
 import MonthlyBooking from './MonthlyBooking'
+import PendingBooking from './PenidngBooking'
+import ContactHost from './ContactHost'
 
 import {
   onGetListingById,
@@ -38,12 +41,13 @@ import {
   onGetAvailabilitiesByListingId
 } from 'redux/ducks/listing'
 
+import { onCreateBooking, onGetPendingBooking } from 'redux/ducks/booking'
+
 import GraphCancelattionImage from 'pages/Listing/SpacePage/CancellationTab/graph_cancellation.png'
 
 const ImageStyled = styled.img`
   width: 100%;
 `
-
 
 const SpacePage = ({ match, location, ...props }) => {
   const dispatch = useDispatch()
@@ -54,13 +58,13 @@ const SpacePage = ({ match, location, ...props }) => {
   const { object: objectSpecifications } = useSelector(state => state.listing.specifications)
   const { array: availabilities } = useSelector(state => state.listing.availabilities)
   const { user } = useSelector(state => state.auth)
+  const { isLoading: isLoadingOnCreateReservation } = useSelector(state => state.booking.create)
+  const { object: pendingBooking } = useSelector(state => state.booking.pending)
 
   const [datesSelected, setDatesSelected] = useState([])
   const [date, setDate] = useState('')
   const [period, setPeriod] = useState(1)
   const [quantity, setQuantity] = useState(1)
-
-  let pendingBooking, isLoadingOnCreateReservation; // TODO: Change for the values
 
   useEffect(() => {
     dispatch(onGetListingById(match.params.id, null, true))
@@ -72,8 +76,9 @@ const SpacePage = ({ match, location, ...props }) => {
       dispatch(onGetAllRules())
       dispatch(onGetAllSpecifications(listing.settingsParent.id, listing.listingData))
     }
+    if (listing && user && user.id) dispatch(onGetPendingBooking(listing.id, user.id))
     if(isCleanedAvailabilities && listing) dispatch(onGetAvailabilitiesByListingId(listing.id))
-  }, [dispatch, listing, isCleanedAvailabilities])
+  }, [dispatch, listing, isCleanedAvailabilities, user])
 
 
   if(listing && listing.user.provider === 'wework') {
@@ -202,12 +207,17 @@ const SpacePage = ({ match, location, ...props }) => {
   }
 
   const _renderContentCard = bookingPeriod => {
-    // if (pendingBooking) {
-    //   return <PendingBooking booking={pendingBooking} listing={listingView.listingData} />
-    // }
-    // if (bookingPeriod === 'hourly') {
-    //   return <ContactHost />
-    // }
+    if (pendingBooking && pendingBooking.bookings.length > 0) {
+      return (
+        <PendingBooking 
+          booking={pendingBooking.bookings[0]} 
+          listing={listing.listingData} 
+          dispatch={dispatch} />
+        )
+    }
+    if (bookingPeriod === 'hourly') {
+      return <ContactHost user={user} dispatch={dispatch} />
+    }
     if (bookingPeriod === 'daily') {
       return (
         <div>
@@ -223,7 +233,7 @@ const SpacePage = ({ match, location, ...props }) => {
             listingData={listing.listingData}
           />
            {_isPeriodValid(listing.bookingPeriod) && datesSelected.length >= 1 && (
-              <Box color={'#f2545b'} ml={'23px'}>
+              <Box color={'error'} ml={'23px'}>
                 {`Minimum ${listing.listingData.minTerm} days is required`}
               </Box>
             )}
@@ -296,19 +306,23 @@ const SpacePage = ({ match, location, ...props }) => {
   }
 
   const _onSubmitBooking = () => {
+    if (!user) {
+      props.history.push(`/login?refer=/space/${listing.id}`)
+      return 
+    }
     const object = {
-      listId: listing.id,
+      listingId: listing.id,
       hostId: listing.userId,
       guestId: (user && user.id) || null,
       basePrice: listing.listingData.basePrice,
       priceType: listing.bookingPeriod,
       currency: listing.listingData.currency,
       bookingType: listing.listingData.bookingType,
-      reservationDates: listing.bookingPeriod === 'daily' ? datesSelected : [date],
-      period: date ? period : datesSelected.length
+      reservations: listing.bookingPeriod === 'daily' ? datesSelected : [date],
+      period: date ? period : datesSelected.length,
+      isAbsorvedFee: listing.listingData.isAbsorvedFee
     }
-    console.log('object', object)
-    // dispatch(createBooking(object))
+    dispatch(onCreateBooking(object))
   }
 
   return (
@@ -413,7 +427,7 @@ const SpacePage = ({ match, location, ...props }) => {
               <Icon
                 style={{ alignSelf: 'center', justifySelf: 'center' }}
                 width="50px"
-                fill={listing.listingData.accessType ? '#6ADC91' : '#E05252'}
+                fill={'#6ADC91'}
                 name={
                   listing.listingData.accessType &&
                   `access-type-${listing.listingData.accessType
@@ -485,7 +499,6 @@ const SpacePage = ({ match, location, ...props }) => {
             <Title
               type="h5"
               title="Availability"
-              color={_getWeekName(listing.accessDays) === 'Closed' ? '#E05252' : null}
             />
             <TimeTable data={listing.accessDays.listingAccessHours} error={_getWeekName(listing.accessDays) === 'Closed'} />
           </Box>
@@ -498,12 +511,12 @@ const SpacePage = ({ match, location, ...props }) => {
             }
             contentComponent={<div>
               {_renderContentCard(listing.bookingPeriod)}
-              {listing.bookingPeriod !== 'hourly' && !pendingBooking && (
+              {listing.bookingPeriod !== 'hourly' && (pendingBooking ? (pendingBooking && pendingBooking.count === 0) : true)  && (
                 <Button
                   onClick={e => _onSubmitBooking(e)}
                   isLoading={isLoadingOnCreateReservation}
                   disabled={_isPeriodValid(listing.bookingPeriod)}
-                  width={'100%'}
+                  fluid
                 >
                   {listing.listingData.bookingType === 'request' ? 'Booking Request' : 'Book Now'}
                 </Button>

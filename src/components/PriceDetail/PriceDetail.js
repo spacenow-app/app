@@ -34,7 +34,6 @@ const RightTitleStyled = styled.span`
   font-family: 'Montserrat-Bold';
   align-self: center;
   justify-self: end;
-  
 `;
 
 const RightStyled = styled.span`
