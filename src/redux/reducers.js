@@ -12,6 +12,7 @@ import payment from './ducks/payment'
 import mail from './ducks/mail'
 import space from './ducks/space'
 import landing from './ducks/landing'
+import search from './ducks/search'
 
 export default combineReducers({
   modal,
@@ -25,5 +26,6 @@ export default combineReducers({
   payment,
   mail,
   space,
-  landing
+  landing,
+  search
 })
