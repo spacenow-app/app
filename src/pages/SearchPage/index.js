@@ -1,7 +1,10 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
+import { useDispatch, shallowEqual, useSelector } from 'react-redux'
 import styled from 'styled-components'
 import { NavBar, Line, Title, Text, Input, Button, Box, Checkbox, MapSearch } from 'components'
 import { Manager, Reference, Popper } from 'react-popper'
+
+import { onSearch } from 'redux/ducks/search'
 
 import ListResults from './ListResults'
 
@@ -51,78 +54,50 @@ const ContainerMap = styled.div`
   }
 `
 
-const markesTemp = [
-  {
-    photo_id: 1,
-    lat: -33.8914095,
-    lng: 151.2495673
-  },
-  {
-    photo_id: 2,
-    lat: -33.8921913,
-    lng: 151.2506929
-  },
-  {
-    photo_id: 3,
-    lat: -33.8916469,
-    lng: 151.2496169
-  },
-  {
-    photo_id: 4,
-    lat: -33.8888924,
-    lng: 151.2597286
-  },
-  {
-    photo_id: 5,
-    lat: -33.8888924,
-    lng: 151.2597286
-  },
-  {
-    photo_id: 6,
-    lat: -33.9111068,
-    lng: 151.2407872
-  },
-  {
-    photo_id: 7,
-    lat: -33.5781409,
-    lng: 151.3430209
-  },
-  {
-    photo_id: 8,
-    lat: -28.15702,
-    lng: 159.1054441
-  },
-  {
-    photo_id: 9,
-    lat: -37.5052801,
-    lng: 140.9992793
-  },
-  {
-    photo_id: 12,
-    lat: -54.83376579999999,
-    lng: 110.9510339
-  },
-  {
-    photo_id: 123,
-    lat: -9.187026399999999,
-    lng: 159.2872223
-  }
-]
-
 const SearchPage = () => {
+  const dispatch = useDispatch()
   const [selectedSpace, setSelectedSpace] = useState(null)
   const [shouldShowFilter, setShouldShowFilter] = useState(false)
+  const [markers, setMarkers] = useState([])
+
+  const searchResults = useSelector(state => state.search.results, shallowEqual)
+
+  useEffect(() => {
+    async function fetchData() {
+      await dispatch(onSearch())
+    }
+
+    fetchData()
+  }, [])
+
+  useEffect(() => {
+    setMarkers(
+      searchResults.map(item => ({
+        id: item.id,
+        lat: +item.location.lat,
+        lng: +item.location.lng
+      }))
+    )
+  }, [searchResults])
 
   const _toggleHover = e => {
     if (!e) {
       setSelectedSpace(null)
       return
     }
-    setSelectedSpace(e)
+    setSelectedSpace({
+      id: e.id,
+      lat: +e.location.lat,
+      lng: +e.location.lng
+    })
   }
 
   const _onClickMarkerMap = e => {
-    setSelectedSpace(e)
+    setSelectedSpace({
+      id: e.id,
+      lat: +e.location.lat,
+      lng: +e.location.lng
+    })
   }
 
   const modifiers = {
@@ -166,17 +141,21 @@ const SearchPage = () => {
                         marginLeft="100px"
                         zIndex="2000001"
                       >
-                        <ul>
-                          <li>Workspace</li>
-                          <li>Meeting space</li>
-                          <li>Event space</li>
-                          <li>Parking</li>
-                          <li>Storage</li>
-                          <li>Retail & Hospitality</li>
-                        </ul>
-                        <button type="button" onClick={() => setShouldShowFilter(null)}>
-                          Save
-                        </button>
+                        <div>
+                          <Checkbox label="Workspace" />
+                          <Text>I’m looking for a desk, office or coworking space</Text>
+                          <Checkbox label="Meeting space" />
+                          <Text>I’m looking for a space to hold a meeting</Text>
+                          <Checkbox label="Event space" />
+                          <Text>I’m looking for a space to hold an event</Text>
+                          <Checkbox label="Parking" />
+                          <Text>I’m looking for a place to park my vehicle</Text>
+                          <Checkbox label="Storage" />
+                          <Text>I’m looking for a place to store items or goods</Text>
+                          <Checkbox label="Retail & Hospitality" />
+                          <Text>I’m looking to rent a place for business</Text>
+                          <Button outline>Save</Button>
+                        </div>
                       </Box>
                     </div>
                   )
@@ -318,9 +297,9 @@ const SearchPage = () => {
         />
       )}
       <ContainerResults>
-        <ListResults markers={markesTemp} onHoverItem={_toggleHover} />
+        <ListResults markers={searchResults} onHoverItem={_toggleHover} />
         <ContainerMap>
-          <MapSearch markers={markesTemp} onClickMarker={_onClickMarkerMap} selectedMarker={selectedSpace} />
+          <MapSearch markers={markers} onClickMarker={_onClickMarkerMap} selectedMarker={selectedSpace} />
         </ContainerMap>
       </ContainerResults>
     </>
