@@ -71,18 +71,18 @@ const ListResults = ({ markers, onHoverItem }) => {
               <Box display="flex" justifyContent="start" mb="15px">
                 <Box>
                   <Tag small icon={<Icon width="24px" name="category-venue" />}>
-                    Venue
+                    {item.settingsParent.category.itemName}
                   </Tag>
                 </Box>
                 <Box margin="0 10px">
                   <Tag small icon={<Icon width="24px" name="sub-category-health-fitness" />}>
-                    Health & Fitness
+                    {item.settingsParent.subcategory.itemName}
                   </Tag>
                 </Box>
               </Box>
-              <CardTitle>Creative Space in Alexandria</CardTitle>
+              <CardTitle>{item.title}</CardTitle>
               <Text display="block" fontFamily="regular" fontSize="14px" color="greyscale.1">
-                Address street, Suburb
+                {`${item.location.address1}, ${item.location.city}`}
               </Text>
               <Box display="grid" gridTemplateColumns="auto auto auto" my="15px">
                 <Box justifySelf="center">
@@ -108,7 +108,7 @@ const ListResults = ({ markers, onHoverItem }) => {
                 <Text fontSize="14px">
                   From:{' '}
                   <Text fontSize="16px" fontFamily="bold">
-                    AU$3,000{' '}
+                    {`${item.listingData.currency}$${item.listingData.basePrice}`}
                   </Text>{' '}
                   Daily
                 </Text>
