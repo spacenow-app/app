@@ -78,6 +78,7 @@ const searchResultFields = `
       profileId
       firstName
       lastName
+      picture
     }
   }
 `
@@ -158,11 +159,11 @@ export const onSearch = (lat, lng) => async dispatch => {
   try {
     // const { data } = await getClient().query({
     //   query: querySearchByAddress,
-    //   variables: { lat: '-33.8688197', lng: '151.2092955' }
+    //   variables: { lat, lng }
     // })
     const data = {
       searchByAddress: {
-        searchKey: '',
+        searchKey: '569505354717b8a0a6d8d8bf6511710386482fbf98d1a5955c9283cea202011e',
         result: mockSearchByAddress.data.searchByAddress.result
       }
     }
@@ -190,14 +191,14 @@ export const onQuery = (searchKey, filters) => async dispatch => {
     //   }
     // })
     const data = {
-      searchByAddress: {
-        searchKey: '',
-        result: mockSearchByAddress.data.searchByAddress.result
+      searchByFilters: {
+        searchKey: '569505354717b8a0a6d8d8bf6511710386482fbf98d1a5955c9283cea202011e',
+        result: mockSearchByFilters.data.searchByFilters.result
       }
     }
     dispatch({
       type: Types.ON_SEARCH_SUCCESS,
-      payload: { searchKey: data.searchByAddress.searchKey, result: data.searchByFilters.result }
+      payload: { searchKey: data.searchByFilters.searchKey, result: data.searchByFilters.result }
     })
   } catch (err) {
     dispatch({ type: Types.ON_SEARCH_FAILURE, payload: errToMsg(err) })
