@@ -65,23 +65,14 @@ const ListResults = ({ markers, onHoverItem }) => {
     <ContainerList>
       {markers.map(item => {
         return (
-          <CardContainer
-            key={item.photo_id}
-            onMouseEnter={() => onHoverItem(item)}
-            onMouseLeave={() => onHoverItem(null)}
-          >
+          <CardContainer key={item.id} onMouseEnter={() => onHoverItem(item)} onMouseLeave={() => onHoverItem(null)}>
             <CardImage src="https://images.unsplash.com/photo-1542744173-8e7e53415bb0?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1350&q=80" />
             <CardContent>
               <Box display="flex" justifyContent="start" mb="15px">
                 <Box>
                   <Tag
                     small
-                    icon={
-                      <Icon
-                        width="24px"
-                        name={_parseCategoryIconName(item.category.otherItemName, false)}
-                      />
-                    }
+                    icon={<Icon width="24px" name={_parseCategoryIconName(item.category.otherItemName, false)} />}
                   >
                     {item.category.itemName}
                   </Tag>
@@ -89,12 +80,7 @@ const ListResults = ({ markers, onHoverItem }) => {
                 <Box margin="0 10px">
                   <Tag
                     small
-                    icon={
-                      <Icon
-                        width="24px"
-                        name={_parseCategoryIconName(item.subcategory.otherItemName, true)}
-                      />
-                    }
+                    icon={<Icon width="24px" name={_parseCategoryIconName(item.subcategory.otherItemName, true)} />}
                   >
                     {item.subcategory.itemName}
                   </Tag>
