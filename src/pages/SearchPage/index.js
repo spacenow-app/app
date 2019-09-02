@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from 'react'
 import { useDispatch, shallowEqual, useSelector } from 'react-redux'
 import styled from 'styled-components'
-import { NavBar, Line, Title, Text, Input, Button, Box, Checkbox, MapSearch, Slider } from 'components'
+import { NavBar, Line, Title, Text, Input, Button, Box, Checkbox, MapSearch, Slider, Switch } from 'components'
 import { Manager, Reference, Popper } from 'react-popper'
+import numeral from 'numeral'
 
 import { onSearch } from 'redux/ducks/search'
 
@@ -54,12 +55,39 @@ const ContainerMap = styled.div`
   }
 `
 
+const ItemSwitchStyled = styled.div`
+  height: 65px;
+  border-radius: 75px;
+  border: 1px solid ${({ checked }) => (checked ? '#6adc91' : '#E2E2E2')};
+  padding: 20px;
+  display: grid;
+  grid-template-columns: auto auto;
+  width: 200px;
+  margin-top: 35px;
+  margin-bottom: 35px;
+`
+
 const SearchPage = () => {
   const dispatch = useDispatch()
   const [selectedSpace, setSelectedSpace] = useState(null)
   const [shouldShowFilter, setShouldShowFilter] = useState(false)
   const [markers, setMarkers] = useState([])
   const [filterPrice, setFilterPrice] = useState([50, 5000])
+  const [filterInstantBooking, setFilterInstantBooking] = useState(false)
+  const [filterDuration, setFilterDuration] = useState({
+    hourly: true,
+    daily: false,
+    weekly: false,
+    monthly: false
+  })
+  const [filterCategory, setFilterCategory] = useState({
+    workspace: false,
+    meetingSpace: false,
+    eventSpace: false,
+    parking: false,
+    storage: false,
+    retailAndHospitality: false
+  })
 
   const searchResults = useSelector(state => state.search.get.result, shallowEqual)
 
@@ -102,20 +130,15 @@ const SearchPage = () => {
   }
 
   const _onChangeInputPrice = (e, type) => {
-    console.log(e, type)
-    const array = filterPrice
-    array[type === 'min' ? 0 : 1] = +e.target.value
-    setFilterPrice(array)
-    console.log(array)
+    const number = numeral(e.target.value)
+    if (type === 'min') setFilterPrice([number.value(), filterPrice[1]])
+    if (type === 'max') setFilterPrice([filterPrice[0], number.value()])
   }
 
   const modifiers = {
-    flip: { enabled: false },
     preventOverflow: { enabled: false },
     hide: { enabled: false }
   }
-
-  console.log('filterPrice', filterPrice)
 
   return (
     <>
@@ -138,7 +161,7 @@ const SearchPage = () => {
               }}
             </Reference>
             {shouldShowFilter === 'category' && (
-              <Popper placement="bottom" modifiers={modifiers}>
+              <Popper placement="bottom-end" modifiers={modifiers} positionFixed>
                 {({ ref, style, placement, arrowProps }) => {
                   return (
                     <div ref={ref} style={{ ...style, zIndex: 5000000 }} data-placement={placement}>
@@ -149,24 +172,73 @@ const SearchPage = () => {
                         border="1px solid #cbcbcb"
                         padding="30px"
                         margin="10px"
-                        marginLeft="100px"
                         zIndex="2000001"
                       >
                         <div>
-                          <Checkbox label="Workspace" />
-                          <Text>I’m looking for a desk, office or coworking space</Text>
-                          <Checkbox label="Meeting space" />
-                          <Text>I’m looking for a space to hold a meeting</Text>
-                          <Checkbox label="Event space" />
-                          <Text>I’m looking for a space to hold an event</Text>
-                          <Checkbox label="Parking" />
-                          <Text>I’m looking for a place to park my vehicle</Text>
-                          <Checkbox label="Storage" />
-                          <Text>I’m looking for a place to store items or goods</Text>
-                          <Checkbox label="Retail & Hospitality" />
-                          <Text>I’m looking to rent a place for business</Text>
-                          <Button outline>Save</Button>
+                          <Checkbox
+                            label="Workspace"
+                            checked={filterCategory.workspace}
+                            handleCheckboxChange={(e, { checked }) =>
+                              setFilterCategory({ ...filterCategory, workspace: !checked })
+                            }
+                          />
+                          <Text display="block" ml="28px" mb="30px">
+                            I’m looking for a desk, office or coworking space
+                          </Text>
+                          <Checkbox
+                            label="Meeting space"
+                            checked={filterCategory.meetingSpace}
+                            handleCheckboxChange={(e, { checked }) =>
+                              setFilterCategory({ ...filterCategory, meetingSpace: !checked })
+                            }
+                          />
+                          <Text display="block" ml="28px" mb="30px">
+                            I’m looking for a space to hold a meeting
+                          </Text>
+                          <Checkbox
+                            label="Event space"
+                            checked={filterCategory.eventSpace}
+                            handleCheckboxChange={(e, { checked }) =>
+                              setFilterCategory({ ...filterCategory, eventSpace: !checked })
+                            }
+                          />
+                          <Text display="block" ml="28px" mb="30px">
+                            I’m looking for a space to hold an event
+                          </Text>
+                          <Checkbox
+                            label="Parking"
+                            checked={filterCategory.parking}
+                            handleCheckboxChange={(e, { checked }) =>
+                              setFilterCategory({ ...filterCategory, parking: !checked })
+                            }
+                          />
+                          <Text display="block" ml="28px" mb="30px">
+                            I’m looking for a place to park my vehicle
+                          </Text>
+                          <Checkbox
+                            label="Storage"
+                            checked={filterCategory.storage}
+                            handleCheckboxChange={(e, { checked }) =>
+                              setFilterCategory({ ...filterCategory, storage: !checked })
+                            }
+                          />
+                          <Text display="block" ml="28px" mb="30px">
+                            I’m looking for a place to store items or goods
+                          </Text>
+                          <Checkbox
+                            label="Retail & Hospitality"
+                            checked={filterCategory.retailAndHospitality}
+                            handleCheckboxChange={(e, { checked }) =>
+                              setFilterCategory({ ...filterCategory, retailAndHospitality: !checked })
+                            }
+                          />
+                          <Text display="block" ml="28px" mb="30px">
+                            I’m looking to rent a place for business
+                          </Text>
                         </div>
+                        <Button size="sm" outline onClick={() => setShouldShowFilter(null)}>
+                          Save
+                        </Button>
                       </Box>
                     </div>
                   )
@@ -186,7 +258,7 @@ const SearchPage = () => {
               }}
             </Reference>
             {shouldShowFilter === 'duration' && (
-              <Popper placement="bottom" modifiers={modifiers}>
+              <Popper placement="bottom-end" modifiers={modifiers}>
                 {({ ref, style, placement, arrowProps }) => {
                   return (
                     <div ref={ref} style={{ ...style, zIndex: 5000000 }} data-placement={placement}>
@@ -199,12 +271,51 @@ const SearchPage = () => {
                         margin="10px"
                         zIndex="2000001"
                       >
-                        <ul>
-                          <li>teste</li>
-                        </ul>
-                        <button type="button" onClick={() => setShouldShowFilter(null)}>
+                        <div>
+                          <Checkbox
+                            label="Hourly"
+                            checked={filterDuration.hourly}
+                            handleCheckboxChange={(e, { checked }) =>
+                              setFilterDuration({ ...filterDuration, hourly: !checked })
+                            }
+                          />
+                          <Text display="block" ml="28px" mb="30px">
+                            I want to find space on a hourly basis
+                          </Text>
+                          <Checkbox
+                            label="Daily"
+                            checked={filterDuration.daily}
+                            handleCheckboxChange={(e, { checked }) =>
+                              setFilterDuration({ ...filterDuration, daily: !checked })
+                            }
+                          />
+                          <Text display="block" ml="28px" mb="30px">
+                            I want to find space on a daily basis
+                          </Text>
+                          <Checkbox
+                            label="Weekly"
+                            checked={filterDuration.weekly}
+                            handleCheckboxChange={(e, { checked }) =>
+                              setFilterDuration({ ...filterDuration, weekly: !checked })
+                            }
+                          />
+                          <Text display="block" ml="28px" mb="30px">
+                            I want to find space on a weekly basis
+                          </Text>
+                          <Checkbox
+                            label="Monthly"
+                            checked={filterDuration.monthly}
+                            handleCheckboxChange={(e, { checked }) =>
+                              setFilterDuration({ ...filterDuration, monthly: !checked })
+                            }
+                          />
+                          <Text display="block" ml="28px" mb="30px">
+                            I want to find space on a monthly basis
+                          </Text>
+                        </div>
+                        <Button size="sm" outline onClick={() => setShouldShowFilter(null)}>
                           Save
-                        </button>
+                        </Button>
                       </Box>
                     </div>
                   )
@@ -224,7 +335,7 @@ const SearchPage = () => {
               }}
             </Reference>
             {shouldShowFilter === 'price' && (
-              <Popper placement="bottom" modifiers={modifiers}>
+              <Popper placement="bottom-end" modifiers={modifiers}>
                 {({ ref, style, placement, arrowProps }) => {
                   return (
                     <div ref={ref} style={{ ...style, zIndex: 5000000 }} data-placement={placement}>
@@ -248,14 +359,23 @@ const SearchPage = () => {
                           <Slider defaultValue={filterPrice} value={filterPrice} handleChange={setFilterPrice} />
                         </Box>
                         <Box display="grid" gridTemplateColumns="1fr auto 1fr" gridColumnGap="15px" alignItems="center">
-                          <Input label="Min" value={filterPrice[0]} onChange={e => _onChangeInputPrice(e, 'min')} />
-                          <Text>To</Text>
-                          <Input label="Max" value={filterPrice[1]} onChange={e => _onChangeInputPrice(e, 'max')} />
+                          <Input
+                            label="Min"
+                            value={numeral(filterPrice[0]).format('$0,0[.]00')}
+                            onChange={e => _onChangeInputPrice(e, 'min')}
+                          />
+                          <Text mt="30px">To</Text>
+                          <Input
+                            label="Max"
+                            value={numeral(filterPrice[1]).format('$0,0[.]00')}
+                            onChange={e => _onChangeInputPrice(e, 'max')}
+                          />
                         </Box>
-
-                        <button type="button" onClick={() => setShouldShowFilter(null)}>
-                          Save
-                        </button>
+                        <Box mt="30px">
+                          <Button size="sm" outline onClick={() => setShouldShowFilter(null)}>
+                            Save
+                          </Button>
+                        </Box>
                       </Box>
                     </div>
                   )
@@ -275,7 +395,7 @@ const SearchPage = () => {
               }}
             </Reference>
             {shouldShowFilter === 'instantBooking' && (
-              <Popper placement="bottom" modifiers={modifiers}>
+              <Popper placement="bottom-end" modifiers={modifiers}>
                 {({ ref, style, placement, arrowProps }) => {
                   return (
                     <div ref={ref} style={{ ...style, zIndex: 5000000 }} data-placement={placement}>
@@ -288,10 +408,20 @@ const SearchPage = () => {
                         margin="10px"
                         zIndex="2000001"
                       >
-                        <Checkbox label="Instant bookings" />
-                        <button type="button" onClick={() => setShouldShowFilter(null)}>
+                        <Text display="block">Book a space without waiting for host approval</Text>
+                        <ItemSwitchStyled checked={filterInstantBooking}>
+                          <span>Instant only</span>
+                          <Switch
+                            id="filterInstantBooking"
+                            name="filterInstantBooking"
+                            value={filterInstantBooking}
+                            checked={filterInstantBooking === true}
+                            handleCheckboxChange={(e, { checked }) => setFilterInstantBooking(checked)}
+                          />
+                        </ItemSwitchStyled>
+                        <Button size="sm" outline onClick={() => setShouldShowFilter(null)}>
                           Save
-                        </button>
+                        </Button>
                       </Box>
                     </div>
                   )
@@ -301,14 +431,16 @@ const SearchPage = () => {
           </Manager>
         </FilterBar>
         <Line />
-        <Title
-          type="h5"
-          title={
-            <Text>
-              Showing resuls around <Text color="primary">Sydney</Text>
-            </Text>
-          }
-        />
+        <Box ml="25px">
+          <Title
+            type="h5"
+            title={
+              <Text>
+                Showing resuls around <Text color="primary">Sydney</Text>
+              </Text>
+            }
+          />
+        </Box>
       </Box>
       {shouldShowFilter && (
         <Box
