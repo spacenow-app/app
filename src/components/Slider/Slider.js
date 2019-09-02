@@ -265,7 +265,7 @@ const Wrapper = styled.div`
 const Slider = ({ min, max, defaultValue, handleChange, ...props }) => {
   return (
     <Wrapper>
-      <Range allowCross={false} defaultValue={defaultValue} min={min} max={max} onChange={handleChange} />
+      <Range {...props} allowCross={false} defaultValue={defaultValue} min={min} max={max} onChange={handleChange} />
     </Wrapper>
   )
 }
@@ -277,6 +277,8 @@ Slider.defaultProps = {
   handleChange: () => {}
 }
 
-Slider.propTypes = {}
+Slider.propTypes = {
+  ...Range.propTypes
+}
 
 export default Slider
