@@ -1,0 +1,1107 @@
+{
+  "data": {
+    "searchByAddress": {
+      "__typename": "SearchResult",
+      "status": "OK",
+      "searchKey": "f1d9d100c0feb50721210903203d27970b3025510413c59d157e1db2ea55ad5e",
+      "result": [
+        {
+          "id": 15,
+          "userId": "9af8ed30-6017-11e9-9e5e-05148d6daebf",
+          "title": "Private Room",
+          "bookingPeriod": "daily",
+          "photos": [],
+          "listingData": {
+            "accessType": "Swipe Card",
+            "minTerm": 1,
+            "basePrice": 100,
+            "currency": "AUD",
+            "isAbsorvedFee": 0,
+            "capacity": 1,
+            "size": 2,
+            "meetingRooms": 3,
+            "isFurnished": 1,
+            "carSpace": 4,
+            "sizeOfVehicle": null,
+            "maxEntranceHeight": null,
+            "bookingType": "request",
+            "spaceType": null
+          },
+          "location": {
+            "id": 37,
+            "country": "Australia",
+            "address1": "66",
+            "buildingName": null,
+            "city": "Mascot",
+            "state": "NSW",
+            "zipcode": "2020",
+            "lat": "-33.9081115",
+            "lng": "151.2251825"
+          },
+          "category": {
+            "id": 566,
+            "typeId": 111,
+            "itemName": "Office",
+            "otherItemName": "office"
+          },
+          "subcategory": {
+            "id": 574,
+            "typeId": 112,
+            "itemName": "Private Room",
+            "otherItemName": "privateRoom"
+          },
+          "host": {
+            "id": "9af8ed30-6017-11e9-9e5e-05148d6daebf",
+            "email": "lucas@spacenow.com",
+            "profile": {
+              "profileId": 19,
+              "firstName": "Lucas",
+              "lastName": "Nascimento"
+            }
+          }
+        },
+        {
+          "id": 31,
+          "userId": "e56fb0b0-60da-11e9-92ef-6b94ff87515a",
+          "title": "Amazing desk test",
+          "bookingPeriod": "daily",
+          "photos": [],
+          "listingData": {
+            "accessType": "Keys",
+            "minTerm": 1,
+            "basePrice": 200,
+            "currency": "AUD",
+            "isAbsorvedFee": 0,
+            "capacity": 5,
+            "size": 123,
+            "meetingRooms": 5,
+            "isFurnished": 1,
+            "carSpace": 2,
+            "sizeOfVehicle": null,
+            "maxEntranceHeight": null,
+            "bookingType": "instant",
+            "spaceType": null
+          },
+          "location": {
+            "id": 44,
+            "country": "Australia",
+            "address1": "Dunblane Street",
+            "buildingName": "44",
+            "city": "Randwick City Council",
+            "state": "NSW",
+            "zipcode": "2033",
+            "lat": "-33.8880965",
+            "lng": "151.1798225"
+          },
+          "category": {
+            "id": 567,
+            "typeId": 111,
+            "itemName": "Coworking",
+            "otherItemName": "coworking"
+          },
+          "subcategory": {
+            "id": 657,
+            "typeId": 112,
+            "itemName": "Desk",
+            "otherItemName": "desk"
+          },
+          "host": {
+            "id": "e56fb0b0-60da-11e9-92ef-6b94ff87515a",
+            "email": "camila1@spacenow.com",
+            "profile": null
+          }
+        },
+        {
+          "id": 53,
+          "userId": "9af8ed30-6017-11e9-9e5e-05148d6daebf",
+          "title": "Desk - Lucas",
+          "bookingPeriod": "daily",
+          "photos": [],
+          "listingData": {
+            "accessType": "Keys",
+            "minTerm": 1,
+            "basePrice": 1,
+            "currency": "AUD",
+            "isAbsorvedFee": 0,
+            "capacity": 1,
+            "size": 1,
+            "meetingRooms": 1,
+            "isFurnished": 1,
+            "carSpace": 1,
+            "sizeOfVehicle": null,
+            "maxEntranceHeight": null,
+            "bookingType": "instant",
+            "spaceType": null
+          },
+          "location": {
+            "id": 37,
+            "country": "Australia",
+            "address1": "66",
+            "buildingName": null,
+            "city": "Mascot",
+            "state": "NSW",
+            "zipcode": "2020",
+            "lat": "-33.9081115",
+            "lng": "151.2251825"
+          },
+          "category": {
+            "id": 567,
+            "typeId": 111,
+            "itemName": "Coworking",
+            "otherItemName": "coworking"
+          },
+          "subcategory": {
+            "id": 657,
+            "typeId": 112,
+            "itemName": "Desk",
+            "otherItemName": "desk"
+          },
+          "host": {
+            "id": "9af8ed30-6017-11e9-9e5e-05148d6daebf",
+            "email": "lucas@spacenow.com",
+            "profile": {
+              "profileId": 19,
+              "firstName": "Lucas",
+              "lastName": "Nascimento"
+            }
+          }
+        },
+        {
+          "id": 54,
+          "userId": "00af49b0-6c72-11e9-8451-8371f1d8ce96",
+          "title": "My title just 20 len",
+          "bookingPeriod": "daily",
+          "photos": [],
+          "listingData": {
+            "accessType": "Keys",
+            "minTerm": 1,
+            "basePrice": 201,
+            "currency": "AUD",
+            "isAbsorvedFee": 0,
+            "capacity": 12,
+            "size": 15,
+            "meetingRooms": 19,
+            "isFurnished": 1,
+            "carSpace": 190000000,
+            "sizeOfVehicle": null,
+            "maxEntranceHeight": null,
+            "bookingType": "instant",
+            "spaceType": null
+          },
+          "location": {
+            "id": 55,
+            "country": "AU",
+            "address1": "14 Ascot Street",
+            "buildingName": " ",
+            "city": "Kensington",
+            "state": "NSW",
+            "zipcode": "2033",
+            "lat": "-33.9082594",
+            "lng": "151.2244969"
+          },
+          "category": {
+            "id": 567,
+            "typeId": 111,
+            "itemName": "Coworking",
+            "otherItemName": "coworking"
+          },
+          "subcategory": {
+            "id": 657,
+            "typeId": 112,
+            "itemName": "Desk",
+            "otherItemName": "desk"
+          },
+          "host": {
+            "id": "00af49b0-6c72-11e9-8451-8371f1d8ce96",
+            "email": "camidsfsdfla@spacenow.com",
+            "profile": {
+              "profileId": 18,
+              "firstName": "Camila",
+              "lastName": "Concha"
+            }
+          }
+        },
+        {
+          "id": 68,
+          "userId": "c4c77350-6c80-11e9-bfb6-55a34828950d",
+          "title": "Big Build Changed",
+          "bookingPeriod": "daily",
+          "photos": [],
+          "listingData": {
+            "accessType": "Keys",
+            "minTerm": 1,
+            "basePrice": 123.45,
+            "currency": "AUD",
+            "isAbsorvedFee": 0,
+            "capacity": 1,
+            "size": 2,
+            "meetingRooms": null,
+            "isFurnished": 0,
+            "carSpace": 3,
+            "sizeOfVehicle": null,
+            "maxEntranceHeight": null,
+            "bookingType": "instant",
+            "spaceType": "Covered"
+          },
+          "location": {
+            "id": 56,
+            "country": "AU",
+            "address1": "14 Botany Street",
+            "buildingName": "19 ",
+            "city": "Bondi Junction",
+            "state": "NSW",
+            "zipcode": "2022",
+            "lat": "-33.8938715",
+            "lng": "151.2543726"
+          },
+          "category": {
+            "id": 569,
+            "typeId": 111,
+            "itemName": "Venue",
+            "otherItemName": "venue"
+          },
+          "subcategory": {
+            "id": 669,
+            "typeId": 112,
+            "itemName": "Venue",
+            "otherItemName": "venue"
+          },
+          "host": {
+            "id": "c4c77350-6c80-11e9-bfb6-55a34828950d",
+            "email": "arthemus.moreira@gmail.com",
+            "profile": {
+              "profileId": 20,
+              "firstName": "Arthemus",
+              "lastName": "Cicotti Moreira"
+            }
+          }
+        },
+        {
+          "id": 69,
+          "userId": "c4c77350-6c80-11e9-bfb6-55a34828950d",
+          "title": "Sport Car",
+          "bookingPeriod": "daily",
+          "photos": [],
+          "listingData": {
+            "accessType": "Smart Lock",
+            "minTerm": 1,
+            "basePrice": 150,
+            "currency": "AUD",
+            "isAbsorvedFee": 1,
+            "capacity": null,
+            "size": 12.2,
+            "meetingRooms": null,
+            "isFurnished": 0,
+            "carSpace": null,
+            "sizeOfVehicle": "Medium",
+            "maxEntranceHeight": "2.5(-)m",
+            "bookingType": "request",
+            "spaceType": "Uncovered"
+          },
+          "location": {
+            "id": 56,
+            "country": "AU",
+            "address1": "14 Botany Street",
+            "buildingName": "19 ",
+            "city": "Bondi Junction",
+            "state": "NSW",
+            "zipcode": "2022",
+            "lat": "-33.8938715",
+            "lng": "151.2543726"
+          },
+          "category": {
+            "id": 570,
+            "typeId": 111,
+            "itemName": "Parking",
+            "otherItemName": "parking"
+          },
+          "subcategory": {
+            "id": 662,
+            "typeId": 112,
+            "itemName": "Car Park",
+            "otherItemName": "carPark"
+          },
+          "host": {
+            "id": "c4c77350-6c80-11e9-bfb6-55a34828950d",
+            "email": "arthemus.moreira@gmail.com",
+            "profile": {
+              "profileId": 20,
+              "firstName": "Arthemus",
+              "lastName": "Cicotti Moreira"
+            }
+          }
+        },
+        {
+          "id": 71,
+          "userId": "c4c77350-6c80-11e9-bfb6-55a34828950d",
+          "title": "Storage in nowhere",
+          "bookingPeriod": "weekly",
+          "photos": [],
+          "listingData": {
+            "accessType": "Swipe Card",
+            "minTerm": 3,
+            "basePrice": 130,
+            "currency": "AUD",
+            "isAbsorvedFee": 0,
+            "capacity": null,
+            "size": 12,
+            "meetingRooms": null,
+            "isFurnished": 0,
+            "carSpace": null,
+            "sizeOfVehicle": null,
+            "maxEntranceHeight": null,
+            "bookingType": "instant",
+            "spaceType": "Covered"
+          },
+          "location": {
+            "id": 56,
+            "country": "AU",
+            "address1": "14 Botany Street",
+            "buildingName": "19 ",
+            "city": "Bondi Junction",
+            "state": "NSW",
+            "zipcode": "2022",
+            "lat": "-33.8938715",
+            "lng": "151.2543726"
+          },
+          "category": {
+            "id": 571,
+            "typeId": 111,
+            "itemName": "Storage",
+            "otherItemName": "storage"
+          },
+          "subcategory": {
+            "id": 665,
+            "typeId": 112,
+            "itemName": "Business",
+            "otherItemName": "business"
+          },
+          "host": {
+            "id": "c4c77350-6c80-11e9-bfb6-55a34828950d",
+            "email": "arthemus.moreira@gmail.com",
+            "profile": {
+              "profileId": 20,
+              "firstName": "Arthemus",
+              "lastName": "Cicotti Moreira"
+            }
+          }
+        },
+        {
+          "id": 95,
+          "userId": "c4c77350-6c80-11e9-bfb6-55a34828950d",
+          "title": "Hotel for Holiday",
+          "bookingPeriod": "weekly",
+          "photos": [],
+          "listingData": {
+            "accessType": "Person",
+            "minTerm": 2,
+            "basePrice": 55.411,
+            "currency": "AUD",
+            "isAbsorvedFee": 0,
+            "capacity": 5,
+            "size": 6,
+            "meetingRooms": 7,
+            "isFurnished": 1,
+            "carSpace": 8,
+            "sizeOfVehicle": "Small",
+            "maxEntranceHeight": "Not Sure",
+            "bookingType": "instant",
+            "spaceType": "Covered"
+          },
+          "location": {
+            "id": 56,
+            "country": "AU",
+            "address1": "14 Botany Street",
+            "buildingName": "19 ",
+            "city": "Bondi Junction",
+            "state": "NSW",
+            "zipcode": "2022",
+            "lat": "-33.8938715",
+            "lng": "151.2543726"
+          },
+          "category": {
+            "id": 566,
+            "typeId": 111,
+            "itemName": "Office",
+            "otherItemName": "office"
+          },
+          "subcategory": {
+            "id": 574,
+            "typeId": 112,
+            "itemName": "Private Room",
+            "otherItemName": "privateRoom"
+          },
+          "host": {
+            "id": "c4c77350-6c80-11e9-bfb6-55a34828950d",
+            "email": "arthemus.moreira@gmail.com",
+            "profile": {
+              "profileId": 20,
+              "firstName": "Arthemus",
+              "lastName": "Cicotti Moreira"
+            }
+          }
+        },
+        {
+          "id": 96,
+          "userId": "26018a50-76c9-11e9-851e-21b5ca827d91",
+          "title": "Priya testing",
+          "bookingPeriod": "hourly",
+          "photos": [],
+          "listingData": {
+            "accessType": "Swipe Card",
+            "minTerm": 12,
+            "basePrice": 100,
+            "currency": "AUD",
+            "isAbsorvedFee": 1,
+            "capacity": 11,
+            "size": 12,
+            "meetingRooms": null,
+            "isFurnished": 0,
+            "carSpace": 1,
+            "sizeOfVehicle": null,
+            "maxEntranceHeight": null,
+            "bookingType": "request",
+            "spaceType": null
+          },
+          "location": {
+            "id": 69,
+            "country": "AU",
+            "address1": "Bourke Road",
+            "buildingName": " 121",
+            "city": "Alexandria",
+            "state": "NSW",
+            "zipcode": "2015",
+            "lat": "-33.912122",
+            "lng": "151.1939032"
+          },
+          "category": {
+            "id": 569,
+            "typeId": 111,
+            "itemName": "Venue",
+            "otherItemName": "venue"
+          },
+          "subcategory": {
+            "id": 671,
+            "typeId": 112,
+            "itemName": "Creative Spaces",
+            "otherItemName": "creative"
+          },
+          "host": {
+            "id": "26018a50-76c9-11e9-851e-21b5ca827d91",
+            "email": "priya.mistry20@gmail.com",
+            "profile": {
+              "profileId": 26,
+              "firstName": "Priya",
+              "lastName": "Shah"
+            }
+          }
+        },
+        {
+          "id": 105,
+          "userId": "322eb220-7779-11e9-8ddc-ab985d67c6d6",
+          "title": "Fabulous space in Mascot",
+          "bookingPeriod": "hourly",
+          "photos": [],
+          "listingData": {
+            "accessType": "Swipe Card",
+            "minTerm": 5,
+            "basePrice": 209000,
+            "currency": "AUD",
+            "isAbsorvedFee": 0,
+            "capacity": 0,
+            "size": 0,
+            "meetingRooms": null,
+            "isFurnished": 0,
+            "carSpace": 0,
+            "sizeOfVehicle": null,
+            "maxEntranceHeight": null,
+            "bookingType": "request",
+            "spaceType": null
+          },
+          "location": {
+            "id": 77,
+            "country": "AU",
+            "address1": "90 Bourke Road",
+            "buildingName": " ",
+            "city": "Alexandria",
+            "state": "NSW",
+            "zipcode": "2015",
+            "lat": "-33.9111014",
+            "lng": "151.1952453"
+          },
+          "category": {
+            "id": 568,
+            "typeId": 111,
+            "itemName": "Meeting",
+            "otherItemName": "meetings"
+          },
+          "subcategory": {
+            "id": 658,
+            "typeId": 112,
+            "itemName": "Meeting Room",
+            "otherItemName": "meetingRoom"
+          },
+          "host": {
+            "id": "322eb220-7779-11e9-8ddc-ab985d67c6d6",
+            "email": "ing.camilaconcha@gmail.com",
+            "profile": {
+              "profileId": 32,
+              "firstName": "Natalia",
+              "lastName": "Concha"
+            }
+          }
+        },
+        {
+          "id": 106,
+          "userId": "322eb220-7779-11e9-8ddc-ab985d67c6d6",
+          "title": "Business",
+          "bookingPeriod": "weekly",
+          "photos": [],
+          "listingData": {
+            "accessType": "Swipe Card",
+            "minTerm": 2,
+            "basePrice": 200,
+            "currency": "AUD",
+            "isAbsorvedFee": 0,
+            "capacity": null,
+            "size": 20,
+            "meetingRooms": null,
+            "isFurnished": 0,
+            "carSpace": null,
+            "sizeOfVehicle": null,
+            "maxEntranceHeight": null,
+            "bookingType": "instant",
+            "spaceType": null
+          },
+          "location": {
+            "id": 78,
+            "country": "AU",
+            "address1": "90 Bourke Road",
+            "buildingName": " ",
+            "city": "Alexandria",
+            "state": "NSW",
+            "zipcode": "2015",
+            "lat": "-33.9111014",
+            "lng": "151.1952453"
+          },
+          "category": {
+            "id": 571,
+            "typeId": 111,
+            "itemName": "Storage",
+            "otherItemName": "storage"
+          },
+          "subcategory": {
+            "id": 665,
+            "typeId": 112,
+            "itemName": "Business",
+            "otherItemName": "business"
+          },
+          "host": {
+            "id": "322eb220-7779-11e9-8ddc-ab985d67c6d6",
+            "email": "ing.camilaconcha@gmail.com",
+            "profile": {
+              "profileId": 32,
+              "firstName": "Natalia",
+              "lastName": "Concha"
+            }
+          }
+        },
+        {
+          "id": 107,
+          "userId": "c4c77350-6c80-11e9-bfb6-55a34828950d",
+          "title": "Holiday Homes For Sale in",
+          "bookingPeriod": "monthly",
+          "photos": [],
+          "listingData": {
+            "accessType": "Swipe Card",
+            "minTerm": 1,
+            "basePrice": 150,
+            "currency": "AUD",
+            "isAbsorvedFee": 1,
+            "capacity": 123,
+            "size": 12,
+            "meetingRooms": 4,
+            "isFurnished": 1,
+            "carSpace": 2,
+            "sizeOfVehicle": null,
+            "maxEntranceHeight": null,
+            "bookingType": "instant",
+            "spaceType": null
+          },
+          "location": {
+            "id": 56,
+            "country": "AU",
+            "address1": "14 Botany Street",
+            "buildingName": "19 ",
+            "city": "Bondi Junction",
+            "state": "NSW",
+            "zipcode": "2022",
+            "lat": "-33.8938715",
+            "lng": "151.2543726"
+          },
+          "category": {
+            "id": 566,
+            "typeId": 111,
+            "itemName": "Office",
+            "otherItemName": "office"
+          },
+          "subcategory": {
+            "id": 575,
+            "typeId": 112,
+            "itemName": "Entire Office",
+            "otherItemName": "entireOffice"
+          },
+          "host": {
+            "id": "c4c77350-6c80-11e9-bfb6-55a34828950d",
+            "email": "arthemus.moreira@gmail.com",
+            "profile": {
+              "profileId": 20,
+              "firstName": "Arthemus",
+              "lastName": "Cicotti Moreira"
+            }
+          }
+        },
+        {
+          "id": 108,
+          "userId": "c4c77350-6c80-11e9-bfb6-55a34828950d",
+          "title": "Public View on Greece",
+          "bookingPeriod": "weekly",
+          "photos": [],
+          "listingData": {
+            "accessType": "Smart Lock",
+            "minTerm": 1,
+            "basePrice": 450,
+            "currency": "AUD",
+            "isAbsorvedFee": 1,
+            "capacity": 1000,
+            "size": 1000,
+            "meetingRooms": 0,
+            "isFurnished": 0,
+            "carSpace": 1,
+            "sizeOfVehicle": null,
+            "maxEntranceHeight": null,
+            "bookingType": "request",
+            "spaceType": null
+          },
+          "location": {
+            "id": 56,
+            "country": "AU",
+            "address1": "14 Botany Street",
+            "buildingName": "19 ",
+            "city": "Bondi Junction",
+            "state": "NSW",
+            "zipcode": "2022",
+            "lat": "-33.8938715",
+            "lng": "151.2543726"
+          },
+          "category": {
+            "id": 567,
+            "typeId": 111,
+            "itemName": "Coworking",
+            "otherItemName": "coworking"
+          },
+          "subcategory": {
+            "id": 657,
+            "typeId": 112,
+            "itemName": "Desk",
+            "otherItemName": "desk"
+          },
+          "host": {
+            "id": "c4c77350-6c80-11e9-bfb6-55a34828950d",
+            "email": "arthemus.moreira@gmail.com",
+            "profile": {
+              "profileId": 20,
+              "firstName": "Arthemus",
+              "lastName": "Cicotti Moreira"
+            }
+          }
+        },
+        {
+          "id": 125,
+          "userId": "28723530-85bc-11e9-8658-63a6398cc0c3",
+          "title": "Espaco Rafael",
+          "bookingPeriod": "weekly",
+          "photos": [],
+          "listingData": {
+            "accessType": "Smart Lock",
+            "minTerm": 2,
+            "basePrice": 200,
+            "currency": "AUD",
+            "isAbsorvedFee": 0,
+            "capacity": 0,
+            "size": 0,
+            "meetingRooms": 0,
+            "isFurnished": 1,
+            "carSpace": 0,
+            "sizeOfVehicle": null,
+            "maxEntranceHeight": null,
+            "bookingType": "request",
+            "spaceType": null
+          },
+          "location": {
+            "id": 84,
+            "country": "AU",
+            "address1": "Pitt Street",
+            "buildingName": " 25",
+            "city": "Haymarket",
+            "state": "NSW",
+            "zipcode": "2000",
+            "lat": "-33.8802412",
+            "lng": "151.206855"
+          },
+          "category": {
+            "id": 566,
+            "typeId": 111,
+            "itemName": "Office",
+            "otherItemName": "office"
+          },
+          "subcategory": {
+            "id": 575,
+            "typeId": 112,
+            "itemName": "Entire Office",
+            "otherItemName": "entireOffice"
+          },
+          "host": {
+            "id": "28723530-85bc-11e9-8658-63a6398cc0c3",
+            "email": "rafandrade4@hotmail.com",
+            "profile": {
+              "profileId": 33,
+              "firstName": "Rafael",
+              "lastName": "Nascimento"
+            }
+          }
+        },
+        {
+          "id": 133,
+          "userId": "28723530-85bc-11e9-8658-63a6398cc0c3",
+          "title": "Private Room - r",
+          "bookingPeriod": "daily",
+          "photos": [],
+          "listingData": {
+            "accessType": "Keys",
+            "minTerm": 0,
+            "basePrice": 100,
+            "currency": "AUD",
+            "isAbsorvedFee": 0,
+            "capacity": 0,
+            "size": 0,
+            "meetingRooms": 0,
+            "isFurnished": 0,
+            "carSpace": 0,
+            "sizeOfVehicle": null,
+            "maxEntranceHeight": null,
+            "bookingType": "instant",
+            "spaceType": null
+          },
+          "location": {
+            "id": 91,
+            "country": "AU",
+            "address1": "18 Llandaff Street",
+            "buildingName": " 8",
+            "city": "Bondi Junction",
+            "state": "NSW",
+            "zipcode": "2022",
+            "lat": "-33.89337640000001",
+            "lng": "151.2532851"
+          },
+          "category": {
+            "id": 566,
+            "typeId": 111,
+            "itemName": "Office",
+            "otherItemName": "office"
+          },
+          "subcategory": {
+            "id": 574,
+            "typeId": 112,
+            "itemName": "Private Room",
+            "otherItemName": "privateRoom"
+          },
+          "host": {
+            "id": "28723530-85bc-11e9-8658-63a6398cc0c3",
+            "email": "rafandrade4@hotmail.com",
+            "profile": {
+              "profileId": 33,
+              "firstName": "Rafael",
+              "lastName": "Nascimento"
+            }
+          }
+        },
+        {
+          "id": 134,
+          "userId": "28723530-85bc-11e9-8658-63a6398cc0c3",
+          "title": "Meeting Room",
+          "bookingPeriod": "hourly",
+          "photos": [],
+          "listingData": {
+            "accessType": "Smart Lock",
+            "minTerm": 2,
+            "basePrice": 100,
+            "currency": "AUD",
+            "isAbsorvedFee": 0,
+            "capacity": 0,
+            "size": 0,
+            "meetingRooms": null,
+            "isFurnished": 0,
+            "carSpace": 0,
+            "sizeOfVehicle": null,
+            "maxEntranceHeight": null,
+            "bookingType": "instant",
+            "spaceType": null
+          },
+          "location": {
+            "id": 92,
+            "country": "AU",
+            "address1": "18 Llandaff Street",
+            "buildingName": " 8",
+            "city": "Bondi Junction",
+            "state": "NSW",
+            "zipcode": "2022",
+            "lat": "-33.89337640000001",
+            "lng": "151.2532851"
+          },
+          "category": {
+            "id": 568,
+            "typeId": 111,
+            "itemName": "Meeting",
+            "otherItemName": "meetings"
+          },
+          "subcategory": {
+            "id": 658,
+            "typeId": 112,
+            "itemName": "Meeting Room",
+            "otherItemName": "meetingRoom"
+          },
+          "host": {
+            "id": "28723530-85bc-11e9-8658-63a6398cc0c3",
+            "email": "rafandrade4@hotmail.com",
+            "profile": {
+              "profileId": 33,
+              "firstName": "Rafael",
+              "lastName": "Nascimento"
+            }
+          }
+        },
+        {
+          "id": 135,
+          "userId": "28723530-85bc-11e9-8658-63a6398cc0c3",
+          "title": "Meeting t-3",
+          "bookingPeriod": "daily",
+          "photos": [],
+          "listingData": {
+            "accessType": "Keys",
+            "minTerm": 3,
+            "basePrice": 100,
+            "currency": "AUD",
+            "isAbsorvedFee": 0,
+            "capacity": 2,
+            "size": 0,
+            "meetingRooms": null,
+            "isFurnished": 0,
+            "carSpace": 2,
+            "sizeOfVehicle": null,
+            "maxEntranceHeight": null,
+            "bookingType": "request",
+            "spaceType": null
+          },
+          "location": {
+            "id": 93,
+            "country": "AU",
+            "address1": "18 Llandaff Street",
+            "buildingName": " 8",
+            "city": "Bondi Junction",
+            "state": "NSW",
+            "zipcode": "2022",
+            "lat": "-33.89337640000001",
+            "lng": "151.2532851"
+          },
+          "category": {
+            "id": 568,
+            "typeId": 111,
+            "itemName": "Meeting",
+            "otherItemName": "meetings"
+          },
+          "subcategory": {
+            "id": 658,
+            "typeId": 112,
+            "itemName": "Meeting Room",
+            "otherItemName": "meetingRoom"
+          },
+          "host": {
+            "id": "28723530-85bc-11e9-8658-63a6398cc0c3",
+            "email": "rafandrade4@hotmail.com",
+            "profile": {
+              "profileId": 33,
+              "firstName": "Rafael",
+              "lastName": "Nascimento"
+            }
+          }
+        },
+        {
+          "id": 137,
+          "userId": "28723530-85bc-11e9-8658-63a6398cc0c3",
+          "title": "Desk - t1",
+          "bookingPeriod": "monthly",
+          "photos": [],
+          "listingData": {
+            "accessType": "Smart Lock",
+            "minTerm": 3,
+            "basePrice": 200,
+            "currency": "AUD",
+            "isAbsorvedFee": 0,
+            "capacity": 2,
+            "size": 13,
+            "meetingRooms": 0,
+            "isFurnished": 0,
+            "carSpace": 0,
+            "sizeOfVehicle": null,
+            "maxEntranceHeight": null,
+            "bookingType": "instant",
+            "spaceType": null
+          },
+          "location": {
+            "id": 99,
+            "country": "AU",
+            "address1": "18 Llandaff Street",
+            "buildingName": " ",
+            "city": "Bondi Junction",
+            "state": "NSW",
+            "zipcode": "2022",
+            "lat": "-33.89337640000001",
+            "lng": "151.2532851"
+          },
+          "category": {
+            "id": 567,
+            "typeId": 111,
+            "itemName": "Coworking",
+            "otherItemName": "coworking"
+          },
+          "subcategory": {
+            "id": 657,
+            "typeId": 112,
+            "itemName": "Desk",
+            "otherItemName": "desk"
+          },
+          "host": {
+            "id": "28723530-85bc-11e9-8658-63a6398cc0c3",
+            "email": "rafandrade4@hotmail.com",
+            "profile": {
+              "profileId": 33,
+              "firstName": "Rafael",
+              "lastName": "Nascimento"
+            }
+          }
+        },
+        {
+          "id": 154,
+          "userId": "b61b5760-76c9-11e9-851e-21b5ca827d91",
+          "title": "Desk",
+          "bookingPeriod": "weekly",
+          "photos": [],
+          "listingData": {
+            "accessType": "Swipe Card",
+            "minTerm": 1,
+            "basePrice": 200,
+            "currency": "AUD",
+            "isAbsorvedFee": 0,
+            "capacity": 0,
+            "size": 0,
+            "meetingRooms": 0,
+            "isFurnished": 0,
+            "carSpace": 0,
+            "sizeOfVehicle": null,
+            "maxEntranceHeight": null,
+            "bookingType": "instant",
+            "spaceType": null
+          },
+          "location": {
+            "id": 116,
+            "country": "AU",
+            "address1": "Llandaff Street",
+            "buildingName": " 18",
+            "city": "Bondi Junction",
+            "state": "NSW",
+            "zipcode": "2022",
+            "lat": "-33.893597",
+            "lng": "151.2531998"
+          },
+          "category": {
+            "id": 567,
+            "typeId": 111,
+            "itemName": "Coworking",
+            "otherItemName": "coworking"
+          },
+          "subcategory": {
+            "id": 657,
+            "typeId": 112,
+            "itemName": "Desk",
+            "otherItemName": "desk"
+          },
+          "host": {
+            "id": "b61b5760-76c9-11e9-851e-21b5ca827d91",
+            "email": "rafanascimento.au@gmail.com",
+            "profile": {
+              "profileId": 27,
+              "firstName": "Rafael",
+              "lastName": "Nascimento"
+            }
+          }
+        },
+        {
+          "id": 159,
+          "userId": "a4a41c50-a758-11e9-9640-df5e56cccb01",
+          "title": "Private Room",
+          "bookingPeriod": "daily",
+          "photos": [],
+          "listingData": {
+            "accessType": "Swipe Card",
+            "minTerm": 2,
+            "basePrice": 2,
+            "currency": "AUD",
+            "isAbsorvedFee": 0,
+            "capacity": 0,
+            "size": 0,
+            "meetingRooms": 0,
+            "isFurnished": 0,
+            "carSpace": 0,
+            "sizeOfVehicle": "Small",
+            "maxEntranceHeight": "Not Sure",
+            "bookingType": "instant",
+            "spaceType": "Covered"
+          },
+          "location": {
+            "id": 125,
+            "country": "AU",
+            "address1": "90 Bourke Road",
+            "buildingName": " ",
+            "city": "Alexandria",
+            "state": "NSW",
+            "zipcode": "2015",
+            "lat": "-33.9111014",
+            "lng": "151.1952453"
+          },
+          "category": {
+            "id": 566,
+            "typeId": 111,
+            "itemName": "Office",
+            "otherItemName": "office"
+          },
+          "subcategory": {
+            "id": 574,
+            "typeId": 112,
+            "itemName": "Private Room",
+            "otherItemName": "privateRoom"
+          },
+          "host": {
+            "id": "a4a41c50-a758-11e9-9640-df5e56cccb01",
+            "email": "camila@spacenow.com",
+            "profile": {
+              "profileId": 62,
+              "firstName": "Camila",
+              "lastName": "Concha"
+            }
+          }
+        }
+      ]
+    }
+  }
+}

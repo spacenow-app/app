@@ -60,7 +60,7 @@ const SearchPage = () => {
   const [shouldShowFilter, setShouldShowFilter] = useState(false)
   const [markers, setMarkers] = useState([])
 
-  const searchResults = useSelector(state => state.search.results, shallowEqual)
+  const searchResults = useSelector(state => state.search.get.result, shallowEqual)
 
   useEffect(() => {
     async function fetchData() {
