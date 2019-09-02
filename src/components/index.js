@@ -43,6 +43,7 @@ import VideoModal from './VideoModal'
 import Link from './Link'
 import Line from './Line'
 import ButtonSocial from './ButtonSocial'
+import Slider from './Slider'
 
 export {
   Modal,
@@ -92,5 +93,6 @@ export {
   VideoModal,
   Link,
   Line,
-  ButtonSocial
+  ButtonSocial,
+  Slider
 }
