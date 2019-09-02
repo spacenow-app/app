@@ -65,7 +65,7 @@ const SearchPage = () => {
 
   useEffect(() => {
     async function fetchData() {
-      await dispatch(onSearch())
+      await dispatch(onSearch('-33.8688197', '151.2092955')) // mock data for test...
     }
 
     fetchData()
