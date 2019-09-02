@@ -56,7 +56,11 @@ const CardContentUserAvatar = styled.img`
 `
 
 const ListResults = ({ markers, onHoverItem }) => {
-  console.log('render')
+  const _parseCategoryIconName = (name, isSub) => {
+    const prefix = isSub ? 'sub-category-' : 'category-'
+    return prefix + name.replace(/([A-Z])/g, g => `-${g[0].toLowerCase()}`)
+  }
+
   return (
     <ContainerList>
       {markers.map(item => {
@@ -70,12 +74,28 @@ const ListResults = ({ markers, onHoverItem }) => {
             <CardContent>
               <Box display="flex" justifyContent="start" mb="15px">
                 <Box>
-                  <Tag small icon={<Icon width="24px" name="category-venue" />}>
+                  <Tag
+                    small
+                    icon={
+                      <Icon
+                        width="24px"
+                        name={_parseCategoryIconName(item.settingsParent.category.otherItemName, false)}
+                      />
+                    }
+                  >
                     {item.settingsParent.category.itemName}
                   </Tag>
                 </Box>
                 <Box margin="0 10px">
-                  <Tag small icon={<Icon width="24px" name="sub-category-health-fitness" />}>
+                  <Tag
+                    small
+                    icon={
+                      <Icon
+                        width="24px"
+                        name={_parseCategoryIconName(item.settingsParent.subcategory.otherItemName, true)}
+                      />
+                    }
+                  >
                     {item.settingsParent.subcategory.itemName}
                   </Tag>
                 </Box>
@@ -131,4 +151,4 @@ const comparisonFn = (prevProps, nextProps) => {
   return prevProps.markers === nextProps.markers
 }
 
-export default React.memo(ListResults, comparisonFn)
+export default memo(ListResults, comparisonFn)
