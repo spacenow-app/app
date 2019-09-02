@@ -156,13 +156,19 @@ export default function reducer(state = initialState, action) {
 export const onSearch = (lat, lng) => async dispatch => {
   dispatch({ type: Types.ON_SEARCH_REQUEST })
   try {
-    const { data } = await getClient().query({
-      query: querySearchByAddress,
-      variables: { lat: '-33.8688197', lng: '151.2092955' }
-    })
+    // const { data } = await getClient().query({
+    //   query: querySearchByAddress,
+    //   variables: { lat: '-33.8688197', lng: '151.2092955' }
+    // })
+    const data = {
+      searchByAddress: {
+        searchKey: '',
+        result: mockSearchByAddress.data.searchByAddress.result
+      }
+    }
     dispatch({
       type: Types.ON_SEARCH_SUCCESS,
-      payload: { searchKey: data.searchByAddress.searchKey, result: mockSearchByAddress.data.searchByAddress.result }
+      payload: { searchKey: data.searchByAddress.searchKey, result: data.searchByAddress.result }
     })
   } catch (err) {
     dispatch({ type: Types.ON_SEARCH_FAILURE, payload: errToMsg(err) })
@@ -172,20 +178,26 @@ export const onSearch = (lat, lng) => async dispatch => {
 export const onQuery = (searchKey, filters) => async dispatch => {
   dispatch({ type: Types.ON_SEARCH_REQUEST })
   try {
-    const { data } = await getClient().query({
-      query: querySearchByFilters,
-      variables: {
-        key: searchKey,
-        categories: filters.categories,
-        duration: filters.duration,
-        priceMin: filters.priceMin,
-        priceMax: filters.priceMax,
-        instant: filters.instant
+    // const { data } = await getClient().query({
+    //   query: querySearchByFilters,
+    //   variables: {
+    //     key: searchKey,
+    //     categories: filters.categories,
+    //     duration: filters.duration,
+    //     priceMin: filters.priceMin,
+    //     priceMax: filters.priceMax,
+    //     instant: filters.instant
+    //   }
+    // })
+    const data = {
+      searchByAddress: {
+        searchKey: '',
+        result: mockSearchByAddress.data.searchByAddress.result
       }
-    })
+    }
     dispatch({
       type: Types.ON_SEARCH_SUCCESS,
-      payload: { searchKey, result: mockSearchByFilters.data.searchByFilters.result }
+      payload: { searchKey: data.searchByAddress.searchKey, result: data.searchByFilters.result }
     })
   } catch (err) {
     dispatch({ type: Types.ON_SEARCH_FAILURE, payload: errToMsg(err) })
