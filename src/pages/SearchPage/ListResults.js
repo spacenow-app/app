@@ -79,11 +79,11 @@ const ListResults = ({ markers, onHoverItem }) => {
                     icon={
                       <Icon
                         width="24px"
-                        name={_parseCategoryIconName(item.settingsParent.category.otherItemName, false)}
+                        name={_parseCategoryIconName(item.category.otherItemName, false)}
                       />
                     }
                   >
-                    {item.settingsParent.category.itemName}
+                    {item.category.itemName}
                   </Tag>
                 </Box>
                 <Box margin="0 10px">
@@ -92,11 +92,11 @@ const ListResults = ({ markers, onHoverItem }) => {
                     icon={
                       <Icon
                         width="24px"
-                        name={_parseCategoryIconName(item.settingsParent.subcategory.otherItemName, true)}
+                        name={_parseCategoryIconName(item.subcategory.otherItemName, true)}
                       />
                     }
                   >
-                    {item.settingsParent.subcategory.itemName}
+                    {item.subcategory.itemName}
                   </Tag>
                 </Box>
               </Box>
