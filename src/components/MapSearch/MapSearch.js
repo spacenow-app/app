@@ -72,7 +72,6 @@ const CardContentUserTitle = styled.span`
 `
 
 const MapSearch = withGoogleMap(props => {
-  console.log('render map', props)
   return (
     <GoogleMap
       defaultZoom={10}
