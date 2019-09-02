@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { useDispatch, shallowEqual, useSelector } from 'react-redux'
 import styled from 'styled-components'
-import { NavBar, Line, Title, Text, Input, Button, Box, Checkbox, MapSearch } from 'components'
+import { NavBar, Line, Title, Text, Input, Button, Box, Checkbox, MapSearch, Slider } from 'components'
 import { Manager, Reference, Popper } from 'react-popper'
 
 import { onSearch } from 'redux/ducks/search'
@@ -59,6 +59,7 @@ const SearchPage = () => {
   const [selectedSpace, setSelectedSpace] = useState(null)
   const [shouldShowFilter, setShouldShowFilter] = useState(false)
   const [markers, setMarkers] = useState([])
+  const [filterPrice, setFilterPrice] = useState([50, 5000])
 
   const searchResults = useSelector(state => state.search.results, shallowEqual)
 
@@ -68,7 +69,7 @@ const SearchPage = () => {
     }
 
     fetchData()
-  }, [])
+  }, [dispatch])
 
   useEffect(() => {
     setMarkers(
@@ -100,11 +101,21 @@ const SearchPage = () => {
     })
   }
 
+  const _onChangeInputPrice = (e, type) => {
+    console.log(e, type)
+    const array = filterPrice
+    array[type === 'min' ? 0 : 1] = +e.target.value
+    setFilterPrice(array)
+    console.log(array)
+  }
+
   const modifiers = {
     flip: { enabled: false },
     preventOverflow: { enabled: false },
     hide: { enabled: false }
   }
+
+  console.log('filterPrice', filterPrice)
 
   return (
     <>
@@ -225,8 +236,23 @@ const SearchPage = () => {
                         padding="30px"
                         margin="10px"
                         zIndex="2000001"
+                        width="400px"
                       >
-                        Price
+                        <Text display="block" fontSize="14px">
+                          Have a specific budget?
+                        </Text>
+                        <Text display="block" fontSize="14px">
+                          Set the minimum and maximum price.
+                        </Text>
+                        <Box my="20px">
+                          <Slider defaultValue={filterPrice} value={filterPrice} handleChange={setFilterPrice} />
+                        </Box>
+                        <Box display="grid" gridTemplateColumns="1fr auto 1fr" gridColumnGap="15px" alignItems="center">
+                          <Input label="Min" value={filterPrice[0]} onChange={e => _onChangeInputPrice(e, 'min')} />
+                          <Text>To</Text>
+                          <Input label="Max" value={filterPrice[1]} onChange={e => _onChangeInputPrice(e, 'max')} />
+                        </Box>
+
                         <button type="button" onClick={() => setShouldShowFilter(null)}>
                           Save
                         </button>
