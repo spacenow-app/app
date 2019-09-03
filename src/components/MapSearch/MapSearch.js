@@ -77,7 +77,7 @@ const CardContentUserTitle = styled.span`
 const MapSearch = withGoogleMap(props => {
   return (
     <GoogleMap
-      defaultZoom={10}
+      defaultZoom={13}
       center={props.position}
       defaultCenter={props.position}
       defaultOptions={{
@@ -143,9 +143,9 @@ MapSearch.propTypes = {
   markers: PropTypes.instanceOf(Array),
   onClickMarker: PropTypes.func,
   selectedMarker: PropTypes.shape({
-    id: PropTypes.string,
+    id: PropTypes.number,
     lat: PropTypes.number,
-    lng: PropTypes.string,
+    lng: PropTypes.number,
     photo: PropTypes.string,
     title: PropTypes.string,
     price: PropTypes.string,
@@ -159,6 +159,10 @@ MapSearch.propTypes = {
 
 const comparisonFn = (prevProps, nextProps) => {
   if (!(prevProps.markers === nextProps.markers)) {
+    return false
+  }
+
+  if (!(prevProps.position === nextProps.position)) {
     return false
   }
 
