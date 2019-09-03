@@ -10,6 +10,8 @@ const Box = styled.div`
   padding: 15px;
   box-shadow: 0px 0px 20px 0px rgba(0, 0, 0, 0.1);
   z-index: 10;
+  position: absolute;
+  background-color: #fff;
 `
 
 const BoxItem = styled.div`
@@ -63,9 +65,10 @@ const AutoComplete = props => {
         <div>
           <Input
             {...getInputProps({
-              label: 'Address or Business name',
-              placeholder: 'Type address or business name.',
-              loading: loading,
+              size: props.size,
+              label: props.label,
+              placeholder: props.placeholder,
+              loading,
               disabled: props.disabled,
               closeButton: props.closeButton,
               onClickCloseButton: props.onClickCloseButton
@@ -91,7 +94,9 @@ const AutoComplete = props => {
 }
 
 AutoComplete.defaultProps = {
-  children: null
+  children: null,
+  label: 'Address or Business name',
+  placeholder: 'Type address or business name.'
 }
 
 AutoComplete.propTypes = {
