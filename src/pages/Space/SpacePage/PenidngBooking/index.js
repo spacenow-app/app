@@ -5,7 +5,6 @@ import styled from 'styled-components';
 
 import { openModal, TypesModal } from 'redux/ducks/modal'
 import { onTimeoutBooking } from 'redux/ducks/booking'
-import { onGetAvailabilitiesByListingId } from 'redux/ducks/listing'
 
 import {  ListDates, 
           PriceDetail,
@@ -112,7 +111,6 @@ const _onContinueBooking = (booking, dispatch) => {
   if (new Date() >= addMinutes(booking.createdAt, '30')) {
 
     dispatch(onTimeoutBooking(booking.bookingId))
-    // dispatch(onGetAvailabilitiesByListingId(booking.listingId))
 
     const options = {
       options: {
