@@ -42,11 +42,31 @@ import {
 } from 'redux/ducks/listing'
 
 import { onCreateBooking, onGetPendingBooking } from 'redux/ducks/booking'
+import { openModal, TypesModal } from 'redux/ducks/modal'
+import  { sendMail } from 'redux/ducks/mail'
 
 import GraphCancelattionImage from 'pages/Listing/SpacePage/CancellationTab/graph_cancellation.png'
 
+import config from 'contants/config'
+
 const ImageStyled = styled.img`
   width: 100%;
+`
+
+const IconBoxStyled = styled.div`
+  background: #6adc91;
+  border-radius: 50%;
+  width: 20px;
+  height: 20px;
+  text-align: center;
+  float: left;
+  margin-right: 10px;
+`
+
+const ReportSpaceStyled = styled.span`
+  font-family: Montserrat-SemiBold;
+  font-size: 12px;
+  cursor: pointer;
 `
 
 const SpacePage = ({ match, location, ...props }) => {
@@ -58,13 +78,14 @@ const SpacePage = ({ match, location, ...props }) => {
   const { object: objectSpecifications } = useSelector(state => state.listing.specifications)
   const { array: availabilities } = useSelector(state => state.listing.availabilities)
   const { user } = useSelector(state => state.auth)
+
   const { isLoading: isLoadingOnCreateReservation } = useSelector(state => state.booking.create)
   const { object: pendingBooking } = useSelector(state => state.booking.pending)
 
   const [datesSelected, setDatesSelected] = useState([])
   const [date, setDate] = useState('')
   const [period, setPeriod] = useState(1)
-  const [quantity, setQuantity] = useState(1)
+  // const [quantity, setQuantity] = useState(1)
 
   useEffect(() => {
     dispatch(onGetListingById(match.params.id, null, true))
@@ -216,14 +237,17 @@ const SpacePage = ({ match, location, ...props }) => {
         )
     }
     if (bookingPeriod === 'hourly') {
-      return <ContactHost user={user} dispatch={dispatch} />
+      return (
+        <ContactHost 
+          user={user} 
+          listing={listing} 
+          dispatch={dispatch} />
+      )
     }
     if (bookingPeriod === 'daily') {
       return (
         <div>
           <DailyBooking
-            {...props}
-            dispatch={dispatch}
             focus={!(datesSelected && datesSelected.length > 0)}
             onDateChange={_onDateChangeArray}
             datesSelected={datesSelected}
@@ -305,7 +329,7 @@ const SpacePage = ({ match, location, ...props }) => {
     return true
   }
 
-  const _onSubmitBooking = () => {
+  const _onSubmitBooking = async () => {
     if (!user) {
       props.history.push(`/login?refer=/space/${listing.id}`)
       return 
@@ -323,6 +347,44 @@ const SpacePage = ({ match, location, ...props }) => {
       isAbsorvedFee: listing.listingData.isAbsorvedFee
     }
     dispatch(onCreateBooking(object))
+  }
+  
+  const _reportSpace = () => {
+    if (!user) {
+      props.history.push(`/login?refer=/space/${listing.id}`)
+      return 
+    }
+    const options = {
+      onConfirm: async (values) => {
+        let sendData = values;
+        Object.assign(sendData,
+          {spaceOwner: listing.user.profile.displayName},
+          {spaceOwnerEmail: listing.user.email},
+          {email: config.admin_email },
+          {guest: user.profile.firstName + ' ' + user.profile.lastName},
+          {guestId: user.id},
+          {spaceId: listing.id}
+        )
+
+        const emailData = {
+          template: 'report-listing',
+          data: JSON.stringify(values)
+        }
+        await dispatch(sendMail(emailData))
+
+        dispatch(
+          openModal(TypesModal.MODAL_TYPE_WARN, {
+            options: {
+              title: 'Your report was sent, thank you!',
+              text: 'Do not worry, we are on it.',
+              handlerCallback: true,
+              handlerTitle: 'Close'
+            }
+          })
+        )
+      },
+    }
+    dispatch(openModal(TypesModal.MODAL_TYPE_REPORT_LISTING, options))
   }
 
   return (
@@ -403,12 +465,11 @@ const SpacePage = ({ match, location, ...props }) => {
                 title="Opening Days"
                 name={_getWeekName(listing.accessDays)}
                 icon="specification-opening-days"
-                error={_getWeekName(listing.accessDays) === 'Closed'}
               />
               {objectSpecifications && _renderHighLights(objectSpecifications)}
             </Grid>
           </Box>
-              
+
           <Box>
             <Title type="h5" title="Access Type" />
             <Box
@@ -427,7 +488,7 @@ const SpacePage = ({ match, location, ...props }) => {
               <Icon
                 style={{ alignSelf: 'center', justifySelf: 'center' }}
                 width="50px"
-                fill={'#6ADC91'}
+                fill="#6ADC91"
                 name={
                   listing.listingData.accessType &&
                   `access-type-${listing.listingData.accessType
@@ -500,36 +561,63 @@ const SpacePage = ({ match, location, ...props }) => {
               type="h5"
               title="Availability"
             />
-            <TimeTable data={listing.accessDays.listingAccessHours} error={_getWeekName(listing.accessDays) === 'Closed'} />
+            <TimeTable 
+              data={listing.accessDays.listingAccessHours} 
+              error={_getWeekName(listing.accessDays) === 'Closed'} 
+            />
           </Box>
         </Box>
 
         <Box>
           <BookingCard
             titleComponent={
-            <Title type="h5" title={listing.title} subtitle={_getAddress(listing.location)} subTitleMargin={10} noMargin/>
+              <Title 
+                type="h5" 
+                title={listing.title} 
+                subtitle={_getAddress(listing.location)} 
+                subTitleMargin={10} 
+                noMargin
+              />
             }
-            contentComponent={<div>
-              {_renderContentCard(listing.bookingPeriod)}
-              {listing.bookingPeriod !== 'hourly' && (pendingBooking ? (pendingBooking && pendingBooking.count === 0) : true)  && (
-                <Button
-                  onClick={e => _onSubmitBooking(e)}
-                  isLoading={isLoadingOnCreateReservation}
-                  disabled={_isPeriodValid(listing.bookingPeriod)}
-                  fluid
-                >
-                  {listing.listingData.bookingType === 'request' ? 'Booking Request' : 'Book Now'}
-                </Button>
-              )}
-              </div>
+            contentComponent={
+              <>
+                {_renderContentCard(listing.bookingPeriod)}
+                {listing.bookingPeriod !== 'hourly' && (pendingBooking ? (pendingBooking && pendingBooking.count === 0) : true)  && (
+                  <Button
+                    onClick={e => _onSubmitBooking(e)}
+                    isLoading={isLoadingOnCreateReservation}
+                    disabled={_isPeriodValid(listing.bookingPeriod) || (user && user.id === listing.user.id)}
+                    fluid
+                  >
+                    {listing.listingData.bookingType === 'request' ? 'Booking Request' : 'Book Now'}
+                  </Button>
+                )}
+              </>
             }
             footerComponent={
-              <UserDetails hostname={listing.user.profile.displayName} imageProfile={listing.user.profile.picture} joined="2019"/>
+              <>
+                <UserDetails 
+                  hostname={listing.user.profile.displayName} 
+                  imageProfile={listing.user.profile.picture} 
+                  joined="2019"
+                />
+                <Box mt="15px">
+                  <IconBoxStyled>
+                    <Icon
+                      name="flag"
+                      width="10px"
+                      height="100%"
+                      style={{ paddingBottom: '5px' }}
+                    /> 
+                  </IconBoxStyled>
+                  <ReportSpaceStyled onClick={_reportSpace}>Report space</ReportSpaceStyled>
+                </Box>
+              </>
             }
           />
         </Box>
       </Box>
-
+      
       <Box mt="100px">
         <Title type="h5" title="Location" />
         <Map position={{ lat: Number(listing.location.lat), lng: Number(listing.location.lng) }} />

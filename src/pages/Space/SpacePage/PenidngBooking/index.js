@@ -15,6 +15,8 @@ import {  ListDates,
           Box
         } from 'components';
 
+import { config } from 'contants'
+
 const ContentStyled = styled.div`
   display: grid;
   grid-template-columns: auto auto;
@@ -121,14 +123,12 @@ const _onContinueBooking = async (booking, dispatch) => {
         buttonConfirmText: 'Go to my dashboard',
       },
       onConfirm: () => {
-        console.log('go to dashboard')
-        // history.push('/dashboard')
+        window.location.href = `${config.legacy}/dashboard/bookings`
       },
     }
     dispatch(openModal(TypesModal.MODAL_TYPE_CONFIRM, options))
   } else {
-    console.log('go to checkout')
-    // props.history.push('/checkout/' + booking.bookingId)
+    window.location.href = `${config.legacy}/checkout/${booking.bookingId}`
   }
 }
 
@@ -151,8 +151,7 @@ const _onCancelBooking = (booking, dispatch) => {
 const PendingBooking = ({
   booking,
   listing,
-  dispatch,
-  ...props
+  dispatch
 }) => (
     <Grid columns={1} rowGap={'20px'}>
       {_renderContentCard(booking)}

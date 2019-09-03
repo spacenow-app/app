@@ -229,7 +229,6 @@ const PartnerPage = ({ match, location, ...props }) => {
             <Title
               type="h5"
               title="Availability"
-              color={_getWeekName(listing.accessDays) === 'Closed' ? '#E05252' : null}
             />
             <TimeTable data={listing.accessDays.listingAccessHours} error={_getWeekName(listing.accessDays) === 'Closed'} />
           </Box>
