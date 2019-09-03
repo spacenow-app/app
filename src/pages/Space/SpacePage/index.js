@@ -104,11 +104,7 @@ const SpacePage = ({ match, location, ...props }) => {
 
   useEffect(() => {
     listing && dispatch(onGetAvailabilitiesByListingId(listing.id))
-  }, [isCleanedAvailabilities])
-
-  useEffect(() => {
-    listing && dispatch(onGetAvailabilitiesByListingId(listing.id))
-  }, [pendingBooking])
+  }, [pendingBooking, isCleanedAvailabilities])
 
 
   if(listing && listing.user.provider === 'wework') {
@@ -197,7 +193,7 @@ const SpacePage = ({ match, location, ...props }) => {
 
   const _convertedArrayPhotos = array => {
     return array.filter(el => el !== undefined).length > 0
-      ? array.filter(el => el !== undefined).map(el => ({ source: el.name }))
+      ? array.filter(el => el !== undefined).map(el => ({ source: `https://api-assets.prod.cloud.spacenow.com?width=800&heigth=500&format=jpeg&path=${el.name}` }))
       : []
   }
 
@@ -275,7 +271,6 @@ const SpacePage = ({ match, location, ...props }) => {
     }
     if (bookingPeriod === 'weekly') {
       if (period < listing.listingData.minTerm) setPeriod(listing.listingData.minTerm)
-
       return (
         <WeeklyBooking
           period={period}
