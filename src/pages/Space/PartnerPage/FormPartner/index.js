@@ -32,13 +32,6 @@ const FormPartner = ({
   isValid,
   ...props
 }) => {
-  
-  // useEffect( () => console.log("mount"), [] );
-  // useEffect( () => console.log("will update data1"), [ data1 ] );
-  // useEffect( () => console.log("will update any") );
-  // useEffect( () => () => console.log("will update data1 or unmount"), [ data1 ] );
-  // useEffect( () => () => console.log("unmount"), [] );
-
 
   const _handleSelectChange = e => {
     const { name, value } = e.target

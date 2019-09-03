@@ -7,7 +7,6 @@ import 'react-day-picker/lib/style.css'
 
 import { format as dateFnsFormat, parse as dateFnsParse } from 'date-fns'
 
-import { Caption } from 'components'
 import CalendarIcon from 'components/Icon/svg/generic/calendar.svg'
 
 const sizeStyle = {
@@ -131,6 +130,12 @@ const WrapperStyled = styled.div`
   }
 `
 
+const Label = styled.label`
+  font-size: 14px;
+  font-family: 'Montserrat-Medium';
+  margin-left: 20px;
+`
+
 const DatePicker = forwardRef(
   ({ label, handleDateChange, dayPickerProps, format, placeholder, value, ...props }, ref) => {
     const formatDate = (date, formatFunc, locale) => {
@@ -151,7 +156,7 @@ const DatePicker = forwardRef(
 
     return (
       <WrapperStyled {...props}>
-        {label && <Caption margin="10px 0">{label}</Caption>}
+        {label && <Label>{label}</Label>}
         <DayPickerInput
           {...props}
           ref={ref}
@@ -172,7 +177,7 @@ const DatePicker = forwardRef(
 DatePicker.defaultProps = {
   size: 'md',
   format: 'DD/MM/YYYY',
-  placeholder: `${dateFnsFormat(new Date(), 'DD/MM/YYYY')}`
+  placeholder: 'Choose Date'
 }
 
 DatePicker.propTypes = {

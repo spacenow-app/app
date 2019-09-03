@@ -39,6 +39,7 @@ import BookingCard from './BookingCard'
 import BackgroundImage from './BackgroundImage'
 import DatePicker from './DatePicker'
 import VideoModal from './VideoModal'
+import ListDates from './ListDates'
 
 export {
   Modal,
@@ -84,5 +85,6 @@ export {
   BackgroundImage,
   Text,
   DatePicker,
-  VideoModal
+  VideoModal,
+  ListDates
 }

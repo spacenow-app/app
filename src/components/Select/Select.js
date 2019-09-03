@@ -86,7 +86,7 @@ const Label = styled.label`
   margin-left: 20px;
 `
 
-const Select = ({ label, options, children, value, size, ...props }) => {
+const Select = ({ label, options, children, value, size, handleChange, ...props }) => {
   if (children) {
     return (
       <WrapperInput>
@@ -100,7 +100,7 @@ const Select = ({ label, options, children, value, size, ...props }) => {
   return (
     <WrapperInput>
       {label && <Label>{label}</Label>}
-      <SelectStyled {...props} size={size} value={value}>
+      <SelectStyled {...props} size={size} value={value} onChange={handleChange}>
         {options.map(item => (
           <option key={item.key} value={item.value}>
             {item.name}
@@ -126,7 +126,8 @@ Select.propTypes = {
   bgColor: PropTypes.string,
   value: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
   size: PropTypes.string,
-  label: PropTypes.string
+  label: PropTypes.string,
+  handleChange: PropTypes.func,
 }
 
 export default Select

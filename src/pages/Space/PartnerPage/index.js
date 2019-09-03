@@ -26,11 +26,8 @@ import {
   onGetAllRules,
   onGetAllAmenities,
   onGetAllSpecifications,
-  onGetPhotosByListingId,
-  onGetProviderByListingId
+  onGetPhotosByListingId
 } from 'redux/ducks/listing'
-
-import { config } from 'contants'
 
 
 const PartnerPage = ({ match, location, ...props }) => {
@@ -38,10 +35,8 @@ const PartnerPage = ({ match, location, ...props }) => {
 
   const { object: listing, isLoading: isListingLoading } = useSelector(state => state.listing.get)
   const { array: arrayPhotos } = useSelector(state => state.listing.photos)
-  const { data } = useSelector(state => state.listing.provider)
 
   useEffect(() => {
-    dispatch(onGetProviderByListingId(match.params.id))
     dispatch(onGetListingById(match.params.id, null, true))
   }, [dispatch, match.params.id])
 
@@ -83,10 +78,9 @@ const PartnerPage = ({ match, location, ...props }) => {
       : []
   }
 
-  // Load the legacy app with regular listing view
-  if(data && data.provider === 'spacenow') {
-    let route = `view-listing/${match.params.id}`
-    window.location.href = `${config.legacy}${route}`
+  // Load the regular listing view
+  if(listing && listing.user.provider === 'spacenow') {
+    props.history.push(`/space/${match.params.id}`)
     return null
   } 
 
@@ -235,7 +229,6 @@ const PartnerPage = ({ match, location, ...props }) => {
             <Title
               type="h5"
               title="Availability"
-              color={_getWeekName(listing.accessDays) === 'Closed' ? '#E05252' : null}
             />
             <TimeTable data={listing.accessDays.listingAccessHours} error={_getWeekName(listing.accessDays) === 'Closed'} />
           </Box>

@@ -6,7 +6,7 @@ import numeral from 'numeral'
 import { useDispatch, useSelector } from 'react-redux'
 import { format } from 'date-fns'
 
-import { sendMailForm } from 'redux/ducks/mail'
+// import { sendMailForm } from 'redux/ducks/mail'
 
 import {
   Wrapper,
@@ -128,7 +128,7 @@ const LeadFormRequirement = ({
           </html>
         `
     }
-    dispatch(sendMailForm(emailOptions))
+    // dispatch(sendMailForm(emailOptions))
   }
 
   return (

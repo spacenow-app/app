@@ -13,7 +13,7 @@ const ModalWarn = ({ onConfirm, options }) => {
   const handleConfirm = isConfirmed => {
     dispatch(closeModal())
     if (isConfirmed) {
-      onConfirm()
+      onConfirm && onConfirm()
     }
   }
 

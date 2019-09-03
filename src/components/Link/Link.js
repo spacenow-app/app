@@ -4,17 +4,12 @@ import styled from 'styled-components'
 
 const LinkStyled = styled.div`
   cursor: ${props => (props.disabled ? 'not-allowed' : 'pointer')};
-  border-radius: ${props => props.theme.link.baseRadius};
-  font-size: ${props => {
-    const { baseFontSize } = props.theme.link
-    const baseFontSizeParsed = parseInt(baseFontSize, 10)
-    return (
-      (props.small && `${baseFontSizeParsed * 0.875}px`) ||
-      (props.large && `${baseFontSizeParsed * 1.375}px`) ||
-      baseFontSize
-    )
+  font-size: ${props => 
+      (props.small && `${14 * 0.875}px`) ||
+      (props.large && `${14 * 1.375}px`) ||
+      "14px"
   }};
-  font-weight: ${props => props.theme.link.fontSemibold};
+  font-family: 'Montserrat-SemiBold';
   line-height: ${props => (props.small && '2.2') || (props.large && '1.25') || '2.5'};
   padding: ${props => (props.large ? '16px 25px 17px' : '0 12px')};
   display: grid;
@@ -87,7 +82,7 @@ Link.defaultProps = {
 Link.propTypes = {
   children: PropTypes.string.isRequired,
   // eslint-disable-next-line react/no-unused-prop-types
-  theme: PropTypes.instanceOf(Object).isRequired,
+  // theme: PropTypes.instanceOf(Object).isRequired,
   onClick: PropTypes.func,
   disabled: PropTypes.bool,
   className: PropTypes.string,
