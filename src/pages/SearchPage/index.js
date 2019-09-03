@@ -1,11 +1,24 @@
 import React, { useEffect, useState } from 'react'
 import { useDispatch, shallowEqual, useSelector } from 'react-redux'
 import styled from 'styled-components'
-import { NavBar, Line, Title, Text, Input, Button, Box, Checkbox, MapSearch, Slider, Switch } from 'components'
+import {
+  NavBar,
+  Line,
+  Title,
+  Text,
+  Input,
+  Button,
+  Box,
+  Checkbox,
+  MapSearch,
+  Slider,
+  Switch,
+  AutoComplete
+} from 'components'
 import { Manager, Reference, Popper } from 'react-popper'
 import numeral from 'numeral'
 
-import { onSearch } from 'redux/ducks/search'
+import { onSearch, onQuery } from 'redux/ducks/search'
 
 import ListResults from './ListResults'
 
@@ -71,10 +84,12 @@ const SearchPage = () => {
   const [selectedSpace, setSelectedSpace] = useState(null)
   const [shouldShowFilter, setShouldShowFilter] = useState(false)
   const [markers, setMarkers] = useState([])
+  const [address, setAddress] = useState('Sydney, Austrália')
+  const [latLng, setLatLng] = useState({ lat: -33.8688197, lng: 151.2092955 })
   const [filterPrice, setFilterPrice] = useState([50, 5000])
   const [filterInstantBooking, setFilterInstantBooking] = useState(false)
   const [filterDuration, setFilterDuration] = useState({
-    hourly: true,
+    hourly: false,
     daily: false,
     weekly: false,
     monthly: false
@@ -157,6 +172,37 @@ const SearchPage = () => {
     if (type === 'max') setFilterPrice([filterPrice[0], number.value()])
   }
 
+  const _onSearch = () => {
+    const filters = {
+      filterCategory,
+      filterDuration,
+      filterInstantBooking,
+      filterPrice
+    }
+    dispatch(onQuery(false, filters))
+    setShouldShowFilter(null)
+  }
+
+  const _onSelectedAddess = obj => {
+    console.log(obj)
+    const { position, address: objAddress } = obj
+    if (position) {
+      setLatLng(position)
+    }
+    if (objAddress) {
+      setAddress(objAddress)
+    }
+  }
+
+  const _onHandleError = () => {
+    setLatLng({})
+  }
+
+  const _reset = () => {
+    setLatLng({})
+    setAddress('')
+  }
+
   const modifiers = {
     preventOverflow: { enabled: false },
     hide: { enabled: false }
@@ -167,7 +213,18 @@ const SearchPage = () => {
       <Box>
         <NavBar />
         <SearchBar>
-          <Input size="sm" placeholder="Sydney, Australia" />
+          <AutoComplete
+            address={address}
+            onChangeAddress={setAddress}
+            onHandleError={_onHandleError}
+            onSelectedAddess={_onSelectedAddess}
+            disabled={latLng && (latLng.lat || latLng.lng)}
+            closeButton={latLng && (latLng.lat || latLng.lng)}
+            onClickCloseButton={_reset}
+            size="sm"
+            placeholder="Sydney, Australia"
+            label={false}
+          />
           <Button size="sm">Search</Button>
         </SearchBar>
         <Line />
@@ -258,7 +315,7 @@ const SearchPage = () => {
                             I’m looking to rent a place for business
                           </Text>
                         </div>
-                        <Button size="sm" outline onClick={() => setShouldShowFilter(null)}>
+                        <Button size="sm" outline onClick={_onSearch}>
                           Save
                         </Button>
                       </Box>
@@ -335,7 +392,7 @@ const SearchPage = () => {
                             I want to find space on a monthly basis
                           </Text>
                         </div>
-                        <Button size="sm" outline onClick={() => setShouldShowFilter(null)}>
+                        <Button size="sm" outline onClick={_onSearch}>
                           Save
                         </Button>
                       </Box>
@@ -394,7 +451,7 @@ const SearchPage = () => {
                           />
                         </Box>
                         <Box mt="30px">
-                          <Button size="sm" outline onClick={() => setShouldShowFilter(null)}>
+                          <Button size="sm" outline onClick={_onSearch}>
                             Save
                           </Button>
                         </Box>
@@ -441,7 +498,7 @@ const SearchPage = () => {
                             handleCheckboxChange={(e, { checked }) => setFilterInstantBooking(checked)}
                           />
                         </ItemSwitchStyled>
-                        <Button size="sm" outline onClick={() => setShouldShowFilter(null)}>
+                        <Button size="sm" outline onClick={_onSearch}>
                           Save
                         </Button>
                       </Box>
@@ -458,7 +515,7 @@ const SearchPage = () => {
             type="h5"
             title={
               <Text>
-                Showing resuls around <Text color="primary">Sydney</Text>
+                Showing resuls around <Text color="primary">{address}</Text>
               </Text>
             }
           />
@@ -479,7 +536,12 @@ const SearchPage = () => {
       <ContainerResults>
         <ListResults markers={searchResults} onHoverItem={_toggleHover} />
         <ContainerMap>
-          <MapSearch markers={markers} onClickMarker={_onClickMarkerMap} selectedMarker={selectedSpace} />
+          <MapSearch
+            position={latLng}
+            markers={markers}
+            onClickMarker={_onClickMarkerMap}
+            selectedMarker={selectedSpace}
+          />
         </ContainerMap>
       </ContainerResults>
     </>
