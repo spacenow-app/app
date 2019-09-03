@@ -1,4 +1,4 @@
-import React from 'react';
+import React from 'react'
 
 import { addMinutes, format } from 'date-fns'
 import styled from 'styled-components';
@@ -72,12 +72,11 @@ function spelling(periodType, reference) {
 }
 
 const _renderContentCard = booking => {
-
   let expiry = addMinutes(new Date(booking.createdAt), 30)
   let expiryDate = format(expiry, "DD/MM/YYYY") + ' at ' + format(expiry, "HH:mm");
   const startDate = booking.reservations[0];
   const endDate = booking.reservations[booking.reservations.length - 1];
-  
+
   return (
     <Grid columns={1} rowGap={'20px'}>
       <Cell>
@@ -109,11 +108,11 @@ const _renderContentCard = booking => {
   )
 }
 
-const _onContinueBooking = async (booking, dispatch) => {
+const _onContinueBooking = (booking, dispatch) => {
   if (new Date() >= addMinutes(booking.createdAt, '30')) {
 
-    await dispatch(onTimeoutBooking(booking.bookingId))
-    dispatch(onGetAvailabilitiesByListingId(booking.listingId))
+    dispatch(onTimeoutBooking(booking.bookingId))
+    // dispatch(onGetAvailabilitiesByListingId(booking.listingId))
 
     const options = {
       options: {
@@ -140,9 +139,8 @@ const _onCancelBooking = (booking, dispatch) => {
       buttonConfirmText: 'Yes, cancel booking',
       buttonCancelText: 'No, keep booking',
     },
-    onConfirm: async () => {
-      await dispatch(onTimeoutBooking(booking.bookingId))
-      dispatch(onGetAvailabilitiesByListingId(booking.listingId))
+    onConfirm: () => {
+      dispatch(onTimeoutBooking(booking.bookingId))
     }
   }
   dispatch(openModal(TypesModal.MODAL_TYPE_CONFIRM, options))
@@ -168,6 +166,6 @@ const PendingBooking = ({
       </Grid>
     </Grid>
   )
-  ;
+;
 
 export default PendingBooking;
