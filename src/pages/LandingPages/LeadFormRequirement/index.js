@@ -3,8 +3,8 @@ import styled, { css } from 'styled-components'
 import { withFormik } from 'formik'
 import * as Yup from 'yup'
 import numeral from 'numeral'
-import { useDispatch, useSelector } from 'react-redux'
-import { format } from 'date-fns'
+import { useSelector } from 'react-redux'
+// import { format } from 'date-fns'
 
 // import { sendMailForm } from 'redux/ducks/mail'
 
@@ -92,7 +92,6 @@ const LeadFormRequirement = ({
   ...props
 }) => {
   const inputTo = useRef()
-  const dispatch = useDispatch()
   const { isLoading } = useSelector(state => state.mail)
 
   const _handleRadioChange = (e, { value, name }) => {
@@ -104,30 +103,30 @@ const LeadFormRequirement = ({
   }
 
   const _handleSubmit = () => {
-    const sizeType = {
-      1: '1-10 People',
-      2: '11 - 100 People',
-      3: '101 - 500 People',
-      4: '500+ People'
-    }
+    // const sizeType = {
+    //   1: '1-10 People',
+    //   2: '11 - 100 People',
+    //   3: '101 - 500 People',
+    //   4: '500+ People'
+    // }
 
-    const emailOptions = {
-      to: 'barrett@spacenow.com, team@spacenow.com',
-      subject: 'Spacenow Landing Page - Lead Requirements Form',
-      html: `
-          <html>
-          <body>
-            <p>Type Of Space: ${values.typeOfSpace.itemName}</p>
-            <p>Location: ${values.location}</p>
-            <p>Start Date: ${format(values.startDate, 'DD/MM/YYYY')}</p>
-            <p>End Date: ${format(values.endDate, 'DD/MM/YYYY')}</p>
-            <p>Size: ${sizeType[values.size]}</p>
-            <p>Budget: ${values.budget || 'I don’t know'}</p>
-            <p>Message: ${values.message}</p>
-          </body>
-          </html>
-        `
-    }
+    // const emailOptions = {
+    //   to: 'barrett@spacenow.com, team@spacenow.com',
+    //   subject: 'Spacenow Landing Page - Lead Requirements Form',
+    //   html: `
+    //       <html>
+    //       <body>
+    //         <p>Type Of Space: ${values.typeOfSpace.itemName}</p>
+    //         <p>Location: ${values.location}</p>
+    //         <p>Start Date: ${format(values.startDate, 'DD/MM/YYYY')}</p>
+    //         <p>End Date: ${format(values.endDate, 'DD/MM/YYYY')}</p>
+    //         <p>Size: ${sizeType[values.size]}</p>
+    //         <p>Budget: ${values.budget || 'I don’t know'}</p>
+    //         <p>Message: ${values.message}</p>
+    //       </body>
+    //       </html>
+    //     `
+    // }
     // dispatch(sendMailForm(emailOptions))
   }
 
