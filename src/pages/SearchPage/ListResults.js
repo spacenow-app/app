@@ -1,6 +1,7 @@
 import React, { memo } from 'react'
 import styled from 'styled-components'
 import { Box, Text, Icon, Tag } from 'components'
+import { toPlural } from 'utils/strings'
 
 const ContainerList = styled.div`
   display: grid;
@@ -73,72 +74,59 @@ const ListResults = ({ markers, onHoverItem }) => {
     return object.photos[0].name
   }
 
-  const _renderSpecifications = obj => {
-    const array = Object.keys(obj).map(i => obj[i])
+  const _renderSpecifications = (spec, listingData) => {
+    const _getInfo = el => {
+      switch (el.field) {
+        case 'capacity':
+          return {
+            icon: 'specification-capacity',
+            value: el.value === 0 ? 'Not mentioned' : `${toPlural('Person', el.value)}`
+          }
+        case 'size':
+          return {
+            icon: 'specification-size',
+            value: el.value === 0 ? 'Not mentioned' : `${el.value} sqm`
+          }
+        case 'meetingRooms':
+          return {
+            icon: 'specification-meetingroom-quantity',
+            value: el.value === 0 ? 'None available' : `${el.value} available`
+          }
+        case 'isFurnished':
+          return {
+            icon: el.value === 0 ? 'specification-furnished-no' : 'specification-furnished-yes',
+            value: el.value === 0 ? 'No' : 'Yes'
+          }
+        case 'carSpace':
+          return {
+            icon: 'category-desk',
+            value: el.value === 0 ? 'None available' : `${el.value} available`
+          }
+        default:
+          return {
+            icon: '',
+            value: ''
+          }
+      }
+    }
 
-    console.log(array)
+    return spec.slice(0, 3).map(el => {
+      const specDataObject = JSON.parse(el.specData)
 
-    return (
-      <>
-        <Box justifySelf="center">
-          <Icon name="specification-capacity" width="22px" />
+      const obj = {
+        field: specDataObject.field,
+        value: listingData[specDataObject.field]
+      }
+
+      return (
+        <Box justifySelf="center" key={el.id}>
+          <Icon name={_getInfo(obj).icon} width="22px" />
           <Text fontSize="10px" ml="10px">
-            120x130m
+            {_getInfo(obj).value}
           </Text>
         </Box>
-        <Box justifySelf="center">
-          <Icon name="specification-car-large" width="22px" />
-          <Text fontSize="10px" ml="10px">
-            10 Capactity
-          </Text>
-        </Box>
-        <Box justifySelf="center">
-          <Icon name="specification-size" width="22px" />
-          <Text fontSize="10px" ml="10px">
-            1 Car Spot
-          </Text>
-        </Box>
-      </>
-    )
-
-    // return array.slice(0, 3).map((el, index) => {
-    //   if (el.field === 'capacity') {
-    //     const value = el.value === 0 ? 'Not mentioned' : `${toPlural('Person', el.value)}`
-    //     return (
-    //       <Icon  title={el.label} name={value} icon="specification-capacity" last={index === 2} />
-    //     )
-    //   }
-    //   if (el.field === 'size') {
-    //     const value = el.value === 0 ? 'Not mentioned' : `${el.value} sqm`
-    //     return <Highlights key={el.field} title={el.label} name={value} icon="specification-size" last={index === 2} />
-    //   }
-    //   if (el.field === 'meetingRooms') {
-    //     const value = el.value === 0 ? 'None available' : `${el.value} available`
-    //     return (
-    //       <Highlights
-    //         key={el.field}
-    //         title={el.label}
-    //         name={value}
-    //         icon="specification-meetingroom-quantity"
-    //         last={index === 2}
-    //       />
-    //     )
-    //   }
-    //   if (el.field === 'isFurnished') {
-    //     const value = el.value === 0 ? 'No’' : 'Yes'
-    //     const icon = el.value === 0 ? 'specification-furnished-no' : 'specification-furnished-yes'
-    //     return <Highlights key={el.field} title={el.label} name={value} icon={icon} last={index === 2} />
-    //   }
-    //   if (el.field === 'carSpace') {
-    //     // const value = el.value === 0 ? 'None available’' : `${el.value} available`
-    //     // return <Highlights title={el.label} name={value} icon="category-desk" last={index === 2} />
-    //   }
-    //   if (el.field === 'isFurnished') {
-    //     // const value = el.value === 0 ? 'None available’' : `${el.value} available`
-    //     // return <Highlights title={el.label} name={value} icon="category-desk" last={index === 2} />
-    //   }
-    //   return <Highlights key={el.field} title={el.label} name={el.value} icon="category-desk" last={index === 2} />
-    // })
+      )
+    })
   }
 
   return (
@@ -170,8 +158,12 @@ const ListResults = ({ markers, onHoverItem }) => {
               <Text display="block" fontFamily="regular" fontSize="14px" color="greyscale.1">
                 {`${item.location.address1}, ${item.location.city}`}
               </Text>
-              <Box display="grid" gridTemplateColumns="auto auto auto" my="15px">
-                {_renderSpecifications(item.listingData)}
+              <Box
+                display="grid"
+                gridTemplateColumns={item.specifications.length >= 3 ? 'auto auto auto' : 'auto auto'}
+                my="15px"
+              >
+                {_renderSpecifications(item.specifications, item.listingData)}
               </Box>
               <Box display="grid" gridAutoFlow="column">
                 <Text fontSize="14px">
