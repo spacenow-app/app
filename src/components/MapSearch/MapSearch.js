@@ -11,6 +11,7 @@ const CardContainer = styled.div`
   grid-column-gap: 10px;
   height: 100px;
   margin-right: 20px;
+  min-width: 350px;
 
   :before {
     content: ' ';
@@ -31,6 +32,7 @@ const CardImage = styled.div`
   height: 100px;
   background-repeat: no-repeat;
   background-size: cover;
+  margin-left: -1px;
 `
 
 const CardContent = styled.div`
@@ -61,6 +63,7 @@ const CardContentUser = styled.div``
 
 const CardContentUserAvatar = styled.img`
   width: 30px;
+  height: 30px;
   border-radius: 100%;
   border: 0.5px solid #ececec;
 `
@@ -110,15 +113,15 @@ const MapSearch = withGoogleMap(props => {
           }}
         >
           <CardContainer>
-            <CardImage src="https://images.unsplash.com/photo-1542744173-8e7e53415bb0?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1350&q=80" />
+            <CardImage src={props.selectedMarker.photo} />
             <CardContent>
-              <CardContentTitle>Creative Space in Alexandria</CardContentTitle>
+              <CardContentTitle>{props.selectedMarker.title}</CardContentTitle>
               <CardContentTextPrice>
-                From <CardContentPrice>AU$3,000</CardContentPrice> Daily
+                From <CardContentPrice>{props.selectedMarker.price}</CardContentPrice> {props.selectedMarker.period}
               </CardContentTextPrice>
               <CardContentUser>
-                <CardContentUserAvatar src="https://avatars3.githubusercontent.com/u/9704744?s=400&v=4" />
-                <CardContentUserTitle>Bruno Valenga</CardContentUserTitle>
+                <CardContentUserAvatar src={props.selectedMarker.host.photo} />
+                <CardContentUserTitle>{props.selectedMarker.host.name}</CardContentUserTitle>
               </CardContentUser>
             </CardContent>
           </CardContainer>
@@ -137,7 +140,21 @@ MapSearch.defaultProps = {
 }
 
 MapSearch.propTypes = {
-  children: PropTypes.element
+  markers: PropTypes.instanceOf(Array),
+  onClickMarker: PropTypes.func,
+  selectedMarker: PropTypes.shape({
+    id: PropTypes.string,
+    lat: PropTypes.number,
+    lng: PropTypes.string,
+    photo: PropTypes.string,
+    title: PropTypes.string,
+    price: PropTypes.string,
+    period: PropTypes.string,
+    host: PropTypes.shape({
+      photo: PropTypes.string,
+      name: PropTypes.string
+    })
+  })
 }
 
 const comparisonFn = (prevProps, nextProps) => {
