@@ -39,7 +39,6 @@ const ContainerResults = styled.div`
 `
 
 const ContainerMap = styled.div`
-  background: tomato;
   margin-bottom: 20px;
 
   .gm-style-iw-c {
@@ -104,29 +103,52 @@ const SearchPage = () => {
       searchResults.map(item => ({
         id: item.id,
         lat: +item.location.lat,
-        lng: +item.location.lng
+        lng: +item.location.lng,
+        photo: _getCoverPhoto(item),
+        title: item.title,
+        price: `${item.listingData.currency}$${item.listingData.basePrice}`,
+        period: item.bookingPeriod,
+        host: {
+          photo: (item.host.profile && item.host.profile.picture) || '',
+          name: (item.host.profile && item.host.profile.firstName) || 'User'
+        }
       }))
     )
   }, [searchResults])
 
-  const _toggleHover = e => {
-    if (!e) {
+  const _toggleHover = object => {
+    if (!object) {
       setSelectedSpace(null)
       return
     }
     setSelectedSpace({
-      id: e.id,
-      lat: +e.location.lat,
-      lng: +e.location.lng
+      id: object.id,
+      lat: +object.location.lat,
+      lng: +object.location.lng,
+      photo: _getCoverPhoto(object),
+      title: object.title,
+      price: `${object.listingData.currency}$${object.listingData.basePrice}`,
+      period: object.bookingPeriod,
+      host: {
+        photo: (object.host.profile && object.host.profile.picture) || '',
+        name: (object.host.profile && object.host.profile.firstName) || 'User'
+      }
     })
   }
 
-  const _onClickMarkerMap = e => {
-    setSelectedSpace({
-      id: e.id,
-      lat: +e.location.lat,
-      lng: +e.location.lng
-    })
+  const _getCoverPhoto = object => {
+    if (object.photos.length <= 0) {
+      return ''
+    }
+    const photoCover = object.photos.find(e => e.isCover)
+    if (photoCover) {
+      return photoCover.name
+    }
+    return object.photos[0].name
+  }
+
+  const _onClickMarkerMap = object => {
+    setSelectedSpace(object)
   }
 
   const _onChangeInputPrice = (e, type) => {
