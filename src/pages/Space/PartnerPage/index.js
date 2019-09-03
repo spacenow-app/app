@@ -23,10 +23,7 @@ import FormPartner from './FormPartner'
 
 import {
   onGetListingById,
-  onGetAllRules,
-  onGetAllAmenities,
-  onGetAllSpecifications,
-  onGetPhotosByListingId
+  onGetAllSpecifications
 } from 'redux/ducks/listing'
 
 
@@ -34,20 +31,14 @@ const PartnerPage = ({ match, location, ...props }) => {
   const dispatch = useDispatch()
 
   const { object: listing, isLoading: isListingLoading } = useSelector(state => state.listing.get)
-  const { array: arrayPhotos } = useSelector(state => state.listing.photos)
 
   useEffect(() => {
     dispatch(onGetListingById(match.params.id, null, true))
-  }, [dispatch, match.params.id])
+  }, [match.params.id])
 
   useEffect(() => {
-    if (listing) {
-      dispatch(onGetAllSpecifications(listing.settingsParent.id, listing.listingData))
-      dispatch(onGetAllAmenities(listing.settingsParent.subcategory.id))
-      dispatch(onGetAllRules())
-      dispatch(onGetPhotosByListingId(listing.id))
-    }
-  }, [dispatch, listing])
+    listing &&  dispatch(onGetAllSpecifications(listing.settingsParent.id, listing.listingData))
+  }, [listing])
 
   const _getAddress = address => {
     const { address1 = '', city = '', zipcode = '', state = '', country = '' } = address
@@ -74,7 +65,7 @@ const PartnerPage = ({ match, location, ...props }) => {
 
   const _convertedArrayPhotos = array => {
     return array.filter(el => el !== undefined).length > 0
-      ? array.filter(el => el !== undefined).map(el => ({ source: el.name }))
+      ? array.filter(el => el !== undefined).map(el => ({ source: `https://api-assets.prod.cloud.spacenow.com?width=800&heigth=500&format=jpeg&path=${el.name}` }))
       : []
   }
 
@@ -94,7 +85,7 @@ const PartnerPage = ({ match, location, ...props }) => {
       <Box display="grid" gridTemplateColumns="1fr 380px" gridColumnGap="15px" my="80px">
         <Box display="grid" gridRowGap="50px">
 
-          <Carousel photos={_convertedArrayPhotos(arrayPhotos)} />
+          <Carousel photos={_convertedArrayPhotos(listing.photos)} />
 
           <Grid justifyContent="space-between" columnGap="10px" columns={2}>
             <Box display="flex" justifyContent="start">
@@ -160,6 +151,7 @@ const PartnerPage = ({ match, location, ...props }) => {
                 name={_getWeekName(listing.accessDays)}
                 icon="specification-opening-days"
                 error={_getWeekName(listing.accessDays) === 'Closed'}
+                last
               />
             </Grid>
           </Box>

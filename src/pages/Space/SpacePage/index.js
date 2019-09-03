@@ -36,13 +36,20 @@ import ContactHost from './ContactHost'
 import {
   onGetListingById,
   onGetAllSpecifications,
-  onGetAllRules,
   onCleanAvailabilitiesByListingId,
   onGetAvailabilitiesByListingId
 } from 'redux/ducks/listing'
 
-import { onCreateBooking, onGetPendingBooking } from 'redux/ducks/booking'
-import { openModal, TypesModal } from 'redux/ducks/modal'
+import { 
+  onCreateBooking, 
+  onGetPendingBooking 
+} from 'redux/ducks/booking'
+
+import { 
+  openModal, 
+  TypesModal 
+} from 'redux/ducks/modal'
+
 import  { sendMail } from 'redux/ducks/mail'
 
 import GraphCancelattionImage from 'pages/Listing/SpacePage/CancellationTab/graph_cancellation.png'
@@ -73,7 +80,6 @@ const SpacePage = ({ match, location, ...props }) => {
   const dispatch = useDispatch()
 
   const { object: listing, isLoading: isListingLoading } = useSelector(state => state.listing.get)
-  const { array: arrayRules, isLoading: isLoadingRules } = useSelector(state => state.listing.rules)
   const { isCleaned: isCleanedAvailabilities } = useSelector(state => state.listing.cleanAvailabilities)
   const { object: objectSpecifications } = useSelector(state => state.listing.specifications)
   const { array: availabilities } = useSelector(state => state.listing.availabilities)
@@ -85,21 +91,20 @@ const SpacePage = ({ match, location, ...props }) => {
   const [datesSelected, setDatesSelected] = useState([])
   const [date, setDate] = useState('')
   const [period, setPeriod] = useState(1)
-  // const [quantity, setQuantity] = useState(1)
 
   useEffect(() => {
     dispatch(onGetListingById(match.params.id, null, true))
     dispatch(onCleanAvailabilitiesByListingId(match.params.id))
-  }, [dispatch, match.params.id])
+  }, [match.params.id])
 
   useEffect(() => {
-    if (listing) {
-      dispatch(onGetAllRules())
-      dispatch(onGetAllSpecifications(listing.settingsParent.id, listing.listingData))
-    }
-    if (listing && user && user.id) dispatch(onGetPendingBooking(listing.id, user.id))
-    if(isCleanedAvailabilities && listing) dispatch(onGetAvailabilitiesByListingId(listing.id))
-  }, [dispatch, listing, isCleanedAvailabilities, user])
+    listing && dispatch(onGetAllSpecifications(listing.settingsParent.id, listing.listingData))
+    listing && user && user.id && dispatch(onGetPendingBooking(listing.id, user.id))
+  }, [listing, user])
+
+  useEffect(() => {
+    listing && dispatch(onGetAvailabilitiesByListingId(listing.id))
+  }, [pendingBooking, isCleanedAvailabilities])
 
 
   if(listing && listing.user.provider === 'wework') {
@@ -188,7 +193,7 @@ const SpacePage = ({ match, location, ...props }) => {
 
   const _convertedArrayPhotos = array => {
     return array.filter(el => el !== undefined).length > 0
-      ? array.filter(el => el !== undefined).map(el => ({ source: el.name }))
+      ? array.filter(el => el !== undefined).map(el => ({ source: `https://api-assets.prod.cloud.spacenow.com?width=800&heigth=500&format=jpeg&path=${el.name}` }))
       : []
   }
 
@@ -266,7 +271,6 @@ const SpacePage = ({ match, location, ...props }) => {
     }
     if (bookingPeriod === 'weekly') {
       if (period < listing.listingData.minTerm) setPeriod(listing.listingData.minTerm)
-
       return (
         <WeeklyBooking
           period={period}
@@ -458,7 +462,7 @@ const SpacePage = ({ match, location, ...props }) => {
             <Grid columns={5}>
               <Highlights
                 title="Minimum term"
-                name={_changeToPlural(listing.bookingPeriod, listing.listingData.minTerm)}
+                name={_changeToPlural(listing.bookingPeriod, listing.listingData.minTerm ? listing.listingData.minTerm : 1)}
                 icon="specification-minimum-term"
               />
               <Highlights
@@ -537,20 +541,18 @@ const SpacePage = ({ match, location, ...props }) => {
               <Box>
                 <Title type="h5" title="Space Rules" />
                 <Box display="grid" gridTemplateColumns="1fr 1fr 1fr" gridRowGap="20px">
-                  {isLoadingRules ? (
-                    <Loader />
-                  ) : (
-                    arrayRules.map(item => (
+                  {listing.rules.map(item => {
+                      return (
                       <Checkbox
                         disabled
                         key={item.id}
-                        label={item.itemName}
+                        label={item.settingsData.itemName}
                         name="rules"
-                        value={item.id}
-                        checked={listing.rules.some(rule => rule.listSettingsId === item.id)}
+                        checked={true}
                       />
-                    ))
-                  )}
+                      )
+                    })
+                  }
                 </Box>
               </Box>
             )
@@ -618,10 +620,11 @@ const SpacePage = ({ match, location, ...props }) => {
         </Box>
       </Box>
       
-      <Box mt="100px">
+      {/* TODO: UNCOMMENT */}
+      {/* <Box mt="100px">
         <Title type="h5" title="Location" />
         <Map position={{ lat: Number(listing.location.lat), lng: Number(listing.location.lng) }} />
-      </Box>
+      </Box> */}
 
       <Box my="100px">
         <Cell>
