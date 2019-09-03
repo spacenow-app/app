@@ -178,6 +178,37 @@ export const onSearch = (lat, lng) => async dispatch => {
 
 export const onQuery = (searchKey, filters) => async dispatch => {
   dispatch({ type: Types.ON_SEARCH_REQUEST })
+
+  const categories = {
+    workspace: [566, 567, 572],
+    meetingSpace: [568],
+    parking: [570],
+    storage: [571],
+    eventSpace: [569],
+    retailAndHospitality: [573]
+  }
+
+  const filter = {
+    categories:
+      Object.keys(categories)
+        .filter(id => {
+          return filters.filterCategory[id]
+        })
+        .map(item => categories[item])
+        .join() || '',
+    duration:
+      Object.keys(filters.filterDuration)
+        .filter(id => {
+          return filters.filterDuration[id]
+        })
+        .join() || '',
+    priceMin: filters.filterPrice[0] || 0,
+    priceMax: filters.filterPrice[1] || 0,
+    instant: filters.filterInstantBooking || ''
+  }
+
+  console.log(filter)
+
   try {
     // const { data } = await getClient().query({
     //   query: querySearchByFilters,
