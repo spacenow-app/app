@@ -184,7 +184,6 @@ const SearchPage = () => {
   }
 
   const _onSelectedAddess = obj => {
-    console.log(obj)
     const { position, address: objAddress } = obj
     if (position) {
       setLatLng(position)
@@ -223,7 +222,7 @@ const SearchPage = () => {
             onClickCloseButton={_reset}
             size="sm"
             placeholder="Sydney, Australia"
-            label={false}
+            label={null}
           />
           <Button size="sm">Search</Button>
         </SearchBar>
