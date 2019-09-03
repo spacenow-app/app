@@ -620,11 +620,10 @@ const SpacePage = ({ match, location, ...props }) => {
         </Box>
       </Box>
       
-      {/* TODO: UNCOMMENT */}
-      {/* <Box mt="100px">
+      <Box mt="100px">
         <Title type="h5" title="Location" />
         <Map position={{ lat: Number(listing.location.lat), lng: Number(listing.location.lng) }} />
-      </Box> */}
+      </Box>
 
       <Box my="100px">
         <Cell>
