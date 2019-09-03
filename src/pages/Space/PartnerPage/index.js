@@ -34,11 +34,11 @@ const PartnerPage = ({ match, location, ...props }) => {
 
   useEffect(() => {
     dispatch(onGetListingById(match.params.id, null, true))
-  }, [match.params.id])
+  }, [dispatch, match.params.id])
 
   useEffect(() => {
     listing &&  dispatch(onGetAllSpecifications(listing.settingsParent.id, listing.listingData))
-  }, [listing])
+  }, [dispatch, listing])
 
   const _getAddress = address => {
     const { address1 = '', city = '', zipcode = '', state = '', country = '' } = address

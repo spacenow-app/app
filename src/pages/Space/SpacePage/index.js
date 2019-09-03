@@ -95,17 +95,16 @@ const SpacePage = ({ match, location, ...props }) => {
   useEffect(() => {
     dispatch(onGetListingById(match.params.id, null, true))
     dispatch(onCleanAvailabilitiesByListingId(match.params.id))
-  }, [match.params.id])
+  }, [dispatch, match.params.id])
 
   useEffect(() => {
     listing && dispatch(onGetAllSpecifications(listing.settingsParent.id, listing.listingData))
     listing && user && user.id && dispatch(onGetPendingBooking(listing.id, user.id))
-  }, [listing, user])
+  }, [dispatch, listing, user])
 
   useEffect(() => {
     listing && dispatch(onGetAvailabilitiesByListingId(listing.id))
-  }, [pendingBooking, isCleanedAvailabilities])
-
+  }, [dispatch, listing, pendingBooking, isCleanedAvailabilities])
 
   if(listing && listing.user.provider === 'wework') {
     props.history.push(`/space/partner/${match.params.id}`)
