@@ -3,11 +3,12 @@ import { SigninPage, SignupPage, ForgotPasswordPage, ResetPasswordPage } from '.
 import NotFoundPage from './NotFoundPage'
 import { IntroPage, LocationPage, CategoryPage, SpaceDetailsPage } from './Listing'
 import { ProfilePage, PaymentPage } from './Account'
+import SearchPage from './SearchPage'
 import { PartnerPage , SpacePage } from './Space'
-
 
 export {
   HomePage,
+  SearchPage,
   SigninPage,
   SignupPage,
   ForgotPasswordPage,
