@@ -40,6 +40,7 @@ import BookingCard from './BookingCard'
 import BackgroundImage from './BackgroundImage'
 import DatePicker from './DatePicker'
 import VideoModal from './VideoModal'
+import ListDates from './ListDates'
 import Link from './Link'
 import Line from './Line'
 import ButtonSocial from './ButtonSocial'
@@ -91,6 +92,7 @@ export {
   Text,
   DatePicker,
   VideoModal,
+  ListDates,
   Link,
   Line,
   ButtonSocial,

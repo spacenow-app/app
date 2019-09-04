@@ -36,7 +36,7 @@ import { openModal, TypesModal } from 'redux/ducks/modal'
 
 import { config } from 'variables'
 
-import GraphCancelattionImage from 'pages/Listing/SpacePage/CancellationTab/graph_cancellation.png'
+import GraphCancelattionImage from 'pages/Listing/SpaceDetailsPage/CancellationTab/graph_cancellation.png'
 
 const ImageStyled = styled.img`
   width: 100%;

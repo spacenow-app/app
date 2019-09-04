@@ -20,37 +20,21 @@ import {
   BookingCard
 } from 'components'
 
-import {
-  onGetListingById,
-  onGetAllRules,
-  onGetAllAmenities,
-  onGetAllSpecifications,
-  onGetPhotosByListingId,
-  onGetProviderByListingId
-} from 'redux/ducks/listing'
+import { onGetListingById, onGetAllSpecifications } from 'redux/ducks/listing'
 
-import { config } from 'variables'
 import FormPartner from './FormPartner'
 
 const PartnerPage = ({ match, location, ...props }) => {
   const dispatch = useDispatch()
 
   const { object: listing, isLoading: isListingLoading } = useSelector(state => state.listing.get)
-  const { array: arrayPhotos } = useSelector(state => state.listing.photos)
-  const { data } = useSelector(state => state.listing.provider)
 
   useEffect(() => {
-    dispatch(onGetProviderByListingId(match.params.id))
     dispatch(onGetListingById(match.params.id, null, true))
   }, [dispatch, match.params.id])
 
   useEffect(() => {
-    if (listing) {
-      dispatch(onGetAllSpecifications(listing.settingsParent.id, listing.listingData))
-      dispatch(onGetAllAmenities(listing.settingsParent.subcategory.id))
-      dispatch(onGetAllRules())
-      dispatch(onGetPhotosByListingId(listing.id))
-    }
+    listing && dispatch(onGetAllSpecifications(listing.settingsParent.id, listing.listingData))
   }, [dispatch, listing])
 
   const _getAddress = address => {
@@ -78,14 +62,17 @@ const PartnerPage = ({ match, location, ...props }) => {
 
   const _convertedArrayPhotos = array => {
     return array.filter(el => el !== undefined).length > 0
-      ? array.filter(el => el !== undefined).map(el => ({ source: el.name }))
+      ? array
+          .filter(el => el !== undefined)
+          .map(el => ({
+            source: `https://api-assets.prod.cloud.spacenow.com?width=800&heigth=500&format=jpeg&path=${el.name}`
+          }))
       : []
   }
 
-  // Load the legacy app with regular listing view
-  if (data && data.provider === 'spacenow') {
-    const route = `view-listing/${match.params.id}`
-    window.location.href = `${config.legacy}${route}`
+  // Load the regular listing view
+  if (listing && listing.user.provider === 'spacenow') {
+    props.history.push(`/space/${match.params.id}`)
     return null
   }
 
@@ -98,7 +85,7 @@ const PartnerPage = ({ match, location, ...props }) => {
       <Helmet title="View Listing - Spacenow" />
       <Box display="grid" gridTemplateColumns="1fr 380px" gridColumnGap="15px" my="80px">
         <Box display="grid" gridRowGap="50px">
-          <Carousel photos={_convertedArrayPhotos(arrayPhotos)} />
+          <Carousel photos={_convertedArrayPhotos(listing.photos)} />
 
           <Grid justifyContent="space-between" columnGap="10px" columns={2}>
             <Box display="flex" justifyContent="start">
@@ -162,6 +149,7 @@ const PartnerPage = ({ match, location, ...props }) => {
                 name={_getWeekName(listing.accessDays)}
                 icon="specification-opening-days"
                 error={_getWeekName(listing.accessDays) === 'Closed'}
+                last
               />
             </Grid>
           </Box>
@@ -226,11 +214,7 @@ const PartnerPage = ({ match, location, ...props }) => {
             </Box>
           )}
           <Box>
-            <Title
-              type="h5"
-              title="Availability"
-              color={_getWeekName(listing.accessDays) === 'Closed' ? '#E05252' : null}
-            />
+            <Title type="h5" title="Availability" />
             <TimeTable
               data={listing.accessDays.listingAccessHours}
               error={_getWeekName(listing.accessDays) === 'Closed'}

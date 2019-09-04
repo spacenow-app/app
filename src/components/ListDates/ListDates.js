@@ -36,7 +36,7 @@ const ListDates = props => {
       {monthNames.map(month => {
         if (datesGrouped[month]) {
           return (
-            <ContainerStyled theme={props.theme}>
+            <ContainerStyled key={month}>
               <MonthNameStyled>{month}</MonthNameStyled>
               <ContainerDatesStyled>
                 {datesGrouped[month].map(date => (

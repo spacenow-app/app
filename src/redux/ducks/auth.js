@@ -3,7 +3,31 @@ import { gql } from 'apollo-boost'
 import { toast } from 'react-toastify'
 import { getClient } from 'graphql/apolloClient'
 import { getByName, setToken, deleteToken } from 'utils/cookies'
+import errToMsg from 'utils/errToMsg'
 import { config } from 'variables'
+
+const loginBaseFields = `
+  status
+  token
+  expiresIn
+  user {
+    id
+    email
+    emailConfirmed
+    profile {
+      profileId
+      firstName
+      lastName
+      picture
+    }
+    verification {
+      id
+      isEmailConfirmed
+      isFacebookConnected
+      isGoogleConnected
+    }
+  }
+`
 
 const mutationTokenValidate = gql`
   mutation tokenValidate($token: String!) {
@@ -27,18 +51,44 @@ const mutationTokenValidate = gql`
   }
 `
 
-const mutatioLogin = gql`
+const mutationLogin = gql`
   mutation login($email: String, $password: String) {
     login(email: $email, password: $password) {
-      token
-      expiresIn
+      ${loginBaseFields}
     }
   }
 `
+
+const mutationSignUp = gql`
+  mutation signup($firstName: String!, $lastName: String!, $email: String!, $password: String!) {
+    signup(firstName: $firstName, lastName: $lastName, email: $email, password: $password) {
+      status
+    }
+  }
+`
+
+const mutationGoogleLogin = gql`
+  mutation tokenGoogleValidate($token: String!) {
+    tokenGoogleValidate(token: $token) {
+      ${loginBaseFields}
+    }
+  }
+`
+
+const mutationFacebookLogin = gql`
+  mutation tokenFacebookValidate($token: String!) {
+    tokenFacebookValidate(token: $token) {
+      ${loginBaseFields}
+    }
+  }
+`
+
 // Action Types
 export const Types = {
-  AUTH_REQUEST: 'AUTH_REQUEST',
-  AUTH_SUCCESS: 'AUTH_SUCCESS',
+  AUTH_SIGNIN_REQUEST: 'AUTH_SIGNIN_REQUEST',
+  AUTH_SIGNIN_SUCCESS: 'AUTH_SIGNIN_SUCCESS',
+  AUTH_SIGNUP_REQUEST: 'AUTH_SIGNUP_REQUEST',
+  AUTH_SIGNUP_SUCCESS: 'AUTH_SIGNUP_SUCCESS',
   AUTH_FAILURE: 'AUTH_FAILURE',
   AUTH_CLEAN_ERROR: 'AUTH_CLEAN_ERROR',
   AUTH_LOGOUT: 'AUTH_LOGOUT',
@@ -68,12 +118,12 @@ const initialState = {
 
 export default function reducer(state = initialState, action) {
   switch (action.type) {
-    case Types.AUTH_REQUEST:
+    case Types.AUTH_SIGNIN_REQUEST:
       return {
         ...state,
         isLoading: true
       }
-    case Types.AUTH_SUCCESS: {
+    case Types.AUTH_SIGNIN_SUCCESS: {
       return {
         ...state,
         isAuthenticated: true,
@@ -153,16 +203,73 @@ export const onIsTokenExists = () => dispatch => {
 }
 
 export const signin = (email, password) => async dispatch => {
-  dispatch({ type: Types.AUTH_REQUEST })
+  dispatch({ type: Types.AUTH_SIGNIN_REQUEST })
   try {
     const { data } = await getClient().mutate({
       variables: { email, password },
-      mutation: mutatioLogin
+      mutation: mutationLogin
     })
-    setToken(data.login.token, data.login.expiresIn)
-    dispatch({ type: Types.AUTH_SUCCESS, payload: {} })
+    const signinReturn = data.login
+    setToken(signinReturn.token, signinReturn.expiresIn)
+    dispatch({ type: Types.AUTH_SIGNIN_SUCCESS, payload: signinReturn.user })
   } catch (err) {
-    toast.error(`Error: ${err}`)
+    toast.error(errToMsg(err))
+    dispatch({
+      type: Types.AUTH_FAILURE,
+      payload: err
+    })
+  }
+}
+
+export const signup = (name, email, password) => async dispatch => {
+  dispatch({ type: Types.AUTH_SIGNUP_REQUEST })
+  try {
+    const { data } = await getClient().mutate({
+      variables: { firstName: name.first, lastName: name.last, email, password },
+      mutation: mutationSignUp
+    })
+    console.log(data)
+    // dispatch({ type: Types.AUTH_SIGNUP_SUCCESS, payload: signinReturn.user })
+  } catch (err) {
+    toast.error(errToMsg(err))
+    dispatch({
+      type: Types.AUTH_FAILURE,
+      payload: err
+    })
+  }
+}
+
+export const googleSignin = googleResponse => async dispatch => {
+  dispatch({ type: Types.AUTH_SIGNIN_REQUEST })
+  try {
+    const { data } = await getClient().mutate({
+      variables: { token: googleResponse.tokenId },
+      mutation: mutationGoogleLogin
+    })
+    const signinReturn = data.tokenGoogleValidate
+    setToken(signinReturn.token, signinReturn.expiresIn)
+    dispatch({ type: Types.AUTH_SIGNIN_SUCCESS, payload: signinReturn.user })
+  } catch (err) {
+    toast.error(errToMsg(err))
+    dispatch({
+      type: Types.AUTH_FAILURE,
+      payload: err
+    })
+  }
+}
+
+export const facebookSignin = facebookResponse => async dispatch => {
+  dispatch({ type: Types.AUTH_SIGNIN_REQUEST })
+  try {
+    const { data } = await getClient().mutate({
+      variables: { token: facebookResponse.accessToken },
+      mutation: mutationFacebookLogin
+    })
+    const signinReturn = data.tokenFacebookValidate
+    setToken(signinReturn.token, signinReturn.expiresIn)
+    dispatch({ type: Types.AUTH_SIGNIN_SUCCESS, payload: signinReturn.user })
+  } catch (err) {
+    toast.error(errToMsg(err))
     dispatch({
       type: Types.AUTH_FAILURE,
       payload: err
