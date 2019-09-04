@@ -1,0 +1,557 @@
+{
+  "plus_code": {
+    "compound_code": "465X+CV Bondi Junction NSW, Austrália",
+    "global_code": "4RRH465X+CV"
+  },
+  "results": [
+    {
+      "address_components": [
+        {
+          "long_name": "Bondi Junction Station, Stand A",
+          "short_name": "Bondi Junction Station, Stand A",
+          "types": ["bus_station", "establishment", "point_of_interest", "transit_station"]
+        },
+        {
+          "long_name": "Bondi Junction",
+          "short_name": "Bondi Junction",
+          "types": ["locality", "political"]
+        },
+        {
+          "long_name": "Waverley Council",
+          "short_name": "Waverley",
+          "types": ["administrative_area_level_2", "political"]
+        },
+        {
+          "long_name": "New South Wales",
+          "short_name": "NSW",
+          "types": ["administrative_area_level_1", "political"]
+        },
+        {
+          "long_name": "Austrália",
+          "short_name": "AU",
+          "types": ["country", "political"]
+        },
+        {
+          "long_name": "2022",
+          "short_name": "2022",
+          "types": ["postal_code"]
+        }
+      ],
+      "formatted_address": "Bondi Junction Station, Stand A, Bondi Junction NSW 2022, Austrália",
+      "geometry": {
+        "location": {
+          "lat": -33.8914095,
+          "lng": 151.2495673
+        },
+        "location_type": "GEOMETRIC_CENTER",
+        "viewport": {
+          "northeast": {
+            "lat": -33.89006051970851,
+            "lng": 151.2509162802915
+          },
+          "southwest": {
+            "lat": -33.8927584802915,
+            "lng": 151.2482183197085
+          }
+        }
+      },
+      "place_id": "ChIJz7E9ovGtEmsRabMiCPj7yOI",
+      "plus_code": {
+        "compound_code": "465X+CR Bondi Junction, New South Wales, Austrália",
+        "global_code": "4RRH465X+CR"
+      },
+      "types": ["bus_station", "establishment", "point_of_interest", "transit_station"]
+    },
+    {
+      "address_components": [
+        {
+          "long_name": "500",
+          "short_name": "500",
+          "types": ["street_number"]
+        },
+        {
+          "long_name": "Oxford Street",
+          "short_name": "Oxford St",
+          "types": ["route"]
+        },
+        {
+          "long_name": "Bondi Junction",
+          "short_name": "Bondi Junction",
+          "types": ["locality", "political"]
+        },
+        {
+          "long_name": "Waverley Council",
+          "short_name": "Waverley",
+          "types": ["administrative_area_level_2", "political"]
+        },
+        {
+          "long_name": "New South Wales",
+          "short_name": "NSW",
+          "types": ["administrative_area_level_1", "political"]
+        },
+        {
+          "long_name": "Austrália",
+          "short_name": "AU",
+          "types": ["country", "political"]
+        },
+        {
+          "long_name": "2022",
+          "short_name": "2022",
+          "types": ["postal_code"]
+        }
+      ],
+      "formatted_address": "500 Oxford St, Bondi Junction NSW 2022, Austrália",
+      "geometry": {
+        "location": {
+          "lat": -33.8921913,
+          "lng": 151.2506929
+        },
+        "location_type": "ROOFTOP",
+        "viewport": {
+          "northeast": {
+            "lat": -33.8908423197085,
+            "lng": 151.2520418802915
+          },
+          "southwest": {
+            "lat": -33.8935402802915,
+            "lng": 151.2493439197085
+          }
+        }
+      },
+      "place_id": "ChIJLfOL-vCtEmsRqjZ6TfY6YW0",
+      "plus_code": {
+        "compound_code": "4752+47 Bondi Junction, New South Wales, Austrália",
+        "global_code": "4RRH4752+47"
+      },
+      "types": ["establishment", "point_of_interest", "shopping_mall"]
+    },
+    {
+      "address_components": [
+        {
+          "long_name": "4",
+          "short_name": "4",
+          "types": ["street_number"]
+        },
+        {
+          "long_name": "Grosvenor Street",
+          "short_name": "Grosvenor St",
+          "types": ["route"]
+        },
+        {
+          "long_name": "Bondi Junction",
+          "short_name": "Bondi Junction",
+          "types": ["locality", "political"]
+        },
+        {
+          "long_name": "Waverley Council",
+          "short_name": "Waverley",
+          "types": ["administrative_area_level_2", "political"]
+        },
+        {
+          "long_name": "New South Wales",
+          "short_name": "NSW",
+          "types": ["administrative_area_level_1", "political"]
+        },
+        {
+          "long_name": "Austrália",
+          "short_name": "AU",
+          "types": ["country", "political"]
+        },
+        {
+          "long_name": "2022",
+          "short_name": "2022",
+          "types": ["postal_code"]
+        }
+      ],
+      "formatted_address": "4 Grosvenor St, Bondi Junction NSW 2022, Austrália",
+      "geometry": {
+        "location": {
+          "lat": -33.8916469,
+          "lng": 151.2496169
+        },
+        "location_type": "ROOFTOP",
+        "viewport": {
+          "northeast": {
+            "lat": -33.8902979197085,
+            "lng": 151.2509658802915
+          },
+          "southwest": {
+            "lat": -33.89299588029149,
+            "lng": 151.2482679197086
+          }
+        }
+      },
+      "place_id": "ChIJid54n_GtEmsRirWzBCJO-kw",
+      "plus_code": {
+        "compound_code": "465X+8R Bondi Junction, New South Wales, Austrália",
+        "global_code": "4RRH465X+8R"
+      },
+      "types": ["street_address"]
+    },
+    {
+      "address_components": [
+        {
+          "long_name": "Grosvenor Street",
+          "short_name": "Grosvenor St",
+          "types": ["route"]
+        },
+        {
+          "long_name": "Bondi Junction",
+          "short_name": "Bondi Junction",
+          "types": ["locality", "political"]
+        },
+        {
+          "long_name": "Waverley Council",
+          "short_name": "Waverley",
+          "types": ["administrative_area_level_2", "political"]
+        },
+        {
+          "long_name": "New South Wales",
+          "short_name": "NSW",
+          "types": ["administrative_area_level_1", "political"]
+        },
+        {
+          "long_name": "Austrália",
+          "short_name": "AU",
+          "types": ["country", "political"]
+        },
+        {
+          "long_name": "2022",
+          "short_name": "2022",
+          "types": ["postal_code"]
+        }
+      ],
+      "formatted_address": "Grosvenor St, Bondi Junction NSW 2022, Austrália",
+      "geometry": {
+        "bounds": {
+          "northeast": {
+            "lat": -33.8913688,
+            "lng": 151.2497704
+          },
+          "southwest": {
+            "lat": -33.8915912,
+            "lng": 151.2496916
+          }
+        },
+        "location": {
+          "lat": -33.8914733,
+          "lng": 151.2497556
+        },
+        "location_type": "GEOMETRIC_CENTER",
+        "viewport": {
+          "northeast": {
+            "lat": -33.8901310197085,
+            "lng": 151.2510799802915
+          },
+          "southwest": {
+            "lat": -33.8928289802915,
+            "lng": 151.2483820197085
+          }
+        }
+      },
+      "place_id": "ChIJy8zAmPGtEmsR-BcwFnTXe5s",
+      "types": ["route"]
+    },
+    {
+      "address_components": [
+        {
+          "long_name": "Bondi Junction",
+          "short_name": "Bondi Junction",
+          "types": ["locality", "political"]
+        },
+        {
+          "long_name": "Waverley Council",
+          "short_name": "Waverley",
+          "types": ["administrative_area_level_2", "political"]
+        },
+        {
+          "long_name": "New South Wales",
+          "short_name": "NSW",
+          "types": ["administrative_area_level_1", "political"]
+        },
+        {
+          "long_name": "Austrália",
+          "short_name": "AU",
+          "types": ["country", "political"]
+        },
+        {
+          "long_name": "2022",
+          "short_name": "2022",
+          "types": ["postal_code"]
+        }
+      ],
+      "formatted_address": "Bondi Junction NSW 2022, Austrália",
+      "geometry": {
+        "bounds": {
+          "northeast": {
+            "lat": -33.8888924,
+            "lng": 151.2597286
+          },
+          "southwest": {
+            "lat": -33.8970931,
+            "lng": 151.2407945
+          }
+        },
+        "location": {
+          "lat": -33.89145,
+          "lng": 151.2497
+        },
+        "location_type": "APPROXIMATE",
+        "viewport": {
+          "northeast": {
+            "lat": -33.8888924,
+            "lng": 151.2597286
+          },
+          "southwest": {
+            "lat": -33.8970931,
+            "lng": 151.2407945
+          }
+        }
+      },
+      "place_id": "ChIJdwsCavGtEmsRkK0yFmh9AQU",
+      "types": ["locality", "political"]
+    },
+    {
+      "address_components": [
+        {
+          "long_name": "2022",
+          "short_name": "2022",
+          "types": ["postal_code"]
+        },
+        {
+          "long_name": "Bondi Junction",
+          "short_name": "Bondi Junction",
+          "types": ["locality", "political"]
+        },
+        {
+          "long_name": "Waverley Council",
+          "short_name": "Waverley",
+          "types": ["administrative_area_level_2", "political"]
+        },
+        {
+          "long_name": "New South Wales",
+          "short_name": "NSW",
+          "types": ["administrative_area_level_1", "political"]
+        },
+        {
+          "long_name": "Austrália",
+          "short_name": "AU",
+          "types": ["country", "political"]
+        }
+      ],
+      "formatted_address": "Bondi Junction NSW 2022, Austrália",
+      "geometry": {
+        "bounds": {
+          "northeast": {
+            "lat": -33.8888924,
+            "lng": 151.2597286
+          },
+          "southwest": {
+            "lat": -33.9039072,
+            "lng": 151.2407872
+          }
+        },
+        "location": {
+          "lat": -33.8956547,
+          "lng": 151.2495903
+        },
+        "location_type": "APPROXIMATE",
+        "viewport": {
+          "northeast": {
+            "lat": -33.8888924,
+            "lng": 151.2597286
+          },
+          "southwest": {
+            "lat": -33.9039072,
+            "lng": 151.2407872
+          }
+        }
+      },
+      "place_id": "ChIJqyJ62suuEmsRQIi6P2t9ARw",
+      "postcode_localities": ["Bondi Junction", "Queens Park"],
+      "types": ["postal_code"]
+    },
+    {
+      "address_components": [
+        {
+          "long_name": "Waverley Council",
+          "short_name": "Waverley",
+          "types": ["administrative_area_level_2", "political"]
+        },
+        {
+          "long_name": "New South Wales",
+          "short_name": "NSW",
+          "types": ["administrative_area_level_1", "political"]
+        },
+        {
+          "long_name": "Austrália",
+          "short_name": "AU",
+          "types": ["country", "political"]
+        }
+      ],
+      "formatted_address": "Waverley, NSW, Austrália",
+      "geometry": {
+        "bounds": {
+          "northeast": {
+            "lat": -33.85702800000001,
+            "lng": 151.2862554
+          },
+          "southwest": {
+            "lat": -33.9111068,
+            "lng": 151.2407872
+          }
+        },
+        "location": {
+          "lat": -33.8977062,
+          "lng": 151.2627078
+        },
+        "location_type": "APPROXIMATE",
+        "viewport": {
+          "northeast": {
+            "lat": -33.85702800000001,
+            "lng": 151.2862554
+          },
+          "southwest": {
+            "lat": -33.9111068,
+            "lng": 151.2407872
+          }
+        }
+      },
+      "place_id": "ChIJg7-VbZatEmsRJQw1y1_6uBk",
+      "types": ["administrative_area_level_2", "political"]
+    },
+    {
+      "address_components": [
+        {
+          "long_name": "Sydney",
+          "short_name": "Sydney",
+          "types": ["colloquial_area", "locality", "political"]
+        },
+        {
+          "long_name": "Nova Gales do Sul",
+          "short_name": "NSW",
+          "types": ["administrative_area_level_1", "political"]
+        },
+        {
+          "long_name": "Austrália",
+          "short_name": "AU",
+          "types": ["country", "political"]
+        }
+      ],
+      "formatted_address": "Sydney Nova Gales do Sul, Austrália",
+      "geometry": {
+        "bounds": {
+          "northeast": {
+            "lat": -33.5781409,
+            "lng": 151.3430209
+          },
+          "southwest": {
+            "lat": -34.118347,
+            "lng": 150.5209286
+          }
+        },
+        "location": {
+          "lat": -33.8688197,
+          "lng": 151.2092955
+        },
+        "location_type": "APPROXIMATE",
+        "viewport": {
+          "northeast": {
+            "lat": -33.5781409,
+            "lng": 151.3430209
+          },
+          "southwest": {
+            "lat": -34.118347,
+            "lng": 150.5209286
+          }
+        }
+      },
+      "place_id": "ChIJP3Sa8ziYEmsRUKgyFmh9AQM",
+      "types": ["colloquial_area", "locality", "political"]
+    },
+    {
+      "address_components": [
+        {
+          "long_name": "Nova Gales do Sul",
+          "short_name": "NSW",
+          "types": ["administrative_area_level_1", "political"]
+        },
+        {
+          "long_name": "Austrália",
+          "short_name": "AU",
+          "types": ["country", "political"]
+        }
+      ],
+      "formatted_address": "Nova Gales do Sul, Austrália",
+      "geometry": {
+        "bounds": {
+          "northeast": {
+            "lat": -33.5781409,
+            "lng": 151.3430209
+          },
+          "southwest": {
+            "lat": -37.5052801,
+            "lng": 140.9992793
+          }
+        },
+        "location": {
+          "lat": -31.2532183,
+          "lng": 146.921099
+        },
+        "location_type": "APPROXIMATE",
+        "viewport": {
+          "northeast": {
+            "lat": -28.15702,
+            "lng": 159.1054441
+          },
+          "southwest": {
+            "lat": -37.5052801,
+            "lng": 140.9992793
+          }
+        }
+      },
+      "place_id": "ChIJDUte93TLDWsRLZ_EIhGvgBc",
+      "types": ["administrative_area_level_1", "political"]
+    },
+    {
+      "address_components": [
+        {
+          "long_name": "Austrália",
+          "short_name": "AU",
+          "types": ["country", "political"]
+        }
+      ],
+      "formatted_address": "Austrália",
+      "geometry": {
+        "bounds": {
+          "northeast": {
+            "lat": -33.5781409,
+            "lng": 151.3430209
+          },
+          "southwest": {
+            "lat": -54.83376579999999,
+            "lng": 110.9510339
+          }
+        },
+        "location": {
+          "lat": -25.274398,
+          "lng": 133.775136
+        },
+        "location_type": "APPROXIMATE",
+        "viewport": {
+          "northeast": {
+            "lat": -9.187026399999999,
+            "lng": 159.2872223
+          },
+          "southwest": {
+            "lat": -54.83376579999999,
+            "lng": 110.9510339
+          }
+        }
+      },
+      "place_id": "ChIJ38WHZwf9KysRUhNblaFnglM",
+      "types": ["country", "political"]
+    }
+  ],
+  "status": "OK"
+}

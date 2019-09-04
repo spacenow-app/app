@@ -27,7 +27,6 @@ import {
   Button
 } from 'components'
 
-import DailyBooking from './DailyBooking'
 import WeeklyBooking from './WeeklyBooking'
 import MonthlyBooking from './MonthlyBooking'
 import PendingBooking from './PenidngBooking'
@@ -40,21 +39,16 @@ import {
   onGetAvailabilitiesByListingId
 } from 'redux/ducks/listing'
 
-import { 
-  onCreateBooking, 
-  onGetPendingBooking 
-} from 'redux/ducks/booking'
+import { onCreateBooking, onGetPendingBooking } from 'redux/ducks/booking'
 
-import { 
-  openModal, 
-  TypesModal 
-} from 'redux/ducks/modal'
+import { openModal, TypesModal } from 'redux/ducks/modal'
 
-import  { sendMail } from 'redux/ducks/mail'
+import { sendMail } from 'redux/ducks/mail'
 
-import GraphCancelattionImage from 'pages/Listing/SpacePage/CancellationTab/graph_cancellation.png'
+import GraphCancelattionImage from 'pages/Listing/SpaceDetailsPage/CancellationTab/graph_cancellation.png'
 
-import config from 'contants/config'
+import config from 'variables/config'
+import DailyBooking from './DailyBooking'
 
 
 const GridStyled = styled(Grid)`
@@ -112,9 +106,9 @@ const SpacePage = ({ match, location, ...props }) => {
     listing && dispatch(onGetAvailabilitiesByListingId(listing.id))
   }, [dispatch, listing, pendingBooking, isCleanedAvailabilities])
 
-  if(listing && listing.user.provider === 'wework') {
+  if (listing && listing.user.provider === 'wework') {
     props.history.push(`/space/partner/${match.params.id}`)
-  } 
+  }
 
   if (isListingLoading) {
     return <Loader text="Loading listing view" />
@@ -198,7 +192,11 @@ const SpacePage = ({ match, location, ...props }) => {
 
   const _convertedArrayPhotos = array => {
     return array.filter(el => el !== undefined).length > 0
-      ? array.filter(el => el !== undefined).map(el => ({ source: `https://api-assets.prod.cloud.spacenow.com?width=800&heigth=500&format=jpeg&path=${el.name}` }))
+      ? array
+          .filter(el => el !== undefined)
+          .map(el => ({
+            source: `https://api-assets.prod.cloud.spacenow.com?width=800&heigth=500&format=jpeg&path=${el.name}`
+          }))
       : []
   }
 
@@ -239,20 +237,10 @@ const SpacePage = ({ match, location, ...props }) => {
 
   const _renderContentCard = bookingPeriod => {
     if (pendingBooking && pendingBooking.bookings.length > 0) {
-      return (
-        <PendingBooking 
-          booking={pendingBooking.bookings[0]} 
-          listing={listing.listingData} 
-          dispatch={dispatch} />
-        )
+      return <PendingBooking booking={pendingBooking.bookings[0]} listing={listing.listingData} dispatch={dispatch} />
     }
     if (bookingPeriod === 'hourly') {
-      return (
-        <ContactHost 
-          user={user} 
-          listing={listing} 
-          dispatch={dispatch} />
-      )
+      return <ContactHost user={user} listing={listing} dispatch={dispatch} />
     }
     if (bookingPeriod === 'daily') {
       return (
@@ -266,11 +254,11 @@ const SpacePage = ({ match, location, ...props }) => {
             closingDays={_returnArrayAvailability(listing.accessDays)}
             listingData={listing.listingData}
           />
-           {_isPeriodValid(listing.bookingPeriod) && datesSelected.length >= 1 && (
-              <Box color={'error'} ml={'23px'}>
-                {`Minimum ${listing.listingData.minTerm} days is required`}
-              </Box>
-            )}
+          {_isPeriodValid(listing.bookingPeriod) && datesSelected.length >= 1 && (
+            <Box color="error" ml="23px">
+              {`Minimum ${listing.listingData.minTerm} days is required`}
+            </Box>
+          )}
         </div>
       )
     }
@@ -315,9 +303,8 @@ const SpacePage = ({ match, location, ...props }) => {
     if (bookingPeriod === 'weekly') {
       if (date > 0 && period > 0) {
         return false
-      } else {
-        return true
       }
+      return true
     }
     if (bookingPeriod === 'monthly') {
       if (date > 0 && period > 0) {
@@ -341,7 +328,7 @@ const SpacePage = ({ match, location, ...props }) => {
   const _onSubmitBooking = async () => {
     if (!user) {
       props.history.push(`/login?refer=/space/${listing.id}`)
-      return 
+      return
     }
     const object = {
       listingId: listing.id,
@@ -357,22 +344,23 @@ const SpacePage = ({ match, location, ...props }) => {
     }
     dispatch(onCreateBooking(object))
   }
-  
+
   const _reportSpace = () => {
     if (!user) {
       props.history.push(`/login?refer=/space/${listing.id}`)
-      return 
+      return
     }
     const options = {
-      onConfirm: async (values) => {
-        let sendData = values;
-        Object.assign(sendData,
-          {spaceOwner: listing.user.profile.displayName},
-          {spaceOwnerEmail: listing.user.email},
-          {email: config.admin_email },
-          {guest: user.profile.firstName + ' ' + user.profile.lastName},
-          {guestId: user.id},
-          {spaceId: listing.id}
+      onConfirm: async values => {
+        const sendData = values
+        Object.assign(
+          sendData,
+          { spaceOwner: listing.user.profile.displayName },
+          { spaceOwnerEmail: listing.user.email },
+          { email: config.admin_email },
+          { guest: `${user.profile.firstName} ${user.profile.lastName}` },
+          { guestId: user.id },
+          { spaceId: listing.id }
         )
 
         const emailData = {
@@ -391,7 +379,7 @@ const SpacePage = ({ match, location, ...props }) => {
             }
           })
         )
-      },
+      }
     }
     dispatch(openModal(TypesModal.MODAL_TYPE_REPORT_LISTING, options))
   }
@@ -580,44 +568,40 @@ const SpacePage = ({ match, location, ...props }) => {
         <Cell area="card">
           <BookingCard
             titleComponent={
-              <Title 
-                type="h5" 
-                title={listing.title} 
-                subtitle={_getAddress(listing.location)} 
-                subTitleMargin={10} 
+              <Title
+                type="h5"
+                title={listing.title}
+                subtitle={_getAddress(listing.location)}
+                subTitleMargin={10}
                 noMargin
               />
             }
             contentComponent={
               <>
                 {_renderContentCard(listing.bookingPeriod)}
-                {listing.bookingPeriod !== 'hourly' && (pendingBooking ? (pendingBooking && pendingBooking.count === 0) : true)  && (
-                  <Button
-                    onClick={e => _onSubmitBooking(e)}
-                    isLoading={isLoadingOnCreateReservation}
-                    disabled={_isPeriodValid(listing.bookingPeriod) || (user && user.id === listing.user.id)}
-                    fluid
-                  >
-                    {listing.listingData.bookingType === 'request' ? 'Booking Request' : 'Book Now'}
-                  </Button>
-                )}
+                {listing.bookingPeriod !== 'hourly' &&
+                  (pendingBooking ? pendingBooking && pendingBooking.count === 0 : true) && (
+                    <Button
+                      onClick={e => _onSubmitBooking(e)}
+                      isLoading={isLoadingOnCreateReservation}
+                      disabled={_isPeriodValid(listing.bookingPeriod) || (user && user.id === listing.user.id)}
+                      fluid
+                    >
+                      {listing.listingData.bookingType === 'request' ? 'Booking Request' : 'Book Now'}
+                    </Button>
+                  )}
               </>
             }
             footerComponent={
               <>
-                <UserDetails 
-                  hostname={listing.user.profile.displayName} 
-                  imageProfile={listing.user.profile.picture} 
+                <UserDetails
+                  hostname={listing.user.profile.displayName}
+                  imageProfile={listing.user.profile.picture}
                   joined="2019"
                 />
                 <Box mt="15px">
                   <IconBoxStyled>
-                    <Icon
-                      name="flag"
-                      width="10px"
-                      height="100%"
-                      style={{ paddingBottom: '5px' }}
-                    /> 
+                    <Icon name="flag" width="10px" height="100%" style={{ paddingBottom: '5px' }} />
                   </IconBoxStyled>
                   <ReportSpaceStyled onClick={_reportSpace}>Report space</ReportSpaceStyled>
                 </Box>

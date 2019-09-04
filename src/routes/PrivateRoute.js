@@ -1,16 +1,12 @@
 import React, { useEffect } from 'react'
 import PropTypes from 'prop-types'
 import { Route, Redirect } from 'react-router-dom'
-import { config } from 'contants'
 
 const PrivateRoute = ({ handlerCheckAuthentication, isAuthenticated, component: Component, location, ...rest }) => {
   useEffect(() => {
     handlerCheckAuthentication()
   })
-  if (!isAuthenticated) {
-    window.location.href = `${config.legacy}/login`
-    return null
-  }
+
   return (
     <Route
       {...rest}
@@ -20,7 +16,7 @@ const PrivateRoute = ({ handlerCheckAuthentication, isAuthenticated, component: 
         ) : (
           <Redirect
             to={{
-              pathname: '/auth',
+              pathname: '/auth/signin',
               state: { from: props.location }
             }}
           />

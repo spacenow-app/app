@@ -5,7 +5,7 @@ import { createUploadLink } from 'apollo-upload-client'
 import { setContext } from 'apollo-link-context'
 import { createHttpLink } from 'apollo-link-http'
 
-import config from 'contants/config'
+import { config } from 'variables'
 
 import { getByName } from 'utils/cookies'
 

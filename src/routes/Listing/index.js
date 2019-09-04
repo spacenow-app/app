@@ -5,7 +5,7 @@ import { Switch, Route, Redirect } from 'react-router-dom'
 const IntroPage = lazy(() => import('pages/Listing/IntroPage'))
 const LocationPage = lazy(() => import('pages/Listing/LocationPage'))
 const CategoryPage = lazy(() => import('pages/Listing/CategoryPage'))
-const SpacePage = lazy(() => import('pages/Listing/SpacePage'))
+const SpaceDetailsPage = lazy(() => import('pages/Listing/SpaceDetailsPage'))
 const PreviewPage = lazy(() => import('pages/Listing/PreviewPage'))
 const NotFoundPage = lazy(() => import('pages/NotFoundPage'))
 
@@ -17,7 +17,7 @@ const Listing = ({ match, ...props }) => {
         <Route exact component={IntroPage} path={`${match.path}/intro`} />
         <Route exact component={LocationPage} path={`${match.path}/location`} />
         <Route exact component={CategoryPage} path={`${match.path}/category`} />
-        <Route component={SpacePage} path={`${match.path}/space/:id`} />
+        <Route component={SpaceDetailsPage} path={`${match.path}/space/:id`} />
         <Route exact component={PreviewPage} path={`${match.path}/preview/:id`} />
         <Route component={NotFoundPage} />
       </Switch>

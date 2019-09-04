@@ -5,7 +5,7 @@ import { useSelector, useDispatch } from 'react-redux'
 import numeral from 'numeral'
 import { Wrapper, Box, NavBar, Title, Text, Select, Button } from 'components'
 import { getCarParkPricesEstimation } from 'redux/ducks/landing'
-import { config } from 'contants'
+import { config } from 'variables'
 
 import heroImage from './images/hero_img.png'
 import gregImage from './images/greg_image.png'

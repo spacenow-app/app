@@ -19,7 +19,7 @@ const ScrollToTop = ({ children, location: { pathname } }) => {
   return children
 }
 
-const SpacePage = ({ match, history, location, ...props }) => {
+const SpaceDetailsPage = ({ match, history, location, ...props }) => {
   const dispatch = useDispatch()
 
   const { object: objectListing, isLoading, isNotOwner } = useSelector(state => state.listing.get)
@@ -162,10 +162,10 @@ const SpacePage = ({ match, history, location, ...props }) => {
   )
 }
 
-SpacePage.propTypes = {
+SpaceDetailsPage.propTypes = {
   match: PropTypes.instanceOf(Object).isRequired,
   location: PropTypes.instanceOf(Object).isRequired,
   history: PropTypes.instanceOf(Object).isRequired
 }
 
-export default SpacePage
+export default SpaceDetailsPage

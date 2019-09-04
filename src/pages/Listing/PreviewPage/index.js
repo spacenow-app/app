@@ -34,9 +34,9 @@ import {
 
 import { openModal, TypesModal } from 'redux/ducks/modal'
 
-import { config } from 'contants'
+import { config } from 'variables'
 
-import GraphCancelattionImage from 'pages/Listing/SpacePage/CancellationTab/graph_cancellation.png'
+import GraphCancelattionImage from 'pages/Listing/SpaceDetailsPage/CancellationTab/graph_cancellation.png'
 
 const ImageStyled = styled.img`
   width: 100%;
@@ -196,7 +196,7 @@ const PreviewPage = ({ match, location, ...props }) => {
   return (
     <Wrapper>
       <Helmet title="Listing Preview - Spacenow" />
-      <Title type="h2" title="Just one more thing, review your space!"/>
+      <Title type="h2" title="Just one more thing, review your space!" />
       <Carousel photos={_convertedArrayPhotos(arrayPhotos)} />
       <Box my="40px">
         <Grid justifyContent="space-between" columnGap="10px" columns={2}>
