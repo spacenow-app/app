@@ -3,7 +3,7 @@ import { gql } from 'apollo-boost'
 
 import { getClientWithAuth } from 'graphql/apolloClient'
 import errToMsg from 'utils/errToMsg'
-import { monthNames } from 'contants/dates'
+import { monthNames } from 'variables'
 import { camalize } from 'utils/strings'
 import { toast } from 'react-toastify'
 

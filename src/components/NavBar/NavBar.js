@@ -1,11 +1,12 @@
 import React from 'react'
-import { useSelector } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { Link } from 'react-router-dom'
 import styled from 'styled-components'
 import { Navbar, Nav, NavDropdown } from 'react-bootstrap'
 import { Avatar, Box } from 'components'
+import { logout } from 'redux/ducks/auth'
 
-import { config } from 'contants'
+import { config } from 'variables'
 
 import logo from './spacenow_logo.png'
 
@@ -18,6 +19,7 @@ const NavDropdownStyled = styled(NavDropdown)`
 `
 
 function NavBar() {
+  const dispatch = useDispatch()
   const authUser = useSelector(state => state.auth.user)
   const isAuthenticated = useSelector(state => state.auth.isAuthenticated)
 
@@ -25,7 +27,7 @@ function NavBar() {
     window.location.href = `${config.legacy}`
   }
   const _handlerLogout = () => {
-    window.location.href = `${config.legacy}/logout`
+    dispatch(logout())
   }
 
   return (

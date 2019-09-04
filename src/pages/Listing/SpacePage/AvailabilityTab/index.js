@@ -7,7 +7,7 @@ import styled from 'styled-components'
 import { format, isAfter, isBefore, isSameDay } from 'date-fns'
 import update from 'immutability-helper'
 
-import { nanDate, weekTimeTable } from 'contants/dates'
+import { nanDate, weekTimeTable } from 'variables'
 
 import { onGetAvailabilitiesByListingId, onGetAllHolidays } from 'redux/ducks/listing'
 

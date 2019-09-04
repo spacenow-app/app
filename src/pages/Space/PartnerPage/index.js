@@ -19,13 +19,14 @@ import {
   UserDetails,
   BookingCard
 } from 'components'
-import FormPartner from './FormPartner'
 
 import {
   onGetListingById,
   onGetAllSpecifications
 } from 'redux/ducks/listing'
 
+import { config } from 'variables'
+import FormPartner from './FormPartner'
 
 const PartnerPage = ({ match, location, ...props }) => {
   const dispatch = useDispatch()
@@ -69,11 +70,18 @@ const PartnerPage = ({ match, location, ...props }) => {
       : []
   }
 
+<<<<<<< HEAD
   // Load the regular listing view
   if(listing && listing.user.provider === 'spacenow') {
     props.history.push(`/space/${match.params.id}`)
+=======
+  // Load the legacy app with regular listing view
+  if (data && data.provider === 'spacenow') {
+    const route = `view-listing/${match.params.id}`
+    window.location.href = `${config.legacy}${route}`
+>>>>>>> authentication
     return null
-  } 
+  }
 
   if (isListingLoading) {
     return <Loader text="Loading listing view" />
@@ -84,8 +92,12 @@ const PartnerPage = ({ match, location, ...props }) => {
       <Helmet title="View Listing - Spacenow" />
       <Box display="grid" gridTemplateColumns="1fr 380px" gridColumnGap="15px" my="80px">
         <Box display="grid" gridRowGap="50px">
+<<<<<<< HEAD
 
           <Carousel photos={_convertedArrayPhotos(listing.photos)} />
+=======
+          <Carousel photos={_convertedArrayPhotos(arrayPhotos)} />
+>>>>>>> authentication
 
           <Grid justifyContent="space-between" columnGap="10px" columns={2}>
             <Box display="flex" justifyContent="start">
@@ -133,9 +145,7 @@ const PartnerPage = ({ match, location, ...props }) => {
             <Cell width={2} center>
               <Title
                 type="h4"
-                title={`$ ${Math.round((listing.listingData.basePrice || 0) * 100) / 100} ${
-                  listing.bookingPeriod
-                }`}
+                title={`$ ${Math.round((listing.listingData.basePrice || 0) * 100) / 100} ${listing.bookingPeriod}`}
                 noMargin
                 right
                 style={{ marginTop: '5px' }}
@@ -155,7 +165,7 @@ const PartnerPage = ({ match, location, ...props }) => {
               />
             </Grid>
           </Box>
-              
+
           <Box>
             <Title type="h5" title="Access Type" />
             <Box
@@ -187,56 +197,64 @@ const PartnerPage = ({ match, location, ...props }) => {
             </Box>
           </Box>
 
-          {
-            listing.listingData.description ? 
-              <Box>
-                <Title type="h5" title="Description" />
-                <p>{listing.listingData.description}</p>
-              </Box> : null
-          }
-          {
-            listing.amenities.length > 0 && (
-              <Box>
-                <Title type="h5" title="Amenities" />
-                <Box display="grid" gridTemplateColumns="1fr 1fr 1fr" gridRowGap="40px">
-                  {listing.amenities.map(item => {
-                    return (
-                      <Box key={item.id} display="grid" gridTemplateColumns="auto 1fr" gridColumnGap="20px">
-                        <Box width="54px" height="54px" borderRadius="100%" bg="primary">
-                          <Icon
-                            name={`amenitie-${item.settingsData.otherItemName}`}
-                            width="70%"
-                            height="100%"
-                            style={{ display: 'block', margin: 'auto' }}
-                          />
-                        </Box>
-                        <span style={{ alignSelf: 'center' }}>{item.settingsData.itemName}</span>
+          {listing.listingData.description ? (
+            <Box>
+              <Title type="h5" title="Description" />
+              <p>{listing.listingData.description}</p>
+            </Box>
+          ) : null}
+          {listing.amenities.length > 0 && (
+            <Box>
+              <Title type="h5" title="Amenities" />
+              <Box display="grid" gridTemplateColumns="1fr 1fr 1fr" gridRowGap="40px">
+                {listing.amenities.map(item => {
+                  return (
+                    <Box key={item.id} display="grid" gridTemplateColumns="auto 1fr" gridColumnGap="20px">
+                      <Box width="54px" height="54px" borderRadius="100%" bg="primary">
+                        <Icon
+                          name={`amenitie-${item.settingsData.otherItemName}`}
+                          width="70%"
+                          height="100%"
+                          style={{ display: 'block', margin: 'auto' }}
+                        />
                       </Box>
-                    )
-                  })}
-                </Box>
+                      <span style={{ alignSelf: 'center' }}>{item.settingsData.itemName}</span>
+                    </Box>
+                  )
+                })}
               </Box>
+            </Box>
           )}
           <Box>
             <Title
               type="h5"
               title="Availability"
             />
-            <TimeTable data={listing.accessDays.listingAccessHours} error={_getWeekName(listing.accessDays) === 'Closed'} />
+            <TimeTable
+              data={listing.accessDays.listingAccessHours}
+              error={_getWeekName(listing.accessDays) === 'Closed'}
+            />
           </Box>
         </Box>
         <Box>
           <BookingCard
-            titleComponent={<Title type="h5" title={listing.title} subtitle={_getAddress(listing.location)} subTitleMargin={10} noMargin/>}
-            contentComponent={
-              <FormPartner
-                {...props}
-                listing={listing}
-                dispatch={dispatch}
+            titleComponent={
+              <Title
+                type="h5"
+                title={listing.title}
+                subtitle={_getAddress(listing.location)}
+                subTitleMargin={10}
+                noMargin
               />
             }
+            contentComponent={<FormPartner {...props} listing={listing} dispatch={dispatch} />}
             footerComponent={
-              <UserDetails hostname={listing.user.profile.displayName} imageProfile={listing.user.profile.picture} joined="2019" text="We do what we love and are connected to something greater than ourselves."/>
+              <UserDetails
+                hostname={listing.user.profile.displayName}
+                imageProfile={listing.user.profile.picture}
+                joined="2019"
+                text="We do what we love and are connected to something greater than ourselves."
+              />
             }
           />
         </Box>

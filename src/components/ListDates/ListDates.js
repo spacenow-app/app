@@ -3,8 +3,8 @@ import PropTypes from 'prop-types'
 import styled from 'styled-components'
 import _ from 'lodash'
 import { format } from 'date-fns'
+import { monthNames } from 'variables'
 import Badge from '../Badge'
-import { monthNames } from 'contants'
 
 const WrapperStyled = styled.div`
   margin: 25px 0;
