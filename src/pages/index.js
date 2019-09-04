@@ -1,5 +1,5 @@
 import HomePage from './HomePage'
-import { SigninPage, SignupPage, ForgotPasswordPage } from './Authentication'
+import { SigninPage, SignupPage, ForgotPasswordPage, ResetPasswordPage } from './Authentication'
 import NotFoundPage from './NotFoundPage'
 import { IntroPage, LocationPage, CategoryPage, SpacePage } from './Listing'
 import { ProfilePage, PaymentPage } from './Account'
@@ -10,6 +10,7 @@ export {
   SigninPage,
   SignupPage,
   ForgotPasswordPage,
+  ResetPasswordPage,
   NotFoundPage,
   IntroPage,
   LocationPage,

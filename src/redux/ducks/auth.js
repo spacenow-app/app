@@ -59,6 +59,14 @@ const mutationLogin = gql`
   }
 `
 
+const mutationSignUp = gql`
+  mutation signup($firstName: String!, $lastName: String!, $email: String!, $password: String!) {
+    signup(firstName: $firstName, lastName: $lastName, email: $email, password: $password) {
+      status
+    }
+  }
+`
+
 const mutationGoogleLogin = gql`
   mutation tokenGoogleValidate($token: String!) {
     tokenGoogleValidate(token: $token) {
@@ -77,8 +85,10 @@ const mutationFacebookLogin = gql`
 
 // Action Types
 export const Types = {
-  AUTH_REQUEST: 'AUTH_REQUEST',
-  AUTH_SUCCESS: 'AUTH_SUCCESS',
+  AUTH_SIGNIN_REQUEST: 'AUTH_SIGNIN_REQUEST',
+  AUTH_SIGNIN_SUCCESS: 'AUTH_SIGNIN_SUCCESS',
+  AUTH_SIGNUP_REQUEST: 'AUTH_SIGNUP_REQUEST',
+  AUTH_SIGNUP_SUCCESS: 'AUTH_SIGNUP_SUCCESS',
   AUTH_FAILURE: 'AUTH_FAILURE',
   AUTH_CLEAN_ERROR: 'AUTH_CLEAN_ERROR',
   AUTH_LOGOUT: 'AUTH_LOGOUT',
@@ -108,12 +118,12 @@ const initialState = {
 
 export default function reducer(state = initialState, action) {
   switch (action.type) {
-    case Types.AUTH_REQUEST:
+    case Types.AUTH_SIGNIN_REQUEST:
       return {
         ...state,
         isLoading: true
       }
-    case Types.AUTH_SUCCESS: {
+    case Types.AUTH_SIGNIN_SUCCESS: {
       return {
         ...state,
         isAuthenticated: true,
@@ -193,7 +203,7 @@ export const onIsTokenExists = () => dispatch => {
 }
 
 export const signin = (email, password) => async dispatch => {
-  dispatch({ type: Types.AUTH_REQUEST })
+  dispatch({ type: Types.AUTH_SIGNIN_REQUEST })
   try {
     const { data } = await getClient().mutate({
       variables: { email, password },
@@ -201,7 +211,25 @@ export const signin = (email, password) => async dispatch => {
     })
     const signinReturn = data.login
     setToken(signinReturn.token, signinReturn.expiresIn)
-    dispatch({ type: Types.AUTH_SUCCESS, payload: signinReturn.user })
+    dispatch({ type: Types.AUTH_SIGNIN_SUCCESS, payload: signinReturn.user })
+  } catch (err) {
+    toast.error(errToMsg(err))
+    dispatch({
+      type: Types.AUTH_FAILURE,
+      payload: err
+    })
+  }
+}
+
+export const signup = (name, email, password) => async dispatch => {
+  dispatch({ type: Types.AUTH_SIGNUP_REQUEST })
+  try {
+    const { data } = await getClient().mutate({
+      variables: { firstName: name.first, lastName: name.last, email, password },
+      mutation: mutationSignUp
+    })
+    console.log(data)
+    // dispatch({ type: Types.AUTH_SIGNUP_SUCCESS, payload: signinReturn.user })
   } catch (err) {
     toast.error(errToMsg(err))
     dispatch({
@@ -212,7 +240,7 @@ export const signin = (email, password) => async dispatch => {
 }
 
 export const googleSignin = googleResponse => async dispatch => {
-  dispatch({ type: Types.AUTH_REQUEST })
+  dispatch({ type: Types.AUTH_SIGNIN_REQUEST })
   try {
     const { data } = await getClient().mutate({
       variables: { token: googleResponse.tokenId },
@@ -220,7 +248,7 @@ export const googleSignin = googleResponse => async dispatch => {
     })
     const signinReturn = data.tokenGoogleValidate
     setToken(signinReturn.token, signinReturn.expiresIn)
-    dispatch({ type: Types.AUTH_SUCCESS, payload: signinReturn.user })
+    dispatch({ type: Types.AUTH_SIGNIN_SUCCESS, payload: signinReturn.user })
   } catch (err) {
     toast.error(errToMsg(err))
     dispatch({
@@ -231,7 +259,7 @@ export const googleSignin = googleResponse => async dispatch => {
 }
 
 export const facebookSignin = facebookResponse => async dispatch => {
-  dispatch({ type: Types.AUTH_REQUEST })
+  dispatch({ type: Types.AUTH_SIGNIN_REQUEST })
   try {
     const { data } = await getClient().mutate({
       variables: { token: facebookResponse.accessToken },
@@ -239,7 +267,7 @@ export const facebookSignin = facebookResponse => async dispatch => {
     })
     const signinReturn = data.tokenFacebookValidate
     setToken(signinReturn.token, signinReturn.expiresIn)
-    dispatch({ type: Types.AUTH_SUCCESS, payload: signinReturn.user })
+    dispatch({ type: Types.AUTH_SIGNIN_SUCCESS, payload: signinReturn.user })
   } catch (err) {
     toast.error(errToMsg(err))
     dispatch({
