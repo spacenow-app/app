@@ -4,13 +4,12 @@ import styled from 'styled-components';
 
 const WrapperStyled = styled.div`
   display: grid;
-  width: 350px;
   min-height: 200px;
   background-color: #F7F7F7;
   padding: 42px;
   grid-row-gap: 32px;
   border-radius: 15px;
-  
+  width: 350px;
 `;
 const TitleStyled = styled.div`
   justify-self: stretch;
