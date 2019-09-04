@@ -3,7 +3,7 @@ import { gql } from 'apollo-boost'
 
 import { getClientWithAuth } from 'graphql/apolloClient'
 import errToMsg from 'utils/errToMsg'
-import { config } from 'contants'
+import { config } from 'variables'
 
 // Actions
 export const Types = {
@@ -35,7 +35,7 @@ const initialState = {
     object: null,
     isLoading: false,
     error: null
-  },
+  }
 }
 
 // GraphQL
@@ -108,7 +108,7 @@ const queryGetPendingBooking = gql`
       }
     }
   }
-`;
+`
 
 export default function reducer(state = initialState, action) {
   switch (action.type) {
@@ -156,8 +156,8 @@ export default function reducer(state = initialState, action) {
           object: action.payload
         },
         pending: {
-          object: null,
-        },
+          object: null
+        }
       }
     }
     case Types.TIMEOUT_BOOKING_FAILURE: {

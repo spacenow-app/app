@@ -20,12 +20,8 @@ import {
   BookingCard
 } from 'components'
 
-import {
-  onGetListingById,
-  onGetAllSpecifications
-} from 'redux/ducks/listing'
+import { onGetListingById, onGetAllSpecifications } from 'redux/ducks/listing'
 
-import { config } from 'variables'
 import FormPartner from './FormPartner'
 
 const PartnerPage = ({ match, location, ...props }) => {
@@ -38,7 +34,7 @@ const PartnerPage = ({ match, location, ...props }) => {
   }, [dispatch, match.params.id])
 
   useEffect(() => {
-    listing &&  dispatch(onGetAllSpecifications(listing.settingsParent.id, listing.listingData))
+    listing && dispatch(onGetAllSpecifications(listing.settingsParent.id, listing.listingData))
   }, [dispatch, listing])
 
   const _getAddress = address => {
@@ -66,20 +62,17 @@ const PartnerPage = ({ match, location, ...props }) => {
 
   const _convertedArrayPhotos = array => {
     return array.filter(el => el !== undefined).length > 0
-      ? array.filter(el => el !== undefined).map(el => ({ source: `https://api-assets.prod.cloud.spacenow.com?width=800&heigth=500&format=jpeg&path=${el.name}` }))
+      ? array
+          .filter(el => el !== undefined)
+          .map(el => ({
+            source: `https://api-assets.prod.cloud.spacenow.com?width=800&heigth=500&format=jpeg&path=${el.name}`
+          }))
       : []
   }
 
-<<<<<<< HEAD
   // Load the regular listing view
-  if(listing && listing.user.provider === 'spacenow') {
+  if (listing && listing.user.provider === 'spacenow') {
     props.history.push(`/space/${match.params.id}`)
-=======
-  // Load the legacy app with regular listing view
-  if (data && data.provider === 'spacenow') {
-    const route = `view-listing/${match.params.id}`
-    window.location.href = `${config.legacy}${route}`
->>>>>>> authentication
     return null
   }
 
@@ -92,12 +85,7 @@ const PartnerPage = ({ match, location, ...props }) => {
       <Helmet title="View Listing - Spacenow" />
       <Box display="grid" gridTemplateColumns="1fr 380px" gridColumnGap="15px" my="80px">
         <Box display="grid" gridRowGap="50px">
-<<<<<<< HEAD
-
           <Carousel photos={_convertedArrayPhotos(listing.photos)} />
-=======
-          <Carousel photos={_convertedArrayPhotos(arrayPhotos)} />
->>>>>>> authentication
 
           <Grid justifyContent="space-between" columnGap="10px" columns={2}>
             <Box display="flex" justifyContent="start">
@@ -226,10 +214,7 @@ const PartnerPage = ({ match, location, ...props }) => {
             </Box>
           )}
           <Box>
-            <Title
-              type="h5"
-              title="Availability"
-            />
+            <Title type="h5" title="Availability" />
             <TimeTable
               data={listing.accessDays.listingAccessHours}
               error={_getWeekName(listing.accessDays) === 'Closed'}

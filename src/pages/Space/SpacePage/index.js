@@ -27,7 +27,6 @@ import {
   Button
 } from 'components'
 
-import DailyBooking from './DailyBooking'
 import WeeklyBooking from './WeeklyBooking'
 import MonthlyBooking from './MonthlyBooking'
 import PendingBooking from './PenidngBooking'
@@ -40,21 +39,16 @@ import {
   onGetAvailabilitiesByListingId
 } from 'redux/ducks/listing'
 
-import { 
-  onCreateBooking, 
-  onGetPendingBooking 
-} from 'redux/ducks/booking'
+import { onCreateBooking, onGetPendingBooking } from 'redux/ducks/booking'
 
-import { 
-  openModal, 
-  TypesModal 
-} from 'redux/ducks/modal'
+import { openModal, TypesModal } from 'redux/ducks/modal'
 
-import  { sendMail } from 'redux/ducks/mail'
+import { sendMail } from 'redux/ducks/mail'
 
-import GraphCancelattionImage from 'pages/Listing/SpacePage/CancellationTab/graph_cancellation.png'
+import GraphCancelattionImage from 'pages/Listing/SpaceDetailsPage/CancellationTab/graph_cancellation.png'
 
-import config from 'contants/config'
+import config from 'variables/config'
+import DailyBooking from './DailyBooking'
 
 const ImageStyled = styled.img`
   width: 100%;
@@ -106,9 +100,9 @@ const SpacePage = ({ match, location, ...props }) => {
     listing && dispatch(onGetAvailabilitiesByListingId(listing.id))
   }, [dispatch, listing, pendingBooking, isCleanedAvailabilities])
 
-  if(listing && listing.user.provider === 'wework') {
+  if (listing && listing.user.provider === 'wework') {
     props.history.push(`/space/partner/${match.params.id}`)
-  } 
+  }
 
   if (isListingLoading) {
     return <Loader text="Loading listing view" />
@@ -192,7 +186,11 @@ const SpacePage = ({ match, location, ...props }) => {
 
   const _convertedArrayPhotos = array => {
     return array.filter(el => el !== undefined).length > 0
-      ? array.filter(el => el !== undefined).map(el => ({ source: `https://api-assets.prod.cloud.spacenow.com?width=800&heigth=500&format=jpeg&path=${el.name}` }))
+      ? array
+          .filter(el => el !== undefined)
+          .map(el => ({
+            source: `https://api-assets.prod.cloud.spacenow.com?width=800&heigth=500&format=jpeg&path=${el.name}`
+          }))
       : []
   }
 
@@ -233,20 +231,10 @@ const SpacePage = ({ match, location, ...props }) => {
 
   const _renderContentCard = bookingPeriod => {
     if (pendingBooking && pendingBooking.bookings.length > 0) {
-      return (
-        <PendingBooking 
-          booking={pendingBooking.bookings[0]} 
-          listing={listing.listingData} 
-          dispatch={dispatch} />
-        )
+      return <PendingBooking booking={pendingBooking.bookings[0]} listing={listing.listingData} dispatch={dispatch} />
     }
     if (bookingPeriod === 'hourly') {
-      return (
-        <ContactHost 
-          user={user} 
-          listing={listing} 
-          dispatch={dispatch} />
-      )
+      return <ContactHost user={user} listing={listing} dispatch={dispatch} />
     }
     if (bookingPeriod === 'daily') {
       return (
@@ -260,11 +248,11 @@ const SpacePage = ({ match, location, ...props }) => {
             closingDays={_returnArrayAvailability(listing.accessDays)}
             listingData={listing.listingData}
           />
-           {_isPeriodValid(listing.bookingPeriod) && datesSelected.length >= 1 && (
-              <Box color={'error'} ml={'23px'}>
-                {`Minimum ${listing.listingData.minTerm} days is required`}
-              </Box>
-            )}
+          {_isPeriodValid(listing.bookingPeriod) && datesSelected.length >= 1 && (
+            <Box color="error" ml="23px">
+              {`Minimum ${listing.listingData.minTerm} days is required`}
+            </Box>
+          )}
         </div>
       )
     }
@@ -309,9 +297,8 @@ const SpacePage = ({ match, location, ...props }) => {
     if (bookingPeriod === 'weekly') {
       if (date > 0 && period > 0) {
         return false
-      } else {
-        return true
       }
+      return true
     }
     if (bookingPeriod === 'monthly') {
       if (date > 0 && period > 0) {
@@ -335,7 +322,7 @@ const SpacePage = ({ match, location, ...props }) => {
   const _onSubmitBooking = async () => {
     if (!user) {
       props.history.push(`/login?refer=/space/${listing.id}`)
-      return 
+      return
     }
     const object = {
       listingId: listing.id,
@@ -351,22 +338,23 @@ const SpacePage = ({ match, location, ...props }) => {
     }
     dispatch(onCreateBooking(object))
   }
-  
+
   const _reportSpace = () => {
     if (!user) {
       props.history.push(`/login?refer=/space/${listing.id}`)
-      return 
+      return
     }
     const options = {
-      onConfirm: async (values) => {
-        let sendData = values;
-        Object.assign(sendData,
-          {spaceOwner: listing.user.profile.displayName},
-          {spaceOwnerEmail: listing.user.email},
-          {email: config.admin_email },
-          {guest: user.profile.firstName + ' ' + user.profile.lastName},
-          {guestId: user.id},
-          {spaceId: listing.id}
+      onConfirm: async values => {
+        const sendData = values
+        Object.assign(
+          sendData,
+          { spaceOwner: listing.user.profile.displayName },
+          { spaceOwnerEmail: listing.user.email },
+          { email: config.admin_email },
+          { guest: `${user.profile.firstName} ${user.profile.lastName}` },
+          { guestId: user.id },
+          { spaceId: listing.id }
         )
 
         const emailData = {
@@ -385,7 +373,7 @@ const SpacePage = ({ match, location, ...props }) => {
             }
           })
         )
-      },
+      }
     }
     dispatch(openModal(TypesModal.MODAL_TYPE_REPORT_LISTING, options))
   }
@@ -395,7 +383,6 @@ const SpacePage = ({ match, location, ...props }) => {
       <Helmet title="View Listing - Spacenow" />
       <Box display="grid" gridTemplateColumns="1fr 380px" gridColumnGap="15px" my="80px">
         <Box display="grid" gridRowGap="50px">
-
           <Carousel photos={_convertedArrayPhotos(listing.photos)} />
 
           <Grid justifyContent="space-between" columnGap="10px" columns={2}>
@@ -446,9 +433,7 @@ const SpacePage = ({ match, location, ...props }) => {
             <Cell width={2} center>
               <Title
                 type="h4"
-                title={`$ ${Math.round((listing.listingData.basePrice || 0) * 100) / 100} ${
-                  listing.bookingPeriod
-                }`}
+                title={`$ ${Math.round((listing.listingData.basePrice || 0) * 100) / 100} ${listing.bookingPeriod}`}
                 noMargin
                 right
                 style={{ marginTop: '5px' }}
@@ -461,7 +446,10 @@ const SpacePage = ({ match, location, ...props }) => {
             <Grid columns={5}>
               <Highlights
                 title="Minimum term"
-                name={_changeToPlural(listing.bookingPeriod, listing.listingData.minTerm ? listing.listingData.minTerm : 1)}
+                name={_changeToPlural(
+                  listing.bookingPeriod,
+                  listing.listingData.minTerm ? listing.listingData.minTerm : 1
+                )}
                 icon="specification-minimum-term"
               />
               <Highlights
@@ -504,67 +492,51 @@ const SpacePage = ({ match, location, ...props }) => {
             </Box>
           </Box>
 
-          {
-            listing.listingData.description ? 
-              <Box>
-                <Title type="h5" title="Description" />
-                <p>{listing.listingData.description}</p>
-              </Box> : null
-          }
-          {
-            listing.amenities.length > 0 && (
-              <Box>
-                <Title type="h5" title="Amenities" />
-                <Box display="grid" gridTemplateColumns="1fr 1fr 1fr" gridRowGap="40px">
-                  {listing.amenities.map(item => {
-                    return (
-                      <Box key={item.id} display="grid" gridTemplateColumns="auto 1fr" gridColumnGap="20px">
-                        <Box width="54px" height="54px" borderRadius="100%" bg="primary">
-                          <Icon
-                            name={`amenitie-${item.settingsData.otherItemName}`}
-                            width="70%"
-                            height="100%"
-                            style={{ display: 'block', margin: 'auto' }}
-                          />
-                        </Box>
-                        <span style={{ alignSelf: 'center' }}>{item.settingsData.itemName}</span>
+          {listing.listingData.description ? (
+            <Box>
+              <Title type="h5" title="Description" />
+              <p>{listing.listingData.description}</p>
+            </Box>
+          ) : null}
+          {listing.amenities.length > 0 && (
+            <Box>
+              <Title type="h5" title="Amenities" />
+              <Box display="grid" gridTemplateColumns="1fr 1fr 1fr" gridRowGap="40px">
+                {listing.amenities.map(item => {
+                  return (
+                    <Box key={item.id} display="grid" gridTemplateColumns="auto 1fr" gridColumnGap="20px">
+                      <Box width="54px" height="54px" borderRadius="100%" bg="primary">
+                        <Icon
+                          name={`amenitie-${item.settingsData.otherItemName}`}
+                          width="70%"
+                          height="100%"
+                          style={{ display: 'block', margin: 'auto' }}
+                        />
                       </Box>
-                    )
-                  })}
-                </Box>
+                      <span style={{ alignSelf: 'center' }}>{item.settingsData.itemName}</span>
+                    </Box>
+                  )
+                })}
               </Box>
+            </Box>
           )}
 
-          {
-            listing.rules.length > 0 && (
-              <Box>
-                <Title type="h5" title="Space Rules" />
-                <Box display="grid" gridTemplateColumns="1fr 1fr 1fr" gridRowGap="20px">
-                  {listing.rules.map(item => {
-                      return (
-                      <Checkbox
-                        disabled
-                        key={item.id}
-                        label={item.settingsData.itemName}
-                        name="rules"
-                        checked={true}
-                      />
-                      )
-                    })
-                  }
-                </Box>
+          {listing.rules.length > 0 && (
+            <Box>
+              <Title type="h5" title="Space Rules" />
+              <Box display="grid" gridTemplateColumns="1fr 1fr 1fr" gridRowGap="20px">
+                {listing.rules.map(item => {
+                  return <Checkbox disabled key={item.id} label={item.settingsData.itemName} name="rules" checked />
+                })}
               </Box>
-            )
-          }
+            </Box>
+          )}
 
           <Box>
-            <Title
-              type="h5"
-              title="Availability"
-            />
-            <TimeTable 
-              data={listing.accessDays.listingAccessHours} 
-              error={_getWeekName(listing.accessDays) === 'Closed'} 
+            <Title type="h5" title="Availability" />
+            <TimeTable
+              data={listing.accessDays.listingAccessHours}
+              error={_getWeekName(listing.accessDays) === 'Closed'}
             />
           </Box>
         </Box>
@@ -572,44 +544,40 @@ const SpacePage = ({ match, location, ...props }) => {
         <Box>
           <BookingCard
             titleComponent={
-              <Title 
-                type="h5" 
-                title={listing.title} 
-                subtitle={_getAddress(listing.location)} 
-                subTitleMargin={10} 
+              <Title
+                type="h5"
+                title={listing.title}
+                subtitle={_getAddress(listing.location)}
+                subTitleMargin={10}
                 noMargin
               />
             }
             contentComponent={
               <>
                 {_renderContentCard(listing.bookingPeriod)}
-                {listing.bookingPeriod !== 'hourly' && (pendingBooking ? (pendingBooking && pendingBooking.count === 0) : true)  && (
-                  <Button
-                    onClick={e => _onSubmitBooking(e)}
-                    isLoading={isLoadingOnCreateReservation}
-                    disabled={_isPeriodValid(listing.bookingPeriod) || (user && user.id === listing.user.id)}
-                    fluid
-                  >
-                    {listing.listingData.bookingType === 'request' ? 'Booking Request' : 'Book Now'}
-                  </Button>
-                )}
+                {listing.bookingPeriod !== 'hourly' &&
+                  (pendingBooking ? pendingBooking && pendingBooking.count === 0 : true) && (
+                    <Button
+                      onClick={e => _onSubmitBooking(e)}
+                      isLoading={isLoadingOnCreateReservation}
+                      disabled={_isPeriodValid(listing.bookingPeriod) || (user && user.id === listing.user.id)}
+                      fluid
+                    >
+                      {listing.listingData.bookingType === 'request' ? 'Booking Request' : 'Book Now'}
+                    </Button>
+                  )}
               </>
             }
             footerComponent={
               <>
-                <UserDetails 
-                  hostname={listing.user.profile.displayName} 
-                  imageProfile={listing.user.profile.picture} 
+                <UserDetails
+                  hostname={listing.user.profile.displayName}
+                  imageProfile={listing.user.profile.picture}
                   joined="2019"
                 />
                 <Box mt="15px">
                   <IconBoxStyled>
-                    <Icon
-                      name="flag"
-                      width="10px"
-                      height="100%"
-                      style={{ paddingBottom: '5px' }}
-                    /> 
+                    <Icon name="flag" width="10px" height="100%" style={{ paddingBottom: '5px' }} />
                   </IconBoxStyled>
                   <ReportSpaceStyled onClick={_reportSpace}>Report space</ReportSpaceStyled>
                 </Box>
@@ -618,7 +586,7 @@ const SpacePage = ({ match, location, ...props }) => {
           />
         </Box>
       </Box>
-      
+
       <Box mt="100px">
         <Title type="h5" title="Location" />
         <Map position={{ lat: Number(listing.location.lat), lng: Number(listing.location.lng) }} />
