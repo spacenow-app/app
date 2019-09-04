@@ -1,5 +1,5 @@
-import { gql } from 'apollo-boost'
-import { getClient } from 'graphql/apolloClient'
+// import { gql } from 'apollo-boost'
+// import { getClient } from 'graphql/apolloClient'
 import errToMsg from 'utils/errToMsg'
 
 import mockSearchByAddress from './searchByAddress.json'
@@ -22,106 +22,106 @@ const initialState = {
   }
 }
 
-const searchResultFields = `
-  id
-  userId
-  title
-  bookingPeriod
-  photos {
-    id
-    isCover
-    name
-  }
-  listingData {
-    accessType
-    minTerm
-    basePrice
-    currency
-    isAbsorvedFee
-    capacity
-    size
-    meetingRooms
-    isFurnished
-    carSpace
-    sizeOfVehicle
-    maxEntranceHeight
-    bookingType
-    spaceType
-  }
-  location {
-    id
-    country
-    address1
-    buildingName
-    city
-    state
-    zipcode
-    lat
-    lng
-  }
-  category {
-    id
-    typeId
-    itemName
-    otherItemName
-  }
-  subcategory {
-    id
-    typeId
-    itemName
-    otherItemName
-  }
-  host {
-    id
-    email
-    profile {
-      profileId
-      firstName
-      lastName
-      picture
-    }
-  }
-`
+// const searchResultFields = `
+//   id
+//   userId
+//   title
+//   bookingPeriod
+//   photos {
+//     id
+//     isCover
+//     name
+//   }
+//   listingData {
+//     accessType
+//     minTerm
+//     basePrice
+//     currency
+//     isAbsorvedFee
+//     capacity
+//     size
+//     meetingRooms
+//     isFurnished
+//     carSpace
+//     sizeOfVehicle
+//     maxEntranceHeight
+//     bookingType
+//     spaceType
+//   }
+//   location {
+//     id
+//     country
+//     address1
+//     buildingName
+//     city
+//     state
+//     zipcode
+//     lat
+//     lng
+//   }
+//   category {
+//     id
+//     typeId
+//     itemName
+//     otherItemName
+//   }
+//   subcategory {
+//     id
+//     typeId
+//     itemName
+//     otherItemName
+//   }
+//   host {
+//     id
+//     email
+//     profile {
+//       profileId
+//       firstName
+//       lastName
+//       picture
+//     }
+//   }
+// `
 
-const querySearchByAddress = gql`
-  query searchByAddress($lat: String!, $lng: String!) {
-    searchByAddress(lat: $lat, lng: $lng) {
-      __typename
-      status
-      searchKey
-      result {
-        ${searchResultFields}
-      }
-    }
-  }
-`
+// const querySearchByAddress = gql`
+//   query searchByAddress($lat: String!, $lng: String!) {
+//     searchByAddress(lat: $lat, lng: $lng) {
+//       __typename
+//       status
+//       searchKey
+//       result {
+//         ${searchResultFields}
+//       }
+//     }
+//   }
+// `
 
-const querySearchByFilters = gql`
-  query searchByFilters(
-    $key: String!,
-    $categories: String,
-    $duration: String,
-    $priceMin: Float,
-    $priceMax: Float,
-    $instant: String,
-  ) {
-    searchByFilters(
-      key: $key,
-      categories: $categories,
-      duration: $duration,
-      priceMin: $priceMin,
-      priceMax: $priceMax,
-      instant: $instant
-    ) {
-      __typename
-      status
-      searchKey
-      result {
-        ${searchResultFields}
-      }
-    }
-  }
-`
+// const querySearchByFilters = gql`
+//   query searchByFilters(
+//     $key: String!,
+//     $categories: String,
+//     $duration: String,
+//     $priceMin: Float,
+//     $priceMax: Float,
+//     $instant: String,
+//   ) {
+//     searchByFilters(
+//       key: $key,
+//       categories: $categories,
+//       duration: $duration,
+//       priceMin: $priceMin,
+//       priceMax: $priceMax,
+//       instant: $instant
+//     ) {
+//       __typename
+//       status
+//       searchKey
+//       result {
+//         ${searchResultFields}
+//       }
+//     }
+//   }
+// `
 
 // Reducer
 export default function reducer(state = initialState, action) {

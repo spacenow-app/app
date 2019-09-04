@@ -278,7 +278,11 @@ Slider.defaultProps = {
 }
 
 Slider.propTypes = {
-  ...Range.propTypes
+  ...Range.propTypes,
+  handleChange: PropTypes.func,
+  defaultValue: PropTypes.instanceOf(Array),
+  min: PropTypes.number,
+  max: PropTypes.number
 }
 
 export default Slider

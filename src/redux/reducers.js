@@ -28,6 +28,6 @@ export default combineReducers({
   mail,
   space,
   landing,
-  search
+  search,
   booking
 })
