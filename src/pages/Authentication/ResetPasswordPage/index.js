@@ -17,7 +17,7 @@ const ResetPasswordPage = ({ location, history, values, touched, errors, handleC
 
   const handleSubmit = e => {
     e.preventDefault()
-    dispatch(resetPassword(values.password, params.get('verify_token'), history))
+    dispatch(resetPassword(params.get('verify_token'), values.password, history))
   }
 
   return (

@@ -93,7 +93,7 @@ const mutationRequestResetPassword = gql`
 
 const mutationResetPassword = gql`
   mutation resetPasswordUpdate($token: String!, $password: String!) {
-    resetPassword(token: $token, password: $password) {
+    resetPasswordUpdate(token: $token, password: $password) {
       status
     }
   }
