@@ -187,8 +187,6 @@ export const onSearch = (lat, lng) => async dispatch => {
 }
 
 export const onQuery = (searchKey, filters) => async dispatch => {
-  console.log('Search Key: ', searchKey)
-  console.log('Filters: ', filters)
   dispatch({ type: Types.ON_SEARCH_REQUEST })
   const categories = {
     workspace: [566, 567, 572],

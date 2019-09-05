@@ -50,22 +50,20 @@ const ContactHost = ({
   const { isLoading: isSendingEmail } = useSelector(state => state.mail)
 
   const _handleSubmit = () => {  
-    let sendData = values;
-    Object.assign(sendData,
+    Object.assign(values,
       {listingPhoto: listing.photos.find(photo => photo.isCover).name },
       {listingTitle: listing.title},
       {listingCity: listing.location.city},
       {listingCountry: listing.location.country},
       {hostName: listing.user.profile.displayName}
     )
-    console.log(sendData)
     const emailGuest = {
       template: 'contact-hourly-guest',
-      data: JSON.stringify(sendData),
+      data: JSON.stringify(values),
     }
     const emailHost = {
       template: 'contact-hourly-host',
-      data: JSON.stringify(sendData),
+      data: JSON.stringify(values),
     }
     dispatch(sendMail(emailGuest))
     dispatch(sendMail(emailHost, "Your enquiry was sent succesfully"))
@@ -75,8 +73,8 @@ const ContactHost = ({
     setFieldValue(name, value)
   }
 
-  let startTimeInitial = new Date("January 31 1980 08:00")
-  let endTimeInitial = new Date("January 31 1980 18:00")
+  const startTimeInitial = new Date("January 31 1980 08:00")
+  const endTimeInitial = new Date("January 31 1980 18:00")
 
   return (
     <form>
