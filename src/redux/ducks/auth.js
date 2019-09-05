@@ -83,9 +83,17 @@ const mutationFacebookLogin = gql`
   }
 `
 
-const mutationResetPassword = gql`
+const mutationRequestResetPassword = gql`
   mutation resetPassword($email: String!) {
     resetPassword(email: $email) {
+      status
+    }
+  }
+`
+
+const mutationResetPassword = gql`
+  mutation resetPasswordUpdate($token: String!, $password: String!) {
+    resetPassword(token: $token, password: $password) {
       status
     }
   }
@@ -268,14 +276,33 @@ export const signup = (name, email, password) => async dispatch => {
   }
 }
 
-export const resetPassword = (email, history) => async dispatch => {
+export const requestResetPassword = (email, history) => async dispatch => {
   dispatch({ type: Types.AUTH_RESET_PASSWORD_REQUEST })
   try {
     await getClient().mutate({
       variables: { email },
-      mutation: mutationResetPassword
+      mutation: mutationRequestResetPassword
     })
     toast.info("If the email you specified exists in our system, we've sent a password reset link to it.")
+    history.push('/auth/signin')
+    dispatch({ type: Types.AUTH_RESET_PASSWORD_SUCCESS })
+  } catch (err) {
+    toast.error(errToMsg(err))
+    dispatch({
+      type: Types.AUTH_RESET_PASSWORD_FAILURE,
+      payload: err
+    })
+  }
+}
+
+export const resetPassword = (token, password, history) => async dispatch => {
+  dispatch({ type: Types.AUTH_RESET_PASSWORD_REQUEST })
+  try {
+    await getClient().mutate({
+      variables: { token, password },
+      mutation: mutationResetPassword
+    })
+    toast.info('Your password has been reset.')
     history.push('/auth/signin')
     dispatch({ type: Types.AUTH_RESET_PASSWORD_SUCCESS })
   } catch (err) {
