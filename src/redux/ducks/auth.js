@@ -62,7 +62,7 @@ const mutationLogin = gql`
 const mutationSignUp = gql`
   mutation signup($firstName: String!, $lastName: String!, $email: String!, $password: String!) {
     signup(firstName: $firstName, lastName: $lastName, email: $email, password: $password) {
-      status
+      ${loginBaseFields}
     }
   }
 `
@@ -228,8 +228,9 @@ export const signup = (name, email, password) => async dispatch => {
       variables: { firstName: name.first, lastName: name.last, email, password },
       mutation: mutationSignUp
     })
-    console.log(data)
-    // dispatch({ type: Types.AUTH_SIGNUP_SUCCESS, payload: signinReturn.user })
+    const signupReturn = data.signup
+    setToken(signupReturn.token, signupReturn.expiresIn)
+    dispatch({ type: Types.AUTH_SIGNIN_SUCCESS, payload: signupReturn.user })
   } catch (err) {
     toast.error(errToMsg(err))
     dispatch({
