@@ -1,8 +1,19 @@
 import React from 'react'
-
+import { withFormik } from 'formik'
+import { useSelector, useDispatch } from 'react-redux'
+import * as Yup from 'yup'
 import { NavBar, Wrapper, Box, Input, Button, Text, Title } from 'components'
+import { requestResetPassword } from 'redux/ducks/auth'
 
-const ForgotPasswordPage = () => {
+const ForgotPasswordPage = ({ history, values, touched, errors, handleChange, handleBlur, isValid }) => {
+  const dispatch = useDispatch()
+  const { isLoadingResetPassword } = useSelector(state => state.auth)
+
+  const handleSubmit = e => {
+    e.preventDefault()
+    dispatch(requestResetPassword(values.email, history))
+  }
+
   return (
     <>
       <NavBar />
@@ -12,14 +23,42 @@ const ForgotPasswordPage = () => {
           <Text display="block" fontSize="14px" fontFamily="medium" my="15px">
             Enter your account email address and we will send you a link to reset your password.
           </Text>
-          <Box display="grid" gridRowGap="15px">
-            <Input placeholder="Email Address" type="email" />
-            <Button fluid="true">Request Password Reset</Button>
-          </Box>
+          <form onSubmit={handleSubmit}>
+            <Box display="grid" gridRowGap="15px">
+              <Input
+                placeholder="Email Address"
+                type="email"
+                name="email"
+                value={values.email}
+                error={touched.email && errors.email}
+                onChange={handleChange}
+                onBlur={handleBlur}
+              />
+              <Button fluid disabled={!isValid} isLoading={isLoadingResetPassword} type="submit">
+                Request Password Reset
+              </Button>
+            </Box>
+          </form>
         </Box>
       </Wrapper>
     </>
   )
 }
 
-export default ForgotPasswordPage
+const formik = {
+  displayName: 'Authentication_ResetPassword',
+  mapPropsToValues: () => {
+    return {
+      email: ''
+    }
+  },
+  mapValuesToPayload: x => x,
+  validationSchema: Yup.object().shape({
+    email: Yup.string()
+      .email('Invalid e-mail address.')
+      .required()
+  }),
+  enableReinitialize: true
+}
+
+export default withFormik(formik)(ForgotPasswordPage)

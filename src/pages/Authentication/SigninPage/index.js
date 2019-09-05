@@ -56,7 +56,7 @@ const SigninPage = ({ values, touched, errors, handleChange, handleBlur, isValid
                 onChange={handleChange}
                 onBlur={handleBlur}
               />
-              <Button fluid="true" disabled={!isValid} isLoading={isLoading} type="submit">
+              <Button fluid disabled={!isValid} isLoading={isLoading} type="submit">
                 Sign In
               </Button>
               <Link to="forgot_password">Forgot password?</Link>

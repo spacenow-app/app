@@ -109,7 +109,6 @@ const LeadFormRequirement = ({
     //   3: '101 - 500 People',
     //   4: '500+ People'
     // }
-
     // const emailOptions = {
     //   to: 'barrett@spacenow.com, team@spacenow.com',
     //   subject: 'Spacenow Landing Page - Lead Requirements Form',
@@ -300,7 +299,7 @@ const LeadFormRequirement = ({
             onBlur={handleBlur}
           />
         </Box>
-        <Button fluid="true" onClick={_handleSubmit} isLoading={isLoading}>
+        <Button fluid onClick={_handleSubmit} isLoading={isLoading}>
           Submit
         </Button>
         <Box my="60px" display="grid" gridTemplateColumns="auto auto auto" gridColumnGap="40px" alignItems="center">
