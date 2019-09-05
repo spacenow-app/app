@@ -83,12 +83,23 @@ const mutationFacebookLogin = gql`
   }
 `
 
+const mutationResetPassword = gql`
+  mutation resetPassword($email: String!) {
+    resetPassword(email: $email) {
+      status
+    }
+  }
+`
+
 // Action Types
 export const Types = {
   AUTH_SIGNIN_REQUEST: 'AUTH_SIGNIN_REQUEST',
   AUTH_SIGNIN_SUCCESS: 'AUTH_SIGNIN_SUCCESS',
   AUTH_SIGNUP_REQUEST: 'AUTH_SIGNUP_REQUEST',
   AUTH_SIGNUP_SUCCESS: 'AUTH_SIGNUP_SUCCESS',
+  AUTH_RESET_PASSWORD_REQUEST: 'AUTH_RESET_PASSWORD_REQUEST',
+  AUTH_RESET_PASSWORD_SUCCESS: 'AUTH_RESET_PASSWORD_SUCCESS',
+  AUTH_RESET_PASSWORD_FAILURE: 'AUTH_RESET_PASSWORD_FAILURE',
   AUTH_FAILURE: 'AUTH_FAILURE',
   AUTH_CLEAN_ERROR: 'AUTH_CLEAN_ERROR',
   AUTH_LOGOUT: 'AUTH_LOGOUT',
@@ -113,7 +124,8 @@ const initialState = {
     }
   },
   isAuthenticated: false,
-  isLoading: true
+  isLoading: true,
+  isLoadingResetPassword: false
 }
 
 export default function reducer(state = initialState, action) {
@@ -162,6 +174,22 @@ export default function reducer(state = initialState, action) {
       return {
         ...initialState,
         isLoading: false
+      }
+    case Types.AUTH_RESET_PASSWORD_REQUEST:
+      return {
+        ...state,
+        isLoadingResetPassword: true
+      }
+    case Types.AUTH_RESET_PASSWORD_SUCCESS:
+      return {
+        ...state,
+        isLoadingResetPassword: false
+      }
+    case Types.AUTH_RESET_PASSWORD_FAILURE:
+      return {
+        ...state,
+        isLoadingResetPassword: false,
+        error: action.payload
       }
     default:
       return state
@@ -235,6 +263,25 @@ export const signup = (name, email, password) => async dispatch => {
     toast.error(errToMsg(err))
     dispatch({
       type: Types.AUTH_FAILURE,
+      payload: err
+    })
+  }
+}
+
+export const resetPassword = (email, history) => async dispatch => {
+  dispatch({ type: Types.AUTH_RESET_PASSWORD_REQUEST })
+  try {
+    await getClient().mutate({
+      variables: { email },
+      mutation: mutationResetPassword
+    })
+    toast.info("If the email you specified exists in our system, we've sent a password reset link to it.")
+    history.push('/auth/signin')
+    dispatch({ type: Types.AUTH_RESET_PASSWORD_SUCCESS })
+  } catch (err) {
+    toast.error(errToMsg(err))
+    dispatch({
+      type: Types.AUTH_RESET_PASSWORD_FAILURE,
       payload: err
     })
   }
