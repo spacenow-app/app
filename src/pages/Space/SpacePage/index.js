@@ -52,7 +52,8 @@ import DailyBooking from './DailyBooking'
 
 
 const GridStyled = styled(Grid)`
-  @media only screen and (max-width: 425px) {
+  @media only screen and (max-width: 991px) {
+    grid-template-columns: repeat(2, 100%);
     grid-template-areas: "card" "content"
   }
 `
