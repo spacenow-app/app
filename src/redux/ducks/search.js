@@ -1,9 +1,6 @@
-// import { gql } from 'apollo-boost'
-// import { getClient } from 'graphql/apolloClient'
+import { gql } from 'apollo-boost'
+import { getClient } from 'graphql/apolloClient'
 import errToMsg from 'utils/errToMsg'
-
-import mockSearchByAddress from './searchByAddress.json'
-import mockSearchByFilters from './searchByFilters.json'
 
 // Actions
 export const Types = {
@@ -22,106 +19,125 @@ const initialState = {
   }
 }
 
-// const searchResultFields = `
-//   id
-//   userId
-//   title
-//   bookingPeriod
-//   photos {
-//     id
-//     isCover
-//     name
-//   }
-//   listingData {
-//     accessType
-//     minTerm
-//     basePrice
-//     currency
-//     isAbsorvedFee
-//     capacity
-//     size
-//     meetingRooms
-//     isFurnished
-//     carSpace
-//     sizeOfVehicle
-//     maxEntranceHeight
-//     bookingType
-//     spaceType
-//   }
-//   location {
-//     id
-//     country
-//     address1
-//     buildingName
-//     city
-//     state
-//     zipcode
-//     lat
-//     lng
-//   }
-//   category {
-//     id
-//     typeId
-//     itemName
-//     otherItemName
-//   }
-//   subcategory {
-//     id
-//     typeId
-//     itemName
-//     otherItemName
-//   }
-//   host {
-//     id
-//     email
-//     profile {
-//       profileId
-//       firstName
-//       lastName
-//       picture
-//     }
-//   }
-// `
+const searchResultFields = `
+  id
+  userId
+  title
+  bookingPeriod
+  photos {
+    id
+    isCover
+    name
+  }
+  listingData {
+    accessType
+    minTerm
+    basePrice
+    currency
+    isAbsorvedFee
+    capacity
+    size
+    meetingRooms
+    isFurnished
+    carSpace
+    sizeOfVehicle
+    maxEntranceHeight
+    bookingType
+    spaceType
+  }
+  specifications {
+    id
+    typeId
+    itemName
+    otherItemName
+    description
+    maximum
+    minimum
+    startValue
+    endValue
+    step
+    isEnable
+    photo
+    photoType
+    isSpecification
+    createdAt
+    updatedAt
+    specData
+  }
+  location {
+    id
+    country
+    address1
+    buildingName
+    city
+    state
+    zipcode
+    lat
+    lng
+  }
+  category {
+    id
+    typeId
+    itemName
+    otherItemName
+  }
+  subcategory {
+    id
+    typeId
+    itemName
+    otherItemName
+  }
+  host {
+    id
+    email
+    profile {
+      profileId
+      firstName
+      lastName
+      picture
+    }
+  }
+`
 
-// const querySearchByAddress = gql`
-//   query searchByAddress($lat: String!, $lng: String!) {
-//     searchByAddress(lat: $lat, lng: $lng) {
-//       __typename
-//       status
-//       searchKey
-//       result {
-//         ${searchResultFields}
-//       }
-//     }
-//   }
-// `
+const querySearchByAddress = gql`
+  query searchByAddress($lat: String!, $lng: String!) {
+    searchByAddress(lat: $lat, lng: $lng) {
+      __typename
+      status
+      searchKey
+      result {
+        ${searchResultFields}
+      }
+    }
+  }
+`
 
-// const querySearchByFilters = gql`
-//   query searchByFilters(
-//     $key: String!,
-//     $categories: String,
-//     $duration: String,
-//     $priceMin: Float,
-//     $priceMax: Float,
-//     $instant: String,
-//   ) {
-//     searchByFilters(
-//       key: $key,
-//       categories: $categories,
-//       duration: $duration,
-//       priceMin: $priceMin,
-//       priceMax: $priceMax,
-//       instant: $instant
-//     ) {
-//       __typename
-//       status
-//       searchKey
-//       result {
-//         ${searchResultFields}
-//       }
-//     }
-//   }
-// `
+const querySearchByFilters = gql`
+  query searchByFilters(
+    $key: String!,
+    $categories: String,
+    $duration: String,
+    $priceMin: Float,
+    $priceMax: Float,
+    $instant: String,
+  ) {
+    searchByFilters(
+      key: $key,
+      categories: $categories,
+      duration: $duration,
+      priceMin: $priceMin,
+      priceMax: $priceMax,
+      instant: $instant
+    ) {
+      __typename
+      status
+      searchKey
+      result {
+        ${searchResultFields}
+      }
+    }
+  }
+`
 
 // Reducer
 export default function reducer(state = initialState, action) {
@@ -157,16 +173,10 @@ export default function reducer(state = initialState, action) {
 export const onSearch = (lat, lng) => async dispatch => {
   dispatch({ type: Types.ON_SEARCH_REQUEST })
   try {
-    // const { data } = await getClient().query({
-    //   query: querySearchByAddress,
-    //   variables: { lat, lng }
-    // })
-    const data = {
-      searchByAddress: {
-        searchKey: '569505354717b8a0a6d8d8bf6511710386482fbf98d1a5955c9283cea202011e',
-        result: mockSearchByAddress.data.searchByAddress.result
-      }
-    }
+    const { data } = await getClient().query({
+      query: querySearchByAddress,
+      variables: { lat, lng }
+    })
     dispatch({
       type: Types.ON_SEARCH_SUCCESS,
       payload: { searchKey: data.searchByAddress.searchKey, result: data.searchByAddress.result }
@@ -177,8 +187,9 @@ export const onSearch = (lat, lng) => async dispatch => {
 }
 
 export const onQuery = (searchKey, filters) => async dispatch => {
+  console.log('Search Key: ', searchKey)
+  console.log('Filters: ', filters)
   dispatch({ type: Types.ON_SEARCH_REQUEST })
-
   const categories = {
     workspace: [566, 567, 572],
     meetingSpace: [568],
@@ -187,7 +198,6 @@ export const onQuery = (searchKey, filters) => async dispatch => {
     eventSpace: [569],
     retailAndHospitality: [573]
   }
-
   const filter = {
     categories:
       Object.keys(categories)
@@ -206,27 +216,18 @@ export const onQuery = (searchKey, filters) => async dispatch => {
     priceMax: filters.filterPrice[1] || 0,
     instant: filters.filterInstantBooking || ''
   }
-
-  console.log(filter)
-
   try {
-    // const { data } = await getClient().query({
-    //   query: querySearchByFilters,
-    //   variables: {
-    //     key: searchKey,
-    //     categories: filters.categories,
-    //     duration: filters.duration,
-    //     priceMin: filters.priceMin,
-    //     priceMax: filters.priceMax,
-    //     instant: filters.instant
-    //   }
-    // })
-    const data = {
-      searchByFilters: {
-        searchKey: '569505354717b8a0a6d8d8bf6511710386482fbf98d1a5955c9283cea202011e',
-        result: mockSearchByFilters.data.searchByFilters.result
+    const { data } = await getClient().query({
+      query: querySearchByFilters,
+      variables: {
+        key: searchKey,
+        categories: filter.categories,
+        duration: filter.duration,
+        priceMin: filter.priceMin,
+        priceMax: filter.priceMax,
+        instant: filter.instant
       }
-    }
+    })
     dispatch({
       type: Types.ON_SEARCH_SUCCESS,
       payload: { searchKey: data.searchByFilters.searchKey, result: data.searchByFilters.result }

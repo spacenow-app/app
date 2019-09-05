@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { useDispatch, shallowEqual, useSelector } from 'react-redux'
 import styled from 'styled-components'
+
 import {
   NavBar,
   Line,
@@ -15,6 +16,7 @@ import {
   Switch,
   AutoComplete
 } from 'components'
+
 import { Manager, Reference, Popper } from 'react-popper'
 import numeral from 'numeral'
 
@@ -81,6 +83,7 @@ const ItemSwitchStyled = styled.div`
 
 const SearchPage = () => {
   const dispatch = useDispatch()
+
   const [selectedSpace, setSelectedSpace] = useState(null)
   const [shouldShowFilter, setShouldShowFilter] = useState(false)
   const [markers, setMarkers] = useState([])
@@ -103,13 +106,12 @@ const SearchPage = () => {
     retailAndHospitality: false
   })
 
-  const searchResults = useSelector(state => state.search.get.result, shallowEqual)
+  const {searchKey, result: searchResults} = useSelector(state => state.search.get, shallowEqual)
 
   useEffect(() => {
     async function fetchData() {
       await dispatch(onSearch('-33.8688197', '151.2092955')) // mock data for test...
     }
-
     fetchData()
   }, [dispatch])
 
@@ -179,7 +181,7 @@ const SearchPage = () => {
       filterInstantBooking,
       filterPrice
     }
-    dispatch(onQuery(false, filters))
+    dispatch(onQuery(searchKey, filters))
     setShouldShowFilter(null)
   }
 
