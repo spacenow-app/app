@@ -3,7 +3,7 @@ import { withFormik } from 'formik'
 import { useSelector, useDispatch } from 'react-redux'
 import * as Yup from 'yup'
 import { NavBar, Wrapper, Box, Input, Button, Text, Title } from 'components'
-import { resetPassword } from 'redux/ducks/auth'
+import { requestResetPassword } from 'redux/ducks/auth'
 
 const ForgotPasswordPage = ({ history, values, touched, errors, handleChange, handleBlur, isValid }) => {
   const dispatch = useDispatch()
@@ -11,7 +11,7 @@ const ForgotPasswordPage = ({ history, values, touched, errors, handleChange, ha
 
   const handleSubmit = e => {
     e.preventDefault()
-    dispatch(resetPassword(values.email, history))
+    dispatch(requestResetPassword(values.email, history))
   }
 
   return (
