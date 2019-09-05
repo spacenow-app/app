@@ -236,7 +236,7 @@ const SpacePage = ({ match, location, ...props }) => {
   }
 
   const _renderContentCard = bookingPeriod => {
-    if (pendingBooking && pendingBooking.bookings.length > 0) {
+    if (pendingBooking && pendingBooking.bookings && pendingBooking.bookings.length > 0) {
       return <PendingBooking booking={pendingBooking.bookings[0]} listing={listing.listingData} dispatch={dispatch} />
     }
     if (bookingPeriod === 'hourly') {
