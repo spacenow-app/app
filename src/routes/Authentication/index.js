@@ -2,7 +2,7 @@ import React, { Suspense } from 'react'
 import PropTypes from 'prop-types'
 import { Switch, Route, Redirect } from 'react-router-dom'
 import { Loader } from 'components'
-import { NotFoundPage, SigninPage, SignupPage, ForgotPasswordPage, ResetPasswordPage } from 'pages'
+import { SigninPage, SignupPage, ForgotPasswordPage, ResetPasswordPage } from 'pages'
 
 const Landingpages = ({ match, ...props }) => {
   return (
