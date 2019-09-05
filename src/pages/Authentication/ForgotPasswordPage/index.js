@@ -14,7 +14,7 @@ const ForgotPasswordPage = () => {
           </Text>
           <Box display="grid" gridRowGap="15px">
             <Input placeholder="Email Address" type="email" />
-            <Button fluid="true">Request Password Reset</Button>
+            <Button fluid>Request Password Reset</Button>
           </Box>
         </Box>
       </Wrapper>

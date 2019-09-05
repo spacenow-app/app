@@ -20,7 +20,7 @@ const ResetPasswordPage = ({ location }) => {
           </Text>
           <Box display="grid" gridRowGap="15px">
             <Input placeholder="New Password" type="password" />
-            <Button fluid="true">Reset Password</Button>
+            <Button fluid>Reset Password</Button>
           </Box>
         </Box>
       </Wrapper>
