@@ -52,7 +52,8 @@ import DailyBooking from './DailyBooking'
 
 
 const GridStyled = styled(Grid)`
-  @media only screen and (max-width: 425px) {
+  @media only screen and (max-width: 991px) {
+    grid-template-columns: repeat(2, 100%);
     grid-template-areas: "card" "content"
   }
 `
@@ -236,7 +237,7 @@ const SpacePage = ({ match, location, ...props }) => {
   }
 
   const _renderContentCard = bookingPeriod => {
-    if (pendingBooking && pendingBooking.bookings.length > 0) {
+    if (pendingBooking && pendingBooking.bookings && pendingBooking.bookings.length > 0) {
       return <PendingBooking booking={pendingBooking.bookings[0]} listing={listing.listingData} dispatch={dispatch} />
     }
     if (bookingPeriod === 'hourly') {
