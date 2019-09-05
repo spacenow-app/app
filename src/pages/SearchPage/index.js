@@ -14,7 +14,8 @@ import {
   MapSearch,
   Slider,
   Switch,
-  AutoComplete
+  AutoComplete,
+  Loader
 } from 'components'
 
 import { Manager, Reference, Popper } from 'react-popper'
@@ -106,7 +107,8 @@ const SearchPage = () => {
     retailAndHospitality: false
   })
 
-  const {searchKey, result: searchResults} = useSelector(state => state.search.get, shallowEqual)
+  const { searchKey, result: searchResults } = useSelector(state => state.search.get, shallowEqual)
+  const isLoading = useSelector(state => state.search.isLoading)
 
   useEffect(() => {
     async function fetchData() {
@@ -522,7 +524,7 @@ const SearchPage = () => {
           />
         </Box>
       </Box>
-      {shouldShowFilter && (
+      {(isLoading || shouldShowFilter) && (
         <Box
           height="100vh"
           width="100%"
@@ -532,7 +534,9 @@ const SearchPage = () => {
           left="0"
           right="0"
           position="fixed"
-        />
+        >
+          {isLoading && <Loader text="Searching" />}
+        </Box>
       )}
       <ContainerResults>
         <ListResults markers={searchResults} onHoverItem={_toggleHover} />

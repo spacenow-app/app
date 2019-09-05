@@ -2,6 +2,7 @@ import React, { memo } from 'react'
 import styled from 'styled-components'
 import PropTypes from 'prop-types'
 import { withGoogleMap, GoogleMap, Marker, InfoWindow } from 'react-google-maps'
+import { Avatar } from 'components'
 import defaultMapStyle from './default_map_style.json'
 import mapPinIcon from './spacenow_logo_pin.png'
 
@@ -59,13 +60,8 @@ const CardContentPrice = styled.span`
   font-family: 'MontSerrat-Bold';
 `
 
-const CardContentUser = styled.div``
-
-const CardContentUserAvatar = styled.img`
-  width: 30px;
-  height: 30px;
-  border-radius: 100%;
-  border: 0.5px solid #ececec;
+const CardContentUser = styled.div`
+  display: flex;
 `
 
 const CardContentUserTitle = styled.span`
@@ -120,7 +116,7 @@ const MapSearch = withGoogleMap(props => {
                 From <CardContentPrice>{props.selectedMarker.price}</CardContentPrice> {props.selectedMarker.period}
               </CardContentTextPrice>
               <CardContentUser>
-                <CardContentUserAvatar src={props.selectedMarker.host.photo} />
+                <Avatar width="30px" height="30px" image={props.selectedMarker.host.photo} />
                 <CardContentUserTitle>{props.selectedMarker.host.name}</CardContentUserTitle>
               </CardContentUser>
             </CardContent>

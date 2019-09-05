@@ -1,6 +1,6 @@
 import React, { memo } from 'react'
 import styled from 'styled-components'
-import { Box, Text, Icon, Tag } from 'components'
+import { Box, Text, Icon, Tag, Avatar } from 'components'
 import { toPlural } from 'utils/strings'
 
 const ContainerList = styled.div`
@@ -48,13 +48,6 @@ const CardImage = styled.img`
 const CardContent = styled.div`
   padding: 25px;
   line-height: 2;
-`
-
-const CardContentUserAvatar = styled.img`
-  width: 30px;
-  height: 30px;
-  border-radius: 100%;
-  border: 0.5px solid #ececec;
 `
 
 const ListResults = ({ markers, onHoverItem }) => {
@@ -173,8 +166,8 @@ const ListResults = ({ markers, onHoverItem }) => {
                   </Text>{' '}
                   {item.bookingPeriod}
                 </Text>
-                <Box justifySelf="end">
-                  <CardContentUserAvatar src={(item.host.profile && item.host.profile.picture) || ''} />
+                <Box justifySelf="end" display="flex" alignItems="center">
+                  <Avatar width="30px" height="30px" image={item.host.profile && item.host.profile.picture} />
                   <Text fontSize="12px" ml="10px" fontFamily="medium">
                     {`${item.host.profile && item.host.profile.firstName}`}
                   </Text>
