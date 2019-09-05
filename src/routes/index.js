@@ -52,17 +52,6 @@ const Routes = props => {
           <PublicRoute
             path="/auth"
             handlerCheckAuthentication={() => {}}
-            isAuthenticated={null}
-            component={otherProps => (
-              <>
-                <NavBar />
-                <NotFoundPage {...otherProps} />
-              </>
-            )}
-          />
-          <PublicRoute
-            path="/auth"
-            handlerCheckAuthentication={() => {}}
             isAuthenticated={isAuthenticated}
             component={Authentication}
           />
