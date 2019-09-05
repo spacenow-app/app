@@ -40,6 +40,17 @@ const Routes = props => {
         <Switch>
           <Redirect exact from="/" to="/listing/intro" />
           <PublicRoute
+            path="/404"
+            handlerCheckAuthentication={() => {}}
+            isAuthenticated={null}
+            component={otherProps => (
+              <>
+                <NavBar />
+                <NotFoundPage {...otherProps} />
+              </>
+            )}
+          />
+          <PublicRoute
             path="/auth"
             handlerCheckAuthentication={() => {}}
             isAuthenticated={isAuthenticated}
