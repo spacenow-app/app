@@ -1,11 +1,12 @@
 import React from 'react'
+import { Redirect } from 'react-router-dom'
 import { NavBar, Wrapper, Box, Input, Button, Text, Title } from 'components'
 
 const ResetPasswordPage = ({ location }) => {
   const params = new URLSearchParams(location.search)
 
   if (!params.has('verify_token')) {
-    return <div>invalid token!</div>
+    return <Redirect to="/404" />
   }
 
   return (
