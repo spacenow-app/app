@@ -1,74 +1,41 @@
-/* eslint-disable max-len */
 import React from 'react'
 import PropTypes from 'prop-types'
 import styled from 'styled-components'
+import { Dropdown as DropdownExternal } from 'react-bootstrap'
 
-const DropdownBoxStyled = styled.div`
-  background: white;
-  display: ${props => (props.isOpen ? 'grid' : 'grid')};
-  justify-content: ${props => (props.alignRight ? 'right' : 'left')};
-  border-radius: ${props => props.theme.dropdown.borderRadius.medium};
-  box-shadow: ${props =>
-    props.isOpen ? `${props.theme.dropdown.boxShadow.blur} ${props.theme.dropdown.boxShadow.color}` : 'none'};
-  padding: ${props => props.theme.dropdown.padding.default};
-  cursor: ${props => (props.disabled ? 'not-allowed' : 'pointer')};
-  min-width: ${props => props.theme.dropdown.minWidth.default};
-  width: ${props => (props.isFullWidth ? '100%' : 'max-content')};
-  position: absolute;
-  top: 0;
-  right: 0;
-  z-index: 2;
-`
-const DropdownHeaderStyled = styled.div`
-  display: grid;
-  justify-content: ${props => (props.alignRight ? 'right' : 'left')};
-  color: ${props => props.theme.dropdown.color.primary};
-`
-const DropdownBodyStyled = styled.div`
-  display: grid;
-  padding-top: ${props => props.theme.dropdown.padding.default};
-  justify-content: ${props => (props.alignRight ? 'right' : 'left')};
+const DropdownStyled = styled(DropdownExternal)`
+  padding: 20px;
+
+  > button {
+    background: transparent;
+    border: none;
+
+    &:hover, &:active, &:focus {
+      background: #6ADC91;
+      > span {
+        color: #ffffff;
+      }
+    }
+  }
+
+  > div {
+    > a {
+      font-size: 14px;
+    }
+  }
+
 `
 
-const Dropdown = props => (
-  <DropdownBoxStyled
-    isOpen={props.isOpen}
-    disabled={props.disabled}
-    alignRight={props.alignRight}
-    isFullWidth={props.isFullWidth}
-    className={props.className}
-  >
-    <DropdownHeaderStyled
-      isOpen={props.isOpen}
-      alignRight={props.alignRight}
-      onClick={e => props.toggle(e, { isOpen: !e.target.isOpen })}
-    >
-      {props.label} &#9776;
-    </DropdownHeaderStyled>
-    {props.isOpen ? <DropdownBodyStyled alignRight={props.alignRight}>{props.children}</DropdownBodyStyled> : ''}
-  </DropdownBoxStyled>
-)
-
-Dropdown.defaultProps = {
-  isOpen: false,
-  disabled: false,
-  alignRight: false,
-  isFullWidth: false,
-  label: 'Options',
-  className: null
+const Dropdown = ({ children, ...props }) => {
+  return (
+    <DropdownStyled {...props}>
+      {children}
+    </DropdownStyled>
+  )
 }
 
 Dropdown.propTypes = {
-  // eslint-disable-next-line react/no-unused-prop-types
-  theme: PropTypes.instanceOf(Object).isRequired,
-  children: PropTypes.instanceOf(Object).isRequired,
-  toggle: PropTypes.func.isRequired,
-  isOpen: PropTypes.bool,
-  disabled: PropTypes.bool,
-  alignRight: PropTypes.bool,
-  isFullWidth: PropTypes.bool,
-  label: PropTypes.string,
-  className: PropTypes.string
+  children: PropTypes.array
 }
 
 export default Dropdown

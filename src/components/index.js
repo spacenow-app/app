@@ -4,6 +4,7 @@ import Wrapper from './Wrapper'
 import Icon from './Icon'
 import Button from './Button'
 import Card from './Card'
+import Dropdown from './Dropdown'
 import Title from './Title'
 import StepButtons from './StepButtons'
 import Input from './Input'
@@ -39,6 +40,7 @@ import BookingCard from './BookingCard'
 import BackgroundImage from './BackgroundImage'
 import DatePicker from './DatePicker'
 import VideoModal from './VideoModal'
+import Link from './Link'
 
 export {
   Modal,
@@ -47,6 +49,7 @@ export {
   Icon,
   Button,
   Card,
+  Dropdown,
   Title,
   StepButtons,
   Input,
@@ -84,5 +87,6 @@ export {
   BackgroundImage,
   Text,
   DatePicker,
-  VideoModal
+  VideoModal,
+  Link
 }

@@ -17,7 +17,7 @@ const Grid = styled.div`
   grid-auto-flow: ${flowValue};
   grid-auto-rows: ${autoRows};
   ${({ rows }) => rows && `grid-template-rows: ${frGetter(rows)}`};
-  grid-template-columns: ${({ columns = 12 }) => frGetter(columns)};
+  grid-template-columns: ${({ columns }) => frGetter(columns)};
   grid-gap: ${gapValue};
   ${({ columnGap }) => columnGap && `column-gap: ${columnGap}`};
   ${({ rowGap }) => rowGap && `row-gap: ${rowGap}`};
@@ -25,6 +25,10 @@ const Grid = styled.div`
   ${({ justifyContent }) => justifyContent && `justify-content: ${justifyContent}`};
   ${({ alignContent }) => alignContent && `align-content: ${alignContent}`};
 `
+
+Grid.defaultProps = {
+  columns: 12
+}
 
 Grid.propTypes = {
   className: PropTypes.string,

@@ -7,10 +7,10 @@ const SpanStyled = styled.div`
   border: 1px solid #cbcbcb;
   border-radius: 8px;
   justify-items: center;
+  align-items: center;
   display: grid;
-  min-width: 110px;
   grid-column-gap: 10px;
-  padding: 10px;
+  padding: ${props => (props.small ? '5px 10px' : '10px')};
   width: fit-content;
   ${props =>
     props.icon &&
@@ -21,13 +21,14 @@ const SpanStyled = styled.div`
 `
 
 const TextStyled = styled.span`
-  font-family: 'Montserrat-Medium';
-  font-size: 12px;
-  align-self: center;
+ font-family: 'Montserrat-Medium';
+ font-size: 12px;
+ align-self: center;
+ justify-self: start;
 `
 
-const Tag = ({ icon, children }) => (
-  <SpanStyled icon={icon}>
+const Tag = ({ icon, children, small }) => (
+  <SpanStyled icon={icon} small={small}>
     {icon && icon}
     <TextStyled>{children}</TextStyled>
   </SpanStyled>
@@ -36,12 +37,14 @@ const Tag = ({ icon, children }) => (
 Tag.defaultProps = {
   icon: null,
   color: 'quartenary',
-  bg: 'white'
+  bg: 'white',
+  small: false
 }
 
 Tag.propTypes = {
   children: PropTypes.oneOfType([PropTypes.string, PropTypes.number, PropTypes.element]),
-  icon: PropTypes.element
+  icon: PropTypes.element,
+  small: PropTypes.bool
 }
 
 export default Tag

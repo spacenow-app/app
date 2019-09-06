@@ -49,7 +49,7 @@ function NavBar() {
               }
               id="basic-nav-dropdown"
             >
-              <NavDropdown.Item href={`${config.legacy}/dashboard/profile`}>Profile</NavDropdown.Item>
+              <NavDropdown.Item href={`/account/profile`}>Profile</NavDropdown.Item>
               <NavDropdown.Divider />
               <NavDropdown.Item href={`${config.legacy}/dashboard`}>Dashboard</NavDropdown.Item>
               <NavDropdown.Divider />

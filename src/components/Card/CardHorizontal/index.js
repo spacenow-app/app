@@ -1,3 +1,4 @@
-import CardHorizontal, { ImageStyled, ContentStyled } from './CardHorizontal';
+import CardHorizontal from './CardHorizontal'
 
-export { CardHorizontal as default, ImageStyled, ContentStyled };
+export default CardHorizontal
+

@@ -151,7 +151,7 @@ const DatePicker = forwardRef(
 
     return (
       <WrapperStyled {...props}>
-        {label && <Caption margin="10px 0">{label}</Caption>}
+        {label && <Caption margin={props.captionMargin}>{label}</Caption>}
         <DayPickerInput
           {...props}
           ref={ref}
@@ -172,7 +172,8 @@ const DatePicker = forwardRef(
 DatePicker.defaultProps = {
   size: 'md',
   format: 'DD/MM/YYYY',
-  placeholder: `${dateFnsFormat(new Date(), 'DD/MM/YYYY')}`
+  placeholder: `${dateFnsFormat(new Date(), 'DD/MM/YYYY')}`,
+  captionMargin: "10px 0"
 }
 
 DatePicker.propTypes = {

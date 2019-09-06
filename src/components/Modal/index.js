@@ -10,7 +10,7 @@ import ModalAddBankDetails from 'components/Modal/ModalAddBankDetails'
 const MODAL_COMPONENTS = {
   [TypesModal.MODAL_TYPE_CONFIRM]: ModalConfirm,
   [TypesModal.MODAL_TYPE_WARN]: ModalWarn,
-  [TypesModal.MODAL_ADD_BANK_DETAILS]: ModalAddBankDetails
+  [TypesModal.MODAL_ADD_BANK_DETAILS]: ModalAddBankDetails,
 }
 
 const Modal = () => {
