@@ -133,7 +133,8 @@ const initialState = {
   },
   isAuthenticated: false,
   isLoading: true,
-  isLoadingResetPassword: false
+  isLoadingResetPassword: false,
+  redirectToReferrer: null
 }
 
 export default function reducer(state = initialState, action) {
@@ -148,7 +149,8 @@ export default function reducer(state = initialState, action) {
         ...state,
         isAuthenticated: true,
         isLoading: false,
-        user: action.payload
+        user: action.payload,
+        redirectToReferrer: action.from
       }
     }
     case Types.AUTH_FAILURE:
@@ -238,7 +240,7 @@ export const onIsTokenExists = () => dispatch => {
   if (!idToken || idToken.length <= 0) dispatch({ type: Types.AUTH_TOKEN_VERIFY_FAILURE, payload: 'No token found' })
 }
 
-export const signin = (email, password) => async dispatch => {
+export const signin = (email, password, from) => async dispatch => {
   dispatch({ type: Types.AUTH_SIGNIN_REQUEST })
   try {
     const { data } = await getClient().mutate({
@@ -247,7 +249,7 @@ export const signin = (email, password) => async dispatch => {
     })
     const signinReturn = data.login
     setToken(signinReturn.token, signinReturn.expiresIn)
-    dispatch({ type: Types.AUTH_SIGNIN_SUCCESS, payload: signinReturn.user })
+    dispatch({ type: Types.AUTH_SIGNIN_SUCCESS, payload: signinReturn.user, from })
   } catch (err) {
     toast.error(errToMsg(err))
     dispatch({

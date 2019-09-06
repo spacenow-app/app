@@ -5,7 +5,7 @@ import * as Yup from 'yup'
 import { NavBar, Wrapper, Box, Input, Button, Text, Title, Link, Line, ButtonSocial } from 'components'
 import { signin, googleSignin, facebookSignin } from 'redux/ducks/auth'
 
-const SigninPage = ({ values, touched, errors, handleChange, handleBlur, isValid }) => {
+const SigninPage = ({ values, touched, errors, handleChange, handleBlur, isValid, ...props }) => {
   const dispatch = useDispatch()
 
   const { isLoading } = useSelector(state => state.auth)
@@ -20,7 +20,8 @@ const SigninPage = ({ values, touched, errors, handleChange, handleBlur, isValid
 
   const handleSubmit = e => {
     e.preventDefault()
-    dispatch(signin(values.email, values.password))
+    const { state } = props.location
+    dispatch(signin(values.email, values.password, (state && state.from) || false))
   }
 
   return (

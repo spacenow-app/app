@@ -20,6 +20,7 @@ const Routes = props => {
 
   const isAuthenticated = useSelector(state => state.auth.isAuthenticated)
   const isLoading = useSelector(state => state.auth.isLoading)
+  const redirectToReferrer = useSelector(state => state.auth.redirectToReferrer)
 
   const _handlerCheckAuthentication = () => dispatch(onIsTokenExists())
 
@@ -66,6 +67,7 @@ const Routes = props => {
             component={otherProps => {
               return (
                 <>
+                  {redirectToReferrer && <Redirect to={redirectToReferrer} />}
                   <NavBar />
                   <Switch>
                     <Route
@@ -93,6 +95,7 @@ const Routes = props => {
                       isAuthenticated={isAuthenticated}
                       component={Space}
                     /> */}
+
                     <Route component={NotFoundPage} />
                   </Switch>
                 </>
