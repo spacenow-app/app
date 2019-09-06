@@ -3,8 +3,8 @@ import PropTypes from 'prop-types'
 import styled from 'styled-components'
 import _ from 'lodash'
 import { format } from 'date-fns'
+import { monthNames } from 'variables'
 import Badge from '../Badge'
-import { monthNames } from 'constants'
 
 const WrapperStyled = styled.div`
   margin: 25px 0;
@@ -36,7 +36,7 @@ const ListDates = props => {
       {monthNames.map(month => {
         if (datesGrouped[month]) {
           return (
-            <ContainerStyled theme={props.theme}>
+            <ContainerStyled key={month}>
               <MonthNameStyled>{month}</MonthNameStyled>
               <ContainerDatesStyled>
                 {datesGrouped[month].map(date => (

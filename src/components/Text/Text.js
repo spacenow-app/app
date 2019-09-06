@@ -13,7 +13,9 @@ ${space}
 
 const Text = ({ children, ...props }) => <TextStyled {...props}>{children}</TextStyled>
 
-Text.defaultProps = {}
+Text.defaultProps = {
+  color: 'quartenary'
+}
 
 Text.propTypes = {
   children: PropTypes.PropTypes.oneOfType([

@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import styled, { css } from 'styled-components'
 import { Wrapper, Box, NavBar, Title, Text, Button, Icon, VideoModal } from 'components'
 
-import { config } from 'contants'
+import { config } from 'variables'
 
 import heroImage from './images/hero_img.png'
 import gregImage from './images/greg_image.png'

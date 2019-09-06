@@ -27,6 +27,7 @@ const sizeStyle = {
 
 const WrapperInput = styled.div`
   position: relative;
+  text-align: left;
 `
 
 const InputStyled = styled.input`
@@ -66,13 +67,13 @@ const Label = styled.label`
 const RightContent = styled.div`
   position: absolute;
   right: 20px;
-  top: 57%;
+  top: ${props => (props.size === 'sm' ? '28%' : '57%')};
 
   ${props =>
     props.closeButton &&
     css`
       right: 1%;
-      top: 49%;
+      top: ${props.size === 'sm' ? '12%' : '49%'};
     `}
 `
 
@@ -146,7 +147,7 @@ const Input = ({ size, label, error, loading, closeButton, onClickCloseButton, .
       {label && <Label>{label}</Label>}
       <InputStyled {...props} size={size} error={error} />
       {(loading || closeButton) && (
-        <RightContent closeButton={closeButton}>
+        <RightContent size={size} closeButton={closeButton}>
           {loading && <LoaderIcon />}
           {closeButton && <Button onClick={onClickCloseButton}>x</Button>}
         </RightContent>

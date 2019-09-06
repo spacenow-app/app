@@ -3,7 +3,7 @@ import { gql } from 'apollo-boost'
 
 import { getClientWithAuth } from 'graphql/apolloClient'
 import errToMsg from 'utils/errToMsg'
-import { monthNames } from 'contants/dates'
+import { monthNames } from 'variables'
 import { camalize } from 'utils/strings'
 import { toast } from 'react-toastify'
 
@@ -43,9 +43,9 @@ export const Types = {
   PUBLISH_LISTING_START: 'PUBLISH_LISTING_START',
   PUBLISH_LISTING_SUCCESS: 'PUBLISH_LISTING_SUCCESS',
   PUBLISH_LISTING_FAILURE: 'PUBLISH_LISTING_FAILURE',
-  GET_PROVIDER_BY_LISTING_REQUEST: 'GET_PROVIDER_BY_LISTING_REQUEST',
-  GET_PROVIDER_BY_LISTING_SUCCESS: 'GET_PROVIDER_BY_LISTING_SUCCESS',
-  GET_PROVIDER_BY_LISTING_FAILURE: 'GET_PROVIDER_BY_LISTING_FAILURE'
+  LISTING_CLEAN_SPACE_AVAILABILITIES_REQUEST: 'LISTING_CLEAN_SPACE_AVAILABILITIES_REQUEST',
+  LISTING_CLEAN_SPACE_AVAILABILITIES_SUCCESS: 'LISTING_CLEAN_SPACE_AVAILABILITIES_SUCCESS',
+  LISTING_CLEAN_SPACE_AVAILABILITIES_FAILURE: 'LISTING_CLEAN_SPACE_AVAILABILITIES_FAILURE',
 }
 
 // Initial State
@@ -102,9 +102,10 @@ const initialState = {
     isPublished: false,
     error: null
   },
-  provider: {
+  cleanAvailabilities: {
     isLoading: false,
-    data: null
+    isCleaned: false,
+    error: null
   }
 }
 
@@ -305,6 +306,7 @@ const allListingFields = `
   user {
     id
     email
+    provider
     profile {
       displayName
       picture
@@ -469,17 +471,13 @@ const mutationPublish = gql`
   }
 `
 
-const queryGetProviderByListingId = gql`
-  query getListingById($id: Int!, $isPublic: Boolean) {
-    getListingById(id: $id, isPublic: $isPublic) {
-      id
-      user {
-        id
-        provider
-      }
+const mutationCleanListingAvailabilities = gql`
+    mutation cleanListingAvailabilities ($listingId:Int!) {
+      cleanListingAvailabilities (listingId:$listingId) {
+        status
     }
   }
-`
+`;
 
 // Reducer
 export default function reducer(state = initialState, action) {
@@ -823,31 +821,32 @@ export default function reducer(state = initialState, action) {
         }
       }
     }
-    case Types.GET_PROVIDER_BY_LISTING_REQUEST: {
+    case Types.LISTING_CLEAN_SPACE_AVAILABILITIES_REQUEST: {
       return {
         ...state,
-        provider: {
-          ...state.provider,
-          isLoading: true
+        cleanAvailabilities: {
+          isLoading: true,
+          isCleaned: false,
+          error: null
         }
       }
     }
-    case Types.GET_PROVIDER_BY_LISTING_SUCCESS: {
+    case Types.LISTING_CLEAN_SPACE_AVAILABILITIES_SUCCESS: {
       return {
         ...state,
-        provider: {
-          ...state.provider,
+        cleanAvailabilities: {
           isLoading: false,
-          data: action.payload
+          isCleaned: true
         }
       }
     }
-    case Types.GET_PROVIDER_BY_LISTING_FAILURE: {
+    case Types.LISTING_CLEAN_SPACE_AVAILABILITIES_FAILURE: {
       return {
         ...state,
-        provider: {
-          ...state.provider,
-          isLoading: false
+        cleanAvailabilities: {
+          isLoading: false,
+          isCleaned: false,
+          error: action.payload
         }
       }
     }
@@ -973,12 +972,12 @@ const mapTo = (originalArray, listingData) => {
   return specifications
 }
 
-export const onGetAvailabilitiesByListingId = listing => async dispatch => {
+export const onGetAvailabilitiesByListingId = listingId => async dispatch => {
   dispatch({ type: Types.LISTING_GET_SPACE_AVAILABILITIES_REQUEST })
   try {
     const { data } = await getClientWithAuth(dispatch).query({
       query: queryGetAvailabilities,
-      variables: { listingId: listing.id },
+      variables: { listingId },
       fetchPolicy: 'network-only'
     })
     const { bookingDates, exceptionDates } = data.getAvailabilitiesByListingId
@@ -1097,17 +1096,15 @@ export const onPublish = listingId => async dispatch => {
   }
 }
 
-export const onGetProviderByListingId = (id, isPublic = true) => async dispatch => {
-  dispatch({ type: Types.GET_PROVIDER_BY_LISTING_REQUEST })
+export const onCleanAvailabilitiesByListingId = id => async dispatch => {
+  dispatch({ type: Types.LISTING_CLEAN_SPACE_AVAILABILITIES_REQUEST })
   try {
-    const { data } = await getClientWithAuth(dispatch).query({
-      query: queryGetProviderByListingId,
-      variables: { id: parseInt(id, 10), isPublic },
-      fetchPolicy: 'network-only'
+    const { data } = await getClientWithAuth(dispatch).mutate({
+      mutation: mutationCleanListingAvailabilities,
+      variables: { listingId: parseInt(id, 10) }
     })
-    const { user } = data.getListingById
-    dispatch({ type: Types.GET_PROVIDER_BY_LISTING_SUCCESS, payload: user })
+    dispatch({ type: Types.LISTING_CLEAN_SPACE_AVAILABILITIES_SUCCESS, payload: data.cleanListingAvailabilities })
   } catch (err) {
-    dispatch({ type: Types.GET_PROVIDER_BY_LISTING_FAILURE })
+    dispatch({ type: Types.LISTING_CLEAN_SPACE_AVAILABILITIES_FAILURE, payload: errToMsg(err) })
   }
 }
