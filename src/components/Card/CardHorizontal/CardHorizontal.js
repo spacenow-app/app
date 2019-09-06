@@ -1,65 +1,118 @@
 import React from 'react'
-import PropTypes from 'prop-types'
 import styled from 'styled-components'
-import { withTheme } from 'theme'
+import { Dropdown, Tooltip, OverlayTrigger } from 'react-bootstrap'
 
-const WrapperStyled = styled.div`
+import Title from 'components/Title'
+import Tag from 'components/Tag'
+import Image from 'components/Image'
+import Label from 'components/Label'
+import Button from 'components/Button'
+
+const Wrapper = styled.div`
   display: grid;
-  grid-template-columns: 1fr 2fr;
-  border-radius: ${props => (props.isRounded ? props.theme.card.borderRadius.large : 0)};
-  box-shadow: ${props => `${props.theme.card.boxShadow.blur} ${props.theme.card.boxShadow.color}`};
+  grid-template-columns: 250px auto auto;
+  grid-template-rows: 1fr auto;
+  grid-template-areas: 
+    "image body body"
+    "image footer footer";
+  grid-column-gap: 20px;
+  border-radius: 10px;
   cursor: pointer;
   overflow: hidden;
+  max-height: 200px;
+  box-shadow: rgb(203, 203, 203) 5px 5px 10px 0px;
+  transition: box-shadow ease .3s;
+  &&: hover {
+    box-shadow: rgb(203, 203, 203) 10px 10px 20px 0px;
+  }
+  `
+
+const ImageStyled = styled(Image)`
+  grid-area: image;
 `
-export const ImageStyled = styled.div``
-export const ContentStyled = styled.div`
+
+const BodyStyled = styled.div`
+  grid-area: body;
   display: grid;
-  grid-template-columns: repeat(7, 1fr);
-  position: relative;
-  padding: ${props => props.theme.card.padding.default};
-  > .cardContentTitle {
-    grid-column-start: 1;
-    grid-column-end: span col6-start;
-    grid-row-start: 1;
-  }
-  > .cardContentPrice {
-    grid-row-start: 2;
-    grid-column-start: 1;
-    grid-column-end: span col7-start;
-  }
-  > .cardContentTags {
-    grid-row-start: 3;
-    grid-column-start: 1;
-    grid-column-end: span col4-start;
-  }
-  > .cardContentToolTip {
-    grid-row-start: 3;
-    grid-column-start: 5;
-    grid-column-end: span 1;
-  }
-  > .cardContentStatus {
-    grid-row-start: 3;
-    grid-column-start: 6;
-    grid-column-end: span 2;
-  }
+  padding: 20px 10px 0 10px;
+  
+  grid-auto-flow: row;
 `
 
-const CardHorizontal = props => (
-  <WrapperStyled isRounded={props.isRounded} {...props}>
-    {props.children}
-  </WrapperStyled>
-)
+const TitleStyled = styled(Title)`
+`
 
-CardHorizontal.defaultProps = {
-  isRounded: false,
-  children: null
+const PriceStyled = styled(Title)`
+`
+
+const TagStyled = styled(Tag)`
+`
+
+const OverlayTriggerStyled = styled(OverlayTrigger)`
+  border-radius: 5px;
+`
+
+const LabelStyled = styled(Label)`
+  justify-self: end;
+`
+
+const ButtonStyled = styled(Button)`
+  justify-self: end;
+`
+
+const FooterStyled = styled.div`
+  grid-area: footer;
+  padding: 0 20px 20px 10px;
+  display: grid;
+  grid-auto-flow: column;
+`
+
+const DropdownStyled = styled(Dropdown)`
+  grid-area: body;
+  justify-self: end;
+  padding: 20px;
+
+  > button {
+    background: transparent;
+    border: none;
+
+    &:hover, &:active, &:focus {
+      background: #6ADC91;
+      > span {
+        color: #ffffff;
+      }
+    }
+  }
+
+  > div {
+    > a {
+      font-size: 14px;
+    }
+  }
+
+`
+
+const ToolTipStyled = styled(Tooltip)`
+`
+
+const CardHorizontal = ({ ...props }) => {
+  return (
+    <Wrapper {...props}>
+      {props.children}
+    </Wrapper>
+  )
 }
 
-CardHorizontal.propTypes = {
-  // eslint-disable-next-line react/no-unused-prop-types
-  theme: PropTypes.instanceOf(Object).isRequired,
-  children: PropTypes.instanceOf(Object).isRequired,
-  isRounded: PropTypes.bool
-}
+CardHorizontal.Image = ImageStyled
+CardHorizontal.Body = BodyStyled
+CardHorizontal.Title = TitleStyled
+CardHorizontal.Price = PriceStyled
+CardHorizontal.Tag = TagStyled
+CardHorizontal.Label = LabelStyled
+CardHorizontal.ToolTip = ToolTipStyled
+CardHorizontal.OverlayTrigger = OverlayTriggerStyled
+CardHorizontal.Dropdown = DropdownStyled
+CardHorizontal.Button = ButtonStyled
+CardHorizontal.Footer = FooterStyled
 
-export default withTheme(CardHorizontal)
+export default CardHorizontal

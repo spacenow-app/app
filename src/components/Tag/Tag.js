@@ -7,6 +7,7 @@ const SpanStyled = styled.div`
   border: 1px solid #cbcbcb;
   border-radius: 8px;
   justify-items: center;
+  align-items: center;
   display: grid;
   /* min-width: 110px; */
   grid-column-gap: 10px;

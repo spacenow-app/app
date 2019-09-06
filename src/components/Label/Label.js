@@ -36,7 +36,8 @@ Label.propTypes = {
   align: PropTypes.string,
   justify: PropTypes.string,
   ...propTypes.color,
-  ...propTypes.border
+  ...propTypes.border,
+  ...propTypes.bg
 }
 
 export default Label
