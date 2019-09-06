@@ -4,7 +4,7 @@ import Helmet from 'react-helmet'
 import { useSelector, useDispatch } from 'react-redux'
 import styled from 'styled-components'
 import _ from 'lodash'
-import { isSameDay } from 'date-fns'
+import { isSameDay, format } from 'date-fns'
 
 import { capitalize, toPlural } from 'utils/strings'
 
@@ -377,7 +377,8 @@ const SpacePage = ({ match, location, ...props }) => {
           { email: config.admin_email },
           { guest: `${user.profile.firstName} ${user.profile.lastName}` },
           { guestId: user.id },
-          { spaceId: listing.id }
+          { spaceId: listing.id },
+          { currentDate: format(new Date(), 'MMMM Mo, YYYY') }
         )
 
         const emailData = {

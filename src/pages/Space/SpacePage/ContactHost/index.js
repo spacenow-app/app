@@ -55,7 +55,11 @@ const ContactHost = ({
       {listingTitle: listing.title},
       {listingCity: listing.location.city},
       {listingCountry: listing.location.country},
-      {hostName: listing.user.profile.displayName}
+      {hostName: listing.user.profile.displayName},
+      {listingCurrency: listing.listingData.currency},
+      {listingPrice: listing.listingData.basePrice},
+      {bookingPeriod: listing.bookingPeriod},
+      {currentDate: format(new Date(), 'MMMM Mo, YYYY')}
     )
     const emailGuest = {
       template: 'contact-hourly-guest',
