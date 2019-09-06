@@ -50,24 +50,28 @@ const ContactHost = ({
   const { isLoading: isSendingEmail } = useSelector(state => state.mail)
 
   const _handleSubmit = () => {  
+    setFieldValue('date',  format(new Date(values.date), 'DD/MM/YYYY').toString())
     Object.assign(values,
-      {listingPhoto: listing.photos.find(photo => photo.isCover).name },
+      {listingPhoto: JSON.stringify(listing.photos.find(photo => photo.isCover).name) },
       {listingTitle: listing.title},
       {listingCity: listing.location.city},
       {listingCountry: listing.location.country},
       {hostName: listing.user.profile.displayName},
       {listingCurrency: listing.listingData.currency},
       {listingPrice: listing.listingData.basePrice},
-      {bookingPeriod: listing.bookingPeriod},
-      {currentDate: format(new Date(), 'MMMM Mo, YYYY')}
+      {listingPeriod: listing.bookingPeriod},
+      {currentDate: format(new Date(), 'MMMM Mo, YYYY')},
+      {listingCategory: listing.settingsParent.category.itemName}
     )
+
+    console.log(Object.assign(values, { email: values.guestEmail}))
     const emailGuest = {
-      template: 'contact-hourly-guest',
-      data: JSON.stringify(values),
+      template: 'contact-guest-hourly',
+      data: JSON.stringify(Object.assign(values, { email: values.guestEmail})),
     }
     const emailHost = {
-      template: 'contact-hourly-host',
-      data: JSON.stringify(values),
+      template: 'contact-host-hourly',
+      data: JSON.stringify(Object.assign(values, { email: listing.user.email})),
     }
     dispatch(sendMail(emailGuest))
     dispatch(sendMail(emailHost, "Your enquiry was sent succesfully"))
@@ -131,9 +135,9 @@ const ContactHost = ({
             <Input
               label="Email*"
               placeholder="Email Address"
-              name="email"
-              error={errors.email}
-              value={values.email}
+              name="guestEmail"
+              error={errors.guestEmail}
+              value={values.guestEmail}
               onChange={handleChange}
               onBlur={handleBlur}
             />
@@ -171,7 +175,7 @@ const formik = {
   displayName: 'Partner_WeWorkForm',
   mapPropsToValues: props => { return ({ 
     guestName: props.user && props.user.id ?  props.user.profile.firstName + ' ' + props.user.profile.lastName : '',
-    email: props.user && props.user.id ? props.user.email : '',
+    guestEmail: props.user && props.user.id ? props.user.email : '',
     date: new Date(),
     startTime: format(new Date("January 31 1980 08:00"), 'HH:mm'),
     endTime: format(new Date("January 31 1980 18:00"), 'HH:mm')
@@ -180,7 +184,7 @@ const formik = {
     date: Yup.string(),
     startTime: Yup.string(),
     endTime: Yup.string(),
-    email: Yup.string().required('Email field is required'),
+    guestEmail: Yup.string().required('Email field is required'),
     guestName: Yup.string().required('Name field is required'),
     phone: Yup.number().typeError('Need to be number.'),
     message: Yup.string(),

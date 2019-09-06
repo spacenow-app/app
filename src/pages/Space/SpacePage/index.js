@@ -92,6 +92,7 @@ const SpacePage = ({ match, location, ...props }) => {
   const [datesSelected, setDatesSelected] = useState([])
   const [date, setDate] = useState('')
   const [period, setPeriod] = useState(1)
+  const [imageHeight, setImageHeight] = useState(500)
 
   useEffect(() => {
     dispatch(onGetListingById(match.params.id, null, true))
@@ -114,6 +115,12 @@ const SpacePage = ({ match, location, ...props }) => {
       location.state.period && setPeriod(location.state.period)
     }
   }, [location])
+
+  useEffect(() => {
+    if(window.innerWidth < 768) {
+      setImageHeight(270)
+    }
+  })
 
   if (listing && listing.user.provider === 'wework') {
     props.history.push(`/space/partner/${match.params.id}`)
@@ -409,7 +416,7 @@ const SpacePage = ({ match, location, ...props }) => {
         <Cell area="content"> 
           <Grid columns={1} rowGap="50px">
             <Box> 
-              <Carousel photos={_convertedArrayPhotos(listing.photos)} />
+              <Carousel photos={_convertedArrayPhotos(listing.photos)} height={imageHeight}/>
             </Box>
 
             <Grid justifyContent="space-between" columnGap="10px" columns={2}>

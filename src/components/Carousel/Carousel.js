@@ -24,7 +24,7 @@ const Carousel = ({ photos, ...props }) => {
           borderRadius: '15px'
         }),
         view: () => ({
-          height: 500,
+          height: props.height,
           width: '100%',
           borderRadius: '15px',
           border: `${photos.length ? '1px solid #E2E2E2' : '1px solid #E05252'}`,
@@ -57,7 +57,8 @@ const Carousel = ({ photos, ...props }) => {
 }
 
 Carousel.defaultProps = {
-  photos: null
+  photos: null,
+  height: 500
 }
 
 Carousel.propTypes = {
