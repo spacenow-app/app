@@ -74,8 +74,8 @@ const MapSearch = withGoogleMap(props => {
   return (
     <GoogleMap
       defaultZoom={13}
-      center={props.position}
-      defaultCenter={props.position}
+      center={{ lat: parseFloat(props.position.lat), lng: parseFloat(props.position.lng) }}
+      defaultCenter={{ lat: parseFloat(props.position.lat), lng: parseFloat(props.position.lng) }}
       defaultOptions={{
         maxZoom: 18,
         streetViewControl: true,
@@ -87,7 +87,7 @@ const MapSearch = withGoogleMap(props => {
         props.markers.map(marker => (
           <Marker
             key={marker.id}
-            position={{ lat: marker.lat, lng: marker.lng }}
+            position={{ lat: parseFloat(marker.lat), lng: parseFloat(marker.lng) }}
             onClick={() => {
               props.onClickMarker(marker)
             }}
