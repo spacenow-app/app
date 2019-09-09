@@ -4,7 +4,7 @@ import Helmet from 'react-helmet'
 import { useSelector, useDispatch } from 'react-redux'
 import styled from 'styled-components'
 import _ from 'lodash'
-import { isSameDay } from 'date-fns'
+import { isSameDay, format } from 'date-fns'
 
 import { capitalize, toPlural } from 'utils/strings'
 
@@ -54,7 +54,7 @@ import DailyBooking from './DailyBooking'
 const GridStyled = styled(Grid)`
   @media only screen and (max-width: 991px) {
     grid-template-columns: repeat(2, 100%);
-    grid-template-areas: "card" "content"
+    grid-template-areas: "content" "card"
   }
 `
 
@@ -85,13 +85,14 @@ const SpacePage = ({ match, location, ...props }) => {
   const { isCleaned: isCleanedAvailabilities } = useSelector(state => state.listing.cleanAvailabilities)
   const { object: objectSpecifications } = useSelector(state => state.listing.specifications)
   const { array: availabilities } = useSelector(state => state.listing.availabilities)
-  const { user } = useSelector(state => state.auth)
+  const { user, isAuthenticated } = useSelector(state => state.auth)
   const { isLoading: isLoadingOnCreateReservation } = useSelector(state => state.booking.create)
   const { object: pendingBooking } = useSelector(state => state.booking.pending)
 
   const [datesSelected, setDatesSelected] = useState([])
   const [date, setDate] = useState('')
   const [period, setPeriod] = useState(1)
+  const [imageHeight, setImageHeight] = useState(500)
 
   useEffect(() => {
     dispatch(onGetListingById(match.params.id, null, true))
@@ -106,6 +107,20 @@ const SpacePage = ({ match, location, ...props }) => {
   useEffect(() => {
     listing && dispatch(onGetAvailabilitiesByListingId(listing.id))
   }, [dispatch, listing, pendingBooking, isCleanedAvailabilities])
+
+  useEffect(() => {
+    if(location.state) {
+      setDatesSelected(location.state.reservations)
+      setDate(location.state.reservations[0])
+      location.state.period && setPeriod(location.state.period)
+    }
+  }, [location])
+
+  useEffect(() => {
+    if(window.innerWidth < 768) {
+      setImageHeight(270)
+    }
+  })
 
   if (listing && listing.user.provider === 'wework') {
     props.history.push(`/space/partner/${match.params.id}`)
@@ -327,10 +342,6 @@ const SpacePage = ({ match, location, ...props }) => {
   }
 
   const _onSubmitBooking = async () => {
-    if (!user) {
-      props.history.push(`/login?refer=/space/${listing.id}`)
-      return
-    }
     const object = {
       listingId: listing.id,
       hostId: listing.userId,
@@ -343,12 +354,24 @@ const SpacePage = ({ match, location, ...props }) => {
       period: date ? period : datesSelected.length,
       isAbsorvedFee: listing.listingData.isAbsorvedFee
     }
+    if (!isAuthenticated) {
+      props.history.push(`/auth/signin`, {
+        from: {
+          ...location, 
+          state: {
+            period: object.period, 
+            reservations: object.reservations 
+          }
+        }
+      })
+      return
+    }
     dispatch(onCreateBooking(object))
   }
 
   const _reportSpace = () => {
-    if (!user) {
-      props.history.push(`/login?refer=/space/${listing.id}`)
+    if (!isAuthenticated) {
+      props.history.push(`/auth/signin`, {from: location})
       return
     }
     const options = {
@@ -361,7 +384,8 @@ const SpacePage = ({ match, location, ...props }) => {
           { email: config.admin_email },
           { guest: `${user.profile.firstName} ${user.profile.lastName}` },
           { guestId: user.id },
-          { spaceId: listing.id }
+          { spaceId: listing.id },
+          { currentDate: format(new Date(), 'MMMM Mo, YYYY') }
         )
 
         const emailData = {
@@ -388,11 +412,11 @@ const SpacePage = ({ match, location, ...props }) => {
   return (
     <Wrapper mt="50px">
       <Helmet title="View Listing - Spacenow" />
-      <GridStyled columns="auto 350px" columnGap="15px" rowGap="50px" areas={["content card"]}>
+      <GridStyled columns="auto 350px" columnGap="15px" rowGap="100px" areas={["content card"]}>
         <Cell area="content"> 
           <Grid columns={1} rowGap="50px">
             <Box> 
-              <Carousel photos={_convertedArrayPhotos(listing.photos)} />
+              <Carousel photos={_convertedArrayPhotos(listing.photos)} height={imageHeight}/>
             </Box>
 
             <Grid justifyContent="space-between" columnGap="10px" columns={2}>

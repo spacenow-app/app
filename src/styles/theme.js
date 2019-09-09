@@ -7,7 +7,13 @@ export default {
     error: '#E05252',
     white: '#FFFFFF',
     greyLight: '#E2E2E2',
-    greyscale: ['#646464', '#939393', '#CBCBCB', '#EBEBEB', '#F7F7F7', '#FFFFFF']
+    greyscale: ['#646464', '#939393', '#CBCBCB', '#EBEBEB', '#F7F7F7', '#FFFFFF'],
+    expired: '#F0AE31',
+    cancelled: '#E05252',
+    active: '#6ADC91',
+    completed: '#172439',
+    pending: '#E2E2E2',
+    approved: '#6ADC91',
   },
   fonts: {
     regular: 'Montserrat-Regular',

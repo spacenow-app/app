@@ -4,6 +4,7 @@ import Wrapper from './Wrapper'
 import Icon from './Icon'
 import Button from './Button'
 import Card from './Card'
+import Dropdown from './Dropdown'
 import Title from './Title'
 import StepButtons from './StepButtons'
 import Input from './Input'
@@ -53,6 +54,7 @@ export {
   Icon,
   Button,
   Card,
+  Dropdown,
   Title,
   StepButtons,
   Input,
