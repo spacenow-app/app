@@ -182,10 +182,10 @@ const Pagination = ({ totalRecords, totalPages, pageNeighbours, pageLimit, onPag
     <PaginationStyled {...props}>
       {pages.map(page => {
         if (page === LEFT_PAGE) {
-          return <PaginationImported.Prev key={page} onClick={handleMoveLeft} />
+          return <PaginationPrev key={page} onClick={handleMoveLeft} />
         }
         if (page === RIGHT_PAGE) {
-          return <PaginationImported.Next key={page} onClick={handleMoveRight} />
+          return <PaginationNext key={page} onClick={handleMoveRight} />
         }
         return (
           <PaginationItem key={page} active={currentPage === page} onClick={handleClick(page)}>
