@@ -3,7 +3,6 @@ import { gql } from 'apollo-boost'
 
 import { getClientWithAuth } from 'graphql/apolloClient'
 import errToMsg from 'utils/errToMsg'
-import { config } from 'variables'
 
 // Actions
 export const Types = {
@@ -81,7 +80,7 @@ const queryGetPendingBooking = gql`
   query getPendingBookingsByUser($listingId: Int!, $userId: String!) {
     getPendingBookingsByUser(listingId: $listingId, userId: $userId) {
       count
-      bookings {
+      items {
         listingId
         quantity
         currency
@@ -204,7 +203,7 @@ export default function reducer(state = initialState, action) {
 // Action Creators
 
 // Side Effects
-export const onCreateBooking = object => async dispatch => {
+export const onCreateBooking = (object, history) => async dispatch => {
   dispatch({ type: Types.CREATE_BOOKING_START })
   try {
     const { data } = await getClientWithAuth(dispatch).mutate({
@@ -212,7 +211,7 @@ export const onCreateBooking = object => async dispatch => {
       variables: object
     })
     dispatch({ type: Types.CREATE_BOOKING_SUCCESS, payload: data.createBooking })
-    window.location.href = `${config.legacy}/checkout/${data.createBooking.bookingId}`
+    history.push(`/checkout/${data.createBooking.bookingId}`)
   } catch (err) {
     dispatch({ type: Types.CREATE_BOOKING_FAILURE, payload: errToMsg(err) })
   }

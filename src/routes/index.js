@@ -14,6 +14,7 @@ const Listing = lazy(() => import('routes/Listing'))
 const Space = lazy(() => import('routes/Space'))
 const Account = lazy(() => import('routes/Account'))
 const LandingPages = lazy(() => import('routes/LandingPages'))
+const Checkout = lazy(() => import('routes/Checkout'))
 
 const Routes = props => {
   const dispatch = useDispatch()
@@ -89,12 +90,12 @@ const Routes = props => {
                       isAuthenticated={isAuthenticated}
                       component={Account}
                     />
-                    {/* <Route
+                    <Route
                       {...otherProps}
-                      path={`${otherProps.match.path}space`}
+                      path={`${otherProps.match.path}checkout`}
                       isAuthenticated={isAuthenticated}
-                      component={Space}
-                    /> */}
+                      component={Checkout}
+                    />
 
                     <Route component={NotFoundPage} />
                   </Switch>
