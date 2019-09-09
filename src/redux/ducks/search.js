@@ -175,7 +175,7 @@ export const onSearch = (lat, lng) => async dispatch => {
   try {
     const { data } = await getClient().query({
       query: querySearchByAddress,
-      variables: { lat, lng }
+      variables: { lat: `${lat}`, lng: `${lng}` }
     })
     dispatch({
       type: Types.ON_SEARCH_SUCCESS,

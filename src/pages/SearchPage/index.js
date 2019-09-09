@@ -112,7 +112,7 @@ const SearchPage = () => {
 
   useEffect(() => {
     async function fetchData() {
-      await dispatch(onSearch('-33.8688197', '151.2092955')) // mock data for test...
+      await dispatch(onSearch('-33.8688197', '151.2092955'))
     }
     fetchData()
   }, [dispatch])
@@ -176,7 +176,7 @@ const SearchPage = () => {
     if (type === 'max') setFilterPrice([filterPrice[0], number.value()])
   }
 
-  const _onSearch = () => {
+  const _onQueryFilter = () => {
     const filters = {
       filterCategory,
       filterDuration,
@@ -187,9 +187,14 @@ const SearchPage = () => {
     setShouldShowFilter(null)
   }
 
+  const _onSearch = () => {
+    dispatch(onSearch(latLng.lat, latLng.lng))
+  }
+
   const _onSelectedAddess = obj => {
     const { position, address: objAddress } = obj
     if (position) {
+      _onSearch()
       setLatLng(position)
     }
     if (objAddress) {
@@ -217,6 +222,9 @@ const SearchPage = () => {
         <NavBar />
         <SearchBar>
           <AutoComplete
+            searchOptions={{
+              types: ['geocode']
+            }}
             address={address}
             onChangeAddress={setAddress}
             onHandleError={_onHandleError}
@@ -228,7 +236,9 @@ const SearchPage = () => {
             placeholder="Sydney, Australia"
             label={null}
           />
-          <Button size="sm">Search</Button>
+          <Button size="sm" onClick={_onSearch}>
+            Search
+          </Button>
         </SearchBar>
         <Line />
         <FilterBar>
@@ -318,7 +328,7 @@ const SearchPage = () => {
                             I’m looking to rent a place for business
                           </Text>
                         </div>
-                        <Button size="sm" outline onClick={_onSearch}>
+                        <Button size="sm" outline onClick={_onQueryFilter}>
                           Save
                         </Button>
                       </Box>
@@ -395,7 +405,7 @@ const SearchPage = () => {
                             I want to find space on a monthly basis
                           </Text>
                         </div>
-                        <Button size="sm" outline onClick={_onSearch}>
+                        <Button size="sm" outline onClick={_onQueryFilter}>
                           Save
                         </Button>
                       </Box>
@@ -454,7 +464,7 @@ const SearchPage = () => {
                           />
                         </Box>
                         <Box mt="30px">
-                          <Button size="sm" outline onClick={_onSearch}>
+                          <Button size="sm" outline onClick={_onQueryFilter}>
                             Save
                           </Button>
                         </Box>
@@ -501,7 +511,7 @@ const SearchPage = () => {
                             handleCheckboxChange={(e, { checked }) => setFilterInstantBooking(checked)}
                           />
                         </ItemSwitchStyled>
-                        <Button size="sm" outline onClick={_onSearch}>
+                        <Button size="sm" outline onClick={_onQueryFilter}>
                           Save
                         </Button>
                       </Box>
