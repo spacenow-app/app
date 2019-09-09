@@ -105,6 +105,12 @@ const querySearchByAddress = gql`
       __typename
       status
       searchKey
+      page
+      perPage
+      prePage
+      nextPage
+      total
+      totalPages
       result {
         ${searchResultFields}
       }
@@ -132,6 +138,12 @@ const querySearchByFilters = gql`
       __typename
       status
       searchKey
+      page
+      perPage
+      prePage
+      nextPage
+      total
+      totalPages
       result {
         ${searchResultFields}
       }
