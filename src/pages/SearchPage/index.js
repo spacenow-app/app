@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { useDispatch, shallowEqual, useSelector } from 'react-redux'
 import styled from 'styled-components'
+import { toast } from 'react-toastify'
 
 import {
   NavBar,
@@ -82,7 +83,7 @@ const ItemSwitchStyled = styled.div`
   margin-bottom: 35px;
 `
 
-const SearchPage = () => {
+const SearchPage = ({ history }) => {
   const dispatch = useDispatch()
 
   const [selectedSpace, setSelectedSpace] = useState(null)
@@ -90,7 +91,7 @@ const SearchPage = () => {
   const [markers, setMarkers] = useState([])
   const [address, setAddress] = useState('Sydney, Austrália')
   const [latLng, setLatLng] = useState({ lat: -33.8688197, lng: 151.2092955 })
-  const [filterPrice, setFilterPrice] = useState([50, 5000])
+  const [filterPrice, setFilterPrice] = useState([0, 0])
   const [filterInstantBooking, setFilterInstantBooking] = useState(false)
   const [filterDuration, setFilterDuration] = useState({
     hourly: false,
@@ -106,13 +107,12 @@ const SearchPage = () => {
     storage: false,
     retailAndHospitality: false
   })
-
-  const { searchKey, result: searchResults } = useSelector(state => state.search.get, shallowEqual)
+  const { searchKey, result: searchResults, pagination } = useSelector(state => state.search.get, shallowEqual)
   const isLoading = useSelector(state => state.search.isLoading)
 
   useEffect(() => {
     async function fetchData() {
-      await dispatch(onSearch('-33.8688197', '151.2092955')) // mock data for test...
+      await dispatch(onSearch('-33.8688197', '151.2092955'))
     }
     fetchData()
   }, [dispatch])
@@ -176,7 +176,7 @@ const SearchPage = () => {
     if (type === 'max') setFilterPrice([filterPrice[0], number.value()])
   }
 
-  const _onSearch = () => {
+  const _onQueryFilter = () => {
     const filters = {
       filterCategory,
       filterDuration,
@@ -187,9 +187,18 @@ const SearchPage = () => {
     setShouldShowFilter(null)
   }
 
+  const _onSearch = (lat, lng, page = false) => {
+    if (!lat && !lng) {
+      toast.info('You must select a address!')
+      return
+    }
+    dispatch(onSearch(lat, lng, page))
+  }
+
   const _onSelectedAddess = obj => {
     const { position, address: objAddress } = obj
     if (position) {
+      _onSearch(position.lat, position.lng)
       setLatLng(position)
     }
     if (objAddress) {
@@ -206,6 +215,19 @@ const SearchPage = () => {
     setAddress('')
   }
 
+  const _onPagionationChange = page => {
+    const filters = {
+      filterCategory,
+      filterDuration,
+      filterInstantBooking,
+      filterPrice
+    }
+    if (!searchKey) {
+      return
+    }
+    dispatch(onQuery(searchKey, filters, page))
+  }
+
   const modifiers = {
     preventOverflow: { enabled: false },
     hide: { enabled: false }
@@ -217,6 +239,9 @@ const SearchPage = () => {
         <NavBar />
         <SearchBar>
           <AutoComplete
+            searchOptions={{
+              types: ['geocode']
+            }}
             address={address}
             onChangeAddress={setAddress}
             onHandleError={_onHandleError}
@@ -228,7 +253,9 @@ const SearchPage = () => {
             placeholder="Sydney, Australia"
             label={null}
           />
-          <Button size="sm">Search</Button>
+          <Button size="sm" onClick={() => _onSearch(latLng.lat, latLng.lng)}>
+            Search
+          </Button>
         </SearchBar>
         <Line />
         <FilterBar>
@@ -318,7 +345,7 @@ const SearchPage = () => {
                             I’m looking to rent a place for business
                           </Text>
                         </div>
-                        <Button size="sm" outline onClick={_onSearch}>
+                        <Button size="sm" outline onClick={_onQueryFilter}>
                           Save
                         </Button>
                       </Box>
@@ -395,7 +422,7 @@ const SearchPage = () => {
                             I want to find space on a monthly basis
                           </Text>
                         </div>
-                        <Button size="sm" outline onClick={_onSearch}>
+                        <Button size="sm" outline onClick={_onQueryFilter}>
                           Save
                         </Button>
                       </Box>
@@ -454,7 +481,7 @@ const SearchPage = () => {
                           />
                         </Box>
                         <Box mt="30px">
-                          <Button size="sm" outline onClick={_onSearch}>
+                          <Button size="sm" outline onClick={_onQueryFilter}>
                             Save
                           </Button>
                         </Box>
@@ -501,7 +528,7 @@ const SearchPage = () => {
                             handleCheckboxChange={(e, { checked }) => setFilterInstantBooking(checked)}
                           />
                         </ItemSwitchStyled>
-                        <Button size="sm" outline onClick={_onSearch}>
+                        <Button size="sm" outline onClick={_onQueryFilter}>
                           Save
                         </Button>
                       </Box>
@@ -539,9 +566,16 @@ const SearchPage = () => {
         </Box>
       )}
       <ContainerResults>
-        <ListResults markers={searchResults} onHoverItem={_toggleHover} />
+        <ListResults
+          markers={searchResults}
+          onHoverItem={_toggleHover}
+          history={history}
+          pagination={pagination}
+          onPageChanged={_onPagionationChange}
+        />
         <ContainerMap>
           <MapSearch
+            history={history}
             position={latLng}
             markers={markers}
             onClickMarker={_onClickMarkerMap}

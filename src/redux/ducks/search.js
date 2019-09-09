@@ -15,7 +15,15 @@ const initialState = {
   error: null,
   get: {
     searchKey: null,
-    result: []
+    result: [],
+    pagination: {
+      page: 1,
+      perPage: 10,
+      prePage: 1,
+      nextPage: 2,
+      total: 0,
+      totalPages: 0
+    }
   }
 }
 
@@ -24,6 +32,7 @@ const searchResultFields = `
   userId
   title
   bookingPeriod
+
   photos {
     id
     isCover
@@ -126,6 +135,7 @@ const querySearchByFilters = gql`
     $priceMin: Float,
     $priceMax: Float,
     $instant: String,
+    $page: Int
   ) {
     searchByFilters(
       key: $key,
@@ -133,7 +143,8 @@ const querySearchByFilters = gql`
       duration: $duration,
       priceMin: $priceMin,
       priceMax: $priceMax,
-      instant: $instant
+      instant: $instant,
+      page: $page
     ) {
       __typename
       status
@@ -165,8 +176,17 @@ export default function reducer(state = initialState, action) {
         ...state,
         isLoading: false,
         get: {
+          ...state.get,
           searchKey: action.payload.searchKey,
-          result: action.payload.result
+          result: action.payload.result,
+          pagination: {
+            page: action.payload.pagination.page,
+            perPage: action.payload.pagination.perPage,
+            prePage: action.payload.pagination.prePage,
+            nextPage: action.payload.pagination.nextPage,
+            total: action.payload.pagination.total,
+            totalPages: action.payload.pagination.totalPages
+          }
         }
       }
     }
@@ -182,23 +202,34 @@ export default function reducer(state = initialState, action) {
   }
 }
 
-export const onSearch = (lat, lng) => async dispatch => {
+export const onSearch = (lat, lng, page = null) => async dispatch => {
   dispatch({ type: Types.ON_SEARCH_REQUEST })
   try {
     const { data } = await getClient().query({
       query: querySearchByAddress,
-      variables: { lat, lng }
+      variables: { lat: `${lat}`, lng: `${lng}`, page }
     })
     dispatch({
       type: Types.ON_SEARCH_SUCCESS,
-      payload: { searchKey: data.searchByAddress.searchKey, result: data.searchByAddress.result }
+      payload: {
+        searchKey: data.searchByAddress.searchKey,
+        result: data.searchByAddress.result,
+        pagination: {
+          page: data.searchByAddress.page,
+          perPage: data.searchByAddress.perPage,
+          prePage: data.searchByAddress.prePage,
+          nextPage: data.searchByAddress.nextPage,
+          total: data.searchByAddress.total,
+          totalPages: data.searchByAddress.totalPages
+        }
+      }
     })
   } catch (err) {
     dispatch({ type: Types.ON_SEARCH_FAILURE, payload: errToMsg(err) })
   }
 }
 
-export const onQuery = (searchKey, filters) => async dispatch => {
+export const onQuery = (searchKey, filters, page = null) => async dispatch => {
   dispatch({ type: Types.ON_SEARCH_REQUEST })
   const categories = {
     workspace: [566, 567, 572],
@@ -235,12 +266,24 @@ export const onQuery = (searchKey, filters) => async dispatch => {
         duration: filter.duration,
         priceMin: filter.priceMin,
         priceMax: filter.priceMax,
-        instant: filter.instant
+        instant: filter.instant,
+        page
       }
     })
     dispatch({
       type: Types.ON_SEARCH_SUCCESS,
-      payload: { searchKey: data.searchByFilters.searchKey, result: data.searchByFilters.result }
+      payload: {
+        searchKey: data.searchByFilters.searchKey,
+        result: data.searchByFilters.result,
+        pagination: {
+          page: data.searchByFilters.page,
+          perPage: data.searchByFilters.perPage,
+          prePage: data.searchByFilters.prePage,
+          nextPage: data.searchByFilters.nextPage,
+          total: data.searchByFilters.total,
+          totalPages: data.searchByFilters.totalPages
+        }
+      }
     })
   } catch (err) {
     dispatch({ type: Types.ON_SEARCH_FAILURE, payload: errToMsg(err) })

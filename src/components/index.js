@@ -46,6 +46,7 @@ import Link from './Link'
 import Line from './Line'
 import ButtonSocial from './ButtonSocial'
 import Slider from './Slider'
+import Pagination from './Pagination'
 
 export {
   Modal,
@@ -98,5 +99,6 @@ export {
   Link,
   Line,
   ButtonSocial,
-  Slider
+  Slider,
+  Pagination
 }
