@@ -5,6 +5,7 @@ import { IntroPage, LocationPage, CategoryPage, SpaceDetailsPage } from './Listi
 import { ProfilePage, PaymentPage, ListingPage, BookingPage } from './Account'
 import SearchPage from './SearchPage'
 import { PartnerPage, SpacePage } from './Space'
+import CheckoutPage from './CheckoutPage'
 
 export {
   HomePage,
@@ -23,5 +24,6 @@ export {
   ProfilePage,
   PaymentPage,
   ListingPage,
-  BookingPage
+  BookingPage,
+  CheckoutPage
 }

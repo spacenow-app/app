@@ -78,7 +78,20 @@ const ReportSpaceStyled = styled.span`
   cursor: pointer;
 `
 
-const SpacePage = ({ match, location, ...props }) => {
+const BottomButtonMobile = styled.div`
+  position: sticky;
+  bottom: 0;
+  background-color: white;
+  width: 100%;
+  padding: 15px 0;
+  text-align: center;
+
+  @media only screen and (min-width: 992px) {
+    display: none;
+  }
+`
+
+const SpacePage = ({ match, location, history, ...props }) => {
   const dispatch = useDispatch()
 
   const { object: listing, isLoading: isListingLoading } = useSelector(state => state.listing.get)
@@ -120,10 +133,10 @@ const SpacePage = ({ match, location, ...props }) => {
     if(window.innerWidth < 768) {
       setImageHeight(270)
     }
-  })
+  },[])
 
   if (listing && listing.user.provider === 'wework') {
-    props.history.push(`/space/partner/${match.params.id}`)
+    history.push(`/space/partner/${match.params.id}`)
   }
 
   if (isListingLoading) {
@@ -252,8 +265,8 @@ const SpacePage = ({ match, location, ...props }) => {
   }
 
   const _renderContentCard = bookingPeriod => {
-    if (pendingBooking && pendingBooking.bookings && pendingBooking.bookings.length > 0) {
-      return <PendingBooking booking={pendingBooking.bookings[0]} listing={listing.listingData} dispatch={dispatch} />
+    if (pendingBooking && pendingBooking.items && pendingBooking.items.length > 0) {
+      return <PendingBooking booking={pendingBooking.items[0]} listing={listing.listingData} dispatch={dispatch} history={history} />
     }
     if (bookingPeriod === 'hourly') {
       return <ContactHost user={user} listing={listing} dispatch={dispatch} />
@@ -355,7 +368,7 @@ const SpacePage = ({ match, location, ...props }) => {
       isAbsorvedFee: listing.listingData.isAbsorvedFee
     }
     if (!isAuthenticated) {
-      props.history.push(`/auth/signin`, {
+      history.push(`/auth/signin`, {
         from: {
           ...location, 
           state: {
@@ -366,12 +379,12 @@ const SpacePage = ({ match, location, ...props }) => {
       })
       return
     }
-    dispatch(onCreateBooking(object))
+    dispatch(onCreateBooking(object, history))
   }
 
   const _reportSpace = () => {
     if (!isAuthenticated) {
-      props.history.push(`/auth/signin`, {from: location})
+      history.push(`/auth/signin`, {from: location})
       return
     }
     const options = {
@@ -590,7 +603,7 @@ const SpacePage = ({ match, location, ...props }) => {
             </Box>
           </Grid>
         </Cell>
-        <Cell area="card">
+        <Cell area="card" id="booking-card">
           <BookingCard
             titleComponent={
               <Title
@@ -659,6 +672,9 @@ const SpacePage = ({ match, location, ...props }) => {
         </Grid>
         
       </Box>
+      <BottomButtonMobile>
+        <Button fluid onClick={() => {document.getElementById("booking-card").scrollIntoView({ behavior: 'smooth' })}}>Reserve</Button>
+      </BottomButtonMobile>
     </Wrapper>
   )
 }

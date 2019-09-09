@@ -8,8 +8,6 @@ import { onTimeoutBooking } from 'redux/ducks/booking'
 
 import { ListDates, PriceDetail, Grid, Cell, Button, Box } from 'components'
 
-import { config } from 'variables'
-
 const ContentStyled = styled.div`
   display: grid;
   grid-template-columns: auto auto;
@@ -104,7 +102,7 @@ const _renderContentCard = booking => {
   )
 }
 
-const _onContinueBooking = (booking, dispatch) => {
+const _onContinueBooking = (booking, dispatch, history) => {
   if (new Date() >= addMinutes(booking.createdAt, '30')) {
     dispatch(onTimeoutBooking(booking.bookingId))
 
@@ -116,12 +114,12 @@ const _onContinueBooking = (booking, dispatch) => {
         buttonConfirmText: 'Go to my dashboard'
       },
       onConfirm: () => {
-        window.location.href = `${config.legacy}/dashboard/bookings`
+        history.push(`/account/booking`)
       }
     }
     dispatch(openModal(TypesModal.MODAL_TYPE_CONFIRM, options))
   } else {
-    window.location.href = `${config.legacy}/checkout/${booking.bookingId}`
+    history.push(`/checkout/${booking.bookingId}`)
   }
 }
 
@@ -140,7 +138,7 @@ const _onCancelBooking = (booking, dispatch) => {
   dispatch(openModal(TypesModal.MODAL_TYPE_CONFIRM, options))
 }
 
-const PendingBooking = ({ booking, listing, dispatch }) => (
+const PendingBooking = ({ booking, listing, dispatch, history }) => (
   <Grid columns={1} rowGap={'20px'}>
     {_renderContentCard(booking)}
     <PriceDetail
@@ -157,7 +155,7 @@ const PendingBooking = ({ booking, listing, dispatch }) => (
         </Button>
       </Cell>
       <Cell md={6}>
-        <Button fluid onClick={() => _onContinueBooking(booking, dispatch)}>
+        <Button fluid onClick={() => _onContinueBooking(booking, dispatch, history)}>
           Continue
         </Button>
       </Cell>

@@ -1,14 +1,14 @@
 import { createStore, compose, applyMiddleware } from 'redux'
 // import createHistory from 'history/createBrowserHistory'
 import thunk from 'redux-thunk'
-// import { createLogger } from 'redux-logger'
+import { createLogger } from 'redux-logger'
 import reducers from './reducers'
 
 // export const history = createHistory()
 
-// const logger = createLogger({
-//   collapsed: true
-// })
+const logger = createLogger({
+  collapsed: true
+})
 
 const composeEnhancers =
     process.env.NODE_ENV !== 'production' &&
@@ -19,7 +19,8 @@ const composeEnhancers =
         }) : compose;
 
 const enhancer = composeEnhancers(
-    applyMiddleware(thunk)
+    applyMiddleware(thunk),
+    applyMiddleware(logger)
 );
 
 // if (process.env.NODE_ENV === 'development') {
