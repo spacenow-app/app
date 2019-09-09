@@ -78,6 +78,19 @@ const ReportSpaceStyled = styled.span`
   cursor: pointer;
 `
 
+const BottomButtonMobile = styled.div`
+  position: sticky;
+  bottom: 0;
+  background-color: white;
+  width: 100%;
+  padding: 15px 0;
+  text-align: center;
+
+  @media only screen and (min-width: 992px) {
+    display: none;
+  }
+`
+
 const SpacePage = ({ match, location, ...props }) => {
   const dispatch = useDispatch()
 
@@ -120,7 +133,7 @@ const SpacePage = ({ match, location, ...props }) => {
     if(window.innerWidth < 768) {
       setImageHeight(270)
     }
-  })
+  },[])
 
   if (listing && listing.user.provider === 'wework') {
     props.history.push(`/space/partner/${match.params.id}`)
@@ -590,7 +603,7 @@ const SpacePage = ({ match, location, ...props }) => {
             </Box>
           </Grid>
         </Cell>
-        <Cell area="card">
+        <Cell area="card" id="booking-card">
           <BookingCard
             titleComponent={
               <Title
@@ -659,6 +672,9 @@ const SpacePage = ({ match, location, ...props }) => {
         </Grid>
         
       </Box>
+      <BottomButtonMobile>
+        <Button fluid onClick={() => {document.getElementById("booking-card").scrollIntoView({ behavior: 'smooth' })}}>Reserve</Button>
+      </BottomButtonMobile>
     </Wrapper>
   )
 }

@@ -63,8 +63,6 @@ const ContactHost = ({
       {currentDate: format(new Date(), 'MMMM Mo, YYYY')},
       {listingCategory: listing.settingsParent.category.itemName}
     )
-
-    console.log(Object.assign(values, { email: values.guestEmail}))
     const emailGuest = {
       template: 'contact-guest-hourly',
       data: JSON.stringify(Object.assign(values, { email: values.guestEmail})),
