@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { useDispatch, shallowEqual, useSelector } from 'react-redux'
 import styled from 'styled-components'
+import { toast } from 'react-toastify'
 
 import {
   NavBar,
@@ -82,7 +83,7 @@ const ItemSwitchStyled = styled.div`
   margin-bottom: 35px;
 `
 
-const SearchPage = () => {
+const SearchPage = ({ history }) => {
   const dispatch = useDispatch()
 
   const [selectedSpace, setSelectedSpace] = useState(null)
@@ -90,7 +91,7 @@ const SearchPage = () => {
   const [markers, setMarkers] = useState([])
   const [address, setAddress] = useState('Sydney, Austrália')
   const [latLng, setLatLng] = useState({ lat: -33.8688197, lng: 151.2092955 })
-  const [filterPrice, setFilterPrice] = useState([50, 5000])
+  const [filterPrice, setFilterPrice] = useState([0, 0])
   const [filterInstantBooking, setFilterInstantBooking] = useState(false)
   const [filterDuration, setFilterDuration] = useState({
     hourly: false,
@@ -106,8 +107,7 @@ const SearchPage = () => {
     storage: false,
     retailAndHospitality: false
   })
-
-  const { searchKey, result: searchResults } = useSelector(state => state.search.get, shallowEqual)
+  const { searchKey, result: searchResults, pagination } = useSelector(state => state.search.get, shallowEqual)
   const isLoading = useSelector(state => state.search.isLoading)
 
   useEffect(() => {
@@ -187,14 +187,18 @@ const SearchPage = () => {
     setShouldShowFilter(null)
   }
 
-  const _onSearch = () => {
-    dispatch(onSearch(latLng.lat, latLng.lng))
+  const _onSearch = (lat, lng, page = false) => {
+    if (!lat && !lng) {
+      toast.info('You must select a address!')
+      return
+    }
+    dispatch(onSearch(lat, lng, page))
   }
 
   const _onSelectedAddess = obj => {
     const { position, address: objAddress } = obj
     if (position) {
-      _onSearch()
+      _onSearch(position.lat, position.lng)
       setLatLng(position)
     }
     if (objAddress) {
@@ -209,6 +213,19 @@ const SearchPage = () => {
   const _reset = () => {
     setLatLng({})
     setAddress('')
+  }
+
+  const _onPagionationChange = page => {
+    const filters = {
+      filterCategory,
+      filterDuration,
+      filterInstantBooking,
+      filterPrice
+    }
+    if (!searchKey) {
+      return
+    }
+    dispatch(onQuery(searchKey, filters, page))
   }
 
   const modifiers = {
@@ -236,7 +253,7 @@ const SearchPage = () => {
             placeholder="Sydney, Australia"
             label={null}
           />
-          <Button size="sm" onClick={_onSearch}>
+          <Button size="sm" onClick={() => _onSearch(latLng.lat, latLng.lng)}>
             Search
           </Button>
         </SearchBar>
@@ -549,9 +566,16 @@ const SearchPage = () => {
         </Box>
       )}
       <ContainerResults>
-        <ListResults markers={searchResults} onHoverItem={_toggleHover} />
+        <ListResults
+          markers={searchResults}
+          onHoverItem={_toggleHover}
+          history={history}
+          pagination={pagination}
+          onPageChanged={_onPagionationChange}
+        />
         <ContainerMap>
           <MapSearch
+            history={history}
             position={latLng}
             markers={markers}
             onClickMarker={_onClickMarkerMap}

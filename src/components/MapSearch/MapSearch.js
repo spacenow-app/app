@@ -34,6 +34,7 @@ const CardImage = styled.div`
   background-repeat: no-repeat;
   background-size: cover;
   margin-left: -1px;
+  cursor: pointer;
 `
 
 const CardContent = styled.div`
@@ -109,7 +110,10 @@ const MapSearch = withGoogleMap(props => {
           }}
         >
           <CardContainer>
-            <CardImage src={props.selectedMarker.photo} />
+            <CardImage
+              src={props.selectedMarker.photo}
+              onClick={() => props.history.push(`/space/${props.selectedMarker.id}`)}
+            />
             <CardContent>
               <CardContentTitle>{props.selectedMarker.title}</CardContentTitle>
               <CardContentTextPrice>
