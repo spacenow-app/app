@@ -16,7 +16,7 @@ const Account = ({ match, ...props }) => {
   return (
     <Suspense fallback={<div>Loading...</div>}>
       <Wrapper>
-        <Box display="grid" gridTemplateColumns="350px 1fr" gridColumnGap="30px" my="80px">
+        <Box display="grid" gridTemplateColumns={{ small: "1fr", medium: '350px 1fr' }} gridColumnGap="30px" my="80px">
           <InnerMenu />
           <Box display="grid">
             <Switch>

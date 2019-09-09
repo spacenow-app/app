@@ -25,10 +25,23 @@ const Wrapper = styled.div`
   &&: hover {
     box-shadow: rgb(203, 203, 203) 10px 10px 20px 0px;
   }
+
+  @media(max-width: 576px) {
+    grid-template-columns: 1fr;
+    grid-template-areas: 
+      "image"
+      "body"
+      "footer";
+    max-height: fit-content;
+  }
+
   `
 
 const ImageStyled = styled(Image)`
   grid-area: image;
+  @media(max-width: 576px) {
+    width: 100%;
+  }
 `
 
 const BodyStyled = styled.div`
@@ -52,6 +65,14 @@ const OverlayTriggerStyled = styled(OverlayTrigger)`
   border-radius: 5px;
 `
 
+const ExpireOnStyled = styled(Title)`
+  display: grid;
+  grid-auto-flow: column;
+  grid-template-columns: max-content;
+  grid-gap: 10px;
+  align-items: center;
+`
+
 const LabelStyled = styled(Label)`
   justify-self: end;
 `
@@ -65,6 +86,11 @@ const FooterStyled = styled.div`
   padding: 0 20px 20px 10px;
   display: grid;
   grid-auto-flow: column;
+  grid-template-columns: max-content;
+  grid-column-gap: inherit;
+  @media(max-width: 576px) {
+     grid-template-columns: fit-content;
+  }
 `
 
 const DropdownStyled = styled(Dropdown)`
@@ -108,6 +134,7 @@ CardHorizontal.Body = BodyStyled
 CardHorizontal.Title = TitleStyled
 CardHorizontal.Price = PriceStyled
 CardHorizontal.Tag = TagStyled
+CardHorizontal.ExpireOn = ExpireOnStyled
 CardHorizontal.Label = LabelStyled
 CardHorizontal.ToolTip = ToolTipStyled
 CardHorizontal.OverlayTrigger = OverlayTriggerStyled

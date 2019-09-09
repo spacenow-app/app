@@ -53,6 +53,7 @@ const FormProfile = ({
             disabled
             value={props.user.email}
             error={!props.user.emailConfirmed}
+
           />
         </SectionStyled>
         <Box display="grid" gridTemplateColumns="auto auto" gridColumnGap="30px">

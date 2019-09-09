@@ -20,5 +20,11 @@ export default {
     medium: 'Montserrat-Medium',
     bold: 'Montserrat-Bold',
     semiBold: 'Montserrat-SemiBold'
+  },
+  breakpoints: {
+    small: "576px",
+    medium: "768px",
+    large: "992px",
+    extraLarge: "1200px"
   }
 }

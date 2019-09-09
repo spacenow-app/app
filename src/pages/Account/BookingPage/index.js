@@ -1,6 +1,8 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
+import { addMinutes, format, isAfter, addHours } from 'date-fns'
 import { useSelector, useDispatch } from 'react-redux'
 import { onGetBookingsByUser } from 'redux/ducks/account'
+import { onDeclineBooking, onAcceptBooking } from 'redux/ducks/booking'
 import { TypesModal, openModal } from 'redux/ducks/modal'
 import { Card, Text, Icon, Loader, BackgroundImage, Grid, Cell, Title } from 'components'
 import { Dropdown } from 'react-bootstrap'
@@ -11,20 +13,40 @@ const _parseCategoryIconName = (name, isSub) => {
   return prefix + name.replace(/([A-Z])/g, g => `-${g[0].toLowerCase()}`)
 }
 
-const BookingCard = (dispatch, item, index) => {
+const BookingCard = (dispatch, item, index, userType) => {
 
-  const _cancelBooking = () => {
+  let expire = addHours(format(new Date(item.createdAt), 'MM/DD/YYYY'), 24)
+
+  if (userType === 'guest')
+    expire = addMinutes(format(new Date(item.createdAt), 'MM/DD/YYYY'), 30)
+
+  let expiryDate = format(expire, "DD/MM/YYYY") + ' at ' + format(expire, "HH:mm")
+
+  const _bookingDetails = (booking, userType) => {
     dispatch(
-      openModal(TypesModal.MODAL_TYPE_CONFIRM, {
+      openModal(TypesModal.MODAL_TYPE_BOOKING_DETAILS, {
         options: {
-          title: 'Cancel Booking?',
-          text: 'Do you really want to cancel this booking?'
+          title: 'Booking Details',
+          text: ''
         },
-        onConfirm: values => {
-          console.log(values)
-        }
+        booking,
+        userType
       })
     )
+  }
+
+  const _continueBooking = () => {
+    if (isAfter(new Date(), expire)) {
+      window.location.href = `/space/${item.listingId}`
+    }
+  }
+
+  const _declineBooking = (bookingId) => {
+    dispatch(onDeclineBooking(bookingId))
+  }
+
+  const _acceptBooking = (bookingId) => {
+    dispatch(onAcceptBooking(bookingId))
   }
 
   return (
@@ -33,15 +55,21 @@ const BookingCard = (dispatch, item, index) => {
       <Card.Horizontal.Body>
         <Card.Horizontal.Title noMargin subTitleMargin={0} type={"h6"} title={<Text>{item.listing.title || ''}</Text>} subtitle={<Text>{`${item.listing.location.address1}, ${item.listing.location.city} ${item.listing.location.state}`}</Text>} />
         <Card.Horizontal.Price noMargin subTitleMargin={0} type={"h6"} title={<Text>AUD ${item.totalPrice.toFixed(2)}</Text>} />
+        {(item.bookingState === 'pending' || item.bookingState === 'requested') && <Card.Horizontal.ExpireOn noMargin subTitleMargin={0} type={`h6`} title="Expires on" subtitle={<Text>{expiryDate}</Text>} />}
       </Card.Horizontal.Body>
       <Card.Horizontal.Dropdown alignRight>
         <Card.Horizontal.Dropdown.Toggle size="sm">
           <Text color="primary">Option</Text>
         </Card.Horizontal.Dropdown.Toggle>
         <Card.Horizontal.Dropdown.Menu>
-          <Card.Horizontal.Dropdown.Item onClick={() => _cancelBooking(item.id)}>Cancel Booking</Card.Horizontal.Dropdown.Item>
-          <Card.Horizontal.Dropdown.Item href="#/action-2">Another action</Card.Horizontal.Dropdown.Item>
-          <Card.Horizontal.Dropdown.Item href="#/action-3">Something else</Card.Horizontal.Dropdown.Item>
+          {(item.bookingState === 'pending' && userType === 'guest') && <Card.Horizontal.Dropdown.Item onClick={() => _continueBooking(item.id)}>Continue Booking</Card.Horizontal.Dropdown.Item>}
+          <Card.Horizontal.Dropdown.Item onClick={() => _bookingDetails(item, userType)}>Booking Details</Card.Horizontal.Dropdown.Item>
+          {(item.bookingState === 'pending' && userType === 'host') &&
+            <>
+              <Card.Horizontal.Dropdown.Item onClick={() => _declineBooking(item.bookingId)}>Decline Booking</Card.Horizontal.Dropdown.Item>
+              <Card.Horizontal.Dropdown.Item onClick={() => _acceptBooking(item.bookingId)}>Accept Booking</Card.Horizontal.Dropdown.Item>
+            </>
+          }
         </Card.Horizontal.Dropdown.Menu>
       </Card.Horizontal.Dropdown>
       <Card.Horizontal.Footer>
@@ -63,6 +91,7 @@ const BookingPage = ({ ...props }) => {
 
   const dispatch = useDispatch();
 
+  const [userType, setUserType] = useState('guest')
   const { user: { id } } = useSelector(state => state.auth)
   const { isLoading, get: { bookings } } = useSelector(state => state.account)
 
@@ -71,6 +100,7 @@ const BookingPage = ({ ...props }) => {
   }, [dispatch, id])
 
   const _handleChange = (userType) => {
+    setUserType(userType)
     dispatch(onGetBookingsByUser(id, userType))
   }
 
@@ -98,7 +128,7 @@ const BookingPage = ({ ...props }) => {
             </Cell>
           </Grid>
           <Grid columns={1} rowGap={`30px`}>
-            {[].concat(bookings.items).map((item, index) => BookingCard(dispatch, item, index))}
+            {[].concat(bookings.items).map((item, index) => BookingCard(dispatch, item, index, userType))}
           </Grid>
         </>
       )

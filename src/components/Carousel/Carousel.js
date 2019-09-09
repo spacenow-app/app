@@ -31,7 +31,8 @@ const Carousel = ({ photos, ...props }) => {
           '& > img': {
             borderRadius: '15px',
             width: '100%',
-            height: '100%'
+            height: '100%',
+            objectFit: 'cover'
           }
         }),
         navigationPrev: base => ({
