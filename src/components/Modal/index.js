@@ -7,12 +7,14 @@ import ModalConfirm from 'components/Modal/ModalConfirm'
 import ModalWarn from 'components/Modal/ModalWarn'
 import ModalAddBankDetails from 'components/Modal/ModalAddBankDetails'
 import ModalReportListing from 'components/Modal/ModalReportListing'
+import ModalAddCreditCard from 'components/Modal/ModalAddCreditCard'
 
 const MODAL_COMPONENTS = {
   [TypesModal.MODAL_TYPE_CONFIRM]: ModalConfirm,
   [TypesModal.MODAL_TYPE_WARN]: ModalWarn,
   [TypesModal.MODAL_ADD_BANK_DETAILS]: ModalAddBankDetails,
-  [TypesModal.MODAL_TYPE_REPORT_LISTING]: ModalReportListing
+  [TypesModal.MODAL_TYPE_REPORT_LISTING]: ModalReportListing,
+  [TypesModal.MODAL_TYPE_ADD_CREDIT_CARD]: ModalAddCreditCard
 }
 
 const Modal = () => {

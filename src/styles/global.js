@@ -37,7 +37,7 @@ export default createGlobalStyle`
       font-size: 1rem;
       font-weight: 400;
       line-height: 1.5;
-      color: #172439;
+      color: #172439 !important;
     }
 
     /* Replace Modal Styles */
@@ -47,6 +47,11 @@ export default createGlobalStyle`
     }
     .modal-footer {
       border: none !important;
+    }
+
+    .modal-header {
+      border: none !important;
+      justify-content: center !important;
     }
 
     /* Replace Toast Styles */

@@ -13,7 +13,13 @@ export const Types = {
   CREATE_PAYMENT_ACCOUNT_SUCCESS: 'CREATE_PAYMENT_ACCOUNT_SUCCESS',
   CREATE_PAYMENT_ACCOUNT_ERROR: 'CREATE_PAYMENT_ACCOUNT_ERROR',
   DELETE_PAYMENT_ACCOUNT_SUCCESS: 'DELETE_PAYMENT_ACCOUNT_SUCCESS',
-  DELETE_PAYMENT_ACCOUNT_ERROR: 'DELETE_PAYMENT_ACCOUNT_ERROR'
+  DELETE_PAYMENT_ACCOUNT_ERROR: 'DELETE_PAYMENT_ACCOUNT_ERROR',
+  GET_CREDIT_CARDS_REQUEST: 'GET_CREDIT_CARDS_REQUEST',
+  GET_CREDIT_CARDS_SUCCESS: 'GET_CREDIT_CARDS_SUCCESS',
+  GET_CREDIT_CARDS_FAILURE: 'GET_CREDIT_CARDS_FAILURE',
+  CREATE_CREDIT_CARD_REQUEST: 'CREATE_CREDIT_CARD_REQUEST',
+  CREATE_CREDIT_CARD_SUCCESS: 'CREATE_CREDIT_CARD_SUCCESS',
+  CREATE_CREDIT_CARD_FAILURE: 'CREATE_CREDIT_CARD_FAILURE'
 }
 
 // Initial State
@@ -24,6 +30,12 @@ const initialState = {
   },
   get: {
     object: null
+  },
+  cards: {
+    array: [],
+    id: null,
+    isLoading: false,
+    isCreating: false
   }
 }
 
@@ -126,6 +138,44 @@ const removePaymentAccount = gql`
   }
 `
 
+const queryGetCards = gql`
+  query getCards {
+    getPaymentCards {
+      id
+      sources {
+        data {
+          id
+          name
+          last4
+          exp_month
+          exp_year
+          brand
+          country
+        }
+      }
+    }
+  }
+`
+
+const mutationCreateCard = gql`
+  mutation createCard($cardName: String!, $cardNumber: String!, $expMonth: Int!, $expYear: Int!, $cvc: String!) {
+    createPaymentCard(cardName: $cardName, cardNumber: $cardNumber, expMonth: $expMonth, expYear: $expYear, cvc: $cvc) {
+      id
+      sources {
+        data {
+          id
+          name
+          last4
+          exp_month
+          exp_year
+          brand
+          country
+        }
+      }
+    }
+  }
+`
+
 // Reducer
 export default function reducer(state = initialState, action) {
   switch (action.type) {
@@ -186,6 +236,54 @@ export default function reducer(state = initialState, action) {
         isLoading: false,
         error: {
           message: action.payload
+        }
+      }
+    }
+    case Types.GET_CREDIT_CARDS_REQUEST: {
+      return {
+        ...state,
+        cards: {
+          ...state.cards,
+          isLoading: true
+        }
+      }
+    }
+    case Types.GET_CREDIT_CARDS_SUCCESS: {
+      return {
+        ...state,
+        cards: {
+          ...state.cards,
+          array: action.payload.sources.data,
+          id: action.payload.id,
+          isLoading: false
+        }
+      }
+    }
+    case Types.CREATE_CREDIT_CARD_REQUEST: {
+      return {
+        ...state,
+        cards: {
+          ...state.cards,
+          isCreating: true
+        }
+      }
+    }
+    case Types.CREATE_CREDIT_CARD_SUCCESS: {
+      return {
+        ...state,
+        cards: {
+          ...state.cards,
+          isCreating: false,
+          array: action.payload.sources.data
+        }
+      }
+    }
+    case Types.CREATE_CREDIT_CARD_FAILURE: {
+      return {
+        ...state,
+        cards: {
+          ...state.cards,
+          isCreating: false
         }
       }
     }
@@ -259,5 +357,35 @@ export const onDeletePaymentAccount = () => async dispatch => {
   } catch (err) {
     toast.error(`Error on remove your bank account! ${errToMsg(err)}`)
     dispatch({ type: Types.DELETE_PAYMENT_ACCOUNT_ERROR, payload: errToMsg(err) })
+  }
+}
+
+export const getUserCards = () => async dispatch => {
+  dispatch({ type: Types.GET_CREDIT_CARDS_REQUEST })
+  try {
+    const { data } = await getClientWithAuth(dispatch).query({ query: queryGetCards })
+    dispatch({ type: Types.GET_CREDIT_CARDS_SUCCESS, payload: data.getPaymentCards })
+  } catch (err) {
+    dispatch({ type: Types.GET_CREDIT_CARDS_FAILURE, payload: errToMsg(err) })
+  }
+}
+
+export const createUserCard = card => async dispatch => {
+  dispatch({ type: Types.CREATE_CREDIT_CARD_REQUEST })
+
+  const newCard = {
+    cardName: card.name,
+    cardNumber: card.number,
+    expMonth: +card.expiry.split('/')[0],
+    expYear: +card.expiry.split('/')[1],
+    cvc: card.cvc
+  }
+
+  try {
+    const { data } = await getClientWithAuth(dispatch).mutate({ mutation: mutationCreateCard, variables: newCard })
+    dispatch({ type: Types.CREATE_CREDIT_CARD_SUCCESS, payload: data.createPaymentCard })
+  } catch (err) {
+    toast.error(`${errToMsg(err)}`)
+    dispatch({ type: Types.CREATE_CREDIT_CARD_FAILURE, payload: errToMsg(err) })
   }
 }
