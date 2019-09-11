@@ -1,7 +1,7 @@
 import React, { forwardRef } from 'react'
 import PropTypes from 'prop-types'
 import styled from 'styled-components'
-import { color, typography } from 'styled-system'
+import { color, typography, space } from 'styled-system'
 import { Button as ButtonExternal, Spinner } from 'react-bootstrap'
 
 const ButtonStyled = styled(ButtonExternal)`
@@ -14,12 +14,14 @@ const ButtonStyled = styled(ButtonExternal)`
     font-family: 'Montserrat-Medium';
     font-size: 14px;
     font-weight: 600;
-    background-color: ${props => (props.outline && '#fff') || (props.disabled && '#fff') || (props.error && '#dd4b39') || '#6adc91'};
+    background-color: ${props =>
+      (props.outline && '#fff') || (props.disabled && '#fff') || (props.error && '#dd4b39') || '#6adc91'};
     color: ${props => (props.outline && '#172439') || '#fff'};
     border: ${props => (props.outline ? `1px solid #172439` : 'none')};
 
     ${color}
     ${typography}
+    ${space}
 
     :hover {
       &&& {
@@ -30,7 +32,8 @@ const ButtonStyled = styled(ButtonExternal)`
     }
     :focus {
       &&& {
-        box-shadow: ${props => (props.error && '0 0 0 0.2rem rgba(194, 51, 33, 0.5)') || '0 0 0 0.2rem rgba(106, 220, 145, 0.5)'};
+        box-shadow: ${props =>
+          (props.error && '0 0 0 0.2rem rgba(194, 51, 33, 0.5)') || '0 0 0 0.2rem rgba(106, 220, 145, 0.5)'};
         background-color: ${props => (props.outline && '#6adc91') || (props.error && '#c23321') || '#2DA577'};
         border: ${props => (props.outline ? `1px solid #6adc91` : 'none')};
         color: #fff;
@@ -141,11 +144,16 @@ const ButtonStyled = styled(ButtonExternal)`
 //   }
 // `
 
-
 const Button = forwardRef(({ children, icon, isLoading, outline, disabled, fluid, error, ...props }, ref) => {
   return (
-    <ButtonStyled {...props} ref={ref} outline={outline ? 'true' : null} disabled={disabled || isLoading} fluid={fluid ? 'true' : null} error={error ? 'true' : null}>
-
+    <ButtonStyled
+      {...props}
+      ref={ref}
+      outline={outline ? 'true' : null}
+      disabled={disabled || isLoading}
+      fluid={fluid ? 'true' : null}
+      error={error ? 'true' : null}
+    >
       {isLoading && (
         <>
           <Spinner as="span" animation="border" size="sm" role="status" aria-hidden="true" />

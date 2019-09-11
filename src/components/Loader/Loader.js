@@ -1,6 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import styled from 'styled-components'
+import { layout } from 'styled-system'
 
 const WrapperStyled = styled.div`
   display: grid;
@@ -17,6 +18,8 @@ const LoaderIcon = styled.i`
   width: 50px;
   display: inline-block;
   animation: around 5.4s infinite;
+
+  ${layout}
 
   ::after,
   ::before {
@@ -52,9 +55,13 @@ const TextStyled = styled.span`
   font-size: 16px;
 `
 
-const Loader = ({ text }) => {
+const Loader = ({ text, icon, ...props }) => {
+  if (icon) {
+    return <LoaderIcon {...props} />
+  }
+
   return (
-    <WrapperStyled>
+    <WrapperStyled {...props}>
       <LoaderIcon />
       {text && <TextStyled>{text}</TextStyled>}
     </WrapperStyled>
@@ -62,11 +69,13 @@ const Loader = ({ text }) => {
 }
 
 Loader.defaultProps = {
-  text: null
+  text: null,
+  icon: false
 }
 
 Loader.propTypes = {
-  text: PropTypes.string
+  text: PropTypes.string,
+  icon: PropTypes.bool
 }
 
 export default Loader

@@ -1,4 +1,5 @@
 import { gql } from 'apollo-boost'
+import update from 'react-addons-update'
 import { getDate, getMonth, getYear } from 'date-fns'
 import { getClientWithAuth } from 'graphql/apolloClient'
 import { toast } from 'react-toastify'
@@ -19,7 +20,10 @@ export const Types = {
   GET_CREDIT_CARDS_FAILURE: 'GET_CREDIT_CARDS_FAILURE',
   CREATE_CREDIT_CARD_REQUEST: 'CREATE_CREDIT_CARD_REQUEST',
   CREATE_CREDIT_CARD_SUCCESS: 'CREATE_CREDIT_CARD_SUCCESS',
-  CREATE_CREDIT_CARD_FAILURE: 'CREATE_CREDIT_CARD_FAILURE'
+  CREATE_CREDIT_CARD_FAILURE: 'CREATE_CREDIT_CARD_FAILURE',
+  DELETE_CREDIT_CARD_REQUEST: 'DELETE_CREDIT_CARD_REQUEST',
+  DELETE_CREDIT_CARD_SUCCESS: 'DELETE_CREDIT_CARD_SUCCESS',
+  DELETE_CREDIT_CARD_FAILURE: 'DELETE_CREDIT_CARD_FAILURE'
 }
 
 // Initial State
@@ -176,6 +180,25 @@ const mutationCreateCard = gql`
   }
 `
 
+const mutationDeleteCard = gql`
+  mutation deleteCard($cardId: String!) {
+    deletePaymentCard(cardId: $cardId) {
+      id
+      sources {
+        data {
+          id
+          name
+          last4
+          exp_month
+          exp_year
+          brand
+          country
+        }
+      }
+    }
+  }
+`
+
 // Reducer
 export default function reducer(state = initialState, action) {
   switch (action.type) {
@@ -287,6 +310,42 @@ export default function reducer(state = initialState, action) {
         }
       }
     }
+    case Types.DELETE_CREDIT_CARD_REQUEST: {
+      const key = state.cards.array.findIndex(o => o.id === action.payload)
+      return update(state, {
+        cards: {
+          array: {
+            [key]: {
+              isLoading: { $set: true }
+            }
+          }
+        }
+      })
+      // return {
+      //   ...state,
+      //   cards: {
+      //     ...state.cards,
+      //     array: action.payload
+      //   }
+      // }
+    }
+    case Types.DELETE_CREDIT_CARD_SUCCESS: {
+      return {
+        ...state,
+        cards: {
+          ...state.cards,
+          array: action.payload.sources.data
+        }
+      }
+    }
+    case Types.DELETE_CREDIT_CARD_FAILURE: {
+      return {
+        ...state,
+        cards: {
+          ...state.cards
+        }
+      }
+    }
     default:
       return state
   }
@@ -387,5 +446,19 @@ export const createUserCard = card => async dispatch => {
   } catch (err) {
     toast.error(`${errToMsg(err)}`)
     dispatch({ type: Types.CREATE_CREDIT_CARD_FAILURE, payload: errToMsg(err) })
+  }
+}
+
+export const deleteUserCard = id => async dispatch => {
+  dispatch({ type: Types.DELETE_CREDIT_CARD_REQUEST, payload: id })
+  try {
+    const { data } = await getClientWithAuth(dispatch).mutate({
+      mutation: mutationDeleteCard,
+      variables: { cardId: id }
+    })
+    dispatch({ type: Types.DELETE_CREDIT_CARD_SUCCESS, payload: data.deletePaymentCard })
+  } catch (err) {
+    toast.error(`${errToMsg(err)}`)
+    dispatch({ type: Types.DELETE_CREDIT_CARD_FAILURE, payload: errToMsg(err) })
   }
 }
