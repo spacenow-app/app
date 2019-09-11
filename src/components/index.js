@@ -9,6 +9,7 @@ import Title from './Title'
 import StepButtons from './StepButtons'
 import Input from './Input'
 import Image from './Image'
+import Document from './Document'
 import Map from './Map'
 import MapSearch from './MapSearch'
 import AutoComplete from './AutoComplete'
@@ -47,6 +48,7 @@ import Line from './Line'
 import ButtonSocial from './ButtonSocial'
 import Slider from './Slider'
 import Pagination from './Pagination'
+import DatesDetail from './DatesDetail'
 
 export {
   Modal,
@@ -60,6 +62,7 @@ export {
   StepButtons,
   Input,
   Image,
+  Document,
   Map,
   MapSearch,
   AutoComplete,
@@ -100,5 +103,6 @@ export {
   Line,
   ButtonSocial,
   Slider,
-  Pagination
+  Pagination,
+  DatesDetail
 }

@@ -9,6 +9,7 @@ const ProfilePage = lazy(() => import('pages/Account/ProfilePage'))
 const PaymentPage = lazy(() => import('pages/Account/PaymentPage'))
 const BookingPage = lazy(() => import('pages/Account/BookingPage'))
 const ListingPage = lazy(() => import('pages/Account/ListingPage'))
+const DocumentVerificationPage = lazy(() => import('pages/Account/DocumentVerificationPage'))
 const NotFoundPage = lazy(() => import('pages/NotFoundPage'))
 
 const Account = ({ match, ...props }) => {
@@ -25,6 +26,7 @@ const Account = ({ match, ...props }) => {
               <Route exact component={PaymentPage} path={`${match.path}/payment`} />
               <Route exact component={BookingPage} path={`${match.path}/booking`} />
               <Route exact component={ListingPage} path={`${match.path}/listing`} />
+              <Route exact component={DocumentVerificationPage} path={`${match.path}/document-verification`} />
               <Route component={NotFoundPage} />
             </Switch>
           </Box>

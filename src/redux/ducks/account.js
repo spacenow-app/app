@@ -9,6 +9,12 @@ export const Types = {
   ACC_GET_PROFILE: '[ACCOUNT] GET PROFILE',
   ACC_GET_PROFILE_SUCCESS: '[ACCOUNT] GET PROFILE SUCCESS',
   ACC_GET_PROFILE_ERROR: '[ACCOUNT] GET PROFILE ERROR',
+  ACC_GET_DOCUMENTS: '[ACCOUNT] GET DOCUMENTS',
+  ACC_GET_DOCUMENTS_SUCCESS: '[ACCOUNT] GET DOCUMENTS SUCCESS',
+  ACC_GET_DOCUMENTS_ERROR: '[ACCOUNT] GET DOCUMENTS ERROR',
+  ACC_DELETE_DOCUMENT: '[ACCOUNT] DELETE DOCUMENT',
+  ACC_DELETE_DOCUMENT_SUCCESS: '[ACCOUNT] DELETE DOCUMENT SUCCESS',
+  ACC_DELETE_DOCUMENT_ERROR: '[ACCOUNT] DELETE DOCUMENT ERROR',
   ACC_GET_ALL_BOOKINGS_BY_USER: '[ACCOUNT] GET ALL BOOKINGS BY USER',
   ACC_GET_ALL_BOOKINGS_BY_USER_SUCCESS: '[ACCOUNT] GET ALL BOOKINGS BY USER SUCCESS',
   ACC_GET_ALL_BOOKINGS_BY_USER_ERROR: '[ACCOUNT] GET ALL BOOKINGS BY USER ERROR',
@@ -23,7 +29,11 @@ export const Types = {
   ACC_UPDATE_PROFILE_ERROR: '[ACCOUNT] UPDATE PROFILE ERROR',
   ACC_UPDATE_PROFILE_PICTURE: '[ACCOUNT] UPDATE PROFILE PICTURE',
   ACC_UPDATE_PROFILE_PICTURE_SUCCESS: '[ACCOUNT] UPDATE PROFILE PICTURE SUCCESS',
-  ACC_UPDATE_PROFILE_PICTURE_ERROR: '[ACCOUNT] UPDATE PROFILE PICTURE ERROR'
+  ACC_UPDATE_PROFILE_PICTURE_ERROR: '[ACCOUNT] UPDATE PROFILE PICTURE ERROR',
+  ACC_UPLOAD_DOCUMENT: '[ACCOUNT] UPLOAD DOCUMENT',
+  ACC_UPLOAD_DOCUMENT_SUCCESS: '[ACCOUNT] UPLOAD DOCUMENT SUCCESS',
+  ACC_UPLOAD_DOCUMENT_ERROR: '[ACCOUNT] UPLOAD DOCUMENT ERROR'
+
 }
 
 // Reducer
@@ -31,6 +41,7 @@ const initialState = {
   error: null,
   get: {
     user: null,
+    documents: null,
     bookings: null,
     listings: null
   },
@@ -159,6 +170,22 @@ const queryGetAllListingsByUser = gql`
 `
 
 // GraphQL
+const queryGetUserDocuments = gql`
+  query getUserDocuments($userId: String!) {
+    getUserDocuments(userId: $userId) {
+      count
+      rows {
+        id
+        userId
+        fileName
+        fileType
+        documentStatus
+      }
+		}
+  }
+`
+
+// GraphQL
 const mutationUpdateListing = gql`
   mutation publish($listingId: Int!, $status: Boolean!) {
     publish(listingId: $listingId, status: $status) {
@@ -186,9 +213,32 @@ const mutationUpdateProfilePicture = gql`
   }
 `
 
+// GraphQL
+const mutationDeleteDocument = gql`
+  mutation deleteDocument($userId: String, $id: String) {
+    deleteDocument(userId: $userId, id: $id) {
+      status
+		}
+  }
+`
+
+// GraphQL
+const mutationUploadDocument = gql`
+  mutation uploadDocument($userId: String, $file: Upload) {
+    uploadDocument(userId: $userId, file: $file) {
+      id
+      userId
+      fileName
+      fileType
+      documentStatus
+		}
+  }
+`
+
 export default function reducer(state = initialState, action) {
   switch (action.type) {
     case Types.ACC_GET_PROFILE:
+    case Types.ACC_GET_DOCUMENTS:
     case Types.ACC_UPDATE_PROFILE:
     case Types.ACC_UPDATE_PROFILE_PICTURE:
     case Types.ACC_GET_ALL_BOOKINGS_BY_USER:
@@ -198,7 +248,9 @@ export default function reducer(state = initialState, action) {
         error: null,
         isLoading: true
       }
-    case Types.ACC_UPDATE_LISTING: {
+    case Types.ACC_UPDATE_LISTING:
+    case Types.ACC_DELETE_DOCUMENT:
+    case Types.ACC_UPLOAD_DOCUMENT: {
       return {
         ...state
       }
@@ -207,6 +259,12 @@ export default function reducer(state = initialState, action) {
       return {
         ...state,
         get: { user: action.payload },
+        isLoading: false
+      }
+    case Types.ACC_GET_DOCUMENTS_SUCCESS:
+      return {
+        ...state,
+        get: { documents: action.payload },
         isLoading: false
       }
     case Types.ACC_GET_ALL_BOOKINGS_BY_USER_SUCCESS:
@@ -241,6 +299,28 @@ export default function reducer(state = initialState, action) {
           }
         }
       }
+    case Types.ACC_DELETE_DOCUMENT_SUCCESS:
+      return {
+        ...state,
+        isLoading: false,
+        get: {
+          documents: {
+            count: state.get.documents.count - 1,
+            rows: state.get.documents.rows.filter((item) => item.id !== action.payload.id)
+          }
+        }
+      }
+    case Types.ACC_UPLOAD_DOCUMENT_SUCCESS:
+      return {
+        ...state,
+        isLoading: false,
+        get: {
+          documents: {
+            count: state.get.documents.count + 1,
+            rows: [...state.get.documents.rows, action.payload]
+          }
+        }
+      }
     case Types.ACC_UPDATE_PROFILE_PICTURE_SUCCESS:
       return {
         ...state,
@@ -250,6 +330,13 @@ export default function reducer(state = initialState, action) {
       return {
         ...state,
         get: { user: null },
+        error: action.payload,
+        isLoading: false
+      }
+    case Types.ACC_GET_DOCUMENTS_ERROR:
+      return {
+        ...state,
+        get: { documents: null },
         error: action.payload,
         isLoading: false
       }
@@ -267,19 +354,11 @@ export default function reducer(state = initialState, action) {
         error: action.payload,
         isLoading: false
       }
+    case Types.ACC_DELETE_DOCUMENT_ERROR:
     case Types.ACC_UPDATE_PROFILE_ERROR:
-      return {
-        ...state,
-        error: action.payload,
-        isLoading: false
-      }
     case Types.ACC_UPDATE_LISTING_ERROR:
-      return {
-        ...state,
-        error: action.payload,
-        isLoading: false
-      }
     case Types.ACC_UPDATE_PROFILE_PICTURE_ERROR:
+    case Types.ACC_UPLOAD_DOCUMENT_ERROR:
       return {
         ...state,
         error: action.payload,
@@ -335,6 +414,36 @@ export const onGetListingsByUser = (userId, status) => async dispatch => {
   }
 }
 
+export const onGetUserDocuments = (userId) => async dispatch => {
+  dispatch({ type: Types.ACC_GET_DOCUMENTS })
+  try {
+    const { data } = await getClientWithAuth(dispatch).query({
+      query: queryGetUserDocuments,
+      variables: { userId },
+      fetchPolicy: 'network-only'
+    })
+    dispatch({ type: Types.ACC_GET_DOCUMENTS_SUCCESS, payload: data.getUserDocuments })
+  } catch (error) {
+    console.log(error)
+    dispatch({ type: Types.ACC_GET_DOCUMENTS_ERROR, payload: error })
+  }
+}
+
+export const onDeleteDocument = (userId, id) => async dispatch => {
+  dispatch({ type: Types.ACC_DELETE_DOCUMENT })
+  try {
+    await getClientWithAuth(dispatch).mutate({
+      mutation: mutationDeleteDocument,
+      variables: { userId, id }
+    })
+    toast.success("Document deleted successfully");
+    dispatch({ type: Types.ACC_DELETE_DOCUMENT_SUCCESS, payload: { id } })
+  } catch (error) {
+    console.log(error)
+    dispatch({ type: Types.ACC_DELETE_DOCUMENT_ERROR, payload: error })
+  }
+}
+
 export const onUpdateListing = (listingId, status) => async dispatch => {
   dispatch({ type: Types.ACC_UPDATE_LISTING })
   try {
@@ -377,5 +486,20 @@ export const onUpdateProfilePicture = (file, userId) => async dispatch => {
   } catch (error) {
     toast.error(error.message);
     dispatch({ type: Types.ACC_UPDATE_PROFILE_PICTURE_ERROR, payload: error.message })
+  }
+}
+
+export const onUploadDocument = (userId, file) => async dispatch => {
+  dispatch({ type: Types.ACC_UPLOAD_DOCUMENT })
+  try {
+    const { data } = await getClientWithAuth(dispatch).mutate({
+      mutation: mutationUploadDocument,
+      variables: { userId, file }
+    })
+    toast.success("Document uploaded successfully");
+    dispatch({ type: Types.ACC_UPLOAD_DOCUMENT_SUCCESS, payload: data.uploadDocument })
+  } catch (error) {
+    toast.error(error.message);
+    dispatch({ type: Types.ACC_UPLOAD_DOCUMENT_ERROR, payload: error.message })
   }
 }
