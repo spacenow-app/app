@@ -9,7 +9,7 @@ import { useSelector } from 'react-redux'
 
 import { Input, TextArea, Button, DatePicker, TimePicker, Grid, Cell } from 'components'
 
-import  { sendMail } from 'redux/ducks/mail'
+import { sendMail } from 'redux/ducks/mail'
 
 const WrapperStyled = styled.div`
   display: grid;
@@ -35,52 +35,42 @@ const LabelStyled = styled.label`
   margin-left: 20px;
 `
 
-const ContactHost = ({
-  values,
-  errors,
-  handleChange,
-  handleBlur,
-  setFieldValue,
-  isValid,
-  dispatch,
-  user,
-  listing,
-}) => {
-
+const ContactHost = ({ values, errors, handleChange, handleBlur, setFieldValue, isValid, dispatch, user, listing }) => {
   const { isLoading: isSendingEmail } = useSelector(state => state.mail)
 
-  const _handleSubmit = () => {  
-    setFieldValue('date',  format(new Date(values.date), 'DD/MM/YYYY').toString())
-    Object.assign(values,
-      {listingPhoto: JSON.stringify(listing.photos.find(photo => photo.isCover).name) },
-      {listingTitle: listing.title},
-      {listingCity: listing.location.city},
-      {listingCountry: listing.location.country},
-      {hostName: listing.user.profile.displayName},
-      {listingCurrency: listing.listingData.currency},
-      {listingPrice: listing.listingData.basePrice},
-      {listingPeriod: listing.bookingPeriod},
-      {currentDate: format(new Date(), 'MMMM Mo, YYYY')},
-      {listingCategory: listing.settingsParent.category.itemName}
+  const _handleSubmit = () => {
+    setFieldValue('date', format(new Date(values.date), 'DD/MM/YYYY').toString())
+    Object.assign(
+      values,
+      { listingPhoto: JSON.stringify(listing.photos.find(photo => photo.isCover).name) },
+      { listingTitle: listing.title },
+      { listingCity: listing.location.city },
+      { listingCountry: listing.location.country },
+      { hostName: listing.user.profile.displayName },
+      { listingCurrency: listing.listingData.currency },
+      { listingPrice: listing.listingData.basePrice },
+      { listingPeriod: listing.bookingPeriod },
+      { currentDate: format(new Date(), 'MMMM Mo, YYYY') },
+      { listingCategory: listing.settingsParent.category.itemName }
     )
     const emailGuest = {
       template: 'contact-guest-hourly',
-      data: JSON.stringify(Object.assign(values, { email: values.guestEmail})),
+      data: JSON.stringify(Object.assign(values, { email: values.guestEmail }))
     }
     const emailHost = {
       template: 'contact-host-hourly',
-      data: JSON.stringify(Object.assign(values, { email: listing.user.email})),
+      data: JSON.stringify(Object.assign(values, { email: listing.user.email }))
     }
     dispatch(sendMail(emailGuest))
-    dispatch(sendMail(emailHost, "Your enquiry was sent succesfully"))
+    dispatch(sendMail(emailHost, 'Your enquiry was sent succesfully'))
   }
 
   const _handleTimeChange = (name, value) => {
     setFieldValue(name, value)
   }
 
-  const startTimeInitial = new Date("January 31 1980 08:00")
-  const endTimeInitial = new Date("January 31 1980 18:00")
+  const startTimeInitial = new Date('January 31 1980 08:00')
+  const endTimeInitial = new Date('January 31 1980 18:00')
 
   return (
     <form>
@@ -88,9 +78,9 @@ const ContactHost = ({
         <DatePicker
           label="Date"
           name="date"
-          handleDateChange={date => setFieldValue('date',  format(date, 'DD/MM/YYYY'))}
+          handleDateChange={date => setFieldValue('date', format(date, 'DD/MM/YYYY'))}
           dayPickerProps={{
-            disabledDays: [{ before: new Date()}],
+            disabledDays: [{ before: new Date() }]
           }}
           value={values.date}
           error={errors.startTime}
@@ -118,7 +108,7 @@ const ContactHost = ({
           </Cell>
         </Grid>
 
-        {!user && 
+        {!user && (
           <>
             <Input
               label="Full Name*"
@@ -140,7 +130,7 @@ const ContactHost = ({
               onBlur={handleBlur}
             />
           </>
-        }
+        )}
 
         <Input
           label="Phone number"
@@ -162,8 +152,9 @@ const ContactHost = ({
           onBlur={handleBlur}
         />
 
-        <Button width="100%" onClick={() => _handleSubmit()} disabled={!isValid} isLoading={isSendingEmail}>Enquire</Button>
-
+        <Button width="100%" onClick={() => _handleSubmit()} disabled={!isValid} isLoading={isSendingEmail}>
+          Enquire
+        </Button>
       </WrapperStyled>
     </form>
   )
@@ -171,13 +162,15 @@ const ContactHost = ({
 
 const formik = {
   displayName: 'Partner_WeWorkForm',
-  mapPropsToValues: props => { return ({ 
-    guestName: props.user && props.user.id ?  props.user.profile.firstName + ' ' + props.user.profile.lastName : '',
-    guestEmail: props.user && props.user.id ? props.user.email : '',
-    date: new Date(),
-    startTime: format(new Date("January 31 1980 08:00"), 'HH:mm'),
-    endTime: format(new Date("January 31 1980 18:00"), 'HH:mm')
-  })},
+  mapPropsToValues: props => {
+    return {
+      guestName: props.user && props.user.id ? props.user.profile.firstName + ' ' + props.user.profile.lastName : '',
+      guestEmail: props.user && props.user.id ? props.user.email : '',
+      date: new Date(),
+      startTime: format(new Date('January 31 1980 08:00'), 'HH:mm'),
+      endTime: format(new Date('January 31 1980 18:00'), 'HH:mm')
+    }
+  },
   validationSchema: Yup.object().shape({
     date: Yup.string(),
     startTime: Yup.string(),
@@ -185,7 +178,7 @@ const formik = {
     guestEmail: Yup.string().required('Email field is required'),
     guestName: Yup.string().required('Name field is required'),
     phone: Yup.number().typeError('Need to be number.'),
-    message: Yup.string(),
+    message: Yup.string()
   }),
   enableReinitialize: true,
   isInitialValid: false

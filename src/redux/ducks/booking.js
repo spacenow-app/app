@@ -191,6 +191,9 @@ const queryGetListingInfo = gql`
   query getListingById($id: Int!, $isPublic: Boolean) {
     getListingById(id: $id, isPublic: $isPublic) {
       title
+      listingData {
+        isAbsorvedFee
+      }
       location {
         id
         userId
