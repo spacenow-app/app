@@ -12,12 +12,25 @@ const Grid = styled.div`
 const Column = styled.div``
 
 const TimeTableView = ({ data, error }) => {
+  const _convertedDate = date => {
+    const h = new Date(date)
+    const u = new Date(
+      h.getUTCFullYear(),
+      h.getUTCMonth(),
+      h.getUTCDate(),
+      h.getUTCHours(),
+      h.getUTCMinutes(),
+      h.getSeconds()
+    )
+    return u
+  }
+
   const renderOpeningData = weekDayIndex => {
     const dayOf = data.find(o => o.weekday === weekDayIndex)
     if (dayOf && dayOf.allday) return '24 Hours'
     if (dayOf) {
-      const hourOpen = format(dayOf.openHour, 'hh:mm a')
-      const hourClose = format(dayOf.closeHour, 'hh:mm a')
+      const hourOpen = format(_convertedDate(dayOf.openHour), 'hh:mm a')
+      const hourClose = format(_convertedDate(dayOf.closeHour), 'hh:mm a')
       return `${hourOpen} to ${hourClose}`
     }
     return 'Closed'

@@ -67,6 +67,127 @@ const initialState = {
     isLoading: false,
     error: null
   }
+  // get: {
+  //   object: {
+  //     listing: {
+  //       id: 45,
+  //       userId: 'f06a7ae0-6c7e-11e9-942d-87c6dd02066d',
+  //       title: 'Auction Rooms',
+  //       coverPhotoId: null,
+  //       bookingPeriod: 'daily',
+  //       isPublished: true,
+  //       isReady: true,
+  //       quantity: 1,
+  //       status: 'active',
+  //       createdAt: '2019-05-02T06:01:05.000Z',
+  //       updatedAt: '2019-05-02T06:09:01.000Z',
+  //       count: null,
+  //       listingData: {
+  //         listingId: 45,
+  //         isAbsorvedFee: false,
+  //         basePrice: 34.5
+  //       },
+  //       location: {
+  //         id: 45,
+  //         country: 'AU',
+  //         address1: '33 Elizabeth Street',
+  //         buildingName: ' 2',
+  //         city: 'Richmond',
+  //         state: 'VIC',
+  //         zipcode: '3121'
+  //       },
+  //       accessDays: {
+  //         id: 83,
+  //         listingId: 45,
+  //         mon: true,
+  //         tue: true,
+  //         wed: true,
+  //         thu: true,
+  //         fri: true,
+  //         sat: false,
+  //         sun: false,
+  //         all247: false,
+  //         createdAt: '2019-05-02T06:01:08.000Z',
+  //         updatedAt: '2019-05-02T06:03:05.000Z',
+  //         listingAccessHours: [
+  //           {
+  //             id: 637,
+  //             listingAccessDaysId: 83,
+  //             weekday: 1,
+  //             openHour: '2019-05-01T22:00:00.000Z',
+  //             closeHour: '2019-05-02T07:00:00.000Z',
+  //             allday: false,
+  //             createdAt: '2019-05-02T06:03:05.000Z',
+  //             updatedAt: '2019-05-02T06:03:05.000Z'
+  //           },
+  //           {
+  //             id: 638,
+  //             listingAccessDaysId: 83,
+  //             weekday: 2,
+  //             openHour: '2019-05-01T22:00:00.000Z',
+  //             closeHour: '2019-05-02T07:00:00.000Z',
+  //             allday: false,
+  //             createdAt: '2019-05-02T06:03:05.000Z',
+  //             updatedAt: '2019-05-02T06:03:05.000Z'
+  //           },
+  //           {
+  //             id: 639,
+  //             listingAccessDaysId: 83,
+  //             weekday: 3,
+  //             openHour: '2019-05-01T22:00:00.000Z',
+  //             closeHour: '2019-05-02T07:00:00.000Z',
+  //             allday: false,
+  //             createdAt: '2019-05-02T06:03:05.000Z',
+  //             updatedAt: '2019-05-02T06:03:05.000Z'
+  //           },
+  //           {
+  //             id: 640,
+  //             listingAccessDaysId: 83,
+  //             weekday: 4,
+  //             openHour: '2019-05-01T22:00:00.000Z',
+  //             closeHour: '2019-05-02T07:00:00.000Z',
+  //             allday: false,
+  //             createdAt: '2019-05-02T06:03:05.000Z',
+  //             updatedAt: '2019-05-02T06:03:05.000Z'
+  //           },
+  //           {
+  //             id: 641,
+  //             listingAccessDaysId: 83,
+  //             weekday: 5,
+  //             openHour: '2019-05-02T06:03:02.000Z',
+  //             closeHour: '2019-05-02T06:03:02.000Z',
+  //             allday: true,
+  //             createdAt: '2019-05-02T06:03:05.000Z',
+  //             updatedAt: '2019-05-02T06:03:05.000Z'
+  //           }
+  //         ]
+  //       }
+  //     },
+  //     listingId: 45,
+  //     quantity: 1,
+  //     currency: 'AUD',
+  //     totalPrice: 117.4725,
+  //     bookingType: 'instant',
+  //     basePrice: 34.5,
+  //     createdAt: 1568169320644,
+  //     period: 3,
+  //     sourceId: null,
+  //     bookingState: 'pending',
+  //     chargeId: null,
+  //     hostServiceFee: 0,
+  //     confirmationCode: 90000891666,
+  //     bookingId: 'cc76e120-d43c-11e9-8fe5-a5b81f1124a1',
+  //     guestServiceFee: 0.135,
+  //     hostId: 'f06a7ae0-6c7e-11e9-942d-87c6dd02066d',
+  //     paymentState: 'pending',
+  //     updatedAt: 1568169320644,
+  //     priceType: 'daily',
+  //     guestId: 'f0889e50-6056-11e9-9917-7f151ab760a4',
+  //     checkIn: '2019-09-24',
+  //     checkOut: '2019-09-26',
+  //     reservations: ['2019-09-24T02:00:00.000Z', '2019-09-25T02:00:00.000Z', '2019-09-26T02:00:00.000Z']
+  //   }
+  // }
 }
 
 // GraphQL
@@ -183,6 +304,60 @@ const queryGetBookingById = gql`
       checkIn
       checkOut
       reservations
+      listing {
+        id
+        userId
+        title
+        coverPhotoId
+        bookingPeriod
+        isPublished
+        isReady
+        quantity
+        status
+        createdAt
+        updatedAt
+        count
+        accessDays {
+          id
+          listingId
+          mon
+          tue
+          wed
+          thu
+          fri
+          sat
+          sun
+          all247
+          createdAt
+          updatedAt
+          listingAccessHours {
+            id
+            listingAccessDaysId
+            weekday
+            openHour
+            closeHour
+            allday
+            createdAt
+            updatedAt
+          }
+        }
+
+        listingData {
+          listingId
+          isAbsorvedFee
+          basePrice
+        }
+
+        location {
+          id
+          country
+          address1
+          buildingName
+          city
+          state
+          zipcode
+        }
+      }
     }
   }
 `
