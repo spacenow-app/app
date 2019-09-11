@@ -40,8 +40,9 @@ export default createGlobalStyle`
       color: #172439 !important;
     }
 
-    :focus {
-      outline: none;
+    button:focus {
+      outline: none !important;
+      box-shadow: none !important;
     }
 
     /* Replace Modal Styles */
