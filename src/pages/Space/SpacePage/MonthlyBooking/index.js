@@ -1,32 +1,21 @@
-import React from 'react';
-import PropTypes from 'prop-types';
+import React from 'react'
+import PropTypes from 'prop-types'
 
-import { DatePicker, Select, PriceDetail, Grid } from 'components';
-
+import { DatePicker, Select, PriceDetail, Grid } from 'components'
 
 function spelling(reference) {
-  let label = 'Month';
-  if (reference > 1) label = 'Months';
-  return label;
+  let label = 'Month'
+  if (reference > 1) label = 'Months'
+  return label
 }
 
+const MonthlyBooking = props => {
+  const { date, onDateChange, listingExceptionDates, closingDays, handleChangePeriod, period, listingData } = props
 
-const MonthlyBooking = (props) => {
-
-  const {
-    date,
-    onDateChange,
-    listingExceptionDates,
-    closingDays,
-    handleChangePeriod,
-    period,
-    listingData
-  } = props;
-
-  let dates = [{ key: 0, value: 0, name: 'Choose a Period' }];
+  let dates = [{ key: 0, value: 0, name: 'Choose a Period' }]
 
   for (let i = props.listingData.minTerm; i < 13; i++) {
-    dates.push({ key: i, value: i, name: `${i} ${spelling(i)}` });
+    dates.push({ key: i, value: i, name: `${i} ${spelling(i)}` })
   }
 
   return (
@@ -47,7 +36,6 @@ const MonthlyBooking = (props) => {
             ]
           }
         }}
-        
       />
       <Select options={dates} handleChange={handleChangePeriod} value={period} />
       <PriceDetail
@@ -58,19 +46,18 @@ const MonthlyBooking = (props) => {
         quantity={1}
       />
     </Grid>
-  );
-};
+  )
+}
 
 MonthlyBooking.defaultProps = {
   date: '',
   period: 0
-};
+}
 
 MonthlyBooking.propTypes = {
   date: PropTypes.any,
   period: PropTypes.number,
-  listingData: PropTypes.instanceOf(Object).isRequired,
-};
+  listingData: PropTypes.instanceOf(Object).isRequired
+}
 
-
-export default MonthlyBooking;
+export default MonthlyBooking

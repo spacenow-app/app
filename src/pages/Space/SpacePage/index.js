@@ -147,7 +147,7 @@ const SpacePage = ({ match, location, history, ...props }) => {
     const { address1 = '', city = '', zipcode = '', state = '', country = '' } = address
     const convertedAddress = `${address1 ? `${address1}, ` : ''} ${city ? `${city}, ` : ''} ${
       zipcode ? `${zipcode}, ` : ''
-      } ${state ? `${state}, ` : ''} ${country ? `${country}` : ''}`
+    } ${state ? `${state}, ` : ''} ${country ? `${country}` : ''}`
     return convertedAddress.replace(/\0.*$/g, '')
   }
 
@@ -222,10 +222,10 @@ const SpacePage = ({ match, location, history, ...props }) => {
   const _convertedArrayPhotos = array => {
     return array.filter(el => el !== undefined).length > 0
       ? array
-        .filter(el => el !== undefined)
-        .map(el => ({
-          source: `https://api-assets.prod.cloud.spacenow.com?width=800&heigth=500&format=jpeg&path=${el.name}`
-        }))
+          .filter(el => el !== undefined)
+          .map(el => ({
+            source: `https://api-assets.prod.cloud.spacenow.com?width=800&heigth=500&format=jpeg&path=${el.name}`
+          }))
       : []
   }
 
@@ -347,7 +347,6 @@ const SpacePage = ({ match, location, history, ...props }) => {
         return false
       }
       return true
-
     }
     if (bookingPeriod === 'daily') {
       if (listing.listingData.minTerm > 0) {
@@ -489,9 +488,7 @@ const SpacePage = ({ match, location, history, ...props }) => {
               <Cell width={2} center>
                 <Title
                   type="h4"
-                  title={`$ ${Math.round((listing.listingData.basePrice || 0) * 100) / 100} ${
-                    listing.bookingPeriod
-                    }`}
+                  title={`$ ${Math.round((listing.listingData.basePrice || 0) * 100) / 100} ${listing.bookingPeriod}`}
                   noMargin
                   right
                   style={{ marginTop: '5px' }}
@@ -584,9 +581,7 @@ const SpacePage = ({ match, location, history, ...props }) => {
                 <Title type="h5" title="Space Rules" />
                 <Grid columns="repeat(auto-fit, minmax(200px, auto))" rowGap="20px">
                   {listing.rules.map(item => {
-                    return (
-                      <Checkbox disabled key={item.id} label={item.settingsData.itemName} name="rules" checked />
-                    )
+                    return <Checkbox disabled key={item.id} label={item.settingsData.itemName} name="rules" checked />
                   })}
                 </Grid>
               </Box>

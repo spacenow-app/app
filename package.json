@@ -43,6 +43,7 @@
     "react-router-dom": "^5.0.1",
     "react-scripts": "3.0.1",
     "react-simple-timefield": "^2.0.3",
+    "react-to-print": "^2.4.0",
     "react-toastify": "^5.3.2",
     "redux": "^4.0.1",
     "redux-logger": "^3.0.6",

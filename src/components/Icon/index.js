@@ -150,6 +150,8 @@ import { ReactComponent as AmenitieWeddingCake } from './svg/amenities/amenities
 import { ReactComponent as AmenitieWhiteboard } from './svg/amenities/amenities_whiteboard.svg'
 import { ReactComponent as AmenitieWifi } from './svg/amenities/amenities_wifi.svg'
 
+import { ReactComponent as Download } from './svg/download.svg'
+
 const Icons = {
   'question-mark': <QuestionMark />,
   'single-space': <SingleSpace />,
@@ -292,7 +294,8 @@ const Icons = {
   'amenitie-videoConference': <AmenitieVideoConference />,
   'amenitie-weedingCakeService': <AmenitieWeddingCake />,
   'amenitie-whiteboard': <AmenitieWhiteboard />,
-  'amenitie-wifi': <AmenitieWifi />
+  'amenitie-wifi': <AmenitieWifi />,
+  download: <Download />
 }
 
 const Icon = props => {

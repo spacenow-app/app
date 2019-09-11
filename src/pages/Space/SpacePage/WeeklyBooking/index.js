@@ -1,32 +1,21 @@
-import React from 'react';
-import PropTypes from 'prop-types';
+import React from 'react'
+import PropTypes from 'prop-types'
 
-import { DatePicker, Select, PriceDetail, Grid } from 'components';
-
+import { DatePicker, Select, PriceDetail, Grid } from 'components'
 
 function spelling(reference) {
-  let label = 'Week';
-  if (reference > 1) label = 'Weeks';
-  return label;
+  let label = 'Week'
+  if (reference > 1) label = 'Weeks'
+  return label
 }
 
+const WeeklyBooking = props => {
+  const { date, onDateChange, listingExceptionDates, closingDays, handleChangePeriod, period, listingData } = props
 
-const WeeklyBooking = (props) => {
-
-  const {
-    date,
-    onDateChange,
-    listingExceptionDates,
-    closingDays,
-    handleChangePeriod,
-    period,
-    listingData
-  } = props;
-
-  let dates = [{ key: 0, value: 0, name: 'Choose a Period' }];
+  let dates = [{ key: 0, value: 0, name: 'Choose a Period' }]
 
   for (let i = props.listingData.minTerm; i < 13; i++) {
-    dates.push({ key: i, value: i, name: `${i} ${spelling(i)}` });
+    dates.push({ key: i, value: i, name: `${i} ${spelling(i)}` })
   }
 
   return (
@@ -47,7 +36,6 @@ const WeeklyBooking = (props) => {
             ]
           }
         }}
-        
       />
       <Select options={dates} handleChange={handleChangePeriod} value={period} />
       <PriceDetail
@@ -58,19 +46,18 @@ const WeeklyBooking = (props) => {
         quantity={1}
       />
     </Grid>
-  );
-};
+  )
+}
 
 WeeklyBooking.defaultProps = {
   date: '',
-  period: 0,
-};
+  period: 0
+}
 
 WeeklyBooking.propTypes = {
   date: PropTypes.any,
   period: PropTypes.number,
-  listingData: PropTypes.instanceOf(Object).isRequired,
-};
+  listingData: PropTypes.instanceOf(Object).isRequired
+}
 
-
-export default WeeklyBooking;
+export default WeeklyBooking

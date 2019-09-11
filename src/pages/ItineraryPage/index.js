@@ -1,7 +1,4 @@
-import React, {
-  useEffect
-  //  useState
-} from 'react'
+import React, { useEffect } from 'react'
 import PropTypes from 'prop-types'
 import Helmet from 'react-helmet'
 import { useSelector, useDispatch } from 'react-redux'
@@ -93,7 +90,7 @@ const ItineraryPage = ({ match, location, history, ...props }) => {
   const endDate = booking && booking.reservations[booking.reservations.length - 1]
 
   return (
-    <Wrapper mt="50px">
+    <Wrapper my="30px">
       <Helmet title="Itinerary - Spacenow" />
       <Title title="You're all booked in." color="#6adc91" noMargin />
       <Box mb="50px" mt="10px">
@@ -136,7 +133,9 @@ const ItineraryPage = ({ match, location, history, ...props }) => {
               </ButtonStyled>
             </CellStyled>
             <CellStyled width={4}>
-              <ButtonStyled fluid>See your receipt</ButtonStyled>
+              <ButtonStyled onClick={() => history.push(`/receipt/${booking.bookingId}`)} fluid>
+                See your receipt
+              </ButtonStyled>
             </CellStyled>
             {isListingLoading ? (
               <Loader sm />
