@@ -71,8 +71,8 @@ const AvailabilityTab = ({ listing, history, setFatherValues }) => {
         description: o.name,
         active: false,
         fulltime: false,
-        open: new Date(`${format(new Date(), 'MM/DD/YYYY')} 08:00`),
-        close: new Date(`${format(new Date(), 'MM/DD/YYYY')} 17:00`),
+        open: new Date(`${format(new Date(), 'dd/MM/yyyy')} 08:00`),
+        close: new Date(`${format(new Date(), 'dd/MM/yyyy')} 17:00`),
         error: {}
       }
       if (/true/i.test(accessDays[o.short])) {
@@ -85,8 +85,8 @@ const AvailabilityTab = ({ listing, history, setFatherValues }) => {
             description: o.name,
             active: true,
             fulltime: hoursElem.allday,
-            open: _formatTime(hoursElem.allday ? new Date(`${format(new Date(), 'MM/DD/YYYY')} 08:00`) : openHour),
-            close: _formatTime(hoursElem.allday ? new Date(`${format(new Date(), 'MM/DD/YYYY')} 17:00`) : closeHour),
+            open: _formatTime(hoursElem.allday ? new Date(`${format(new Date(), 'dd/MM/yyyy')} 08:00`) : openHour),
+            close: _formatTime(hoursElem.allday ? new Date(`${format(new Date(), 'dd/MM/yyyy')} 17:00`) : closeHour),
             error: {}
           }
         }
@@ -121,7 +121,7 @@ const AvailabilityTab = ({ listing, history, setFatherValues }) => {
 
   const _formatTime = date => {
     const time = format(date, 'HH:mm')
-    return new Date(`${format(new Date(), 'MM/DD/YYYY')} ${time}`)
+    return new Date(`${format(new Date(), 'dd/MM/yyyy')} ${time}`)
   }
 
   const _checkFullTime = array => {
@@ -130,7 +130,7 @@ const AvailabilityTab = ({ listing, history, setFatherValues }) => {
   }
 
   const _handleChangeTime = options => {
-    const newTime = new Date(`${format(new Date(), 'MM/DD/YYYY')} ${options.value}`)
+    const newTime = new Date(`${format(new Date(), 'dd/MM/yyyy')} ${options.value}`)
     const error = {
       open: false,
       close: false

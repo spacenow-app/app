@@ -8,9 +8,7 @@ import { format } from 'date-fns'
 
 import { Input, Select, TextArea, Button, DatePicker, Box } from 'components'
 
-import {
-  onUpdateProfile,
-} from 'redux/ducks/account'
+import { onUpdateProfile } from 'redux/ducks/account'
 
 const WrapperStyled = styled.div`
   display: grid;
@@ -32,7 +30,6 @@ const FormProfile = ({
   isValid,
   ...props
 }) => {
-
   const _handleSelectChange = e => {
     const { name, value } = e.target
     setFieldValue(name, value)
@@ -53,7 +50,6 @@ const FormProfile = ({
             disabled
             value={props.user.email}
             error={!props.user.emailConfirmed}
-
           />
         </SectionStyled>
         <Box display="grid" gridTemplateColumns="auto auto" gridColumnGap="30px">
@@ -107,8 +103,8 @@ const FormProfile = ({
           <SectionStyled>
             <DatePicker
               label="Date of Birth"
-              value={format(values.dateOfBirth, 'DD/MM/YYYY')}
-              handleDateChange={date => setFieldValue('dateOfBirth', format(date, 'DD/MM/YYYY'))}
+              value={format(values.dateOfBirth, 'dd/MM/yyyy')}
+              handleDateChange={date => setFieldValue('dateOfBirth', format(date, 'dd/MM/yyyy'))}
               captionMargin="0 0 .5rem 25px"
             />
           </SectionStyled>
@@ -125,8 +121,9 @@ const FormProfile = ({
           />
         </SectionStyled>
 
-        <Button onClick={() => _handleSubmit()} disabled={!isValid}>SUBMIT</Button>
-
+        <Button onClick={() => _handleSubmit()} disabled={!isValid}>
+          SUBMIT
+        </Button>
       </WrapperStyled>
     </form>
   )
@@ -144,7 +141,7 @@ const formik = {
         dateOfBirth: profile.dateOfBirth || '',
         gender: profile.gender || '',
         phoneNumber: profile.phoneNumber || '',
-        info: profile.info || '',
+        info: profile.info || ''
       }
     }
     return {}
@@ -155,7 +152,7 @@ const formik = {
     dateOfBirth: Yup.date(),
     gender: Yup.string(),
     phoneNumber: Yup.string(),
-    info: Yup.string(),
+    info: Yup.string()
   }),
   enableReinitialize: true,
   isInitialValid: false

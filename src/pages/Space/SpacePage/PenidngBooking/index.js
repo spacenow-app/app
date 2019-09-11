@@ -33,13 +33,13 @@ function spelling(periodType, reference) {
 }
 
 const _renderContentCard = booking => {
-  let expiry = addMinutes(new Date(booking.createdAt), 30)
-  let expiryDate = format(expiry, 'DD/MM/YYYY') + ' at ' + format(expiry, 'HH:mm')
+  const expiry = addMinutes(new Date(booking.createdAt), 30)
+  const expiryDate = `${format(expiry, 'dd/MM/yyyy')  } at ${  format(expiry, 'HH:mm')}`
   const startDate = booking.reservations[0]
   const endDate = booking.reservations[booking.reservations.length - 1]
 
   return (
-    <Grid columns={1} rowGap={'20px'}>
+    <Grid columns={1} rowGap="20px">
       <Cell>
         <TitleStyled>You have an incomplete reservation for this listing. What would you like to do?</TitleStyled>
         <SubTitleStyled>{`This reservation will expire on ${expiryDate}`}</SubTitleStyled>
@@ -99,7 +99,7 @@ const _onCancelBooking = (booking, dispatch) => {
 }
 
 const PendingBooking = ({ booking, listing, dispatch, history }) => (
-  <Grid columns={1} rowGap={'20px'}>
+  <Grid columns={1} rowGap="20px">
     {_renderContentCard(booking)}
     <PriceDetail
       periodLabel={spelling(booking.priceType, booking.period)}

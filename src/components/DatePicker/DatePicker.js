@@ -176,7 +176,7 @@ const DatePicker = forwardRef(
 
 DatePicker.defaultProps = {
   size: 'md',
-  format: 'DD/MM/YYYY',
+  format: 'dd/MM/yyyy',
   placeholder: 'Choose Date'
 }
 
