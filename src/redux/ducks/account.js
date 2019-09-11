@@ -40,7 +40,19 @@ export const Types = {
 const initialState = {
   error: null,
   get: {
-    user: null,
+    user: {
+      id: null,
+      email: null,
+      profile: {
+        profileId: null,
+        firstName: null,
+        lastName: null,
+        picture: null
+      },
+      verification: {
+        isEmailVerification: false
+      }
+    },
     documents: null,
     bookings: null,
     listings: null
@@ -282,6 +294,7 @@ export default function reducer(state = initialState, action) {
     case Types.ACC_UPDATE_PROFILE_SUCCESS:
       return {
         ...state,
+        get: { user: { ...state.get.user, profile: { ...state.get.user.profile, ...action.payload } } },
         isLoading: false,
       }
     case Types.ACC_UPDATE_LISTING_SUCCESS:
@@ -466,8 +479,9 @@ export const onUpdateProfile = (userId, input) => async dispatch => {
       mutation: mutationUpdateUserProfile,
       variables: { userId, input }
     })
+    console.log(input)
     toast.success("Profile updated successfully");
-    dispatch({ type: Types.ACC_UPDATE_PROFILE_SUCCESS })
+    dispatch({ type: Types.ACC_UPDATE_PROFILE_SUCCESS, payload: input })
   } catch (error) {
     toast.error(error.message);
     dispatch({ type: Types.ACC_UPDATE_PROFILE_ERROR, payload: error.message })

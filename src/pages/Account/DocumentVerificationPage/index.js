@@ -37,7 +37,7 @@ const DocumentCard = (dispatch, item, index) => {
 const DocumentVerificationPage = () => {
   const dispatch = useDispatch();
 
-  const { user: { id } } = useSelector(state => state.auth)
+  const { user: { id } } = useSelector(state => state.account.get)
   const { isLoading, get: { documents } } = useSelector(state => state.account)
 
   useEffect(() => {
@@ -57,8 +57,11 @@ const DocumentVerificationPage = () => {
     <Wrapper>
       <Helmet title="Your Documents - Spacenow" />
       <Grid column="12">
-        <Cell width={6}>
+        <Cell width={8}>
           <Title type="h4" title="Your Documents" />
+        </Cell>
+        <Cell width={4} middle justifySelf="end">
+          {(!documents || documents.count === 0) && <Document isButton onDrop={_addDocument} />}
         </Cell>
       </Grid>
 

@@ -97,7 +97,8 @@ const SpacePage = ({ match, location, history, ...props }) => {
   const { isCleaned: isCleanedAvailabilities } = useSelector(state => state.listing.cleanAvailabilities)
   const { object: objectSpecifications } = useSelector(state => state.listing.specifications)
   const { array: availabilities } = useSelector(state => state.listing.availabilities)
-  const { user, isAuthenticated } = useSelector(state => state.auth)
+  const { user } = useSelector(state => state.account.get)
+  const { isAuthenticated } = useSelector(state => state.auth)
   const { isLoading: isLoadingOnCreateReservation } = useSelector(state => state.booking.create)
   const { object: pendingBooking } = useSelector(state => state.booking.pending)
 

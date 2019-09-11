@@ -14,6 +14,7 @@ export default {
     completed: '#172439',
     pending: '#E2E2E2',
     approved: '#6ADC91',
+    declined: '#C45151',
   },
   fonts: {
     regular: 'Montserrat-Regular',

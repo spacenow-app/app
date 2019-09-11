@@ -10,7 +10,7 @@ const ProfilePage = ({ ...props }) => {
 
   const dispatch = useDispatch()
 
-  const { user: { id } } = useSelector(state => state.auth)
+  const { user: { id } } = useSelector(state => state.account.get)
   const { isLoading, get: { user } } = useSelector(state => state.account)
 
   useEffect(() => {

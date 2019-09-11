@@ -14,15 +14,32 @@ const _handleOnUpdateListing = (dispatch) => (listingId, status) => {
   dispatch(onUpdateListing(listingId, status))
 }
 
+const _handleRedirect = (id) => {
+  window.location.href = `/space/${id}`
+}
+
+const _handleEditRedirect = (id) => {
+  window.location.href = `/space/${id}`
+}
+
 const ListingCard = (dispatch, item, index) => {
 
   return (
     <Card.Horizontal key={index}>
-      <Card.Horizontal.Image src={item.photos.length > 0 ? item.photos[0].name : ""} />
+      <Card.Horizontal.Image src={item.photos.length > 0 ? item.photos[0].name : ""} handleClick={() => !item.isPublished ? _handleRedirect(item.id) : ''} />
       <Card.Horizontal.Body>
         <Card.Horizontal.Title noMargin subTitleMargin={0} type={"h6"} title={<Text>{item.title || ''}</Text>} subtitle={<Text>{`${item.location.address1}, ${item.location.city} ${item.location.state}`}</Text>} />
         <Card.Horizontal.Price noMargin subTitleMargin={0} type={"h6"} title={<Text>AUD ${item.listingData.basePrice ? item.listingData.basePrice.toFixed(2) : 0.00}</Text>} />
       </Card.Horizontal.Body>
+      <Card.Horizontal.Dropdown alignRight>
+        <Card.Horizontal.Dropdown.Toggle size="sm">
+          <Text color="primary">Option</Text>
+        </Card.Horizontal.Dropdown.Toggle>
+        <Card.Horizontal.Dropdown.Menu>
+          <Card.Horizontal.Dropdown.Item onClick={() => _handleEditRedirect(item.id)}>Edit</Card.Horizontal.Dropdown.Item>
+          <Card.Horizontal.Dropdown.Item onClick={() => _handleEditRedirect(item.id)}>Delete</Card.Horizontal.Dropdown.Item>
+        </Card.Horizontal.Dropdown.Menu>
+      </Card.Horizontal.Dropdown>
       <Card.Horizontal.Footer>
         <Card.Horizontal.Tag small icon={<Icon width="24px" name={_parseCategoryIconName(item.settingsParent.category.otherItemName, false)} />}>
           {item.settingsParent.category.itemName}
@@ -30,9 +47,11 @@ const ListingCard = (dispatch, item, index) => {
         <Card.Horizontal.Tag small icon={<Icon width="24px" name={_parseCategoryIconName(item.settingsParent.subcategory.otherItemName, true)} />}>
           {item.settingsParent.subcategory.itemName}
         </Card.Horizontal.Tag>
-        <Card.Horizontal.Button size={`sm`} onClick={() => _handleOnUpdateListing(dispatch)(item.id, !item.isPublished)}>
-          {item.isPublished ? 'Unpublish' : 'Publish'}
-        </Card.Horizontal.Button>
+        {item.isReady &&
+          <Card.Horizontal.Button size={`sm`} onClick={() => _handleOnUpdateListing(dispatch)(item.id, !item.isPublished)}>
+            {item.isPublished ? 'Unpublish' : 'Publish'}
+          </Card.Horizontal.Button>
+        }
       </Card.Horizontal.Footer>
     </Card.Horizontal>
   )
@@ -42,14 +61,15 @@ const ListingPage = ({ ...props }) => {
 
   const dispatch = useDispatch();
 
-  const { user: { id } } = useSelector(state => state.auth)
-  const { isLoading, get: { listings } } = useSelector(state => state.account)
+  const { isLoading, get: { listings, user: { id } } } = useSelector(state => state.account)
 
   useEffect(() => {
     dispatch(onGetListingsByUser(id))
   }, [dispatch, id])
 
-  const _addListing = () => null
+  const _addListing = () => {
+    window.location.href = `/listing/intro`
+  }
 
   if (isLoading) return <Loader text="Loading listing process" />
 
@@ -60,7 +80,7 @@ const ListingPage = ({ ...props }) => {
         <Cell width={6}>
           <Title type="h4" title="Your Listings" />
         </Cell>
-        <Cell width={6} center middle left="none">
+        <Cell width={6} justifySelf={'end'} middle>
           <Button size="sm" onClick={() => _addListing()}>
             Add Listing
           </Button>

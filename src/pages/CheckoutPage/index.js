@@ -10,7 +10,7 @@ import addMinutes from 'date-fns/addMinutes'
 import { toPlural } from 'utils/strings'
 
 import { TypesModal, openModal } from 'redux/ducks/modal'
-import { getUserCards, createUserCard, deleteUserCard } from 'redux/ducks/payment'
+import { getUserCards, createUserCard, deleteUserCard, pay } from 'redux/ducks/payment'
 import { onGetBooking } from 'redux/ducks/booking'
 import {
   Wrapper,
@@ -53,6 +53,7 @@ const CheckoutPage = ({ match, location, history, ...props }) => {
   const [selectedCard, setSelectedCard] = useState({})
   const { isLoading: isLoadingGetCards, array: arrayCards, isCreating } = useSelector(state => state.payment.cards)
   const { object: reservation, isLoading: isLoadingGetBooking } = useSelector(state => state.booking.get)
+  const { isLoading: isPaying } = useSelector(state => state.payment.pay)
   const { listing } = reservation || { listing: {} }
 
   useEffect(() => {
@@ -106,6 +107,10 @@ const CheckoutPage = ({ match, location, history, ...props }) => {
       return
     }
     setSelectedCard(card)
+  }
+
+  const _payNow = async () => {
+    await dispatch(pay(selectedCard.id, match.params.id, history))
   }
 
   if (isLoadingGetBooking || isLoadingGetCards) {
@@ -206,7 +211,7 @@ const CheckoutPage = ({ match, location, history, ...props }) => {
 
           <Box mt="50px">
             <Button outline>Edit Dates</Button>
-            <Button ml="20px" disabled={!selectedCard.id}>
+            <Button ml="20px" disabled={!selectedCard.id} onClick={_payNow} isLoading={isPaying}>
               Pay Now
             </Button>
           </Box>

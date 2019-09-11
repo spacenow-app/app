@@ -5,6 +5,7 @@ import { getClient } from 'graphql/apolloClient'
 import { getByName, setToken, deleteToken } from 'utils/cookies'
 import errToMsg from 'utils/errToMsg'
 import { config } from 'variables'
+import { Types as AccountTypes } from './account'
 
 const loginBaseFields = `
   status
@@ -118,19 +119,6 @@ export const Types = {
 // Reducer
 const initialState = {
   error: null,
-  user: {
-    id: null,
-    email: null,
-    profile: {
-      profileId: null,
-      firstName: null,
-      lastName: null,
-      picture: null
-    },
-    verification: {
-      isEmailVerification: false
-    }
-  },
   isAuthenticated: false,
   isLoading: true,
   isLoadingResetPassword: false,
@@ -149,7 +137,6 @@ export default function reducer(state = initialState, action) {
         ...state,
         isAuthenticated: true,
         isLoading: false,
-        user: action.payload,
         redirectToReferrer: action.from
       }
     }
@@ -158,7 +145,6 @@ export default function reducer(state = initialState, action) {
         ...state,
         isLoading: false,
         isAuthenticated: false,
-        user: initialState.user,
         error: action.payload
       }
     case Types.AUTH_TOKEN_VERIFY_SUCCESS:
@@ -166,14 +152,12 @@ export default function reducer(state = initialState, action) {
         ...state,
         isAuthenticated: true,
         isLoading: false,
-        user: action.payload
       }
     case Types.AUTH_TOKEN_VERIFY_FAILURE:
       return {
         ...state,
         isLoading: false,
         isAuthenticated: false,
-        user: initialState.user
       }
     case Types.AUTH_CLEAN_ERROR:
       return {
@@ -220,10 +204,8 @@ export const onTokenValidation = () => async dispatch => {
     })
     if (data && data.tokenValidate) {
       if (data.tokenValidate.status && data.tokenValidate.status === 'OK') {
-        dispatch({
-          type: Types.AUTH_TOKEN_VERIFY_SUCCESS,
-          payload: data.tokenValidate.user
-        })
+        dispatch({ type: Types.AUTH_TOKEN_VERIFY_SUCCESS })
+        dispatch({ type: AccountTypes.ACC_GET_PROFILE_SUCCESS, payload: data.tokenValidate.user })
         return
       }
     }
@@ -249,7 +231,8 @@ export const signin = (email, password, from) => async dispatch => {
     })
     const signinReturn = data.login
     setToken(signinReturn.token, signinReturn.expiresIn)
-    dispatch({ type: Types.AUTH_SIGNIN_SUCCESS, payload: signinReturn.user, from })
+    dispatch({ type: Types.AUTH_SIGNIN_SUCCESS, from })
+    dispatch({ type: AccountTypes.ACC_GET_PROFILE_SUCCESS, payload: signinReturn.user })
   } catch (err) {
     toast.error(errToMsg(err))
     dispatch({
@@ -268,7 +251,8 @@ export const signup = (name, email, password) => async dispatch => {
     })
     const signupReturn = data.signup
     setToken(signupReturn.token, signupReturn.expiresIn)
-    dispatch({ type: Types.AUTH_SIGNIN_SUCCESS, payload: signupReturn.user })
+    dispatch({ type: Types.AUTH_SIGNIN_SUCCESS })
+    dispatch({ type: AccountTypes.ACC_GET_PROFILE_SUCCESS, payload: signupReturn.user })
   } catch (err) {
     toast.error(errToMsg(err))
     dispatch({
@@ -325,7 +309,8 @@ export const googleSignin = googleResponse => async dispatch => {
     })
     const signinReturn = data.tokenGoogleValidate
     setToken(signinReturn.token, signinReturn.expiresIn)
-    dispatch({ type: Types.AUTH_SIGNIN_SUCCESS, payload: signinReturn.user })
+    dispatch({ type: Types.AUTH_SIGNIN_SUCCESS })
+    dispatch({ type: AccountTypes.ACC_GET_PROFILE_SUCCESS, payload: signinReturn.user })
   } catch (err) {
     toast.error(errToMsg(err))
     dispatch({
@@ -344,7 +329,8 @@ export const facebookSignin = facebookResponse => async dispatch => {
     })
     const signinReturn = data.tokenFacebookValidate
     setToken(signinReturn.token, signinReturn.expiresIn)
-    dispatch({ type: Types.AUTH_SIGNIN_SUCCESS, payload: signinReturn.user })
+    dispatch({ type: Types.AUTH_SIGNIN_SUCCESS })
+    dispatch({ type: AccountTypes.ACC_GET_PROFILE_SUCCESS, payload: signinReturn.user })
   } catch (err) {
     toast.error(errToMsg(err))
     dispatch({
