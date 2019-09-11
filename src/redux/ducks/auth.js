@@ -16,10 +16,15 @@ const loginBaseFields = `
     email
     emailConfirmed
     profile {
+      status
       profileId
       firstName
       lastName
       picture
+      dateOfBirth
+      gender
+      phoneNumber
+      info
     }
     verification {
       id
@@ -38,10 +43,15 @@ const mutationTokenValidate = gql`
         id
         email
         profile {
+          status
           profileId
           firstName
           lastName
           picture
+          dateOfBirth
+          gender
+          phoneNumber
+          info
         }
         verification {
           id
