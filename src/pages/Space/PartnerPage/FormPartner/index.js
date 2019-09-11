@@ -4,13 +4,14 @@ import React from 'react'
 import styled from 'styled-components'
 import { withFormik } from 'formik'
 import * as Yup from 'yup'
-import {format} from 'date-fns'
+import { format } from 'date-fns'
 
 import { Title, Input, Select, TextArea, Button, DatePicker } from 'components'
 
-import  { onSendHubSpotForm, 
-          // onCreateWeWorkReferral 
-        } from 'redux/ducks/integration'
+import {
+  onSendHubSpotForm
+  // onCreateWeWorkReferral
+} from 'redux/ducks/integration'
 
 const WrapperStyled = styled.div`
   display: grid;
@@ -32,7 +33,6 @@ const FormPartner = ({
   isValid,
   ...props
 }) => {
-
   const _handleSelectChange = e => {
     const { name, value } = e.target
     setFieldValue(name, value)
@@ -44,13 +44,7 @@ const FormPartner = ({
     dispatch(onSendHubSpotForm(values))
   }
 
-  const arrayDesks = [
-    "1-10",
-    "10-20",
-    "20-50",
-    "50-100",
-    "100-1000"
-  ]
+  const arrayDesks = ['1-10', '10-20', '20-50', '50-100', '100-1000']
 
   return (
     <form>
@@ -90,7 +84,7 @@ const FormPartner = ({
             onBlur={handleBlur}
           />
         </SectionStyled>
-        
+
         <SectionStyled>
           <Title title="Tell us more about your introduction" type="h6" subTitleMargin={0} noMargin />
         </SectionStyled>
@@ -108,7 +102,12 @@ const FormPartner = ({
         </SectionStyled>
 
         <SectionStyled>
-          <Select value={values.desks_estimated} name="desks_estimated" onChange={_handleSelectChange} label="Number of Desks needed">
+          <Select
+            value={values.desks_estimated}
+            name="desks_estimated"
+            onChange={_handleSelectChange}
+            label="Number of Desks needed"
+          >
             <option>Select a range</option>
             {arrayDesks.map(item => (
               <option key={item} value={item}>
@@ -121,11 +120,11 @@ const FormPartner = ({
         <SectionStyled>
           <DatePicker
             label="Requested Move In Date"
-            handleDateChange={date => setFieldValue('requested_move_in_date',  format(date, 'YYYY-MM-DD'))}
+            handleDateChange={date => setFieldValue('requested_move_in_date', format(date, 'yyyy-MM-dd'))}
             dayPickerProps={{
-              disabledDays: [{ before: new Date()}],
+              disabledDays: [{ before: new Date() }]
             }}
-            />
+          />
         </SectionStyled>
 
         <SectionStyled>
@@ -139,8 +138,9 @@ const FormPartner = ({
           />
         </SectionStyled>
 
-        <Button width="100%" onClick={() => _handleSubmit()} disabled={!isValid}>SUBMIT INTRODUCTION</Button>
-
+        <Button width="100%" onClick={() => _handleSubmit()} disabled={!isValid}>
+          SUBMIT INTRODUCTION
+        </Button>
       </WrapperStyled>
     </form>
   )
@@ -153,15 +153,15 @@ const formik = {
     if (listing && listing.id) {
       return {
         email: '',
-        name:  '',
-        phone:  '',
+        name: '',
+        phone: '',
         city: listing.location.city,
-        requested_location:  '',
-        company_name:  '',
-        requested_move_in_date:  '',
-        desks_estimated:  '',
-        contact_allowed:  true,
-        notes:  '',
+        requested_location: '',
+        company_name: '',
+        requested_move_in_date: '',
+        desks_estimated: '',
+        contact_allowed: true,
+        notes: ''
       }
     }
     return {}
@@ -176,7 +176,7 @@ const formik = {
     requested_move_in_date: Yup.string(),
     desks_estimated: Yup.string(),
     contact_allowed: Yup.string(),
-    notes: Yup.string(),
+    notes: Yup.string()
   }),
   enableReinitialize: true,
   isInitialValid: false

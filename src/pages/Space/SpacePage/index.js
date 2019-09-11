@@ -27,7 +27,6 @@ import {
   Button
 } from 'components'
 
-import WeeklyBooking from './WeeklyBooking'
 import MonthlyBooking from './MonthlyBooking'
 import PendingBooking from './PenidngBooking'
 import ContactHost from './ContactHost'
@@ -48,13 +47,13 @@ import { sendMail } from 'redux/ducks/mail'
 import GraphCancelattionImage from 'pages/Listing/SpaceDetailsPage/CancellationTab/graph_cancellation.png'
 
 import config from 'variables/config'
+import WeeklyBooking from './WeeklyBooking'
 import DailyBooking from './DailyBooking'
-
 
 const GridStyled = styled(Grid)`
   @media only screen and (max-width: 991px) {
     grid-template-columns: repeat(2, 100%);
-    grid-template-areas: "content" "card"
+    grid-template-areas: 'content' 'card';
   }
 `
 
@@ -267,7 +266,14 @@ const SpacePage = ({ match, location, history, ...props }) => {
 
   const _renderContentCard = bookingPeriod => {
     if (pendingBooking && pendingBooking.items && pendingBooking.items.length > 0) {
-      return <PendingBooking booking={pendingBooking.items[0]} listing={listing.listingData} dispatch={dispatch} history={history} />
+      return (
+        <PendingBooking
+          booking={pendingBooking.items[0]}
+          listing={listing.listingData}
+          dispatch={dispatch}
+          history={history}
+        />
+      )
     }
     if (bookingPeriod === 'hourly') {
       return <ContactHost user={user} listing={listing} dispatch={dispatch} />
@@ -339,9 +345,9 @@ const SpacePage = ({ match, location, history, ...props }) => {
     if (bookingPeriod === 'monthly') {
       if (date > 0 && period > 0) {
         return false
-      } else {
-        return true
       }
+      return true
+
     }
     if (bookingPeriod === 'daily') {
       if (listing.listingData.minTerm > 0) {
@@ -399,7 +405,7 @@ const SpacePage = ({ match, location, history, ...props }) => {
           { guest: `${user.profile.firstName} ${user.profile.lastName}` },
           { guestId: user.id },
           { spaceId: listing.id },
-          { currentDate: format(new Date(), 'MMMM Mo, YYYY') }
+          { currentDate: format(new Date(), 'MMMM Mo, yyyy') }
         )
 
         const emailData = {
@@ -426,7 +432,7 @@ const SpacePage = ({ match, location, history, ...props }) => {
   return (
     <Wrapper mt="50px">
       <Helmet title="View Listing - Spacenow" />
-      <GridStyled columns="auto 350px" columnGap="15px" rowGap="100px" areas={["content card"]}>
+      <GridStyled columns="auto 350px" columnGap="15px" rowGap="100px" areas={['content card']}>
         <Cell area="content">
           <Grid columns={1} rowGap="50px">
             <Box>
@@ -462,7 +468,9 @@ const SpacePage = ({ match, location, history, ...props }) => {
               </Box>
               <Cell style={{ justifySelf: 'end' }}>
                 <Tag>
-                  {listing.listingData.bookingType ? `${capitalize(listing.listingData.bookingType)} Booking` : 'No data'}
+                  {listing.listingData.bookingType
+                    ? `${capitalize(listing.listingData.bookingType)} Booking`
+                    : 'No data'}
                 </Tag>
               </Cell>
             </Grid>
@@ -493,10 +501,13 @@ const SpacePage = ({ match, location, history, ...props }) => {
 
             <Box>
               <Title type="h5" title="Highlights" />
-              <Grid columns={"repeat(auto-fit, minmax(120px, 1fr))"} rowGap="50px">
+              <Grid columns="repeat(auto-fit, minmax(120px, 1fr))" rowGap="50px">
                 <Highlights
                   title="Minimum term"
-                  name={_changeToPlural(listing.bookingPeriod, listing.listingData.minTerm ? listing.listingData.minTerm : 1)}
+                  name={_changeToPlural(
+                    listing.bookingPeriod,
+                    listing.listingData.minTerm ? listing.listingData.minTerm : 1
+                  )}
                   icon="specification-minimum-term"
                 />
                 <Highlights
@@ -539,64 +550,50 @@ const SpacePage = ({ match, location, history, ...props }) => {
               </Box>
             </Box>
 
-            {
-              listing.listingData.description ?
-                <Box>
-                  <Title type="h5" title="Description" />
-                  <p>{listing.listingData.description}</p>
-                </Box> : null
-            }
-            {
-              listing.amenities.length > 0 && (
-                <Box>
-                  <Title type="h5" title="Amenities" />
-                  <Grid columns={"repeat(auto-fit, minmax(200px, auto))"} rowGap="40px">
-                    {listing.amenities.map(item => {
-                      return (
-                        <Box key={item.id} display="grid" gridTemplateColumns="auto 1fr" gridColumnGap="20px">
-                          <Box width="54px" height="54px" borderRadius="100%" bg="primary">
-                            <Icon
-                              name={`amenitie-${item.settingsData.otherItemName}`}
-                              width="70%"
-                              height="100%"
-                              style={{ display: 'block', margin: 'auto' }}
-                            />
-                          </Box>
-                          <span style={{ alignSelf: 'center' }}>{item.settingsData.itemName}</span>
+            {listing.listingData.description ? (
+              <Box>
+                <Title type="h5" title="Description" />
+                <p>{listing.listingData.description}</p>
+              </Box>
+            ) : null}
+            {listing.amenities.length > 0 && (
+              <Box>
+                <Title type="h5" title="Amenities" />
+                <Grid columns="repeat(auto-fit, minmax(200px, auto))" rowGap="40px">
+                  {listing.amenities.map(item => {
+                    return (
+                      <Box key={item.id} display="grid" gridTemplateColumns="auto 1fr" gridColumnGap="20px">
+                        <Box width="54px" height="54px" borderRadius="100%" bg="primary">
+                          <Icon
+                            name={`amenitie-${item.settingsData.otherItemName}`}
+                            width="70%"
+                            height="100%"
+                            style={{ display: 'block', margin: 'auto' }}
+                          />
                         </Box>
-                      )
-                    })}
-                  </Grid>
-                </Box>
-              )}
+                        <span style={{ alignSelf: 'center' }}>{item.settingsData.itemName}</span>
+                      </Box>
+                    )
+                  })}
+                </Grid>
+              </Box>
+            )}
 
-            {
-              listing.rules.length > 0 && (
-                <Box>
-                  <Title type="h5" title="Space Rules" />
-                  <Grid columns={"repeat(auto-fit, minmax(200px, auto))"} rowGap="20px">
-                    {listing.rules.map(item => {
-                      return (
-                        <Checkbox
-                          disabled
-                          key={item.id}
-                          label={item.settingsData.itemName}
-                          name="rules"
-                          checked={true}
-                        />
-                      )
-                    })
-                    }
-                  </Grid>
-                </Box>
-              )
-            }
+            {listing.rules.length > 0 && (
+              <Box>
+                <Title type="h5" title="Space Rules" />
+                <Grid columns="repeat(auto-fit, minmax(200px, auto))" rowGap="20px">
+                  {listing.rules.map(item => {
+                    return (
+                      <Checkbox disabled key={item.id} label={item.settingsData.itemName} name="rules" checked />
+                    )
+                  })}
+                </Grid>
+              </Box>
+            )}
 
             <Box>
-              <Title
-                type="h5"
-                title="Availability"
-              />
+              <Title type="h5" title="Availability" />
               <TimeTable
                 data={listing.accessDays.listingAccessHours}
                 error={_getWeekName(listing.accessDays) === 'Closed'}
@@ -657,7 +654,7 @@ const SpacePage = ({ match, location, history, ...props }) => {
 
       <Box my="100px">
         <Title type="h5" title="Cancellation Policy" />
-        <Grid columns={"repeat(auto-fit, minmax(350px, auto))"}>
+        <Grid columns="repeat(auto-fit, minmax(350px, auto))">
           <Cell>
             <Title
               noMargin
@@ -671,10 +668,16 @@ const SpacePage = ({ match, location, history, ...props }) => {
             <ImageStyled alt="Cancellation Policy" src={GraphCancelattionImage} width="700px" />
           </Cell>
         </Grid>
-
       </Box>
       <BottomButtonMobile>
-        <Button fluid onClick={() => { document.getElementById("booking-card").scrollIntoView({ behavior: 'smooth' }) }}>Reserve</Button>
+        <Button
+          fluid
+          onClick={() => {
+            document.getElementById('booking-card').scrollIntoView({ behavior: 'smooth' })
+          }}
+        >
+          Reserve
+        </Button>
       </BottomButtonMobile>
     </Wrapper>
   )

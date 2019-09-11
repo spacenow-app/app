@@ -32,7 +32,6 @@ const searchResultFields = `
   userId
   title
   bookingPeriod
-
   photos {
     id
     isCover
@@ -43,7 +42,6 @@ const searchResultFields = `
     minTerm
     basePrice
     currency
-    isAbsorvedFee
     capacity
     size
     meetingRooms
@@ -59,18 +57,6 @@ const searchResultFields = `
     typeId
     itemName
     otherItemName
-    description
-    maximum
-    minimum
-    startValue
-    endValue
-    step
-    isEnable
-    photo
-    photoType
-    isSpecification
-    createdAt
-    updatedAt
     specData
   }
   location {
