@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react'
 import PropTypes from 'prop-types'
 import styled from 'styled-components'
 import Helmet from 'react-helmet'
+import { toast } from 'react-toastify'
 import { useSelector, useDispatch } from 'react-redux'
 import fromUnixTime from 'date-fns/fromUnixTime'
 import format from 'date-fns/format'
@@ -47,7 +48,7 @@ const IconButton = styled.button`
   }
 `
 
-const CheckoutPage = ({ match, location, ...props }) => {
+const CheckoutPage = ({ match, location, history, ...props }) => {
   const dispatch = useDispatch()
   const [selectedCard, setSelectedCard] = useState({})
   const { isLoading: isLoadingGetCards, array: arrayCards, isCreating } = useSelector(state => state.payment.cards)
@@ -109,6 +110,24 @@ const CheckoutPage = ({ match, location, ...props }) => {
 
   if (isLoadingGetBooking || isLoadingGetCards) {
     return <Loader text="Loading data..." />
+  }
+
+  if (!reservation) {
+    // toast.error('Booking not found.')
+    history.replace('/')
+    return null
+  }
+
+  if (reservation.bookingState === 'approved' || reservation.bookingState === 'requested') {
+    toast.info('Reservation is already paid.')
+    history.replace('/')
+    return null
+  }
+
+  if (reservation.bookingState === 'timeout') {
+    toast.info('Reservation is cancelled.')
+    history.replace('/')
+    return null
   }
 
   return (

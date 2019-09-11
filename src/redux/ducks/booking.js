@@ -1,5 +1,6 @@
 /* eslint-disable no-console */
 import { gql } from 'apollo-boost'
+import { toast } from 'react-toastify'
 
 import { getClientWithAuth } from 'graphql/apolloClient'
 import errToMsg from 'utils/errToMsg'
@@ -715,6 +716,7 @@ export const onGetBooking = id => async dispatch => {
     })
     dispatch({ type: Types.GET_BOOKING_SUCCESS, payload: data.getBookingById })
   } catch (err) {
+    toast.error(errToMsg(err))
     dispatch({ type: Types.GET_BOOKING_FAILURE, payload: errToMsg(err) })
   }
 }
