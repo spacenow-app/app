@@ -97,7 +97,8 @@ const SpacePage = ({ match, location, history, ...props }) => {
   const { isCleaned: isCleanedAvailabilities } = useSelector(state => state.listing.cleanAvailabilities)
   const { object: objectSpecifications } = useSelector(state => state.listing.specifications)
   const { array: availabilities } = useSelector(state => state.listing.availabilities)
-  const { user, isAuthenticated } = useSelector(state => state.auth)
+  const { user } = useSelector(state => state.account.get)
+  const { isAuthenticated } = useSelector(state => state.auth)
   const { isLoading: isLoadingOnCreateReservation } = useSelector(state => state.booking.create)
   const { object: pendingBooking } = useSelector(state => state.booking.pending)
 
@@ -344,9 +345,8 @@ const SpacePage = ({ match, location, history, ...props }) => {
     if (bookingPeriod === 'monthly') {
       if (date > 0 && period > 0) {
         return false
-      } 
-        return true
-      
+      }
+      return true
     }
     if (bookingPeriod === 'daily') {
       if (listing.listingData.minTerm > 0) {
@@ -581,9 +581,7 @@ const SpacePage = ({ match, location, history, ...props }) => {
                 <Title type="h5" title="Space Rules" />
                 <Grid columns="repeat(auto-fit, minmax(200px, auto))" rowGap="20px">
                   {listing.rules.map(item => {
-                    return (
-                      <Checkbox disabled key={item.id} label={item.settingsData.itemName} name="rules" checked />
-                    )
+                    return <Checkbox disabled key={item.id} label={item.settingsData.itemName} name="rules" checked />
                   })}
                 </Grid>
               </Box>

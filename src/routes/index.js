@@ -16,13 +16,12 @@ const Account = lazy(() => import('routes/Account'))
 const LandingPages = lazy(() => import('routes/LandingPages'))
 const Checkout = lazy(() => import('routes/Checkout'))
 const Itinerary = lazy(() => import('routes/Itinerary'))
+const Receipt = lazy(() => import('routes/Receipt'))
 
 const Routes = props => {
   const dispatch = useDispatch()
 
-  const isAuthenticated = useSelector(state => state.auth.isAuthenticated)
-  const isLoading = useSelector(state => state.auth.isLoading)
-  const redirectToReferrer = useSelector(state => state.auth.redirectToReferrer)
+  const { isAuthenticated, redirectToReferrer, isLoading } = useSelector(state => state.auth)
 
   const _handlerCheckAuthentication = () => dispatch(onIsTokenExists())
 
@@ -43,7 +42,7 @@ const Routes = props => {
           <Redirect exact from="/" to="/listing/intro" />
           <PublicRoute
             path="/404"
-            handlerCheckAuthentication={() => {}}
+            handlerCheckAuthentication={() => { }}
             isAuthenticated={null}
             component={otherProps => (
               <>
@@ -54,13 +53,13 @@ const Routes = props => {
           />
           <PublicRoute
             path="/auth"
-            handlerCheckAuthentication={() => {}}
+            handlerCheckAuthentication={() => { }}
             isAuthenticated={isAuthenticated}
             component={Authentication}
           />
-          <PublicRoute {...props} path="/lp" handlerCheckAuthentication={() => {}} component={LandingPages} />
-          <PublicRoute {...props} path="/space" handlerCheckAuthentication={() => {}} component={Space} />
-          <PublicRoute {...props} path="/search" handlerCheckAuthentication={() => {}} component={SearchPage} />
+          <PublicRoute {...props} path="/lp" handlerCheckAuthentication={() => { }} component={LandingPages} />
+          <PublicRoute {...props} path="/space" handlerCheckAuthentication={() => { }} component={Space} />
+          <PublicRoute {...props} path="/search" handlerCheckAuthentication={() => { }} component={SearchPage} />
           <PrivateRoute
             {...props}
             path="/"
@@ -103,7 +102,12 @@ const Routes = props => {
                       isAuthenticated={isAuthenticated}
                       component={Itinerary}
                     />
-
+                    <Route
+                      {...otherProps}
+                      path={`${otherProps.match.path}receipt`}
+                      isAuthenticated={isAuthenticated}
+                      component={Receipt}
+                    />
                     <Route component={NotFoundPage} />
                   </Switch>
                 </>

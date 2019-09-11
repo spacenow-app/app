@@ -40,6 +40,10 @@ export default createGlobalStyle`
       color: #172439 !important;
     }
 
+    :focus {
+      outline: none;
+    }
+
     /* Replace Modal Styles */
     .modal-content {
       border: none !important;

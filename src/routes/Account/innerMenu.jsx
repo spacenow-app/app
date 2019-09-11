@@ -1,18 +1,17 @@
 import React, { useCallback } from 'react'
-import { Link } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
 
-import { Box, Avatar, Title } from 'components'
+import { Box, Avatar, Title, Link } from 'components'
 import { onUpdateProfilePicture } from 'redux/ducks/account'
 
 const InnerMenu = ({ ...props }) => {
   const dispatch = useDispatch()
 
-  const authUser = useSelector(state => state.auth.user)
+  const { user } = useSelector(state => state.account.get)
 
   const _handleOnDrop = useCallback(
-    acceptedFiles => acceptedFiles.map(async file => await dispatch(onUpdateProfilePicture(file, authUser.id))),
-    [dispatch, authUser.id]
+    acceptedFiles => acceptedFiles.map(async file => await dispatch(onUpdateProfilePicture(file, user.id))),
+    [dispatch, user.id]
   )
 
   return (
@@ -26,11 +25,11 @@ const InnerMenu = ({ ...props }) => {
       borderRadius="15px"
       height="fit-content"
     >
-      <Avatar image={authUser.profile.picture || null} onDrop={_handleOnDrop} />
-      <Title type={'h4'} title={`${authUser.profile.firstName} ${authUser.profile.lastName}`} />
+      <Avatar image={user.profile.picture || null} onDrop={_handleOnDrop} />
+      <Title type={'h5'} title={`${user.profile.firstName} ${user.profile.lastName}`} />
       <Link to={`/account/profile`}>Profile</Link>
       <Link to={`/account/document-verification`}>Document Verification</Link>
-      <Link to={`/account/payment`}>Payment Details</Link>
+      <Link to={`/account/payment`}>Payment Preferences</Link>
       <Link to={`/account/listing`}>Your Listings</Link>
       <Link to={`/account/booking`}>Your Bookings</Link>
     </Box>

@@ -99,22 +99,28 @@ const DropdownStyled = styled(Dropdown)`
   justify-self: end;
   padding: 20px;
 
-  > button {
-    background: transparent;
-    border: none;
+  &&&.show button {
+    background-color: transparent;
+  }
+  > div {
+    border-radius: 10px;
+  }  
 
-    &:hover, &:active, &:focus {
-      background: #6ADC91;
-      > span {
-        color: #ffffff;
-      }
+  & button { 
+    background-color: transparent;
+    border: none;
+    border-radius: 30px;
+    padding: 10px 10px;
+
+    & span {
+      color: #6ADC91;
     }
   }
-
-  > div {
-    > a {
-      font-size: 14px;
-    }
+  &&&:hover button, &&&:focus button, &&&:active button {
+    background-color: transparent;
+  }
+  & a {
+    font-size: 14px;
   }
 
 `

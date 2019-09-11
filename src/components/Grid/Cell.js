@@ -10,14 +10,17 @@ const Cell = styled.div`
   ${({ top }) => top && `grid-row-start: ${top}`};
   ${({ center }) => center && `text-align: center`};
   ${({ area }) => area && `grid-area: ${area}`};
+  ${({ justifySelf }) => justifySelf && `justify-self: ${justifySelf}`};
   ${/* prettier-ignore */
   ({ middle }) => middle && `
     display: inline-flex;
     flex-flow: column wrap;
     justify-content: center;
-    justify-self: stretch;
   `};
 `
+Cell.defaultProps = {
+  justifySelf: 'stretch'
+}
 
 Cell.propTypes = {
   className: PropTypes.string,
@@ -27,7 +30,8 @@ Cell.propTypes = {
   left: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
   middle: PropTypes.bool,
   center: PropTypes.bool,
-  area: PropTypes.string
+  area: PropTypes.string,
+  justifySelf: PropTypes.string
 }
 
 export default Cell

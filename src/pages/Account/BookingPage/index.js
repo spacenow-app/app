@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from 'react'
-import { addMinutes, format, isAfter, addHours } from 'date-fns'
+import { addMinutes, format, addHours, isAfter } from 'date-fns'
 import { useSelector, useDispatch } from 'react-redux'
 import Helmet from 'react-helmet'
 import { onGetBookingsByUser } from 'redux/ducks/account'
 import { onDeclineBooking, onAcceptBooking } from 'redux/ducks/booking'
 import { TypesModal, openModal } from 'redux/ducks/modal'
-import { Card, Text, Icon, Loader, BackgroundImage, Grid, Cell, Title, Wrapper } from 'components'
-import { Dropdown } from 'react-bootstrap'
+import { Card, Text, Icon, Loader, BackgroundImage, Grid, Cell, Title, Wrapper, Dropdown } from 'components'
+
 
 const _parseCategoryIconName = (name, isSub) => {
   let prefix = 'category-'
@@ -27,13 +27,7 @@ const _bookingDetails = dispatch => (booking, userType) => {
   )
 }
 
-const _continueBooking = (expire, listingId) => {
-  if (isAfter(new Date(), expire)) {
-    window.location.href = `/space/${listingId}`
-  }
-}
-
-const _declineBooking = dispatch => bookingId => {
+const _declineBooking = (dispatch) => (bookingId) => {
   dispatch(onDeclineBooking(bookingId))
 }
 
@@ -41,16 +35,50 @@ const _acceptBooking = dispatch => bookingId => {
   dispatch(onAcceptBooking(bookingId))
 }
 
+const _handleRedirect = (id) => {
+  window.location.href = `/space/${id}`
+}
+
+const _getTip = (status, userType) => {
+  switch (status) {
+    case 'expired':
+      return userType === 'guest'
+        ? 'Your host didn’t confirm in time. We’ll let them know they missed their chance. If you still want to book this space, please re-enquire.'
+        : 'You missed the 24 hour window to reply to this booking. You can contact the guest to see if they want to re-enquire'
+    case 'cancelled':
+      return userType === 'guest'
+        ? 'This booking has been cancelled by you or the host.'
+        : 'This booking has been cancelled by you or the guest.'
+    case 'pending':
+      return userType === 'guest'
+        ? 'You’ve started this booking, but you need to enter your payment details before we send your request to the host.'
+        : 'A guest has created a booking, but hasn’t completed their payment. We’ll chase them up.'
+    case 'requested':
+      return userType === 'guest'
+        ? 'Your booking is with the host for approval.'
+        : 'Please either approve or reject this booking within 24 hours, or it’ll expire.'
+    case 'approved':
+      return userType === 'guest'
+        ? 'Your booking is now in progress.'
+        : 'This booking and its payments are currently in progress.'
+    default:
+      return userType === 'guest' ? 'This booking is now finished.' : 'This booking is now finished.'
+  }
+}
+
 const BookingCard = (dispatch, item, index, userType) => {
   let expire = addHours(format(new Date(item.createdAt), 'dd/MM/yyyy'), 24)
 
   if (userType === 'guest') expire = addMinutes(format(new Date(item.createdAt), 'dd/MM/yyyy'), 30)
 
-  const expiryDate = `${format(expire, 'dd/MM/yyyy')  } at ${  format(expire, 'HH:mm')}`
+  if (userType === 'guest')
+    expire = addMinutes(format(new Date(item.createdAt), 'MM/DD/YYYY'), 15)
+
+  let expiryDate = format(expire, "DD/MM/YYYY") + ' at ' + format(expire, "HH:mm")
 
   return (
     <Card.Horizontal key={index}>
-      <Card.Horizontal.Image src={item.listing.photos.length > 0 ? item.listing.photos[0].name : ''} />
+      <Card.Horizontal.Image src={item.listing.photos.length > 0 ? item.listing.photos[0].name : ""} handleClick={() => _handleRedirect(item.listingId)} />
       <Card.Horizontal.Body>
         <Card.Horizontal.Title
           noMargin
@@ -82,15 +110,9 @@ const BookingCard = (dispatch, item, index, userType) => {
           <Text color="primary">Option</Text>
         </Card.Horizontal.Dropdown.Toggle>
         <Card.Horizontal.Dropdown.Menu>
-          {item.bookingState === 'pending' && userType === 'guest' && (
-            <Card.Horizontal.Dropdown.Item onClick={() => _continueBooking(dispatch)(expire, item.listingId)}>
-              Continue Booking
-            </Card.Horizontal.Dropdown.Item>
-          )}
-          <Card.Horizontal.Dropdown.Item onClick={() => _bookingDetails(dispatch)(item, userType)}>
-            Booking Details
-          </Card.Horizontal.Dropdown.Item>
-          {item.bookingState === 'pending' && userType === 'host' && (
+          {(item.bookingState === 'pending' && userType === 'guest' && isAfter(new Date(), expire)) && <Card.Horizontal.Dropdown.Item onClick={() => _handleRedirect(item.listingId)}>Continue Booking</Card.Horizontal.Dropdown.Item>}
+          <Card.Horizontal.Dropdown.Item onClick={() => _bookingDetails(dispatch)(item, userType)}>Booking Details</Card.Horizontal.Dropdown.Item>
+          {(item.bookingState === 'pending' && userType === 'host') &&
             <>
               <Card.Horizontal.Dropdown.Item onClick={() => _declineBooking(dispatch)(item.bookingId)}>
                 Decline Booking
@@ -99,7 +121,7 @@ const BookingCard = (dispatch, item, index, userType) => {
                 Accept Booking
               </Card.Horizontal.Dropdown.Item>
             </>
-          )}
+          }
         </Card.Horizontal.Dropdown.Menu>
       </Card.Horizontal.Dropdown>
       <Card.Horizontal.Footer>
@@ -125,12 +147,8 @@ const BookingCard = (dispatch, item, index, userType) => {
         >
           {item.listing.settingsParent.subcategory.itemName}
         </Card.Horizontal.Tag>
-        <Card.Horizontal.OverlayTrigger
-          overlay={<Card.Horizontal.ToolTip>asdf adf asdf asdf asdf asdf</Card.Horizontal.ToolTip>}
-        >
-          <Card.Horizontal.Label bg={item.bookingState} color="white">
-            {item.bookingState}
-          </Card.Horizontal.Label>
+        <Card.Horizontal.OverlayTrigger overlay={<Card.Horizontal.ToolTip>{_getTip(item.bookingState, userType)}</Card.Horizontal.ToolTip>}>
+          <Card.Horizontal.Label bg={item.bookingState} color={'white'}>{item.bookingState}</Card.Horizontal.Label>
         </Card.Horizontal.OverlayTrigger>
       </Card.Horizontal.Footer>
     </Card.Horizontal>
@@ -141,13 +159,8 @@ const BookingPage = ({ ...props }) => {
   const dispatch = useDispatch()
 
   const [userType, setUserType] = useState('guest')
-  const {
-    user: { id }
-  } = useSelector(state => state.auth)
-  const {
-    isLoading,
-    get: { bookings }
-  } = useSelector(state => state.account)
+  const { user: { id } } = useSelector(state => state.account.get)
+  const { isLoading, get: { bookings } } = useSelector(state => state.account)
 
   useEffect(() => {
     dispatch(onGetBookingsByUser(id))
@@ -167,7 +180,7 @@ const BookingPage = ({ ...props }) => {
         <Cell width={6}>
           <Title type="h4" title="Your Bookings" />
         </Cell>
-        <Cell width={6} center middle left="none">
+        <Cell width={6} middle justifySelf={'end'}>
           <Dropdown alignRight>
             <Dropdown.Toggle size="sm">
               <Text color="primary">User Type</Text>
@@ -183,10 +196,10 @@ const BookingPage = ({ ...props }) => {
       {!bookings || bookings.count === 0 ? (
         <BackgroundImage text="We didn't find any booking :(" />
       ) : (
-        <Grid columns={1} rowGap="30px">
-          {[].concat(bookings.items).map((item, index) => BookingCard(dispatch, item, index, userType))}
-        </Grid>
-      )}
+          <Grid columns={1} rowGap="30px">
+            {[].concat(bookings.items).map((item, index) => BookingCard(dispatch, item, index, userType))}
+          </Grid>
+        )}
     </Wrapper>
   )
 }

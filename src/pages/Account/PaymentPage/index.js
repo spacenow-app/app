@@ -43,7 +43,7 @@ const AccountNumber = styled.span``
 const PaymentPage = () => {
   const dispatch = useDispatch()
 
-  const { user } = useSelector(state => state.auth)
+  const { user } = useSelector(state => state.account.get)
   const { isLoading } = useSelector(state => state.payment)
   const { object: details } = useSelector(state => state.payment.get)
 
@@ -69,16 +69,16 @@ const PaymentPage = () => {
     )
   }
 
-  if (isLoading) return <Loader text="Loading listing process" />
+  if (isLoading) return <Loader text="Loading payment process" />
 
   return (
     <Wrapper>
       <Helmet title="Payment Preferences - Spacenow" />
       <Grid column="12">
-        <Cell width={6}>
+        <Cell width={8}>
           <Title type="h3" title="Payment Preferences" />
         </Cell>
-        <Cell width={6} center middle left="none">
+        <Cell width={4} middle justifySelf="end">
           <Button size="sm" onClick={() => _addAccount()}>
             Add Account
           </Button>
@@ -88,27 +88,27 @@ const PaymentPage = () => {
       {!details || !details.id ? (
         <BackgroundImage text="We didn't find any accounts :(" />
       ) : (
-        <ListGroup>
-          <ListHeader>
-            <Caption>First Name</Caption>
-            <Caption>BSB</Caption>
-            <Caption>Account</Caption>
-            <Options>
-              <Caption>Options</Caption>
-            </Options>
-          </ListHeader>
-          <ListItem>
-            <AccountName>{details.legal_entity.first_name}</AccountName>
-            <BSB>{details.external_accounts.data[0].routing_number}</BSB>
-            <AccountNumber>{details.external_accounts.data[0].last4}</AccountNumber>
-            <Options>
-              <a href="#" onClick={_handleRemoveAccount}>
-                <Icon name="bin" width="25px" />
-              </a>
-            </Options>
-          </ListItem>
-        </ListGroup>
-      )}
+          <ListGroup>
+            <ListHeader>
+              <Caption>First Name</Caption>
+              <Caption>BSB</Caption>
+              <Caption>Account</Caption>
+              <Options>
+                <Caption>Options</Caption>
+              </Options>
+            </ListHeader>
+            <ListItem>
+              <AccountName>{details.legal_entity.first_name}</AccountName>
+              <BSB>{details.external_accounts.data[0].routing_number}</BSB>
+              <AccountNumber>{details.external_accounts.data[0].last4}</AccountNumber>
+              <Options>
+                <a href="#" onClick={_handleRemoveAccount}>
+                  <Icon name="bin" width="25px" />
+                </a>
+              </Options>
+            </ListItem>
+          </ListGroup>
+        )}
     </Wrapper>
   )
 }

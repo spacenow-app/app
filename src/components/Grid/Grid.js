@@ -19,6 +19,7 @@ const Grid = styled.div`
   ${({ rows }) => rows && `grid-template-rows: ${frGetter(rows)}`};
   grid-template-columns: ${({ columns }) => frGetter(columns)};
   grid-gap: ${gapValue};
+  ${({ alignSelf }) => alignSelf && `align-self: ${alignSelf}`};
   ${({ columnGap }) => columnGap && `column-gap: ${columnGap}`};
   ${({ rowGap }) => rowGap && `row-gap: ${rowGap}`};
   ${({ areas }) => areas && `grid-template-areas: ${formatAreas(areas)}`};
@@ -42,7 +43,8 @@ Grid.propTypes = {
   rows: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
   areas: PropTypes.arrayOf(PropTypes.string),
   justifyContent: PropTypes.string,
-  alignContent: PropTypes.string
+  alignContent: PropTypes.string,
+  alignSelf: PropTypes.string
 }
 
 export default Grid

@@ -50,8 +50,7 @@ const PreviewPage = ({ match, location, ...props }) => {
   const { array: arrayPhotos } = useSelector(state => state.listing.photos)
   const { object: objectSpecifications } = useSelector(state => state.listing.specifications)
   const { isLoading: isPublishLoading, isPublished } = useSelector(state => state.listing.publishing)
-  const { isEmailConfirmed } = useSelector(state => state.auth.user.verification)
-  const { user } = useSelector(state => state.auth)
+  const { user, user: { verification: { isEmailConfirmed } } } = useSelector(state => state.account.get)
 
   useEffect(() => {
     dispatch(onGetListingById(match.params.id, user.id))
