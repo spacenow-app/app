@@ -52,11 +52,11 @@ const PriceDetail = props => (
     <ContentStyled>
       <LeftStyled>{`${props.currency} ${props.currencySymbol} ${props.price.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')} x ${props.days} ${
         props.periodLabel
-      }`}</LeftStyled>
+        }`}</LeftStyled>
       <RightStyled>{`${props.currency} ${props.currencySymbol}${(props.price * props.days).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')}`}</RightStyled>
     </ContentStyled>
     <ContentStyled>
-      <LeftStyled>Quantity x{props.quantity}</LeftStyled>
+      <LeftStyled>Quantity x {props.quantity}</LeftStyled>
       <RightStyled>{`${props.currency} ${props.currencySymbol}${(props.price * props.days * props.quantity).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')}`}</RightStyled>
     </ContentStyled>
     <ContentStyled>
@@ -64,17 +64,17 @@ const PriceDetail = props => (
       <RightStyled>
         {props.isAbsorvedFee
           ? `${props.currency} ${props.currencySymbol}${(
-              props.price *
-              props.days *
-              props.quantity *
-              IS_ABSORVE
-            ).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')}`
+            props.price *
+            props.days *
+            props.quantity *
+            IS_ABSORVE
+          ).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')}`
           : `${props.currency} ${props.currencySymbol}${(
-              props.price *
-              props.days *
-              props.quantity *
-              NO_ABSORVE
-            ).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')}`}
+            props.price *
+            props.days *
+            props.quantity *
+            NO_ABSORVE
+          ).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')}`}
       </RightStyled>
     </ContentStyled>
     <ContentStyled>

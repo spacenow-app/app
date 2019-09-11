@@ -20,7 +20,13 @@ export const Types = {
   GET_BOOKING_FAILURE: 'GET_BOOKING_FAILURE',
   GET_LISTING_INFO_REQUEST: 'GET_LISTING_INFO_REQUEST',
   GET_LISTING_INFO_SUCCESS: 'GET_LISTING_INFO_SUCCESS',
-  GET_LISTING_INFO_FAILURE: 'GET_LISTING_INFO_FAILURE'
+  GET_LISTING_INFO_FAILURE: 'GET_LISTING_INFO_FAILURE',
+  ACCEPT_BOOKING_START: 'ACCEPT_BOOKING_START',
+  ACCEPT_BOOKING_SUCCESS: 'ACCEPT_BOOKING_SUCCESS',
+  ACCEPT_BOOKING_FAILURE: 'ACCEPT_BOOKING_FAILURE',
+  DECLINE_BOOKING_START: 'DECLINE_BOOKING_START',
+  DECLINE_BOOKING_SUCCESS: 'DECLINE_BOOKING_SUCCESS',
+  DECLINE_BOOKING_FAILURE: 'DECLINE_BOOKING_FAILURE'
 }
 
 // Initial State
@@ -50,6 +56,16 @@ const initialState = {
     isLoading: true,
     error: null,
     object: null
+  },
+  accept: {
+    object: null,
+    isLoading: false,
+    error: null
+  },
+  decline: {
+    object: null,
+    isLoading: false,
+    error: null
   }
 }
 
@@ -87,6 +103,22 @@ const mutationCreateBooking = gql`
 const mutationTimeoutBooking = gql`
   mutation timeoutBooking($bookingId: String!) {
     timeoutBooking(bookingId: $bookingId) {
+      status
+    }
+  }
+`
+
+const mutationAcceptBooking = gql`
+  mutation acceptBooking($bookingId: String!) {
+    acceptBooking(bookingId: $bookingId) {
+      status
+    }
+  }
+`
+
+const mutationDeclineBooking = gql`
+  mutation declineBooking($bookingId: String!) {
+    declineBooking(bookingId: $bookingId) {
       status
     }
   }
@@ -282,6 +314,66 @@ export default function reducer(state = initialState, action) {
         }
       }
     }
+    case Types.ACCEPT_BOOKING_START: {
+      return {
+        ...state,
+        accept: {
+          isLoading: true,
+          error: null
+        }
+      }
+    }
+    case Types.ACCEPT_BOOKING_SUCCESS: {
+      return {
+        ...state,
+        accept: {
+          isLoading: false,
+          object: action.payload
+        },
+        pending: {
+          object: null
+        }
+      }
+    }
+    case Types.ACCEPT_BOOKING_FAILURE: {
+      return {
+        ...state,
+        accept: {
+          isLoading: false,
+          error: action.payload
+        }
+      }
+    }
+    case Types.DECLINE_BOOKING_START: {
+      return {
+        ...state,
+        decline: {
+          isLoading: true,
+          error: null
+        }
+      }
+    }
+    case Types.DECLINE_BOOKING_SUCCESS: {
+      return {
+        ...state,
+        decline: {
+          isLoading: false,
+          object: action.payload
+        },
+        pending: {
+          object: null
+        }
+      }
+    }
+    case Types.DECLINE_BOOKING_FAILURE: {
+      return {
+        ...state,
+        decline: {
+          isLoading: false,
+          error: action.payload
+        }
+      }
+    }
     case Types.GET_PENDING_BOOKING_REQUEST: {
       return {
         ...state,
@@ -395,6 +487,32 @@ export const onTimeoutBooking = bookingId => async dispatch => {
     dispatch({ type: Types.TIMEOUT_BOOKING_SUCCESS, payload: data.timeoutBooking })
   } catch (err) {
     dispatch({ type: Types.TIMEOUT_BOOKING_FAILURE, payload: errToMsg(err) })
+  }
+}
+
+export const onAcceptBooking = bookingId => async dispatch => {
+  dispatch({ type: Types.ACCEPT_BOOKING_START })
+  try {
+    const { data } = await getClientWithAuth(dispatch).mutate({
+      mutation: mutationAcceptBooking,
+      variables: { bookingId }
+    })
+    dispatch({ type: Types.ACCEPT_BOOKING_SUCCESS, payload: data.acceptBooking })
+  } catch (err) {
+    dispatch({ type: Types.ACCEPT_BOOKING_FAILURE, payload: errToMsg(err) })
+  }
+}
+
+export const onDeclineBooking = bookingId => async dispatch => {
+  dispatch({ type: Types.DECLINE_BOOKING_START })
+  try {
+    const { data } = await getClientWithAuth(dispatch).mutate({
+      mutation: mutationDeclineBooking,
+      variables: { bookingId }
+    })
+    dispatch({ type: Types.DECLINE_BOOKING_SUCCESS, payload: data.declineBooking })
+  } catch (err) {
+    dispatch({ type: Types.DECLINE_BOOKING_FAILURE, payload: errToMsg(err) })
   }
 }
 
