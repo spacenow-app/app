@@ -7,7 +7,7 @@ const WrapperStyled = styled.div`
   align-content: center;
   justify-content: center;
   justify-items: center;
-  height: calc(100vh - 78px);
+  height: ${props => (props.sm ? 'fit-content' : 'calc(100vh - 78px)')};
   grid-row-gap: 15px;
 `
 
@@ -52,9 +52,9 @@ const TextStyled = styled.span`
   font-size: 16px;
 `
 
-const Loader = ({ text }) => {
+const Loader = ({ text, ...props }) => {
   return (
-    <WrapperStyled>
+    <WrapperStyled {...props}>
       <LoaderIcon />
       {text && <TextStyled>{text}</TextStyled>}
     </WrapperStyled>
@@ -62,11 +62,13 @@ const Loader = ({ text }) => {
 }
 
 Loader.defaultProps = {
-  text: null
+  text: null,
+  sm: false
 }
 
 Loader.propTypes = {
-  text: PropTypes.string
+  text: PropTypes.string,
+  sm: PropTypes.bool
 }
 
 export default Loader

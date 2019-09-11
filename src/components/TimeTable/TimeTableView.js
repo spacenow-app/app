@@ -6,10 +6,7 @@ import { SubTitle, Caption } from 'components'
 
 const Grid = styled.div`
   display: grid;
-  grid-template-columns: 200px 250px;
-  @media (max-width: 680px) {
-    grid-template-columns: 140px 210px;
-  }
+  grid-template-columns: 40% 60%;
 `
 
 const Column = styled.div``
