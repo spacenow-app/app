@@ -1,16 +1,44 @@
 import React, { useEffect, useState } from 'react'
 import { addMinutes, format, isAfter, addHours } from 'date-fns'
 import { useSelector, useDispatch } from 'react-redux'
+import Helmet from 'react-helmet'
 import { onGetBookingsByUser } from 'redux/ducks/account'
 import { onDeclineBooking, onAcceptBooking } from 'redux/ducks/booking'
 import { TypesModal, openModal } from 'redux/ducks/modal'
-import { Card, Text, Icon, Loader, BackgroundImage, Grid, Cell, Title } from 'components'
+import { Card, Text, Icon, Loader, BackgroundImage, Grid, Cell, Title, Wrapper } from 'components'
 import { Dropdown } from 'react-bootstrap'
 
 const _parseCategoryIconName = (name, isSub) => {
   let prefix = 'category-'
   if (isSub) prefix = 'sub-category-'
   return prefix + name.replace(/([A-Z])/g, g => `-${g[0].toLowerCase()}`)
+}
+
+const _bookingDetails = (dispatch) => (booking, userType) => {
+  dispatch(
+    openModal(TypesModal.MODAL_TYPE_BOOKING_DETAILS, {
+      options: {
+        title: 'Booking Details',
+        text: ''
+      },
+      booking,
+      userType
+    })
+  )
+}
+
+const _continueBooking = (expire, listingId) => {
+  if (isAfter(new Date(), expire)) {
+    window.location.href = `/space/${listingId}`
+  }
+}
+
+const _declineBooking = (dispatch) => (bookingId) => {
+  dispatch(onDeclineBooking(bookingId))
+}
+
+const _acceptBooking = (dispatch) => (bookingId) => {
+  dispatch(onAcceptBooking(bookingId))
 }
 
 const BookingCard = (dispatch, item, index, userType) => {
@@ -21,33 +49,6 @@ const BookingCard = (dispatch, item, index, userType) => {
     expire = addMinutes(format(new Date(item.createdAt), 'MM/DD/YYYY'), 30)
 
   let expiryDate = format(expire, "DD/MM/YYYY") + ' at ' + format(expire, "HH:mm")
-
-  const _bookingDetails = (booking, userType) => {
-    dispatch(
-      openModal(TypesModal.MODAL_TYPE_BOOKING_DETAILS, {
-        options: {
-          title: 'Booking Details',
-          text: ''
-        },
-        booking,
-        userType
-      })
-    )
-  }
-
-  const _continueBooking = () => {
-    if (isAfter(new Date(), expire)) {
-      window.location.href = `/space/${item.listingId}`
-    }
-  }
-
-  const _declineBooking = (bookingId) => {
-    dispatch(onDeclineBooking(bookingId))
-  }
-
-  const _acceptBooking = (bookingId) => {
-    dispatch(onAcceptBooking(bookingId))
-  }
 
   return (
     <Card.Horizontal key={index}>
@@ -62,12 +63,12 @@ const BookingCard = (dispatch, item, index, userType) => {
           <Text color="primary">Option</Text>
         </Card.Horizontal.Dropdown.Toggle>
         <Card.Horizontal.Dropdown.Menu>
-          {(item.bookingState === 'pending' && userType === 'guest') && <Card.Horizontal.Dropdown.Item onClick={() => _continueBooking(item.id)}>Continue Booking</Card.Horizontal.Dropdown.Item>}
-          <Card.Horizontal.Dropdown.Item onClick={() => _bookingDetails(item, userType)}>Booking Details</Card.Horizontal.Dropdown.Item>
+          {(item.bookingState === 'pending' && userType === 'guest') && <Card.Horizontal.Dropdown.Item onClick={() => _continueBooking(dispatch)(expire, item.listingId)}>Continue Booking</Card.Horizontal.Dropdown.Item>}
+          <Card.Horizontal.Dropdown.Item onClick={() => _bookingDetails(dispatch)(item, userType)}>Booking Details</Card.Horizontal.Dropdown.Item>
           {(item.bookingState === 'pending' && userType === 'host') &&
             <>
-              <Card.Horizontal.Dropdown.Item onClick={() => _declineBooking(item.bookingId)}>Decline Booking</Card.Horizontal.Dropdown.Item>
-              <Card.Horizontal.Dropdown.Item onClick={() => _acceptBooking(item.bookingId)}>Accept Booking</Card.Horizontal.Dropdown.Item>
+              <Card.Horizontal.Dropdown.Item onClick={() => _declineBooking(dispatch)(item.bookingId)}>Decline Booking</Card.Horizontal.Dropdown.Item>
+              <Card.Horizontal.Dropdown.Item onClick={() => _acceptBooking(dispatch)(item.bookingId)}>Accept Booking</Card.Horizontal.Dropdown.Item>
             </>
           }
         </Card.Horizontal.Dropdown.Menu>
@@ -105,34 +106,36 @@ const BookingPage = ({ ...props }) => {
   }
 
   if (isLoading) return <Loader text="Loading bookings process" />
-  if (bookings)
-    if (bookings.count === 0)
-      return <BackgroundImage text="We didn't find any booking :(" />
-    else
-      return (
-        <>
-          <Grid column="12">
-            <Cell width={6}>
-              <Title type="h4" title="Your Bookings" />
-            </Cell>
-            <Cell width={6} center middle left="none">
-              <Dropdown alignRight>
-                <Dropdown.Toggle size="sm">
-                  <Text color="primary">User Type</Text>
-                </Dropdown.Toggle>
-                <Dropdown.Menu>
-                  <Dropdown.Item onClick={() => _handleChange('guest')}>Guest</Dropdown.Item>
-                  <Dropdown.Item onClick={() => _handleChange('host')}>Host</Dropdown.Item>
-                </Dropdown.Menu>
-              </Dropdown>
-            </Cell>
-          </Grid>
+
+  return (
+    <Wrapper>
+      <Helmet title="Your Bookings - Spacenow" />
+      <Grid column="12">
+        <Cell width={6}>
+          <Title type="h4" title="Your Bookings" />
+        </Cell>
+        <Cell width={6} center middle left="none">
+          <Dropdown alignRight>
+            <Dropdown.Toggle size="sm">
+              <Text color="primary">User Type</Text>
+            </Dropdown.Toggle>
+            <Dropdown.Menu>
+              <Dropdown.Item onClick={() => _handleChange('guest')}>Guest</Dropdown.Item>
+              <Dropdown.Item onClick={() => _handleChange('host')}>Host</Dropdown.Item>
+            </Dropdown.Menu>
+          </Dropdown>
+        </Cell>
+      </Grid>
+
+      {!bookings || bookings.count === 0 ? (
+        <BackgroundImage text="We didn't find any booking :(" />
+      ) : (
           <Grid columns={1} rowGap={`30px`}>
             {[].concat(bookings.items).map((item, index) => BookingCard(dispatch, item, index, userType))}
           </Grid>
-        </>
-      )
-  else return null;
+        )}
+    </Wrapper>
+  )
 }
 
 export default BookingPage;

@@ -89,7 +89,8 @@ const FooterStyled = styled.div`
   grid-template-columns: max-content;
   grid-column-gap: inherit;
   @media(max-width: 576px) {
-     grid-template-columns: fit-content;
+    grid-auto-flow: column;
+    padding: 10px 20px 20px 10px;
   }
 `
 

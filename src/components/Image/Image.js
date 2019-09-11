@@ -17,7 +17,10 @@ const ImageStyled = styled.div`
 const Image = props => (
   <ImageStyled {...props} onClick={e => props.handleClick(e)}>
     {props.src ? (
-      <img src={props.src} alt={props.alt} width="100%" height="100%" />
+      props.type !== 'application/pdf' ?
+        <img src={props.src} alt={props.alt} width="100%" height="100%" /> :
+        <embed src={`https://drive.google.com/viewerng/
+viewer?embedded=true&url=${props.src}`} width="100%" height="100%" type="application/pdf" />
     ) : (
         <svg
           width={props.width}
@@ -39,7 +42,7 @@ Image.defaultProps = {
   src: '',
   alt: '...',
   width: '250px',
-  height: '200px'
+  height: '200px',
 }
 
 Image.propTypes = {
@@ -48,7 +51,8 @@ Image.propTypes = {
   src: PropTypes.string,
   alt: PropTypes.string,
   width: PropTypes.string,
-  height: PropTypes.string
+  height: PropTypes.string,
+  type: PropTypes.string,
 }
 
 export { Image }
