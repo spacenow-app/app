@@ -483,7 +483,6 @@ export const onUpdateProfile = (userId, input) => async dispatch => {
       mutation: mutationUpdateUserProfile,
       variables: { userId, input }
     })
-    console.log(input)
     toast.success("Profile updated successfully");
     dispatch({ type: Types.ACC_UPDATE_PROFILE_SUCCESS, payload: input })
   } catch (error) {
