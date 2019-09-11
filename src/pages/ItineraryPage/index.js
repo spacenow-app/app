@@ -153,6 +153,7 @@ const ItineraryPage = ({ match, location, history, ...props }) => {
             <CellStyled width={10}>
               {booking.priceType === 'daily' ? (
                 <Box m="0">
+                  <Title type="h6" title="Selected dates" />
                   <ListDates dates={booking.reservations} />
                 </Box>
               ) : (
