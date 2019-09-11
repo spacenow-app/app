@@ -6,6 +6,7 @@ import PropTypes from 'prop-types'
 import Helmet from 'react-helmet'
 import { useSelector, useDispatch } from 'react-redux'
 import styled from 'styled-components'
+import { toast } from 'react-toastify'
 
 import {
   Wrapper,
@@ -62,6 +63,7 @@ const _getWeekName = days => {
 const ItineraryPage = ({ match, location, history, ...props }) => {
   const dispatch = useDispatch()
 
+  const { user } = useSelector(state => state.auth)
   const { object: booking, isLoading: isBookingLoading } = useSelector(state => state.booking.get)
   const { object: listing, isLoading: isListingLoading } = useSelector(state => state.booking.listing)
 
@@ -75,6 +77,15 @@ const ItineraryPage = ({ match, location, history, ...props }) => {
 
   if (isBookingLoading) {
     return <Loader text="Loading itinerary" />
+  }
+
+  if (booking && booking.bookingState === 'pending') {
+    history.replace('/account/booking')
+    toast.warning(`Reservation ${booking.confirmationCode} still 'pending'.`)
+  }
+
+  if (booking && user && booking.guestId !== user.id) {
+    history.replace('/account/booking')
   }
 
   const listingPhoto = listing && listing.photos.find(photo => photo.isCover).name
@@ -153,6 +164,7 @@ const ItineraryPage = ({ match, location, history, ...props }) => {
             <CellStyled width={10}>
               {booking.priceType === 'daily' ? (
                 <Box m="0">
+                  <Title type="h6" title="Selected dates" />
                   <ListDates dates={booking.reservations} />
                 </Box>
               ) : (
