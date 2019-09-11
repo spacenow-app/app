@@ -23,7 +23,7 @@ const SpaceDetailsPage = ({ match, history, location, ...props }) => {
   const dispatch = useDispatch()
 
   const { object: objectListing, isLoading, isNotOwner } = useSelector(state => state.listing.get)
-  const { user } = useSelector(state => state.auth)
+  const { user } = useSelector(state => state.account.get)
 
   const [values, setValues] = useState({})
 

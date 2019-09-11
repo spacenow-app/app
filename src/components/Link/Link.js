@@ -7,13 +7,12 @@ const Link = styled(LinkRouter)`
 
   :hover {
     ${color}
+    text-decoration: none;
   }
 `
 
 Link.defaultProps = {
   color: 'secondary'
 }
-
-Link.propTypes = {}
 
 export default Link

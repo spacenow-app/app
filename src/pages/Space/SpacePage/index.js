@@ -98,7 +98,8 @@ const SpacePage = ({ match, location, history, ...props }) => {
   const { isCleaned: isCleanedAvailabilities } = useSelector(state => state.listing.cleanAvailabilities)
   const { object: objectSpecifications } = useSelector(state => state.listing.specifications)
   const { array: availabilities } = useSelector(state => state.listing.availabilities)
-  const { user, isAuthenticated } = useSelector(state => state.auth)
+  const { user } = useSelector(state => state.account.get)
+  const { isAuthenticated } = useSelector(state => state.auth)
   const { isLoading: isLoadingOnCreateReservation } = useSelector(state => state.booking.create)
   const { object: pendingBooking } = useSelector(state => state.booking.pending)
 
@@ -122,7 +123,7 @@ const SpacePage = ({ match, location, history, ...props }) => {
   }, [dispatch, listing, pendingBooking, isCleanedAvailabilities])
 
   useEffect(() => {
-    if(location.state) {
+    if (location.state) {
       setDatesSelected(location.state.reservations)
       setDate(location.state.reservations[0])
       location.state.period && setPeriod(location.state.period)
@@ -130,10 +131,10 @@ const SpacePage = ({ match, location, history, ...props }) => {
   }, [location])
 
   useEffect(() => {
-    if(window.innerWidth < 768) {
+    if (window.innerWidth < 768) {
       setImageHeight(270)
     }
-  },[])
+  }, [])
 
   if (listing && listing.user.provider === 'wework') {
     history.push(`/space/partner/${match.params.id}`)
@@ -147,7 +148,7 @@ const SpacePage = ({ match, location, history, ...props }) => {
     const { address1 = '', city = '', zipcode = '', state = '', country = '' } = address
     const convertedAddress = `${address1 ? `${address1}, ` : ''} ${city ? `${city}, ` : ''} ${
       zipcode ? `${zipcode}, ` : ''
-    } ${state ? `${state}, ` : ''} ${country ? `${country}` : ''}`
+      } ${state ? `${state}, ` : ''} ${country ? `${country}` : ''}`
     return convertedAddress.replace(/\0.*$/g, '')
   }
 
@@ -222,10 +223,10 @@ const SpacePage = ({ match, location, history, ...props }) => {
   const _convertedArrayPhotos = array => {
     return array.filter(el => el !== undefined).length > 0
       ? array
-          .filter(el => el !== undefined)
-          .map(el => ({
-            source: `https://api-assets.prod.cloud.spacenow.com?width=800&heigth=500&format=jpeg&path=${el.name}`
-          }))
+        .filter(el => el !== undefined)
+        .map(el => ({
+          source: `https://api-assets.prod.cloud.spacenow.com?width=800&heigth=500&format=jpeg&path=${el.name}`
+        }))
       : []
   }
 
@@ -370,10 +371,10 @@ const SpacePage = ({ match, location, history, ...props }) => {
     if (!isAuthenticated) {
       history.push(`/auth/signin`, {
         from: {
-          ...location, 
+          ...location,
           state: {
-            period: object.period, 
-            reservations: object.reservations 
+            period: object.period,
+            reservations: object.reservations
           }
         }
       })
@@ -384,7 +385,7 @@ const SpacePage = ({ match, location, history, ...props }) => {
 
   const _reportSpace = () => {
     if (!isAuthenticated) {
-      history.push(`/auth/signin`, {from: location})
+      history.push(`/auth/signin`, { from: location })
       return
     }
     const options = {
@@ -426,10 +427,10 @@ const SpacePage = ({ match, location, history, ...props }) => {
     <Wrapper mt="50px">
       <Helmet title="View Listing - Spacenow" />
       <GridStyled columns="auto 350px" columnGap="15px" rowGap="100px" areas={["content card"]}>
-        <Cell area="content"> 
+        <Cell area="content">
           <Grid columns={1} rowGap="50px">
-            <Box> 
-              <Carousel photos={_convertedArrayPhotos(listing.photos)} height={imageHeight}/>
+            <Box>
+              <Carousel photos={_convertedArrayPhotos(listing.photos)} height={imageHeight} />
             </Box>
 
             <Grid justifyContent="space-between" columnGap="10px" columns={2}>
@@ -482,7 +483,7 @@ const SpacePage = ({ match, location, history, ...props }) => {
                   type="h4"
                   title={`$ ${Math.round((listing.listingData.basePrice || 0) * 100) / 100} ${
                     listing.bookingPeriod
-                  }`}
+                    }`}
                   noMargin
                   right
                   style={{ marginTop: '5px' }}
@@ -539,7 +540,7 @@ const SpacePage = ({ match, location, history, ...props }) => {
             </Box>
 
             {
-              listing.listingData.description ? 
+              listing.listingData.description ?
                 <Box>
                   <Title type="h5" title="Description" />
                   <p>{listing.listingData.description}</p>
@@ -567,7 +568,7 @@ const SpacePage = ({ match, location, history, ...props }) => {
                     })}
                   </Grid>
                 </Box>
-            )}
+              )}
 
             {
               listing.rules.length > 0 && (
@@ -575,7 +576,7 @@ const SpacePage = ({ match, location, history, ...props }) => {
                   <Title type="h5" title="Space Rules" />
                   <Grid columns={"repeat(auto-fit, minmax(200px, auto))"} rowGap="20px">
                     {listing.rules.map(item => {
-                        return (
+                      return (
                         <Checkbox
                           disabled
                           key={item.id}
@@ -583,8 +584,8 @@ const SpacePage = ({ match, location, history, ...props }) => {
                           name="rules"
                           checked={true}
                         />
-                        )
-                      })
+                      )
+                    })
                     }
                   </Grid>
                 </Box>
@@ -596,9 +597,9 @@ const SpacePage = ({ match, location, history, ...props }) => {
                 type="h5"
                 title="Availability"
               />
-              <TimeTable 
-                data={listing.accessDays.listingAccessHours} 
-                error={_getWeekName(listing.accessDays) === 'Closed'} 
+              <TimeTable
+                data={listing.accessDays.listingAccessHours}
+                error={_getWeekName(listing.accessDays) === 'Closed'}
               />
             </Box>
           </Grid>
@@ -648,7 +649,7 @@ const SpacePage = ({ match, location, history, ...props }) => {
           />
         </Cell>
       </GridStyled>
-      
+
       <Box mt="100px">
         <Title type="h5" title="Location" />
         <Map position={{ lat: Number(listing.location.lat), lng: Number(listing.location.lng) }} />
@@ -670,10 +671,10 @@ const SpacePage = ({ match, location, history, ...props }) => {
             <ImageStyled alt="Cancellation Policy" src={GraphCancelattionImage} width="700px" />
           </Cell>
         </Grid>
-        
+
       </Box>
       <BottomButtonMobile>
-        <Button fluid onClick={() => {document.getElementById("booking-card").scrollIntoView({ behavior: 'smooth' })}}>Reserve</Button>
+        <Button fluid onClick={() => { document.getElementById("booking-card").scrollIntoView({ behavior: 'smooth' }) }}>Reserve</Button>
       </BottomButtonMobile>
     </Wrapper>
   )

@@ -20,8 +20,8 @@ const NavDropdownStyled = styled(NavDropdown)`
 
 function NavBar() {
   const dispatch = useDispatch()
-  const authUser = useSelector(state => state.auth.user)
-  const isAuthenticated = useSelector(state => state.auth.isAuthenticated)
+  const { user } = useSelector(state => state.account.get)
+  const { isAuthenticated } = useSelector(state => state.auth)
 
   const _handlerGoToLegancy = () => {
     window.location.href = `${config.legacy}`
@@ -45,15 +45,15 @@ function NavBar() {
               alignRight
               title={
                 <Box display="grid" gridTemplateColumns="auto auto" gridColumnGap="10px" color="quartenary">
-                  <span style={{ alignSelf: 'center' }}>{authUser.profile.firstName || 'User Profile'}</span>
-                  <Avatar style={{ width: '30px', height: '30px' }} image={authUser.profile.picture || null} />
+                  <span style={{ alignSelf: 'center' }}>{user.profile.firstName || 'User Profile'}</span>
+                  <Avatar style={{ width: '30px', height: '30px' }} image={user.profile.picture || null} />
                 </Box>
               }
               id="basic-nav-dropdown"
             >
               <NavDropdown.Item href={`/account/profile`}>Profile</NavDropdown.Item>
               <NavDropdown.Divider />
-              <NavDropdown.Item href={`${config.legacy}/dashboard`}>Dashboard</NavDropdown.Item>
+              <NavDropdown.Item href={`/account/dashboard`}>Dashboard</NavDropdown.Item>
               <NavDropdown.Divider />
               <NavDropdown.Item onClick={_handlerLogout}>Logout</NavDropdown.Item>
             </NavDropdownStyled>
