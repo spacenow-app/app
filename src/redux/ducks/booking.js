@@ -14,12 +14,23 @@ export const Types = {
   GET_PENDING_BOOKING_FAILURE: 'GET_PENDING_BOOKING_FAILURE',
   TIMEOUT_BOOKING_START: 'TIMEOUT_BOOKING_START',
   TIMEOUT_BOOKING_SUCCESS: 'TIMEOUT_BOOKING_SUCCESS',
-  TIMEOUT_BOOKING_FAILURE: 'TIMEOUT_BOOKING_FAILURE'
+  TIMEOUT_BOOKING_FAILURE: 'TIMEOUT_BOOKING_FAILURE',
+  GET_BOOKING_REQUEST: 'GET_BOOKING_REQUEST',
+  GET_BOOKING_SUCCESS: 'GET_BOOKING_SUCCESS',
+  GET_BOOKING_FAILURE: 'GET_BOOKING_FAILURE',
+  GET_LISTING_INFO_REQUEST: 'GET_LISTING_INFO_REQUEST',
+  GET_LISTING_INFO_SUCCESS: 'GET_LISTING_INFO_SUCCESS',
+  GET_LISTING_INFO_FAILURE: 'GET_LISTING_INFO_FAILURE'
 }
 
 // Initial State
 const initialState = {
   isLoading: false,
+  get: {
+    isLoading: true,
+    error: null,
+    object: null
+  },
   create: {
     object: null,
     isLoading: false,
@@ -34,6 +45,11 @@ const initialState = {
     object: null,
     isLoading: false,
     error: null
+  },
+  listing: {
+    isLoading: true,
+    error: null,
+    object: null
   }
 }
 
@@ -104,6 +120,104 @@ const queryGetPendingBooking = gql`
         checkIn
         checkOut
         reservations
+      }
+    }
+  }
+`
+
+const queryGetBookingById = gql`
+  query getBookingById($id: String!) {
+    getBookingById(id: $id) {
+      listingId
+      quantity
+      currency
+      totalPrice
+      bookingType
+      basePrice
+      createdAt
+      period
+      sourceId
+      bookingState
+      chargeId
+      hostServiceFee
+      confirmationCode
+      bookingId
+      guestServiceFee
+      hostId
+      paymentState
+      updatedAt
+      priceType
+      guestId
+      checkIn
+      checkOut
+      reservations
+    }
+  }
+`
+
+const queryGetListingInfo = gql`
+  query getListingById($id: Int!, $isPublic: Boolean) {
+    getListingById(id: $id, isPublic: $isPublic) {
+      title
+      location {
+        id
+        userId
+        country
+        address1
+        address2
+        buildingName
+        city
+        state
+        zipcode
+        lat
+        lng
+        createdAt
+        updatedAt
+      }
+      accessDays {
+        id
+        listingId
+        mon
+        tue
+        wed
+        thu
+        fri
+        sat
+        sun
+        all247
+        createdAt
+        updatedAt
+        listingAccessHours {
+          id
+          listingAccessDaysId
+          weekday
+          openHour
+          closeHour
+          allday
+          createdAt
+          updatedAt
+        }
+      }
+      photos {
+        id
+        listingId
+        name
+        isCover
+        bucket
+        region
+        key
+        type
+        createdAt
+        updatedAt
+      }
+      user {
+        id
+        email
+        provider
+        profile {
+          displayName
+          picture
+        }
       }
     }
   }
@@ -195,6 +309,60 @@ export default function reducer(state = initialState, action) {
         }
       }
     }
+    case Types.GET_BOOKING_REQUEST: {
+      return {
+        ...state,
+        get: {
+          isLoading: true,
+          error: null
+        }
+      }
+    }
+    case Types.GET_BOOKING_SUCCESS: {
+      return {
+        ...state,
+        get: {
+          isLoading: false,
+          object: action.payload
+        }
+      }
+    }
+    case Types.GET_BOOKING_FAILURE: {
+      return {
+        ...state,
+        get: {
+          isLoading: false,
+          error: action.payload
+        }
+      }
+    }
+    case Types.GET_LISTING_INFO_REQUEST: {
+      return {
+        ...state,
+        listing: {
+          isLoading: true,
+          error: null
+        }
+      }
+    }
+    case Types.GET_LISTING_INFO_SUCCESS: {
+      return {
+        ...state,
+        listing: {
+          isLoading: false,
+          object: action.payload
+        }
+      }
+    }
+    case Types.GET_LISTING_INFO_FAILURE: {
+      return {
+        ...state,
+        listing: {
+          isLoading: false,
+          error: action.payload
+        }
+      }
+    }
     default:
       return state
   }
@@ -241,5 +409,34 @@ export const onGetPendingBooking = (listingId, userId) => async dispatch => {
     dispatch({ type: Types.GET_PENDING_BOOKING_SUCCESS, payload: data.getPendingBookingsByUser })
   } catch (err) {
     dispatch({ type: Types.GET_PENDING_BOOKING_FAILURE, payload: errToMsg(err) })
+  }
+}
+
+export const onGetBooking = id => async dispatch => {
+  dispatch({ type: Types.GET_BOOKING_REQUEST })
+  try {
+    const { data } = await getClientWithAuth(dispatch).query({
+      query: queryGetBookingById,
+      variables: { id },
+      fetchPolicy: 'network-only'
+    })
+    dispatch({ type: Types.GET_BOOKING_SUCCESS, payload: data.getBookingById })
+  } catch (err) {
+    dispatch({ type: Types.GET_BOOKING_FAILURE, payload: errToMsg(err) })
+  }
+}
+
+// Side Effects
+export const onGetListingInfo = id => async dispatch => {
+  dispatch({ type: Types.GET_LISTING_INFO_REQUEST })
+  try {
+    const { data } = await getClientWithAuth(dispatch).query({
+      query: queryGetListingInfo,
+      variables: { id },
+      fetchPolicy: 'network-only'
+    })
+    dispatch({ type: Types.GET_LISTING_INFO_SUCCESS, payload: data.getListingById })
+  } catch (err) {
+    dispatch({ type: Types.GET_LISTING_INFO_FAILURE, payload: errToMsg(err) })
   }
 }

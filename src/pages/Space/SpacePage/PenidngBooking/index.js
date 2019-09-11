@@ -6,20 +6,7 @@ import styled from 'styled-components'
 import { openModal, TypesModal } from 'redux/ducks/modal'
 import { onTimeoutBooking } from 'redux/ducks/booking'
 
-import { ListDates, PriceDetail, Grid, Cell, Button, Box } from 'components'
-
-const ContentStyled = styled.div`
-  display: grid;
-  grid-template-columns: auto auto;
-  grid-column-gap: 10px;
-`
-
-const LeftTitleStyled = styled.span`
-  font-family: 'Montserrat-Bold';
-  align-self: center;
-  justify-self: start;
-  font-size: 14px;
-`
+import { ListDates, PriceDetail, Grid, Cell, Button, Box, DatesDetail } from 'components'
 
 const TitleStyled = styled.span`
   font-family: 'Montserrat-Bold';
@@ -27,23 +14,6 @@ const TitleStyled = styled.span`
 `
 const SubTitleStyled = styled.span`
   font-size: 11px;
-`
-
-const RightTitleStyled = styled.span`
-  font-family: 'Montserrat-Bold';
-  align-self: center;
-  justify-self: end;
-  font-size: 14px;
-`
-
-const LeftStyled = styled.span`
-  align-self: center;
-  justify-self: start;
-`
-
-const RightStyled = styled.span`
-  align-self: center;
-  justify-self: end;
 `
 
 function spelling(periodType, reference) {
@@ -80,23 +50,13 @@ const _renderContentCard = booking => {
           <ListDates dates={booking.reservations} />
         </Box>
       ) : (
-        <>
-          <Cell>
-            <LeftTitleStyled>Period</LeftTitleStyled>
-            <br />
-            <LeftStyled>{booking.period + ' ' + spelling(booking.priceType, booking.period)}</LeftStyled>
-          </Cell>
-          <Cell>
-            <ContentStyled>
-              <LeftTitleStyled>Start date</LeftTitleStyled>
-              <RightTitleStyled>End date</RightTitleStyled>
-            </ContentStyled>
-            <ContentStyled>
-              <LeftStyled>{format(startDate, 'DD/MM/YYYY')}</LeftStyled>
-              <RightStyled>{format(endDate, 'DD/MM/YYYY')}</RightStyled>
-            </ContentStyled>
-          </Cell>
-        </>
+        <DatesDetail
+          startDate={startDate}
+          endDate={endDate}
+          period={booking.period}
+          priceType={booking.priceType}
+          alignLeft
+        />
       )}
     </Grid>
   )
