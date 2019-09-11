@@ -104,7 +104,7 @@ const DatePicker = props => {
         focused={props.focus}
         id="date_picker"
         numberOfMonths={1}
-        displayFormat="DD/MM/YYYY"
+        displayFormat="dd/MM/yyyy"
         onDateChange={_onDatesChange}
         onFocusChange={_onFocusChange}
         placeholder={props.placeholder}

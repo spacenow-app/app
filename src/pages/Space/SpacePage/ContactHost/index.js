@@ -39,7 +39,7 @@ const ContactHost = ({ values, errors, handleChange, handleBlur, setFieldValue, 
   const { isLoading: isSendingEmail } = useSelector(state => state.mail)
 
   const _handleSubmit = () => {
-    setFieldValue('date', format(new Date(values.date), 'DD/MM/YYYY').toString())
+    setFieldValue('date', format(new Date(values.date), 'dd/MM/yyyy').toString())
     Object.assign(
       values,
       { listingPhoto: JSON.stringify(listing.photos.find(photo => photo.isCover).name) },
@@ -50,7 +50,7 @@ const ContactHost = ({ values, errors, handleChange, handleBlur, setFieldValue, 
       { listingCurrency: listing.listingData.currency },
       { listingPrice: listing.listingData.basePrice },
       { listingPeriod: listing.bookingPeriod },
-      { currentDate: format(new Date(), 'MMMM Mo, YYYY') },
+      { currentDate: format(new Date(), 'MMMM Mo, yyyy') },
       { listingCategory: listing.settingsParent.category.itemName }
     )
     const emailGuest = {
@@ -78,7 +78,7 @@ const ContactHost = ({ values, errors, handleChange, handleBlur, setFieldValue, 
         <DatePicker
           label="Date"
           name="date"
-          handleDateChange={date => setFieldValue('date', format(date, 'DD/MM/YYYY'))}
+          handleDateChange={date => setFieldValue('date', format(date, 'dd/MM/yyyy'))}
           dayPickerProps={{
             disabledDays: [{ before: new Date() }]
           }}
@@ -164,7 +164,7 @@ const formik = {
   displayName: 'Partner_WeWorkForm',
   mapPropsToValues: props => {
     return {
-      guestName: props.user && props.user.id ? props.user.profile.firstName + ' ' + props.user.profile.lastName : '',
+      guestName: props.user && props.user.id ? `${props.user.profile.firstName} ${props.user.profile.lastName}` : '',
       guestEmail: props.user && props.user.id ? props.user.email : '',
       date: new Date(),
       startTime: format(new Date('January 31 1980 08:00'), 'HH:mm'),

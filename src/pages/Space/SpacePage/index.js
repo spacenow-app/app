@@ -27,7 +27,6 @@ import {
   Button
 } from 'components'
 
-import WeeklyBooking from './WeeklyBooking'
 import MonthlyBooking from './MonthlyBooking'
 import PendingBooking from './PenidngBooking'
 import ContactHost from './ContactHost'
@@ -48,6 +47,7 @@ import { sendMail } from 'redux/ducks/mail'
 import GraphCancelattionImage from 'pages/Listing/SpaceDetailsPage/CancellationTab/graph_cancellation.png'
 
 import config from 'variables/config'
+import WeeklyBooking from './WeeklyBooking'
 import DailyBooking from './DailyBooking'
 
 const GridStyled = styled(Grid)`
@@ -344,9 +344,8 @@ const SpacePage = ({ match, location, history, ...props }) => {
     if (bookingPeriod === 'monthly') {
       if (date > 0 && period > 0) {
         return false
-      } else {
-        return true
       }
+      return true
     }
     if (bookingPeriod === 'daily') {
       if (listing.listingData.minTerm > 0) {
@@ -404,7 +403,7 @@ const SpacePage = ({ match, location, history, ...props }) => {
           { guest: `${user.profile.firstName} ${user.profile.lastName}` },
           { guestId: user.id },
           { spaceId: listing.id },
-          { currentDate: format(new Date(), 'MMMM Mo, YYYY') }
+          { currentDate: format(new Date(), 'MMMM Mo, yyyy') }
         )
 
         const emailData = {
@@ -498,7 +497,7 @@ const SpacePage = ({ match, location, history, ...props }) => {
 
             <Box>
               <Title type="h5" title="Highlights" />
-              <Grid columns={'repeat(auto-fit, minmax(120px, 1fr))'} rowGap="50px">
+              <Grid columns="repeat(auto-fit, minmax(120px, 1fr))" rowGap="50px">
                 <Highlights
                   title="Minimum term"
                   name={_changeToPlural(
@@ -556,7 +555,7 @@ const SpacePage = ({ match, location, history, ...props }) => {
             {listing.amenities.length > 0 && (
               <Box>
                 <Title type="h5" title="Amenities" />
-                <Grid columns={'repeat(auto-fit, minmax(200px, auto))'} rowGap="40px">
+                <Grid columns="repeat(auto-fit, minmax(200px, auto))" rowGap="40px">
                   {listing.amenities.map(item => {
                     return (
                       <Box key={item.id} display="grid" gridTemplateColumns="auto 1fr" gridColumnGap="20px">
@@ -579,11 +578,9 @@ const SpacePage = ({ match, location, history, ...props }) => {
             {listing.rules.length > 0 && (
               <Box>
                 <Title type="h5" title="Space Rules" />
-                <Grid columns={'repeat(auto-fit, minmax(200px, auto))'} rowGap="20px">
+                <Grid columns="repeat(auto-fit, minmax(200px, auto))" rowGap="20px">
                   {listing.rules.map(item => {
-                    return (
-                      <Checkbox disabled key={item.id} label={item.settingsData.itemName} name="rules" checked={true} />
-                    )
+                    return <Checkbox disabled key={item.id} label={item.settingsData.itemName} name="rules" checked />
                   })}
                 </Grid>
               </Box>
@@ -651,7 +648,7 @@ const SpacePage = ({ match, location, history, ...props }) => {
 
       <Box my="100px">
         <Title type="h5" title="Cancellation Policy" />
-        <Grid columns={'repeat(auto-fit, minmax(350px, auto))'}>
+        <Grid columns="repeat(auto-fit, minmax(350px, auto))">
           <Cell>
             <Title
               noMargin

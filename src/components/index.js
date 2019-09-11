@@ -49,6 +49,7 @@ import ButtonSocial from './ButtonSocial'
 import Slider from './Slider'
 import Pagination from './Pagination'
 import DatesDetail from './DatesDetail'
+import Table from './Table'
 
 export {
   Modal,
@@ -104,5 +105,6 @@ export {
   ButtonSocial,
   Slider,
   Pagination,
-  DatesDetail
+  DatesDetail,
+  Table
 }

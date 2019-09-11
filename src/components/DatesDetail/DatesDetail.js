@@ -47,11 +47,11 @@ function spelling(periodType, reference) {
 
 const DatesDetail = ({ startDate, endDate, period, priceType, ...props }) => {
   return (
-    <Grid columns={1} rows={2} rowGap={'20px'}>
+    <Grid columns={1} rows={2} rowGap="20px">
       <Box>
         <LeftTitleStyled>Period</LeftTitleStyled>
         <br />
-        <LeftStyled>{period + ' ' + spelling(priceType, period)}</LeftStyled>
+        <LeftStyled>{`${period} ${spelling(priceType, period)}`}</LeftStyled>
       </Box>
       <Box>
         <ContentStyled>
@@ -59,8 +59,8 @@ const DatesDetail = ({ startDate, endDate, period, priceType, ...props }) => {
           <RightTitleStyled {...props}>End date</RightTitleStyled>
         </ContentStyled>
         <ContentStyled>
-          <LeftStyled>{format(startDate, 'DD/MM/YYYY')}</LeftStyled>
-          <RightStyled {...props}>{format(endDate, 'DD/MM/YYYY')}</RightStyled>
+          <LeftStyled>{format(startDate, 'dd/MM/yyyy')}</LeftStyled>
+          <RightStyled {...props}>{format(endDate, 'dd/MM/yyyy')}</RightStyled>
         </ContentStyled>
       </Box>
     </Grid>

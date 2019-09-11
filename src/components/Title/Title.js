@@ -1,6 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import styled, { css } from 'styled-components'
+import { space } from 'styled-system'
 
 const baseStyle = css`
   font-family: 'Montserrat-Bold';
@@ -18,6 +19,7 @@ const baseStyle = css`
 const TitleStyled = styled.div`
   display: ${props => (props.subtitle ? 'grid' : 'block')};
   margin: ${props => (props.noMargin ? '0' : '30px 0;')};
+  ${space}
 `
 
 const H1Styled = styled.h1`
@@ -57,73 +59,112 @@ const SubtitleStyled = styled.p`
   line-height: 26px;
 `
 
-const Title = ({ type, title, subtitle, subTitleSize, subTitleMargin, subTitleColor, noMargin, right, center, ...props }) => {
+const Title = ({
+  type,
+  title,
+  subtitle,
+  subTitleSize,
+  subTitleMargin,
+  subTitleColor,
+  noMargin,
+  right,
+  center,
+  ...props
+}) => {
   if (type === 'h1') {
     return (
-      <TitleStyled className={props.className} noMargin={noMargin}>
+      <TitleStyled className={props.className} noMargin={noMargin} {...props}>
         <H1Styled right={right} center={center} {...props}>
           {title}
         </H1Styled>
-        {subtitle && <SubtitleStyled subTitleSize={subTitleSize} subTitleMargin={subTitleMargin} subTitleColor={subTitleColor}>{subtitle}</SubtitleStyled>}
+        {subtitle && (
+          <SubtitleStyled subTitleSize={subTitleSize} subTitleMargin={subTitleMargin} subTitleColor={subTitleColor}>
+            {subtitle}
+          </SubtitleStyled>
+        )}
       </TitleStyled>
     )
   }
   if (type === 'h2') {
     return (
-      <TitleStyled className={props.className} noMargin={noMargin}>
+      <TitleStyled className={props.className} noMargin={noMargin} {...props}>
         <H2Styled right={right} center={center} {...props}>
           {title}
         </H2Styled>
-        {subtitle && <SubtitleStyled subTitleSize={subTitleSize} subTitleMargin={subTitleMargin} subTitleColor={subTitleColor}>{subtitle}</SubtitleStyled>}
+        {subtitle && (
+          <SubtitleStyled subTitleSize={subTitleSize} subTitleMargin={subTitleMargin} subTitleColor={subTitleColor}>
+            {subtitle}
+          </SubtitleStyled>
+        )}
       </TitleStyled>
     )
   }
   if (type === 'h3') {
     return (
-      <TitleStyled className={props.className} noMargin={noMargin}>
+      <TitleStyled className={props.className} noMargin={noMargin} {...props}>
         <H3Styled right={right} center={center} {...props}>
           {title}
         </H3Styled>
-        {subtitle && <SubtitleStyled subTitleSize={subTitleSize} subTitleMargin={subTitleMargin} subTitleColor={subTitleColor}>{subtitle}</SubtitleStyled>}
+        {subtitle && (
+          <SubtitleStyled subTitleSize={subTitleSize} subTitleMargin={subTitleMargin} subTitleColor={subTitleColor}>
+            {subtitle}
+          </SubtitleStyled>
+        )}
       </TitleStyled>
     )
   }
   if (type === 'h4') {
     return (
-      <TitleStyled className={props.className} noMargin={noMargin}>
+      <TitleStyled className={props.className} noMargin={noMargin} {...props}>
         <H4Styled right={right} center={center} {...props}>
           {title}
         </H4Styled>
-        {subtitle && <SubtitleStyled subTitleSize={subTitleSize} subTitleMargin={subTitleMargin} subTitleColor={subTitleColor}>{subtitle}</SubtitleStyled>}
+        {subtitle && (
+          <SubtitleStyled subTitleSize={subTitleSize} subTitleMargin={subTitleMargin} subTitleColor={subTitleColor}>
+            {subtitle}
+          </SubtitleStyled>
+        )}
       </TitleStyled>
     )
   }
   if (type === 'h5') {
     return (
-      <TitleStyled className={props.className} noMargin={noMargin}>
+      <TitleStyled className={props.className} noMargin={noMargin} {...props}>
         <H5Styled right={right} center={center} {...props}>
           {title}
         </H5Styled>
-        {subtitle && <SubtitleStyled subTitleSize={subTitleSize} subTitleMargin={subTitleMargin} subTitleColor={subTitleColor}>{subtitle}</SubtitleStyled>}
+        {subtitle && (
+          <SubtitleStyled subTitleSize={subTitleSize} subTitleMargin={subTitleMargin} subTitleColor={subTitleColor}>
+            {subtitle}
+          </SubtitleStyled>
+        )}
       </TitleStyled>
     )
   }
   if (type === 'h6') {
     return (
-      <TitleStyled className={props.className} noMargin={noMargin}>
+      <TitleStyled className={props.className} noMargin={noMargin} {...props}>
         <H6Styled right={right} center={center} {...props}>
           {title}
         </H6Styled>
-        {subtitle && <SubtitleStyled subTitleSize={subTitleSize} subTitleMargin={subTitleMargin} subTitleColor={subTitleColor}>{subtitle}</SubtitleStyled>}
+        {subtitle && (
+          <SubtitleStyled subTitleSize={subTitleSize} subTitleMargin={subTitleMargin} subTitleColor={subTitleColor}>
+            {subtitle}
+          </SubtitleStyled>
+        )}
       </TitleStyled>
     )
   }
   return (
-    <TitleStyled className={props.className} noMargin={noMargin}>
+    <TitleStyled className={props.className} noMargin={noMargin} {...props}>
       <H1Styled right={right} center={center} {...props}>
         {title}
       </H1Styled>
-      {subtitle && <SubtitleStyled subTitleSize={subTitleSize} subTitleMargin={subTitleMargin} subTitleColor={subTitleColor}>{subtitle}</SubtitleStyled>}
+      {subtitle && (
+        <SubtitleStyled subTitleSize={subTitleSize} subTitleMargin={subTitleMargin} subTitleColor={subTitleColor}>
+          {subtitle}
+        </SubtitleStyled>
+      )}
     </TitleStyled>
   )
 }

@@ -1,7 +1,7 @@
 import React, { forwardRef } from 'react'
 import PropTypes from 'prop-types'
 import styled from 'styled-components'
-import { color, typography } from 'styled-system'
+import { color, typography, space } from 'styled-system'
 import { Button as ButtonExternal, Spinner } from 'react-bootstrap'
 
 const ButtonStyled = styled(ButtonExternal)`
@@ -21,6 +21,7 @@ const ButtonStyled = styled(ButtonExternal)`
 
     ${color}
     ${typography}
+    ${space}
 
     :hover {
       &&& {
