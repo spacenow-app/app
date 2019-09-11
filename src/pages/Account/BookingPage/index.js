@@ -6,7 +6,7 @@ import { onGetBookingsByUser } from 'redux/ducks/account'
 import { onDeclineBooking, onAcceptBooking } from 'redux/ducks/booking'
 import { TypesModal, openModal } from 'redux/ducks/modal'
 import { Card, Text, Icon, Loader, BackgroundImage, Grid, Cell, Title, Wrapper, Dropdown } from 'components'
-
+import { convertedDate } from 'utils/date'
 
 const _parseCategoryIconName = (name, isSub) => {
   let prefix = 'category-'
@@ -67,14 +67,14 @@ const _getTip = (status, userType) => {
 }
 
 const BookingCard = (dispatch, item, index, userType) => {
-  let expire = addHours(format(new Date(item.createdAt), 'dd/MM/yyyy'), 24)
+  let expire = addHours(convertedDate(item.createdAt), 24)
 
-  if (userType === 'guest') expire = addMinutes(format(new Date(item.createdAt), 'dd/MM/yyyy'), 30)
+  if (userType === 'guest') expire = addMinutes(convertedDate(item.createdAt), 30)
 
   if (userType === 'guest')
-    expire = addMinutes(format(new Date(item.createdAt), 'MM/DD/YYYY'), 15)
+    expire = addMinutes(convertedDate(item.createdAt), 15)
 
-  let expiryDate = format(expire, "DD/MM/YYYY") + ' at ' + format(expire, "HH:mm")
+  let expiryDate = format(expire, "dd/MM/yyyy") + ' at ' + format(expire, "HH:mm")
 
   return (
     <Card.Horizontal key={index}>

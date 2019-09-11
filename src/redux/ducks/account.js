@@ -276,19 +276,19 @@ export default function reducer(state = initialState, action) {
     case Types.ACC_GET_DOCUMENTS_SUCCESS:
       return {
         ...state,
-        get: { documents: action.payload },
+        get: { ...state.get, documents: action.payload },
         isLoading: false
       }
     case Types.ACC_GET_ALL_BOOKINGS_BY_USER_SUCCESS:
       return {
         ...state,
-        get: { bookings: action.payload },
+        get: { ...state.get, bookings: action.payload },
         isLoading: false
       }
     case Types.ACC_GET_ALL_LISTINGS_BY_USER_SUCCESS:
       return {
         ...state,
-        get: { listings: action.payload },
+        get: { ...state.get, listings: action.payload },
         isLoading: false
       }
     case Types.ACC_UPDATE_PROFILE_SUCCESS:
@@ -302,6 +302,7 @@ export default function reducer(state = initialState, action) {
         ...state,
         isLoading: false,
         get: {
+          ...state.get,
           listings: {
             count: state.get.listings.count,
             rows: state.get.listings.rows.map((item) => {
@@ -317,6 +318,7 @@ export default function reducer(state = initialState, action) {
         ...state,
         isLoading: false,
         get: {
+          ...state.get,
           documents: {
             count: state.get.documents.count - 1,
             rows: state.get.documents.rows.filter((item) => item.id !== action.payload.id)
@@ -328,6 +330,7 @@ export default function reducer(state = initialState, action) {
         ...state,
         isLoading: false,
         get: {
+          ...state.get,
           documents: {
             count: state.get.documents.count + 1,
             rows: [...state.get.documents.rows, action.payload]
@@ -342,28 +345,28 @@ export default function reducer(state = initialState, action) {
     case Types.ACC_GET_PROFILE_ERROR:
       return {
         ...state,
-        get: { user: null },
+        get: { ...state.get, user: null },
         error: action.payload,
         isLoading: false
       }
     case Types.ACC_GET_DOCUMENTS_ERROR:
       return {
         ...state,
-        get: { documents: null },
+        get: { ...state.get, documents: null },
         error: action.payload,
         isLoading: false
       }
     case Types.ACC_GET_ALL_BOOKINGS_BY_USER_ERROR:
       return {
         ...state,
-        get: { bookings: null },
+        get: { ...state.get, bookings: null },
         error: action.payload,
         isLoading: false
       }
     case Types.ACC_GET_ALL_LISTINGS_BY_USER_ERROR:
       return {
         ...state,
-        get: { listings: null },
+        get: { ...state.get, listings: null },
         error: action.payload,
         isLoading: false
       }

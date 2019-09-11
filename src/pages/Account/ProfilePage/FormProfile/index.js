@@ -5,9 +5,7 @@ import styled from 'styled-components'
 import { withFormik } from 'formik'
 import * as Yup from 'yup'
 import { format } from 'date-fns'
-
 import { Input, Select, TextArea, Button, DatePicker, Box } from 'components'
-
 import { onUpdateProfile } from 'redux/ducks/account'
 
 const WrapperStyled = styled.div`
@@ -103,7 +101,7 @@ const FormProfile = ({
           <SectionStyled>
             <DatePicker
               label="Date of Birth"
-              value={format(values.dateOfBirth, 'dd/MM/yyyy')}
+              value={values.dateOfBirth}
               handleDateChange={date => setFieldValue('dateOfBirth', format(date, 'dd/MM/yyyy'))}
               captionMargin="0 0 .5rem 25px"
             />
@@ -138,7 +136,7 @@ const formik = {
       return {
         firstName: profile.firstName || '',
         lastName: profile.lastName || '',
-        dateOfBirth: profile.dateOfBirth || '',
+        dateOfBirth: format(new Date(profile.dateOfBirth), 'dd/MM/yyyy') || '',
         gender: profile.gender || '',
         phoneNumber: profile.phoneNumber || '',
         info: profile.info || ''
