@@ -29,7 +29,22 @@ const ListDates = props => {
   if (!props.dates || props.dates.lenght < 0) {
     return null
   }
-  const datesGrouped = _.groupBy(props.dates, item => format(item, 'MMMM'))
+
+  const _convertedDate = date => {
+    const h = new Date(date)
+    const u = new Date(
+      h.getUTCFullYear(),
+      h.getUTCMonth(),
+      h.getUTCDate(),
+      h.getUTCHours(),
+      h.getUTCMinutes(),
+      h.getSeconds()
+    )
+    return u
+  }
+  const datesGrouped = _.groupBy(props.dates, item => {
+    return format(_convertedDate(item), 'MMMM')
+  })
 
   return (
     <WrapperStyled>
@@ -41,7 +56,7 @@ const ListDates = props => {
               <ContainerDatesStyled>
                 {datesGrouped[month].map(date => (
                   <Badge key={date} handleClick={props.onClickDate && (e => props.onClickDate(e, date))}>
-                    {format(date, 'D')}
+                    {format(_convertedDate(date), 'd')}
                   </Badge>
                 ))}
               </ContainerDatesStyled>
