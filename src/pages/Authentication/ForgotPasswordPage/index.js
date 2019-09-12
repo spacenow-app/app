@@ -18,7 +18,7 @@ const ForgotPasswordPage = ({ history, values, touched, errors, handleChange, ha
     <>
       <NavBar />
       <Wrapper>
-        <Box margin="0 auto" width="500px" p="40px" textAlign="center">
+        <Box margin="0 auto" width={{ _: '100%', medium: '500px' }} p="40px" textAlign="center">
           <Title center type="h3" title="Forgot Password?" />
           <Text display="block" fontSize="14px" fontFamily="medium" my="15px">
             Enter your account email address and we will send you a link to reset your password.

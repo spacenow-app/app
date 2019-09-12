@@ -36,9 +36,9 @@ const SignupPage = ({ values, touched, errors, handleChange, handleBlur, isValid
     <>
       <NavBar />
       <Wrapper>
-        <Box margin="0 auto" width="500px" p="40px" textAlign="center">
+        <Box margin="0 auto" width={{ _: '100%', medium: '500px' }} p="40px" textAlign="center">
           <Title center type="h3" title="Create your account" />
-          <Box display="grid" gridTemplateColumns="auto auto" gridColumnGap="15px">
+          <Box display="grid" gridTemplateColumns={{ _: 'none', medium: 'auto auto' }} gridGap="15px">
             <ButtonSocial facebook onResponse={responseFacebook} />
             <ButtonSocial google onResponse={responseGoogle} />
           </Box>

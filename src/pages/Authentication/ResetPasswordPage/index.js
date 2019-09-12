@@ -24,7 +24,7 @@ const ResetPasswordPage = ({ location, history, values, touched, errors, handleC
     <>
       <NavBar />
       <Wrapper>
-        <Box margin="0 auto" width="500px" p="40px" textAlign="center">
+        <Box margin="0 auto" width={{ _: '100%', medium: '500px' }} p="40px" textAlign="center">
           <Title center type="h3" title="Reset Password" />
           <Text display="block" fontSize="14px" fontFamily="medium" my="15px">
             The password should contain at least 8 characters, 1 uppercase letter, 1 number, 1 symbol like @, # or &
