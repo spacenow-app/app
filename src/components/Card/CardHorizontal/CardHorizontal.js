@@ -1,12 +1,13 @@
 import React from 'react'
 import styled from 'styled-components'
-import { Dropdown, Tooltip, OverlayTrigger } from 'react-bootstrap'
+import { Tooltip, OverlayTrigger } from 'react-bootstrap'
 
 import Title from 'components/Title'
 import Tag from 'components/Tag'
 import Image from 'components/Image'
 import Label from 'components/Label'
 import Button from 'components/Button'
+import Dropdown from 'components/Dropdown'
 
 const Wrapper = styled.div`
   display: grid;
@@ -75,6 +76,7 @@ const ExpireOnStyled = styled(Title)`
 
 const LabelStyled = styled(Label)`
   justify-self: end;
+  font-size: 12px;
 `
 
 const ButtonStyled = styled(Button)`
@@ -87,7 +89,8 @@ const FooterStyled = styled.div`
   display: grid;
   grid-auto-flow: column;
   grid-template-columns: max-content;
-  grid-column-gap: inherit;
+  grid-gap: inherit;
+  width: 100%;
   @media(max-width: 576px) {
     grid-auto-flow: column;
     padding: 10px 20px 20px 10px;
@@ -97,32 +100,8 @@ const FooterStyled = styled.div`
 const DropdownStyled = styled(Dropdown)`
   grid-area: body;
   justify-self: end;
-  padding: 20px;
-
-  &&&.show button {
-    background-color: transparent;
-  }
-  > div {
-    border-radius: 10px;
-  }  
-
-  & button { 
-    background-color: transparent;
-    border: none;
-    border-radius: 30px;
-    padding: 10px 10px;
-
-    & span {
-      color: #6ADC91;
-    }
-  }
-  &&&:hover button, &&&:focus button, &&&:active button {
-    background-color: transparent;
-  }
-  & a {
-    font-size: 14px;
-  }
-
+  padding: 20px 20px 0 0;
+  font-size: 12px;
 `
 
 const ToolTipStyled = styled(Tooltip)`

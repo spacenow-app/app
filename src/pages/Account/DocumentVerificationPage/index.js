@@ -4,7 +4,7 @@ import { useSelector, useDispatch } from 'react-redux'
 import Helmet from 'react-helmet'
 import styled from 'styled-components'
 import { onGetUserDocuments, onDeleteDocument, onUploadDocument } from 'redux/ducks/account';
-import { Button, Loader, BackgroundImage, Grid, Cell, Title, Image, Wrapper, Icon, Document } from 'components'
+import { Box, Button, Loader, BackgroundImage, Grid, Cell, Title, Image, Wrapper, Icon, Document } from 'components'
 
 const CadStyled = styled.div`
   display: grid;
@@ -68,10 +68,10 @@ const DocumentVerificationPage = () => {
       {!documents || documents.count === 0 ? (
         <BackgroundImage text="We didn't find any document :(" />
       ) : (
-          <Grid columns={3}>
+          <Box display="grid" gridTemplateColumns={{ _: "1fr 1fr", medium: '1fr 1fr 1fr' }} gridGap="30px">
             {[].concat(documents.rows).map((item, index) => DocumentCard(dispatch, item, index))}
             <Document onDrop={_addDocument} />
-          </Grid>
+          </Box>
         )}
     </Wrapper>
   )

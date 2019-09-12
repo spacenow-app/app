@@ -11,6 +11,11 @@ import { onUpdateProfile } from 'redux/ducks/account'
 const WrapperStyled = styled.div`
   display: grid;
   grid-row-gap: 40px;
+
+  @media(max-width: 576px) {
+    margin-top: 30px;
+  }
+
 `
 
 const SectionStyled = styled.div``
@@ -47,10 +52,13 @@ const FormProfile = ({
             name="email"
             disabled
             value={props.user.email}
+            borderColor={props.user.emailConfirmed ? 'primary' : 'warning.0'}
+            backgroundColor={props.user.emailConfirmed ? 'greyscale.4' : 'warning.1'}
+            color={props.user.emailConfirmed ? 'greyscale.1' : ''}
             error={!props.user.emailConfirmed}
           />
         </SectionStyled>
-        <Box display="grid" gridTemplateColumns="auto auto" gridColumnGap="30px">
+        <Box display="grid" gridTemplateColumns={{ _: "1fr", medium: 'auto auto' }} gridGap="30px">
           <SectionStyled>
             <Input
               label="First Name*"
@@ -76,7 +84,7 @@ const FormProfile = ({
           </SectionStyled>
         </Box>
 
-        <Box display="grid" gridTemplateColumns="auto auto auto" gridColumnGap="30px">
+        <Box display="grid" gridTemplateColumns={{ _: "1fr", medium: 'auto auto auto' }} gridGap="30px">
           <SectionStyled>
             <Input
               label="Phone Number"

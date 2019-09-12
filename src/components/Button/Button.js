@@ -7,15 +7,15 @@ import { Button as ButtonExternal, Spinner } from 'react-bootstrap'
 const ButtonStyled = styled(ButtonExternal)`
   &&& {
     height: 54px;
-    height: ${props => (props.height && props.height) || (props.size === 'sm' && '42px') || '54px'};
+    height: ${props => (props.height && props.height) || (props.size === 'xs' && '36px') || (props.size === 'sm' && '42px') || '54px'};
     width: ${props =>
-      (props.fluid && '100%') || (props.width && props.width) || (props.size === 'sm' && '144px') || '180px'};
+    (props.fluid && '100%') || (props.width && props.width) || (props.size === 'xs' && '120px') || (props.size === 'sm' && '144px') || '180px'};
     border-radius: 37px;
     font-family: 'Montserrat-Medium';
-    font-size: 14px;
+    font-size: ${props => (props.size === 'xs' && '12px') || (props.size === 'sm' && '14px') || '14px'};;
     font-weight: 600;
     background-color: ${props =>
-      (props.outline && '#fff') || (props.disabled && '#fff') || (props.error && '#dd4b39') || '#6adc91'};
+    (props.outline && '#fff') || (props.disabled && '#fff') || (props.error && '#dd4b39') || '#6adc91'};
     color: ${props => (props.outline && '#172439') || '#fff'};
     border: ${props => (props.outline ? `1px solid #172439` : 'none')};
 
@@ -33,7 +33,7 @@ const ButtonStyled = styled(ButtonExternal)`
     :focus {
       &&& {
         box-shadow: ${props =>
-          (props.error && '0 0 0 0.2rem rgba(194, 51, 33, 0.5)') || '0 0 0 0.2rem rgba(106, 220, 145, 0.5)'};
+    (props.error && '0 0 0 0.2rem rgba(194, 51, 33, 0.5)') || '0 0 0 0.2rem rgba(106, 220, 145, 0.5)'};
         background-color: ${props => (props.outline && '#6adc91') || (props.error && '#c23321') || '#2DA577'};
         border: ${props => (props.outline ? `1px solid #6adc91` : 'none')};
         color: #fff;
@@ -182,7 +182,7 @@ Button.propTypes = {
   outline: PropTypes.bool,
   type: PropTypes.string,
   onClick: PropTypes.func,
-  size: PropTypes.oneOf(['sm', 'md']),
+  size: PropTypes.oneOf(['xs', 'sm', 'md']),
   width: PropTypes.string,
   fluid: PropTypes.bool,
   error: PropTypes.bool
