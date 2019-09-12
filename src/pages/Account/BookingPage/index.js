@@ -105,8 +105,8 @@ const BookingCard = (dispatch, item, index, userType) => {
           />
         )}
       </Card.Horizontal.Body>
-      <Card.Horizontal.Dropdown alignRight>
-        <Card.Horizontal.Dropdown.Toggle size="sm">
+      <Card.Horizontal.Dropdown alignRight size="sm">
+        <Card.Horizontal.Dropdown.Toggle>
           <Text color="primary">Option</Text>
         </Card.Horizontal.Dropdown.Toggle>
         <Card.Horizontal.Dropdown.Menu>
@@ -181,7 +181,7 @@ const BookingPage = ({ ...props }) => {
           <Title type="h4" title="Your Bookings" />
         </Cell>
         <Cell width={6} middle justifySelf={'end'}>
-          <Dropdown alignRight>
+          <Dropdown alignRight size={'sm'}>
             <Dropdown.Toggle size="sm">
               <Text color="primary">User Type</Text>
             </Dropdown.Toggle>

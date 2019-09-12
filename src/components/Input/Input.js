@@ -1,6 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import styled, { css } from 'styled-components'
+import { border, color } from 'styled-system'
 
 const sizeStyle = {
   sm: css`
@@ -56,6 +57,10 @@ const InputStyled = styled.input`
     -webkit-appearance: none;
     margin: 0;
   }
+
+  ${ border }
+  ${ color }
+
 `
 
 const Label = styled.label`
