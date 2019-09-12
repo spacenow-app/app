@@ -42,7 +42,7 @@ const Routes = props => {
           <Redirect exact from="/" to="/listing/intro" />
           <PublicRoute
             path="/404"
-            handlerCheckAuthentication={() => { }}
+            handlerCheckAuthentication={() => {}}
             isAuthenticated={null}
             component={otherProps => (
               <>
@@ -53,13 +53,13 @@ const Routes = props => {
           />
           <PublicRoute
             path="/auth"
-            handlerCheckAuthentication={() => { }}
+            handlerCheckAuthentication={() => {}}
             isAuthenticated={isAuthenticated}
             component={Authentication}
           />
-          <PublicRoute {...props} path="/lp" handlerCheckAuthentication={() => { }} component={LandingPages} />
-          <PublicRoute {...props} path="/space" handlerCheckAuthentication={() => { }} component={Space} />
-          <PublicRoute {...props} path="/search" handlerCheckAuthentication={() => { }} component={SearchPage} />
+          <PublicRoute {...props} path="/lp" handlerCheckAuthentication={() => {}} component={LandingPages} />
+          <PublicRoute {...props} path="/space" handlerCheckAuthentication={() => {}} component={Space} />
+          <PublicRoute {...props} path="/search" handlerCheckAuthentication={() => {}} component={SearchPage} />
           <PrivateRoute
             {...props}
             path="/"
