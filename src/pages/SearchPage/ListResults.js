@@ -7,6 +7,10 @@ const Wrapper = styled.div`
   overflow-y: scroll;
   height: 100%;
   padding: 5px;
+
+  @media only screen and (max-width: 600px) {
+    overflow-y: unset;
+  }
 `
 
 const ContainerList = styled.div`
