@@ -220,7 +220,7 @@ const mutationUpdateUserProfile = gql`
 const mutationUpdateProfilePicture = gql`
   mutation updateProfilePicture($file: Upload, $userId: String! ) {
     updateProfilePicture(file: $file, userId: $userId) {
-      status
+      picture
 		}
   }
 `
@@ -340,6 +340,7 @@ export default function reducer(state = initialState, action) {
     case Types.ACC_UPDATE_PROFILE_PICTURE_SUCCESS:
       return {
         ...state,
+        get: { ...state.get, user: { ...state.get.user, profile: { ...state.get.user.profile, ...action.payload } } },
         isLoading: false,
       }
     case Types.ACC_GET_PROFILE_ERROR:
@@ -482,7 +483,6 @@ export const onUpdateProfile = (userId, input) => async dispatch => {
       mutation: mutationUpdateUserProfile,
       variables: { userId, input }
     })
-    console.log(input)
     toast.success("Profile updated successfully");
     dispatch({ type: Types.ACC_UPDATE_PROFILE_SUCCESS, payload: input })
   } catch (error) {
@@ -494,12 +494,12 @@ export const onUpdateProfile = (userId, input) => async dispatch => {
 export const onUpdateProfilePicture = (file, userId) => async dispatch => {
   dispatch({ type: Types.ACC_UPDATE_PROFILE_PICTURE })
   try {
-    await getClientWithAuth(dispatch).mutate({
+    const { data } = await getClientWithAuth(dispatch).mutate({
       mutation: mutationUpdateProfilePicture,
       variables: { userId, file }
     })
     toast.success("Profile updated successfully");
-    dispatch({ type: Types.ACC_UPDATE_PROFILE_PICTURE_SUCCESS })
+    dispatch({ type: Types.ACC_UPDATE_PROFILE_PICTURE_SUCCESS, payload: data.updateProfilePicture })
   } catch (error) {
     toast.error(error.message);
     dispatch({ type: Types.ACC_UPDATE_PROFILE_PICTURE_ERROR, payload: error.message })
