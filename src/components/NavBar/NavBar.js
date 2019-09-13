@@ -63,7 +63,7 @@ const NavBar = () => {
   const { user } = useSelector(state => state.account.get)
   const { isAuthenticated } = useSelector(state => state.auth)
 
-  const _handlerGoToLegancy = page => () => {
+  const _handlerGoToLegancy = page => {
     window.location.href = `${config.static}/${page || ''}`
   }
   const _handlerLogout = () => {
@@ -72,7 +72,7 @@ const NavBar = () => {
 
   return (
     <Navbar expand="lg">
-      <Link to="" onClick={_handlerGoToLegancy}>
+      <Link to="" onClick={() => _handlerGoToLegancy()}>
         <Navbar.Brand>
           <img alt="" src={logo} width={230} className="d-inline-block align-top" />
         </Navbar.Brand>
@@ -81,17 +81,13 @@ const NavBar = () => {
       <Navbar.Collapse className="justify-content-end" id="top-navbar-nav">
         <Nav style={{ alignItems: 'center' }}>
           <NavLinkStyled to="/listing">List Your Space</NavLinkStyled>
-          <NavLinkStyled to="" onClick={_handlerGoToLegancy('help')}>
+          <NavLinkStyled to="" onClick={() => _handlerGoToLegancy('help')}>
             Help
           </NavLinkStyled>
           {!isAuthenticated ? (
             <>
-              <NavLinkStyled to="/auth/signin" href="#link">
-                Sign In
-              </NavLinkStyled>
-              <NavLinkStyled to="/auth/signup" href="#link">
-                Sign Up
-              </NavLinkStyled>
+              <NavLinkStyled to="/auth/signin">Sign In</NavLinkStyled>
+              <NavLinkStyled to="/auth/signup">Sign Up</NavLinkStyled>
             </>
           ) : (
             <NavDropdownStyled
