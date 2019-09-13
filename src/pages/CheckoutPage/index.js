@@ -32,6 +32,14 @@ import {
   PriceDetail
 } from 'components'
 
+const GridStyled = styled(Grid)`
+  @media only screen and (max-width: 600px) {
+    grid-template-areas:
+      'card card'
+      'content content';
+  }
+`
+
 const IconButton = styled.button`
   background-color: transparent;
   border: none;
@@ -138,8 +146,8 @@ const CheckoutPage = ({ match, location, history, ...props }) => {
   return (
     <Wrapper>
       <Helmet title="Checkout - Spacenow" />
-      <Grid columns="1fr 350px" columnGap="35px">
-        <Cell>
+      <GridStyled columns="repeat(auto-fit,minmax(300px,1fr))" columnGap="35px" areas={['content card']}>
+        <Cell area="content">
           <Title
             marginTop="0px"
             className="testTitle"
@@ -168,7 +176,7 @@ const CheckoutPage = ({ match, location, history, ...props }) => {
               <Text color="primary" fontSize="18px" fontFamily="semiBold">
                 Card details
               </Text>
-              <Table>
+              <Table responsive>
                 <thead>
                   <tr>
                     <th />
@@ -209,14 +217,16 @@ const CheckoutPage = ({ match, location, history, ...props }) => {
             Add Card
           </Button>
 
-          <Box mt="50px">
-            <Button outline>Edit Dates</Button>
+          <Box mt="50px" mb="25px" display="flex">
+            <Button outline onClick={() => history.goBack()}>
+              Edit Dates
+            </Button>
             <Button ml="20px" disabled={!selectedCard.id} onClick={_payNow} isLoading={isPaying}>
               Pay Now
             </Button>
           </Box>
         </Cell>
-        <Cell>
+        <Cell area="card">
           <BookingCard
             titleComponent={
               <>
@@ -259,7 +269,7 @@ const CheckoutPage = ({ match, location, history, ...props }) => {
             Cancellation Policy <Text fontFamily="semiBold">Flexible</Text>
           </Text>
         </Cell>
-      </Grid>
+      </GridStyled>
     </Wrapper>
   )
 }

@@ -32,6 +32,10 @@ const SearchBar = styled(Box)`
   grid-column-gap: 20px;
   width: 714px;
   padding: 0 20px;
+
+  @media only screen and (max-width: 600px) {
+    width: 100%;
+  }
 `
 
 const FilterBar = styled.div`
@@ -39,6 +43,17 @@ const FilterBar = styled.div`
   grid-template-columns: auto auto auto 1fr;
   grid-column-gap: 30px;
   padding: 0 20px;
+
+  @media only screen and (max-width: 600px) {
+    display: grid;
+    grid-gap: 10px;
+    padding: 0 20px;
+    grid-template-columns: none;
+
+    button {
+      width: 100% !important;
+    }
+  }
 `
 
 const ContainerResults = styled.div`
@@ -555,7 +570,7 @@ const SearchPage = ({ history }) => {
         <Box
           height="100vh"
           width="100%"
-          top="223px"
+          top={{ _: '223px', sm: '135px' }}
           zIndex="2000000"
           bg="rgba(255, 255, 255, 0.85)"
           left="0"
