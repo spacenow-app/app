@@ -145,13 +145,13 @@ const SearchPage = ({ history, location }) => {
         setAddress(`${firstLocation.city}, ${firstLocation.country}`)
       }
     }
-  }, [searchResults])
+  }, [lat, lng, searchResults])
 
   useEffect(() => {
     if (category) {
       setFilterCategory({...filterCategory, [category]: true})
     }
-  }, [])
+  }, [filterCategory, category])
 
   useEffect(() => {
     setMarkers(
