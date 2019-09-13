@@ -27,6 +27,15 @@ const initialState = {
   }
 }
 
+const CATEGORIES = {
+  workspace: [566, 567, 572],
+  meetingSpace: [568],
+  parking: [570],
+  storage: [571],
+  eventSpace: [569],
+  retailAndHospitality: [573]
+}
+
 const searchResultFields = `
   id
   userId
@@ -95,8 +104,8 @@ const searchResultFields = `
 `
 
 const querySearchByAddress = gql`
-  query searchByAddress($lat: String!, $lng: String!) {
-    searchByAddress(lat: $lat, lng: $lng) {
+  query searchByAddress($lat: String!, $lng: String!, $categories: String) {
+    searchByAddress(lat: $lat, lng: $lng, categories: $categories) {
       __typename
       status
       searchKey
@@ -188,12 +197,16 @@ export default function reducer(state = initialState, action) {
   }
 }
 
-export const onSearch = (lat, lng, page = null) => async dispatch => {
+export const onSearch = (lat, lng, categoryKey = false) => async dispatch => {
   dispatch({ type: Types.ON_SEARCH_REQUEST })
   try {
+    const queryVariables = { lat: `${lat}`, lng: `${lng}` }
+    if (categoryKey) {
+      queryVariables.categories = CATEGORIES[categoryKey].join()
+    }
     const { data } = await getClient().query({
       query: querySearchByAddress,
-      variables: { lat: `${lat}`, lng: `${lng}`, page }
+      variables: queryVariables
     })
     dispatch({
       type: Types.ON_SEARCH_SUCCESS,
@@ -217,21 +230,13 @@ export const onSearch = (lat, lng, page = null) => async dispatch => {
 
 export const onQuery = (searchKey, filters, page = null) => async dispatch => {
   dispatch({ type: Types.ON_SEARCH_REQUEST })
-  const categories = {
-    workspace: [566, 567, 572],
-    meetingSpace: [568],
-    parking: [570],
-    storage: [571],
-    eventSpace: [569],
-    retailAndHospitality: [573]
-  }
   const filter = {
     categories:
-      Object.keys(categories)
+      Object.keys(CATEGORIES)
         .filter(id => {
           return filters.filterCategory[id]
         })
-        .map(item => categories[item])
+        .map(item => CATEGORIES[item])
         .join() || '',
     duration:
       Object.keys(filters.filterDuration)
