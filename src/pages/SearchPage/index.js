@@ -98,7 +98,7 @@ const ItemSwitchStyled = styled.div`
   margin-bottom: 35px;
 `
 
-const SearchPage = ({ history }) => {
+const SearchPage = ({ history, location }) => {
   const dispatch = useDispatch()
 
   const [selectedSpace, setSelectedSpace] = useState(null)
@@ -125,12 +125,33 @@ const SearchPage = ({ history }) => {
   const { searchKey, result: searchResults, pagination } = useSelector(state => state.search.get, shallowEqual)
   const isLoading = useSelector(state => state.search.isLoading)
 
+  const queryParams = new URLSearchParams(location.search)
+  const lat = queryParams.get('lat') || '-33.8688197'
+  const lng = queryParams.get('lng') || '151.2092955'
+  const category = queryParams.get('category') || false
+  
   useEffect(() => {
     async function fetchData() {
-      await dispatch(onSearch('-33.8688197', '151.2092955'))
+      await dispatch(onSearch(lat, lng, category))
     }
     fetchData()
-  }, [dispatch])
+  }, [dispatch, category, lat, lng])
+
+  useEffect(() => {
+    if (lat && lng) {
+      setLatLng({lat, lng})
+      if (searchResults && searchResults.length > 0) {
+        const firstLocation = searchResults[0].location
+        setAddress(`${firstLocation.city}, ${firstLocation.country}`)
+      }
+    }
+  }, [lat, lng, searchResults])
+
+  useEffect(() => {
+    if (category) {
+      setFilterCategory({...filterCategory, [category]: true})
+    }
+  }, [filterCategory, category])
 
   useEffect(() => {
     setMarkers(

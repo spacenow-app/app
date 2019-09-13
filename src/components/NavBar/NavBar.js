@@ -63,10 +63,10 @@ const NavBar = () => {
   const { user } = useSelector(state => state.account.get)
   const { isAuthenticated } = useSelector(state => state.auth)
 
-  const _handlerGoToLegancy = page => () => {
+  const _handlerGoToLegancy = page => {
     window.location.href = `${config.static}/${page || ''}`
   }
-  const _handlerLogout = () => () => {
+  const _handlerLogout = () => {
     dispatch(logout())
   }
 
@@ -86,12 +86,8 @@ const NavBar = () => {
           </NavLinkStyled>
           {!isAuthenticated ? (
             <>
-              <NavLinkStyled to="/auth/signin" href="#link">
-                Sign In
-              </NavLinkStyled>
-              <NavLinkStyled to="/auth/signup" href="#link">
-                Sign Up
-              </NavLinkStyled>
+              <NavLinkStyled to="/auth/signin">Sign In</NavLinkStyled>
+              <NavLinkStyled to="/auth/signup">Sign Up</NavLinkStyled>
             </>
           ) : (
               <NavDropdownStyled
