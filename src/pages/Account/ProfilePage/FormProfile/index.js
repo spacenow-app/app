@@ -5,8 +5,8 @@ import styled from 'styled-components'
 import { withFormik } from 'formik'
 import * as Yup from 'yup'
 import { format } from 'date-fns'
-import { Input, Select, TextArea, Button, DatePicker, Box } from 'components'
-import { onUpdateProfile } from 'redux/ducks/account'
+import { Input, Select, TextArea, Button, DatePicker, Box, Link, Text } from 'components'
+import { onUpdateProfile, onResendLink } from 'redux/ducks/account'
 
 const WrapperStyled = styled.div`
   display: grid;
@@ -42,6 +42,10 @@ const FormProfile = ({
     dispatch(onUpdateProfile(props.user.id, values))
   }
 
+  const _handleResendLink = () => {
+    dispatch(onResendLink(props.user.email))
+  }
+
   return (
     <form>
       <WrapperStyled>
@@ -57,6 +61,7 @@ const FormProfile = ({
             color={props.user.emailConfirmed ? 'greyscale.1' : ''}
             error={!props.user.emailConfirmed}
           />
+          {!props.user.emailConfirmed && <Text fontSize={12} marginLeft={'18px'}>Email not verified <Link color={'error'} onClick={() => _handleResendLink()}>resend link</Link></Text>}
         </SectionStyled>
         <Box display="grid" gridTemplateColumns={{ _: "1fr", medium: 'auto auto' }} gridGap="30px">
           <SectionStyled>

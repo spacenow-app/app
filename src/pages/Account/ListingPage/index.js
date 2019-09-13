@@ -33,7 +33,7 @@ const ListingCard = (dispatch, item, index) => {
       </Card.Horizontal.Body>
       <Card.Horizontal.Dropdown alignRight>
         <Card.Horizontal.Dropdown.Toggle size="sm">
-          <Text color="primary">Option</Text>
+          <Text color="primary" fontSize='12px'>Option</Text>
         </Card.Horizontal.Dropdown.Toggle>
         <Card.Horizontal.Dropdown.Menu>
           <Card.Horizontal.Dropdown.Item onClick={() => _handleEditRedirect(item.id)}>Edit</Card.Horizontal.Dropdown.Item>

@@ -101,7 +101,32 @@ const DropdownStyled = styled(Dropdown)`
   grid-area: body;
   justify-self: end;
   padding: 20px 20px 0 0;
-  font-size: 12px;
+
+  &&& button {
+    background: transparent;
+    border: 1px solid #6ADC91;
+    color: #6ADC91;
+    > span {
+      color: #6ADC91
+    }
+  }
+
+  &&&.show button {
+    background: transparent;
+    border: 1px solid #6ADC91;
+    color: #6ADC91;
+    > span {
+      color: #6ADC91
+    }
+  }
+
+  &&&:hover button, &&&:focus button, &&&:active button {
+    background-color: transparent;
+  }
+
+  > button {
+    padding: 5px 15px;
+  }
 `
 
 const ToolTipStyled = styled(Tooltip)`
