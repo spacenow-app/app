@@ -45,7 +45,7 @@ export const Types = {
   PUBLISH_LISTING_FAILURE: 'PUBLISH_LISTING_FAILURE',
   LISTING_CLEAN_SPACE_AVAILABILITIES_REQUEST: 'LISTING_CLEAN_SPACE_AVAILABILITIES_REQUEST',
   LISTING_CLEAN_SPACE_AVAILABILITIES_SUCCESS: 'LISTING_CLEAN_SPACE_AVAILABILITIES_SUCCESS',
-  LISTING_CLEAN_SPACE_AVAILABILITIES_FAILURE: 'LISTING_CLEAN_SPACE_AVAILABILITIES_FAILURE',
+  LISTING_CLEAN_SPACE_AVAILABILITIES_FAILURE: 'LISTING_CLEAN_SPACE_AVAILABILITIES_FAILURE'
 }
 
 // Initial State
@@ -472,12 +472,12 @@ const mutationPublish = gql`
 `
 
 const mutationCleanListingAvailabilities = gql`
-    mutation cleanListingAvailabilities ($listingId:Int!) {
-      cleanListingAvailabilities (listingId:$listingId) {
-        status
+  mutation cleanListingAvailabilities($listingId: Int!) {
+    cleanListingAvailabilities(listingId: $listingId) {
+      status
     }
   }
-`;
+`
 
 // Reducer
 export default function reducer(state = initialState, action) {
@@ -977,7 +977,7 @@ export const onGetAvailabilitiesByListingId = listingId => async dispatch => {
   try {
     const { data } = await getClientWithAuth(dispatch).query({
       query: queryGetAvailabilities,
-      variables: { listingId },
+      variables: { listingId: listingId.id },
       fetchPolicy: 'network-only'
     })
     const { bookingDates, exceptionDates } = data.getAvailabilitiesByListingId
