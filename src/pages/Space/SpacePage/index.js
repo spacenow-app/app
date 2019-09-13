@@ -52,8 +52,7 @@ import DailyBooking from './DailyBooking'
 
 const GridStyled = styled(Grid)`
   @media only screen and (max-width: 991px) {
-    grid-template-columns: repeat(2, 100%);
-    grid-template-areas: 'content' 'card';
+    grid-template-columns: 100%;
   }
 `
 
@@ -87,6 +86,18 @@ const BottomButtonMobile = styled.div`
 
   @media only screen and (min-width: 992px) {
     display: none;
+  }
+`
+
+const CellStyled = styled(Cell)`
+  @media only screen and (max-width: 991px) {
+    grid-column-end: span 12;
+    &&& {
+      h4 {
+        margin-top: 22px !important;
+        text-align: left;
+      }
+    }
   }
 `
 
@@ -431,8 +442,8 @@ const SpacePage = ({ match, location, history, ...props }) => {
   return (
     <Wrapper mt="50px">
       <Helmet title="View Listing - Spacenow" />
-      <GridStyled columns="auto 350px" columnGap="15px" rowGap="100px" areas={['content card']}>
-        <Cell area="content">
+      <GridStyled columns="auto 350px" columnGap="15px" rowGap="100px">
+        <Cell>
           <Grid columns={1} rowGap="50px">
             <Box>
               <Carousel photos={_convertedArrayPhotos(listing.photos)} height={imageHeight} />
@@ -475,7 +486,7 @@ const SpacePage = ({ match, location, history, ...props }) => {
             </Grid>
 
             <Grid columns={5}>
-              <Cell width={3}>
+              <CellStyled width={3}>
                 <Title
                   type="h4"
                   title={listing.title}
@@ -484,8 +495,8 @@ const SpacePage = ({ match, location, history, ...props }) => {
                   subTitleMargin={20}
                   noMargin
                 />
-              </Cell>
-              <Cell width={2} center>
+              </CellStyled>
+              <CellStyled width={2} center>
                 <Title
                   type="h4"
                   title={`$ ${Math.round((listing.listingData.basePrice || 0) * 100) / 100} ${listing.bookingPeriod}`}
@@ -493,7 +504,7 @@ const SpacePage = ({ match, location, history, ...props }) => {
                   right
                   style={{ marginTop: '5px' }}
                 />
-              </Cell>
+              </CellStyled>
             </Grid>
 
             <Box>
@@ -596,7 +607,7 @@ const SpacePage = ({ match, location, history, ...props }) => {
             </Box>
           </Grid>
         </Cell>
-        <Cell area="card" id="booking-card">
+        <Cell id="booking-card">
           <BookingCard
             titleComponent={
               <Title
