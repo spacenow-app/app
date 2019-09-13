@@ -107,7 +107,7 @@ const BookingCard = (dispatch, item, index, userType) => {
       </Card.Horizontal.Body>
       <Card.Horizontal.Dropdown alignRight size="sm">
         <Card.Horizontal.Dropdown.Toggle>
-          <Text color="primary">Option</Text>
+          <Text color="primary" fontSize='12px'>Option</Text>
         </Card.Horizontal.Dropdown.Toggle>
         <Card.Horizontal.Dropdown.Menu>
           {(item.bookingState === 'pending' && userType === 'guest' && isAfter(new Date(), expire)) && <Card.Horizontal.Dropdown.Item onClick={() => _handleRedirect(item.listingId)}>Continue Booking</Card.Horizontal.Dropdown.Item>}
