@@ -66,7 +66,7 @@ const NavBar = () => {
   const _handlerGoToLegancy = page => () => {
     window.location.href = `${config.static}/${page || ''}`
   }
-  const _handlerLogout = () => () => {
+  const _handlerLogout = () => {
     dispatch(logout())
   }
 
@@ -106,9 +106,11 @@ const NavBar = () => {
             >
               <DropdownItemStyled to="/account/profile">Profile</DropdownItemStyled>
               <NavDropdown.Divider />
-              <DropdownItemStyled href="/account/dashboard">Dashboard</DropdownItemStyled>
+              <DropdownItemStyled to="/account">Dashboard</DropdownItemStyled>
               <NavDropdown.Divider />
-              <DropdownItemStyled onClick={_handlerLogout}>Logout</DropdownItemStyled>
+              <DropdownItemStyled to="" onClick={() => _handlerLogout()}>
+                Logout
+              </DropdownItemStyled>
             </NavDropdownStyled>
           )}
         </Nav>
