@@ -152,28 +152,36 @@ const queryGetAllListingsByUser = gql`
         quantity
         status
         amenities {
+          id
           settingsData {
+            id
             itemName
             otherItemName
           }
         }
         listingData {
+          id
           basePrice
         }
         location {
+          id
           address1
           city
           state
         }
         photos {
+          id
           name
         }
         settingsParent {
+          id
           category {
+            id
             itemName
             otherItemName
           }
           subcategory {
+            id
             itemName
             otherItemName
           }
@@ -259,7 +267,6 @@ const mutationRequestResendEmail = gql`
 
 export default function reducer(state = initialState, action) {
   switch (action.type) {
-    case Types.ACC_GET_PROFILE:
     case Types.ACC_GET_DOCUMENTS:
     case Types.ACC_UPDATE_PROFILE:
     case Types.ACC_UPDATE_PROFILE_PICTURE:
@@ -270,6 +277,7 @@ export default function reducer(state = initialState, action) {
         error: null,
         isLoading: true
       }
+    case Types.ACC_GET_PROFILE:
     case Types.ACC_UPDATE_LISTING:
     case Types.ACC_DELETE_DOCUMENT:
     case Types.ACC_UPLOAD_DOCUMENT:
@@ -281,7 +289,7 @@ export default function reducer(state = initialState, action) {
     case Types.ACC_GET_PROFILE_SUCCESS:
       return {
         ...state,
-        get: { user: action.payload },
+        get: { ...state.get, user: action.payload },
         isLoading: false
       }
     case Types.ACC_GET_DOCUMENTS_SUCCESS:

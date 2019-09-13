@@ -72,7 +72,7 @@ const NavBar = () => {
 
   return (
     <Navbar expand="lg">
-      <Link to="" onClick={_handlerGoToLegancy}>
+      <Link to="#" onClick={_handlerGoToLegancy}>
         <Navbar.Brand>
           <img alt="" src={logo} width={230} className="d-inline-block align-top" />
         </Navbar.Brand>
@@ -81,7 +81,7 @@ const NavBar = () => {
       <Navbar.Collapse className="justify-content-end" id="top-navbar-nav">
         <Nav style={{ alignItems: 'center' }}>
           <NavLinkStyled to="/listing">List Your Space</NavLinkStyled>
-          <NavLinkStyled to="" onClick={_handlerGoToLegancy('help')}>
+          <NavLinkStyled to="#" onClick={_handlerGoToLegancy('help')}>
             Help
           </NavLinkStyled>
           {!isAuthenticated ? (
@@ -94,23 +94,23 @@ const NavBar = () => {
               </NavLinkStyled>
             </>
           ) : (
-            <NavDropdownStyled
-              alignRight
-              title={
-                <Box display="grid" gridTemplateColumns="auto auto" gridColumnGap="10px" color="quartenary">
-                  <span style={{ alignSelf: 'center' }}>{user.profile.firstName || 'User Profile'}</span>
-                  <Avatar style={{ width: '30px', height: '30px' }} image={user.profile.picture || null} />
-                </Box>
-              }
-              id="basic-nav-dropdown"
-            >
-              <DropdownItemStyled to="/account/profile">Profile</DropdownItemStyled>
-              <NavDropdown.Divider />
-              <DropdownItemStyled href="/account/dashboard">Dashboard</DropdownItemStyled>
-              <NavDropdown.Divider />
-              <DropdownItemStyled onClick={_handlerLogout}>Logout</DropdownItemStyled>
-            </NavDropdownStyled>
-          )}
+              <NavDropdownStyled
+                alignRight
+                title={
+                  <Box display="grid" gridTemplateColumns="auto auto" gridColumnGap="10px" color="quartenary">
+                    <span style={{ alignSelf: 'center' }}>{user.profile.firstName || 'User Profile'}</span>
+                    <Avatar style={{ width: '30px', height: '30px' }} image={user.profile.picture || null} />
+                  </Box>
+                }
+                id="basic-nav-dropdown"
+              >
+                <DropdownItemStyled to="/account/profile">Profile</DropdownItemStyled>
+                <NavDropdown.Divider />
+                <DropdownItemStyled to="/account/dashboard">Dashboard</DropdownItemStyled>
+                <NavDropdown.Divider />
+                <DropdownItemStyled to="#" onClick={_handlerLogout}>Logout</DropdownItemStyled>
+              </NavDropdownStyled>
+            )}
         </Nav>
       </Navbar.Collapse>
     </Navbar>

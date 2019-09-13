@@ -128,10 +128,7 @@ const BookingCard = (dispatch, item, index, userType) => {
         <Card.Horizontal.Tag
           small
           icon={
-            <Icon
-              width="24px"
-              name={_parseCategoryIconName(item.listing.settingsParent.category.otherItemName, false)}
-            />
+            <Icon width="24px" name={_parseCategoryIconName(item.listing.settingsParent.category.otherItemName, false)} />
           }
         >
           {item.listing.settingsParent.category.itemName}

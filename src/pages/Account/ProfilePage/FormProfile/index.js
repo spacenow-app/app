@@ -56,12 +56,12 @@ const FormProfile = ({
             name="email"
             disabled
             value={props.user.email}
-            borderColor={props.user.emailConfirmed ? 'primary' : 'warning.0'}
-            backgroundColor={props.user.emailConfirmed ? 'greyscale.4' : 'warning.1'}
+            borderColor={!props.user.emailConfirmed ? 'warning.0': 'primary'}
+            backgroundColor={!props.user.emailConfirmed ? 'warning.1': 'greyscale.4'}
             color={props.user.emailConfirmed ? 'greyscale.1' : ''}
             error={!props.user.emailConfirmed}
           />
-          {!props.user.emailConfirmed && <Text fontSize={12} marginLeft={'18px'}>Email not verified <Link color={'error'} onClick={() => _handleResendLink()}>resend link</Link></Text>}
+          {!props.user.emailConfirmed && <Text fontSize={12} marginLeft={'18px'}>Email not verified <Link color={'error'} to={'#'} onClick={() => _handleResendLink()}>resend link</Link></Text>}
         </SectionStyled>
         <Box display="grid" gridTemplateColumns={{ _: "1fr", medium: 'auto auto' }} gridGap="30px">
           <SectionStyled>
