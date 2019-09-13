@@ -1,7 +1,8 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import PropTypes from 'prop-types'
 import Helmet from 'react-helmet'
 import { useSelector, useDispatch } from 'react-redux'
+import styled from 'styled-components'
 
 import {
   Wrapper,
@@ -17,17 +18,46 @@ import {
   Loader,
   Carousel,
   UserDetails,
-  BookingCard
+  BookingCard,
+  Button
 } from 'components'
 
 import { onGetListingById, onGetAllSpecifications } from 'redux/ducks/listing'
 
 import FormPartner from './FormPartner'
 
+const GridStyled = styled(Grid)`
+  @media only screen and (max-width: 991px) {
+    grid-template-columns: 100%;
+  }
+`
+
+const CellStyled = styled(Cell)`
+  @media only screen and (max-width: 991px) {
+    grid-column-end: span 12;
+    justify-self: start !important;
+    margin-bottom: 20px !important;
+  }
+`
+
+const BottomButtonMobile = styled.div`
+  position: sticky;
+  bottom: 0;
+  background-color: white;
+  width: 100%;
+  padding: 15px 0;
+  text-align: center;
+
+  @media only screen and (min-width: 992px) {
+    display: none;
+  }
+`
+
 const PartnerPage = ({ match, location, ...props }) => {
   const dispatch = useDispatch()
 
   const { object: listing, isLoading: isListingLoading } = useSelector(state => state.listing.get)
+  const [imageHeight, setImageHeight] = useState(500)
 
   useEffect(() => {
     dispatch(onGetListingById(match.params.id, null, true))
@@ -36,6 +66,12 @@ const PartnerPage = ({ match, location, ...props }) => {
   useEffect(() => {
     listing && dispatch(onGetAllSpecifications(listing.settingsParent.id, listing.listingData))
   }, [dispatch, listing])
+
+  useEffect(() => {
+    if (window.innerWidth < 768) {
+      setImageHeight(270)
+    }
+  }, [])
 
   const _getAddress = address => {
     const { address1 = '', city = '', zipcode = '', state = '', country = '' } = address
@@ -81,15 +117,15 @@ const PartnerPage = ({ match, location, ...props }) => {
   }
 
   return (
-    <Wrapper>
+    <Wrapper mt="50px">
       <Helmet title="View Listing - Spacenow" />
-      <Box display="grid" gridTemplateColumns="1fr 380px" gridColumnGap="15px" my="80px">
+      <GridStyled columns="auto 350px" columnGap="15px" rowGap="100px">
         <Box display="grid" gridRowGap="50px">
-          <Carousel photos={_convertedArrayPhotos(listing.photos)} />
+          <Carousel photos={_convertedArrayPhotos(listing.photos)} height={imageHeight} />
 
-          <Grid justifyContent="space-between" columnGap="10px" columns={2}>
-            <Box display="flex" justifyContent="start">
-              <Box>
+          <Grid columns={12}>
+            <CellStyled width={6}>
+              <Box style={{ float: 'left' }}>
                 <Tag
                   icon={
                     <Icon
@@ -101,7 +137,7 @@ const PartnerPage = ({ match, location, ...props }) => {
                   {listing.settingsParent.category.itemName}
                 </Tag>
               </Box>
-              <Box margin="0 10px">
+              <Box margin="0 10px" style={{ float: 'left' }}>
                 <Tag
                   icon={
                     <Icon
@@ -113,24 +149,24 @@ const PartnerPage = ({ match, location, ...props }) => {
                   {listing.settingsParent.subcategory.itemName}
                 </Tag>
               </Box>
-            </Box>
-            <Cell style={{ justifySelf: 'end' }}>
+            </CellStyled>
+            <CellStyled width={6} justifySelf="end">
               <UserDetails hostname={listing.user.profile.displayName} imageProfile={listing.user.profile.picture} />
-            </Cell>
+            </CellStyled>
           </Grid>
 
           <Grid columns={5}>
-            <Cell width={3}>
+            <CellStyled width={3}>
               <Title
                 type="h4"
-                title={listing.title ? listing.title : 'Input Title'}
+                title={listing.title}
                 subtitle={_getAddress(listing.location)}
                 subTitleSize={18}
                 subTitleMargin={20}
                 noMargin
               />
-            </Cell>
-            <Cell width={2} center>
+            </CellStyled>
+            <CellStyled width={2} center>
               <Title
                 type="h4"
                 title={`$ ${Math.round((listing.listingData.basePrice || 0) * 100) / 100} ${listing.bookingPeriod}`}
@@ -138,7 +174,7 @@ const PartnerPage = ({ match, location, ...props }) => {
                 right
                 style={{ marginTop: '5px' }}
               />
-            </Cell>
+            </CellStyled>
           </Grid>
 
           <Box>
@@ -194,7 +230,7 @@ const PartnerPage = ({ match, location, ...props }) => {
           {listing.amenities.length > 0 && (
             <Box>
               <Title type="h5" title="Amenities" />
-              <Box display="grid" gridTemplateColumns="1fr 1fr 1fr" gridRowGap="40px">
+              <Grid columns="repeat(auto-fit, minmax(200px, auto))" rowGap="40px">
                 {listing.amenities.map(item => {
                   return (
                     <Box key={item.id} display="grid" gridTemplateColumns="auto 1fr" gridColumnGap="20px">
@@ -210,7 +246,7 @@ const PartnerPage = ({ match, location, ...props }) => {
                     </Box>
                   )
                 })}
-              </Box>
+              </Grid>
             </Box>
           )}
           <Box>
@@ -221,7 +257,7 @@ const PartnerPage = ({ match, location, ...props }) => {
             />
           </Box>
         </Box>
-        <Box>
+        <Box id="booking-card">
           <BookingCard
             titleComponent={
               <Title
@@ -243,11 +279,21 @@ const PartnerPage = ({ match, location, ...props }) => {
             }
           />
         </Box>
-      </Box>
+      </GridStyled>
       <Box my="100px">
         <Title type="h5" title="Location" />
         <Map position={{ lat: Number(listing.location.lat), lng: Number(listing.location.lng) }} />
       </Box>
+      <BottomButtonMobile>
+        <Button
+          fluid
+          onClick={() => {
+            document.getElementById('booking-card').scrollIntoView({ behavior: 'smooth' })
+          }}
+        >
+          Reserve
+        </Button>
+      </BottomButtonMobile>
     </Wrapper>
   )
 }

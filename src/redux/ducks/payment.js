@@ -45,7 +45,8 @@ const initialState = {
     isCreating: false
   },
   pay: {
-    isLoading: false
+    isLoading: false,
+    bookingState: null
   }
 }
 
@@ -209,6 +210,8 @@ const mutationDoPayment = gql`
   mutation doPayment($cardId: String!, $bookingId: String!) {
     createPayment(cardId: $cardId, bookingId: $bookingId) {
       status
+      bookingId
+      bookingState
     }
   }
 `
@@ -367,6 +370,7 @@ export default function reducer(state = initialState, action) {
         ...state,
         pay: {
           ...state.pay,
+          bookingState: action.payload.bookingState,
           isLoading: false
         }
       }
@@ -505,8 +509,8 @@ export const pay = (cardId, bookingId, history) => async dispatch => {
       variables: { cardId, bookingId }
     })
     toast.success('Paid')
-    history.push(`/itinerary/${bookingId}`)
     dispatch({ type: Types.DOING_PAYMENT_SUCCESS, payload: data.createPayment })
+    history.push(`/itinerary/${bookingId}`)
   } catch (err) {
     toast.error(`${errToMsg(err)}`)
     dispatch({ type: Types.DOING_PAYMENT_FAILURE, payload: errToMsg(err) })
