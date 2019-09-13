@@ -93,49 +93,51 @@ const TimeTableEditable = ({
         </Cell>
       </Grid>
       <Grid columns={12} rows={7} rowGap="20px" columnGap="40px">
-        {data.map((item, index) => (
-          <Fragment key={item.day}>
-            <Cell width={4}>
-              <ItemSwitchStyled checked={item.active}>
-                <span>{item.description}</span>
-                <SwitchStyled>
-                  <Switch name={item.day} handleCheckboxChange={onHandleClickDay} checked={item.active} />
-                </SwitchStyled>
-              </ItemSwitchStyled>
-            </Cell>
-            <Cell width={2}>
-              <ItemStyled disabled={item.fulltime || !item.active} error={item.error.open}>
-                <TimePicker
-                  value={format(item.open, 'HH:mm')}
-                  disabled={item.fulltime || !item.active}
-                  onChange={time => onHandleChangeTime('open', time, item, index)}
-                />
-              </ItemStyled>
-            </Cell>
-            <Cell width={2}>
-              <ItemStyled disabled={item.fulltime || !item.active} error={item.error.close}>
-                <TimePicker
-                  value={format(item.close, 'HH:mm')}
-                  disabled={item.fulltime || !item.active}
-                  onChange={time => onHandleChangeTime('close', time, item, index)}
-                />
-              </ItemStyled>
-            </Cell>
-            <Cell width={4}>
-              <ItemSwitchStyled>
-                <span>Open 24 hours</span>
-                <SwitchStyled>
-                  <Switch
-                    name={`${item.day}-24h`}
-                    disabled={!item.active}
-                    handleCheckboxChange={onHandleClick24hours}
-                    checked={item.fulltime}
+        {data.map((item, index) => {
+          return (
+            <Fragment key={item.day}>
+              <Cell width={4}>
+                <ItemSwitchStyled checked={item.active}>
+                  <span>{item.description}</span>
+                  <SwitchStyled>
+                    <Switch name={item.day} handleCheckboxChange={onHandleClickDay} checked={item.active} />
+                  </SwitchStyled>
+                </ItemSwitchStyled>
+              </Cell>
+              <Cell width={2}>
+                <ItemStyled disabled={item.fulltime || !item.active} error={item.error.open}>
+                  <TimePicker
+                    value={format(new Date(item.open), 'HH:mm')}
+                    disabled={item.fulltime || !item.active}
+                    onChange={time => onHandleChangeTime('open', time, item, index)}
                   />
-                </SwitchStyled>
-              </ItemSwitchStyled>
-            </Cell>
-          </Fragment>
-        ))}
+                </ItemStyled>
+              </Cell>
+              <Cell width={2}>
+                <ItemStyled disabled={item.fulltime || !item.active} error={item.error.close}>
+                  <TimePicker
+                    value={format(new Date(item.close), 'HH:mm')}
+                    disabled={item.fulltime || !item.active}
+                    onChange={time => onHandleChangeTime('close', time, item, index)}
+                  />
+                </ItemStyled>
+              </Cell>
+              <Cell width={4}>
+                <ItemSwitchStyled>
+                  <span>Open 24 hours</span>
+                  <SwitchStyled>
+                    <Switch
+                      name={`${item.day}-24h`}
+                      disabled={!item.active}
+                      handleCheckboxChange={onHandleClick24hours}
+                      checked={item.fulltime}
+                    />
+                  </SwitchStyled>
+                </ItemSwitchStyled>
+              </Cell>
+            </Fragment>
+          )
+        })}
       </Grid>
     </WrapperStyled>
   )

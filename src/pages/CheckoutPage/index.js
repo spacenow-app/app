@@ -218,7 +218,9 @@ const CheckoutPage = ({ match, location, history, ...props }) => {
           </Button>
 
           <Box mt="50px" mb="25px" display="flex">
-            <Button outline>Edit Dates</Button>
+            <Button outline onClick={() => history.goBack()}>
+              Edit Dates
+            </Button>
             <Button ml="20px" disabled={!selectedCard.id} onClick={_payNow} isLoading={isPaying}>
               Pay Now
             </Button>

@@ -1,6 +1,6 @@
 /* eslint-disable no-console */
 import { gql } from 'apollo-boost'
-import { getClientWithAuth } from 'graphql/apolloClient'
+import { getClientWithAuth, getClient } from 'graphql/apolloClient'
 
 import { toast } from 'react-toastify'
 
@@ -32,8 +32,10 @@ export const Types = {
   ACC_UPDATE_PROFILE_PICTURE_ERROR: '[ACCOUNT] UPDATE PROFILE PICTURE ERROR',
   ACC_UPLOAD_DOCUMENT: '[ACCOUNT] UPLOAD DOCUMENT',
   ACC_UPLOAD_DOCUMENT_SUCCESS: '[ACCOUNT] UPLOAD DOCUMENT SUCCESS',
-  ACC_UPLOAD_DOCUMENT_ERROR: '[ACCOUNT] UPLOAD DOCUMENT ERROR'
-
+  ACC_UPLOAD_DOCUMENT_ERROR: '[ACCOUNT] UPLOAD DOCUMENT ERROR',
+  ACC_GET_RESEND_LINK: '[ACCOUNT] GET RESEND LINK',
+  ACC_GET_RESEND_LINK_SUCCESS: '[ACCOUNT] GET RESEND LINK SUCCESS',
+  ACC_GET_RESEND_LINK_ERROR: '[ACCOUNT] GET RESEND LINK ERROR',
 }
 
 // Reducer
@@ -246,6 +248,14 @@ const mutationUploadDocument = gql`
 		}
   }
 `
+// GraphQL
+const mutationRequestResendEmail = gql`
+  mutation resendEmail($email: String!) {
+    resendEmail(email: $email) {
+      status
+    }
+  }
+`
 
 export default function reducer(state = initialState, action) {
   switch (action.type) {
@@ -262,7 +272,8 @@ export default function reducer(state = initialState, action) {
       }
     case Types.ACC_UPDATE_LISTING:
     case Types.ACC_DELETE_DOCUMENT:
-    case Types.ACC_UPLOAD_DOCUMENT: {
+    case Types.ACC_UPLOAD_DOCUMENT:
+    case Types.ACC_GET_RESEND_LINK: {
       return {
         ...state
       }
@@ -343,6 +354,11 @@ export default function reducer(state = initialState, action) {
         get: { ...state.get, user: { ...state.get.user, profile: { ...state.get.user.profile, ...action.payload } } },
         isLoading: false,
       }
+    case Types.ACC_GET_RESEND_LINK_SUCCESS:
+      return {
+        ...state,
+        isLoading: false
+      }
     case Types.ACC_GET_PROFILE_ERROR:
       return {
         ...state,
@@ -376,6 +392,7 @@ export default function reducer(state = initialState, action) {
     case Types.ACC_UPDATE_LISTING_ERROR:
     case Types.ACC_UPDATE_PROFILE_PICTURE_ERROR:
     case Types.ACC_UPLOAD_DOCUMENT_ERROR:
+    case Types.ACC_GET_RESEND_LINK_ERROR:
       return {
         ...state,
         error: action.payload,
@@ -518,5 +535,20 @@ export const onUploadDocument = (userId, file) => async dispatch => {
   } catch (error) {
     toast.error(error.message);
     dispatch({ type: Types.ACC_UPLOAD_DOCUMENT_ERROR, payload: error.message })
+  }
+}
+
+export const onResendLink = (email) => async dispatch => {
+  dispatch({ type: Types.ACC_GET_RESEND_LINK })
+  try {
+    await getClient().mutate({
+      variables: { email },
+      mutation: mutationRequestResendEmail
+    })
+    toast.success("Document uploaded successfully");
+    dispatch({ type: Types.ACC_GET_RESEND_LINK_SUCCESS })
+  } catch (error) {
+    toast.error(error.message);
+    dispatch({ type: Types.ACC_GET_RESEND_LINK_ERROR })
   }
 }
