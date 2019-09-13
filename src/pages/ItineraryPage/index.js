@@ -57,12 +57,24 @@ const _getWeekName = days => {
   return 'Custom'
 }
 
+const _getCoverPhoto = object => {
+  if (object.photos.length <= 0) {
+    return ''
+  }
+  const photoCover = object.photos.find(e => e.isCover)
+  if (photoCover) {
+    return photoCover.name
+  }
+  return object.photos[0].name
+}
+
 const ItineraryPage = ({ match, location, history, ...props }) => {
   const dispatch = useDispatch()
 
   const { user } = useSelector(state => state.auth)
   const { object: booking, isLoading: isBookingLoading } = useSelector(state => state.booking.get)
   const { object: listing, isLoading: isListingLoading } = useSelector(state => state.booking.listing)
+  const { bookingState } = useSelector(state => state.payment.pay)
 
   useEffect(() => {
     dispatch(onGetBooking(match.params.id))
@@ -76,16 +88,29 @@ const ItineraryPage = ({ match, location, history, ...props }) => {
     return <Loader text="Loading itinerary" />
   }
 
-  if (booking && booking.bookingState === 'pending') {
-    history.replace('/account/booking')
+  if (bookingState === 'pending') {
+    history.push('/account/booking')
     toast.warning(`Reservation ${booking.confirmationCode} still 'pending'.`)
+    return null
+  }
+
+  if (!bookingState && booking && booking.bookingState === 'pending') {
+    history.push('/account/booking')
+    toast.warning(`Reservation ${booking.confirmationCode} still 'pending'.`)
+    return null
+  }
+
+  if (booking && booking.bookingState === 'timeout') {
+    toast.info('Reservation is cancelled.')
+    history.push('/')
+    return null
   }
 
   if (booking && user && booking.guestId !== user.id) {
-    history.replace('/account/booking')
+    history.push('/account/booking')
+    return null
   }
 
-  const listingPhoto = listing && listing.photos.find(photo => photo.isCover).name
   const startDate = booking && booking.reservations[0]
   const endDate = booking && booking.reservations[booking.reservations.length - 1]
 
@@ -105,7 +130,7 @@ const ItineraryPage = ({ match, location, history, ...props }) => {
               noPadding
               titleComponent={
                 <ImageContainerStyled>
-                  <Image width="100%" height="100%" src={listingPhoto} />
+                  <Image width="100%" height="100%" src={_getCoverPhoto(listing)} />
                 </ImageContainerStyled>
               }
               footerComponent={

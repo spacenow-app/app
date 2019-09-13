@@ -67,6 +67,12 @@ const ReceiptPage = ({ match, location, history, ...props }) => {
     toast.warning(`Reservation ${booking.confirmationCode} still 'pending'.`)
   }
 
+  if (booking && booking.bookingState === 'timeout') {
+    toast.info('Reservation is cancelled.')
+    history.replace('/')
+    return null
+  }
+
   if (booking && user && booking.guestId !== user.id) {
     history.replace('/account/booking')
   }

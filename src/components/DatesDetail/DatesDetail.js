@@ -3,6 +3,7 @@ import PropTypes from 'prop-types'
 import styled from 'styled-components'
 import { Grid, Box } from 'components'
 import { format } from 'date-fns'
+import { convertedDate } from 'utils/date'
 
 const ContentStyled = styled.div`
   display: grid;
@@ -59,8 +60,8 @@ const DatesDetail = ({ startDate, endDate, period, priceType, ...props }) => {
           <RightTitleStyled {...props}>End date</RightTitleStyled>
         </ContentStyled>
         <ContentStyled>
-          <LeftStyled>{format(startDate, 'dd/MM/yyyy')}</LeftStyled>
-          <RightStyled {...props}>{format(endDate, 'dd/MM/yyyy')}</RightStyled>
+          <LeftStyled>{format(convertedDate(startDate), 'dd/MM/yyyy')}</LeftStyled>
+          <RightStyled {...props}>{format(convertedDate(endDate), 'dd/MM/yyyy')}</RightStyled>
         </ContentStyled>
       </Box>
     </Grid>
