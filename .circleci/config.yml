@@ -88,54 +88,6 @@ jobs:
             aws s3 ls
             aws s3 sync build/ s3://$AWS_BUCKET --delete --region $AWS_REGION
             aws cloudfront create-invalidation --distribution-id "EJBM66ARV7ZA9" --paths /index.html
-  build-qa:
-    <<: *defaults
-    steps:
-      - restore_cache:
-          key: source-{{ .Branch }}-{{ .Revision }}
-      - restore_cache:
-          key: yarn-v1-{{ checksum "yarn.lock" }}-{{ arch }}
-      - restore_cache:
-          key: dependency-cache-{{ checksum "package.json" }}
-      - run:
-          name: 'Build app'
-          command:
-            REACT_APP_ENV=production REACT_APP_GOOGLE_MAPS_KEY=${NONPROD_REACT_APP_GOOGLE_MAPS_KEY}
-            GENERATE_SOURCEMAP=false INLINE_RUNTIME_CHUNK=false REACT_APP_LEGACY=${NONPROD_REACT_APP_LEGACY}
-            REACT_APP_GRAPH_HOST=${NONPROD_REACT_APP_GRAPH_HOST} yarn build
-      - persist_to_workspace:
-          root: ~/repo
-          paths:
-            - build
-            - scripts
-            - package.json
-  deploy-qa:
-    <<: *defaults
-    steps:
-      - attach_workspace:
-          at: ~/repo
-      - run:
-          name: 'INSTALL PIP'
-          command: |
-            sudo apt-get update && sudo apt-get install -y python-dev
-            sudo curl -O https://bootstrap.pypa.io/get-pip.py
-            sudo python get-pip.py
-      - run:
-          name: 'INSTALL AWS CLI'
-          command: |
-            sudo pip install awscli --upgrade
-            aws --version
-      - run:
-          name: 'SETUP ACCOUNT'
-          command: |
-            export ACCOUNT_ID=211853473677
-            source scripts/assume-role.sh
-      - run:
-          name: 'Deploy to S3 QA'
-          command: |
-            aws s3 ls
-            aws s3 sync build/ s3://${NONPROD_AWS_BUCKET} --delete --region $AWS_REGION
-            aws cloudfront create-invalidation --distribution-id "E8T1Z3NYNLEPU" --paths /index.html
   build-prod:
     <<: *defaults
     steps:
@@ -211,32 +163,10 @@ workflows:
             branches:
               only:
                 - master
-      - qa-approval:
-          type: approval
-          requires:
-            - deploy
-          filters:
-            branches:
-              only:
-                - master
-      - build-qa:
-          requires:
-            - qa-approval
-          filters:
-            branches:
-              only:
-                - master
-      - deploy-qa:
-          requires:
-            - build-qa
-          filters:
-            branches:
-              only:
-                - master
       - prod-approval:
           type: approval
           requires:
-            - deploy-qa
+            - deploy
           filters:
             branches:
               only:
