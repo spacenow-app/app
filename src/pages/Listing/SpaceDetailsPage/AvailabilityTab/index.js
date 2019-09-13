@@ -4,7 +4,7 @@ import PropTypes from 'prop-types'
 import Helmet from 'react-helmet'
 import { useDispatch, useSelector } from 'react-redux'
 import styled from 'styled-components'
-import { format, isAfter, isBefore, isSameDay } from 'date-fns'
+import { isAfter, isBefore, isSameDay } from 'date-fns'
 import update from 'immutability-helper'
 
 import { nanDate, weekTimeTable } from 'variables'
@@ -71,8 +71,8 @@ const AvailabilityTab = ({ listing, history, setFatherValues }) => {
         description: o.name,
         active: false,
         fulltime: false,
-        open: new Date(`${format(new Date(), 'dd/MM/yyyy')} 08:00`),
-        close: new Date(`${format(new Date(), 'dd/MM/yyyy')} 17:00`),
+        open: `${_newDateTime('08', '00')}`,
+        close: `${_newDateTime('17', '00')}`,
         error: {}
       }
       if (/true/i.test(accessDays[o.short])) {
@@ -85,8 +85,8 @@ const AvailabilityTab = ({ listing, history, setFatherValues }) => {
             description: o.name,
             active: true,
             fulltime: hoursElem.allday,
-            open: _formatTime(hoursElem.allday ? new Date(`${format(new Date(), 'dd/MM/yyyy')} 08:00`) : openHour),
-            close: _formatTime(hoursElem.allday ? new Date(`${format(new Date(), 'dd/MM/yyyy')} 17:00`) : closeHour),
+            open: hoursElem.allday ? `${_newDateTime('08', '00')}` : openHour,
+            close: hoursElem.allday ? `${_newDateTime('17', '00')}` : closeHour,
             error: {}
           }
         }
@@ -119,10 +119,16 @@ const AvailabilityTab = ({ listing, history, setFatherValues }) => {
     setTimeTableWeek(newTimeTableWeek.filter(el => el !== undefined))
   }, [timetable])
 
-  const _formatTime = date => {
-    const time = format(date, 'HH:mm')
-    return new Date(`${format(new Date(), 'dd/MM/yyyy')} ${time}`)
+  const _newDateTime = (hour, min) => {
+    const h = new Date()
+    const u = new Date(h.getFullYear(), h.getMonth(), h.getDate(), hour, min, h.getSeconds())
+    return u
   }
+
+  // const _formatTime = date => {
+  //   const time = format(date, 'HH:mm')
+  //   return new Date(`${format(new Date(), 'dd/MM/yyyy')} ${time}`)
+  // }
 
   const _checkFullTime = array => {
     const isFullTime = array.every(el => el.active === true && el.fulltime === true)
@@ -130,7 +136,7 @@ const AvailabilityTab = ({ listing, history, setFatherValues }) => {
   }
 
   const _handleChangeTime = options => {
-    const newTime = new Date(`${format(new Date(), 'dd/MM/yyyy')} ${options.value}`)
+    const newTime = _newDateTime(options.value.split(':')[0], options.value.split(':')[1])
     const error = {
       open: false,
       close: false
