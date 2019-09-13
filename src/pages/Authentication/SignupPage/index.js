@@ -4,6 +4,7 @@ import { useSelector, useDispatch } from 'react-redux'
 import * as Yup from 'yup'
 import { NavBar, Wrapper, Box, Input, Button, Text, Title, Link, Line, ButtonSocial } from 'components'
 import { signup, googleSignin, facebookSignin } from 'redux/ducks/auth'
+import { config } from 'variables'
 
 const SignupPage = ({ values, touched, errors, handleChange, handleBlur, isValid }) => {
   const dispatch = useDispatch()
@@ -30,6 +31,10 @@ const SignupPage = ({ values, touched, errors, handleChange, handleBlur, isValid
         values.password
       )
     )
+  }
+
+  const _handlerGoToLegancy = page => {
+    window.location.href = `${config.static}/${page || ''}`
   }
 
   return (
@@ -79,8 +84,15 @@ const SignupPage = ({ values, touched, errors, handleChange, handleBlur, isValid
               </Button>
 
               <Text display="block" fontSize="12px">
-                By signing up, you agree to the <Link to="/terms">Terms of Service</Link> and{' '}
-                <Link to="/policy"> Privacy Policy</Link>
+                By signing up, you agree to the{' '}
+                <Link to="" onClick={() => _handlerGoToLegancy('terms')}>
+                  Terms of Service
+                </Link>{' '}
+                and{' '}
+                <Link to="" onClick={() => _handlerGoToLegancy('privacy-policy')}>
+                  {' '}
+                  Privacy Policy
+                </Link>
               </Text>
               <Line margin="0" />
               <Text display="block">
