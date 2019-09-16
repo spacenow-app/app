@@ -52,6 +52,7 @@ const CardImage = styled.img`
   border-top-left-radius: 6px;
   border-top-right-radius: 6px;
   cursor: pointer;
+  object-fit: cover;
 `
 const CardContent = styled.div`
   padding: 25px;
