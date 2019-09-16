@@ -1,15 +1,9 @@
-import React from 'react'
-import Photo from "components/Photo"
+import { useEffect } from 'react'
+import { config } from 'variables'
 
-const HomePage = () => {
-  return <>
-    <Photo />
-    <Photo />
-    <Photo />
-    <Photo />
-    <Photo />
-    <Photo />
-  </>
+export default () => {
+  useEffect(() => {
+    window.location.href = config.static
+  }, [])
+  return null
 }
-
-export default HomePage
