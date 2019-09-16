@@ -15,8 +15,8 @@ const ContainerStyled = styled.div`
 `
 
 const MonthNameStyled = styled.span`
-  margin-left: 15px;
   font-size: 14px;
+  font-family: Montserrat-Bold;
 `
 
 const ContainerDatesStyled = styled.div`
