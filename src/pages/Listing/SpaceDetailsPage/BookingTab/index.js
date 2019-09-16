@@ -3,7 +3,7 @@ import Helmet from 'react-helmet'
 import { withFormik } from 'formik'
 import * as Yup from 'yup'
 import numeral from 'numeral'
-import { Title, Select, Input, Caption, Radio, Grid, Cell, StepButtons, Box } from 'components'
+import { Title, Select, Input, Caption, Radio, Cell, StepButtons, Box } from 'components'
 import { capitalize, toPlural } from 'utils/strings'
 
 import GuestFeeIcon from './guest_fee_icon.svg'

@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 import { Modal } from 'react-bootstrap'
 import { withFormik } from 'formik'
 import * as Yup from 'yup'
-import { Button, Box, Grid, Cell, Select, Input, DatePicker } from 'components'
+import { Button, Box, Grid, Cell, Select, Input, DatePicker, Title } from 'components'
 
 import { useDispatch } from 'react-redux'
 import { closeModal } from 'redux/ducks/modal'
@@ -40,7 +40,7 @@ const ModalAddBankDetails = ({
   return (
     <Modal show centered size="lg" onHide={() => dispatch(closeModal())}>
       <Modal.Header closeButton>
-        <Modal.Title>Add Bank Details</Modal.Title>
+        <Modal.Title><Title noMargin type={"h5"} title={"Add Bank Details"} /></Modal.Title>
       </Modal.Header>
       <Modal.Body>
         <Box>

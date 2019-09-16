@@ -27,7 +27,7 @@ const WrapperStyled = styled.div`
   grid-row-gap: 80px;
 
   @media (max-width: 680px) {
-    grid-row-gap: 40px;
+    grid-row-gap: 20px;
   }
 
 `

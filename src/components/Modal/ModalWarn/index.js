@@ -2,7 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import { Modal } from 'react-bootstrap'
 
-import Button from 'components/Button'
+import { Title, Button } from 'components'
 
 import { useDispatch } from 'react-redux'
 import { closeModal } from 'redux/ducks/modal'
@@ -21,7 +21,7 @@ const ModalWarn = ({ onConfirm, options }) => {
     <Modal show onHide={() => handleConfirm(false)}>
       {options.title && (
         <Modal.Header closeButton>
-          <Modal.Title>{options.title}</Modal.Title>
+          <Modal.Title><Title noMargin type={"h5"} title={options.title} /></Modal.Title>
         </Modal.Header>
       )}
       {options.text && <Modal.Body>{options.text}</Modal.Body>}
