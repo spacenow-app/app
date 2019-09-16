@@ -10,6 +10,10 @@ const WrapperStyled = styled.div`
   border-radius: 15px;
   width: 350px;
   padding: ${props => (props.noPadding && '0px') || '42px'};
+
+  @media only screen and (max-width: 991px) {
+    width: 100%;
+  }
 `
 const TitleStyled = styled.div`
   justify-self: stretch;

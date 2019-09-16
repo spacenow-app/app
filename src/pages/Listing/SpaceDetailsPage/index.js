@@ -107,7 +107,7 @@ const SpaceDetailsPage = ({ match, history, location, ...props }) => {
           Availability
         </TabItem>
         <TabItem nav to={`${match.url}/cancellation`}>
-          Cancelation Policy
+          Cancellation
         </TabItem>
       </Tab>
       <Switch>

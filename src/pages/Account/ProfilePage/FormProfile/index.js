@@ -4,6 +4,7 @@ import React from 'react'
 import styled from 'styled-components'
 import { withFormik } from 'formik'
 import * as Yup from 'yup'
+import { convertedDate } from 'utils/date'
 import { format } from 'date-fns'
 import { Input, Select, TextArea, Button, DatePicker, Box, Link, Text } from 'components'
 import { onUpdateProfile, onResendLink } from 'redux/ducks/account'
@@ -56,8 +57,8 @@ const FormProfile = ({
             name="email"
             disabled
             value={props.user.email}
-            borderColor={!props.user.emailConfirmed ? 'warning.0': 'primary'}
-            backgroundColor={!props.user.emailConfirmed ? 'warning.1': 'greyscale.4'}
+            borderColor={!props.user.emailConfirmed ? 'warning.0' : 'primary'}
+            backgroundColor={!props.user.emailConfirmed ? 'warning.1' : 'greyscale.4'}
             color={props.user.emailConfirmed ? 'greyscale.1' : ''}
             error={!props.user.emailConfirmed}
           />
@@ -149,7 +150,7 @@ const formik = {
       return {
         firstName: profile.firstName || '',
         lastName: profile.lastName || '',
-        dateOfBirth: format(new Date(profile.dateOfBirth), 'dd/MM/yyyy') || '',
+        dateOfBirth: convertedDate(new Date(profile.dateOfBirth)) || '',
         gender: profile.gender || '',
         phoneNumber: profile.phoneNumber || '',
         info: profile.info || ''

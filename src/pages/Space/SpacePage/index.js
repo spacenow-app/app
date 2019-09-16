@@ -94,7 +94,6 @@ const CellStyled = styled(Cell)`
     grid-column-end: span 12;
     &&& {
       h4 {
-        margin-top: 22px !important;
         text-align: left;
       }
     }
@@ -442,9 +441,9 @@ const SpacePage = ({ match, location, history, ...props }) => {
   return (
     <Wrapper mt="50px">
       <Helmet title="View Listing - Spacenow" />
-      <GridStyled columns="auto 350px" columnGap="15px" rowGap="100px">
+      <GridStyled columns="auto 350px" columnGap="15px" rowGap="30px">
         <Cell>
-          <Grid columns={1} rowGap="50px">
+          <Grid columns={1} rowGap="15px">
             <Box>
               <Carousel photos={_convertedArrayPhotos(listing.photos)} height={imageHeight} />
             </Box>
@@ -653,12 +652,12 @@ const SpacePage = ({ match, location, history, ...props }) => {
         </Cell>
       </GridStyled>
 
-      <Box mt="100px">
+      <Box mt="30px">
         <Title type="h5" title="Location" />
         <Map position={{ lat: Number(listing.location.lat), lng: Number(listing.location.lng) }} />
       </Box>
 
-      <Box my="100px">
+      <Box mb="30px">
         <Title type="h5" title="Cancellation Policy" />
         <Grid columns="repeat(auto-fit, minmax(350px, auto))">
           <Cell>

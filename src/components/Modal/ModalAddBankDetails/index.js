@@ -112,7 +112,7 @@ const ModalAddBankDetails = ({
             <Cell width={12}>
               <DatePicker
                 size="sm"
-                label="Date of Birthday "
+                label="Date of Birth"
                 name="dateOfBirthday"
                 error={touched.dateOfBirthday && errors.dateOfBirthday}
                 value={values.dateOfBirthday}
