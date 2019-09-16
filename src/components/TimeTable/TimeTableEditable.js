@@ -1,8 +1,8 @@
-import React, { Fragment } from 'react'
+import React from 'react'
 import PropTypes from 'prop-types'
 import styled, { css } from 'styled-components'
 import { format } from 'date-fns'
-import { Grid, Cell, Switch, TimePicker, Box } from 'components'
+import { Cell, Switch, TimePicker, Box } from 'components'
 
 const WrapperStyled = styled.div`
   display: grid;
