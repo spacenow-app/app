@@ -90,23 +90,25 @@ const NavBar = () => {
               <NavLinkStyled to="/auth/signup">Sign Up</NavLinkStyled>
             </>
           ) : (
-              <NavDropdownStyled
-                alignRight
-                title={
-                  <Box display="grid" gridTemplateColumns="auto auto" gridColumnGap="10px" color="quartenary">
-                    <span style={{ alignSelf: 'center' }}>{user.profile.firstName || 'User Profile'}</span>
-                    <Avatar style={{ width: '30px', height: '30px' }} image={user.profile.picture || null} />
-                  </Box>
-                }
-                id="basic-nav-dropdown"
-              >
-                <DropdownItemStyled to="/account/profile">Profile</DropdownItemStyled>
-                <NavDropdown.Divider />
-                <DropdownItemStyled to="/account/dashboard">Dashboard</DropdownItemStyled>
-                <NavDropdown.Divider />
-                <DropdownItemStyled to="#" onClick={_handlerLogout}>Logout</DropdownItemStyled>
-              </NavDropdownStyled>
-            )}
+            <NavDropdownStyled
+              alignRight
+              title={
+                <Box display="grid" gridTemplateColumns="auto auto" gridColumnGap="10px" color="quartenary">
+                  <span style={{ alignSelf: 'center' }}>{user.profile.firstName || 'User Profile'}</span>
+                  <Avatar style={{ width: '30px', height: '30px' }} image={user.profile.picture || null} />
+                </Box>
+              }
+              id="basic-nav-dropdown"
+            >
+              <DropdownItemStyled to="/account/profile">Profile</DropdownItemStyled>
+              <NavDropdown.Divider />
+              <DropdownItemStyled to="/account/dashboard">Dashboard</DropdownItemStyled>
+              <NavDropdown.Divider />
+              <DropdownItemStyled to="#" onClick={_handlerLogout}>
+                Logout
+              </DropdownItemStyled>
+            </NavDropdownStyled>
+          )}
         </Nav>
       </Navbar.Collapse>
     </Navbar>
