@@ -441,7 +441,7 @@ const SpacePage = ({ match, location, history, ...props }) => {
   return (
     <Wrapper mt="50px">
       <Helmet title="View Listing - Spacenow" />
-      <GridStyled columns="auto 350px" columnGap="15px" rowGap="30px">
+      <GridStyled columns="auto 350px" columnGap="35px" rowGap="30px">
         <Cell>
           <Grid columns={1} rowGap="15px">
             <Box>
