@@ -13,7 +13,7 @@ import { sendMail } from 'redux/ducks/mail'
 
 const WrapperStyled = styled.div`
   display: grid;
-  grid-row-gap: 40px;
+  grid-row-gap: 10px;
 `
 
 const TimePickerStyled = styled.div`
@@ -30,7 +30,7 @@ const TimePickerStyled = styled.div`
 `
 
 const LabelStyled = styled.label`
-  font-size: 14px;
+  font-size: 12px;
   font-family: 'Montserrat-Medium';
   margin-left: 20px;
 `
@@ -152,7 +152,7 @@ const ContactHost = ({ values, errors, handleChange, handleBlur, setFieldValue, 
           onBlur={handleBlur}
         />
 
-        <Button width="100%" onClick={() => _handleSubmit()} disabled={!isValid} isLoading={isSendingEmail}>
+        <Button fluid mt="20px" onClick={() => _handleSubmit()} disabled={!isValid} isLoading={isSendingEmail}>
           Enquire
         </Button>
       </WrapperStyled>

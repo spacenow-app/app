@@ -15,7 +15,7 @@ import {
 
 const WrapperStyled = styled.div`
   display: grid;
-  grid-row-gap: 40px;
+  grid-row-gap: 10px;
 `
 
 const SectionStyled = styled.div``
@@ -86,7 +86,7 @@ const FormPartner = ({
         </SectionStyled>
 
         <SectionStyled>
-          <Title title="Tell us more about your introduction" type="h6" subTitleMargin={0} noMargin />
+          <Title title="Tell us more about your introduction" type="h6" subTitleMargin={0} />
         </SectionStyled>
 
         <SectionStyled>
