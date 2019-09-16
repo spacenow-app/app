@@ -19,6 +19,11 @@ const ButtonStyled = styled(ButtonExternal)`
     color: ${props => (props.outline && '#172439') || '#fff'};
     border: ${props => (props.outline ? `1px solid #172439` : 'none')};
 
+    @media (max-width: 680px) {
+      width: ${props =>
+    (props.fluid && '100%') || (props.width && props.width) || (props.size === 'xs' && '100px') || (props.size === 'sm' && '124px') || '140px'};
+    }
+
     ${color}
     ${typography}
     ${space}

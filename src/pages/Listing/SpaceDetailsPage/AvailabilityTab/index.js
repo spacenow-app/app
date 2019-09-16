@@ -11,7 +11,7 @@ import { nanDate, weekTimeTable } from 'variables'
 
 import { onGetAvailabilitiesByListingId, onGetAllHolidays } from 'redux/ducks/listing'
 
-import { Title, Grid, Cell, TimeTable, Calendar, Switch, StepButtons, ToolTip } from 'components'
+import { Title, Grid, Cell, TimeTable, Calendar, Switch, StepButtons, ToolTip, Box } from 'components'
 
 const SwitchStyled = styled.div`
   justify-self: end;
@@ -303,8 +303,8 @@ const AvailabilityTab = ({ listing, history, setFatherValues }) => {
             title="Holidays"
             subtitle="Are you closed on all Australian holidays? Or Just a few of them?"
           />
-          <Grid columns={12} gap="20px" columnGap="40px" style={{ margin: '30px 0' }}>
-            <Cell width={3}>
+          <Box display="grid" gridTemplateColumns={{ _: "1fr", medium: "1fr 1fr", large: "1fr 1fr 1fr", extraLarge: "1fr 1fr 1fr 1fr" }} gridGap="20px">
+            <Cell width={1}>
               <ItemSwitchStyled>
                 <span>Block all</span>
                 <SwitchStyled>
@@ -326,7 +326,7 @@ const AvailabilityTab = ({ listing, history, setFatherValues }) => {
               })
               .map((o, index) => {
                 return (
-                  <Cell key={o.date} width={3}>
+                  <Cell key={o.date} width={1}>
                     <ToolTip placement="bottom" content={o.description}>
                       <ItemSwitchStyled>
                         <span>{o.dateFormatted}</span>
@@ -344,7 +344,7 @@ const AvailabilityTab = ({ listing, history, setFatherValues }) => {
                   </Cell>
                 )
               })}
-          </Grid>
+          </Box>
         </Cell>
         <StepButtons
           prev={{ onClick: () => history.push('booking') }}
