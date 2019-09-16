@@ -75,7 +75,7 @@ const ModalBookingDetails = ({
           />
         )}
       </Modal.Body>
-      {(booking.bookingState === 'pending' && userType === 'host') &&
+      {(booking.bookingState === 'requested' && userType === 'host') &&
         <Modal.Footer>
           <Button size={`sm`} color={`red`} onClick={() => _declineBooking(booking.bookingId)}>
             {options.buttonDeclineBookingText || 'Decline Booking'}
