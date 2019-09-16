@@ -35,7 +35,7 @@ const StyledCheckbox = styled.div`
   border: 2px solid ${props => (props.checked ? '#6ADC91' : '#172439')};
   border-radius: 5px;
   transition: all 150ms;
-  cursor: ${props => (props.disabled ? 'not-allowed' : 'pointer')};
+  cursor: ${props => (props.disabled ? 'none' : 'pointer')};
 
   ${HiddenCheckbox}:focus + & {
     box-shadow: 0 0 0 3px #6adc91;
