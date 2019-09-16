@@ -280,7 +280,7 @@ const PartnerPage = ({ match, location, ...props }) => {
           />
         </Box>
       </GridStyled>
-      <Box my="30px">
+      <Box my="45px">
         <Title type="h5" title="Location" />
         <Map position={{ lat: Number(listing.location.lat), lng: Number(listing.location.lng) }} />
       </Box>

@@ -652,12 +652,12 @@ const SpacePage = ({ match, location, history, ...props }) => {
         </Cell>
       </GridStyled>
 
-      <Box mt="30px">
+      <Box mt="45px">
         <Title type="h5" title="Location" />
         <Map position={{ lat: Number(listing.location.lat), lng: Number(listing.location.lng) }} />
       </Box>
 
-      <Box mb="30px">
+      <Box mb="45px">
         <Title type="h5" title="Cancellation Policy" />
         <Grid columns="repeat(auto-fit, minmax(350px, auto))">
           <Cell>
