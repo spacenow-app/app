@@ -3,7 +3,7 @@ import { addMinutes, format, addHours, isAfter } from 'date-fns'
 import { useSelector, useDispatch } from 'react-redux'
 import Helmet from 'react-helmet'
 import { onGetBookingsByUser } from 'redux/ducks/account'
-import { onDeclineBooking, onAcceptBooking } from 'redux/ducks/booking'
+import { onDeclineBooking, onAcceptBooking, onAcceptDeclineByEmail } from 'redux/ducks/booking'
 import { TypesModal, openModal } from 'redux/ducks/modal'
 import { Card, Text, Icon, Loader, BackgroundImage, Grid, Cell, Title, Wrapper, Dropdown } from 'components'
 import { convertedDate } from 'utils/date'
@@ -173,17 +173,22 @@ const BookingPage = ({ ...props }) => {
   const dispatch = useDispatch()
 
   const [userType, setUserType] = useState('guest')
-  const {
-    user: { id }
-  } = useSelector(state => state.account.get)
-  const {
-    isLoading,
-    get: { bookings }
-  } = useSelector(state => state.account)
+  
+  const { user: { id } } = useSelector(state => state.account.get)
+  
+  const { isLoading, get: { bookings } } = useSelector(state => state.account)
 
   useEffect(() => {
-    dispatch(onGetBookingsByUser(id))
-  }, [dispatch, id])
+    const queryParams = new URLSearchParams(props.location.search)
+    if (queryParams.get('b') && queryParams.get('a')) {
+      dispatch(onAcceptDeclineByEmail(queryParams.get('b'), queryParams.get('a'), id)).then(() => {
+        setUserType('host')
+        dispatch(onGetBookingsByUser(id, 'host'))
+      })
+    } else {
+      dispatch(onGetBookingsByUser(id))
+    }
+  }, [dispatch, props.location.search, id])
 
   const _handleChange = userType => {
     setUserType(userType)
