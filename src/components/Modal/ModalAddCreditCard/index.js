@@ -5,7 +5,7 @@ import Cards from 'react-credit-cards'
 import valid from 'card-validator'
 import { Modal } from 'react-bootstrap'
 import styled from 'styled-components'
-import { Box, Input, Button } from 'components'
+import { Box, Input, Button, Title } from 'components'
 import 'react-credit-cards/es/styles-compiled.css'
 
 import { useDispatch } from 'react-redux'
@@ -60,7 +60,7 @@ const ModalAddBankDetails = ({
   return (
     <ModalStyled show centered onHide={() => dispatch(closeModal())}>
       <Modal.Header closeButton>
-        <Modal.Title>Add New Credit Card</Modal.Title>
+        <Modal.Title><Title noMargin type={"h5"} title={"Add New Credit Card"} /></Modal.Title>
       </Modal.Header>
       <Modal.Body>
         <Cards

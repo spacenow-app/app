@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import PropTypes from 'prop-types'
 import { Modal } from 'react-bootstrap'
 import { withFormik } from 'formik'
-import { Button, Radio, TextArea, Text, Grid } from 'components'
+import { Button, Title, TextArea, Text, Grid } from 'components'
 
 import { useSelector, useDispatch } from 'react-redux'
 import { closeModal } from 'redux/ducks/modal'
@@ -34,7 +34,7 @@ const ModalMultipleSpaces = ({
     <Modal show centered size="lg" onHide={() => { }}>
       <Modal.Header>
         <Modal.Title>
-          Contact Us to list multiple space
+          <Title noMargin type={"h5"} title={"Contact Us to list multiple space"} />
         </Modal.Title>
       </Modal.Header>
       <Modal.Body>
