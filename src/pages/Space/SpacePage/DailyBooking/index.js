@@ -1,19 +1,12 @@
 import React from 'react'
 
-import styled from 'styled-components'
-
-import { DatePicker, ListDates, PriceDetail, Caption } from 'components'
+import { DatePicker, ListDates, PriceDetail } from 'components'
 
 function spelling(reference) {
   let label = 'Day'
   if (reference > 1) label = 'Days'
   return label
 }
-
-const StartDateDiv = styled.div`
-  margin-left: 21px;
-  margin-bottom: 10px;
-`
 
 const DailyBooking = ({
   focus,
