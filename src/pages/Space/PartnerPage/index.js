@@ -123,7 +123,7 @@ const PartnerPage = ({ match, location, ...props }) => {
         <Box display="grid" gridRowGap="50px">
           <Carousel photos={_convertedArrayPhotos(listing.photos)} height={imageHeight} />
 
-          <Grid columns={12}>
+          <Grid columns={12} style={{ marginTop: '-30px' }}>
             <CellStyled width={6}>
               <Box style={{ float: 'left' }}>
                 <Tag
@@ -155,7 +155,7 @@ const PartnerPage = ({ match, location, ...props }) => {
             </CellStyled>
           </Grid>
 
-          <Grid columns={5}>
+          <Grid columns={5} style={{ marginTop: '-25px' }}>
             <CellStyled width={3}>
               <Title
                 type="h4"

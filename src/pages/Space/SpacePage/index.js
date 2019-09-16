@@ -449,7 +449,7 @@ const SpacePage = ({ match, location, history, ...props }) => {
               <Carousel photos={_convertedArrayPhotos(listing.photos)} height={imageHeight} />
             </Box>
 
-            <Grid justifyContent="space-between" columnGap="10px" columns={2}>
+            <Grid justifyContent="space-between" columnGap="10px" columns={2} style={{ marginTop: '-30px' }}>
               <Box display="flex" justifyContent="start">
                 <Box>
                   <Tag
@@ -485,7 +485,7 @@ const SpacePage = ({ match, location, history, ...props }) => {
               </Cell>
             </Grid>
 
-            <Grid columns={5}>
+            <Grid columns={5} style={{ marginTop: '-25px' }}>
               <CellStyled width={3}>
                 <Title
                   type="h4"
