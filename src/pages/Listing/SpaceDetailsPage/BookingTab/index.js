@@ -44,7 +44,8 @@ const BookingTab = ({
   }
 
   return (
-    <Grid columns={1} rowGap="80px">
+    <Box display="grid" gridTemplateColumns={{ _: "1fr" }} gridGap={{_: "20px", medium: "40px"}}>
+    
       <Helmet title="Listing Space Booking - Spacenow" />
       <Cell>
         <Title
@@ -236,7 +237,7 @@ const BookingTab = ({
         prev={{ onClick: () => props.history.push('specification') }}
         next={{ onClick: () => props.history.push('availability') }}
       />
-    </Grid>
+    </Box>
   )
 }
 

@@ -306,7 +306,7 @@ const SearchPage = ({ history, location }) => {
               }}
             </Reference>
             {shouldShowFilter === 'category' && (
-              <Popper placement="bottom-end" modifiers={modifiers}>
+              <Popper placement="bottom-end" modifiers={modifiers} positionFixed>
                 {({ ref, style, placement, arrowProps }) => {
                   return (
                     <div ref={ref} style={{ ...style, zIndex: 5000000 }} data-placement={placement}>
