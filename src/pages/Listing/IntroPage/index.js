@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import styled from 'styled-components'
 import Helmet from 'react-helmet'
 import { Wrapper, Card, Title } from 'components'
-import FormContactUs from './FormContactUs'
+// import FormContactUs from './FormContactUs'
 
 const WrapperStyled = styled.div`
   display: grid;

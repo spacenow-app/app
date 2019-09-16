@@ -10,8 +10,14 @@ import * as actions from 'redux/ducks/location'
 const GroupInput = styled.div`
   display: grid;
   grid-template-columns: 1fr 150px;
-  grid-column-gap: 20px;
+  grid-gap: 20px;
   width: 80%;
+
+  @media (max-width: 680px) {
+    grid-template-columns: 1fr;
+    width: 100%;
+  }
+
 `
 
 const LocationPage = props => {
