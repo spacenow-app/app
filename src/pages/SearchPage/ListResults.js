@@ -126,7 +126,7 @@ const ListResults = ({ history, markers, onHoverItem, pagination, onPageChanged,
       }
 
       return (
-        <Box justifySelf="center" key={el.id}>
+        <Box key={el.id}>
           <Icon name={_getInfo(obj).icon} width="22px" />
           <Text fontSize="10px" ml="10px">
             {_getInfo(obj).value}
