@@ -25,14 +25,12 @@ const DailyBooking = ({
   removeDate
 }) => (
   <>
-    <StartDateDiv>
-      <Caption type="large">Start Date</Caption>
-    </StartDateDiv>
     <DatePicker
+      label="Start Date"
       date={null}
       handleDateChange={onDateChange}
       hideOnDayClick={focus}
-      placeholder={'Choose Dates'}
+      placeholder="Choose Dates"
       dayPickerProps={{
         selectedDays: [...datesSelected.map(el => new Date(el))],
         modifiers: {

@@ -24,7 +24,7 @@ const TextAreaStyled = styled.textarea`
 `
 
 const Label = styled.label`
-  font-size: 14px;
+  font-size: 12px;
   font-family: 'Montserrat-Medium';
   margin-left: 20px;
 `
@@ -36,9 +36,9 @@ const ErrorMessage = styled.small`
 
 const TextArea = ({ size, label, error, loading, ...props }) => {
   return (
-    <WrapperTextArea >
+    <WrapperTextArea>
       {label && <Label>{label}</Label>}
-      <TextAreaStyled {...props}/>
+      <TextAreaStyled {...props} />
       {error && <ErrorMessage>{error}</ErrorMessage>}
     </WrapperTextArea>
   )

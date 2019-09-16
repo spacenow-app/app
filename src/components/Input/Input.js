@@ -58,13 +58,12 @@ const InputStyled = styled.input`
     margin: 0;
   }
 
-  ${ border }
-  ${ color }
-
+  ${border}
+  ${color}
 `
 
 const Label = styled.label`
-  font-size: 14px;
+  font-size: 12px;
   font-family: 'Montserrat-Medium';
   margin-left: 20px;
 `
