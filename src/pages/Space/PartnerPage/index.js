@@ -47,6 +47,7 @@ const BottomButtonMobile = styled.div`
   width: 100%;
   padding: 15px 0;
   text-align: center;
+  border-top: 1px solid #e2e2e2;
 
   @media only screen and (min-width: 992px) {
     display: none;
@@ -285,14 +286,26 @@ const PartnerPage = ({ match, location, ...props }) => {
         <Map position={{ lat: Number(listing.location.lat), lng: Number(listing.location.lng) }} />
       </Box>
       <BottomButtonMobile>
-        <Button
-          fluid
-          onClick={() => {
-            document.getElementById('booking-card').scrollIntoView({ behavior: 'smooth' })
-          }}
-        >
-          Reserve
-        </Button>
+        <Grid columns={2} style={{ alignItems: 'center' }}>
+          <Cell style={{ alignContent: 'center', justifyContent: 'left', display: 'grid' }}>
+            <span>
+              <span
+                style={{ fontFamily: 'Montserrat-Bold', fontSize: '18px' }}
+              >{`$ ${listing.listingData.basePrice} ${listing.listingData.currency}`}</span>
+              {` ${listing.bookingPeriod}`}
+            </span>
+          </Cell>
+          <Cell justifySelf="self-end">
+            <Button
+              size="sm"
+              onClick={() => {
+                document.getElementById('booking-card').scrollIntoView({ behavior: 'smooth' })
+              }}
+            >
+              Reserve
+            </Button>
+          </Cell>
+        </Grid>
       </BottomButtonMobile>
     </Wrapper>
   )

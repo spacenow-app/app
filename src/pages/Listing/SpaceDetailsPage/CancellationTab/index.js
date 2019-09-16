@@ -2,7 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import Helmet from 'react-helmet'
 import styled from 'styled-components'
-import { Title, Grid, Cell, StepButtons } from 'components'
+import { Title, Grid, Cell, StepButtons, Box } from 'components'
 
 import GraphCancelattionImage from './graph_cancellation.png'
 
@@ -19,8 +19,8 @@ const CancellationTab = props => {
           <Title type="h3" title="Cancellation Policy" />
         </Cell>
         <Cell>
-          <Grid columns={12}>
-            <Cell width={4}>
+          <Box display="grid" gridTemplateColumns={{ _: "1fr", medium: "1fr 2fr" }} gridGap="20px">
+            <Cell width={1}>
               <Title
                 noMargin
                 type="h4"
@@ -29,10 +29,10 @@ const CancellationTab = props => {
                 subtitle="Guest cannot cancel their booking. Note: This may affect the number of bookings received."
               />
             </Cell>
-            <Cell width={8}>
+            <Cell width={1}>
               <ImageStyled alt="Cancellation Policy" src={GraphCancelattionImage} />
             </Cell>
-          </Grid>
+          </Box>
         </Cell>
         <StepButtons
           prev={{ onClick: () => props.history.push('availability') }}

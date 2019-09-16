@@ -195,40 +195,34 @@ const PreviewPage = ({ match, location, ...props }) => {
       <Helmet title="Listing Preview - Spacenow" />
       <Title type="h2" title="Just one more thing, review your space!" />
       <Carousel photos={_convertedArrayPhotos(arrayPhotos)} />
-      <Box my="40px">
-        <Grid justifyContent="space-between" columnGap="10px" columns={2}>
-          <Box display="flex" justifyContent="start">
-            <Box>
-              <Tag
-                icon={
-                  <Icon
-                    width="24px"
-                    name={_parseCategoryIconName(listing.settingsParent.category.otherItemName, false)}
-                  />
-                }
-              >
-                {listing.settingsParent.category.itemName}
-              </Tag>
-            </Box>
-            <Box margin="0 10px">
-              <Tag
-                icon={
-                  <Icon
-                    width="24px"
-                    name={_parseCategoryIconName(listing.settingsParent.subcategory.otherItemName, true)}
-                  />
-                }
-              >
-                {listing.settingsParent.subcategory.itemName}
-              </Tag>
-            </Box>
-          </Box>
-          <Cell style={{ justifySelf: 'end' }}>
-            <Tag>
-              {listing.listingData.bookingType ? `${capitalize(listing.listingData.bookingType)} Booking` : 'No data'}
-            </Tag>
-          </Cell>
-        </Grid>
+      <Box my={{ _: "20px", medium: "50px" }} display="grid" gridTemplateColumns={{ _: "1fr", medium: "2fr 1fr" }} gridGap={"20px"}>
+        <Box width={1} display="grid" gridAutoColumns={{ _: "max-content" }} gridAutoFlow={{ _: "column" }} gridGap={"20px"}>
+          <Tag
+            icon={
+              <Icon
+                width="24px"
+                name={_parseCategoryIconName(listing.settingsParent.category.otherItemName, false)}
+              />
+            }
+          >
+            {listing.settingsParent.category.itemName}
+          </Tag>
+          <Tag
+            icon={
+              <Icon
+                width="24px"
+                name={_parseCategoryIconName(listing.settingsParent.subcategory.otherItemName, true)}
+              />
+            }
+          >
+            {listing.settingsParent.subcategory.itemName}
+          </Tag>
+        </Box>
+        <Cell width={1} justifySelf={'end'}>
+          <Tag>
+            {listing.listingData.bookingType ? `${capitalize(listing.listingData.bookingType)} Booking` : 'No data'}
+          </Tag>
+        </Cell>
       </Box>
       <Grid columns={5}>
         <Cell width={3}>
@@ -254,9 +248,9 @@ const PreviewPage = ({ match, location, ...props }) => {
           />
         </Cell>
       </Grid>
-      <Box my="100px">
+      <Box my={{ _: "50px", medium: "100px" }} display="grid" gridTemplateColumns={{ _: "1fr", medium: "1fr" }}>
         <Title type="h4" title="Highlights" />
-        <Grid columns={5}>
+        <Box display="grid" gridTemplateColumns={{ _: "1fr 1fr", medium: "1fr 1fr 1fr 1fr 1fr" }}>
           <Highlights
             title="Minimum term"
             name={_changeToPlural(listing.bookingPeriod, listing.listingData.minTerm)}
@@ -269,10 +263,10 @@ const PreviewPage = ({ match, location, ...props }) => {
             error={_getWeekName(listing.accessDays) === 'Closed'}
           />
           {objectSpecifications && _renderHighLights(objectSpecifications)}
-        </Grid>
+        </Box>
       </Box>
 
-      <Box my="100px">
+      <Box my={{ _: "50px", medium: "100px" }}>
         <Title type="h4" title="Access Information" />
         <Box
           display="grid"
@@ -372,8 +366,8 @@ const PreviewPage = ({ match, location, ...props }) => {
           <Title type="h4" title="Cancellation Policy" />
         </Cell>
         <Cell>
-          <Grid columns={12}>
-            <Cell width={4}>
+          <Box display="grid" gridTemplateColumns={{ _: "1fr", medium: "1fr 2fr" }} gridGap="20px">
+            <Cell width={1}>
               <Title
                 noMargin
                 type="h4"
@@ -382,10 +376,10 @@ const PreviewPage = ({ match, location, ...props }) => {
                 subtitle="Guest cannot cancel their booking. Note: This may affect the number of bookings received."
               />
             </Cell>
-            <Cell width={8}>
+            <Cell width={1}>
               <ImageStyled alt="Cancellation Policy" src={GraphCancelattionImage} />
             </Cell>
-          </Grid>
+          </Box>
         </Cell>
       </Grid>
 
