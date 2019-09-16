@@ -41,6 +41,8 @@ const Routes = props => {
         <Switch>
           <PublicRoute
             path="/404"
+            handlerCheckAuthentication={() => { }}
+            isAuthenticated={null}
             component={otherProps => (
               <>
                 <NavBar />
@@ -51,11 +53,13 @@ const Routes = props => {
           <PublicRoute
             {...props}
             path="/auth"
+            handlerCheckAuthentication={() => { }}
+            isAuthenticated={isAuthenticated}
             component={Authentication}
           />
-          <PublicRoute {...props} path="/lp" component={LandingPages} />
-          <PublicRoute {...props} path="/space" component={Space} />
-          <PublicRoute {...props} path="/search" component={SearchPage} />
+          <PublicRoute {...props} path="/lp" handlerCheckAuthentication={() => { }} component={LandingPages} />
+          <PublicRoute {...props} path="/space" handlerCheckAuthentication={() => { }} component={Space} />
+          <PublicRoute {...props} path="/search" handlerCheckAuthentication={() => { }} component={SearchPage} />
           <PrivateRoute
             {...props}
             path="/"

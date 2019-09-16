@@ -33,7 +33,7 @@ import {
 } from 'components'
 
 const GridStyled = styled(Grid)`
-  @media only screen and (max-width: 600px) {
+  @media only screen and (max-width: 991px) {
     grid-template-areas:
       'card card'
       'content content';

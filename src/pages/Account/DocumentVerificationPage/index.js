@@ -3,7 +3,7 @@ import React, { useEffect, useCallback } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import Helmet from 'react-helmet'
 import styled from 'styled-components'
-import { onGetUserDocuments, onDeleteDocument, onUploadDocument } from 'redux/ducks/account';
+import { onGetUserDocuments, onDeleteDocument, onUploadDocument } from 'redux/ducks/account'
 import { Box, Button, Loader, BackgroundImage, Grid, Cell, Title, Image, Wrapper, Icon, Document } from 'components'
 
 const CadStyled = styled.div`
@@ -21,7 +21,7 @@ const CadStyled = styled.div`
   }
 `
 
-const _handleOnDelete = (dispatch) => (userId, id) => {
+const _handleOnDelete = dispatch => (userId, id) => {
   dispatch(onDeleteDocument(userId, id))
 }
 
@@ -29,16 +29,25 @@ const DocumentCard = (dispatch, item, index) => {
   return (
     <CadStyled key={index}>
       <Image src={item.fileName} type={item.fileType} width="100%" />
-      <Button icon={<Icon width="15px" fill="#ffffff" name="bin" />} style={{ width: '40px', height: '40px' }} onClick={() => _handleOnDelete(dispatch)(item.userId, item.id)} />
+      <Button
+        icon={<Icon width="15px" fill="#ffffff" name="bin" />}
+        style={{ width: '40px', height: '40px' }}
+        onClick={() => _handleOnDelete(dispatch)(item.userId, item.id)}
+      />
     </CadStyled>
   )
 }
 
 const DocumentVerificationPage = () => {
-  const dispatch = useDispatch();
+  const dispatch = useDispatch()
 
-  const { user: { id } } = useSelector(state => state.account.get)
-  const { isLoading, get: { documents } } = useSelector(state => state.account)
+  const {
+    user: { id }
+  } = useSelector(state => state.account.get)
+  const {
+    isLoading,
+    get: { documents }
+  } = useSelector(state => state.account)
 
   useEffect(() => {
     dispatch(onGetUserDocuments(id))
@@ -49,7 +58,9 @@ const DocumentVerificationPage = () => {
       acceptedFiles.map(async file => {
         await dispatch(onUploadDocument(id, file))
       })
-    }, [dispatch, id])
+    },
+    [dispatch, id]
+  )
 
   if (isLoading) return <Loader text="Loading documents process" />
 
@@ -66,13 +77,13 @@ const DocumentVerificationPage = () => {
       </Grid>
 
       {!documents || documents.count === 0 ? (
-        <BackgroundImage text="We didn't find any document :(" />
+        <BackgroundImage text="We didn't find any documents :(" />
       ) : (
-          <Box display="grid" gridTemplateColumns={{ _: "1fr 1fr", medium: '1fr 1fr 1fr' }} gridGap="30px">
-            {[].concat(documents.rows).map((item, index) => DocumentCard(dispatch, item, index))}
-            <Document onDrop={_addDocument} />
-          </Box>
-        )}
+        <Box display="grid" gridTemplateColumns={{ _: '1fr 1fr', medium: '1fr 1fr 1fr' }} gridGap="30px">
+          {[].concat(documents.rows).map((item, index) => DocumentCard(dispatch, item, index))}
+          <Document onDrop={_addDocument} />
+        </Box>
+      )}
     </Wrapper>
   )
 }
