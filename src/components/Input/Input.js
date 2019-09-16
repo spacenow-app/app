@@ -63,7 +63,7 @@ const InputStyled = styled.input`
 `
 
 const Label = styled.label`
-  font-size: 14px;
+  font-size: 12px;
   font-family: 'Montserrat-Medium';
   margin-left: 20px;
 `
