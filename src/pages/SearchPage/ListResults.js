@@ -43,6 +43,7 @@ const CardTitle = styled(Text)`
   overflow: hidden;
   white-space: nowrap;
   text-overflow: ellipsis;
+  cursor: pointer;
 `
 
 const CardImage = styled.img`
@@ -163,7 +164,7 @@ const ListResults = ({ history, markers, onHoverItem, pagination, onPageChanged,
                     </Tag>
                   </Box>
                 </Box>
-                <CardTitle>{item.title}</CardTitle>
+                <CardTitle onClick={() => history.push(`/space/${item.id}`)}>{item.title}</CardTitle>
                 <Text display="block" fontFamily="regular" fontSize="14px" color="greyscale.1">
                   {`${item.location.address1}, ${item.location.city}`}
                 </Text>

@@ -158,7 +158,7 @@ const SpacePage = ({ match, location, history, ...props }) => {
     const { address1 = '', city = '', zipcode = '', state = '', country = '' } = address
     const convertedAddress = `${address1 ? `${address1}, ` : ''} ${city ? `${city}, ` : ''} ${
       zipcode ? `${zipcode}, ` : ''
-    } ${state ? `${state}, ` : ''} ${country ? `${country}` : ''}`
+      } ${state ? `${state}, ` : ''} ${country ? `${country}` : ''}`
     return convertedAddress.replace(/\0.*$/g, '')
   }
 
@@ -233,10 +233,10 @@ const SpacePage = ({ match, location, history, ...props }) => {
   const _convertedArrayPhotos = array => {
     return array.filter(el => el !== undefined).length > 0
       ? array
-          .filter(el => el !== undefined)
-          .map(el => ({
-            source: `https://api-assets.prod.cloud.spacenow.com?width=800&heigth=500&format=jpeg&path=${el.name}`
-          }))
+        .filter(el => el !== undefined)
+        .map(el => ({
+          source: `https://api-assets.prod.cloud.spacenow.com?width=800&heigth=500&format=jpeg&path=${el.name}`
+        }))
       : []
   }
 
@@ -531,8 +531,6 @@ const SpacePage = ({ match, location, history, ...props }) => {
               <Title type="h5" title="Access Type" />
               <Box
                 display="grid"
-                border="1px solid"
-                borderRadius="10px"
                 width="110px"
                 height="130px"
                 justifyContent="center"
@@ -540,7 +538,7 @@ const SpacePage = ({ match, location, history, ...props }) => {
                 fontFamily="MontSerrat-SemiBold"
                 fontSize="14px"
                 color={listing.listingData.accessType ? 'quartenary' : 'error'}
-                borderColor={listing.listingData.accessType ? 'greyscale.4' : 'error'}
+                borderColor={listing.listingData.accessType ? '' : 'error'}
               >
                 <Icon
                   style={{ alignSelf: 'center', justifySelf: 'center' }}

@@ -20,6 +20,10 @@ const ButtonStyled = styled.button`
     border-color: #4285f4;
     color: #fff;
   }
+
+  && > svg {
+    border-radius: 20px;
+  }
 `
 
 const ButtonSocial = ({ onResponse, onFailure }) => (
