@@ -17,10 +17,13 @@ const ButtonStyled = styled.button`
 
   :hover {
     border-color: #4285f4;
+    background-color: #4285f4;
+    color: #ffffff;
   }
 
   && > svg {
     border-radius: 20px;
+    background-color: #ffffff;
   }
 `
 
