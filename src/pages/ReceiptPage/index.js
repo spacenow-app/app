@@ -100,12 +100,10 @@ class ComponentToPrint extends React.Component {
     const endDate = booking && booking.reservations[booking.reservations.length - 1]
 
     return (
-      <>
+      <Wrapper my="30px">
         <Grid columns={12} rows="auto" rowGap="12px">
           <Cell width={12}>
-            <Box mb="35px">
-              <Title title="Receipt" />
-            </Box>
+            <Title title="Receipt" noMargin />
           </Cell>
           <CellStyled width={4}>
             <ReservationCodeStyled>{`Reservation Code: ${booking.confirmationCode.toString()}`}</ReservationCodeStyled>
@@ -169,7 +167,7 @@ class ComponentToPrint extends React.Component {
             )}
           </CellStyled>
         </Grid>
-      </>
+      </Wrapper>
     )
   }
 }
