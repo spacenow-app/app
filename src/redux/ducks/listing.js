@@ -977,7 +977,7 @@ export const onGetAvailabilitiesByListingId = listingId => async dispatch => {
   try {
     const { data } = await getClientWithAuth(dispatch).query({
       query: queryGetAvailabilities,
-      variables: { listingId: listingId.id },
+      variables: { listingId },
       fetchPolicy: 'network-only'
     })
     const { bookingDates, exceptionDates } = data.getAvailabilitiesByListingId

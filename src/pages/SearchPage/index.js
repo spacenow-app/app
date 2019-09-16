@@ -129,7 +129,7 @@ const SearchPage = ({ history, location }) => {
   const lat = queryParams.get('lat') || '-33.8688197'
   const lng = queryParams.get('lng') || '151.2092955'
   const category = queryParams.get('category') || false
-  
+
   useEffect(() => {
     async function fetchData() {
       await dispatch(onSearch(lat, lng, category))
@@ -139,7 +139,7 @@ const SearchPage = ({ history, location }) => {
 
   useEffect(() => {
     if (lat && lng) {
-      setLatLng({lat, lng})
+      setLatLng({ lat, lng })
       if (searchResults && searchResults.length > 0) {
         const firstLocation = searchResults[0].location
         setAddress(`${firstLocation.city}, ${firstLocation.country}`)
@@ -149,7 +149,7 @@ const SearchPage = ({ history, location }) => {
 
   useEffect(() => {
     if (category) {
-      setFilterCategory({...filterCategory, [category]: true})
+      setFilterCategory({ ...filterCategory, [category]: true })
     }
   }, [filterCategory, category])
 
@@ -306,7 +306,7 @@ const SearchPage = ({ history, location }) => {
               }}
             </Reference>
             {shouldShowFilter === 'category' && (
-              <Popper placement="bottom-end" modifiers={modifiers} positionFixed>
+              <Popper placement="bottom-end" modifiers={modifiers}>
                 {({ ref, style, placement, arrowProps }) => {
                   return (
                     <div ref={ref} style={{ ...style, zIndex: 5000000 }} data-placement={placement}>

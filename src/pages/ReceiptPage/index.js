@@ -104,7 +104,7 @@ class ComponentToPrint extends React.Component {
         <Grid columns={12} rows="auto" rowGap="12px">
           <Cell width={12}>
             <Box mb="35px">
-              <Title title="Receipt" color="#6adc91" />
+              <Title title="Receipt" />
             </Box>
           </Cell>
           <CellStyled width={4}>
