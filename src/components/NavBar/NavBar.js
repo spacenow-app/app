@@ -72,7 +72,7 @@ const NavBar = () => {
 
   return (
     <Navbar expand="lg">
-      <Link to="#" onClick={_handlerGoToLegancy}>
+      <Link to="#" onClick={() => _handlerGoToLegancy()}>
         <Navbar.Brand>
           <img alt="" src={logo} width={230} className="d-inline-block align-top" />
         </Navbar.Brand>
@@ -81,7 +81,7 @@ const NavBar = () => {
       <Navbar.Collapse className="justify-content-end" id="top-navbar-nav">
         <Nav style={{ alignItems: 'center' }}>
           <NavLinkStyled to="/listing">List Your Space</NavLinkStyled>
-          <NavLinkStyled to="#" onClick={_handlerGoToLegancy('help')}>
+          <NavLinkStyled to="#" onClick={() => _handlerGoToLegancy('help')}>
             Help
           </NavLinkStyled>
           {!isAuthenticated ? (

@@ -2,8 +2,6 @@ import React, { useState } from 'react'
 import styled, { css } from 'styled-components'
 import { Wrapper, Box, NavBar, Title, Text, Button, Icon, VideoModal } from 'components'
 
-import { config } from 'variables'
-
 import heroImage from './images/hero_img.png'
 import gregImage from './images/greg_image.png'
 import jamesImage from './images/james_image.png'
@@ -190,7 +188,7 @@ const RentMyOfficeSpace = ({ history, ...props }) => {
                   <Button fluid onClick={_goToListing}>
                     Sign up and start earning.
                   </Button>
-                  <a href={`${config.legacy}/terms`}>
+                  <a href={`/terms`}>
                     <Text fontSize="12px">T&C’s apply - $450 is a weekly average across all categories</Text>
                   </a>
                 </Box>

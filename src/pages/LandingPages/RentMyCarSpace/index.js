@@ -5,7 +5,6 @@ import { useSelector, useDispatch } from 'react-redux'
 import numeral from 'numeral'
 import { Wrapper, Box, NavBar, Title, Text, Select, Button } from 'components'
 import { getCarParkPricesEstimation } from 'redux/ducks/landing'
-import { config } from 'variables'
 
 import heroImage from './images/hero_img.png'
 import gregImage from './images/greg_image.png'
@@ -212,7 +211,7 @@ const RentMyOfficeSpace = ({ history }) => {
                     Sign up and start earning.
                   </Button>
 
-                  <a href={`${config.legacy}/terms`}>
+                  <a href={`/terms`}>
                     <Text fontSize="12px">T&C’s apply</Text>
                   </a>
                 </Box>
