@@ -38,8 +38,8 @@ const ModalAddBankDetails = ({
   }
 
   return (
-    <Modal show centered size="lg" onHide={() => {}}>
-      <Modal.Header>
+    <Modal show centered size="lg" onHide={() => dispatch(closeModal())}>
+      <Modal.Header closeButton>
         <Modal.Title>Add Bank Details</Modal.Title>
       </Modal.Header>
       <Modal.Body>

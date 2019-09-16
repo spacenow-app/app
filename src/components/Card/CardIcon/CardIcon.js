@@ -21,7 +21,7 @@ const Description = styled.div`
   color: #172439;
   font-size: 14px;
   text-align: center;
-  max-height: 85px;
+  height: fit-content;
 `
 
 const IconStyled = styled(Icon)`

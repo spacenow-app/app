@@ -23,7 +23,7 @@ const ModalConfirm = ({ onConfirm, onCancel, options }) => {
   return (
     <Modal show onHide={() => handleConfirm(false)}>
       {options.title && (
-        <Modal.Header>
+        <Modal.Header closeButton>
           <Modal.Title>{options.title}</Modal.Title>
         </Modal.Header>
       )}

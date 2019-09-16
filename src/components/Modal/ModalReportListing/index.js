@@ -46,77 +46,77 @@ const ModalReportListing = ({
   }
 
   return (
-    <Modal show centered size="lg" onHide={() => {}}>
-      <Modal.Header>
+    <Modal show centered size="lg" onHide={() => dispatch(closeModal())}>
+      <Modal.Header closeButton>
         <Modal.Title>
           Why are you reporting this space?
         </Modal.Title>
       </Modal.Header>
       <Modal.Body>
-      <Grid columns={1} rowGap={'20px'}>
-        <Text>Don’t worry, this won’t be shared the host.</Text>
-        {stepOne &&
-          <>
-            <Radio
-              name="reportDetails"
-              value={values.reportDetails}
-              label='It is inaccurate or incorrect.'
-              checked={values.reportDetails === 'It is inaccurate or incorrect.'}
-              handleChange={() => _handleRadioChange('It is inaccurate or incorrect.')}
-            />
-            <Radio
-              name="reportDetails"
-              value={values.reportDetails}
-              label='It is not a real place.'
-              checked={values.reportDetails === 'It is not a real place.'}
-              handleChange={() => _handleRadioChange('It is not a real place.')}
-            />
-            <Radio
-              name="reportDetails"
-              value={values.reportDetails}
-              label='It is a scam.'
-              checked={values.reportDetails === 'It is a scam.'}
-              handleChange={() => _handleRadioChange('It is a scam.')}
-            />
-            <Radio
-              name="reportDetails"
-              value={values.reportDetails}
-              label='It is offensive.'
-              checked={values.reportDetails === 'It is offensive.'}
-              handleChange={() => _handleRadioChange('It is offensive.')}
-            />
-            <Radio
-              name="reportDetails"
-              value={values.reportDetails}
-              label='It is something else.'
-              checked={values.reportDetails === 'It is something else.'}
-              handleChange={() => _handleRadioChange('It is something else.')}
-            />
-          </>
-        }
-        {stepTwo && 
-          <>
-            <Text fontFamily="Montserrat-Bold" marginTop="10px" fontSize="14px">Describe how {values.reportDetails}</Text>
-            <TextArea
-              name="reportMessage"
-              placeholder="Ex: The images do not match the real space."
-              value={values.reportMessage}
-              onChange={handleChange}
-              onBlur={handleBlur}
-            />
-          </>
-        }
+        <Grid columns={1} rowGap={'20px'}>
+          <Text>Don’t worry, this won’t be shared the host.</Text>
+          {stepOne &&
+            <>
+              <Radio
+                name="reportDetails"
+                value={values.reportDetails}
+                label='It is inaccurate or incorrect.'
+                checked={values.reportDetails === 'It is inaccurate or incorrect.'}
+                handleChange={() => _handleRadioChange('It is inaccurate or incorrect.')}
+              />
+              <Radio
+                name="reportDetails"
+                value={values.reportDetails}
+                label='It is not a real place.'
+                checked={values.reportDetails === 'It is not a real place.'}
+                handleChange={() => _handleRadioChange('It is not a real place.')}
+              />
+              <Radio
+                name="reportDetails"
+                value={values.reportDetails}
+                label='It is a scam.'
+                checked={values.reportDetails === 'It is a scam.'}
+                handleChange={() => _handleRadioChange('It is a scam.')}
+              />
+              <Radio
+                name="reportDetails"
+                value={values.reportDetails}
+                label='It is offensive.'
+                checked={values.reportDetails === 'It is offensive.'}
+                handleChange={() => _handleRadioChange('It is offensive.')}
+              />
+              <Radio
+                name="reportDetails"
+                value={values.reportDetails}
+                label='It is something else.'
+                checked={values.reportDetails === 'It is something else.'}
+                handleChange={() => _handleRadioChange('It is something else.')}
+              />
+            </>
+          }
+          {stepTwo &&
+            <>
+              <Text fontFamily="Montserrat-Bold" marginTop="10px" fontSize="14px">Describe how {values.reportDetails}</Text>
+              <TextArea
+                name="reportMessage"
+                placeholder="Ex: The images do not match the real space."
+                value={values.reportMessage}
+                onChange={handleChange}
+                onBlur={handleBlur}
+              />
+            </>
+          }
         </Grid>
       </Modal.Body>
       <Modal.Footer>
-        <Button 
+        <Button
           outline
-          onClick={stepOne ? _handleCancelButton : _handleBackButton} 
+          onClick={stepOne ? _handleCancelButton : _handleBackButton}
         >
           {stepOne ? 'Cancel' : 'Back'}
         </Button>
-        <Button 
-          disabled={stepOne ? !values.reportDetails : !values.reportMessage} 
+        <Button
+          disabled={stepOne ? !values.reportDetails : !values.reportMessage}
           onClick={stepOne ? _handleNextButton : _handleSubmit}
           isLoading={stepOne ? false : isSendingEmail}
         >
