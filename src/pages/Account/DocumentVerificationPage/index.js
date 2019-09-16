@@ -4,7 +4,20 @@ import { useSelector, useDispatch } from 'react-redux'
 import Helmet from 'react-helmet'
 import styled from 'styled-components'
 import { onGetUserDocuments, onDeleteDocument, onUploadDocument } from 'redux/ducks/account'
-import { Box, Button, Loader, BackgroundImage, Grid, Cell, Title, Image, Wrapper, Icon, Document } from 'components'
+import {
+  Box,
+  Button,
+  Loader,
+  BackgroundImage,
+  Grid,
+  Cell,
+  Title,
+  Image,
+  Wrapper,
+  Icon,
+  Document,
+  Text
+} from 'components'
 
 const CadStyled = styled.div`
   display: grid;
@@ -73,6 +86,12 @@ const DocumentVerificationPage = () => {
         </Cell>
         <Cell width={4} middle justifySelf="end">
           {(!documents || documents.count === 0) && <Document isButton onDrop={_addDocument} />}
+        </Cell>
+        <Cell width={12}>
+          <Text>
+            Please upload 100 points of ID to make booking space quicker for host approvals. Guest with 100 points of ID
+            get better approval rates.
+          </Text>
         </Cell>
       </Grid>
 
