@@ -1,9 +1,12 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import PropTypes from 'prop-types'
-import { Route } from 'react-router-dom'
+import { Route, Redirect } from 'react-router-dom'
 
-const PublicRoute = ({ component: Component, ...rest }) => {
-  return <Route {...rest} render={props => <Component {...props} />} />
+const PublicRoute = ({ handlerCheckAuthentication, isAuthenticated, component: Component, ...rest }) => {
+  useEffect(() => {
+    handlerCheckAuthentication()
+  })
+  return <Route {...rest} render={props => (!isAuthenticated ? <Component {...props} /> : <Redirect to="/" />)} />
 }
 
 PublicRoute.propTypes = {
@@ -13,7 +16,9 @@ PublicRoute.propTypes = {
     PropTypes.elementType,
     PropTypes.instanceOf(Array),
     PropTypes.instanceOf(Object)
-  ]).isRequired
+  ]).isRequired,
+  handlerCheckAuthentication: PropTypes.func.isRequired,
+  isAuthenticated: PropTypes.bool
 }
 
 export default PublicRoute
