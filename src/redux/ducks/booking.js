@@ -1,6 +1,7 @@
 /* eslint-disable no-console */
 import { gql } from 'apollo-boost'
 import { toast } from 'react-toastify'
+import crypto from 'crypto'
 
 import { getClientWithAuth } from 'graphql/apolloClient'
 import errToMsg from 'utils/errToMsg'
@@ -25,9 +26,11 @@ export const Types = {
   ACCEPT_BOOKING_START: 'ACCEPT_BOOKING_START',
   ACCEPT_BOOKING_SUCCESS: 'ACCEPT_BOOKING_SUCCESS',
   ACCEPT_BOOKING_FAILURE: 'ACCEPT_BOOKING_FAILURE',
+  ACCEPTED_BOOKING_BY_EMAIL: 'ACCEPTED_BOOKING_BY_EMAIL',
   DECLINE_BOOKING_START: 'DECLINE_BOOKING_START',
   DECLINE_BOOKING_SUCCESS: 'DECLINE_BOOKING_SUCCESS',
-  DECLINE_BOOKING_FAILURE: 'DECLINE_BOOKING_FAILURE'
+  DECLINE_BOOKING_FAILURE: 'DECLINE_BOOKING_FAILURE',
+  DECLINED_BOOKING_BY_EMAIL: 'DECLINED_BOOKING_BY_EMAIL'
 }
 
 // Initial State
@@ -521,6 +524,8 @@ export default function reducer(state = initialState, action) {
 // Action Creators
 
 // Side Effects
+const getHash = (value) => crypto.createHash('sha256').update(value, 'utf8').digest('hex')
+
 export const onCreateBooking = (object, history) => async dispatch => {
   dispatch({ type: Types.CREATE_BOOKING_START })
   try {
@@ -617,3 +622,30 @@ export const onGetListingInfo = id => async dispatch => {
     dispatch({ type: Types.GET_LISTING_INFO_FAILURE, payload: errToMsg(err) })
   }
 }
+
+export const onAcceptDeclineByEmail = (bookingId, emailAction, userId) => (dispatch) =>
+  new Promise(async (resolve) => {
+    let mutation
+    let dispatchType
+    try {
+      const approveChecking = getHash(`${userId}APPROVE`)
+      if (approveChecking === emailAction) {
+        mutation = mutationAcceptBooking
+        dispatchType = Types.ACCEPTED_BOOKING_BY_EMAIL
+      } else {
+        const declineChecking = getHash(`${userId}DECLINE`)
+        if (declineChecking === emailAction) {
+          mutation = mutationDeclineBooking
+          dispatchType = Types.DECLINED_BOOKING_BY_EMAIL
+        }
+      }
+      if (mutation) {
+        await getClientWithAuth(dispatch).mutate({ mutation, variables: { bookingId } })
+      }
+      dispatch({ type: dispatchType })
+      resolve()
+    } catch (err) {
+      console.error(err)
+      resolve()
+    }
+  })
