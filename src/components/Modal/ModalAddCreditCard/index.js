@@ -58,8 +58,8 @@ const ModalAddBankDetails = ({
   }
 
   return (
-    <ModalStyled show centered onHide={() => {}}>
-      <Modal.Header>
+    <ModalStyled show centered onHide={() => dispatch(closeModal())}>
+      <Modal.Header closeButton>
         <Modal.Title>Add New Credit Card</Modal.Title>
       </Modal.Header>
       <Modal.Body>

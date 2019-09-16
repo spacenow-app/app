@@ -119,7 +119,7 @@ const PartnerPage = ({ match, location, ...props }) => {
   return (
     <Wrapper mt="50px">
       <Helmet title="View Listing - Spacenow" />
-      <GridStyled columns="auto 350px" columnGap="15px" rowGap="30px">
+      <GridStyled columns="auto 350px" columnGap="35px" rowGap="30px">
         <Box display="grid" gridRowGap="15px">
           <Carousel photos={_convertedArrayPhotos(listing.photos)} height={imageHeight} />
 
@@ -280,7 +280,7 @@ const PartnerPage = ({ match, location, ...props }) => {
           />
         </Box>
       </GridStyled>
-      <Box my="30px">
+      <Box my="45px">
         <Title type="h5" title="Location" />
         <Map position={{ lat: Number(listing.location.lat), lng: Number(listing.location.lng) }} />
       </Box>

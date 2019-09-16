@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import Helmet from 'react-helmet'
-import { onGetListingsByUser, onUpdateListing } from 'redux/ducks/account'
+import { onGetListingsByUser, onUpdateListing, onDeleteListing } from 'redux/ducks/account'
 import { Card, Text, Icon, Loader, BackgroundImage, Grid, Cell, Title, Wrapper, Button } from 'components'
 
 const _parseCategoryIconName = (name, isSub) => {
@@ -15,11 +15,15 @@ const _handleOnUpdateListing = dispatch => (listingId, status) => {
 }
 
 const _handleRedirect = id => {
-  window.location.href = `/space/${id}`
+  window.location.href = `/listing/space/${id}/specification`
 }
 
 const _handleEditRedirect = id => {
-  window.location.href = `/space/${id}`
+  window.location.href = `/listing/space/${id}/specification`
+}
+
+const _handleDelete = dispatch => id => {
+  dispatch(onDeleteListing(id))
 }
 
 const ListingCard = (dispatch, item, index) => {
@@ -27,7 +31,7 @@ const ListingCard = (dispatch, item, index) => {
     <Card.Horizontal key={index}>
       <Card.Horizontal.Image
         src={item.photos.length > 0 ? item.photos[0].name : ''}
-        handleClick={() => (!item.isPublished ? _handleRedirect(item.id) : '')}
+        handleClick={() => (item.isPublished ? _handleRedirect(item.id) : '')}
       />
       <Card.Horizontal.Body>
         <Card.Horizontal.Title
@@ -54,7 +58,7 @@ const ListingCard = (dispatch, item, index) => {
           <Card.Horizontal.Dropdown.Item onClick={() => _handleEditRedirect(item.id)}>
             Edit
           </Card.Horizontal.Dropdown.Item>
-          <Card.Horizontal.Dropdown.Item onClick={() => _handleEditRedirect(item.id)}>
+          <Card.Horizontal.Dropdown.Item onClick={() => _handleDelete(item.id)}>
             Delete
           </Card.Horizontal.Dropdown.Item>
         </Card.Horizontal.Dropdown.Menu>
@@ -125,10 +129,10 @@ const ListingPage = ({ ...props }) => {
       {!listings || listings.count === 0 ? (
         <BackgroundImage text="We didn't find any listings :(" />
       ) : (
-        <Grid columns={1} rowGap={`30px`}>
-          {[].concat(listings.rows).map((item, index) => ListingCard(dispatch, item, index))}
-        </Grid>
-      )}
+          <Grid columns={1} rowGap={`30px`}>
+            {[].concat(listings.rows).map((item, index) => ListingCard(dispatch, item, index))}
+          </Grid>
+        )}
     </Wrapper>
   )
 }

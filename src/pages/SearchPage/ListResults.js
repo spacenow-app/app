@@ -52,6 +52,7 @@ const CardImage = styled.img`
   border-top-left-radius: 6px;
   border-top-right-radius: 6px;
   cursor: pointer;
+  object-fit: cover;
 `
 const CardContent = styled.div`
   padding: 25px;
@@ -126,7 +127,7 @@ const ListResults = ({ history, markers, onHoverItem, pagination, onPageChanged,
       }
 
       return (
-        <Box justifySelf="center" key={el.id}>
+        <Box key={el.id}>
           <Icon name={_getInfo(obj).icon} width="22px" />
           <Text fontSize="10px" ml="10px">
             {_getInfo(obj).value}

@@ -24,6 +24,9 @@ export const Types = {
   ACC_UPDATE_LISTING: '[ACCOUNT] UPDATE LISTING',
   ACC_UPDATE_LISTING_SUCCESS: '[ACCOUNT] UPDATE LISTING SUCCESS',
   ACC_UPDATE_LISTING_ERROR: '[ACCOUNT] UPDATE LISTING ERROR',
+  ACC_DELETE_LISTING: '[ACCOUNT] DELETE LISTING',
+  ACC_DELETE_LISTING_SUCCESS: '[ACCOUNT] DELETE LISTING SUCCESS',
+  ACC_DELETE_LISTING_ERROR: '[ACCOUNT] DELETE LISTING ERROR',
   ACC_UPDATE_PROFILE: '[ACCOUNT] UPDATE PROFILE',
   ACC_UPDATE_PROFILE_SUCCESS: '[ACCOUNT] UPDATE PROFILE SUCCESS',
   ACC_UPDATE_PROFILE_ERROR: '[ACCOUNT] UPDATE PROFILE ERROR',
@@ -218,6 +221,15 @@ const mutationUpdateListing = gql`
 `
 
 // GraphQL
+const mutationDeleteListing = gql`
+  mutation delete($listingId: Int!) {
+    publish(listingId: $listingId) {
+      id
+		}
+  }
+`
+
+// GraphQL
 const mutationUpdateUserProfile = gql`
   mutation updateUserProfileLegacy($userId: String, $input: UserProfileInput) {
     updateUserProfileLegacy(userId: $userId, input: $input) {
@@ -279,6 +291,7 @@ export default function reducer(state = initialState, action) {
       }
     case Types.ACC_GET_PROFILE:
     case Types.ACC_UPDATE_LISTING:
+    case Types.ACC_DELETE_LISTING:
     case Types.ACC_DELETE_DOCUMENT:
     case Types.ACC_UPLOAD_DOCUMENT:
     case Types.ACC_GET_RESEND_LINK: {
@@ -329,6 +342,18 @@ export default function reducer(state = initialState, action) {
                 return item
               return item = { ...item, isPublished: action.payload.isPublished }
             })
+          }
+        }
+      }
+    case Types.ACC_DELETE_LISTING_SUCCESS:
+      return {
+        ...state,
+        isLoading: false,
+        get: {
+          ...state.get,
+          listings: {
+            count: state.get.listings.count - 1,
+            rows: state.get.documents.rows.filter((item) => item.id !== action.payload.id)
           }
         }
       }
@@ -398,6 +423,7 @@ export default function reducer(state = initialState, action) {
     case Types.ACC_DELETE_DOCUMENT_ERROR:
     case Types.ACC_UPDATE_PROFILE_ERROR:
     case Types.ACC_UPDATE_LISTING_ERROR:
+    case Types.ACC_DELETE_LISTING_ERROR:
     case Types.ACC_UPDATE_PROFILE_PICTURE_ERROR:
     case Types.ACC_UPLOAD_DOCUMENT_ERROR:
     case Types.ACC_GET_RESEND_LINK_ERROR:
@@ -498,6 +524,21 @@ export const onUpdateListing = (listingId, status) => async dispatch => {
   } catch (error) {
     toast.error(error.message);
     dispatch({ type: Types.ACC_UPDATE_LISTING_ERROR, payload: error.message })
+  }
+}
+
+export const onDeleteListing = (listingId) => async dispatch => {
+  dispatch({ type: Types.ACC_DELETE_LISTING })
+  try {
+    await getClientWithAuth(dispatch).mutate({
+      mutation: mutationDeleteListing,
+      variables: { listingId }
+    })
+    toast.success("Listing updated successfully");
+    dispatch({ type: Types.ACC_DELETE_LISTING_SUCCESS, payload: { listingId } })
+  } catch (error) {
+    toast.error(error.message);
+    dispatch({ type: Types.ACC_DELETE_LISTING_ERROR, payload: error.message })
   }
 }
 

@@ -58,13 +58,12 @@ const InputStyled = styled.input`
     margin: 0;
   }
 
-  ${ border }
-  ${ color }
-
+  ${border}
+  ${color}
 `
 
 const Label = styled.label`
-  font-size: 14px;
+  font-size: 12px;
   font-family: 'Montserrat-Medium';
   margin-left: 20px;
 `
@@ -80,6 +79,10 @@ const RightContent = styled.div`
       right: 1%;
       top: ${props.size === 'sm' ? '12%' : '49%'};
     `}
+
+  @media only screen and (max-width: 600px) {
+    right: 3%;
+  }
 `
 
 const LoaderIcon = styled.i`
