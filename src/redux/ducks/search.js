@@ -230,7 +230,6 @@ export const onSearch = (lat, lng, categoryKey = false) => async dispatch => {
 
 export const onQuery = (searchKey, filters, page = null) => async dispatch => {
   dispatch({ type: Types.ON_SEARCH_REQUEST })
-  console.log('onQuery filters: ', filters)
   const filter = {
     categories:
       Object.keys(CATEGORIES)

@@ -15,7 +15,7 @@ const _handleOnUpdateListing = dispatch => (listingId, status) => {
 }
 
 const _handleRedirect = id => {
-  window.location.href = `/listing/space/${id}/specification`
+  window.location.href = `/space/${id}`
 }
 
 const _handleEditRedirect = id => {
