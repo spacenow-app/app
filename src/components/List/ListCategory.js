@@ -4,7 +4,7 @@ import { Icon } from 'components'
 
 const List = styled.div`
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(130px, 130px));
+  grid-template-columns: repeat(auto-fit, minmax(150px, 130px));
   grid-column-gap: 10px;
   justify-content: ${props => (props.spaceBetween ? 'space-between' : 'center')};
 
@@ -80,6 +80,7 @@ const TitleStyled = styled.span`
   color: #172439;
   font-family: 'Montserrat-Medium';
   font-size: 14px;
+  max-height: 22px;
 
   ${props =>
     props.circular &&

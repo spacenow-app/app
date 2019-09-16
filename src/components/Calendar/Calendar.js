@@ -166,7 +166,7 @@ const Calendar = ({ selectedDays, disabledDays, daysOfWeek, handleDayClick, ...p
     <WrapperStyled>
       <DayPicker
         {...props}
-        numberOfMonths={2}
+        numberOfMonths={1}
         disabledDays={[
           ...disabledDays.map(el => new Date(el)),
           {

@@ -51,6 +51,8 @@ const CategoryPage = props => {
     return false
   }
 
+  console.log(categories)
+
   return (
     <Wrapper>
       <Title
@@ -62,7 +64,11 @@ const CategoryPage = props => {
         <Loader text="Loading Categories..." />
       ) : (
         <>
-          <List data={categories} handleItemClick={_handleCategoryClick} itemSelected={categorySelected} />
+          <List
+            data={categories.filter(res => res.otherItemName !== 'desk')}
+            handleItemClick={_handleCategoryClick}
+            itemSelected={categorySelected}
+          />
           {categorySelected && categorySelected.subCategories && categorySelected.itemName !== 'Office' && (
             <>
               <Caption large centered margin="50px 0">

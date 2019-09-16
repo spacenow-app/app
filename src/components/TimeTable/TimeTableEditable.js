@@ -71,7 +71,7 @@ const TimeTableEditable = ({
 
   return (
     <WrapperStyled>
-      <Box display="grid" gridTemplateColumns={{ _: "1fr", medium: "1fr 1fr 1fr 1fr" }} gridGap="20px">
+      <Box display="grid" gridTemplateColumns={{ _: "1fr", medium: "2fr 1fr 1fr 2fr" }} gridGap="20px">
         <Cell width={1}>
           <ItemSwitchStyled>
             <span>Open 24 / 7</span>
@@ -81,8 +81,8 @@ const TimeTableEditable = ({
           </ItemSwitchStyled>
         </Cell>
       </Box>
-      <Box display="grid" gridTemplateColumns={{ _: "1fr 1fr", medium: "2fr 1fr 1fr 2fr" }} gridGap="20px">
-        <Cell width={2} middle>
+      <Box display="grid" gridTemplateColumns={{ _: "1fr", medium: "2fr 1fr 1fr 2fr" }} gridGap="20px">
+        <Cell width={{ _: 2, medium: 1 }} middle>
           <TitleStyled>Days</TitleStyled>
         </Cell>
         <Cell width={1} middle>
@@ -91,15 +91,15 @@ const TimeTableEditable = ({
         <Cell width={1} middle>
           <TitleStyled>Close</TitleStyled>
         </Cell>
-        <Cell width={2} middle>
+        <Cell width={{ _: 2, medium: 1 }} middle>
           <TitleStyled>Working hours</TitleStyled>
         </Cell>
       </Box>
       <Box display="grid" gridTemplateColumns={"1fr"} gridRowGap={{ _: "50px", medium: "20px" }}>
         {data.map((item, index) => {
           return (
-            <Box key={item.day} display="grid" gridTemplateColumns={{ _: "1fr 1fr", medium: "2fr 1fr 1fr 2fr" }} gridGap={{ _: "10px", medium: "20px" }}>
-              <Cell width={2}>
+            <Box key={item.day} display="grid" gridTemplateColumns={{ _: "1fr", medium: "2fr 1fr 1fr 2fr" }} gridGap={{ _: "10px", medium: "20px" }}>
+              <Cell width={{ _: 2, medium: 1 }}>
                 <ItemSwitchStyled checked={item.active}>
                   <span>{item.description}</span>
                   <SwitchStyled>
@@ -125,7 +125,7 @@ const TimeTableEditable = ({
                   />
                 </ItemStyled>
               </Cell>
-              <Cell width={2}>
+              <Cell width={{ _: 2, medium: 1 }}>
                 <ItemSwitchStyled>
                   <span>Open 24 hours</span>
                   <SwitchStyled>

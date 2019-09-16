@@ -16,9 +16,11 @@ const ButtonStyled = styled.button`
   color: #4285f4;
 
   :hover {
-    background-color: #4285f4;
     border-color: #4285f4;
-    color: #fff;
+  }
+
+  && > svg {
+    border-radius: 20px;
   }
 `
 
@@ -29,7 +31,7 @@ const ButtonSocial = ({ onResponse, onFailure }) => (
     onFailure={onFailure}
     render={renderProps => (
       <ButtonStyled onClick={renderProps.onClick} disabled={renderProps.disabled}>
-        <GoogleLogo width="25px" style={{ background: '#fff', marginRight: '20px' }} />
+        <GoogleLogo width="25px" style={{ marginRight: '20px' }} />
         Google
       </ButtonStyled>
     )}

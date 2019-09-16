@@ -50,6 +50,18 @@ const WrapperStyled = styled.div`
       }
     }
 
+    .DayPicker-WeekdaysRow {
+      display: grid;
+      grid-auto-flow: column;
+      grid-gap: 5px;
+    }
+
+    .DayPicker-Week {
+      display: grid;
+      grid-auto-flow: column;
+      grid-gap: 5px;
+    }
+
     .DayPicker-Weekday {
       color: #6adc91;
       font-size: 16px;
@@ -63,6 +75,9 @@ const WrapperStyled = styled.div`
       max-width: 40px;
       font-family: 'Montserrat-Medium';
       font-size: 14px;
+      display: grid;
+      justify-content: center;
+      align-items: center;
     }
 
     .DayPicker:not(.DayPicker--interactionDisabled)
