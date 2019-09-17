@@ -25,7 +25,7 @@ const ListItem = styled.div`
   ${props =>
     !props.circular &&
     css`
-      background-color: ${props.bgItem ? props.bgItem : '#f7f7f7'};
+      background-color: ${props.bgItem ? props.bgItem : '#ededed'};
       width: 130px;
       height: 130px;
       border-radius: 8px;

@@ -24,7 +24,7 @@ const BoxItem = styled.div`
   background-color: ${props => props.active && '#fafafa'};
 
   :hover {
-    background-color: #f7f7f7;
+    background-color: #ededed;
     border-radius: 20px;
   }
 `

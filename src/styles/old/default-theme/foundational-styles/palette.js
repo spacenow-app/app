@@ -13,7 +13,7 @@ export default {
     two: '#939393',
     three: '#CBCBCB',
     four: '#EBEBEB',
-    five: '#F7F7F7',
+    five: '#ededed',
     six: '#FFFFFF'
   }
 }
