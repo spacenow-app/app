@@ -22,10 +22,12 @@ const ModalConfirm = ({ onConfirm, onCancel, options }) => {
   }
 
   return (
-    <Modal show onHide={() => handleConfirm(false)}>
+    <Modal show centered onHide={() => handleConfirm(false)}>
       {options.title && (
         <Modal.Header closeButton>
-          <Modal.Title><Title noMargin type={"h5"} title={options.title} /></Modal.Title>
+          <Modal.Title>
+            <Title noMargin type={'h5'} title={options.title} />
+          </Modal.Title>
         </Modal.Header>
       )}
       {options.text && <Modal.Body>{options.text}</Modal.Body>}
@@ -40,7 +42,6 @@ const ModalConfirm = ({ onConfirm, onCancel, options }) => {
     </Modal>
   )
 }
-
 
 ModalConfirm.propTypes = {
   onConfirm: PropTypes.func.isRequired,
