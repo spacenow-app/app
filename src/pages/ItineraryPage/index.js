@@ -291,31 +291,7 @@ const ItineraryPage = ({ match, location, history, ...props }) => {
       </Box>
       <GridStyled columns="420px auto" columnGap="45px">
         <Cell>
-<<<<<<< HEAD
-          {isListingLoading ? (
-            <Loader sm />
-          ) : (
-              <BookingCard
-                noPadding
-                titleComponent={
-                  <ImageContainerStyled>
-                    <Image width="100%" height="100%" src={_getCoverPhoto(listing)} />
-                  </ImageContainerStyled>
-                }
-                footerComponent={
-                  <Box p="0 30px 30px 30px">
-                    <UserDetails
-                      hostname={listing.user.profile.displayName}
-                      imageProfile={listing.user.profile.picture}
-                      joined="2019"
-                    />
-                  </Box>
-                }
-              />
-            )}
-=======
           {isListingLoading ? <Loader sm /> : _renderSpaceCard()}
->>>>>>> 998b350a61bebb494bb1fc4d876441ed20512ab9
           <Box mt="20px">
             <ButtonStyled outline onClick={() => history.push(`/account/booking`)}>
               View Bookings
