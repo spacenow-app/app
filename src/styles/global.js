@@ -39,10 +39,19 @@ export default createGlobalStyle`
       line-height: 1.5;
       color: #172439 !important;
     }
+    p, li, ul {
+      font-size: 16px !important;
+    }
 
     button:focus {
       outline: none !important;
       box-shadow: none !important;
+    }
+
+    @media only screen and (max-width: 600px) {
+      p, li, ul {
+      font-size: 13px !important;
+      }
     }
 
     /* Replace Modal Styles */
