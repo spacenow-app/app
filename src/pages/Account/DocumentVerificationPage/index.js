@@ -9,7 +9,6 @@ import {
   Button,
   Loader,
   BackgroundImage,
-  Grid,
   Cell,
   Title,
   Image,
@@ -80,20 +79,21 @@ const DocumentVerificationPage = () => {
   return (
     <Wrapper>
       <Helmet title="Your Documents - Spacenow" />
-      <Grid column="12">
-        <Cell width={8}>
+
+      <Box display="grid" gridTemplateColumns={{ _: '1fr', medium: '2fr 1fr' }} gridGap="20px">
+        <Cell width={1}>
           <Title type="h4" title="Your Documents" />
         </Cell>
-        <Cell width={4} middle justifySelf="end">
+        <Cell width={1} middle justifySelf="end">
           {(!documents || documents.count === 0) && <Document isButton onDrop={_addDocument} />}
         </Cell>
-        <Cell width={12}>
+        <Cell width={2}>
           <Text>
             Please upload 100 points of ID to make booking space quicker for host approvals. Guest with 100 points of ID
             get better approval rates.
           </Text>
         </Cell>
-      </Grid>
+      </Box>
 
       {!documents || documents.count === 0 ? (
         <BackgroundImage text="We didn't find any documents :(" />
