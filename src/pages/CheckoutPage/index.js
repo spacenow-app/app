@@ -8,7 +8,7 @@ import fromUnixTime from 'date-fns/fromUnixTime'
 import format from 'date-fns/format'
 import addMinutes from 'date-fns/addMinutes'
 import { toPlural } from 'utils/strings'
-
+import { convertedDate } from 'utils/date'
 import { TypesModal, openModal } from 'redux/ducks/modal'
 import { getUserCards, createUserCard, deleteUserCard, pay } from 'redux/ducks/payment'
 import { onGetBooking } from 'redux/ducks/booking'
@@ -93,7 +93,7 @@ const CheckoutPage = ({ match, location, history, ...props }) => {
     return format(new Date(expiry), 'Pp')
   }
 
-  const _spelling = periodType => {
+  const _spelling = (periodType, reference) => {
     let label = 'Day'
     switch (periodType) {
       case 'weekly':
@@ -105,6 +105,7 @@ const CheckoutPage = ({ match, location, history, ...props }) => {
       default:
         label = 'Day'
     }
+    if (reference > 1) label = `${label}s`
     return label
   }
 
@@ -142,7 +143,7 @@ const CheckoutPage = ({ match, location, history, ...props }) => {
     history.replace('/')
     return null
   }
-
+  console.log(toPlural(_spelling(reservation.listing.bookingPeriod), reservation.reservations.length))
   return (
     <Wrapper>
       <Helmet title="Checkout - Spacenow" />
@@ -164,9 +165,9 @@ const CheckoutPage = ({ match, location, history, ...props }) => {
               <ListDates dates={reservation.reservations} />
             </>
           ) : (
-              // <BookingDates reservationData={[]} />
-              <></>
-            )}
+            // <BookingDates reservationData={[]} />
+            <></>
+          )}
 
           <TimeTable data={listing.accessDays.listingAccessHours} />
 
@@ -180,10 +181,26 @@ const CheckoutPage = ({ match, location, history, ...props }) => {
                 <thead>
                   <tr>
                     <th />
-                    <th><Text fontSize="14px" fontFamily="semiBold" style={{ whiteSpace: "nowrap" }}>Name on Card</Text></th>
-                    <th><Text fontSize="14px" fontFamily="semiBold" style={{ whiteSpace: "nowrap" }}>Brand</Text></th>
-                    <th><Text fontSize="14px" fontFamily="semiBold" style={{ whiteSpace: "nowrap" }}>Card Number</Text></th>
-                    <th><Text fontSize="14px" fontFamily="semiBold" style={{ whiteSpace: "nowrap" }}>Options</Text></th>
+                    <th>
+                      <Text fontSize="14px" fontFamily="semiBold" style={{ whiteSpace: 'nowrap' }}>
+                        Name on Card
+                      </Text>
+                    </th>
+                    <th>
+                      <Text fontSize="14px" fontFamily="semiBold" style={{ whiteSpace: 'nowrap' }}>
+                        Brand
+                      </Text>
+                    </th>
+                    <th>
+                      <Text fontSize="14px" fontFamily="semiBold" style={{ whiteSpace: 'nowrap' }}>
+                        Card Number
+                      </Text>
+                    </th>
+                    <th>
+                      <Text fontSize="14px" fontFamily="semiBold" style={{ whiteSpace: 'nowrap' }}>
+                        Options
+                      </Text>
+                    </th>
                   </tr>
                 </thead>
                 <tbody>
@@ -192,17 +209,27 @@ const CheckoutPage = ({ match, location, history, ...props }) => {
                       <td>
                         <Checkbox onClick={_handleChangeCardSelect(card)} checked={selectedCard.id === card.id} />
                       </td>
-                      <td><Text fontSize="14px" style={{ whiteSpace: "nowrap" }}>{card.name}</Text></td>
-                      <td><Text fontSize="14px" style={{ whiteSpace: "nowrap" }}>{card.brand}</Text></td>
-                      <td><Text fontSize="14px" style={{ whiteSpace: "nowrap" }}>{`**** **** **** ${card.last4}`}</Text></td>
-                      <td align={'center'}>
+                      <td>
+                        <Text fontSize="14px" style={{ whiteSpace: 'nowrap' }}>
+                          {card.name}
+                        </Text>
+                      </td>
+                      <td>
+                        <Text fontSize="14px" style={{ whiteSpace: 'nowrap' }}>
+                          {card.brand}
+                        </Text>
+                      </td>
+                      <td>
+                        <Text fontSize="14px" style={{ whiteSpace: 'nowrap' }}>{`**** **** **** ${card.last4}`}</Text>
+                      </td>
+                      <td align="center">
                         {card.isLoading ? (
                           <Loader icon width="20px" height="20px" />
                         ) : (
-                            <IconButton onClick={_handleRemoveCard(card)}>
-                              <Icon name="bin" style={{ fill: '#51C482' }} />
-                            </IconButton>
-                          )}
+                          <IconButton onClick={_handleRemoveCard(card)}>
+                            <Icon name="bin" style={{ fill: '#51C482' }} />
+                          </IconButton>
+                        )}
                       </td>
                     </tr>
                   ))}
@@ -210,8 +237,8 @@ const CheckoutPage = ({ match, location, history, ...props }) => {
               </Table>
             </>
           ) : (
-              <Text>You don't have any credit cards yet, please add one :)</Text>
-            )}
+            <Text>You don't have any credit cards yet, please add one :)</Text>
+          )}
 
           <Button size="sm" onClick={_addNewCard} isLoading={isCreating}>
             Add Card
@@ -231,7 +258,12 @@ const CheckoutPage = ({ match, location, history, ...props }) => {
             titleComponent={
               <>
                 <Title type="h5" title="Hosted by" noMargin />
-                <UserDetails hostname="host name" imageProfile={null} joined="2019" />
+                <UserDetails
+                  hostname={`${listing.user && listing.user.profile.firstName} ${listing.user &&
+                    listing.user.profile.lastName} `}
+                  imageProfile={listing.user && listing.user.profile.picture}
+                  joined={format(convertedDate(listing.user && listing.user.profile.createdAt), 'yyyy')}
+                />
               </>
             }
             contentComponent={
@@ -248,7 +280,7 @@ const CheckoutPage = ({ match, location, history, ...props }) => {
                 />
                 <PriceDetail
                   margin="0"
-                  periodLabel={toPlural(_spelling(reservation.listing.bookingPeriod), reservation.reservations.length)}
+                  periodLabel={_spelling(reservation.listing.bookingPeriod, reservation.reservations.length)}
                   price={listing.listingData.basePrice}
                   isAbsorvedFee={listing.listingData.isAbsorvedFee}
                   days={reservation.reservations.length}

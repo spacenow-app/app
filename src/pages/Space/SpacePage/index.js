@@ -83,7 +83,7 @@ const BottomButtonMobile = styled.div`
   width: 100%;
   padding: 15px 0;
   text-align: center;
-  border-top: 1px solid #e2e2e2;
+  border-top: 1px solid #c4c4c4;
 
   @media only screen and (min-width: 992px) {
     display: none;

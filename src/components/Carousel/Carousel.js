@@ -27,7 +27,7 @@ const Carousel = ({ photos, ...props }) => {
           height: props.height,
           width: '100%',
           borderRadius: '15px',
-          border: `${photos.length ? '1px solid #E2E2E2' : '1px solid #E05252'}`,
+          border: `${photos.length ? '1px solid #c4c4c4' : '1px solid #E05252'}`,
           '& > img': {
             borderRadius: '15px',
             width: '100%',

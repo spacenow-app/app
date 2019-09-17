@@ -18,7 +18,7 @@ const InnerMenu = ({ ...props }) => {
     <Box
       display="grid"
       gridRowGap="15px"
-      background="#f7f7f7"
+      background="#ededed"
       justifyItems="center"
       alignContent="start"
       p="30px"

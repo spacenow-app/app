@@ -5,7 +5,7 @@ import styled from 'styled-components'
 const WrapperStyled = styled.div`
   display: grid;
   min-height: 200px;
-  background-color: #f7f7f7;
+  background-color: #ededed;
   grid-row-gap: 32px;
   border-radius: 15px;
   width: 350px;

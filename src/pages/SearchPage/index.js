@@ -66,7 +66,7 @@ const ContainerResults = styled.div`
   padding: 0 20px;
 
   @media (max-width: 945px) {
-    grid-template-columns: auto;
+    grid-template-columns: 100%;
   }
 `
 
@@ -89,7 +89,7 @@ const ContainerMap = styled.div`
 const ItemSwitchStyled = styled.div`
   height: 65px;
   border-radius: 75px;
-  border: 1px solid ${({ checked }) => (checked ? '#6adc91' : '#E2E2E2')};
+  border: 1px solid ${({ checked }) => (checked ? '#6adc91' : '#c4c4c4')};
   padding: 20px;
   display: grid;
   grid-template-columns: auto auto;
