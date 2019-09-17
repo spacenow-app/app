@@ -30,6 +30,11 @@ const H1Styled = styled.h1`
 const H2Styled = styled.h2`
   font-size: 40px;
   ${baseStyle}
+
+  @media (max-width: 576px) {
+    font-size: 30px;
+  }
+
 `
 
 const H3Styled = styled.h3`

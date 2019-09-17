@@ -80,14 +80,14 @@ const DocumentVerificationPage = () => {
     <Wrapper>
       <Helmet title="Your Documents - Spacenow" />
 
-      <Box display="grid" gridTemplateColumns={{ _: '1fr', medium: '2fr 1fr' }} gridGap="20px">
+      <Box my={{ _: '20px', medium: '0' }} display="grid" gridTemplateColumns={{ _: '1fr', medium: '2fr 1fr' }} gridGap="20px">
         <Cell width={1}>
-          <Title type="h4" title="Your Documents" />
+          <Title type="h4" title="Your Documents" noMargin />
         </Cell>
         <Cell width={1} middle justifySelf="end">
           {(!documents || documents.count === 0) && <Document isButton onDrop={_addDocument} />}
         </Cell>
-        <Cell width={2}>
+        <Cell width={{ _: 1, medium: 2 }}>
           <Text>
             Please upload 100 points of ID to make booking space quicker for host approvals. Guest with 100 points of ID
             get better approval rates.
