@@ -93,7 +93,7 @@ const CheckoutPage = ({ match, location, history, ...props }) => {
     return format(new Date(expiry), 'Pp')
   }
 
-  const _spelling = periodType => {
+  const _spelling = (periodType, reference) => {
     let label = 'Day'
     switch (periodType) {
       case 'weekly':
@@ -105,6 +105,7 @@ const CheckoutPage = ({ match, location, history, ...props }) => {
       default:
         label = 'Day'
     }
+    if (reference > 1) label = `${label}s`
     return label
   }
 
@@ -142,7 +143,7 @@ const CheckoutPage = ({ match, location, history, ...props }) => {
     history.replace('/')
     return null
   }
-
+  console.log(toPlural(_spelling(reservation.listing.bookingPeriod), reservation.reservations.length))
   return (
     <Wrapper>
       <Helmet title="Checkout - Spacenow" />
@@ -279,7 +280,7 @@ const CheckoutPage = ({ match, location, history, ...props }) => {
                 />
                 <PriceDetail
                   margin="0"
-                  periodLabel={toPlural(_spelling(reservation.listing.bookingPeriod), reservation.reservations.length)}
+                  periodLabel={_spelling(reservation.listing.bookingPeriod, reservation.reservations.length)}
                   price={listing.listingData.basePrice}
                   isAbsorvedFee={listing.listingData.isAbsorvedFee}
                   days={reservation.reservations.length}
