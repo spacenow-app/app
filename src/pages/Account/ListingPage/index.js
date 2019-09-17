@@ -38,8 +38,8 @@ const ListingCard = (dispatch, item, index) => {
           noMargin
           subTitleMargin={0}
           type={'h6'}
-          title={<Text>{item.title || ''}</Text>}
-          subtitle={<Text>{`${item.location.address1}, ${item.location.city} ${item.location.state}`}</Text>}
+          title={<Text width={{ _: '200px', medium: 'auto' }}>{item.title || ''}</Text>}
+          subtitle={<Text width={{ _: '200px', medium: 'auto' }}>{`${item.location.address1}, ${item.location.city} ${item.location.state}`}</Text>}
         />
         <Card.Horizontal.Price
           noMargin
