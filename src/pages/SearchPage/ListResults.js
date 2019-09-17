@@ -169,6 +169,7 @@ const ListResults = ({ history, markers, onHoverItem, pagination, onPageChanged,
                   {`${item.location.address1}, ${item.location.city}`}
                 </Text>
                 <Box
+                  my="10px"
                   display="grid"
                   gridTemplateColumns={item.specifications.length >= 3 ? 'auto auto auto' : 'auto auto'}
                 >
