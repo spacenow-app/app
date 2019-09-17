@@ -440,7 +440,7 @@ const SpacePage = ({ match, location, history, ...props }) => {
   }
 
   return (
-    <Wrapper mt="50px">
+    <Wrapper>
       <Helmet title="View Listing - Spacenow" />
       <GridStyled columns="auto 350px" columnGap="35px" rowGap="30px">
         <Cell>
@@ -565,7 +565,7 @@ const SpacePage = ({ match, location, history, ...props }) => {
             {listing.amenities.length > 0 && (
               <Box>
                 <Title type="h5" title="Amenities" />
-                <Grid columns="repeat(auto-fit, minmax(200px, auto))" rowGap="40px">
+                <Grid columns="repeat(auto-fit, minmax(200px, auto))" rowGap="20px">
                   {listing.amenities.map(item => {
                     return (
                       <Box key={item.id} display="grid" gridTemplateColumns="auto 1fr" gridColumnGap="20px">

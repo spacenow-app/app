@@ -306,7 +306,7 @@ const SearchPage = ({ history, location }) => {
               }}
             </Reference>
             {shouldShowFilter === 'category' && (
-              <Popper placement="bottom-end" modifiers={modifiers}>
+              <Popper placement="top-end" modifiers={modifiers}>
                 {({ ref, style, placement, arrowProps }) => {
                   return (
                     <div ref={ref} style={{ ...style, zIndex: 5000000 }} data-placement={placement}>
@@ -321,63 +321,63 @@ const SearchPage = ({ history, location }) => {
                       >
                         <div>
                           <Checkbox
-                            label="Workspace"
+                            label={<Text fontFamily="bold">Workspace</Text>}
                             checked={filterCategory.workspace}
                             handleCheckboxChange={(e, { checked }) =>
                               setFilterCategory({ ...filterCategory, workspace: !checked })
                             }
                           />
-                          <Text display="block" ml="28px" mb="30px">
+                          <Text display="block" ml="28px" mb="20px">
                             I’m looking for a desk, office or coworking space
                           </Text>
                           <Checkbox
-                            label="Meeting space"
+                            label={<Text fontFamily="bold">Meeting space</Text>}
                             checked={filterCategory.meetingSpace}
                             handleCheckboxChange={(e, { checked }) =>
                               setFilterCategory({ ...filterCategory, meetingSpace: !checked })
                             }
                           />
-                          <Text display="block" ml="28px" mb="30px">
+                          <Text display="block" ml="28px" mb="20px">
                             I’m looking for a space to hold a meeting
                           </Text>
                           <Checkbox
-                            label="Event space"
+                            label={<Text fontFamily="bold">Event space</Text>}
                             checked={filterCategory.eventSpace}
                             handleCheckboxChange={(e, { checked }) =>
                               setFilterCategory({ ...filterCategory, eventSpace: !checked })
                             }
                           />
-                          <Text display="block" ml="28px" mb="30px">
+                          <Text display="block" ml="28px" mb="20px">
                             I’m looking for a space to hold an event
                           </Text>
                           <Checkbox
-                            label="Parking"
+                            label={<Text fontFamily="bold">Parking</Text>}
                             checked={filterCategory.parking}
                             handleCheckboxChange={(e, { checked }) =>
                               setFilterCategory({ ...filterCategory, parking: !checked })
                             }
                           />
-                          <Text display="block" ml="28px" mb="30px">
+                          <Text display="block" ml="28px" mb="20px">
                             I’m looking for a place to park my vehicle
                           </Text>
                           <Checkbox
-                            label="Storage"
+                            label={<Text fontFamily="bold">Storage</Text>}
                             checked={filterCategory.storage}
                             handleCheckboxChange={(e, { checked }) =>
                               setFilterCategory({ ...filterCategory, storage: !checked })
                             }
                           />
-                          <Text display="block" ml="28px" mb="30px">
+                          <Text display="block" ml="28px" mb="20px">
                             I’m looking for a place to store items or goods
                           </Text>
                           <Checkbox
-                            label="Retail & Hospitality"
+                            label={<Text fontFamily="bold">Retail & Hospitality</Text>}
                             checked={filterCategory.retailAndHospitality}
                             handleCheckboxChange={(e, { checked }) =>
                               setFilterCategory({ ...filterCategory, retailAndHospitality: !checked })
                             }
                           />
-                          <Text display="block" ml="28px" mb="30px">
+                          <Text display="block" ml="28px" mb="20px">
                             I’m looking to rent a place for business
                           </Text>
                         </div>
@@ -403,7 +403,7 @@ const SearchPage = ({ history, location }) => {
               }}
             </Reference>
             {shouldShowFilter === 'duration' && (
-              <Popper placement="bottom-end" modifiers={modifiers}>
+              <Popper placement="top-end" modifiers={modifiers}>
                 {({ ref, style, placement, arrowProps }) => {
                   return (
                     <div ref={ref} style={{ ...style, zIndex: 5000000 }} data-placement={placement}>
@@ -418,43 +418,43 @@ const SearchPage = ({ history, location }) => {
                       >
                         <div>
                           <Checkbox
-                            label="Hourly"
+                            label={<Text fontFamily="bold">Hourly</Text>}
                             checked={filterDuration.hourly}
                             handleCheckboxChange={(e, { checked }) =>
                               setFilterDuration({ ...filterDuration, hourly: !checked })
                             }
                           />
-                          <Text display="block" ml="28px" mb="30px">
+                          <Text display="block" ml="28px" mb="20px">
                             I want to find space on a hourly basis
                           </Text>
                           <Checkbox
-                            label="Daily"
+                            label={<Text fontFamily="bold">Daily</Text>}
                             checked={filterDuration.daily}
                             handleCheckboxChange={(e, { checked }) =>
                               setFilterDuration({ ...filterDuration, daily: !checked })
                             }
                           />
-                          <Text display="block" ml="28px" mb="30px">
+                          <Text display="block" ml="28px" mb="20px">
                             I want to find space on a daily basis
                           </Text>
                           <Checkbox
-                            label="Weekly"
+                            label={<Text fontFamily="bold">Weekly</Text>}
                             checked={filterDuration.weekly}
                             handleCheckboxChange={(e, { checked }) =>
                               setFilterDuration({ ...filterDuration, weekly: !checked })
                             }
                           />
-                          <Text display="block" ml="28px" mb="30px">
+                          <Text display="block" ml="28px" mb="20px">
                             I want to find space on a weekly basis
                           </Text>
                           <Checkbox
-                            label="Monthly"
+                            label={<Text fontFamily="bold">Monthly</Text>}
                             checked={filterDuration.monthly}
                             handleCheckboxChange={(e, { checked }) =>
                               setFilterDuration({ ...filterDuration, monthly: !checked })
                             }
                           />
-                          <Text display="block" ml="28px" mb="30px">
+                          <Text display="block" ml="28px" mb="20px">
                             I want to find space on a monthly basis
                           </Text>
                         </div>

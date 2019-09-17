@@ -85,7 +85,7 @@ const SignupPage = ({ values, touched, errors, handleChange, handleBlur, isValid
 
               <Text display="block" fontSize="12px">
                 By signing up, you agree to the{' '}
-                <Link to="" onClick={() => _handlerGoToLegancy('terms')}>
+                <Link to="" onClick={() => _handlerGoToLegancy('terms-conditions')}>
                   Terms of Service
                 </Link>{' '}
                 and{' '}

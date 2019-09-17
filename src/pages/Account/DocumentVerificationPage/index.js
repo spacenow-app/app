@@ -41,7 +41,7 @@ const _handleOnDelete = dispatch => (userId, id) => {
 const DocumentCard = (dispatch, item, index) => {
   return (
     <CadStyled key={index}>
-      <Image src={item.fileName} type={item.fileType} width="100%" />
+      <Image src={item.fileName} type={item.fileType} width="100%" height="100%" />
       <Button
         icon={<Icon width="15px" fill="#ffffff" name="bin" />}
         style={{ width: '40px', height: '40px' }}
@@ -98,11 +98,11 @@ const DocumentVerificationPage = () => {
       {!documents || documents.count === 0 ? (
         <BackgroundImage text="We didn't find any documents :(" />
       ) : (
-        <Box display="grid" gridTemplateColumns={{ _: '1fr 1fr', medium: '1fr 1fr 1fr' }} gridGap="30px">
-          {[].concat(documents.rows).map((item, index) => DocumentCard(dispatch, item, index))}
-          <Document onDrop={_addDocument} />
-        </Box>
-      )}
+          <Box display="grid" gridTemplateColumns={{ _: '1fr 1fr', medium: '1fr 1fr 1fr' }} gridGap="30px">
+            {[].concat(documents.rows).map((item, index) => DocumentCard(dispatch, item, index))}
+            <Document onDrop={_addDocument} />
+          </Box>
+        )}
     </Wrapper>
   )
 }

@@ -115,11 +115,11 @@ const ItineraryPage = ({ match, location, history, ...props }) => {
   const endDate = booking && booking.reservations[booking.reservations.length - 1]
 
   return (
-    <Wrapper my="30px">
+    <Wrapper>
       <Helmet title="Itinerary - Spacenow" />
-      <Title title="You're all booked in." color="#6adc91" noMargin />
+      <Title title="You're all booked in." color="#6adc91" noMargin type="h2" />
       <Box mb="50px" mt="10px">
-        <Title title="Enjoy your space!" noMargin />
+        <Title title="Enjoy your space!" noMargin type="h2" />
       </Box>
       <GridStyled columns="350px auto" columnGap="45px">
         <Cell>
@@ -168,7 +168,7 @@ const ItineraryPage = ({ match, location, history, ...props }) => {
               <>
                 <Cell width={12}>
                   <Title
-                    type="h3"
+                    type="h4"
                     title={listing.title}
                     subtitle={`${listing.location.city}, ${listing.location.country}`}
                     subTitleMargin={5}
