@@ -231,7 +231,7 @@ const PartnerPage = ({ match, location, ...props }) => {
           {listing.amenities.length > 0 && (
             <Box>
               <Title type="h5" title="Amenities" />
-              <Grid columns="repeat(auto-fit, minmax(200px, auto))" rowGap="40px">
+              <Grid columns="repeat(auto-fit, minmax(200px, auto))" rowGap="20px">
                 {listing.amenities.map(item => {
                   return (
                     <Box key={item.id} display="grid" gridTemplateColumns="auto 1fr" gridColumnGap="20px">
