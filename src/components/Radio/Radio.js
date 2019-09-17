@@ -12,7 +12,7 @@ const RadioItem = styled.div`
     props.box &&
     css`
       font-family: 'Montserrat-SemiBold';
-      border: 1px solid ${props.checked ? '#6adc91' : '#e2e2e2'};
+      border: 1px solid ${props.checked ? '#6adc91' : '#c4c4c4'};
       display: grid;
       padding: 40px;
       border-radius: 10px;

@@ -61,7 +61,7 @@ const ItemSelected = styled.div`
   align-items: center;
   justify-content: center;
   height: 54px;
-  border: 1px solid #e2e2e2;
+  border: 1px solid #c4c4c4;
   border-radius: 37px;
   font-size: 14px;
 

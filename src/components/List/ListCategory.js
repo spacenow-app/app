@@ -46,7 +46,7 @@ const ListItem = styled.div`
 `
 
 const IconContainer = styled.div`
-  border: 1px solid #e2e2e2;
+  border: 1px solid #c4c4c4;
   width: 90px;
   height: 90px;
   border-radius: 100%;

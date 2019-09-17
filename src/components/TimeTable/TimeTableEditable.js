@@ -21,7 +21,7 @@ TitleStyled.displayName = 'Title'
 const ItemStyled = styled.div`
   height: 65px;
   border-radius: 75px;
-  border: 1px solid ${({ checked, disabled }) => (checked || !disabled ? '#6adc91' : '#E2E2E2')};
+  border: 1px solid ${({ checked, disabled }) => (checked || !disabled ? '#6adc91' : '#c4c4c4')};
   padding: 20px;
   text-align: center;
 
@@ -35,7 +35,7 @@ const ItemStyled = styled.div`
 const ItemSwitchStyled = styled.div`
   height: 65px;
   border-radius: 75px;
-  border: 1px solid ${({ checked }) => (checked ? '#6adc91' : '#E2E2E2')};
+  border: 1px solid ${({ checked }) => (checked ? '#6adc91' : '#c4c4c4')};
   padding: 20px;
   display: grid;
   grid-template-columns: auto auto;
