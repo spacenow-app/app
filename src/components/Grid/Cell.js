@@ -13,7 +13,6 @@ const Cell = styled.div`
   ${({ justifySelf }) => justifySelf && `justify-self: ${justifySelf}`};
   ${/* prettier-ignore */
   ({ middle }) => middle && `
-    display: inline-flex;
     flex-flow: column wrap;
     justify-content: center;
   `};
@@ -24,7 +23,7 @@ Cell.defaultProps = {
 
 Cell.propTypes = {
   className: PropTypes.string,
-  width: PropTypes.number,
+  width: PropTypes.oneOfType([PropTypes.number, PropTypes.object]),
   height: PropTypes.number,
   top: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
   left: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),

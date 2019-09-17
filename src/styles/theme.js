@@ -15,7 +15,8 @@ export default {
     pending: '#E2E2E2',
     approved: '#6ADC91',
     declined: '#C45151',
-    warning: ['#ffc107', '#ffb007']
+    warning: ['#ffc107', '#ffb007'],
+    requested: '#E2E2E2'
   },
   fonts: {
     regular: 'Montserrat-Regular',
