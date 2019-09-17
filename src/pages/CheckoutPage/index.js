@@ -8,7 +8,7 @@ import fromUnixTime from 'date-fns/fromUnixTime'
 import format from 'date-fns/format'
 import addMinutes from 'date-fns/addMinutes'
 import { toPlural } from 'utils/strings'
-
+import { convertedDate } from 'utils/date'
 import { TypesModal, openModal } from 'redux/ducks/modal'
 import { getUserCards, createUserCard, deleteUserCard, pay } from 'redux/ducks/payment'
 import { onGetBooking } from 'redux/ducks/booking'
@@ -231,7 +231,11 @@ const CheckoutPage = ({ match, location, history, ...props }) => {
             titleComponent={
               <>
                 <Title type="h5" title="Hosted by" noMargin />
-                <UserDetails hostname="host name" imageProfile={null} joined="2019" />
+                <UserDetails
+                  hostname={`${listing.user.profile.firstName} ${listing.user.profile.lastName} `}
+                  imageProfile={listing.user.profile.picture}
+                  joined={format(convertedDate(listing.user.profile.createdAt), 'yyyy')}
+                />
               </>
             }
             contentComponent={

@@ -200,6 +200,14 @@ const queryGetBookingById = gql`
         createdAt
         updatedAt
         count
+        user {
+          profile {
+            firstName
+            lastName
+            createdAt
+            picture
+          }
+        }
         accessDays {
           id
           listingId
@@ -524,7 +532,11 @@ export default function reducer(state = initialState, action) {
 // Action Creators
 
 // Side Effects
-const getHash = (value) => crypto.createHash('sha256').update(value, 'utf8').digest('hex')
+const getHash = value =>
+  crypto
+    .createHash('sha256')
+    .update(value, 'utf8')
+    .digest('hex')
 
 export const onCreateBooking = (object, history) => async dispatch => {
   dispatch({ type: Types.CREATE_BOOKING_START })
@@ -623,8 +635,8 @@ export const onGetListingInfo = id => async dispatch => {
   }
 }
 
-export const onAcceptDeclineByEmail = (bookingId, emailAction, userId) => (dispatch) =>
-  new Promise(async (resolve) => {
+export const onAcceptDeclineByEmail = (bookingId, emailAction, userId) => dispatch =>
+  new Promise(async resolve => {
     let mutation
     let dispatchType
     try {
