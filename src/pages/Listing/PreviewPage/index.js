@@ -72,7 +72,7 @@ const PreviewPage = ({ match, location, ...props }) => {
     const { address1 = '', city = '', zipcode = '', state = '', country = '' } = address
     const convertedAddress = `${address1 ? `${address1}, ` : ''} ${city ? `${city}, ` : ''} ${
       zipcode ? `${zipcode}, ` : ''
-    } ${state ? `${state}, ` : ''} ${country ? `${country}` : ''}`
+      } ${state ? `${state}, ` : ''} ${country ? `${country}` : ''}`
     return convertedAddress.replace(/\0.*$/g, '')
   }
 
@@ -231,7 +231,34 @@ const PreviewPage = ({ match, location, ...props }) => {
           </Tag>
         </Box>
       </Box>
-      <Grid columns={5}>
+      <Box
+        my={{ _: '20px', medium: '50px' }}
+        display="grid"
+        gridTemplateColumns={{ _: '1fr', medium: '2fr 1fr' }}
+        gridGap={'20px'}
+      >
+        <Title
+          type="h3"
+          title={listing.title ? listing.title : 'Input Title'}
+          color={!listing.title ? '#E05252' : null}
+          subtitle={_getAddress(listing.location)}
+          subTitleSize={18}
+          noMargin
+        />
+        <Title
+          type="h4"
+          title={`${listing.listingData.currency}$ ${Math.round((listing.listingData.basePrice || 0) * 100) / 100} ${
+            listing.bookingPeriod
+            }`}
+          color={listing.listingData.basePrice === 0 || listing.listingData.basePrice === null ? '#E05252' : null}
+          noMargin
+          right
+          style={{ marginTop: '5px' }}
+        />
+      </Box>
+
+
+      {/* <Grid columns={5}>
         <Cell width={3}>
           <Title
             type="h3"
@@ -254,7 +281,7 @@ const PreviewPage = ({ match, location, ...props }) => {
             style={{ marginTop: '5px' }}
           />
         </Cell>
-      </Grid>
+      </Grid> */}
       <Box my={{ _: '50px', medium: '100px' }} display="grid" gridTemplateColumns={{ _: '1fr', medium: '1fr' }}>
         <Title type="h4" title="Highlights" />
         <Box display="grid" gridTemplateColumns={{ _: '1fr 1fr', medium: '1fr 1fr 1fr 1fr 1fr' }} gridGap={'20px'}>
@@ -339,17 +366,17 @@ const PreviewPage = ({ match, location, ...props }) => {
             {isLoadingRules ? (
               <Loader />
             ) : (
-              arrayRules.map(item => (
-                <Checkbox
-                  disabled
-                  key={item.id}
-                  label={item.itemName}
-                  name="rules"
-                  value={item.id}
-                  checked={listing.rules.some(rule => rule.listSettingsId === item.id)}
-                />
-              ))
-            )}
+                arrayRules.map(item => (
+                  <Checkbox
+                    disabled
+                    key={item.id}
+                    label={item.itemName}
+                    name="rules"
+                    value={item.id}
+                    checked={listing.rules.some(rule => rule.listSettingsId === item.id)}
+                  />
+                ))
+              )}
           </Box>
         </Box>
       )}

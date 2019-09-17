@@ -24,7 +24,6 @@ const Text = ({ children, ...props }) => <TextStyled {...props}>{children}</Text
 
 Text.defaultProps = {
   color: 'quartenary',
-  width: "auto"
 }
 
 Text.propTypes = {
