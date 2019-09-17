@@ -37,14 +37,14 @@ const ListingCard = (dispatch, item, index) => {
         <Card.Horizontal.Title
           noMargin
           subTitleMargin={0}
-          type={'h6'}
+          type="h6"
           title={<Text>{item.title || ''}</Text>}
           subtitle={<Text>{`${item.location.address1}, ${item.location.city} ${item.location.state}`}</Text>}
         />
         <Card.Horizontal.Price
           noMargin
           subTitleMargin={0}
-          type={'h6'}
+          type="h6"
           title={<Text>AUD ${item.listingData.basePrice ? item.listingData.basePrice.toFixed(2) : 0.0}</Text>}
         />
       </Card.Horizontal.Body>
@@ -58,9 +58,7 @@ const ListingCard = (dispatch, item, index) => {
           <Card.Horizontal.Dropdown.Item onClick={() => _handleEditRedirect(item.id)}>
             Edit
           </Card.Horizontal.Dropdown.Item>
-          <Card.Horizontal.Dropdown.Item onClick={() => _handleDelete(item.id)}>
-            Delete
-          </Card.Horizontal.Dropdown.Item>
+          <Card.Horizontal.Dropdown.Item onClick={() => _handleDelete(dispatch)(item.id)}>Delete</Card.Horizontal.Dropdown.Item>
         </Card.Horizontal.Dropdown.Menu>
       </Card.Horizontal.Dropdown>
       <Card.Horizontal.Footer>
@@ -80,7 +78,7 @@ const ListingCard = (dispatch, item, index) => {
         </Card.Horizontal.Tag>
         {item.isReady && (
           <Card.Horizontal.Button
-            size={`xs`}
+            size="xs"
             onClick={() => _handleOnUpdateListing(dispatch)(item.id, !item.isPublished)}
           >
             {item.isPublished ? 'Unpublish' : 'Publish'}
@@ -119,7 +117,7 @@ const ListingPage = ({ ...props }) => {
         <Cell width={6}>
           <Title type="h4" title="Your Listings" />
         </Cell>
-        <Cell width={6} justifySelf={'end'} middle>
+        <Cell width={6} justifySelf="end" middle>
           <Button size="sm" onClick={() => _addListing()}>
             Add Listing
           </Button>
@@ -129,10 +127,10 @@ const ListingPage = ({ ...props }) => {
       {!listings || listings.count === 0 ? (
         <BackgroundImage text="We didn't find any listings :(" />
       ) : (
-          <Grid columns={1} rowGap={`30px`}>
-            {[].concat(listings.rows).map((item, index) => ListingCard(dispatch, item, index))}
-          </Grid>
-        )}
+        <Grid columns={1} rowGap="30px">
+          {[].concat(listings.rows).map((item, index) => ListingCard(dispatch, item, index))}
+        </Grid>
+      )}
     </Wrapper>
   )
 }
