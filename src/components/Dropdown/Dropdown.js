@@ -9,11 +9,16 @@ const Dropdown = styled(DropdownExternal)`
     border-radius: 10px;
   }  
 
-  & button { 
+  & button {
     background-color: #6ADC91;
     border: none;
     border-radius: 30px;
+    display: flex;
     padding: 10px 25px;
+
+    &::after {
+      margin-top: 7px;
+    }
 
     & span {
       color: #ffffff;
