@@ -39,6 +39,11 @@ const TitleStyled = styled.span`
   ${NavLinkStyled}.active & {
     color: #6adc91;
   }
+
+  @media only screen and (max-width: 600px) {
+    font-size: 12px;
+  }
+
 `
 
 const TabItem = ({ children, nav, ...props }) => {

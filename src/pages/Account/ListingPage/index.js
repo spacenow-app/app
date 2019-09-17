@@ -37,9 +37,9 @@ const ListingCard = (dispatch, item, index) => {
         <Card.Horizontal.Title
           noMargin
           subTitleMargin={0}
-          type="h6"
-          title={<Text>{item.title || ''}</Text>}
-          subtitle={<Text>{`${item.location.address1}, ${item.location.city} ${item.location.state}`}</Text>}
+          type={'h6'}
+          title={<Text width={{ _: '200px', medium: 'auto' }}>{item.title || ''}</Text>}
+          subtitle={<Text width={{ _: '200px', medium: 'auto' }}>{`${item.location.address1}, ${item.location.city} ${item.location.state}`}</Text>}
         />
         <Card.Horizontal.Price
           noMargin
@@ -127,10 +127,10 @@ const ListingPage = ({ ...props }) => {
       {!listings || listings.count === 0 ? (
         <BackgroundImage text="We didn't find any listings :(" />
       ) : (
-        <Grid columns={1} rowGap="30px">
-          {[].concat(listings.rows).map((item, index) => ListingCard(dispatch, item, index))}
-        </Grid>
-      )}
+          <Grid columns={1} rowGap="30px">
+            {[].concat(listings.rows).map((item, index) => ListingCard(dispatch, item, index))}
+          </Grid>
+        )}
     </Wrapper>
   )
 }
