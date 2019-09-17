@@ -18,11 +18,11 @@ const ModalWarn = ({ onConfirm, options }) => {
   }
 
   return (
-    <Modal show onHide={() => handleConfirm(false)}>
+    <Modal show centered onHide={() => handleConfirm(false)}>
       {options.title && (
         <Modal.Header closeButton>
           <Modal.Title>
-            <Title noMargin type={'h5'} title={options.title} />
+            <Title noMargin type="h5" title={options.title} />
           </Modal.Title>
         </Modal.Header>
       )}
