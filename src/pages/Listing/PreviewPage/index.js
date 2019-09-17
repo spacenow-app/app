@@ -253,7 +253,6 @@ const PreviewPage = ({ match, location, ...props }) => {
           color={listing.listingData.basePrice === 0 || listing.listingData.basePrice === null ? '#E05252' : null}
           noMargin
           right
-          style={{ marginTop: '5px' }}
         />
       </Box>
 
@@ -362,7 +361,7 @@ const PreviewPage = ({ match, location, ...props }) => {
       {listing.rules.length > 0 && (
         <Box my={{ _: '50px', medium: '100px' }}>
           <Title type="h4" title="Space Rules" />
-          <Box display="grid" gridTemplateColumns="1fr 1fr 1fr" gridRowGap="20px">
+          <Box display="grid" gridTemplateColumns={{ _: "1fr", medium: "1fr 1fr 1fr" }} gridRowGap="20px">
             {isLoadingRules ? (
               <Loader />
             ) : (
