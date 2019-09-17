@@ -14,7 +14,7 @@ const TextAreaStyled = styled.textarea`
   width: 100%;
   min-height: 150px;
   border-radius: 15px;
-  border: 1px solid #e2e2e2;
+  border: 1px solid #c4c4c4;
 
   :focus {
     outline: 0px;

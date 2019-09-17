@@ -7,7 +7,7 @@ const Wrapper = styled.div`
   max-width: 575px;
   max-height: 700px;
   padding: 50px;
-  border: 1px solid #e2e2e2;
+  border: 1px solid #c4c4c4;
   border-radius: 15px;
   grid-row-gap: 45px;
 `
