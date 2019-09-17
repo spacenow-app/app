@@ -171,7 +171,6 @@ const ListResults = ({ history, markers, onHoverItem, pagination, onPageChanged,
                 <Box
                   display="grid"
                   gridTemplateColumns={item.specifications.length >= 3 ? 'auto auto auto' : 'auto auto'}
-                  my="15px"
                 >
                   {_renderSpecifications(item.specifications, item.listingData)}
                 </Box>

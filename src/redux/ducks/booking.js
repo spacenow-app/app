@@ -248,9 +248,26 @@ const queryGetBookingById = gql`
 const queryGetListingInfo = gql`
   query getListingById($id: Int!, $isPublic: Boolean) {
     getListingById(id: $id, isPublic: $isPublic) {
+      id
       title
+      bookingPeriod
       listingData {
         isAbsorvedFee
+        basePrice
+        currency
+        accessType
+        minTerm
+        basePrice
+        currency
+        capacity
+        size
+        meetingRooms
+        isFurnished
+        carSpace
+        sizeOfVehicle
+        maxEntranceHeight
+        bookingType
+        spaceType
       }
       location {
         id
@@ -310,6 +327,20 @@ const queryGetListingInfo = gql`
         profile {
           displayName
           picture
+          firstName
+        }
+      }
+      settingsParent {
+        id
+        category {
+          id
+          itemName
+          otherItemName
+        }
+        subcategory {
+          id
+          itemName
+          otherItemName
         }
       }
     }
@@ -524,7 +555,11 @@ export default function reducer(state = initialState, action) {
 // Action Creators
 
 // Side Effects
-const getHash = (value) => crypto.createHash('sha256').update(value, 'utf8').digest('hex')
+const getHash = value =>
+  crypto
+    .createHash('sha256')
+    .update(value, 'utf8')
+    .digest('hex')
 
 export const onCreateBooking = (object, history) => async dispatch => {
   dispatch({ type: Types.CREATE_BOOKING_START })
@@ -623,8 +658,8 @@ export const onGetListingInfo = id => async dispatch => {
   }
 }
 
-export const onAcceptDeclineByEmail = (bookingId, emailAction, userId) => (dispatch) =>
-  new Promise(async (resolve) => {
+export const onAcceptDeclineByEmail = (bookingId, emailAction, userId) => dispatch =>
+  new Promise(async resolve => {
     let mutation
     let dispatchType
     try {

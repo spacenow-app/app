@@ -10,21 +10,23 @@ ${typography}
 ${position}
 ${space}
 ${flexbox}
-${props => props.width ? `
+${props =>
+  props.width
+    ? `
     display: inline-block;
     width: ${props.width};
     white-space: nowrap;
     overflow: hidden !important;
     text-overflow: ellipsis;
-  ` : "width: auto"
-  }
+  `
+    : 'width: auto'}
 `
 
 const Text = ({ children, ...props }) => <TextStyled {...props}>{children}</TextStyled>
 
 Text.defaultProps = {
   color: 'quartenary',
-  width: "auto"
+  width: 'auto'
 }
 
 Text.propTypes = {
@@ -34,10 +36,7 @@ Text.propTypes = {
     PropTypes.instanceOf(Array),
     PropTypes.element
   ]).isRequired,
-  width: PropTypes.PropTypes.oneOfType([
-    PropTypes.string,
-    PropTypes.object
-  ])
+  width: PropTypes.PropTypes.oneOfType([PropTypes.string, PropTypes.object])
 }
 
 export default Text
