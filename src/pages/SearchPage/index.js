@@ -41,7 +41,7 @@ const SearchBar = styled(Box)`
 const FilterBar = styled.div`
   display: grid;
   grid-template-columns: auto auto auto 1fr;
-  grid-column-gap: 30px;
+  grid-column-gap: 15px;
   padding: 0 20px;
 
   @media only screen and (max-width: 600px) {
