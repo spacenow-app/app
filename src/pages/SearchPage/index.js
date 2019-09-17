@@ -162,7 +162,7 @@ const SearchPage = ({ history, location }) => {
         lng: +item.location.lng,
         photo: _getCoverPhoto(item),
         title: item.title,
-        price: `${item.listingData.currency}$${item.listingData.basePrice}`,
+        price: `${item.listingData.currency || 'AUD'}$${item.listingData.basePrice}`,
         period: item.bookingPeriod,
         host: {
           photo: (item.host.profile && item.host.profile.picture) || '',
@@ -183,7 +183,7 @@ const SearchPage = ({ history, location }) => {
       lng: +object.location.lng,
       photo: _getCoverPhoto(object),
       title: object.title,
-      price: `${object.listingData.currency}$${object.listingData.basePrice}`,
+      price: `${object.listingData.currency || 'AUD'}$${object.listingData.basePrice}`,
       period: object.bookingPeriod,
       host: {
         photo: (object.host.profile && object.host.profile.picture) || '',
