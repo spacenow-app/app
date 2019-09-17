@@ -200,6 +200,14 @@ const queryGetBookingById = gql`
         createdAt
         updatedAt
         count
+        user {
+          profile {
+            firstName
+            lastName
+            createdAt
+            picture
+          }
+        }
         accessDays {
           id
           listingId

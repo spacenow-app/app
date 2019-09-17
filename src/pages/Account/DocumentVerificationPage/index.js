@@ -9,7 +9,6 @@ import {
   Button,
   Loader,
   BackgroundImage,
-  Grid,
   Cell,
   Title,
   Image,
@@ -41,7 +40,7 @@ const _handleOnDelete = dispatch => (userId, id) => {
 const DocumentCard = (dispatch, item, index) => {
   return (
     <CadStyled key={index}>
-      <Image src={item.fileName} type={item.fileType} width="100%" />
+      <Image src={item.fileName} type={item.fileType} width="100%" height="100%" />
       <Button
         icon={<Icon width="15px" fill="#ffffff" name="bin" />}
         style={{ width: '40px', height: '40px' }}
@@ -80,29 +79,30 @@ const DocumentVerificationPage = () => {
   return (
     <Wrapper>
       <Helmet title="Your Documents - Spacenow" />
-      <Grid column="12">
-        <Cell width={8}>
+
+      <Box display="grid" gridTemplateColumns={{ _: '1fr', medium: '2fr 1fr' }} gridGap="20px">
+        <Cell width={1}>
           <Title type="h4" title="Your Documents" />
         </Cell>
-        <Cell width={4} middle justifySelf="end">
+        <Cell width={1} middle justifySelf="end">
           {(!documents || documents.count === 0) && <Document isButton onDrop={_addDocument} />}
         </Cell>
-        <Cell width={12}>
+        <Cell width={2}>
           <Text>
             Please upload 100 points of ID to make booking space quicker for host approvals. Guest with 100 points of ID
             get better approval rates.
           </Text>
         </Cell>
-      </Grid>
+      </Box>
 
       {!documents || documents.count === 0 ? (
         <BackgroundImage text="We didn't find any documents :(" />
       ) : (
-        <Box display="grid" gridTemplateColumns={{ _: '1fr 1fr', medium: '1fr 1fr 1fr' }} gridGap="30px">
-          {[].concat(documents.rows).map((item, index) => DocumentCard(dispatch, item, index))}
-          <Document onDrop={_addDocument} />
-        </Box>
-      )}
+          <Box display="grid" gridTemplateColumns={{ _: '1fr 1fr', medium: '1fr 1fr 1fr' }} gridGap="30px">
+            {[].concat(documents.rows).map((item, index) => DocumentCard(dispatch, item, index))}
+            <Document onDrop={_addDocument} />
+          </Box>
+        )}
     </Wrapper>
   )
 }

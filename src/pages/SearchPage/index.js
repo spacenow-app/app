@@ -45,7 +45,7 @@ const FilterBar = styled.div`
   padding: 0 20px;
 
   @media only screen and (max-width: 600px) {
-    display: grid;
+    display: ${props => (props.show ? 'grid' : 'none')};
     grid-gap: 10px;
     padding: 0 20px;
     grid-template-columns: none;
@@ -108,6 +108,7 @@ const SearchPage = ({ history, location }) => {
   const [latLng, setLatLng] = useState({ lat: -33.8688197, lng: 151.2092955 })
   const [filterPrice, setFilterPrice] = useState([0, 0])
   const [filterInstantBooking, setFilterInstantBooking] = useState(false)
+  const [showFilterBar, setShowFilterBar] = useState(false)
   const [filterDuration, setFilterDuration] = useState({
     hourly: false,
     daily: false,
@@ -294,7 +295,12 @@ const SearchPage = ({ history, location }) => {
           </Button>
         </SearchBar>
         <Line />
-        <FilterBar>
+        <Box display={{ _: 'block', small: 'none' }} mx="20px" mb="20px">
+          <Button fluid size="sm" onClick={() => setShowFilterBar(!showFilterBar)}>
+            {showFilterBar ? 'Hide Filters' : 'Show Filters'}
+          </Button>
+        </Box>
+        <FilterBar show={showFilterBar}>
           <Manager>
             <Reference>
               {({ ref }) => {
