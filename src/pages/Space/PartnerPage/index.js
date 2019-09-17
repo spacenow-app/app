@@ -118,7 +118,7 @@ const PartnerPage = ({ match, location, ...props }) => {
   }
 
   return (
-    <Wrapper mt="50px">
+    <Wrapper>
       <Helmet title="View Listing - Spacenow" />
       <GridStyled columns="auto 350px" columnGap="35px" rowGap="30px">
         <Box display="grid" gridRowGap="15px">
