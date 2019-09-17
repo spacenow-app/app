@@ -52,9 +52,9 @@ const ButtonStyled = styled(ButtonExternal)`
 
     :disabled {
       &&& {
-        background-color: ${props => (props.outline ? `#fff` : '#E2E2E2')};
+        background-color: ${props => (props.outline ? `#fff` : '#c4c4c4')};
         border: ${props => (props.outline ? `1px solid #CBCBCB` : 'none')};
-        color: ${props => (props.outline ? `#E2E2E2` : '#fff')};
+        color: ${props => (props.outline ? `#c4c4c4` : '#fff')};
         cursor: not-allowed;
       }
     }

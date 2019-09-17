@@ -8,15 +8,16 @@ import { useDropzone } from 'react-dropzone'
 const AvatarStyled = styled.div`
   border-radius: 50%;
   background-image: url(${props => props.src || defaultPic});
-  background-color: #f7f7f7;
+  background-color: #ededed;
   background-blend-mode: multiply;
   background-repeat: no-repeat;
   background-size: cover
   width: ${props => (props.small && '50px') || (props.large && '300px') || '150px'};
   height: ${props => (props.small && '50px') || (props.large && '300px') || '150px'};
   position: relative;
-  ${props => props.onDrop !== undefined ?
-    `
+  ${props =>
+    props.onDrop !== undefined
+      ? `
   &:hover::after {
     content: 'Update';
     color: #fff;
@@ -30,7 +31,8 @@ const AvatarStyled = styled.div`
     display: flex;
     align-items: center;
     cursor: pointer;
-  ` : ``}
+  `
+      : ``}
   > input:focus {outline:0;}
 
      @media (max-width: 680px) {
@@ -42,16 +44,14 @@ const AvatarStyled = styled.div`
 `
 
 const Avatar = ({ onDrop, image, small, large, ...props }) => {
-
   const { getRootProps, getInputProps } = useDropzone({ onDrop, accept: 'image/jpeg, image/png' })
 
-  return (
-    onDrop === undefined ?
-      <AvatarStyled {...props} src={image} small={small} large={large} /> :
-      <AvatarStyled {...props} src={image} small={small} large={large} {...getRootProps()}>
-        <input {...getInputProps()} />
-      </AvatarStyled>
-
+  return onDrop === undefined ? (
+    <AvatarStyled {...props} src={image} small={small} large={large} />
+  ) : (
+    <AvatarStyled {...props} src={image} small={small} large={large} {...getRootProps()}>
+      <input {...getInputProps()} />
+    </AvatarStyled>
   )
   // <AvatarStyled {...props} src={image} small={small} large={large} />
 }

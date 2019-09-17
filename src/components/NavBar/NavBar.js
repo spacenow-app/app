@@ -63,7 +63,7 @@ const NavBar = () => {
   const { user } = useSelector(state => state.account.get)
   const { isAuthenticated } = useSelector(state => state.auth)
 
-  const _handlerGoToLegancy = page => {
+  const _handlerGoToLegancy = (page = false) => {
     window.location.href = `${config.static}/${page || ''}`
   }
   const _handlerLogout = () => {

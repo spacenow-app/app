@@ -83,7 +83,7 @@ const BottomButtonMobile = styled.div`
   width: 100%;
   padding: 15px 0;
   text-align: center;
-  border-top: 1px solid #e2e2e2;
+  border-top: 1px solid #c4c4c4;
 
   @media only screen and (min-width: 992px) {
     display: none;
@@ -440,7 +440,7 @@ const SpacePage = ({ match, location, history, ...props }) => {
   }
 
   return (
-    <Wrapper mt="50px">
+    <Wrapper>
       <Helmet title="View Listing - Spacenow" />
       <GridStyled columns="auto 350px" columnGap="35px" rowGap="30px">
         <Cell>
@@ -565,7 +565,7 @@ const SpacePage = ({ match, location, history, ...props }) => {
             {listing.amenities.length > 0 && (
               <Box>
                 <Title type="h5" title="Amenities" />
-                <Grid columns="repeat(auto-fit, minmax(200px, auto))" rowGap="40px">
+                <Grid columns="repeat(auto-fit, minmax(200px, auto))" rowGap="20px">
                   {listing.amenities.map(item => {
                     return (
                       <Box key={item.id} display="grid" gridTemplateColumns="auto 1fr" gridColumnGap="20px">

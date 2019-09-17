@@ -27,7 +27,7 @@ const WrapperStyled = styled.div`
   grid-row-gap: 80px;
 
   @media (max-width: 680px) {
-    grid-row-gap: 40px;
+    grid-row-gap: 20px;
   }
 
 `
@@ -49,6 +49,17 @@ const CheckboxGroup = styled.div`
   grid-gap: 40px;
   @media (max-width: 680px) {
     grid-template-columns: 1fr 1fr;
+    grid-gap: 20px;
+  }
+`
+
+const CheckboxGroupRules = styled.div`
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  grid-gap: 40px;
+  @media (max-width: 680px) {
+    grid-template-columns: 1fr;
+    grid-gap: 20px;
   }
 `
 
@@ -325,7 +336,7 @@ const SpecificationTab = ({
         </SectionStyled>
         <SectionStyled>
           <Title type="h3" title="Space Rules" subtitle="Let guests know about the rules of the space." />
-          <CheckboxGroup>
+          <CheckboxGroupRules>
             {isLoadingRules ? (
               <Loader />
             ) : (
@@ -340,7 +351,7 @@ const SpecificationTab = ({
                   />
                 ))
               )}
-          </CheckboxGroup>
+          </CheckboxGroupRules>
         </SectionStyled>
         <SectionStyled>
           <Title type="h3" title="Access Information*" subtitle="Let your guests know how they’ll get in." />

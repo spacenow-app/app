@@ -52,6 +52,11 @@ const LabelStyled = styled.span`
   color: #172439;
   font-size: 16px;
   margin: 0 8px;
+
+  @media only screen and (max-width: 600px) {
+    font-size: 14px;
+  }
+  
 `
 
 const Checkbox = ({ className, name, checked, label, handleCheckboxChange, disabled, ...props }) => (
@@ -79,7 +84,7 @@ const Checkbox = ({ className, name, checked, label, handleCheckboxChange, disab
 Checkbox.defaultProps = {
   checked: false,
   label: false,
-  handleCheckboxChange: () => {}
+  handleCheckboxChange: () => { }
 }
 
 Checkbox.propTypes = {

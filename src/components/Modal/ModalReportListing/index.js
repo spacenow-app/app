@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import PropTypes from 'prop-types'
 import { Modal } from 'react-bootstrap'
 import { withFormik } from 'formik'
-import { Button, Radio, TextArea, Text, Grid } from 'components'
+import { Button, Radio, TextArea, Text, Grid, Title } from 'components'
 
 import { useSelector, useDispatch } from 'react-redux'
 import { closeModal } from 'redux/ducks/modal'
@@ -49,7 +49,7 @@ const ModalReportListing = ({
     <Modal show centered size="lg" onHide={() => dispatch(closeModal())}>
       <Modal.Header closeButton>
         <Modal.Title>
-          Why are you reporting this space?
+          <Title noMargin type={"h5"} title={"Why are you reporting this space?"} />
         </Modal.Title>
       </Modal.Header>
       <Modal.Body>

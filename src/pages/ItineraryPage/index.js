@@ -4,15 +4,17 @@ import Helmet from 'react-helmet'
 import { useSelector, useDispatch } from 'react-redux'
 import styled from 'styled-components'
 import { toast } from 'react-toastify'
+import { toPlural } from 'utils/strings'
 
 import {
   Wrapper,
   Title,
   Grid,
   Cell,
-  UserDetails,
-  BookingCard,
-  Image,
+  Tag,
+  Icon,
+  Text,
+  Avatar,
   Box,
   Button,
   ListDates,
@@ -23,11 +25,7 @@ import {
 
 import { onGetBooking, onGetListingInfo } from 'redux/ducks/booking'
 
-const ImageContainerStyled = styled.div`
-  > div {
-    border-radius: 15px 15px 0 0;
-  }
-`
+import { onGetAllSpecifications } from 'redux/ducks/listing'
 
 const GridStyled = styled(Grid)`
   @media only screen and (max-width: 991px) {
@@ -46,6 +44,43 @@ const ButtonStyled = styled(Button)`
     max-width: 350px;
     min-width: 350px;
   }
+`
+
+const CardContainer = styled.div`
+  height: 530px;
+  background: #ffffff 0% 0% no-repeat padding-box;
+  /* border: 1px solid #ececec; */
+  box-shadow: 0 0 5px 1px #eee;
+  border-radius: 6px;
+  opacity: 1;
+
+  :hover {
+    box-shadow: 0 0 5px 1px #ddd;
+  }
+`
+
+const CardTitle = styled(Text)`
+  display: block;
+  font-family: 'MontSerrat-Bold';
+  font-size: 22px;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  cursor: pointer;
+`
+
+const CardImage = styled.img`
+  width: 100%;
+  height: 280px;
+  display: block;
+  border-top-left-radius: 6px;
+  border-top-right-radius: 6px;
+  cursor: pointer;
+  object-fit: cover;
+`
+const CardContent = styled.div`
+  padding: 25px;
+  line-height: 2;
 `
 
 const _getWeekName = days => {
@@ -68,12 +103,73 @@ const _getCoverPhoto = object => {
   return object.photos[0].name
 }
 
+const _renderSpecifications = (spec, listingData) => {
+  const _getInfo = el => {
+    switch (el.field) {
+      case 'capacity':
+        return {
+          icon: 'specification-capacity',
+          value: el.value === 0 ? 'Not mentioned' : `${toPlural('Person', el.value)}`
+        }
+      case 'size':
+        return {
+          icon: 'specification-size',
+          value: el.value === 0 ? 'Not mentioned' : `${el.value} sqm`
+        }
+      case 'meetingRooms':
+        return {
+          icon: 'specification-meetingroom-quantity',
+          value: el.value === 0 ? 'None available' : `${el.value} available`
+        }
+      case 'isFurnished':
+        return {
+          icon: el.value === 0 ? 'specification-furnished-no' : 'specification-furnished-yes',
+          value: el.value === 0 ? 'No' : 'Yes'
+        }
+      case 'carSpace':
+        return {
+          icon: 'category-desk',
+          value: el.value === 0 ? 'None available' : `${el.value} available`
+        }
+      default:
+        return {
+          icon: '',
+          value: ''
+        }
+    }
+  }
+  return Object.entries(spec)
+    .slice(0, 3)
+    .map((el, i) => {
+      const specDataObject = el[1]
+      const obj = {
+        field: specDataObject.field,
+        value: listingData[specDataObject.field]
+      }
+
+      return (
+        <Box key={i}>
+          <Icon name={_getInfo(obj).icon} width="22px" />
+          <Text fontSize="10px" ml="10px">
+            {_getInfo(obj).value}
+          </Text>
+        </Box>
+      )
+    })
+}
+
+const _parseCategoryIconName = (name, isSub) => {
+  const prefix = isSub ? 'sub-category-' : 'category-'
+  return prefix + name.replace(/([A-Z])/g, g => `-${g[0].toLowerCase()}`)
+}
+
 const ItineraryPage = ({ match, location, history, ...props }) => {
   const dispatch = useDispatch()
 
   const { user } = useSelector(state => state.auth)
   const { object: booking, isLoading: isBookingLoading } = useSelector(state => state.booking.get)
   const { object: listing, isLoading: isListingLoading } = useSelector(state => state.booking.listing)
+  const { object: objectSpecifications } = useSelector(state => state.listing.specifications)
   const { bookingState } = useSelector(state => state.payment.pay)
 
   useEffect(() => {
@@ -83,6 +179,10 @@ const ItineraryPage = ({ match, location, history, ...props }) => {
   useEffect(() => {
     booking && dispatch(onGetListingInfo(booking.listingId))
   }, [dispatch, booking])
+
+  useEffect(() => {
+    listing && dispatch(onGetAllSpecifications(listing.settingsParent.id, listing.listingData))
+  }, [dispatch, listing])
 
   if (isBookingLoading) {
     return <Loader text="Loading itinerary" />
@@ -114,36 +214,84 @@ const ItineraryPage = ({ match, location, history, ...props }) => {
   const startDate = booking && booking.reservations[0]
   const endDate = booking && booking.reservations[booking.reservations.length - 1]
 
+  const _renderSpaceCard = () => {
+    return (
+      <>
+        <CardContainer>
+          <CardImage src={_getCoverPhoto(listing)} onClick={() => history.push(`/space/${listing.id}`)} />
+          <CardContent>
+            <Box display="flex" justifyContent="start" mb="15px">
+              <Box>
+                <Tag
+                  small
+                  icon={
+                    <Icon
+                      width="24px"
+                      name={_parseCategoryIconName(listing.settingsParent.category.otherItemName, false)}
+                    />
+                  }
+                >
+                  {listing.settingsParent.category.itemName}
+                </Tag>
+              </Box>
+              <Box margin="0 10px">
+                <Tag
+                  small
+                  icon={
+                    <Icon
+                      width="24px"
+                      name={_parseCategoryIconName(listing.settingsParent.subcategory.otherItemName, true)}
+                    />
+                  }
+                >
+                  {listing.settingsParent.subcategory.itemName}
+                </Tag>
+              </Box>
+            </Box>
+            <CardTitle>{listing.title}</CardTitle>
+            <Text display="block" fontFamily="regular" fontSize="14px" color="greyscale.1">
+              {`${listing.location.address1}, ${listing.location.city}`}
+            </Text>
+            <Box
+              my="10px"
+              display="grid"
+              gridTemplateColumns={
+                objectSpecifications && Object.keys(objectSpecifications).length >= 3 ? 'auto auto auto' : 'auto auto'
+              }
+            >
+              {objectSpecifications && _renderSpecifications(objectSpecifications, listing.listingData)}
+            </Box>
+            <Box display="grid" gridAutoFlow="column">
+              <Text fontSize="14px">
+                From:{' '}
+                <Text fontSize="16px" fontFamily="bold">
+                  {`${listing.listingData.currency}$${listing.listingData.basePrice}`}
+                </Text>{' '}
+                {listing.bookingPeriod}
+              </Text>
+              <Box justifySelf="end" display="flex" alignItems="center">
+                <Avatar width="30px" height="30px" image={listing.user.profile && listing.user.profile.picture} />
+                <Text fontSize="12px" ml="10px" fontFamily="medium">
+                  {`${listing.user.profile && listing.user.profile.firstName}`}
+                </Text>
+              </Box>
+            </Box>
+          </CardContent>
+        </CardContainer>
+      </>
+    )
+  }
+
   return (
-    <Wrapper my="30px">
+    <Wrapper>
       <Helmet title="Itinerary - Spacenow" />
-      <Title title="You're all booked in." color="#6adc91" noMargin />
-      <Box mb="50px" mt="10px">
-        <Title title="Enjoy your space!" noMargin />
+      <Box mb="50px" mt={{ _: "20px", medium: "10px" }}>
+        <Title title="You're all booked in." color="#6adc91" noMargin type="h2" />
+        <Title title="Enjoy your space!" noMargin type="h2" />
       </Box>
-      <GridStyled columns="350px auto" columnGap="45px">
+      <GridStyled columns="420px auto" columnGap="45px">
         <Cell>
-          {isListingLoading ? (
-            <Loader sm />
-          ) : (
-            <BookingCard
-              noPadding
-              titleComponent={
-                <ImageContainerStyled>
-                  <Image width="100%" height="100%" src={_getCoverPhoto(listing)} />
-                </ImageContainerStyled>
-              }
-              footerComponent={
-                <Box p="0 30px 30px 30px">
-                  <UserDetails
-                    hostname={listing.user.profile.displayName}
-                    imageProfile={listing.user.profile.picture}
-                    joined="2019"
-                  />
-                </Box>
-              }
-            />
-          )}
+          {isListingLoading ? <Loader sm /> : _renderSpaceCard()}
           <Box mt="20px">
             <ButtonStyled outline onClick={() => history.push(`/account/booking`)}>
               View Bookings
@@ -165,26 +313,26 @@ const ItineraryPage = ({ match, location, history, ...props }) => {
             {isListingLoading ? (
               <Loader sm />
             ) : (
-              <>
-                <Cell width={12}>
-                  <Title
-                    type="h3"
-                    title={listing.title}
-                    subtitle={`${listing.location.city}, ${listing.location.country}`}
-                    subTitleMargin={5}
-                  />
-                </Cell>
-                <Cell width={12}>
-                  <Title
-                    type="h6"
-                    title="Address"
-                    noMargin
-                    subtitle={`${listing.location.address1}, ${listing.location.city}, ${listing.location.zipcode}, ${listing.location.state}, ${listing.location.country}`}
-                    subTitleMargin={5}
-                  />
-                </Cell>
-              </>
-            )}
+                <>
+                  <Cell width={12}>
+                    <Title
+                      type="h4"
+                      title={listing.title}
+                      subtitle={`${listing.location.city}, ${listing.location.country}`}
+                      subTitleMargin={5}
+                    />
+                  </Cell>
+                  <Cell width={12}>
+                    <Title
+                      type="h6"
+                      title="Address"
+                      noMargin
+                      subtitle={`${listing.location.address1}, ${listing.location.city}, ${listing.location.zipcode}, ${listing.location.state}, ${listing.location.country}`}
+                      subTitleMargin={5}
+                    />
+                  </Cell>
+                </>
+              )}
             <CellStyled width={10}>
               {booking.priceType === 'daily' ? (
                 <Box m="0">
@@ -192,28 +340,28 @@ const ItineraryPage = ({ match, location, history, ...props }) => {
                   <ListDates dates={booking.reservations} />
                 </Box>
               ) : (
-                <Box mt="20px">
-                  <DatesDetail
-                    startDate={startDate}
-                    endDate={endDate}
-                    period={booking.period}
-                    priceType={booking.priceType}
-                  />
-                </Box>
-              )}
+                  <Box mt="20px">
+                    <DatesDetail
+                      startDate={startDate}
+                      endDate={endDate}
+                      period={booking.period}
+                      priceType={booking.priceType}
+                    />
+                  </Box>
+                )}
             </CellStyled>
 
             <CellStyled width={10}>
               {isListingLoading ? (
                 <Loader sm />
               ) : (
-                <Box my="30px">
-                  <TimeTable
-                    data={listing.accessDays.listingAccessHours}
-                    error={_getWeekName(listing.accessDays) === 'Closed'}
-                  />
-                </Box>
-              )}
+                  <Box my="30px">
+                    <TimeTable
+                      data={listing.accessDays.listingAccessHours}
+                      error={_getWeekName(listing.accessDays) === 'Closed'}
+                    />
+                  </Box>
+                )}
             </CellStyled>
           </Grid>
         </Cell>

@@ -7,6 +7,10 @@ const Footer = styled.div`
   display: grid;
   grid-template-columns: auto auto;
   margin: 50px 0;
+
+  @media (max-width: 680px) {
+    margin: 20px 0;
+  }
 `
 const Left = styled.div`
   justify-self: start;

@@ -133,7 +133,7 @@ const Button = styled.button`
   height: 32px;
   width: 32px;
   display: inline-block;
-  background-color: #e2e2e2;
+  background-color: #c4c4c4;
   color: white;
   font-size: 14px;
   outline: none;

@@ -2,7 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import styled from 'styled-components'
 import { format } from 'date-fns'
-import { SubTitle, Caption } from 'components'
+import { SubTitle, Caption, Box } from 'components'
 
 const Grid = styled.div`
   display: grid;
@@ -26,10 +26,11 @@ const TimeTableView = ({ data, error }) => {
   return (
     <Grid>
       <Column>
-        <Caption type="large" color={error ? '#E05252' : '#172439'}>
-          Weekday
-        </Caption>
-        <br />
+        <Box mb="5px">
+          <Caption type="large" color={error ? '#E05252' : '#172439'}>
+            Weekday
+          </Caption>
+        </Box>
         <SubTitle type="xSmall" color={error ? '#E05252' : '#172439'}>
           Monday
         </SubTitle>
@@ -53,10 +54,11 @@ const TimeTableView = ({ data, error }) => {
         </SubTitle>
       </Column>
       <Column>
-        <Caption type="large" color={error ? '#E05252' : '#172439'}>
-          Opening hours
-        </Caption>
-        <br />
+        <Box mb="5px">
+          <Caption type="large" color={error ? '#E05252' : '#172439'}>
+            Opening hours
+          </Caption>
+        </Box>
         <SubTitle type="xSmall" color={error ? '#E05252' : '#172439'}>
           {renderOpeningData(1)}
         </SubTitle>

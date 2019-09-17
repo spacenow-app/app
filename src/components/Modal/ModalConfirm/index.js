@@ -3,6 +3,7 @@ import PropTypes from 'prop-types'
 import { Modal } from 'react-bootstrap'
 
 import Button from 'components/Button'
+import Title from 'components/Title'
 
 import { useDispatch } from 'react-redux'
 import { closeModal } from 'redux/ducks/modal'
@@ -21,10 +22,12 @@ const ModalConfirm = ({ onConfirm, onCancel, options }) => {
   }
 
   return (
-    <Modal show onHide={() => handleConfirm(false)}>
+    <Modal show centered onHide={() => handleConfirm(false)}>
       {options.title && (
         <Modal.Header closeButton>
-          <Modal.Title>{options.title}</Modal.Title>
+          <Modal.Title>
+            <Title noMargin type={'h5'} title={options.title} />
+          </Modal.Title>
         </Modal.Header>
       )}
       {options.text && <Modal.Body>{options.text}</Modal.Body>}
@@ -39,7 +42,6 @@ const ModalConfirm = ({ onConfirm, onCancel, options }) => {
     </Modal>
   )
 }
-
 
 ModalConfirm.propTypes = {
   onConfirm: PropTypes.func.isRequired,

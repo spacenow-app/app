@@ -7,7 +7,7 @@ const Text = styled.span``
 const SpanStyled = styled.div`
   width: 35px;
   height: 35px;
-  margin: 5px 5px;
+  /* margin: 5px 5px; */
   background-color: red;
   display: flex;
   justify-content: center;
@@ -18,8 +18,8 @@ const SpanStyled = styled.div`
   border: 0 solid transparent;
   border-radius: 100%;
   cursor: ${props => (props.handleClick ? 'pointer' : 'default')};
-  background-color: #6ADC91;
-  border-color: #6ADC91;
+  background-color: #6adc91;
+  border-color: #6adc91;
   color: #172439;
 
   ${props =>
@@ -42,7 +42,7 @@ const Icon = styled.svg`
   display: none;
 
   ${SpanStyled}:hover & {
-    fill: #6ADC91;
+    fill: #6adc91;
     display: block;
   }
 `
