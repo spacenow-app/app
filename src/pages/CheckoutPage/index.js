@@ -164,9 +164,9 @@ const CheckoutPage = ({ match, location, history, ...props }) => {
               <ListDates dates={reservation.reservations} />
             </>
           ) : (
-              // <BookingDates reservationData={[]} />
-              <></>
-            )}
+            // <BookingDates reservationData={[]} />
+            <></>
+          )}
 
           <TimeTable data={listing.accessDays.listingAccessHours} />
 
@@ -180,10 +180,26 @@ const CheckoutPage = ({ match, location, history, ...props }) => {
                 <thead>
                   <tr>
                     <th />
-                    <th><Text fontSize="14px" fontFamily="semiBold" style={{ whiteSpace: "nowrap" }}>Name on Card</Text></th>
-                    <th><Text fontSize="14px" fontFamily="semiBold" style={{ whiteSpace: "nowrap" }}>Brand</Text></th>
-                    <th><Text fontSize="14px" fontFamily="semiBold" style={{ whiteSpace: "nowrap" }}>Card Number</Text></th>
-                    <th><Text fontSize="14px" fontFamily="semiBold" style={{ whiteSpace: "nowrap" }}>Options</Text></th>
+                    <th>
+                      <Text fontSize="14px" fontFamily="semiBold" style={{ whiteSpace: 'nowrap' }}>
+                        Name on Card
+                      </Text>
+                    </th>
+                    <th>
+                      <Text fontSize="14px" fontFamily="semiBold" style={{ whiteSpace: 'nowrap' }}>
+                        Brand
+                      </Text>
+                    </th>
+                    <th>
+                      <Text fontSize="14px" fontFamily="semiBold" style={{ whiteSpace: 'nowrap' }}>
+                        Card Number
+                      </Text>
+                    </th>
+                    <th>
+                      <Text fontSize="14px" fontFamily="semiBold" style={{ whiteSpace: 'nowrap' }}>
+                        Options
+                      </Text>
+                    </th>
                   </tr>
                 </thead>
                 <tbody>
@@ -192,17 +208,27 @@ const CheckoutPage = ({ match, location, history, ...props }) => {
                       <td>
                         <Checkbox onClick={_handleChangeCardSelect(card)} checked={selectedCard.id === card.id} />
                       </td>
-                      <td><Text fontSize="14px" style={{ whiteSpace: "nowrap" }}>{card.name}</Text></td>
-                      <td><Text fontSize="14px" style={{ whiteSpace: "nowrap" }}>{card.brand}</Text></td>
-                      <td><Text fontSize="14px" style={{ whiteSpace: "nowrap" }}>{`**** **** **** ${card.last4}`}</Text></td>
-                      <td align={'center'}>
+                      <td>
+                        <Text fontSize="14px" style={{ whiteSpace: 'nowrap' }}>
+                          {card.name}
+                        </Text>
+                      </td>
+                      <td>
+                        <Text fontSize="14px" style={{ whiteSpace: 'nowrap' }}>
+                          {card.brand}
+                        </Text>
+                      </td>
+                      <td>
+                        <Text fontSize="14px" style={{ whiteSpace: 'nowrap' }}>{`**** **** **** ${card.last4}`}</Text>
+                      </td>
+                      <td align="center">
                         {card.isLoading ? (
                           <Loader icon width="20px" height="20px" />
                         ) : (
-                            <IconButton onClick={_handleRemoveCard(card)}>
-                              <Icon name="bin" style={{ fill: '#51C482' }} />
-                            </IconButton>
-                          )}
+                          <IconButton onClick={_handleRemoveCard(card)}>
+                            <Icon name="bin" style={{ fill: '#51C482' }} />
+                          </IconButton>
+                        )}
                       </td>
                     </tr>
                   ))}
@@ -210,8 +236,8 @@ const CheckoutPage = ({ match, location, history, ...props }) => {
               </Table>
             </>
           ) : (
-              <Text>You don't have any credit cards yet, please add one :)</Text>
-            )}
+            <Text>You don't have any credit cards yet, please add one :)</Text>
+          )}
 
           <Button size="sm" onClick={_addNewCard} isLoading={isCreating}>
             Add Card
@@ -232,9 +258,10 @@ const CheckoutPage = ({ match, location, history, ...props }) => {
               <>
                 <Title type="h5" title="Hosted by" noMargin />
                 <UserDetails
-                  hostname={`${listing.user.profile.firstName} ${listing.user.profile.lastName} `}
-                  imageProfile={listing.user.profile.picture}
-                  joined={format(convertedDate(listing.user.profile.createdAt), 'yyyy')}
+                  hostname={`${listing.user && listing.user.profile.firstName} ${listing.user &&
+                    listing.user.profile.lastName} `}
+                  imageProfile={listing.user && listing.user.profile.picture}
+                  joined={format(convertedDate(listing.user && listing.user.profile.createdAt), 'yyyy')}
                 />
               </>
             }
