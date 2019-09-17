@@ -66,7 +66,7 @@ const ContainerResults = styled.div`
   padding: 0 20px;
 
   @media (max-width: 945px) {
-    grid-template-columns: auto;
+    grid-template-columns: 100%;
   }
 `
 

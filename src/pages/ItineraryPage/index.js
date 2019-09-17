@@ -47,7 +47,7 @@ const ButtonStyled = styled(Button)`
 `
 
 const CardContainer = styled.div`
-  height: 540px;
+  height: 530px;
   background: #ffffff 0% 0% no-repeat padding-box;
   /* border: 1px solid #ececec; */
   box-shadow: 0 0 5px 1px #eee;
@@ -253,6 +253,7 @@ const ItineraryPage = ({ match, location, history, ...props }) => {
               {`${listing.location.address1}, ${listing.location.city}`}
             </Text>
             <Box
+              my="10px"
               display="grid"
               gridTemplateColumns={
                 objectSpecifications && Object.keys(objectSpecifications).length >= 3 ? 'auto auto auto' : 'auto auto'

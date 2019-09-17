@@ -20,7 +20,7 @@ const ContainerList = styled.div`
   grid-row-gap: 25px;
 
   @media (max-width: 945px) {
-    grid-template-columns: repeat(auto-fill, minmax(420px, 1fr));
+    grid-template-columns: repeat(auto-fill, minmax(100%, 1fr));
   }
 `
 
@@ -169,6 +169,7 @@ const ListResults = ({ history, markers, onHoverItem, pagination, onPageChanged,
                   {`${item.location.address1}, ${item.location.city}`}
                 </Text>
                 <Box
+                  my="10px"
                   display="grid"
                   gridTemplateColumns={item.specifications.length >= 3 ? 'auto auto auto' : 'auto auto'}
                 >
