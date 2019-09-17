@@ -201,6 +201,7 @@ const queryGetBookingById = gql`
         updatedAt
         count
         user {
+          id
           profile {
             firstName
             lastName
