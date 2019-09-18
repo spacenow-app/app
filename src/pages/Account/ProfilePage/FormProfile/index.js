@@ -155,7 +155,7 @@ const formik = {
       return {
         firstName: profile.firstName || '',
         lastName: profile.lastName || '',
-        dateOfBirth: convertedDate(new Date(profile.dateOfBirth)) || '',
+        dateOfBirth: profile.dateOfBirth || '',
         gender: profile.gender || '',
         phoneNumber: profile.phoneNumber || '',
         info: profile.info || ''
