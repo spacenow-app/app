@@ -183,6 +183,7 @@ const DatePicker = forwardRef(
           formatDate={formatDate}
           onDayChange={handleDateChange}
           dayPickerProps={{
+            ...dayPickerProps,
             locale: enGB
           }}
         />
