@@ -104,7 +104,7 @@ const SearchPage = ({ history, location }) => {
   const [selectedSpace, setSelectedSpace] = useState(null)
   const [shouldShowFilter, setShouldShowFilter] = useState(false)
   const [markers, setMarkers] = useState([])
-  const [address, setAddress] = useState('Sydney, Austrália')
+  const [address, setAddress] = useState('Sydney, AU')
   const [latLng, setLatLng] = useState({ lat: -33.8688197, lng: 151.2092955 })
   const [filterPrice, setFilterPrice] = useState([0, 0])
   const [filterInstantBooking, setFilterInstantBooking] = useState(false)
@@ -287,7 +287,7 @@ const SearchPage = ({ history, location }) => {
             closeButton={latLng && (latLng.lat || latLng.lng)}
             onClickCloseButton={_reset}
             size="sm"
-            placeholder="Sydney, Australia"
+            placeholder="Sydney, AU"
             label={null}
           />
           <Button size="sm" onClick={() => _onSearch(latLng.lat, latLng.lng)}>
@@ -387,9 +387,14 @@ const SearchPage = ({ history, location }) => {
                             I’m looking to rent a place for business
                           </Text>
                         </div>
-                        <Button size="sm" outline onClick={_onQueryFilter}>
-                          Save
-                        </Button>
+                        <Box display="flex" justifyContent="space-between">
+                          <Button size="sm" outline onClick={_onQueryFilter}>
+                            Update Search
+                          </Button>
+                          <Button size="sm" outline onClick={() => setShouldShowFilter(false)}>
+                            Close
+                          </Button>
+                        </Box>
                       </Box>
                     </div>
                   )
@@ -464,9 +469,14 @@ const SearchPage = ({ history, location }) => {
                             I want to find space on a monthly basis
                           </Text>
                         </div>
-                        <Button size="sm" outline onClick={_onQueryFilter}>
-                          Save
-                        </Button>
+                        <Box display="flex" justifyContent="space-between">
+                          <Button size="sm" outline onClick={_onQueryFilter}>
+                            Update Search
+                          </Button>
+                          <Button size="sm" outline onClick={() => setShouldShowFilter(false)}>
+                            Close
+                          </Button>
+                        </Box>
                       </Box>
                     </div>
                   )
@@ -522,9 +532,12 @@ const SearchPage = ({ history, location }) => {
                             onChange={e => _onChangeInputPrice(e, 'max')}
                           />
                         </Box>
-                        <Box mt="30px">
+                        <Box mt="30px" display="flex" justifyContent="space-between">
                           <Button size="sm" outline onClick={_onQueryFilter}>
-                            Save
+                            Update Search
+                          </Button>
+                          <Button size="sm" outline onClick={() => setShouldShowFilter(false)}>
+                            Close
                           </Button>
                         </Box>
                       </Box>
@@ -540,7 +553,7 @@ const SearchPage = ({ history, location }) => {
               {({ ref }) => {
                 return (
                   <Button outline size="sm" ref={ref} onClick={() => setShouldShowFilter('instantBooking')}>
-                    Instant Booking
+                    Instant
                   </Button>
                 )
               }}
@@ -570,9 +583,14 @@ const SearchPage = ({ history, location }) => {
                             handleCheckboxChange={(e, { checked }) => setFilterInstantBooking(checked)}
                           />
                         </ItemSwitchStyled>
-                        <Button size="sm" outline onClick={_onQueryFilter}>
-                          Save
-                        </Button>
+                        <Box display="flex" justifyContent="space-between">
+                          <Button size="sm" outline onClick={_onQueryFilter}>
+                            Update Search
+                          </Button>
+                          <Button size="sm" outline onClick={() => setShouldShowFilter(false)}>
+                            Close
+                          </Button>
+                        </Box>
                       </Box>
                     </div>
                   )
@@ -587,7 +605,7 @@ const SearchPage = ({ history, location }) => {
             type="h5"
             title={
               <Text>
-                Showing resuls around <Text color="primary">{address}</Text>
+                Showing results around <Text color="primary">{address}</Text>
               </Text>
             }
           />
@@ -603,6 +621,7 @@ const SearchPage = ({ history, location }) => {
           left="0"
           right="0"
           position="fixed"
+          onClick={() => setShouldShowFilter(false)}
         >
           {isLoading && <Loader text="Searching" />}
         </Box>
