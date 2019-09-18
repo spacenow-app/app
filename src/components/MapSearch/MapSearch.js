@@ -49,6 +49,10 @@ const CardContentTitle = styled.span`
   display: block;
   font-size: 16px;
   font-family: 'Montserrat-SemiBold';
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  width: 245px;
 `
 
 const CardContentTextPrice = styled.span`
