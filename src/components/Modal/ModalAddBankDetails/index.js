@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 import { Modal } from 'react-bootstrap'
 import { withFormik } from 'formik'
 import * as Yup from 'yup'
-import { Button, Box, Grid, Cell, Select, Input, DatePicker, Title } from 'components'
+import { Button, Box, Grid, Cell, Select, Input, Title } from 'components'
 
 import { useDispatch } from 'react-redux'
 import { closeModal } from 'redux/ducks/modal'
@@ -112,14 +112,6 @@ const ModalAddBankDetails = ({
               />
             </Cell>
             <Cell width={12}>
-              {/* <DatePicker
-                size="sm"
-                label="Date of Birth"
-                name="dateOfBirthday"
-                error={touched.dateOfBirthday && errors.dateOfBirthday}
-                value={values.dateOfBirthday}
-                handleDateChange={date => setFieldValue('dateOfBirthday', date)}
-              /> */}
               <Input
                 type="date"
                 size="sm"
