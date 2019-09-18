@@ -51,8 +51,6 @@ const CategoryPage = props => {
     return false
   }
 
-  console.log(categories)
-
   return (
     <Wrapper>
       <Title

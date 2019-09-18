@@ -101,11 +101,16 @@ const ItemSwitchStyled = styled.div`
 const SearchPage = ({ history, location }) => {
   const dispatch = useDispatch()
 
+  const queryParams = new URLSearchParams(location.search)
+  const queryLat = queryParams.get('lat')
+  const queryLng = queryParams.get('lng')
+  const queryCategory = queryParams.get('category')
+
   const [selectedSpace, setSelectedSpace] = useState(null)
   const [shouldShowFilter, setShouldShowFilter] = useState(false)
   const [markers, setMarkers] = useState([])
   const [address, setAddress] = useState('Sydney, AU')
-  const [latLng, setLatLng] = useState({ lat: -33.8688197, lng: 151.2092955 })
+  const [latLng, setLatLng] = useState({ lat: queryLat || -33.8688197, lng: queryLng || 151.2092955 })
   const [filterPrice, setFilterPrice] = useState([0, 0])
   const [filterInstantBooking, setFilterInstantBooking] = useState(false)
   const [showFilterBar, setShowFilterBar] = useState(false)
@@ -116,43 +121,35 @@ const SearchPage = ({ history, location }) => {
     monthly: false
   })
   const [filterCategory, setFilterCategory] = useState({
-    workspace: false,
-    meetingSpace: false,
-    eventSpace: false,
-    parking: false,
-    storage: false,
-    retailAndHospitality: false
+    workspace: /workspace/i.test(queryCategory),
+    meetingSpace: /meetingSpace/i.test(queryCategory),
+    eventSpace: /eventSpace/i.test(queryCategory),
+    parking: /parking/i.test(queryCategory),
+    storage: /storage/i.test(queryCategory),
+    retailAndHospitality: /retailAndHospitality/i.test(queryCategory)
   })
   const { searchKey, result: searchResults, pagination } = useSelector(state => state.search.get, shallowEqual)
   const isLoading = useSelector(state => state.search.isLoading)
 
-  const queryParams = new URLSearchParams(location.search)
-  const lat = queryParams.get('lat') || '-33.8688197'
-  const lng = queryParams.get('lng') || '151.2092955'
-  const category = queryParams.get('category') || false
-
   useEffect(() => {
     async function fetchData() {
-      await dispatch(onSearch(lat, lng, category))
+      if (queryLat && queryLng && queryCategory) {
+        await dispatch(onSearch(queryLat, queryLng, queryCategory))
+      } else {
+        await dispatch(onSearch(latLng.lat, latLng.lng))
+      }
     }
     fetchData()
-  }, [dispatch, category, lat, lng])
+  }, [dispatch, queryLat, queryLng, queryCategory, latLng])
 
   useEffect(() => {
-    if (lat && lng) {
-      setLatLng({ lat, lng })
+    if (queryLat && queryLng && queryCategory) {
       if (searchResults && searchResults.length > 0) {
         const firstLocation = searchResults[0].location
         setAddress(`${firstLocation.city}, ${firstLocation.country}`)
       }
     }
-  }, [lat, lng, searchResults])
-
-  useEffect(() => {
-    if (category) {
-      setFilterCategory({ ...filterCategory, [category]: true })
-    }
-  }, [filterCategory, category])
+  }, [queryLat, queryLng, queryCategory, searchResults])
 
   useEffect(() => {
     setMarkers(
@@ -287,7 +284,7 @@ const SearchPage = ({ history, location }) => {
             closeButton={latLng && (latLng.lat || latLng.lng)}
             onClickCloseButton={_reset}
             size="sm"
-            placeholder="Sydney, Australia"
+            placeholder="Sydney, AU"
             label={null}
           />
           <Button size="sm" onClick={() => _onSearch(latLng.lat, latLng.lng)}>
@@ -553,7 +550,7 @@ const SearchPage = ({ history, location }) => {
               {({ ref }) => {
                 return (
                   <Button outline size="sm" ref={ref} onClick={() => setShouldShowFilter('instantBooking')}>
-                    Instant Booking
+                    Instant
                   </Button>
                 )
               }}
@@ -605,7 +602,7 @@ const SearchPage = ({ history, location }) => {
             type="h5"
             title={
               <Text>
-                Showing resuls around <Text color="primary">{address}</Text>
+                Showing results around <Text color="primary">{address}</Text>
               </Text>
             }
           />
