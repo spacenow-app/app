@@ -58,6 +58,13 @@ const InputStyled = styled.input`
     margin: 0;
   }
 
+  &[type='date']::-webkit-inner-spin-button,
+  &[type='date']::-webkit-calendar-picker-indicator,
+  &[type='date']::-webkit-clear-button {
+    display: none;
+    -webkit-appearance: none;
+  }
+
   ${border}
   ${color}
 `

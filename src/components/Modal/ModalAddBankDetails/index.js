@@ -40,7 +40,9 @@ const ModalAddBankDetails = ({
   return (
     <Modal show centered size="lg" onHide={() => dispatch(closeModal())}>
       <Modal.Header closeButton>
-        <Modal.Title><Title noMargin type={"h5"} title={"Add Bank Details"} /></Modal.Title>
+        <Modal.Title>
+          <Title noMargin type={'h5'} title={'Add Bank Details'} />
+        </Modal.Title>
       </Modal.Header>
       <Modal.Body>
         <Box>
@@ -110,13 +112,22 @@ const ModalAddBankDetails = ({
               />
             </Cell>
             <Cell width={12}>
-              <DatePicker
+              {/* <DatePicker
                 size="sm"
                 label="Date of Birth"
                 name="dateOfBirthday"
                 error={touched.dateOfBirthday && errors.dateOfBirthday}
                 value={values.dateOfBirthday}
                 handleDateChange={date => setFieldValue('dateOfBirthday', date)}
+              /> */}
+              <Input
+                type="date"
+                size="sm"
+                label="Date of Birth"
+                name="dateOfBirthday"
+                error={touched.dateOfBirthday && errors.dateOfBirthday}
+                value={values.dateOfBirthday}
+                onChange={handleChange}
               />
             </Cell>
             {values.accountType === 'company' && (
