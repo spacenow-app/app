@@ -157,7 +157,7 @@ const PreviewPage = ({ match, location, ...props }) => {
             handlerTitle: 'Profile'
           },
           onConfirm: () => {
-            window.location.href = `/dashboard/profile`
+            window.location.href = `/account/profile`
           }
         })
       )
@@ -175,7 +175,7 @@ const PreviewPage = ({ match, location, ...props }) => {
   }
 
   if (isPublished) {
-    window.location.href = `/dashboard`
+    window.location.href = `/account/listing`
     return null
   }
 
@@ -189,7 +189,7 @@ const PreviewPage = ({ match, location, ...props }) => {
           handlerTitle: 'OK'
         },
         onConfirm: () => {
-          window.location.href = `/dashboard`
+          window.location.href = `/account/listing`
         }
       })
     )

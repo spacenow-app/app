@@ -97,7 +97,7 @@ const AvailabilityTab = ({ listing, history, setFatherValues }) => {
   }, [listing])
 
   useEffect(() => {
-    dispatch(onGetAvailabilitiesByListingId(listing))
+    dispatch(onGetAvailabilitiesByListingId(listing.id))
     dispatch(onGetAllHolidays())
   }, [dispatch, listing])
 
