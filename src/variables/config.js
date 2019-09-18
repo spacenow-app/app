@@ -7,8 +7,8 @@ const config = {
   static: process.env.REACT_APP_STATIC_PAGES,
   token_name: 'id_token',
   admin_email: 'admin@spacenow.com',
-  facebook_app_id: process.env.REACT_APP_FACEBOOK_APP_ID,
-  google_app_id: process.env.REACT_APP_GOOGLE_APP_ID
+  facebook_app_id: process.env.REACT_APP_FACEBOOK_APP_ID || process.env.FACEBOOK_APP_ID,
+  google_app_id: process.env.REACT_APP_GOOGLE_APP_ID || process.env.GOOGLE_CLIENT_ID
 }
 
 export default config
