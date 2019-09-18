@@ -102,7 +102,7 @@ const NavBar = () => {
             >
               <DropdownItemStyled to="/account/profile">Profile</DropdownItemStyled>
               <NavDropdown.Divider />
-              <DropdownItemStyled to="/account/dashboard">Dashboard</DropdownItemStyled>
+              <DropdownItemStyled to="/account/listing">Dashboard</DropdownItemStyled>
               <NavDropdown.Divider />
               <DropdownItemStyled to="#" onClick={_handlerLogout}>
                 Logout

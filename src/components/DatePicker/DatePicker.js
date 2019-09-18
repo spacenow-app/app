@@ -6,7 +6,6 @@ import DayPickerInput from 'react-day-picker/DayPickerInput'
 import 'react-day-picker/lib/style.css'
 
 import { format as dateFnsFormat, parse as dateFnsParse } from 'date-fns'
-import { enGB } from 'date-fns/locale'
 
 import CalendarIcon from 'components/Icon/svg/generic/calendar.svg'
 
@@ -183,8 +182,7 @@ const DatePicker = forwardRef(
           formatDate={formatDate}
           onDayChange={handleDateChange}
           dayPickerProps={{
-            ...dayPickerProps,
-            locale: enGB
+            ...dayPickerProps
           }}
         />
       </WrapperStyled>
