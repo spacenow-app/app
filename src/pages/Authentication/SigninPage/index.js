@@ -21,7 +21,6 @@ const SigninPage = ({ values, touched, errors, handleChange, handleBlur, isValid
   const handleSubmit = e => {
     e.preventDefault()
     const { state } = props.location
-    console.log(state)
     dispatch(signin(values.email, values.password, (state && state.from) || false))
   }
 

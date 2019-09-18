@@ -121,7 +121,9 @@ const FormProfile = ({
             <DatePicker
               label="Date of Birth"
               value={values.dateOfBirth}
-              handleDateChange={date => { console.log(date); return setFieldValue('dateOfBirth', date) }}
+              handleDateChange={date => {
+                return setFieldValue('dateOfBirth', date)
+              }}
               captionMargin="0 0 .5rem 25px"
             />
           </SectionStyled>
