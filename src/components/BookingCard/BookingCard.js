@@ -5,11 +5,15 @@ import styled from 'styled-components'
 const WrapperStyled = styled.div`
   display: grid;
   min-height: 200px;
-  background-color: #f7f7f7;
+  background-color: #ededed;
   grid-row-gap: 32px;
   border-radius: 15px;
   width: 350px;
   padding: ${props => (props.noPadding && '0px') || '42px'};
+
+  @media only screen and (max-width: 991px) {
+    width: 100%;
+  }
 `
 const TitleStyled = styled.div`
   justify-self: stretch;

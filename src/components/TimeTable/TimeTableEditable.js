@@ -1,10 +1,13 @@
-import React, { Fragment } from 'react'
+import React from 'react'
 import PropTypes from 'prop-types'
 import styled, { css } from 'styled-components'
 import { format } from 'date-fns'
-import { Grid, Cell, Switch, TimePicker } from 'components'
+import { Cell, Switch, TimePicker, Box } from 'components'
 
-const WrapperStyled = styled.div``
+const WrapperStyled = styled.div`
+  display: grid;
+  grid-gap: 20px;
+`
 
 const TitleStyled = styled.span`
   color: #1f252a;
@@ -18,7 +21,7 @@ TitleStyled.displayName = 'Title'
 const ItemStyled = styled.div`
   height: 65px;
   border-radius: 75px;
-  border: 1px solid ${({ checked, disabled }) => (checked || !disabled ? '#6adc91' : '#E2E2E2')};
+  border: 1px solid ${({ checked, disabled }) => (checked || !disabled ? '#6adc91' : '#c4c4c4')};
   padding: 20px;
   text-align: center;
 
@@ -32,7 +35,7 @@ const ItemStyled = styled.div`
 const ItemSwitchStyled = styled.div`
   height: 65px;
   border-radius: 75px;
-  border: 1px solid ${({ checked }) => (checked ? '#6adc91' : '#E2E2E2')};
+  border: 1px solid ${({ checked }) => (checked ? '#6adc91' : '#c4c4c4')};
   padding: 20px;
   display: grid;
   grid-template-columns: auto auto;
@@ -68,8 +71,8 @@ const TimeTableEditable = ({
 
   return (
     <WrapperStyled>
-      <Grid columns={12} columnGap="40px" style={{ margin: '30px 0' }}>
-        <Cell width={4}>
+      <Box display="grid" gridTemplateColumns={{ _: "1fr", medium: "2fr 1fr 1fr 2fr" }} gridGap="20px">
+        <Cell width={1}>
           <ItemSwitchStyled>
             <span>Open 24 / 7</span>
             <SwitchStyled>
@@ -77,26 +80,26 @@ const TimeTableEditable = ({
             </SwitchStyled>
           </ItemSwitchStyled>
         </Cell>
-      </Grid>
-      <Grid columns={12} columnGap="40px" left>
-        <Cell width={4} middle>
+      </Box>
+      <Box display="grid" gridTemplateColumns={{ _: "1fr", medium: "2fr 1fr 1fr 2fr" }} gridGap="20px">
+        <Cell width={{ _: 2, medium: 1 }} middle>
           <TitleStyled>Days</TitleStyled>
         </Cell>
-        <Cell width={2} middle>
+        <Cell width={1} middle>
           <TitleStyled>Open</TitleStyled>
         </Cell>
-        <Cell width={2} middle>
+        <Cell width={1} middle>
           <TitleStyled>Close</TitleStyled>
         </Cell>
-        <Cell width={4} middle>
+        <Cell width={{ _: 2, medium: 1 }} middle>
           <TitleStyled>Working hours</TitleStyled>
         </Cell>
-      </Grid>
-      <Grid columns={12} rows={7} rowGap="20px" columnGap="40px">
+      </Box>
+      <Box display="grid" gridTemplateColumns={"1fr"} gridRowGap={{ _: "50px", medium: "20px" }}>
         {data.map((item, index) => {
           return (
-            <Fragment key={item.day}>
-              <Cell width={4}>
+            <Box key={item.day} display="grid" gridTemplateColumns={{ _: "1fr", medium: "2fr 1fr 1fr 2fr" }} gridGap={{ _: "10px", medium: "20px" }}>
+              <Cell width={{ _: 2, medium: 1 }}>
                 <ItemSwitchStyled checked={item.active}>
                   <span>{item.description}</span>
                   <SwitchStyled>
@@ -104,7 +107,7 @@ const TimeTableEditable = ({
                   </SwitchStyled>
                 </ItemSwitchStyled>
               </Cell>
-              <Cell width={2}>
+              <Cell width={1}>
                 <ItemStyled disabled={item.fulltime || !item.active} error={item.error.open}>
                   <TimePicker
                     value={format(new Date(item.open), 'HH:mm')}
@@ -113,7 +116,7 @@ const TimeTableEditable = ({
                   />
                 </ItemStyled>
               </Cell>
-              <Cell width={2}>
+              <Cell width={1}>
                 <ItemStyled disabled={item.fulltime || !item.active} error={item.error.close}>
                   <TimePicker
                     value={format(new Date(item.close), 'HH:mm')}
@@ -122,7 +125,7 @@ const TimeTableEditable = ({
                   />
                 </ItemStyled>
               </Cell>
-              <Cell width={4}>
+              <Cell width={{ _: 2, medium: 1 }}>
                 <ItemSwitchStyled>
                   <span>Open 24 hours</span>
                   <SwitchStyled>
@@ -135,11 +138,11 @@ const TimeTableEditable = ({
                   </SwitchStyled>
                 </ItemSwitchStyled>
               </Cell>
-            </Fragment>
+            </Box>
           )
         })}
-      </Grid>
-    </WrapperStyled>
+      </Box>
+    </WrapperStyled >
   )
 }
 

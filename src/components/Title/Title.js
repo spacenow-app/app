@@ -30,6 +30,11 @@ const H1Styled = styled.h1`
 const H2Styled = styled.h2`
   font-size: 40px;
   ${baseStyle}
+
+  @media (max-width: 576px) {
+    font-size: 30px;
+  }
+
 `
 
 const H3Styled = styled.h3`
@@ -54,7 +59,6 @@ const SubtitleStyled = styled.p`
   font-size: ${props => `${props.subTitleSize}px`};
   margin-top: ${props => `${props.subTitleMargin}px`};
   color: ${props => (props.subTitleColor ? props.subTitleColor : '#172439')};
-  width: 80%;
   margin-bottom: 0px;
   line-height: 26px;
 `

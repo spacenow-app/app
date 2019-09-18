@@ -25,6 +25,11 @@ import { Title, Input, Checkbox, Select, TextArea, StepButtons, Loader, Photo, B
 const WrapperStyled = styled.div`
   display: grid;
   grid-row-gap: 80px;
+
+  @media (max-width: 680px) {
+    grid-row-gap: 20px;
+  }
+
 `
 
 const SectionStyled = styled.div``
@@ -32,13 +37,30 @@ const SectionStyled = styled.div``
 const InputGroup = styled.div`
   display: grid;
   grid-template-columns: 1fr 1fr 1fr 1fr;
-  grid-column-gap: 30px;
+  grid-gap: 30px;
+  @media (max-width: 680px) {
+    grid-template-columns: 1fr;
+  }
 `
 
 const CheckboxGroup = styled.div`
   display: grid;
   grid-template-columns: 1fr 1fr 1fr;
-  grid-row-gap: 40px;
+  grid-gap: 40px;
+  @media (max-width: 680px) {
+    grid-template-columns: 1fr 1fr;
+    grid-gap: 20px;
+  }
+`
+
+const CheckboxGroupRules = styled.div`
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  grid-gap: 40px;
+  @media (max-width: 680px) {
+    grid-template-columns: 1fr;
+    grid-gap: 20px;
+  }
 `
 
 const PhotosGroup = styled.div`
@@ -268,13 +290,13 @@ const SpecificationTab = ({
           {isLoadingSpecifications ? (
             <Loader />
           ) : (
-            <InputGroup>
-              {Object.keys(objectSpecifications).map(k => {
-                const o = objectSpecifications[k]
-                return <span key={o.field}>{_renderSpecifications(o)}</span>
-              })}
-            </InputGroup>
-          )}
+              <InputGroup>
+                {Object.keys(objectSpecifications).map(k => {
+                  const o = objectSpecifications[k]
+                  return <span key={o.field}>{_renderSpecifications(o)}</span>
+                })}
+              </InputGroup>
+            )}
         </SectionStyled>
         <SectionStyled>
           <Title
@@ -297,39 +319,39 @@ const SpecificationTab = ({
             {isLoadingAmenities ? (
               <Loader />
             ) : (
-              arrayAmenities.map(item => {
-                return (
-                  <Checkbox
-                    key={item.id}
-                    label={item.itemName}
-                    name="amenities"
-                    value={item.id}
-                    checked={values.amenities.some(amenitie => amenitie.listSettingsId === item.id)}
-                    handleCheckboxChange={_handleCheckboxChange}
-                  />
-                )
-              })
-            )}
+                arrayAmenities.map(item => {
+                  return (
+                    <Checkbox
+                      key={item.id}
+                      label={item.itemName}
+                      name="amenities"
+                      value={item.id}
+                      checked={values.amenities.some(amenitie => amenitie.listSettingsId === item.id)}
+                      handleCheckboxChange={_handleCheckboxChange}
+                    />
+                  )
+                })
+              )}
           </CheckboxGroup>
         </SectionStyled>
         <SectionStyled>
           <Title type="h3" title="Space Rules" subtitle="Let guests know about the rules of the space." />
-          <CheckboxGroup>
+          <CheckboxGroupRules>
             {isLoadingRules ? (
               <Loader />
             ) : (
-              arrayRules.map(item => (
-                <Checkbox
-                  key={item.id}
-                  label={item.itemName}
-                  name="rules"
-                  value={item.id}
-                  checked={values.rules.some(rule => rule.listSettingsId === item.id)}
-                  handleCheckboxChange={_handleCheckboxChange}
-                />
-              ))
-            )}
-          </CheckboxGroup>
+                arrayRules.map(item => (
+                  <Checkbox
+                    key={item.id}
+                    label={item.itemName}
+                    name="rules"
+                    value={item.id}
+                    checked={values.rules.some(rule => rule.listSettingsId === item.id)}
+                    handleCheckboxChange={_handleCheckboxChange}
+                  />
+                ))
+              )}
+          </CheckboxGroupRules>
         </SectionStyled>
         <SectionStyled>
           <Title type="h3" title="Access Information*" subtitle="Let your guests know how they’ll get in." />
@@ -337,15 +359,15 @@ const SpecificationTab = ({
             {isLoadingAccessTypes ? (
               <Loader />
             ) : (
-              <Select value={values.accessType} name="accessType" onChange={_handleSelectChange}>
-                {!values.accessType && <option>Select type of access</option>}
-                {arrayAccessTypes.map(item => (
-                  <option key={item.id} value={item.itemName}>
-                    {item.itemName}
-                  </option>
-                ))}
-              </Select>
-            )}
+                <Select value={values.accessType} name="accessType" onChange={_handleSelectChange}>
+                  {!values.accessType && <option>Select type of access</option>}
+                  {arrayAccessTypes.map(item => (
+                    <option key={item.id} value={item.itemName}>
+                      {item.itemName}
+                    </option>
+                  ))}
+                </Select>
+              )}
           </Box>
         </SectionStyled>
         <SectionStyled>
@@ -358,19 +380,19 @@ const SpecificationTab = ({
             {isLoadingPhotos ? (
               <Loader />
             ) : (
-              <>
-                {arrayPhotos.map((item, index) => (
-                  <Photo
-                    key={`photo-${index}`}
-                    onDrop={_handleOnDrop}
-                    url={item ? item.name : null}
-                    isCover={item ? item.isCover : false}
-                    onCover={_handleSetCoverPhoto(item ? item.id : '')}
-                    onDelete={_handleDeletePhoto(item ? item.id : '')}
-                  />
-                ))}
-              </>
-            )}
+                <>
+                  {arrayPhotos.map((item, index) => (
+                    <Photo
+                      key={`photo-${index}`}
+                      onDrop={_handleOnDrop}
+                      url={item ? item.name : null}
+                      isCover={item ? item.isCover : false}
+                      onCover={_handleSetCoverPhoto(item ? item.id : '')}
+                      onDelete={_handleDeletePhoto(item ? item.id : '')}
+                    />
+                  ))}
+                </>
+              )}
           </PhotosGroup>
           <p>
             TIP: Take photos in landscape mode to capture as much of your space as possible. Shoot from corners to add

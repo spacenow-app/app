@@ -22,7 +22,7 @@ const WrapperStyled = styled.div`
     .DayPicker-Month {
       border-spacing: 10px;
       border-collapse: separate;
-    }
+    } 
 
     .DayPicker-Day {
       width: 50px;
@@ -66,12 +66,22 @@ const WrapperStyled = styled.div`
       background-color: #fff;
     }
   }
+
+  @media (max-width: 680px) {
+    &&& {
+      .DayPicker-Month {
+        border-spacing: 0px;
+      }
+    }
+  }
 `
 
 const NavBarContainer = styled.div`
   display: grid;
-  grid-template-columns: auto auto;
+  grid-template-columns: 1fr 1fr;
   grid-column-gap: 1rem;
+  width: auto;
+  justify-content: space-between;
 `
 
 const NavBatItem = styled.div`
@@ -82,8 +92,8 @@ const NavBatItem = styled.div`
   display: grid;
   align-content: center
     ${props =>
-      props.left &&
-      css`
+    props.left &&
+    css`
         grid-template-columns: auto 1fr;
         > button {
           display: grid;
@@ -98,8 +108,8 @@ const NavBatItem = styled.div`
         }
       `}
     ${props =>
-      props.right &&
-      css`
+    props.right &&
+    css`
         grid-template-columns: 1fr auto;
         > button {
           display: grid;
@@ -156,7 +166,7 @@ const Calendar = ({ selectedDays, disabledDays, daysOfWeek, handleDayClick, ...p
     <WrapperStyled>
       <DayPicker
         {...props}
-        numberOfMonths={2}
+        numberOfMonths={1}
         disabledDays={[
           ...disabledDays.map(el => new Date(el)),
           {

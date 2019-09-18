@@ -58,13 +58,12 @@ const InputStyled = styled.input`
     margin: 0;
   }
 
-  ${ border }
-  ${ color }
-
+  ${border}
+  ${color}
 `
 
 const Label = styled.label`
-  font-size: 14px;
+  font-size: 12px;
   font-family: 'Montserrat-Medium';
   margin-left: 20px;
 `
@@ -80,6 +79,10 @@ const RightContent = styled.div`
       right: 1%;
       top: ${props.size === 'sm' ? '12%' : '49%'};
     `}
+
+  @media only screen and (max-width: 600px) {
+    right: 3%;
+  }
 `
 
 const LoaderIcon = styled.i`
@@ -130,7 +133,7 @@ const Button = styled.button`
   height: 32px;
   width: 32px;
   display: inline-block;
-  background-color: #e2e2e2;
+  background-color: #c4c4c4;
   color: white;
   font-size: 14px;
   outline: none;

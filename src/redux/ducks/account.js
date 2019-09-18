@@ -24,6 +24,9 @@ export const Types = {
   ACC_UPDATE_LISTING: '[ACCOUNT] UPDATE LISTING',
   ACC_UPDATE_LISTING_SUCCESS: '[ACCOUNT] UPDATE LISTING SUCCESS',
   ACC_UPDATE_LISTING_ERROR: '[ACCOUNT] UPDATE LISTING ERROR',
+  ACC_DELETE_LISTING: '[ACCOUNT] DELETE LISTING',
+  ACC_DELETE_LISTING_SUCCESS: '[ACCOUNT] DELETE LISTING SUCCESS',
+  ACC_DELETE_LISTING_ERROR: '[ACCOUNT] DELETE LISTING ERROR',
   ACC_UPDATE_PROFILE: '[ACCOUNT] UPDATE PROFILE',
   ACC_UPDATE_PROFILE_SUCCESS: '[ACCOUNT] UPDATE PROFILE SUCCESS',
   ACC_UPDATE_PROFILE_ERROR: '[ACCOUNT] UPDATE PROFILE ERROR',
@@ -35,7 +38,7 @@ export const Types = {
   ACC_UPLOAD_DOCUMENT_ERROR: '[ACCOUNT] UPLOAD DOCUMENT ERROR',
   ACC_GET_RESEND_LINK: '[ACCOUNT] GET RESEND LINK',
   ACC_GET_RESEND_LINK_SUCCESS: '[ACCOUNT] GET RESEND LINK SUCCESS',
-  ACC_GET_RESEND_LINK_ERROR: '[ACCOUNT] GET RESEND LINK ERROR',
+  ACC_GET_RESEND_LINK_ERROR: '[ACCOUNT] GET RESEND LINK ERROR'
 }
 
 // Reducer
@@ -80,7 +83,7 @@ const queryGetProfile = gql`
         phoneNumber
         info
       }
-		}
+    }
   }
 `
 
@@ -135,7 +138,7 @@ const queryGetAllBookingsByUser = gql`
         checkOut
         reservations
       }
-		}
+    }
   }
 `
 
@@ -187,7 +190,7 @@ const queryGetAllListingsByUser = gql`
           }
         }
       }
-		}
+    }
   }
 `
 
@@ -203,7 +206,7 @@ const queryGetUserDocuments = gql`
         fileType
         documentStatus
       }
-		}
+    }
   }
 `
 
@@ -211,9 +214,18 @@ const queryGetUserDocuments = gql`
 const mutationUpdateListing = gql`
   mutation publish($listingId: Int!, $status: Boolean!) {
     publish(listingId: $listingId, status: $status) {
-      id,
+      id
       isPublished
-		}
+    }
+  }
+`
+
+// GraphQL
+const mutationDeleteListing = gql`
+  mutation removeListingById($listingId: Int!) {
+    removeListingById(listingId: $listingId) {
+      status
+    }
   }
 `
 
@@ -222,16 +234,16 @@ const mutationUpdateUserProfile = gql`
   mutation updateUserProfileLegacy($userId: String, $input: UserProfileInput) {
     updateUserProfileLegacy(userId: $userId, input: $input) {
       status
-		}
+    }
   }
 `
 
 // GraphQL
 const mutationUpdateProfilePicture = gql`
-  mutation updateProfilePicture($file: Upload, $userId: String! ) {
+  mutation updateProfilePicture($file: Upload, $userId: String!) {
     updateProfilePicture(file: $file, userId: $userId) {
       picture
-		}
+    }
   }
 `
 
@@ -240,7 +252,7 @@ const mutationDeleteDocument = gql`
   mutation deleteDocument($userId: String, $id: String) {
     deleteDocument(userId: $userId, id: $id) {
       status
-		}
+    }
   }
 `
 
@@ -253,7 +265,7 @@ const mutationUploadDocument = gql`
       fileName
       fileType
       documentStatus
-		}
+    }
   }
 `
 // GraphQL
@@ -279,6 +291,7 @@ export default function reducer(state = initialState, action) {
       }
     case Types.ACC_GET_PROFILE:
     case Types.ACC_UPDATE_LISTING:
+    case Types.ACC_DELETE_LISTING:
     case Types.ACC_DELETE_DOCUMENT:
     case Types.ACC_UPLOAD_DOCUMENT:
     case Types.ACC_GET_RESEND_LINK: {
@@ -314,7 +327,7 @@ export default function reducer(state = initialState, action) {
       return {
         ...state,
         get: { user: { ...state.get.user, profile: { ...state.get.user.profile, ...action.payload } } },
-        isLoading: false,
+        isLoading: false
       }
     case Types.ACC_UPDATE_LISTING_SUCCESS:
       return {
@@ -324,11 +337,22 @@ export default function reducer(state = initialState, action) {
           ...state.get,
           listings: {
             count: state.get.listings.count,
-            rows: state.get.listings.rows.map((item) => {
-              if (item.id !== action.payload.id)
-                return item
-              return item = { ...item, isPublished: action.payload.isPublished }
+            rows: state.get.listings.rows.map(item => {
+              if (item.id !== action.payload.id) return item
+              return (item = { ...item, isPublished: action.payload.isPublished })
             })
+          }
+        }
+      }
+    case Types.ACC_DELETE_LISTING_SUCCESS:
+      return {
+        ...state,
+        isLoading: false,
+        get: {
+          ...state.get,
+          listings: {
+            count: state.get.listings.count - 1,
+            rows: state.get.listings.rows.filter(item => item.id !== action.payload.listingId)
           }
         }
       }
@@ -340,7 +364,7 @@ export default function reducer(state = initialState, action) {
           ...state.get,
           documents: {
             count: state.get.documents.count - 1,
-            rows: state.get.documents.rows.filter((item) => item.id !== action.payload.id)
+            rows: state.get.documents.rows.filter(item => item.id !== action.payload.id)
           }
         }
       }
@@ -360,7 +384,7 @@ export default function reducer(state = initialState, action) {
       return {
         ...state,
         get: { ...state.get, user: { ...state.get.user, profile: { ...state.get.user.profile, ...action.payload } } },
-        isLoading: false,
+        isLoading: false
       }
     case Types.ACC_GET_RESEND_LINK_SUCCESS:
       return {
@@ -398,6 +422,7 @@ export default function reducer(state = initialState, action) {
     case Types.ACC_DELETE_DOCUMENT_ERROR:
     case Types.ACC_UPDATE_PROFILE_ERROR:
     case Types.ACC_UPDATE_LISTING_ERROR:
+    case Types.ACC_DELETE_LISTING_ERROR:
     case Types.ACC_UPDATE_PROFILE_PICTURE_ERROR:
     case Types.ACC_UPLOAD_DOCUMENT_ERROR:
     case Types.ACC_GET_RESEND_LINK_ERROR:
@@ -456,7 +481,7 @@ export const onGetListingsByUser = (userId, status) => async dispatch => {
   }
 }
 
-export const onGetUserDocuments = (userId) => async dispatch => {
+export const onGetUserDocuments = userId => async dispatch => {
   dispatch({ type: Types.ACC_GET_DOCUMENTS })
   try {
     const { data } = await getClientWithAuth(dispatch).query({
@@ -478,7 +503,7 @@ export const onDeleteDocument = (userId, id) => async dispatch => {
       mutation: mutationDeleteDocument,
       variables: { userId, id }
     })
-    toast.success("Document deleted successfully");
+    toast.success('Document deleted successfully')
     dispatch({ type: Types.ACC_DELETE_DOCUMENT_SUCCESS, payload: { id } })
   } catch (error) {
     console.log(error)
@@ -493,11 +518,26 @@ export const onUpdateListing = (listingId, status) => async dispatch => {
       mutation: mutationUpdateListing,
       variables: { listingId, status }
     })
-    toast.success("Listing updated successfully");
+    toast.success('Listing updated successfully')
     dispatch({ type: Types.ACC_UPDATE_LISTING_SUCCESS, payload: data.publish })
   } catch (error) {
-    toast.error(error.message);
+    toast.error(error.message)
     dispatch({ type: Types.ACC_UPDATE_LISTING_ERROR, payload: error.message })
+  }
+}
+
+export const onDeleteListing = listingId => async dispatch => {
+  dispatch({ type: Types.ACC_DELETE_LISTING })
+  try {
+    await getClientWithAuth(dispatch).mutate({
+      mutation: mutationDeleteListing,
+      variables: { listingId }
+    })
+    toast.success('Listing removed successfully')
+    dispatch({ type: Types.ACC_DELETE_LISTING_SUCCESS, payload: { listingId } })
+  } catch (error) {
+    toast.error(error.message)
+    dispatch({ type: Types.ACC_DELETE_LISTING_ERROR, payload: error.message })
   }
 }
 
@@ -508,10 +548,10 @@ export const onUpdateProfile = (userId, input) => async dispatch => {
       mutation: mutationUpdateUserProfile,
       variables: { userId, input }
     })
-    toast.success("Profile updated successfully");
+    toast.success('Profile updated successfully')
     dispatch({ type: Types.ACC_UPDATE_PROFILE_SUCCESS, payload: input })
   } catch (error) {
-    toast.error(error.message);
+    toast.error(error.message)
     dispatch({ type: Types.ACC_UPDATE_PROFILE_ERROR, payload: error.message })
   }
 }
@@ -523,10 +563,10 @@ export const onUpdateProfilePicture = (file, userId) => async dispatch => {
       mutation: mutationUpdateProfilePicture,
       variables: { userId, file }
     })
-    toast.success("Profile updated successfully");
+    toast.success('Profile updated successfully')
     dispatch({ type: Types.ACC_UPDATE_PROFILE_PICTURE_SUCCESS, payload: data.updateProfilePicture })
   } catch (error) {
-    toast.error(error.message);
+    toast.error(error.message)
     dispatch({ type: Types.ACC_UPDATE_PROFILE_PICTURE_ERROR, payload: error.message })
   }
 }
@@ -538,25 +578,25 @@ export const onUploadDocument = (userId, file) => async dispatch => {
       mutation: mutationUploadDocument,
       variables: { userId, file }
     })
-    toast.success("Document uploaded successfully");
+    toast.success('Document uploaded successfully')
     dispatch({ type: Types.ACC_UPLOAD_DOCUMENT_SUCCESS, payload: data.uploadDocument })
   } catch (error) {
-    toast.error(error.message);
+    toast.error(error.message)
     dispatch({ type: Types.ACC_UPLOAD_DOCUMENT_ERROR, payload: error.message })
   }
 }
 
-export const onResendLink = (email) => async dispatch => {
+export const onResendLink = email => async dispatch => {
   dispatch({ type: Types.ACC_GET_RESEND_LINK })
   try {
     await getClient().mutate({
       variables: { email },
       mutation: mutationRequestResendEmail
     })
-    toast.success("Document uploaded successfully");
+    toast.success('Document uploaded successfully')
     dispatch({ type: Types.ACC_GET_RESEND_LINK_SUCCESS })
   } catch (error) {
-    toast.error(error.message);
+    toast.error(error.message)
     dispatch({ type: Types.ACC_GET_RESEND_LINK_ERROR })
   }
 }

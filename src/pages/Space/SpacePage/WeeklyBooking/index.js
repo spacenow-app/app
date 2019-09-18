@@ -19,25 +19,28 @@ const WeeklyBooking = props => {
   }
 
   return (
-    <Grid columns={1} rowGap={'30px'}>
-      <DatePicker
-        value={date}
-        handleDateChange={onDateChange}
-        dayPickerProps={{
-          modifiers: {
-            disabled: [
-              ...listingExceptionDates.map(el => new Date(el)),
-              {
-                daysOfWeek: closingDays
-              },
-              {
-                before: new Date()
-              }
-            ]
-          }
-        }}
-      />
-      <Select options={dates} handleChange={handleChangePeriod} value={period} />
+    <Grid columns={1} rowGap="40px">
+      <Grid columns={1} rowGap="10px">
+        <DatePicker
+          label="Start Day"
+          value={date}
+          handleDateChange={onDateChange}
+          dayPickerProps={{
+            modifiers: {
+              disabled: [
+                ...listingExceptionDates.map(el => new Date(el)),
+                {
+                  daysOfWeek: closingDays
+                },
+                {
+                  before: new Date()
+                }
+              ]
+            }
+          }}
+        />
+        <Select label="Period" options={dates} handleChange={handleChangePeriod} value={period} />
+      </Grid>
       <PriceDetail
         periodLabel={spelling(period)}
         price={listingData.basePrice}

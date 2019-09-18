@@ -6,6 +6,7 @@ import DayPickerInput from 'react-day-picker/DayPickerInput'
 import 'react-day-picker/lib/style.css'
 
 import { format as dateFnsFormat, parse as dateFnsParse } from 'date-fns'
+import { enGB } from 'date-fns/locale'
 
 import CalendarIcon from 'components/Icon/svg/generic/calendar.svg'
 
@@ -50,6 +51,18 @@ const WrapperStyled = styled.div`
       }
     }
 
+    .DayPicker-WeekdaysRow {
+      display: grid;
+      grid-auto-flow: column;
+      grid-gap: 5px;
+    }
+
+    .DayPicker-Week {
+      display: grid;
+      grid-auto-flow: column;
+      grid-gap: 5px;
+    }
+
     .DayPicker-Weekday {
       color: #6adc91;
       font-size: 16px;
@@ -63,6 +76,9 @@ const WrapperStyled = styled.div`
       max-width: 40px;
       font-family: 'Montserrat-Medium';
       font-size: 14px;
+      display: grid;
+      justify-content: center;
+      align-items: center;
     }
 
     .DayPicker:not(.DayPicker--interactionDisabled)
@@ -131,7 +147,7 @@ const WrapperStyled = styled.div`
 `
 
 const Label = styled.label`
-  font-size: 14px;
+  font-size: 12px;
   font-family: 'Montserrat-Medium';
   margin-left: 20px;
 `
@@ -165,9 +181,10 @@ const DatePicker = forwardRef(
           format={format}
           parseDate={parseDate}
           formatDate={formatDate}
-          dayPickerProps={dayPickerProps}
           onDayChange={handleDateChange}
-          captionElement={({ date, localeUtils }) => <div>test</div>}
+          dayPickerProps={{
+            locale: enGB
+          }}
         />
       </WrapperStyled>
     )

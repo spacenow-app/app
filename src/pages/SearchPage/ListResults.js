@@ -20,7 +20,7 @@ const ContainerList = styled.div`
   grid-row-gap: 25px;
 
   @media (max-width: 945px) {
-    grid-template-columns: repeat(auto-fill, minmax(420px, 1fr));
+    grid-template-columns: repeat(auto-fill, minmax(100%, 1fr));
   }
 `
 
@@ -43,6 +43,7 @@ const CardTitle = styled(Text)`
   overflow: hidden;
   white-space: nowrap;
   text-overflow: ellipsis;
+  cursor: pointer;
 `
 
 const CardImage = styled.img`
@@ -52,6 +53,7 @@ const CardImage = styled.img`
   border-top-left-radius: 6px;
   border-top-right-radius: 6px;
   cursor: pointer;
+  object-fit: cover;
 `
 const CardContent = styled.div`
   padding: 25px;
@@ -126,7 +128,7 @@ const ListResults = ({ history, markers, onHoverItem, pagination, onPageChanged,
       }
 
       return (
-        <Box justifySelf="center" key={el.id}>
+        <Box key={el.id}>
           <Icon name={_getInfo(obj).icon} width="22px" />
           <Text fontSize="10px" ml="10px">
             {_getInfo(obj).value}
@@ -162,14 +164,14 @@ const ListResults = ({ history, markers, onHoverItem, pagination, onPageChanged,
                     </Tag>
                   </Box>
                 </Box>
-                <CardTitle>{item.title}</CardTitle>
+                <CardTitle onClick={() => history.push(`/space/${item.id}`)}>{item.title}</CardTitle>
                 <Text display="block" fontFamily="regular" fontSize="14px" color="greyscale.1">
                   {`${item.location.address1}, ${item.location.city}`}
                 </Text>
                 <Box
+                  my="10px"
                   display="grid"
                   gridTemplateColumns={item.specifications.length >= 3 ? 'auto auto auto' : 'auto auto'}
-                  my="15px"
                 >
                   {_renderSpecifications(item.specifications, item.listingData)}
                 </Box>
@@ -177,7 +179,7 @@ const ListResults = ({ history, markers, onHoverItem, pagination, onPageChanged,
                   <Text fontSize="14px">
                     From:{' '}
                     <Text fontSize="16px" fontFamily="bold">
-                      {`${item.listingData.currency}$${item.listingData.basePrice}`}
+                      {`${item.listingData.currency || 'AUD'}$${item.listingData.basePrice}`}
                     </Text>{' '}
                     {item.bookingPeriod}
                   </Text>

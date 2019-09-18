@@ -8,7 +8,7 @@ import fromUnixTime from 'date-fns/fromUnixTime'
 import format from 'date-fns/format'
 import addMinutes from 'date-fns/addMinutes'
 import { toPlural } from 'utils/strings'
-
+import { convertedDate } from 'utils/date'
 import { TypesModal, openModal } from 'redux/ducks/modal'
 import { getUserCards, createUserCard, deleteUserCard, pay } from 'redux/ducks/payment'
 import { onGetBooking } from 'redux/ducks/booking'
@@ -33,7 +33,7 @@ import {
 } from 'components'
 
 const GridStyled = styled(Grid)`
-  @media only screen and (max-width: 600px) {
+  @media only screen and (max-width: 991px) {
     grid-template-areas:
       'card card'
       'content content';
@@ -93,7 +93,7 @@ const CheckoutPage = ({ match, location, history, ...props }) => {
     return format(new Date(expiry), 'Pp')
   }
 
-  const _spelling = periodType => {
+  const _spelling = (periodType, reference) => {
     let label = 'Day'
     switch (periodType) {
       case 'weekly':
@@ -105,6 +105,7 @@ const CheckoutPage = ({ match, location, history, ...props }) => {
       default:
         label = 'Day'
     }
+    if (reference > 1) label = `${label}s`
     return label
   }
 
@@ -142,7 +143,7 @@ const CheckoutPage = ({ match, location, history, ...props }) => {
     history.replace('/')
     return null
   }
-
+  console.log(toPlural(_spelling(reservation.listing.bookingPeriod), reservation.reservations.length))
   return (
     <Wrapper>
       <Helmet title="Checkout - Spacenow" />
@@ -180,10 +181,26 @@ const CheckoutPage = ({ match, location, history, ...props }) => {
                 <thead>
                   <tr>
                     <th />
-                    <th>Name on Card</th>
-                    <th>Brand</th>
-                    <th>Card Number</th>
-                    <th>Options</th>
+                    <th>
+                      <Text fontSize="14px" fontFamily="semiBold" style={{ whiteSpace: 'nowrap' }}>
+                        Name on Card
+                      </Text>
+                    </th>
+                    <th>
+                      <Text fontSize="14px" fontFamily="semiBold" style={{ whiteSpace: 'nowrap' }}>
+                        Brand
+                      </Text>
+                    </th>
+                    <th>
+                      <Text fontSize="14px" fontFamily="semiBold" style={{ whiteSpace: 'nowrap' }}>
+                        Card Number
+                      </Text>
+                    </th>
+                    <th>
+                      <Text fontSize="14px" fontFamily="semiBold" style={{ whiteSpace: 'nowrap' }}>
+                        Options
+                      </Text>
+                    </th>
                   </tr>
                 </thead>
                 <tbody>
@@ -192,10 +209,20 @@ const CheckoutPage = ({ match, location, history, ...props }) => {
                       <td>
                         <Checkbox onClick={_handleChangeCardSelect(card)} checked={selectedCard.id === card.id} />
                       </td>
-                      <td>{card.name}</td>
-                      <td>{card.brand}</td>
-                      <td>{`**** **** **** ${card.last4}`}</td>
                       <td>
+                        <Text fontSize="14px" style={{ whiteSpace: 'nowrap' }}>
+                          {card.name}
+                        </Text>
+                      </td>
+                      <td>
+                        <Text fontSize="14px" style={{ whiteSpace: 'nowrap' }}>
+                          {card.brand}
+                        </Text>
+                      </td>
+                      <td>
+                        <Text fontSize="14px" style={{ whiteSpace: 'nowrap' }}>{`**** **** **** ${card.last4}`}</Text>
+                      </td>
+                      <td align="center">
                         {card.isLoading ? (
                           <Loader icon width="20px" height="20px" />
                         ) : (
@@ -231,7 +258,12 @@ const CheckoutPage = ({ match, location, history, ...props }) => {
             titleComponent={
               <>
                 <Title type="h5" title="Hosted by" noMargin />
-                <UserDetails hostname="host name" imageProfile={null} joined="2019" />
+                <UserDetails
+                  hostname={`${listing.user && listing.user.profile.firstName} ${listing.user &&
+                    listing.user.profile.lastName} `}
+                  imageProfile={listing.user && listing.user.profile.picture}
+                  joined={format(convertedDate(listing.user && listing.user.profile.createdAt), 'yyyy')}
+                />
               </>
             }
             contentComponent={
@@ -248,7 +280,7 @@ const CheckoutPage = ({ match, location, history, ...props }) => {
                 />
                 <PriceDetail
                   margin="0"
-                  periodLabel={toPlural(_spelling(reservation.listing.bookingPeriod), reservation.reservations.length)}
+                  periodLabel={_spelling(reservation.listing.bookingPeriod, reservation.reservations.length)}
                   price={listing.listingData.basePrice}
                   isAbsorvedFee={listing.listingData.isAbsorvedFee}
                   days={reservation.reservations.length}

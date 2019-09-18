@@ -81,7 +81,7 @@ const SelectStyled = styled.select`
 `
 
 const Label = styled.label`
-  font-size: 14px;
+  font-size: 12px;
   font-family: 'Montserrat-Medium';
   margin-left: 20px;
 `
@@ -127,7 +127,7 @@ Select.propTypes = {
   value: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
   size: PropTypes.string,
   label: PropTypes.string,
-  handleChange: PropTypes.func,
+  handleChange: PropTypes.func
 }
 
 export default Select

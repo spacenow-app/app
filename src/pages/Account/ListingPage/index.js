@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import Helmet from 'react-helmet'
-import { onGetListingsByUser, onUpdateListing } from 'redux/ducks/account'
+import { onGetListingsByUser, onUpdateListing, onDeleteListing } from 'redux/ducks/account'
 import { Card, Text, Icon, Loader, BackgroundImage, Grid, Cell, Title, Wrapper, Button } from 'components'
 
 const _parseCategoryIconName = (name, isSub) => {
@@ -10,58 +10,95 @@ const _parseCategoryIconName = (name, isSub) => {
   return prefix + name.replace(/([A-Z])/g, g => `-${g[0].toLowerCase()}`)
 }
 
-const _handleOnUpdateListing = (dispatch) => (listingId, status) => {
+const _handleOnUpdateListing = dispatch => (listingId, status) => {
   dispatch(onUpdateListing(listingId, status))
 }
 
-const _handleRedirect = (id) => {
+const _handleRedirect = id => {
   window.location.href = `/space/${id}`
 }
 
-const _handleEditRedirect = (id) => {
-  window.location.href = `/space/${id}`
+const _handleEditRedirect = id => {
+  window.location.href = `/listing/space/${id}/specification`
+}
+
+const _handleDelete = dispatch => id => {
+  dispatch(onDeleteListing(id))
 }
 
 const ListingCard = (dispatch, item, index) => {
-
   return (
     <Card.Horizontal key={index}>
-      <Card.Horizontal.Image src={item.photos.length > 0 ? item.photos[0].name : ""} handleClick={() => !item.isPublished ? _handleRedirect(item.id) : ''} />
+      <Card.Horizontal.Image
+        src={item.photos.length > 0 ? item.photos[0].name : ''}
+        handleClick={() => (item.isPublished ? _handleRedirect(item.id) : '')}
+      />
       <Card.Horizontal.Body>
-        <Card.Horizontal.Title noMargin subTitleMargin={0} type={"h6"} title={<Text>{item.title || ''}</Text>} subtitle={<Text>{`${item.location.address1}, ${item.location.city} ${item.location.state}`}</Text>} />
-        <Card.Horizontal.Price noMargin subTitleMargin={0} type={"h6"} title={<Text>AUD ${item.listingData.basePrice ? item.listingData.basePrice.toFixed(2) : 0.00}</Text>} />
+        <Card.Horizontal.Title
+          noMargin
+          subTitleMargin={0}
+          type={'h6'}
+          title={<Text width={{ _: '200px', medium: 'auto' }}>{item.title || ''}</Text>}
+          subtitle={<Text width={{ _: '200px', medium: 'auto' }}>{`${item.location.address1}, ${item.location.city} ${item.location.state}`}</Text>}
+        />
+        <Card.Horizontal.Price
+          noMargin
+          subTitleMargin={0}
+          type="h6"
+          title={<Text>AUD ${item.listingData.basePrice ? item.listingData.basePrice.toFixed(2) : 0.0}</Text>}
+        />
       </Card.Horizontal.Body>
       <Card.Horizontal.Dropdown alignRight>
         <Card.Horizontal.Dropdown.Toggle size="sm">
-          <Text color="primary" fontSize='12px'>Option</Text>
+          <Text color="primary" fontSize="12px">
+            Option
+          </Text>
         </Card.Horizontal.Dropdown.Toggle>
         <Card.Horizontal.Dropdown.Menu>
-          <Card.Horizontal.Dropdown.Item onClick={() => _handleEditRedirect(item.id)}>Edit</Card.Horizontal.Dropdown.Item>
-          <Card.Horizontal.Dropdown.Item onClick={() => _handleEditRedirect(item.id)}>Delete</Card.Horizontal.Dropdown.Item>
+          <Card.Horizontal.Dropdown.Item onClick={() => _handleEditRedirect(item.id)}>
+            Edit
+          </Card.Horizontal.Dropdown.Item>
+          <Card.Horizontal.Dropdown.Item onClick={() => _handleDelete(dispatch)(item.id)}>Delete</Card.Horizontal.Dropdown.Item>
         </Card.Horizontal.Dropdown.Menu>
       </Card.Horizontal.Dropdown>
       <Card.Horizontal.Footer>
-        <Card.Horizontal.Tag small icon={<Icon width="24px" name={_parseCategoryIconName(item.settingsParent.category.otherItemName, false)} />}>
+        <Card.Horizontal.Tag
+          small
+          icon={<Icon width="24px" name={_parseCategoryIconName(item.settingsParent.category.otherItemName, false)} />}
+        >
           {item.settingsParent.category.itemName}
         </Card.Horizontal.Tag>
-        <Card.Horizontal.Tag small icon={<Icon width="24px" name={_parseCategoryIconName(item.settingsParent.subcategory.otherItemName, true)} />}>
+        <Card.Horizontal.Tag
+          small
+          icon={
+            <Icon width="24px" name={_parseCategoryIconName(item.settingsParent.subcategory.otherItemName, true)} />
+          }
+        >
           {item.settingsParent.subcategory.itemName}
         </Card.Horizontal.Tag>
-        {item.isReady &&
-          <Card.Horizontal.Button size={`xs`} onClick={() => _handleOnUpdateListing(dispatch)(item.id, !item.isPublished)}>
+        {item.isReady && (
+          <Card.Horizontal.Button
+            size="xs"
+            onClick={() => _handleOnUpdateListing(dispatch)(item.id, !item.isPublished)}
+          >
             {item.isPublished ? 'Unpublish' : 'Publish'}
           </Card.Horizontal.Button>
-        }
+        )}
       </Card.Horizontal.Footer>
     </Card.Horizontal>
   )
 }
 
 const ListingPage = ({ ...props }) => {
+  const dispatch = useDispatch()
 
-  const dispatch = useDispatch();
-
-  const { isLoading, get: { listings, user: { id } } } = useSelector(state => state.account)
+  const {
+    isLoading,
+    get: {
+      listings,
+      user: { id }
+    }
+  } = useSelector(state => state.account)
 
   useEffect(() => {
     dispatch(onGetListingsByUser(id))
@@ -80,7 +117,7 @@ const ListingPage = ({ ...props }) => {
         <Cell width={6}>
           <Title type="h4" title="Your Listings" />
         </Cell>
-        <Cell width={6} justifySelf={'end'} middle>
+        <Cell width={6} justifySelf="end" middle>
           <Button size="sm" onClick={() => _addListing()}>
             Add Listing
           </Button>
@@ -88,15 +125,14 @@ const ListingPage = ({ ...props }) => {
       </Grid>
 
       {!listings || listings.count === 0 ? (
-        <BackgroundImage text="We didn't find any listing :(" />
+        <BackgroundImage text="We didn't find any listings :(" />
       ) : (
-          <Grid columns={1} rowGap={`30px`}>
+          <Grid columns={1} rowGap="30px">
             {[].concat(listings.rows).map((item, index) => ListingCard(dispatch, item, index))}
           </Grid>
         )}
     </Wrapper>
   )
-
 }
 
-export default ListingPage;
+export default ListingPage

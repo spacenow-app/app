@@ -13,7 +13,7 @@ import { sendMail } from 'redux/ducks/mail'
 
 const WrapperStyled = styled.div`
   display: grid;
-  grid-row-gap: 40px;
+  grid-row-gap: 10px;
 `
 
 const TimePickerStyled = styled.div`
@@ -30,10 +30,21 @@ const TimePickerStyled = styled.div`
 `
 
 const LabelStyled = styled.label`
-  font-size: 14px;
+  font-size: 12px;
   font-family: 'Montserrat-Medium';
   margin-left: 20px;
 `
+
+const _getCoverPhoto = object => {
+  if (object.photos.length <= 0) {
+    return ''
+  }
+  const photoCover = object.photos.find(e => e.isCover)
+  if (photoCover) {
+    return photoCover.name
+  }
+  return object.photos[0].name
+}
 
 const ContactHost = ({ values, errors, handleChange, handleBlur, setFieldValue, isValid, dispatch, user, listing }) => {
   const { isLoading: isSendingEmail } = useSelector(state => state.mail)
@@ -42,7 +53,7 @@ const ContactHost = ({ values, errors, handleChange, handleBlur, setFieldValue, 
     setFieldValue('date', format(new Date(values.date), 'dd/MM/yyyy').toString())
     Object.assign(
       values,
-      { listingPhoto: JSON.stringify(listing.photos.find(photo => photo.isCover).name) },
+      { listingPhoto: JSON.stringify(_getCoverPhoto(listing)) },
       { listingTitle: listing.title },
       { listingCity: listing.location.city },
       { listingCountry: listing.location.country },
@@ -152,7 +163,7 @@ const ContactHost = ({ values, errors, handleChange, handleBlur, setFieldValue, 
           onBlur={handleBlur}
         />
 
-        <Button width="100%" onClick={() => _handleSubmit()} disabled={!isValid} isLoading={isSendingEmail}>
+        <Button fluid mt="20px" onClick={() => _handleSubmit()} disabled={!isValid} isLoading={isSendingEmail}>
           Enquire
         </Button>
       </WrapperStyled>

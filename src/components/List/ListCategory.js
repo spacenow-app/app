@@ -4,7 +4,7 @@ import { Icon } from 'components'
 
 const List = styled.div`
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(130px, 130px));
+  grid-template-columns: repeat(auto-fit, minmax(150px, 130px));
   grid-column-gap: 10px;
   justify-content: ${props => (props.spaceBetween ? 'space-between' : 'center')};
 
@@ -25,7 +25,7 @@ const ListItem = styled.div`
   ${props =>
     !props.circular &&
     css`
-      background-color: ${props.bgItem ? props.bgItem : '#f7f7f7'};
+      background-color: ${props.bgItem ? props.bgItem : '#ededed'};
       width: 130px;
       height: 130px;
       border-radius: 8px;
@@ -46,7 +46,7 @@ const ListItem = styled.div`
 `
 
 const IconContainer = styled.div`
-  border: 1px solid #e2e2e2;
+  border: 1px solid #c4c4c4;
   width: 90px;
   height: 90px;
   border-radius: 100%;
@@ -80,6 +80,7 @@ const TitleStyled = styled.span`
   color: #172439;
   font-family: 'Montserrat-Medium';
   font-size: 14px;
+  max-height: 22px;
 
   ${props =>
     props.circular &&

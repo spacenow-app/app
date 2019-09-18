@@ -14,7 +14,7 @@ const TextAreaStyled = styled.textarea`
   width: 100%;
   min-height: 150px;
   border-radius: 15px;
-  border: 1px solid #e2e2e2;
+  border: 1px solid #c4c4c4;
 
   :focus {
     outline: 0px;
@@ -24,7 +24,7 @@ const TextAreaStyled = styled.textarea`
 `
 
 const Label = styled.label`
-  font-size: 14px;
+  font-size: 12px;
   font-family: 'Montserrat-Medium';
   margin-left: 20px;
 `
@@ -36,9 +36,9 @@ const ErrorMessage = styled.small`
 
 const TextArea = ({ size, label, error, loading, ...props }) => {
   return (
-    <WrapperTextArea >
+    <WrapperTextArea>
       {label && <Label>{label}</Label>}
-      <TextAreaStyled {...props}/>
+      <TextAreaStyled {...props} />
       {error && <ErrorMessage>{error}</ErrorMessage>}
     </WrapperTextArea>
   )

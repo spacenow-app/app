@@ -3,7 +3,7 @@ import Helmet from 'react-helmet'
 import { withFormik } from 'formik'
 import * as Yup from 'yup'
 import numeral from 'numeral'
-import { Title, Select, Input, Caption, Radio, Grid, Cell, StepButtons } from 'components'
+import { Title, Select, Input, Caption, Radio, Cell, StepButtons, Box } from 'components'
 import { capitalize, toPlural } from 'utils/strings'
 
 import GuestFeeIcon from './guest_fee_icon.svg'
@@ -44,7 +44,8 @@ const BookingTab = ({
   }
 
   return (
-    <Grid columns={1} rowGap="80px">
+    <Box display="grid" gridTemplateColumns={{ _: "1fr" }} gridGap={{_: "20px", medium: "40px"}}>
+    
       <Helmet title="Listing Space Booking - Spacenow" />
       <Cell>
         <Title
@@ -52,7 +53,7 @@ const BookingTab = ({
           title="Booking Period"
           subtitle="Spacenow have four payment options: hourly, daily, weekly and monthly. These payment options determine more than just the displayed price for your guests. As a host, selecting the right option is important because it will manage your availability, payouts, and payment options for your guests."
         />
-        <Grid columns={4} columnGap="20px">
+        <Box display="grid" gridTemplateColumns={{ _: "1fr", medium: "1fr 1fr 1fr 1fr" }} gridGap="20px">
           <Radio
             box
             value="hourly"
@@ -95,17 +96,17 @@ const BookingTab = ({
             label="Monthly"
             text="Monthly spaces are the least effort to manage, but be sure you’re willing to commit to the longer length of time. Spacenow transfers the money to you 48 hours after completion of each month."
           />
-        </Grid>
+        </Box>
       </Cell>
       <Cell>
         <Title type="h3" title="Price*" />
-        <Grid columns={12} columnGap="20px">
-          <Cell width={4}>
+        <Box display="grid" gridTemplateColumns={{ _: "1fr 2fr", medium: "1fr 2fr 2fr" }} gridGap="20px">
+          <Cell width={1}>
             <Select label="Currency" name="currency" value={values.currency} onChange={_handleSelectChange}>
               <option value="AUD">AUD</option>
             </Select>
           </Cell>
-          <Cell width={2}>
+          <Cell width={1}>
             <Input
               min="0"
               type="number"
@@ -118,13 +119,13 @@ const BookingTab = ({
               onBlur={handleBlur}
             />
           </Cell>
-        </Grid>
+        </Box>
       </Cell>
       <Cell>
         <Title type="h3" title="Minimum Term" subtitle="The shortest time you required a guest to stay" />
         <Caption>Period</Caption>
-        <Grid columns={12} columnGap="20px">
-          <Cell width={2}>
+        <Box display="grid" gridTemplateColumns={{ _: "1fr 1fr", medium: "1fr 1fr 1fr 1fr" }} gridGap="20px">
+          <Cell width={1}>
             <Radio
               name="minTerm"
               value={1}
@@ -133,7 +134,7 @@ const BookingTab = ({
               label={_changeToPlural(values.bookingPeriod, 1)}
             />
           </Cell>
-          <Cell width={2}>
+          <Cell width={1}>
             <Radio
               name="minTerm"
               value={2}
@@ -142,7 +143,7 @@ const BookingTab = ({
               label={_changeToPlural(values.bookingPeriod, 2)}
             />
           </Cell>
-          <Cell width={2}>
+          <Cell width={1}>
             <Radio
               name="minTerm"
               value={5}
@@ -151,7 +152,7 @@ const BookingTab = ({
               label={_changeToPlural(values.bookingPeriod, 5)}
             />
           </Cell>
-          <Cell width={2}>
+          <Cell width={1}>
             <Radio
               name="minTerm"
               value={7}
@@ -160,7 +161,7 @@ const BookingTab = ({
               label={_changeToPlural(values.bookingPeriod, 7)}
             />
           </Cell>
-        </Grid>
+        </Box>
       </Cell>
       <Cell>
         <Title
@@ -168,7 +169,7 @@ const BookingTab = ({
           title="Booking type"
           subtitle="Would you prefer to take an instant booking? Or confirm each booking manually?"
         />
-        <Grid columns={2}>
+        <Box display="grid" gridTemplateColumns={{ _: "1fr", medium: "1fr 1fr" }} gridGap="20px">
           <Cell width={1}>
             <Radio
               box
@@ -193,7 +194,7 @@ const BookingTab = ({
                 this option."
             />
           </Cell>
-        </Grid>
+        </Box>
       </Cell>
       <Cell>
         <Title
@@ -201,7 +202,7 @@ const BookingTab = ({
           title="Booking Fee"
           subtitle="Incorporate Spacenow’s 10% commision into the price or push it onto the guest. Tip: Been competitive means more bookings."
         />
-        <Grid columns={2}>
+        <Box display="grid" gridTemplateColumns={{ _: "1fr", medium: "1fr 1fr" }} gridGap="20px">
           <Cell width={1}>
             <Radio
               box
@@ -230,13 +231,13 @@ const BookingTab = ({
               image={GuestFeeIcon}
             />
           </Cell>
-        </Grid>
+        </Box>
       </Cell>
       <StepButtons
         prev={{ onClick: () => props.history.push('specification') }}
         next={{ onClick: () => props.history.push('availability') }}
       />
-    </Grid>
+    </Box>
   )
 }
 

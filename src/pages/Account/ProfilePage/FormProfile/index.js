@@ -4,7 +4,7 @@ import React from 'react'
 import styled from 'styled-components'
 import { withFormik } from 'formik'
 import * as Yup from 'yup'
-import { format } from 'date-fns'
+import { convertedDate } from 'utils/date'
 import { Input, Select, TextArea, Button, DatePicker, Box, Link, Text } from 'components'
 import { onUpdateProfile, onResendLink } from 'redux/ducks/account'
 
@@ -12,10 +12,9 @@ const WrapperStyled = styled.div`
   display: grid;
   grid-row-gap: 40px;
 
-  @media(max-width: 576px) {
+  @media (max-width: 576px) {
     margin-top: 30px;
   }
-
 `
 
 const SectionStyled = styled.div``
@@ -56,14 +55,21 @@ const FormProfile = ({
             name="email"
             disabled
             value={props.user.email}
-            borderColor={!props.user.emailConfirmed ? 'warning.0': 'primary'}
-            backgroundColor={!props.user.emailConfirmed ? 'warning.1': 'greyscale.4'}
+            borderColor={!props.user.emailConfirmed ? 'warning.0' : 'primary'}
+            backgroundColor={!props.user.emailConfirmed ? 'warning.1' : 'greyscale.4'}
             color={props.user.emailConfirmed ? 'greyscale.1' : ''}
             error={!props.user.emailConfirmed}
           />
-          {!props.user.emailConfirmed && <Text fontSize={12} marginLeft={'18px'}>Email not verified <Link color={'error'} to={'#'} onClick={() => _handleResendLink()}>resend link</Link></Text>}
+          {!props.user.emailConfirmed && (
+            <Text fontSize={12} marginLeft="18px">
+              Email not verified{' '}
+              <Link color="error" to="#" onClick={() => _handleResendLink()}>
+                resend link
+              </Link>
+            </Text>
+          )}
         </SectionStyled>
-        <Box display="grid" gridTemplateColumns={{ _: "1fr", medium: 'auto auto' }} gridGap="30px">
+        <Box display="grid" gridTemplateColumns={{ _: '1fr', medium: 'auto auto' }} gridGap="30px">
           <SectionStyled>
             <Input
               label="First Name*"
@@ -89,7 +95,7 @@ const FormProfile = ({
           </SectionStyled>
         </Box>
 
-        <Box display="grid" gridTemplateColumns={{ _: "1fr", medium: 'auto auto auto' }} gridGap="30px">
+        <Box display="grid" gridTemplateColumns={{ _: '1fr', medium: 'auto auto auto' }} gridGap="30px">
           <SectionStyled>
             <Input
               label="Phone Number"
@@ -115,7 +121,7 @@ const FormProfile = ({
             <DatePicker
               label="Date of Birth"
               value={values.dateOfBirth}
-              handleDateChange={date => setFieldValue('dateOfBirth', format(date, 'dd/MM/yyyy'))}
+              handleDateChange={date => { console.log(date); return setFieldValue('dateOfBirth', date) }}
               captionMargin="0 0 .5rem 25px"
             />
           </SectionStyled>
@@ -133,7 +139,7 @@ const FormProfile = ({
         </SectionStyled>
 
         <Button onClick={() => _handleSubmit()} disabled={!isValid}>
-          SUBMIT
+          Save
         </Button>
       </WrapperStyled>
     </form>
@@ -149,7 +155,7 @@ const formik = {
       return {
         firstName: profile.firstName || '',
         lastName: profile.lastName || '',
-        dateOfBirth: format(new Date(profile.dateOfBirth), 'dd/MM/yyyy') || '',
+        dateOfBirth: convertedDate(new Date(profile.dateOfBirth)) || '',
         gender: profile.gender || '',
         phoneNumber: profile.phoneNumber || '',
         info: profile.info || ''

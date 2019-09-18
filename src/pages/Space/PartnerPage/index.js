@@ -47,6 +47,7 @@ const BottomButtonMobile = styled.div`
   width: 100%;
   padding: 15px 0;
   text-align: center;
+  border-top: 1px solid #c4c4c4;
 
   @media only screen and (min-width: 992px) {
     display: none;
@@ -117,10 +118,10 @@ const PartnerPage = ({ match, location, ...props }) => {
   }
 
   return (
-    <Wrapper mt="50px">
+    <Wrapper>
       <Helmet title="View Listing - Spacenow" />
-      <GridStyled columns="auto 350px" columnGap="15px" rowGap="100px">
-        <Box display="grid" gridRowGap="50px">
+      <GridStyled columns="auto 350px" columnGap="35px" rowGap="30px">
+        <Box display="grid" gridRowGap="15px">
           <Carousel photos={_convertedArrayPhotos(listing.photos)} height={imageHeight} />
 
           <Grid columns={12}>
@@ -230,7 +231,7 @@ const PartnerPage = ({ match, location, ...props }) => {
           {listing.amenities.length > 0 && (
             <Box>
               <Title type="h5" title="Amenities" />
-              <Grid columns="repeat(auto-fit, minmax(200px, auto))" rowGap="40px">
+              <Grid columns="repeat(auto-fit, minmax(200px, auto))" rowGap="20px">
                 {listing.amenities.map(item => {
                   return (
                     <Box key={item.id} display="grid" gridTemplateColumns="auto 1fr" gridColumnGap="20px">
@@ -280,19 +281,31 @@ const PartnerPage = ({ match, location, ...props }) => {
           />
         </Box>
       </GridStyled>
-      <Box my="100px">
+      <Box my="45px">
         <Title type="h5" title="Location" />
         <Map position={{ lat: Number(listing.location.lat), lng: Number(listing.location.lng) }} />
       </Box>
       <BottomButtonMobile>
-        <Button
-          fluid
-          onClick={() => {
-            document.getElementById('booking-card').scrollIntoView({ behavior: 'smooth' })
-          }}
-        >
-          Reserve
-        </Button>
+        <Grid columns={2} style={{ alignItems: 'center' }}>
+          <Cell style={{ alignContent: 'center', justifyContent: 'left', display: 'grid' }}>
+            <span>
+              <span
+                style={{ fontFamily: 'Montserrat-Bold', fontSize: '18px' }}
+              >{`$ ${listing.listingData.basePrice} ${listing.listingData.currency}`}</span>
+              {` ${listing.bookingPeriod}`}
+            </span>
+          </Cell>
+          <Cell justifySelf="self-end">
+            <Button
+              size="sm"
+              onClick={() => {
+                document.getElementById('booking-card').scrollIntoView({ behavior: 'smooth' })
+              }}
+            >
+              Reserve
+            </Button>
+          </Cell>
+        </Grid>
       </BottomButtonMobile>
     </Wrapper>
   )

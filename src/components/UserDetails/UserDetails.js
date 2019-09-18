@@ -41,6 +41,7 @@ const TextDefaultStyled = styled.span`
 const TextName = styled(TextDefaultStyled)`
   font-family: Montserrat-Bold;
   font-size: 18px;
+  line-height: 28px;
 `
 
 const TextCity = styled(TextDefaultStyled)`
@@ -55,7 +56,7 @@ const TextJoined = styled(TextDefaultStyled)`
 const TextBottom = styled.span`
   color: #172439;
   font-size: 12px;
-`;
+`
 
 const UserDetails = props => (
   <WrapperStyled>
@@ -63,19 +64,15 @@ const UserDetails = props => (
       <Avatar small image={props.imageProfile} />
       <UserContainer>
         <TextName>{props.hostname}</TextName>
-        { props.address && 
-          <TextCity>{props.address}</TextCity>
-        }
+        {props.address && <TextCity>{props.address}</TextCity>}
       </UserContainer>
     </TopStyled>
-    { props.joined && 
+    {props.joined && (
       <BottomStyled>
         <TextJoined>{`Joined in ${props.joined}`}</TextJoined>
       </BottomStyled>
-    }
-    { props.text && 
-        <TextBottom>{props.text}</TextBottom>
-    }
+    )}
+    {props.text && <TextBottom>{props.text}</TextBottom>}
   </WrapperStyled>
 )
 

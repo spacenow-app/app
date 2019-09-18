@@ -2,17 +2,23 @@ import React, { Component } from 'react'
 import styled from 'styled-components'
 import Helmet from 'react-helmet'
 import { Wrapper, Card, Title } from 'components'
+import { config } from 'variables'
+// import FormContactUs from './FormContactUs'
 
 const WrapperStyled = styled.div`
   display: grid;
   grid-template-columns: auto auto;
-  grid-column-gap: 20px;
+  grid-gap: 20px;
+
+  @media (max-width: 680px) {
+    grid-template-columns: auto;
+  }
 `
 
 class IntroPage extends Component {
   _goTo = type => {
     if (type === 'multiple') {
-      window.location.href = `/become-a-host`
+      window.location.href = `${config.static}/contact-us`
       return
     }
     this.props.history.push('/listing/location')
@@ -38,14 +44,16 @@ class IntroPage extends Component {
             buttonText="Create"
             buttonHandleClick={() => this._goTo('single')}
           />
+
+          {/* <FormContactUs /> */}
           <Card
             rounded
             border
             type="icon"
             icon="multiple-space"
             title="Multiple spaces"
-            description="If you’re listing a couple of spaces or several this option is for you. Ie. an office space, meeting room, and a car spot.<separate>TIP: If you have more than 20 please contact us."
-            buttonText="Create Spaces"
+            description="If you're listing more than one or 2 spaces, please contact us and we will be happy to help get everything set up on your behalf – get ready for the smoothest on boarding ever."
+            buttonText="Contact Us"
             buttonHandleClick={() => this._goTo('multiple')}
           />
         </WrapperStyled>

@@ -47,7 +47,7 @@ const ModalBookingDetails = ({
     <Modal show onHide={() => dispatch(closeModal())} centered size="lg">
       {options.title && (
         <Modal.Header closeButton>
-          <Modal.Title>{options.title}</Modal.Title>
+          <Modal.Title><Title noMargin type={"h5"} title={options.title} /></Modal.Title>
         </Modal.Header>
       )}
       <Modal.Body>
@@ -75,7 +75,7 @@ const ModalBookingDetails = ({
           />
         )}
       </Modal.Body>
-      {(booking.bookingState === 'pending' && userType === 'host') &&
+      {(booking.bookingState === 'requested' && userType === 'host') &&
         <Modal.Footer>
           <Button size={`sm`} color={`red`} onClick={() => _declineBooking(booking.bookingId)}>
             {options.buttonDeclineBookingText || 'Decline Booking'}

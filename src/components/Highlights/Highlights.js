@@ -6,7 +6,7 @@ import { Box, Icon } from 'components'
 const TitleStyled = styled.span`
   font-size: ${props => (props.isTitle ? '12px' : '18px')};
   color: ${props => (props.error ? '#E05252' : '#172439')};
-  font-family: 'Montserrat-Regular';
+  font-family: ${props => (props.isTitle ? 'Montserrat-Bold' : 'Montserrat-Regular')};
 `
 
 const Highlights = ({ title, name, icon, last, error, ...props }) => {

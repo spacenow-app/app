@@ -35,7 +35,7 @@ const StyledCheckbox = styled.div`
   border: 2px solid ${props => (props.checked ? '#6ADC91' : '#172439')};
   border-radius: 5px;
   transition: all 150ms;
-  cursor: ${props => (props.disabled ? 'not-allowed' : 'pointer')};
+  cursor: ${props => (props.disabled ? 'none' : 'pointer')};
 
   ${HiddenCheckbox}:focus + & {
     box-shadow: 0 0 0 3px #6adc91;
@@ -52,6 +52,11 @@ const LabelStyled = styled.span`
   color: #172439;
   font-size: 16px;
   margin: 0 8px;
+
+  @media only screen and (max-width: 600px) {
+    font-size: 14px;
+  }
+  
 `
 
 const Checkbox = ({ className, name, checked, label, handleCheckboxChange, disabled, ...props }) => (
@@ -79,7 +84,7 @@ const Checkbox = ({ className, name, checked, label, handleCheckboxChange, disab
 Checkbox.defaultProps = {
   checked: false,
   label: false,
-  handleCheckboxChange: () => {}
+  handleCheckboxChange: () => { }
 }
 
 Checkbox.propTypes = {
