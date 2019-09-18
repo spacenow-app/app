@@ -143,7 +143,7 @@ const CheckoutPage = ({ match, location, history, ...props }) => {
     history.replace('/')
     return null
   }
-  console.log(toPlural(_spelling(reservation.listing.bookingPeriod), reservation.reservations.length))
+
   return (
     <Wrapper>
       <Helmet title="Checkout - Spacenow" />
