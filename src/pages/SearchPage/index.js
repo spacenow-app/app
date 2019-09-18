@@ -287,7 +287,7 @@ const SearchPage = ({ history, location }) => {
             closeButton={latLng && (latLng.lat || latLng.lng)}
             onClickCloseButton={_reset}
             size="sm"
-            placeholder="Sydney, Australia"
+            placeholder="Sydney, AU"
             label={null}
           />
           <Button size="sm" onClick={() => _onSearch(latLng.lat, latLng.lng)}>
@@ -553,7 +553,7 @@ const SearchPage = ({ history, location }) => {
               {({ ref }) => {
                 return (
                   <Button outline size="sm" ref={ref} onClick={() => setShouldShowFilter('instantBooking')}>
-                    Instant Booking
+                    Instant
                   </Button>
                 )
               }}
@@ -605,7 +605,7 @@ const SearchPage = ({ history, location }) => {
             type="h5"
             title={
               <Text>
-                Showing resuls around <Text color="primary">{address}</Text>
+                Showing results around <Text color="primary">{address}</Text>
               </Text>
             }
           />
