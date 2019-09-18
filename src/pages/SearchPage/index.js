@@ -104,7 +104,7 @@ const SearchPage = ({ history, location }) => {
   const [selectedSpace, setSelectedSpace] = useState(null)
   const [shouldShowFilter, setShouldShowFilter] = useState(false)
   const [markers, setMarkers] = useState([])
-  const [address, setAddress] = useState('Sydney, Austrália')
+  const [address, setAddress] = useState('Sydney, Australia')
   const [latLng, setLatLng] = useState({ lat: -33.8688197, lng: 151.2092955 })
   const [filterPrice, setFilterPrice] = useState([0, 0])
   const [filterInstantBooking, setFilterInstantBooking] = useState(false)
@@ -129,7 +129,7 @@ const SearchPage = ({ history, location }) => {
   const lat = queryParams.get('lat') || '-33.8688197'
   const lng = queryParams.get('lng') || '151.2092955'
   const category = queryParams.get('category') || false
-  
+
   useEffect(() => {
     async function fetchData() {
       await dispatch(onSearch(lat, lng, category))
@@ -139,7 +139,7 @@ const SearchPage = ({ history, location }) => {
 
   useEffect(() => {
     if (lat && lng) {
-      setLatLng({lat, lng})
+      setLatLng({ lat, lng })
       if (searchResults && searchResults.length > 0) {
         const firstLocation = searchResults[0].location
         setAddress(`${firstLocation.city}, ${firstLocation.country}`)
@@ -149,7 +149,7 @@ const SearchPage = ({ history, location }) => {
 
   useEffect(() => {
     if (category) {
-      setFilterCategory({...filterCategory, [category]: true})
+      setFilterCategory({ ...filterCategory, [category]: true })
     }
   }, [filterCategory, category])
 
