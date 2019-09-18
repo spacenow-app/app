@@ -188,9 +188,9 @@ const AvailabilityTab = ({ listing, history, setFatherValues }) => {
   }
 
   const _timeToString = time => {
-    const h = _zero(time.getHours())
-    const m = _zero(time.getMinutes())
-    const s = _zero(time.getSeconds())
+    const h = _zero(new Date(time).getHours())
+    const m = _zero(new Date(time).getMinutes())
+    const s = _zero(new Date(time).getSeconds())
     return `${h}:${m}:${s}`
   }
 
@@ -303,7 +303,11 @@ const AvailabilityTab = ({ listing, history, setFatherValues }) => {
             title="Holidays"
             subtitle="Are you closed on all Australian holidays? Or Just a few of them?"
           />
-          <Box display="grid" gridTemplateColumns={{ _: "1fr", medium: "1fr 1fr", large: "1fr 1fr 1fr", extraLarge: "1fr 1fr 1fr 1fr" }} gridGap="20px">
+          <Box
+            display="grid"
+            gridTemplateColumns={{ _: '1fr', medium: '1fr 1fr', large: '1fr 1fr 1fr', extraLarge: '1fr 1fr 1fr 1fr' }}
+            gridGap="20px"
+          >
             <Cell width={1}>
               <ItemSwitchStyled>
                 <span>Block all</span>
