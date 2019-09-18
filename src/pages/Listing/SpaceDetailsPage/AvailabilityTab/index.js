@@ -38,7 +38,7 @@ const TIME_TABLE_INIT_STATE = {
   listingAccessHours: []
 }
 
-const AvailabilityTab = ({ listing, history, setFatherValues }) => {
+const AvailabilityTab = ({ match, listing, history, setFatherValues }) => {
   const dispatch = useDispatch()
 
   const [timetable, setTimeTable] = useState([])
@@ -348,7 +348,8 @@ const AvailabilityTab = ({ listing, history, setFatherValues }) => {
         </Cell>
         <StepButtons
           prev={{ onClick: () => history.push('booking') }}
-          next={{ onClick: () => history.push('cancellation') }}
+          // next={{ onClick: () => history.push('cancellation') }}
+          next={{ onClick: () => history.push(`/listing/preview/${match.params.id}`) }}
         />
       </Grid>
     </>
@@ -358,7 +359,8 @@ const AvailabilityTab = ({ listing, history, setFatherValues }) => {
 AvailabilityTab.propTypes = {
   listing: PropTypes.instanceOf(Object).isRequired,
   history: PropTypes.instanceOf(Object).isRequired,
-  setFatherValues: PropTypes.instanceOf(Function).isRequired
+  setFatherValues: PropTypes.instanceOf(Function).isRequired,
+  match: PropTypes.instanceOf(Object).isRequired
 }
 
 export default AvailabilityTab
