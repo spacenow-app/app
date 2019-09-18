@@ -104,7 +104,7 @@ const SearchPage = ({ history, location }) => {
   const [selectedSpace, setSelectedSpace] = useState(null)
   const [shouldShowFilter, setShouldShowFilter] = useState(false)
   const [markers, setMarkers] = useState([])
-  const [address, setAddress] = useState('Sydney, Austrália')
+  const [address, setAddress] = useState('Sydney, Australia')
   const [latLng, setLatLng] = useState({ lat: -33.8688197, lng: 151.2092955 })
   const [filterPrice, setFilterPrice] = useState([0, 0])
   const [filterInstantBooking, setFilterInstantBooking] = useState(false)
@@ -387,9 +387,14 @@ const SearchPage = ({ history, location }) => {
                             I’m looking to rent a place for business
                           </Text>
                         </div>
-                        <Button size="sm" outline onClick={_onQueryFilter}>
-                          Save
-                        </Button>
+                        <Box display="flex" justifyContent="space-between">
+                          <Button size="sm" outline onClick={_onQueryFilter}>
+                            Update Search
+                          </Button>
+                          <Button size="sm" outline onClick={() => setShouldShowFilter(false)}>
+                            Close
+                          </Button>
+                        </Box>
                       </Box>
                     </div>
                   )
@@ -464,9 +469,14 @@ const SearchPage = ({ history, location }) => {
                             I want to find space on a monthly basis
                           </Text>
                         </div>
-                        <Button size="sm" outline onClick={_onQueryFilter}>
-                          Save
-                        </Button>
+                        <Box display="flex" justifyContent="space-between">
+                          <Button size="sm" outline onClick={_onQueryFilter}>
+                            Update Search
+                          </Button>
+                          <Button size="sm" outline onClick={() => setShouldShowFilter(false)}>
+                            Close
+                          </Button>
+                        </Box>
                       </Box>
                     </div>
                   )
@@ -522,9 +532,12 @@ const SearchPage = ({ history, location }) => {
                             onChange={e => _onChangeInputPrice(e, 'max')}
                           />
                         </Box>
-                        <Box mt="30px">
+                        <Box mt="30px" display="flex" justifyContent="space-between">
                           <Button size="sm" outline onClick={_onQueryFilter}>
-                            Save
+                            Update Search
+                          </Button>
+                          <Button size="sm" outline onClick={() => setShouldShowFilter(false)}>
+                            Close
                           </Button>
                         </Box>
                       </Box>
@@ -570,9 +583,14 @@ const SearchPage = ({ history, location }) => {
                             handleCheckboxChange={(e, { checked }) => setFilterInstantBooking(checked)}
                           />
                         </ItemSwitchStyled>
-                        <Button size="sm" outline onClick={_onQueryFilter}>
-                          Save
-                        </Button>
+                        <Box display="flex" justifyContent="space-between">
+                          <Button size="sm" outline onClick={_onQueryFilter}>
+                            Update Search
+                          </Button>
+                          <Button size="sm" outline onClick={() => setShouldShowFilter(false)}>
+                            Close
+                          </Button>
+                        </Box>
                       </Box>
                     </div>
                   )
@@ -603,6 +621,7 @@ const SearchPage = ({ history, location }) => {
           left="0"
           right="0"
           position="fixed"
+          onClick={() => setShouldShowFilter(false)}
         >
           {isLoading && <Loader text="Searching" />}
         </Box>
