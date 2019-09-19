@@ -23,7 +23,7 @@ const TimePickerStyled = styled.div`
   border: 1px solid #ebebeb;
   padding-right: 17px;
   padding: 10px 20px;
-  border-radius: 37px;
+  border-radius: 8px;
   height: 54px;
   text-align: center;
   font-size: 14px;
