@@ -13,7 +13,7 @@ const TextAreaStyled = styled.textarea`
   padding: 20px;
   width: 100%;
   min-height: 150px;
-  border-radius: 15px;
+  border-radius: 8px;
   border: 1px solid #c4c4c4;
 
   :focus {

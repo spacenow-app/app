@@ -10,8 +10,8 @@ import _ from 'lodash'
 
 import { nanDate, weekTimeTable } from 'variables'
 
-import { onGetAvailabilitiesByListingId, onGetAllHolidays } from 'redux/ducks/listing'
-import { onUpdate } from 'redux/ducks/listing'
+import { onGetAvailabilitiesByListingId, onGetAllHolidays , onUpdate } from 'redux/ducks/listing'
+
 
 import {
   Title,
@@ -33,7 +33,7 @@ const SwitchStyled = styled.div`
 
 const ItemSwitchStyled = styled.div`
   height: 65px;
-  border-radius: 75px;
+  border-radius: 8px;
   border: 1px solid ${({ checked }) => (checked ? '#6adc91' : '#c4c4c4')};
   padding: 20px;
   display: grid;

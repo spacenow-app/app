@@ -14,21 +14,21 @@ const sizeStyle = {
     padding: 10px 20px;
     font-size: 12px;
     line-height: 1.5;
-    border-radius: 37px;
+    border-radius: 8px;
     height: 42px;
   `,
   md: css`
     padding: 10px 20px;
     font-size: 14px;
     line-height: 1.5;
-    border-radius: 37px;
+    border-radius: 8px;
     height: 54px;
   `,
   lg: css`
     padding: 0.5rem 1rem;
     font-size: 16px;
     line-height: 1.5;
-    border-radius: 37px;
+    border-radius: 8px;
   `
 }
 
