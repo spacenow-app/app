@@ -37,7 +37,7 @@ const InputStyled = styled.input`
   color: rgb(33, 37, 41);
   background-color: ${props => (props.error ? 'rgba(224, 82, 82, 0.1);' : '#ffffff')};
   border-width: 1px;
-  border-color: ${props => (props.error ? '#e05252' : '#ebebeb')};
+  border-color: ${props => (props.error ? '#e05252' : '#ccc')};
   border-style: solid;
   transition: color 0.2s ease-in-out 0s, border-style 0.2s ease-in-out 0s, border-color 0.2s ease-in-out 0s,
     visibility 0.2s ease-in-out 0s, background 0.2s ease-in-out 0s, background-color 0.2s ease-in-out 0s,
