@@ -8,21 +8,21 @@ const sizeStyle = {
     padding: 10px 20px;
     font-size: 12px;
     line-height: 1.5;
-    border-radius: 37px;
+    border-radius: 8px;
     height: 42px;
   `,
   md: css`
     padding: 10px 20px;
     font-size: 14px;
     line-height: 1.5;
-    border-radius: 37px;
+    border-radius: 8px;
     height: 54px;
   `,
   lg: css`
     padding: 0.5rem 1rem;
     font-size: 16px;
     line-height: 1.5;
-    border-radius: 37px;
+    border-radius: 8px;
   `
 }
 
@@ -33,11 +33,12 @@ const WrapperInput = styled.div`
 
 const InputStyled = styled.input`
   display: block;
+  cursor: text;
   width: 100%;
   color: rgb(33, 37, 41);
-  background-color: ${props => (props.error ? 'rgba(224, 82, 82, 0.1);' : '#ffffff')};
+  background-color: ${props => (props.error ? 'rgba(224, 82, 82, 0.1);' : '#fefefe')};
   border-width: 1px;
-  border-color: ${props => (props.error ? '#e05252' : '#ccc')};
+  border-color: ${props => (props.error ? '#e05252' : '#cacaca')};
   border-style: solid;
   transition: color 0.2s ease-in-out 0s, border-style 0.2s ease-in-out 0s, border-color 0.2s ease-in-out 0s,
     visibility 0.2s ease-in-out 0s, background 0.2s ease-in-out 0s, background-color 0.2s ease-in-out 0s,
@@ -131,7 +132,7 @@ const Button = styled.button`
   border: none;
   height: 20px;
   width: 20px;
-  border-radius: 100%;
+  border-radius: 5px;
   outline: none;
   text-align: center;
   font-weight: bold;

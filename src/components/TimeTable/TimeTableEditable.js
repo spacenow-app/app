@@ -20,7 +20,7 @@ TitleStyled.displayName = 'Title'
 
 const ItemStyled = styled.div`
   height: 65px;
-  border-radius: 75px;
+  border-radius: 8px;
   border: 1px solid ${({ checked, disabled }) => (checked || !disabled ? '#6adc91' : '#c4c4c4')};
   padding: 20px;
   text-align: center;
@@ -34,7 +34,7 @@ const ItemStyled = styled.div`
 
 const ItemSwitchStyled = styled.div`
   height: 65px;
-  border-radius: 75px;
+  border-radius: 8px;
   border: 1px solid ${({ checked }) => (checked ? '#6adc91' : '#c4c4c4')};
   padding: 20px;
   display: grid;
@@ -71,7 +71,7 @@ const TimeTableEditable = ({
 
   return (
     <WrapperStyled>
-      <Box display="grid" gridTemplateColumns={{ _: "1fr", medium: "2fr 1fr 1fr 2fr" }} gridGap="20px">
+      <Box display="grid" gridTemplateColumns={{ _: '1fr', medium: '2fr 1fr 1fr 2fr' }} gridGap="20px">
         <Cell width={1}>
           <ItemSwitchStyled>
             <span>Open 24 / 7</span>
@@ -81,7 +81,7 @@ const TimeTableEditable = ({
           </ItemSwitchStyled>
         </Cell>
       </Box>
-      <Box display="grid" gridTemplateColumns={{ _: "1fr", medium: "2fr 1fr 1fr 2fr" }} gridGap="20px">
+      <Box display="grid" gridTemplateColumns={{ _: '1fr', medium: '2fr 1fr 1fr 2fr' }} gridGap="20px">
         <Cell width={{ _: 2, medium: 1 }} middle>
           <TitleStyled>Days</TitleStyled>
         </Cell>
@@ -95,10 +95,15 @@ const TimeTableEditable = ({
           <TitleStyled>Working hours</TitleStyled>
         </Cell>
       </Box>
-      <Box display="grid" gridTemplateColumns={"1fr"} gridRowGap={{ _: "50px", medium: "20px" }}>
+      <Box display="grid" gridTemplateColumns="1fr" gridRowGap={{ _: '50px', medium: '20px' }}>
         {data.map((item, index) => {
           return (
-            <Box key={item.day} display="grid" gridTemplateColumns={{ _: "1fr", medium: "2fr 1fr 1fr 2fr" }} gridGap={{ _: "10px", medium: "20px" }}>
+            <Box
+              key={item.day}
+              display="grid"
+              gridTemplateColumns={{ _: '1fr', medium: '2fr 1fr 1fr 2fr' }}
+              gridGap={{ _: '10px', medium: '20px' }}
+            >
               <Cell width={{ _: 2, medium: 1 }}>
                 <ItemSwitchStyled checked={item.active}>
                   <span>{item.description}</span>
@@ -142,7 +147,7 @@ const TimeTableEditable = ({
           )
         })}
       </Box>
-    </WrapperStyled >
+    </WrapperStyled>
   )
 }
 

@@ -68,6 +68,7 @@ const SearchBar = styled.div`
 
   @media only screen and (max-width: 600px) {
     width: 100%;
+    margin-bottom: 10px;
   }
 `
 
