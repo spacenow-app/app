@@ -105,6 +105,7 @@ const cleanParameter = value => {
 
 const SearchPage = ({ history, location }) => {
   const dispatch = useDispatch()
+  const refResults = useRef()
 
   const queryParams = new URLSearchParams(location.search)
   const queryLat = queryParams.get('lat')
