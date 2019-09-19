@@ -6,7 +6,7 @@ import { ReactComponent as GoogleLogo } from './images/svg_logo_google.svg'
 
 const ButtonStyled = styled.button`
   height: 54px;
-  border-radius: 37px;
+  border-radius: 8px;
   font-family: 'Montserrat-Medium';
   font-size: 14px;
   font-weight: 600;
