@@ -33,7 +33,6 @@ const SpaceDetailsPage = ({ match, history, location, ...props }) => {
 
   useEffect(() => {
     if (history.action === 'PUSH' && values.isValid) dispatch(onUpdate(objectListing, values))
-
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [history.location.key])
 

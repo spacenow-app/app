@@ -11,6 +11,7 @@ import _ from 'lodash'
 import { nanDate, weekTimeTable } from 'variables'
 
 import { onGetAvailabilitiesByListingId, onGetAllHolidays } from 'redux/ducks/listing'
+import { onUpdate } from 'redux/ducks/listing'
 
 import {
   Title,
@@ -299,10 +300,22 @@ const AvailabilityTab = ({ match, listing, history, setFatherValues }) => {
     setSelectedDates(newArray)
   }
 
+  // TODO: Remove when the next button goes to cancellation policy again.
+  const _onUpdateListing = () => {
+    const valuesToUpdate = {
+      ...listing,
+      listingAccessDays: _mapToAccessHourType(timetable),
+      listingExceptionDates: selectedDates,
+      isValid: true
+    }
+    dispatch(onUpdate(listing, valuesToUpdate))
+    history.push(`/listing/preview/${listing.id}`)
+  }
+
   return (
     <>
       <Helmet title="Listing Space Availability - Spacenow" />
-      <Grid columns={1} rowGap="80px">
+      <Grid columns={1} rowGap="40px">
         <Cell>
           <Title type="h3" title="Timetable*" subtitle="Let guests know the times your space is open." />
           <TimeTable
@@ -329,7 +342,6 @@ const AvailabilityTab = ({ match, listing, history, setFatherValues }) => {
             daysOfWeek={timeTableWeek}
           /> */}
           <DatePicker
-            label="Blocked Dates"
             date={null}
             handleDateChange={_onClickSelectDay}
             hideOnDayClick={false}
@@ -413,7 +425,7 @@ const AvailabilityTab = ({ match, listing, history, setFatherValues }) => {
         <StepButtons
           prev={{ onClick: () => history.push('booking') }}
           // next={{ onClick: () => history.push('cancellation') }}
-          next={{ onClick: () => history.push(`/listing/preview/${match.params.id}`) }}
+          next={{ onClick: () => _onUpdateListing() }}
         />
       </Grid>
     </>
