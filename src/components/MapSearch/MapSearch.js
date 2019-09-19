@@ -85,7 +85,8 @@ const MapSearch = withGoogleMap(props => {
         maxZoom: 18,
         streetViewControl: true,
         mapTypeControl: false,
-        styles: props.styles
+        styles: props.styles,
+        scrollwheel: false
       }}
     >
       {props.markers &&

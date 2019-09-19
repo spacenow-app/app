@@ -1,4 +1,4 @@
-import React, { memo } from 'react'
+import React, { memo, forwardRef } from 'react'
 import styled from 'styled-components'
 import { Box, Text, Icon, Tag, Avatar, Pagination } from 'components'
 import { toPlural } from 'utils/strings'
@@ -66,7 +66,8 @@ const ContainerPagination = styled.div`
   justify-content: center;
 `
 
-const ListResults = ({ history, markers, onHoverItem, pagination, onPageChanged, ...props }) => {
+const ListResults = forwardRef(({ history, markers, onHoverItem, pagination, onPageChanged, ...props }, ref) => {
+
   const _parseCategoryIconName = (name, isSub) => {
     const prefix = isSub ? 'sub-category-' : 'category-'
     return prefix + name.replace(/([A-Z])/g, g => `-${g[0].toLowerCase()}`)
@@ -139,12 +140,12 @@ const ListResults = ({ history, markers, onHoverItem, pagination, onPageChanged,
   }
 
   return (
-    <Wrapper>
+    <Wrapper ref={ref}>
       <ContainerList>
         {markers.map(item => {
           return (
             <CardContainer key={item.id} onMouseEnter={() => onHoverItem(item)} onMouseLeave={() => onHoverItem(null)}>
-              <CardImage src={_getCoverPhoto(item)} onClick={() => history.push(`/space/${item.id}`)} />
+              <CardImage src={_getCoverPhoto(item)} onClick={() => window.open(`/space/${item.id}`)} />
               <CardContent>
                 <Box display="flex" justifyContent="start" mb="15px">
                   <Box>
@@ -164,7 +165,7 @@ const ListResults = ({ history, markers, onHoverItem, pagination, onPageChanged,
                     </Tag>
                   </Box>
                 </Box>
-                <CardTitle onClick={() => history.push(`/space/${item.id}`)}>{item.title}</CardTitle>
+                <CardTitle onClick={() => window.open(`/space/${item.id}`)}>{item.title}</CardTitle>
                 <Text display="block" fontFamily="regular" fontSize="14px" color="greyscale.1">
                   {`${item.location.address1}, ${item.location.city}`}
                 </Text>
@@ -200,7 +201,7 @@ const ListResults = ({ history, markers, onHoverItem, pagination, onPageChanged,
       </ContainerPagination>
     </Wrapper>
   )
-}
+})
 
 const comparisonFn = (prevProps, nextProps) => {
   return prevProps.markers === nextProps.markers
