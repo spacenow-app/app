@@ -1,9 +1,10 @@
-import React from 'react'
+import React, { useState } from 'react'
+import PropTypes from 'prop-types'
 import { useDispatch, useSelector } from 'react-redux'
 import { Link, NavLink } from 'react-router-dom'
 import styled from 'styled-components'
 import { Navbar, Nav, NavDropdown } from 'react-bootstrap'
-import { Avatar, Box } from 'components'
+import { Avatar, Box, AutoComplete, Button } from 'components'
 import { logout } from 'redux/ducks/auth'
 
 import { config } from 'variables'
@@ -58,16 +59,54 @@ const NavLinkStyled = styled(NavLink)`
   }
 `
 
-const NavBar = () => {
+const SearchBar = styled.div`
+  display: grid;
+  grid-template-columns: 1fr auto;
+  grid-column-gap: 20px;
+  width: 714px;
+  padding: 0 5px;
+
+  @media only screen and (max-width: 600px) {
+    width: 100%;
+  }
+`
+
+const NavBar = ({ history, shownSearch }) => {
   const dispatch = useDispatch()
   const { user } = useSelector(state => state.account.get)
   const { isAuthenticated } = useSelector(state => state.auth)
+  const [address, setAddress] = useState('')
+  const [latLng, setLatLng] = useState({})
 
   const _handlerGoToLegancy = (page = false) => {
     window.location.href = `${config.static}/${page || ''}`
   }
   const _handlerLogout = () => {
     dispatch(logout())
+  }
+
+  const _onHandleError = e => console.log(e)
+
+  const _onSelectedAddess = obj => {
+    const { position, address: objAddress } = obj
+    if (position) {
+      setLatLng(position)
+    }
+    if (objAddress) {
+      setAddress(objAddress)
+    }
+  }
+
+  const _reset = () => {
+    setLatLng({})
+    setAddress('')
+  }
+
+  const _onSearch = () => {
+    history.push({
+      pathname: '/search',
+      search: `?lat=${latLng.lat}&lng=${latLng.lng}&location=${address}`
+    })
   }
 
   return (
@@ -78,6 +117,28 @@ const NavBar = () => {
         </Navbar.Brand>
       </Link>
       <Navbar.Toggle aria-controls="top-navbar-nav" />
+      {shownSearch && (
+        <SearchBar>
+          <AutoComplete
+            searchOptions={{
+              types: ['geocode']
+            }}
+            address={address}
+            onChangeAddress={setAddress}
+            onHandleError={_onHandleError}
+            onSelectedAddess={_onSelectedAddess}
+            disabled={latLng && (latLng.lat || latLng.lng)}
+            closeButton={latLng && (latLng.lat || latLng.lng)}
+            onClickCloseButton={_reset}
+            size="sm"
+            placeholder="Sydney, AU"
+            label={null}
+          />
+          <Button size="sm" onClick={_onSearch}>
+            Search
+          </Button>
+        </SearchBar>
+      )}
       <Navbar.Collapse className="justify-content-end" id="top-navbar-nav">
         <Nav style={{ alignItems: 'center' }}>
           <NavLinkStyled to="/listing">List Your Space</NavLinkStyled>
@@ -113,6 +174,11 @@ const NavBar = () => {
       </Navbar.Collapse>
     </Navbar>
   )
+}
+
+NavBar.propTypes = {
+  shownSearch: PropTypes.bool,
+  history: PropTypes.instanceOf(Object)
 }
 
 export default NavBar
