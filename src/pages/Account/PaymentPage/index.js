@@ -79,7 +79,7 @@ const PaymentPage = () => {
           <Title type="h3" title="Payment Preferences" />
         </Cell>
         <Cell width={4} middle justifySelf="end">
-          <Button size="sm" onClick={() => _addAccount()}>
+          <Button my="30px" size="sm" onClick={() => _addAccount()}>
             Add Account
           </Button>
         </Cell>
@@ -88,27 +88,27 @@ const PaymentPage = () => {
       {!details || !details.id ? (
         <BackgroundImage text="We didn't find any accounts :(" />
       ) : (
-          <ListGroup>
-            <ListHeader>
-              <Caption>First Name</Caption>
-              <Caption>BSB</Caption>
-              <Caption>Account</Caption>
-              <Options>
-                <Caption>Options</Caption>
-              </Options>
-            </ListHeader>
-            <ListItem>
-              <AccountName>{details.legal_entity.first_name}</AccountName>
-              <BSB>{details.external_accounts.data[0].routing_number}</BSB>
-              <AccountNumber>{details.external_accounts.data[0].last4}</AccountNumber>
-              <Options>
-                <a href="#" onClick={_handleRemoveAccount}>
-                  <Icon name="bin" width="25px" />
-                </a>
-              </Options>
-            </ListItem>
-          </ListGroup>
-        )}
+        <ListGroup>
+          <ListHeader>
+            <Caption>First Name</Caption>
+            <Caption>BSB</Caption>
+            <Caption>Account</Caption>
+            <Options>
+              <Caption>Options</Caption>
+            </Options>
+          </ListHeader>
+          <ListItem>
+            <AccountName>{details.legal_entity.first_name}</AccountName>
+            <BSB>{details.external_accounts.data[0].routing_number}</BSB>
+            <AccountNumber>{details.external_accounts.data[0].last4}</AccountNumber>
+            <Options>
+              <a href="#" onClick={_handleRemoveAccount}>
+                <Icon name="bin" width="25px" />
+              </a>
+            </Options>
+          </ListItem>
+        </ListGroup>
+      )}
     </Wrapper>
   )
 }

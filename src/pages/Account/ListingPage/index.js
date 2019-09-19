@@ -39,7 +39,11 @@ const ListingCard = (dispatch, item, index) => {
           subTitleMargin={0}
           type={'h6'}
           title={<Text width={{ _: '200px', medium: 'auto' }}>{item.title || ''}</Text>}
-          subtitle={<Text width={{ _: '200px', medium: 'auto' }}>{`${item.location.address1}, ${item.location.city} ${item.location.state}`}</Text>}
+          subtitle={
+            <Text
+              width={{ _: '200px', medium: 'auto' }}
+            >{`${item.location.address1}, ${item.location.city} ${item.location.state}`}</Text>
+          }
         />
         <Card.Horizontal.Price
           noMargin
@@ -58,7 +62,9 @@ const ListingCard = (dispatch, item, index) => {
           <Card.Horizontal.Dropdown.Item onClick={() => _handleEditRedirect(item.id)}>
             Edit
           </Card.Horizontal.Dropdown.Item>
-          <Card.Horizontal.Dropdown.Item onClick={() => _handleDelete(dispatch)(item.id)}>Delete</Card.Horizontal.Dropdown.Item>
+          <Card.Horizontal.Dropdown.Item onClick={() => _handleDelete(dispatch)(item.id)}>
+            Delete
+          </Card.Horizontal.Dropdown.Item>
         </Card.Horizontal.Dropdown.Menu>
       </Card.Horizontal.Dropdown>
       <Card.Horizontal.Footer>
@@ -111,14 +117,14 @@ const ListingPage = ({ ...props }) => {
   if (isLoading) return <Loader text="Loading listing process" />
 
   return (
-    <Wrapper>
+    <>
       <Helmet title="Your Listings - Spacenow" />
       <Grid column="12">
         <Cell width={6}>
           <Title type="h4" title="Your Listings" />
         </Cell>
         <Cell width={6} justifySelf="end" middle>
-          <Button size="sm" onClick={() => _addListing()}>
+          <Button my="30px" size="sm" onClick={() => _addListing()}>
             Add Listing
           </Button>
         </Cell>
@@ -127,11 +133,11 @@ const ListingPage = ({ ...props }) => {
       {!listings || listings.count === 0 ? (
         <BackgroundImage text="We didn't find any listings :(" />
       ) : (
-          <Grid columns={1} rowGap="30px">
-            {[].concat(listings.rows).map((item, index) => ListingCard(dispatch, item, index))}
-          </Grid>
-        )}
-    </Wrapper>
+        <Grid columns={1} rowGap="30px">
+          {[].concat(listings.rows).map((item, index) => ListingCard(dispatch, item, index))}
+        </Grid>
+      )}
+    </>
   )
 }
 

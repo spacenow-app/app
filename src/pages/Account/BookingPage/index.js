@@ -173,10 +173,15 @@ const BookingPage = ({ ...props }) => {
   const dispatch = useDispatch()
 
   const [userType, setUserType] = useState('guest')
-  
-  const { user: { id } } = useSelector(state => state.account.get)
-  
-  const { isLoading, get: { bookings } } = useSelector(state => state.account)
+
+  const {
+    user: { id }
+  } = useSelector(state => state.account.get)
+
+  const {
+    isLoading,
+    get: { bookings }
+  } = useSelector(state => state.account)
 
   useEffect(() => {
     const queryParams = new URLSearchParams(props.location.search)
@@ -205,7 +210,7 @@ const BookingPage = ({ ...props }) => {
           <Title type="h4" title="Your Bookings" />
         </Cell>
         <Cell width={6} middle justifySelf={'end'}>
-          <Dropdown alignRight size={'sm'}>
+          <Dropdown alignRight size={'sm'} style={{ margin: '30px 0' }}>
             <Dropdown.Toggle size="sm">
               <Text color="primary">User Type</Text>
             </Dropdown.Toggle>

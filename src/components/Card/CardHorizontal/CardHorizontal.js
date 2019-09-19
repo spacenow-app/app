@@ -13,35 +13,38 @@ const Wrapper = styled.div`
   display: grid;
   grid-template-columns: 250px auto auto;
   grid-template-rows: 1fr auto;
-  grid-template-areas: 
-    "image body body"
-    "image footer footer";
+  grid-template-areas:
+    'image body body'
+    'image footer footer';
   grid-column-gap: 20px;
   border-radius: 10px;
   cursor: pointer;
   overflow: hidden;
   max-height: 200px;
   box-shadow: rgb(203, 203, 203) 5px 5px 10px 0px;
-  transition: box-shadow ease .3s;
+  transition: box-shadow ease 0.3s;
   &&: hover {
     box-shadow: rgb(203, 203, 203) 10px 10px 20px 0px;
   }
 
-  @media(max-width: 576px) {
+  @media (max-width: 576px) {
     grid-template-columns: 1fr;
-    grid-template-areas: 
-      "image"
-      "body"
-      "footer";
+    grid-template-areas:
+      'image'
+      'body'
+      'footer';
     max-height: fit-content;
   }
-
-  `
+`
 
 const ImageStyled = styled(Image)`
   grid-area: image;
-  @media(max-width: 576px) {
+  @media (max-width: 576px) {
     width: 100%;
+
+    > svg {
+      width: 100%;
+    }
   }
 `
 
@@ -49,18 +52,15 @@ const BodyStyled = styled.div`
   grid-area: body;
   display: grid;
   padding: 20px 10px 0 10px;
-  
+
   grid-auto-flow: row;
 `
 
-const TitleStyled = styled(Title)`
-`
+const TitleStyled = styled(Title)``
 
-const PriceStyled = styled(Title)`
-`
+const PriceStyled = styled(Title)``
 
-const TagStyled = styled(Tag)`
-`
+const TagStyled = styled(Tag)``
 
 const OverlayTriggerStyled = styled(OverlayTrigger)`
   border-radius: 5px;
@@ -91,7 +91,7 @@ const FooterStyled = styled.div`
   grid-template-columns: max-content;
   grid-gap: inherit;
   width: 100%;
-  @media(max-width: 576px) {
+  @media (max-width: 576px) {
     grid-auto-flow: column;
     padding: 10px 20px 20px 10px;
   }
@@ -104,23 +104,25 @@ const DropdownStyled = styled(Dropdown)`
 
   &&& button {
     background: transparent;
-    border: 1px solid #6ADC91;
-    color: #6ADC91;
+    border: 1px solid #6adc91;
+    color: #6adc91;
     > span {
-      color: #6ADC91
+      color: #6adc91;
     }
   }
 
   &&&.show button {
     background: transparent;
-    border: 1px solid #6ADC91;
-    color: #6ADC91;
+    border: 1px solid #6adc91;
+    color: #6adc91;
     > span {
-      color: #6ADC91
+      color: #6adc91;
     }
   }
 
-  &&&:hover button, &&&:focus button, &&&:active button {
+  &&&:hover button,
+  &&&:focus button,
+  &&&:active button {
     background-color: transparent;
   }
 
@@ -129,15 +131,10 @@ const DropdownStyled = styled(Dropdown)`
   }
 `
 
-const ToolTipStyled = styled(Tooltip)`
-`
+const ToolTipStyled = styled(Tooltip)``
 
 const CardHorizontal = ({ ...props }) => {
-  return (
-    <Wrapper {...props}>
-      {props.children}
-    </Wrapper>
-  )
+  return <Wrapper {...props}>{props.children}</Wrapper>
 }
 
 CardHorizontal.Image = ImageStyled
