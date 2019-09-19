@@ -164,9 +164,9 @@ const CheckoutPage = ({ match, location, history, ...props }) => {
               <ListDates dates={reservation.reservations} />
             </>
           ) : (
-            // <BookingDates reservationData={[]} />
-            <></>
-          )}
+              // <BookingDates reservationData={[]} />
+              <></>
+            )}
 
           <TimeTable data={listing.accessDays.listingAccessHours} />
 
@@ -225,10 +225,10 @@ const CheckoutPage = ({ match, location, history, ...props }) => {
                         {card.isLoading ? (
                           <Loader icon width="20px" height="20px" />
                         ) : (
-                          <IconButton onClick={_handleRemoveCard(card)}>
-                            <Icon name="bin" style={{ fill: '#51C482' }} />
-                          </IconButton>
-                        )}
+                            <IconButton onClick={_handleRemoveCard(card)}>
+                              <Icon name="bin" style={{ fill: '#51C482' }} />
+                            </IconButton>
+                          )}
                       </td>
                     </tr>
                   ))}
@@ -236,8 +236,8 @@ const CheckoutPage = ({ match, location, history, ...props }) => {
               </Table>
             </>
           ) : (
-            <Text>You don't have any credit cards yet, please add one :)</Text>
-          )}
+              <Text>You don't have any credit cards yet, please add one :)</Text>
+            )}
 
           <Button size="sm" onClick={_addNewCard} isLoading={isCreating}>
             Add Card
@@ -288,7 +288,7 @@ const CheckoutPage = ({ match, location, history, ...props }) => {
               </Box>
             }
             footerComponent={
-              <Box display="grid" gridTemplateColumns="auto auto" bg="white" height="50px" p="15px" borderRadius="37px">
+              <Box display="grid" gridTemplateColumns="auto auto" bg="white" height="50px" p="15px" borderRadius="8px">
                 <Text>Total</Text>
                 <Text justifySelf="end" fontFamily="semiBold" color="primary">
                   {`${reservation.currency}$ ${reservation.totalPrice.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')}`}
