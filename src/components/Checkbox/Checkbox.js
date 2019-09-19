@@ -52,6 +52,9 @@ const LabelStyled = styled.span`
   color: #172439;
   font-size: 16px;
   margin: 0 8px;
+  display: block;
+  float: right;
+  width: 83%;
 
   @media only screen and (max-width: 600px) {
     font-size: 14px;
