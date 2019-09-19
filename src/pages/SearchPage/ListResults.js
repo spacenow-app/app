@@ -1,4 +1,4 @@
-import React, { memo } from 'react'
+import React, { memo, forwardRef } from 'react'
 import styled from 'styled-components'
 import { Box, Text, Icon, Tag, Avatar, Pagination } from 'components'
 import { toPlural } from 'utils/strings'
@@ -66,7 +66,8 @@ const ContainerPagination = styled.div`
   justify-content: center;
 `
 
-const ListResults = ({ history, markers, onHoverItem, pagination, onPageChanged, ...props }) => {
+const ListResults = forwardRef(({ history, markers, onHoverItem, pagination, onPageChanged, ...props }, ref) => {
+
   const _parseCategoryIconName = (name, isSub) => {
     const prefix = isSub ? 'sub-category-' : 'category-'
     return prefix + name.replace(/([A-Z])/g, g => `-${g[0].toLowerCase()}`)
@@ -139,7 +140,7 @@ const ListResults = ({ history, markers, onHoverItem, pagination, onPageChanged,
   }
 
   return (
-    <Wrapper>
+    <Wrapper ref={ref}>
       <ContainerList>
         {markers.map(item => {
           return (
@@ -200,7 +201,7 @@ const ListResults = ({ history, markers, onHoverItem, pagination, onPageChanged,
       </ContainerPagination>
     </Wrapper>
   )
-}
+})
 
 const comparisonFn = (prevProps, nextProps) => {
   return prevProps.markers === nextProps.markers

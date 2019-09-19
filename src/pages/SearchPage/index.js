@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useLayoutEffect, useEffect, useState, useRef } from 'react'
 import { useDispatch, shallowEqual, useSelector } from 'react-redux'
 import styled from 'styled-components'
 import { toast } from 'react-toastify'
@@ -130,6 +130,16 @@ const SearchPage = ({ history, location }) => {
   const lat = queryParams.get('lat') || '-33.8688197'
   const lng = queryParams.get('lng') || '151.2092955'
   const category = queryParams.get('category') || false
+  const refResults = useRef()
+
+  useLayoutEffect(() => {
+    window.addEventListener('wheel', _onHandleScroll, true);
+    return () => window.removeEventListener('wheel')
+  }, [])
+
+  const _onHandleScroll = (event) => {
+    event.deltaY > 0 ? refResults.current.scrollTop = refResults.current.scrollTop + event.deltaY : refResults.current.scrollTop = refResults.current.scrollTop + event.deltaY
+  };
 
   useEffect(() => {
     async function fetchData() {
@@ -609,6 +619,7 @@ const SearchPage = ({ history, location }) => {
       )}
       <ContainerResults>
         <ListResults
+          ref={refResults}
           markers={searchResults}
           onHoverItem={_toggleHover}
           history={history}
