@@ -25,7 +25,7 @@ const ContainerList = styled.div`
 `
 
 const CardContainer = styled.div`
-  height: 540px;
+  /* height: 540px; */
   background: #ffffff 0% 0% no-repeat padding-box;
   /* border: 1px solid #ececec; */
   box-shadow: 0 0 5px 1px #eee;
@@ -54,6 +54,10 @@ const CardImage = styled.img`
   border-top-right-radius: 6px;
   cursor: pointer;
   object-fit: cover;
+
+  @media (max-width: 945px) {
+    height: 200px;
+  }
 `
 const CardContent = styled.div`
   padding: 25px;
@@ -67,7 +71,6 @@ const ContainerPagination = styled.div`
 `
 
 const ListResults = forwardRef(({ history, markers, onHoverItem, pagination, onPageChanged, ...props }, ref) => {
-
   const _parseCategoryIconName = (name, isSub) => {
     const prefix = isSub ? 'sub-category-' : 'category-'
     return prefix + name.replace(/([A-Z])/g, g => `-${g[0].toLowerCase()}`)
