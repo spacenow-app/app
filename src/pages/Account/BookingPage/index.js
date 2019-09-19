@@ -5,7 +5,7 @@ import Helmet from 'react-helmet'
 import { onGetBookingsByUser } from 'redux/ducks/account'
 import { onDeclineBooking, onAcceptBooking, onAcceptDeclineByEmail } from 'redux/ducks/booking'
 import { TypesModal, openModal } from 'redux/ducks/modal'
-import { Card, Text, Icon, Loader, BackgroundImage, Grid, Cell, Title, Wrapper, Dropdown } from 'components'
+import { Card, Text, Icon, Loader, BackgroundImage, Grid, Cell, Title, Dropdown } from 'components'
 import { convertedDate } from 'utils/date'
 
 const _parseCategoryIconName = (name, isSub) => {
@@ -86,9 +86,9 @@ const BookingCard = (dispatch, item, index, userType) => {
           noMargin
           subTitleMargin={0}
           type="h6"
-          title={<Text>{item.listing.title || ''}</Text>}
+          title={<Text width="200px">{item.listing.title || ''}</Text>}
           subtitle={
-            <Text>{`${item.listing.location.address1}, ${item.listing.location.city} ${item.listing.location.state}`}</Text>
+            <Text width="220px">{`${item.listing.location.address1}, ${item.listing.location.city} ${item.listing.location.state}`}</Text>
           }
         />
         <Card.Horizontal.Price
@@ -203,7 +203,7 @@ const BookingPage = ({ ...props }) => {
   if (isLoading) return <Loader text="Loading bookings process" />
 
   return (
-    <Wrapper>
+    <>
       <Helmet title="Your Bookings - Spacenow" />
       <Grid column="12">
         <Cell width={6}>
@@ -229,7 +229,7 @@ const BookingPage = ({ ...props }) => {
           {[].concat(bookings.items).map((item, index) => BookingCard(dispatch, item, index, userType))}
         </Grid>
       )}
-    </Wrapper>
+    </>
   )
 }
 

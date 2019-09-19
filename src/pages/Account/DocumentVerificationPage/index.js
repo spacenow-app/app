@@ -4,19 +4,7 @@ import { useSelector, useDispatch } from 'react-redux'
 import Helmet from 'react-helmet'
 import styled from 'styled-components'
 import { onGetUserDocuments, onDeleteDocument, onUploadDocument } from 'redux/ducks/account'
-import {
-  Box,
-  Button,
-  Loader,
-  BackgroundImage,
-  Cell,
-  Title,
-  Image,
-  Wrapper,
-  Icon,
-  Document,
-  Text
-} from 'components'
+import { Box, Button, Loader, BackgroundImage, Cell, Title, Image, Wrapper, Icon, Document, Text } from 'components'
 
 const CadStyled = styled.div`
   display: grid;
@@ -40,7 +28,7 @@ const _handleOnDelete = dispatch => (userId, id) => {
 const DocumentCard = (dispatch, item, index) => {
   return (
     <CadStyled key={index}>
-      <Image src={item.fileName} type={item.fileType} width="100%" height="100%" />
+      <Image src={item.fileName} type={item.fileType} width="100%" />
       <Button
         icon={<Icon width="15px" fill="#ffffff" name="bin" />}
         style={{ width: '40px', height: '40px' }}
@@ -80,7 +68,12 @@ const DocumentVerificationPage = () => {
     <Wrapper>
       <Helmet title="Your Documents - Spacenow" />
 
-      <Box my={{ _: '20px', medium: '0' }} display="grid" gridTemplateColumns={{ _: '1fr', medium: '2fr 1fr' }} gridGap="20px">
+      <Box
+        my={{ _: '20px', medium: '0' }}
+        display="grid"
+        gridTemplateColumns={{ _: '1fr', medium: '2fr 1fr' }}
+        gridGap="20px"
+      >
         <Cell width={1}>
           <Title type="h4" title="Your Documents" noMargin />
         </Cell>
@@ -98,11 +91,11 @@ const DocumentVerificationPage = () => {
       {!documents || documents.count === 0 ? (
         <BackgroundImage text="We didn't find any documents :(" />
       ) : (
-          <Box display="grid" gridTemplateColumns={{ _: '1fr 1fr', medium: '1fr 1fr 1fr' }} gridGap="30px">
-            {[].concat(documents.rows).map((item, index) => DocumentCard(dispatch, item, index))}
-            <Document onDrop={_addDocument} />
-          </Box>
-        )}
+        <Box display="grid" gridTemplateColumns={{ _: '1fr 1fr', medium: '1fr 1fr 1fr' }} gridGap="30px">
+          {[].concat(documents.rows).map((item, index) => DocumentCard(dispatch, item, index))}
+          <Document onDrop={_addDocument} />
+        </Box>
+      )}
     </Wrapper>
   )
 }
