@@ -145,7 +145,7 @@ const ListResults = forwardRef(({ history, markers, onHoverItem, pagination, onP
         {markers.map(item => {
           return (
             <CardContainer key={item.id} onMouseEnter={() => onHoverItem(item)} onMouseLeave={() => onHoverItem(null)}>
-              <CardImage src={_getCoverPhoto(item)} onClick={() => history.push(`/space/${item.id}`)} />
+              <CardImage src={_getCoverPhoto(item)} onClick={() => window.open(`/space/${item.id}`)} />
               <CardContent>
                 <Box display="flex" justifyContent="start" mb="15px">
                   <Box>
@@ -165,7 +165,7 @@ const ListResults = forwardRef(({ history, markers, onHoverItem, pagination, onP
                     </Tag>
                   </Box>
                 </Box>
-                <CardTitle onClick={() => history.push(`/space/${item.id}`)}>{item.title}</CardTitle>
+                <CardTitle onClick={() => window.open(`/space/${item.id}`)}>{item.title}</CardTitle>
                 <Text display="block" fontFamily="regular" fontSize="14px" color="greyscale.1">
                   {`${item.location.address1}, ${item.location.city}`}
                 </Text>

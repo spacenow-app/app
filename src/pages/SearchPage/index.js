@@ -105,6 +105,7 @@ const cleanParameter = value => {
 
 const SearchPage = ({ history, location }) => {
   const dispatch = useDispatch()
+  const refResults = useRef()
 
   const queryParams = new URLSearchParams(location.search)
   const queryLat = queryParams.get('lat')
@@ -139,7 +140,7 @@ const SearchPage = ({ history, location }) => {
 
   useLayoutEffect(() => {
     window.addEventListener('wheel', _onHandleScroll, true);
-    return () => window.removeEventListener('wheel')
+    return () => window.removeEventListener('wheel', _onHandleScroll, true)
   }, [])
 
   const _onHandleScroll = (event) => {
