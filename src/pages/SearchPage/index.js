@@ -139,14 +139,16 @@ const SearchPage = ({ history, location }) => {
   const isLoading = useSelector(state => state.search.isLoading)
 
   useLayoutEffect(() => {
-    window.addEventListener('wheel', _onHandleScroll, true);
+    window.addEventListener('wheel', _onHandleScroll, true)
     return () => window.removeEventListener('wheel', _onHandleScroll, true)
   }, [])
 
-  const _onHandleScroll = (event) => {
-    event.deltaY > 0 ? refResults.current.scrollTop = refResults.current.scrollTop + event.deltaY : refResults.current.scrollTop = refResults.current.scrollTop + event.deltaY
-  };
-  
+  const _onHandleScroll = event => {
+    event.deltaY > 0
+      ? (refResults.current.scrollTop = refResults.current.scrollTop + event.deltaY)
+      : (refResults.current.scrollTop = refResults.current.scrollTop + event.deltaY)
+  }
+
   useEffect(() => {
     async function fetchData() {
       if (queryLat && queryLng && queryCategory) {
@@ -319,14 +321,19 @@ const SearchPage = ({ history, location }) => {
               <Popper placement="top-end" modifiers={modifiers}>
                 {({ ref, style, placement, arrowProps }) => {
                   return (
-                    <div ref={ref} style={{ ...style, zIndex: 5000000 }} data-placement={placement}>
+                    <Box
+                      ref={ref}
+                      style={{ ...style, zIndex: 5000000 }}
+                      width={{ _: '90vw', small: 'auto' }}
+                      data-placement={placement}
+                    >
                       <div ref={arrowProps.ref} style={arrowProps.style} />
                       <Box
                         borderRadius="6px"
                         bg="white"
                         border="1px solid #cbcbcb"
                         padding="30px"
-                        margin="10px"
+                        marginTop="10px"
                         zIndex="2000001"
                       >
                         <div>
@@ -400,7 +407,7 @@ const SearchPage = ({ history, location }) => {
                           </Button>
                         </Box>
                       </Box>
-                    </div>
+                    </Box>
                   )
                 }}
               </Popper>
@@ -421,14 +428,19 @@ const SearchPage = ({ history, location }) => {
               <Popper placement="top-end" modifiers={modifiers}>
                 {({ ref, style, placement, arrowProps }) => {
                   return (
-                    <div ref={ref} style={{ ...style, zIndex: 5000000 }} data-placement={placement}>
+                    <Box
+                      ref={ref}
+                      style={{ ...style, zIndex: 5000000 }}
+                      width={{ _: '90vw', small: 'auto' }}
+                      data-placement={placement}
+                    >
                       <div ref={arrowProps.ref} style={arrowProps.style} />
                       <Box
                         borderRadius="6px"
                         bg="white"
                         border="1px solid #cbcbcb"
                         padding="30px"
-                        margin="10px"
+                        marginTop="10px"
                         zIndex="2000001"
                       >
                         <div>
@@ -482,7 +494,7 @@ const SearchPage = ({ history, location }) => {
                           </Button>
                         </Box>
                       </Box>
-                    </div>
+                    </Box>
                   )
                 }}
               </Popper>
@@ -503,14 +515,19 @@ const SearchPage = ({ history, location }) => {
               <Popper placement="bottom-end" modifiers={modifiers}>
                 {({ ref, style, placement, arrowProps }) => {
                   return (
-                    <div ref={ref} style={{ ...style, zIndex: 5000000 }} data-placement={placement}>
+                    <Box
+                      ref={ref}
+                      style={{ ...style, zIndex: 5000000 }}
+                      width={{ _: '90vw', small: 'auto' }}
+                      data-placement={placement}
+                    >
                       <div ref={arrowProps.ref} style={arrowProps.style} />
                       <Box
                         borderRadius="6px"
                         bg="white"
                         border="1px solid #cbcbcb"
                         padding="30px"
-                        margin="10px"
+                        marginTop="10px"
                         zIndex="2000001"
                         width="400px"
                       >
@@ -545,7 +562,7 @@ const SearchPage = ({ history, location }) => {
                           </Button>
                         </Box>
                       </Box>
-                    </div>
+                    </Box>
                   )
                 }}
               </Popper>
@@ -566,14 +583,19 @@ const SearchPage = ({ history, location }) => {
               <Popper placement="bottom-end" modifiers={modifiers}>
                 {({ ref, style, placement, arrowProps }) => {
                   return (
-                    <div ref={ref} style={{ ...style, zIndex: 5000000 }} data-placement={placement}>
+                    <Box
+                      ref={ref}
+                      style={{ ...style, zIndex: 5000000 }}
+                      width={{ _: '90vw', small: 'auto' }}
+                      data-placement={placement}
+                    >
                       <div ref={arrowProps.ref} style={arrowProps.style} />
                       <Box
                         borderRadius="6px"
                         bg="white"
                         border="1px solid #cbcbcb"
                         padding="30px"
-                        margin="10px"
+                        marginTop="10px"
                         zIndex="2000001"
                       >
                         <Text display="block">Book a space without waiting for host approval</Text>
@@ -596,7 +618,7 @@ const SearchPage = ({ history, location }) => {
                           </Button>
                         </Box>
                       </Box>
-                    </div>
+                    </Box>
                   )
                 }}
               </Popper>
