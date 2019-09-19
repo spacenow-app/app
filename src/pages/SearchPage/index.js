@@ -98,14 +98,25 @@ const ItemSwitchStyled = styled.div`
   margin-bottom: 35px;
 `
 
+const cleanParameter = value => {
+  if (!value) return undefined
+  return value.replace('+', ' ')
+}
+
 const SearchPage = ({ history, location }) => {
   const dispatch = useDispatch()
+
+  const queryParams = new URLSearchParams(location.search)
+  const queryLat = queryParams.get('lat')
+  const queryLng = queryParams.get('lng')
+  const queryCategory = queryParams.get('category')
+  const queryLocation = cleanParameter(queryParams.get('location'))
 
   const [selectedSpace, setSelectedSpace] = useState(null)
   const [shouldShowFilter, setShouldShowFilter] = useState(false)
   const [markers, setMarkers] = useState([])
-  const [address, setAddress] = useState('Sydney, Austrália')
-  const [latLng, setLatLng] = useState({ lat: -33.8688197, lng: 151.2092955 })
+  const [address, setAddress] = useState(queryLocation || 'Sydney, AU')
+  const [latLng, setLatLng] = useState({ lat: queryLat || -33.8688197, lng: queryLng || 151.2092955 })
   const [filterPrice, setFilterPrice] = useState([0, 0])
   const [filterInstantBooking, setFilterInstantBooking] = useState(false)
   const [showFilterBar, setShowFilterBar] = useState(false)
@@ -116,21 +127,15 @@ const SearchPage = ({ history, location }) => {
     monthly: false
   })
   const [filterCategory, setFilterCategory] = useState({
-    workspace: false,
-    meetingSpace: false,
-    eventSpace: false,
-    parking: false,
-    storage: false,
-    retailAndHospitality: false
+    workspace: /workspace/i.test(queryCategory),
+    meetingSpace: /meetingSpace/i.test(queryCategory),
+    eventSpace: /eventSpace/i.test(queryCategory),
+    parking: /parking/i.test(queryCategory),
+    storage: /storage/i.test(queryCategory),
+    retailAndHospitality: /retailAndHospitality/i.test(queryCategory)
   })
   const { searchKey, result: searchResults, pagination } = useSelector(state => state.search.get, shallowEqual)
   const isLoading = useSelector(state => state.search.isLoading)
-
-  const queryParams = new URLSearchParams(location.search)
-  const lat = queryParams.get('lat') || '-33.8688197'
-  const lng = queryParams.get('lng') || '151.2092955'
-  const category = queryParams.get('category') || false
-  const refResults = useRef()
 
   useLayoutEffect(() => {
     window.addEventListener('wheel', _onHandleScroll, true);
@@ -140,29 +145,17 @@ const SearchPage = ({ history, location }) => {
   const _onHandleScroll = (event) => {
     event.deltaY > 0 ? refResults.current.scrollTop = refResults.current.scrollTop + event.deltaY : refResults.current.scrollTop = refResults.current.scrollTop + event.deltaY
   };
-
+  
   useEffect(() => {
     async function fetchData() {
-      await dispatch(onSearch(lat, lng, category))
-    }
-    fetchData()
-  }, [dispatch, category, lat, lng])
-
-  useEffect(() => {
-    if (lat && lng) {
-      setLatLng({ lat, lng })
-      if (searchResults && searchResults.length > 0) {
-        const firstLocation = searchResults[0].location
-        setAddress(`${firstLocation.city}, ${firstLocation.country}`)
+      if (queryLat && queryLng && queryCategory) {
+        await dispatch(onSearch(queryLat, queryLng, queryCategory))
+      } else {
+        await dispatch(onSearch(latLng.lat, latLng.lng))
       }
     }
-  }, [lat, lng, searchResults])
-
-  useEffect(() => {
-    if (category) {
-      setFilterCategory({ ...filterCategory, [category]: true })
-    }
-  }, [filterCategory, category])
+    fetchData()
+  }, [dispatch, queryLat, queryLng, queryCategory, latLng])
 
   useEffect(() => {
     setMarkers(
@@ -172,7 +165,7 @@ const SearchPage = ({ history, location }) => {
         lng: +item.location.lng,
         photo: _getCoverPhoto(item),
         title: item.title,
-        price: `${item.listingData.currency}$${item.listingData.basePrice}`,
+        price: `${item.listingData.currency || 'AUD'}$${item.listingData.basePrice}`,
         period: item.bookingPeriod,
         host: {
           photo: (item.host.profile && item.host.profile.picture) || '',
@@ -193,7 +186,7 @@ const SearchPage = ({ history, location }) => {
       lng: +object.location.lng,
       photo: _getCoverPhoto(object),
       title: object.title,
-      price: `${object.listingData.currency}$${object.listingData.basePrice}`,
+      price: `${object.listingData.currency || 'AUD'}$${object.listingData.basePrice}`,
       period: object.bookingPeriod,
       host: {
         photo: (object.host.profile && object.host.profile.picture) || '',
@@ -297,7 +290,7 @@ const SearchPage = ({ history, location }) => {
             closeButton={latLng && (latLng.lat || latLng.lng)}
             onClickCloseButton={_reset}
             size="sm"
-            placeholder="Sydney, Australia"
+            placeholder="Sydney, AU"
             label={null}
           />
           <Button size="sm" onClick={() => _onSearch(latLng.lat, latLng.lng)}>
@@ -397,9 +390,14 @@ const SearchPage = ({ history, location }) => {
                             I’m looking to rent a place for business
                           </Text>
                         </div>
-                        <Button size="sm" outline onClick={_onQueryFilter}>
-                          Save
-                        </Button>
+                        <Box display="flex" justifyContent="space-between">
+                          <Button size="sm" outline onClick={_onQueryFilter}>
+                            Update Search
+                          </Button>
+                          <Button size="sm" outline onClick={() => setShouldShowFilter(false)}>
+                            Close
+                          </Button>
+                        </Box>
                       </Box>
                     </div>
                   )
@@ -474,9 +472,14 @@ const SearchPage = ({ history, location }) => {
                             I want to find space on a monthly basis
                           </Text>
                         </div>
-                        <Button size="sm" outline onClick={_onQueryFilter}>
-                          Save
-                        </Button>
+                        <Box display="flex" justifyContent="space-between">
+                          <Button size="sm" outline onClick={_onQueryFilter}>
+                            Update Search
+                          </Button>
+                          <Button size="sm" outline onClick={() => setShouldShowFilter(false)}>
+                            Close
+                          </Button>
+                        </Box>
                       </Box>
                     </div>
                   )
@@ -532,9 +535,12 @@ const SearchPage = ({ history, location }) => {
                             onChange={e => _onChangeInputPrice(e, 'max')}
                           />
                         </Box>
-                        <Box mt="30px">
+                        <Box mt="30px" display="flex" justifyContent="space-between">
                           <Button size="sm" outline onClick={_onQueryFilter}>
-                            Save
+                            Update Search
+                          </Button>
+                          <Button size="sm" outline onClick={() => setShouldShowFilter(false)}>
+                            Close
                           </Button>
                         </Box>
                       </Box>
@@ -550,7 +556,7 @@ const SearchPage = ({ history, location }) => {
               {({ ref }) => {
                 return (
                   <Button outline size="sm" ref={ref} onClick={() => setShouldShowFilter('instantBooking')}>
-                    Instant Booking
+                    Instant
                   </Button>
                 )
               }}
@@ -580,9 +586,14 @@ const SearchPage = ({ history, location }) => {
                             handleCheckboxChange={(e, { checked }) => setFilterInstantBooking(checked)}
                           />
                         </ItemSwitchStyled>
-                        <Button size="sm" outline onClick={_onQueryFilter}>
-                          Save
-                        </Button>
+                        <Box display="flex" justifyContent="space-between">
+                          <Button size="sm" outline onClick={_onQueryFilter}>
+                            Update Search
+                          </Button>
+                          <Button size="sm" outline onClick={() => setShouldShowFilter(false)}>
+                            Close
+                          </Button>
+                        </Box>
                       </Box>
                     </div>
                   )
@@ -597,7 +608,7 @@ const SearchPage = ({ history, location }) => {
             type="h5"
             title={
               <Text>
-                Showing resuls around <Text color="primary">{address}</Text>
+                Showing results around <Text color="primary">{address}</Text>
               </Text>
             }
           />
@@ -613,6 +624,7 @@ const SearchPage = ({ history, location }) => {
           left="0"
           right="0"
           position="fixed"
+          onClick={() => setShouldShowFilter(false)}
         >
           {isLoading && <Loader text="Searching" />}
         </Box>

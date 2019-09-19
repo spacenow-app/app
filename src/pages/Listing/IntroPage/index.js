@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import styled from 'styled-components'
 import Helmet from 'react-helmet'
 import { Wrapper, Card, Title } from 'components'
+import { config } from 'variables'
 // import FormContactUs from './FormContactUs'
 
 const WrapperStyled = styled.div`
@@ -17,7 +18,7 @@ const WrapperStyled = styled.div`
 class IntroPage extends Component {
   _goTo = type => {
     if (type === 'multiple') {
-      window.location.href = `/become-a-host`
+      window.location.href = `${config.static}/contact-us`
       return
     }
     this.props.history.push('/listing/location')
@@ -53,7 +54,7 @@ class IntroPage extends Component {
             title="Multiple spaces"
             description="If you're listing more than one or 2 spaces, please contact us and we will be happy to help get everything set up on your behalf – get ready for the smoothest on boarding ever."
             buttonText="Contact Us"
-            buttonHandleClick={() => this._openModal('multiple')}
+            buttonHandleClick={() => this._goTo('multiple')}
           />
         </WrapperStyled>
       </Wrapper>

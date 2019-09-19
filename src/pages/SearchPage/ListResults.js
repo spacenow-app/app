@@ -180,7 +180,7 @@ const ListResults = forwardRef(({ history, markers, onHoverItem, pagination, onP
                   <Text fontSize="14px">
                     From:{' '}
                     <Text fontSize="16px" fontFamily="bold">
-                      {`${item.listingData.currency}$${item.listingData.basePrice}`}
+                      {`${item.listingData.currency || 'AUD'}$${item.listingData.basePrice}`}
                     </Text>{' '}
                     {item.bookingPeriod}
                   </Text>

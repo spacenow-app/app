@@ -7,7 +7,6 @@ import { useSelector, useDispatch } from 'react-redux'
 import fromUnixTime from 'date-fns/fromUnixTime'
 import format from 'date-fns/format'
 import addMinutes from 'date-fns/addMinutes'
-import { toPlural } from 'utils/strings'
 import { convertedDate } from 'utils/date'
 import { TypesModal, openModal } from 'redux/ducks/modal'
 import { getUserCards, createUserCard, deleteUserCard, pay } from 'redux/ducks/payment'
@@ -143,7 +142,7 @@ const CheckoutPage = ({ match, location, history, ...props }) => {
     history.replace('/')
     return null
   }
-  console.log(toPlural(_spelling(reservation.listing.bookingPeriod), reservation.reservations.length))
+
   return (
     <Wrapper>
       <Helmet title="Checkout - Spacenow" />
@@ -298,7 +297,7 @@ const CheckoutPage = ({ match, location, history, ...props }) => {
             }
           />
           <Text display="block" textAlign="center" mt="15px">
-            Cancellation Policy <Text fontFamily="semiBold">Flexible</Text>
+            No Cancellation
           </Text>
         </Cell>
       </GridStyled>

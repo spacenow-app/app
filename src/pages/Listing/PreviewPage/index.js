@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import PropTypes from 'prop-types'
 import Helmet from 'react-helmet'
 import styled from 'styled-components'
@@ -40,6 +40,12 @@ const ImageStyled = styled.img`
   width: 100%;
 `
 
+const TitlePrice = styled(Title)`
+  @media only screen and (max-width: 991px) {
+    float: left !important;
+  }
+`
+
 const PreviewPage = ({ match, location, ...props }) => {
   const dispatch = useDispatch()
 
@@ -55,6 +61,8 @@ const PreviewPage = ({ match, location, ...props }) => {
     }
   } = useSelector(state => state.account.get)
 
+  const [imageHeight, setImageHeight] = useState(500)
+
   useEffect(() => {
     dispatch(onGetListingById(match.params.id, user.id))
   }, [dispatch, match.params.id, user])
@@ -68,11 +76,17 @@ const PreviewPage = ({ match, location, ...props }) => {
     }
   }, [dispatch, listing])
 
+  useEffect(() => {
+    if (window.innerWidth < 768) {
+      setImageHeight(270)
+    }
+  }, [])
+
   const _getAddress = address => {
     const { address1 = '', city = '', zipcode = '', state = '', country = '' } = address
     const convertedAddress = `${address1 ? `${address1}, ` : ''} ${city ? `${city}, ` : ''} ${
       zipcode ? `${zipcode}, ` : ''
-      } ${state ? `${state}, ` : ''} ${country ? `${country}` : ''}`
+    } ${state ? `${state}, ` : ''} ${country ? `${country}` : ''}`
     return convertedAddress.replace(/\0.*$/g, '')
   }
 
@@ -157,7 +171,7 @@ const PreviewPage = ({ match, location, ...props }) => {
             handlerTitle: 'Profile'
           },
           onConfirm: () => {
-            window.location.href = `/dashboard/profile`
+            window.location.href = `/account/profile`
           }
         })
       )
@@ -175,7 +189,7 @@ const PreviewPage = ({ match, location, ...props }) => {
   }
 
   if (isPublished) {
-    window.location.href = `/dashboard`
+    window.location.href = `/account/listing`
     return null
   }
 
@@ -189,7 +203,7 @@ const PreviewPage = ({ match, location, ...props }) => {
           handlerTitle: 'OK'
         },
         onConfirm: () => {
-          window.location.href = `/dashboard`
+          window.location.href = `/account/listing`
         }
       })
     )
@@ -199,13 +213,8 @@ const PreviewPage = ({ match, location, ...props }) => {
     <Wrapper>
       <Helmet title="Listing Preview - Spacenow" />
       <Title type="h2" title="Just one more thing, review your space!" />
-      <Carousel photos={_convertedArrayPhotos(arrayPhotos)} />
-      <Box
-        my={{ _: '20px', medium: '50px' }}
-        display="grid"
-        gridTemplateColumns={{ _: '1fr', medium: '2fr 1fr' }}
-        gridGap={'20px'}
-      >
+      <Carousel photos={_convertedArrayPhotos(arrayPhotos)} height={imageHeight} />
+      <Box my="15px" display="grid" gridTemplateColumns={{ _: '1fr', medium: '2fr 1fr' }} gridGap={'20px'}>
         <Box display="grid" gridAutoColumns={{ _: 'max-content' }} gridAutoFlow={{ _: 'column' }} gridGap={'20px'}>
           <Tag
             icon={
@@ -231,12 +240,7 @@ const PreviewPage = ({ match, location, ...props }) => {
           </Tag>
         </Box>
       </Box>
-      <Box
-        my={{ _: '20px', medium: '50px' }}
-        display="grid"
-        gridTemplateColumns={{ _: '1fr', medium: '2fr 1fr' }}
-        gridGap={'20px'}
-      >
+      <Box my="30px" display="grid" gridTemplateColumns={{ _: '1fr', medium: '2fr 1fr' }} gridGap={'20px'}>
         <Title
           type="h3"
           title={listing.title ? listing.title : 'Input Title'}
@@ -245,17 +249,16 @@ const PreviewPage = ({ match, location, ...props }) => {
           subTitleSize={18}
           noMargin
         />
-        <Title
+        <TitlePrice
           type="h4"
           title={`${listing.listingData.currency}$ ${Math.round((listing.listingData.basePrice || 0) * 100) / 100} ${
             listing.bookingPeriod
-            }`}
+          }`}
           color={listing.listingData.basePrice === 0 || listing.listingData.basePrice === null ? '#E05252' : null}
           noMargin
           right
         />
       </Box>
-
 
       {/* <Grid columns={5}>
         <Cell width={3}>
@@ -281,7 +284,7 @@ const PreviewPage = ({ match, location, ...props }) => {
           />
         </Cell>
       </Grid> */}
-      <Box my={{ _: '50px', medium: '100px' }} display="grid" gridTemplateColumns={{ _: '1fr', medium: '1fr' }}>
+      <Box my="30px" display="grid" gridTemplateColumns={{ _: '1fr', medium: '1fr' }}>
         <Title type="h4" title="Highlights" />
         <Box display="grid" gridTemplateColumns={{ _: '1fr 1fr', medium: '1fr 1fr 1fr 1fr 1fr' }} gridGap={'20px'}>
           <Highlights
@@ -299,8 +302,8 @@ const PreviewPage = ({ match, location, ...props }) => {
         </Box>
       </Box>
 
-      <Box my={{ _: '50px', medium: '100px' }}>
-        <Title type="h4" title="Access Information" />
+      <Box my="50px">
+        <Title type="h4" title="Access Type" />
         <Box
           display="grid"
           border="1px solid"
@@ -330,15 +333,15 @@ const PreviewPage = ({ match, location, ...props }) => {
         </Box>
       </Box>
 
-      <Box my={{ _: '50px', medium: '100px' }}>
+      <Box my="50px">
         <Title type="h4" title="Description" color={!listing.listingData.description ? '#E05252' : null} />
         <p>{listing.listingData.description}</p>
       </Box>
 
       {listing.amenities.length > 0 && (
-        <Box my={{ _: '50px', medium: '100px' }}>
+        <Box my="50px">
           <Title type="h4" title="Amenities" />
-          <Box display="grid" gridTemplateColumns="1fr 1fr 1fr" gridRowGap="20px">
+          <Box display="grid" gridTemplateColumns={{ _: '1fr', medium: '1fr 1fr 1fr' }} gridRowGap="20px">
             {listing.amenities.map(item => {
               return (
                 <Box key={item.id} display="grid" gridTemplateColumns="auto 1fr" gridColumnGap="20px">
@@ -359,28 +362,28 @@ const PreviewPage = ({ match, location, ...props }) => {
       )}
 
       {listing.rules.length > 0 && (
-        <Box my={{ _: '50px', medium: '100px' }}>
+        <Box my="50px">
           <Title type="h4" title="Space Rules" />
-          <Box display="grid" gridTemplateColumns={{ _: "1fr", medium: "1fr 1fr 1fr" }} gridRowGap="20px">
+          <Box display="grid" gridTemplateColumns={{ _: '1fr', medium: '1fr 1fr 1fr' }} gridRowGap="20px">
             {isLoadingRules ? (
               <Loader />
             ) : (
-                arrayRules.map(item => (
-                  <Checkbox
-                    disabled
-                    key={item.id}
-                    label={item.itemName}
-                    name="rules"
-                    value={item.id}
-                    checked={listing.rules.some(rule => rule.listSettingsId === item.id)}
-                  />
-                ))
-              )}
+              arrayRules.map(item => (
+                <Checkbox
+                  disabled
+                  key={item.id}
+                  label={item.itemName}
+                  name="rules"
+                  value={item.id}
+                  checked={listing.rules.some(rule => rule.listSettingsId === item.id)}
+                />
+              ))
+            )}
           </Box>
         </Box>
       )}
 
-      <Box my={{ _: '50px', medium: '100px' }}>
+      <Box my="50px">
         <Title
           type="h4"
           title="Availability"
@@ -389,7 +392,7 @@ const PreviewPage = ({ match, location, ...props }) => {
         <TimeTable data={listing.accessDays.listingAccessHours} error={_getWeekName(listing.accessDays) === 'Closed'} />
       </Box>
 
-      <Box my={{ _: '50px', medium: '100px' }}>
+      <Box mt="50px">
         <Title type="h4" title="Location" />
         <Map position={{ lat: Number(listing.location.lat), lng: Number(listing.location.lng) }} />
       </Box>

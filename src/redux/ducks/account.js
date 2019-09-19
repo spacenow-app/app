@@ -1,6 +1,6 @@
 /* eslint-disable no-console */
 import { gql } from 'apollo-boost'
-import { getClientWithAuth, getClient } from 'graphql/apolloClient'
+import { getClientWithAuth } from 'graphql/apolloClient'
 
 import { toast } from 'react-toastify'
 
@@ -67,8 +67,8 @@ const initialState = {
 
 // GraphQL
 const queryGetProfile = gql`
-  query getProfile($id: String!) {
-    getUserLegacyById(id: $id) {
+  query getProfile($id: String!, $token: String) {
+    getUserLegacyById(id: $id, token: $token) {
       id
       email
       emailConfirmed
@@ -436,17 +436,17 @@ export default function reducer(state = initialState, action) {
   }
 }
 
-export const onGetProfile = id => async dispatch => {
+export const onGetProfile = (id, token) => async dispatch => {
   dispatch({ type: Types.ACC_GET_PROFILE })
   try {
     const { data } = await getClientWithAuth(dispatch).query({
       query: queryGetProfile,
-      variables: { id },
+      variables: { id, token },
       fetchPolicy: 'network-only'
     })
     dispatch({ type: Types.ACC_GET_PROFILE_SUCCESS, payload: data.getUserLegacyById })
   } catch (error) {
-    console.log(error)
+    console.error(error)
     dispatch({ type: Types.ACC_GET_PROFILE_ERROR, payload: error })
   }
 }
@@ -461,7 +461,7 @@ export const onGetBookingsByUser = (userId, userType, status, period) => async d
     })
     dispatch({ type: Types.ACC_GET_ALL_BOOKINGS_BY_USER_SUCCESS, payload: data.getAllBookingsByUser })
   } catch (error) {
-    console.log(error)
+    console.error(error)
     dispatch({ type: Types.ACC_GET_ALL_BOOKINGS_BY_USER_ERROR, payload: error })
   }
 }
@@ -476,7 +476,7 @@ export const onGetListingsByUser = (userId, status) => async dispatch => {
     })
     dispatch({ type: Types.ACC_GET_ALL_LISTINGS_BY_USER_SUCCESS, payload: data.getAllListingsByUser })
   } catch (error) {
-    console.log(error)
+    console.error(error)
     dispatch({ type: Types.ACC_GET_ALL_LISTINGS_BY_USER_ERROR, payload: error })
   }
 }
@@ -491,7 +491,7 @@ export const onGetUserDocuments = userId => async dispatch => {
     })
     dispatch({ type: Types.ACC_GET_DOCUMENTS_SUCCESS, payload: data.getUserDocuments })
   } catch (error) {
-    console.log(error)
+    console.error(error)
     dispatch({ type: Types.ACC_GET_DOCUMENTS_ERROR, payload: error })
   }
 }
@@ -506,7 +506,7 @@ export const onDeleteDocument = (userId, id) => async dispatch => {
     toast.success('Document deleted successfully')
     dispatch({ type: Types.ACC_DELETE_DOCUMENT_SUCCESS, payload: { id } })
   } catch (error) {
-    console.log(error)
+    console.error(error)
     dispatch({ type: Types.ACC_DELETE_DOCUMENT_ERROR, payload: error })
   }
 }
@@ -589,11 +589,11 @@ export const onUploadDocument = (userId, file) => async dispatch => {
 export const onResendLink = email => async dispatch => {
   dispatch({ type: Types.ACC_GET_RESEND_LINK })
   try {
-    await getClient().mutate({
+    await getClientWithAuth(dispatch).mutate({
       variables: { email },
       mutation: mutationRequestResendEmail
     })
-    toast.success('Document uploaded successfully')
+    toast.success('Email verification sent successfully')
     dispatch({ type: Types.ACC_GET_RESEND_LINK_SUCCESS })
   } catch (error) {
     toast.error(error.message)

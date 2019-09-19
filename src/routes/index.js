@@ -41,7 +41,7 @@ const Routes = props => {
         <Switch>
           <PublicRoute
             path="/404"
-            handlerCheckAuthentication={() => { }}
+            handlerCheckAuthentication={() => {}}
             isAuthenticated={null}
             component={otherProps => (
               <>
@@ -53,13 +53,14 @@ const Routes = props => {
           <PublicRoute
             {...props}
             path="/auth"
-            handlerCheckAuthentication={() => { }}
+            handlerCheckAuthentication={() => {}}
             isAuthenticated={isAuthenticated}
             component={Authentication}
+            redirectToReferrer={redirectToReferrer}
           />
-          <PublicRoute {...props} path="/lp" handlerCheckAuthentication={() => { }} component={LandingPages} />
-          <PublicRoute {...props} path="/space" handlerCheckAuthentication={() => { }} component={Space} />
-          <PublicRoute {...props} path="/search" handlerCheckAuthentication={() => { }} component={SearchPage} />
+          <PublicRoute {...props} path="/lp" handlerCheckAuthentication={() => {}} component={LandingPages} />
+          <PublicRoute {...props} path="/space" handlerCheckAuthentication={() => {}} component={Space} />
+          <PublicRoute {...props} path="/search" handlerCheckAuthentication={() => {}} component={SearchPage} />
           <Redirect from="/account/dashboard" to="/account/profile" />
           <PrivateRoute
             {...props}
@@ -75,7 +76,7 @@ const Routes = props => {
                     <Route
                       {...otherProps}
                       exact
-                      path={otherProps.match.path}
+                      path={`${otherProps.match.path}/`}
                       isAuthenticated={isAuthenticated}
                       component={HomePage}
                     />

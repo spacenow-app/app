@@ -5,7 +5,7 @@ import { Icon } from 'components'
 const List = styled.div`
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(150px, 130px));
-  grid-column-gap: 10px;
+  grid-gap: 10px;
   justify-content: ${props => (props.spaceBetween ? 'space-between' : 'center')};
 
   ${props =>

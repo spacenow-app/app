@@ -6,12 +6,26 @@ import { useDispatch, useSelector } from 'react-redux'
 import styled from 'styled-components'
 import { isAfter, isBefore, isSameDay } from 'date-fns'
 import update from 'immutability-helper'
+import _ from 'lodash'
 
 import { nanDate, weekTimeTable } from 'variables'
 
 import { onGetAvailabilitiesByListingId, onGetAllHolidays } from 'redux/ducks/listing'
+import { onUpdate } from 'redux/ducks/listing'
 
-import { Title, Grid, Cell, TimeTable, Calendar, Switch, StepButtons, ToolTip, Box } from 'components'
+import {
+  Title,
+  Grid,
+  Cell,
+  TimeTable,
+  // Calendar,
+  Switch,
+  StepButtons,
+  ToolTip,
+  Box,
+  DatePicker,
+  ListDates
+} from 'components'
 
 const SwitchStyled = styled.div`
   justify-self: end;
@@ -38,7 +52,7 @@ const TIME_TABLE_INIT_STATE = {
   listingAccessHours: []
 }
 
-const AvailabilityTab = ({ listing, history, setFatherValues }) => {
+const AvailabilityTab = ({ match, listing, history, setFatherValues }) => {
   const dispatch = useDispatch()
 
   const [timetable, setTimeTable] = useState([])
@@ -97,7 +111,7 @@ const AvailabilityTab = ({ listing, history, setFatherValues }) => {
   }, [listing])
 
   useEffect(() => {
-    dispatch(onGetAvailabilitiesByListingId(listing))
+    dispatch(onGetAvailabilitiesByListingId(listing.id))
     dispatch(onGetAllHolidays())
   }, [dispatch, listing])
 
@@ -188,9 +202,9 @@ const AvailabilityTab = ({ listing, history, setFatherValues }) => {
   }
 
   const _timeToString = time => {
-    const h = _zero(time.getHours())
-    const m = _zero(time.getMinutes())
-    const s = _zero(time.getSeconds())
+    const h = _zero(new Date(time).getHours())
+    const m = _zero(new Date(time).getMinutes())
+    const s = _zero(new Date(time).getSeconds())
     return `${h}:${m}:${s}`
   }
 
@@ -235,12 +249,14 @@ const AvailabilityTab = ({ listing, history, setFatherValues }) => {
     } else {
       copySelectedDates.push(day)
     }
-    setSelectedDates(copySelectedDates)
+    const arraySorted = _.sortBy([...copySelectedDates], item => item)
+    setSelectedDates(arraySorted)
   }
 
-  const _onChangeHoliday = (_, { checked, name }) => {
+  const _onChangeHoliday = (i, { checked, name }) => {
     const newDate = new Date(name)
     const copyHolidays = [...holidays]
+
     const copySelectedDays = [...selectedDates]
     if (!checked) {
       const selectedIndex = copyHolidays.findIndex(selectedDay => isSameDay(selectedDay, newDate))
@@ -251,26 +267,55 @@ const AvailabilityTab = ({ listing, history, setFatherValues }) => {
       copyHolidays.push(newDate)
       copySelectedDays.push(newDate)
     }
+    const arraySorted = _.sortBy([...copySelectedDays], item => item)
     setHolidays(copyHolidays)
-    setSelectedDates(copySelectedDays)
+    setSelectedDates(arraySorted)
   }
 
-  const _onChangeHolidayBlockAll = (_, { checked }) => {
+  const _onChangeHolidayBlockAll = (i, { checked }) => {
     if (checked) {
-      const newarray = holidaysArray.map(el => el.originalDate)
+      const newarray = holidaysArray
+        .filter(el => {
+          if (isAfter(new Date(), new Date(el.date))) {
+            return false
+          }
+          return true
+        })
+        .map(el => el.originalDate)
+
+      const newArraySelected = selectedDates.filter(el => !holidaysArray.some(hl => isSameDay(hl.originalDate, el)))
       setHolidays(newarray)
-      setSelectedDates([...selectedDates, ...newarray])
+      const arraySorted = _.sortBy([...newArraySelected, ...newarray], item => item)
+      setSelectedDates(arraySorted)
       return
     }
     const newArraySelected = selectedDates.filter(el => !holidaysArray.some(hl => isSameDay(hl.originalDate, el)))
+    const arraySorted = _.sortBy([...newArraySelected], item => item)
     setHolidays([])
-    setSelectedDates(newArraySelected)
+    setSelectedDates(arraySorted)
+  }
+
+  const _removeDate = date => {
+    const newArray = _.filter(selectedDates, dateFromArray => !isSameDay(new Date(dateFromArray), date))
+    setSelectedDates(newArray)
+  }
+
+  // TODO: Remove when the next button goes to cancellation policy again.
+  const _onUpdateListing = () => {
+    const valuesToUpdate = {
+      ...listing,
+      listingAccessDays: _mapToAccessHourType(timetable),
+      listingExceptionDates: selectedDates,
+      isValid: true
+    }
+    dispatch(onUpdate(listing, valuesToUpdate))
+    history.push(`/listing/preview/${listing.id}`)
   }
 
   return (
     <>
       <Helmet title="Listing Space Availability - Spacenow" />
-      <Grid columns={1} rowGap="80px">
+      <Grid columns={1} rowGap="40px">
         <Cell>
           <Title type="h3" title="Timetable*" subtitle="Let guests know the times your space is open." />
           <TimeTable
@@ -289,13 +334,33 @@ const AvailabilityTab = ({ listing, history, setFatherValues }) => {
             title="Blocked dates"
             subtitle="Block out times when the space is not available within business opening hours."
           />
-          <Calendar
+          {/* <Calendar
             fromMonth={new Date()}
             handleDayClick={_onClickSelectDay}
             selectedDays={selectedDates}
             disabledDays={[]}
             daysOfWeek={timeTableWeek}
+          /> */}
+          <DatePicker
+            date={null}
+            handleDateChange={_onClickSelectDay}
+            hideOnDayClick={false}
+            placeholder="Choose Dates"
+            dayPickerProps={{
+              selectedDays: selectedDates,
+              modifiers: {
+                disabled: [
+                  {
+                    daysOfWeek: timeTableWeek
+                  },
+                  {
+                    before: new Date()
+                  }
+                ]
+              }
+            }}
           />
+          <ListDates dates={selectedDates} onClickDate={(e, date) => _removeDate(date)} />
         </Cell>
         <Cell>
           <Title
@@ -303,7 +368,11 @@ const AvailabilityTab = ({ listing, history, setFatherValues }) => {
             title="Holidays"
             subtitle="Are you closed on all Australian holidays? Or Just a few of them?"
           />
-          <Box display="grid" gridTemplateColumns={{ _: "1fr", medium: "1fr 1fr", large: "1fr 1fr 1fr", extraLarge: "1fr 1fr 1fr 1fr" }} gridGap="20px">
+          <Box
+            display="grid"
+            gridTemplateColumns={{ _: '1fr', medium: '1fr 1fr', large: '1fr 1fr 1fr', extraLarge: '1fr 1fr 1fr 1fr' }}
+            gridGap="20px"
+          >
             <Cell width={1}>
               <ItemSwitchStyled>
                 <span>Block all</span>
@@ -311,7 +380,14 @@ const AvailabilityTab = ({ listing, history, setFatherValues }) => {
                   <Switch
                     id="blockall"
                     name="blockall"
-                    checked={holidaysArray.length === holidays.length}
+                    checked={
+                      holidaysArray.filter(el => {
+                        if (isAfter(new Date(), new Date(el.date))) {
+                          return false
+                        }
+                        return true
+                      }).length === holidays.length
+                    }
                     handleCheckboxChange={_onChangeHolidayBlockAll}
                   />
                 </SwitchStyled>
@@ -348,7 +424,8 @@ const AvailabilityTab = ({ listing, history, setFatherValues }) => {
         </Cell>
         <StepButtons
           prev={{ onClick: () => history.push('booking') }}
-          next={{ onClick: () => history.push('cancellation') }}
+          // next={{ onClick: () => history.push('cancellation') }}
+          next={{ onClick: () => _onUpdateListing() }}
         />
       </Grid>
     </>
@@ -358,7 +435,8 @@ const AvailabilityTab = ({ listing, history, setFatherValues }) => {
 AvailabilityTab.propTypes = {
   listing: PropTypes.instanceOf(Object).isRequired,
   history: PropTypes.instanceOf(Object).isRequired,
-  setFatherValues: PropTypes.instanceOf(Function).isRequired
+  setFatherValues: PropTypes.instanceOf(Function).isRequired,
+  match: PropTypes.instanceOf(Object).isRequired
 }
 
 export default AvailabilityTab
