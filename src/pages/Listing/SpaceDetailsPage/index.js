@@ -7,7 +7,7 @@ import { Wrapper, Tab, TabItem, Loader, Tag, Icon, Box } from 'components'
 import { onGetListingById, onUpdate } from 'redux/ducks/listing'
 import { openModal, TypesModal } from 'redux/ducks/modal'
 
-import CancellationTab from './CancellationTab'
+// import CancellationTab from './CancellationTab'
 import BookingTab from './BookingTab'
 import SpecificationTab from './SpecificationTab'
 import AvailabilityTab from './AvailabilityTab'
@@ -106,9 +106,9 @@ const SpaceDetailsPage = ({ match, history, location, ...props }) => {
         <TabItem nav to={`${match.url}/availability`}>
           Availability
         </TabItem>
-        <TabItem nav to={`${match.url}/cancellation`}>
+        {/* <TabItem nav to={`${match.url}/cancellation`}>
           Cancellation
-        </TabItem>
+        </TabItem> */}
       </Tab>
       <Switch>
         <Redirect exact from={match.path} to={`${match.path}/specification`} />
@@ -146,15 +146,16 @@ const SpaceDetailsPage = ({ match, history, location, ...props }) => {
                 listing={objectListing}
                 dispatch={dispatch}
                 setFatherValues={_setFatherValues}
+                match={match}
               />
             )}
           />
-          <Route
+          {/* <Route
             path={`${match.path}/cancellation`}
             render={routeProps => (
               <CancellationTab {...routeProps} {...props} listing={objectListing} match={match} dispatch={dispatch} />
             )}
-          />
+          /> */}
         </ScrollToTop>
         <Route component={() => <h1>not found</h1>} />
       </Switch>

@@ -4,7 +4,7 @@ import React from 'react'
 import styled from 'styled-components'
 import { withFormik } from 'formik'
 import * as Yup from 'yup'
-import { convertedDate } from 'utils/date'
+// import { convertedDate } from 'utils/date'
 import { Input, Select, TextArea, Button, DatePicker, Box, Link, Text } from 'components'
 import { onUpdateProfile, onResendLink } from 'redux/ducks/account'
 
@@ -157,7 +157,7 @@ const formik = {
       return {
         firstName: profile.firstName || '',
         lastName: profile.lastName || '',
-        dateOfBirth: convertedDate(new Date(profile.dateOfBirth)) || '',
+        dateOfBirth: profile.dateOfBirth || '',
         gender: profile.gender || '',
         phoneNumber: profile.phoneNumber || '',
         info: profile.info || ''
