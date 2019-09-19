@@ -140,7 +140,7 @@ const SearchPage = ({ history, location }) => {
 
   useLayoutEffect(() => {
     window.addEventListener('wheel', _onHandleScroll, true);
-    return () => window.removeEventListener('wheel')
+    return () => window.removeEventListener('wheel', _onHandleScroll, true)
   }, [])
 
   const _onHandleScroll = (event) => {
