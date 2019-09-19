@@ -98,6 +98,11 @@ const ItemSwitchStyled = styled.div`
   margin-bottom: 35px;
 `
 
+const cleanParameter = value => {
+  if (!value) return undefined
+  return value.replace('+', ' ')
+}
+
 const SearchPage = ({ history, location }) => {
   const dispatch = useDispatch()
 
@@ -105,11 +110,12 @@ const SearchPage = ({ history, location }) => {
   const queryLat = queryParams.get('lat')
   const queryLng = queryParams.get('lng')
   const queryCategory = queryParams.get('category')
+  const queryLocation = cleanParameter(queryParams.get('location'))
 
   const [selectedSpace, setSelectedSpace] = useState(null)
   const [shouldShowFilter, setShouldShowFilter] = useState(false)
   const [markers, setMarkers] = useState([])
-  const [address, setAddress] = useState('Sydney, AU')
+  const [address, setAddress] = useState(queryLocation || 'Sydney, AU')
   const [latLng, setLatLng] = useState({ lat: queryLat || -33.8688197, lng: queryLng || 151.2092955 })
   const [filterPrice, setFilterPrice] = useState([0, 0])
   const [filterInstantBooking, setFilterInstantBooking] = useState(false)
@@ -141,15 +147,6 @@ const SearchPage = ({ history, location }) => {
     }
     fetchData()
   }, [dispatch, queryLat, queryLng, queryCategory, latLng])
-
-  useEffect(() => {
-    if (queryLat && queryLng && queryCategory) {
-      if (searchResults && searchResults.length > 0) {
-        const firstLocation = searchResults[0].location
-        setAddress(`${firstLocation.city}, ${firstLocation.country}`)
-      }
-    }
-  }, [queryLat, queryLng, queryCategory, searchResults])
 
   useEffect(() => {
     setMarkers(

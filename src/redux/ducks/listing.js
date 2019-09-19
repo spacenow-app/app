@@ -4,7 +4,7 @@ import { gql } from 'apollo-boost'
 import { getClientWithAuth } from 'graphql/apolloClient'
 import errToMsg from 'utils/errToMsg'
 import { monthNames } from 'variables'
-import { camalize } from 'utils/strings'
+import { camalize, isPositiveInt } from 'utils/strings'
 import { toast } from 'react-toastify'
 
 // Actions
@@ -1063,11 +1063,11 @@ const getValues = (_, values) => {
     basePrice: values.basePrice || _.listingData.basePrice,
     currency: values.currency || _.listingData.currency,
     isAbsorvedFee: values.isAbsorvedFee !== undefined ? values.isAbsorvedFee : _.listingData.isAbsorvedFee,
-    capacity: values.capacity || _.listingData.capacity,
-    size: values.size || _.listingData.size,
-    meetingRooms: values.meetingRooms || _.listingData.meetingRooms,
+    capacity: isPositiveInt(values.capacity) ? values.capacity : _.listingData.capacity,
+    size: isPositiveInt(values.size) ? values.size : _.listingData.size,
+    meetingRooms: isPositiveInt(values.meetingRooms) ? values.meetingRooms : _.listingData.meetingRooms,
+    carSpace: isPositiveInt(values.carSpace) ? values.carSpace : _.listingData.carSpace,
     isFurnished: values.isFurnished !== undefined ? /true/i.test(values.isFurnished) : _.listingData.isFurnished,
-    carSpace: values.carSpace || _.listingData.carSpace,
     sizeOfVehicle: values.sizeOfVehicle || _.listingData.sizeOfVehicle,
     maxEntranceHeight: values.maxEntranceHeight || _.listingData.maxEntranceHeight,
     spaceType: values.spaceType || _.listingData.spaceType,
