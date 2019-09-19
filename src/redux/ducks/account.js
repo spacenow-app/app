@@ -73,6 +73,7 @@ const queryGetProfile = gql`
       email
       emailConfirmed
       profile {
+        id
         status
         profileId
         firstName
