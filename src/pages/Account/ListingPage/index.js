@@ -2,7 +2,7 @@ import React, { useEffect } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import Helmet from 'react-helmet'
 import { onGetListingsByUser, onUpdateListing, onDeleteListing } from 'redux/ducks/account'
-import { Card, Text, Icon, Loader, BackgroundImage, Grid, Cell, Title, Wrapper, Button } from 'components'
+import { Card, Text, Icon, Loader, BackgroundImage, Grid, Cell, Title, Button } from 'components'
 
 const _parseCategoryIconName = (name, isSub) => {
   let prefix = 'category-'
