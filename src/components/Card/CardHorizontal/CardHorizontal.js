@@ -94,6 +94,7 @@ const FooterStyled = styled.div`
   @media (max-width: 576px) {
     grid-auto-flow: column;
     padding: 10px 20px 20px 10px;
+    grid-gap: 5px;
   }
 `
 
