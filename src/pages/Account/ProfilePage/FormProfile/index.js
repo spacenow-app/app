@@ -4,8 +4,7 @@ import React from 'react'
 import styled from 'styled-components'
 import { withFormik } from 'formik'
 import * as Yup from 'yup'
-// import { convertedDate } from 'utils/date'
-import { Input, Select, TextArea, Button, DatePicker, Box, Link, Text } from 'components'
+import { Input, Select, TextArea, Button, Box, Link, Text } from 'components'
 import { onUpdateProfile, onResendLink } from 'redux/ducks/account'
 
 const WrapperStyled = styled.div`
@@ -118,14 +117,24 @@ const FormProfile = ({
           </SectionStyled>
 
           <SectionStyled>
-            <DatePicker
+            <Input
+              type="date"
+              label="Date of Birth"
+              placeholder="DD/MM/YYYY"
+              name="dateOfBirth"
+              error={errors.dateOfBirth}
+              value={values.dateOfBirth}
+              onChange={handleChange}
+              onBlur={handleBlur}
+            />
+            {/* <DatePicker
               label="Date of Birth"
               value={values.dateOfBirth}
               handleDateChange={date => {
                 return setFieldValue('dateOfBirth', date)
               }}
               captionMargin="0 0 .5rem 25px"
-            />
+            /> */}
           </SectionStyled>
         </Box>
 
