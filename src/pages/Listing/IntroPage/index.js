@@ -9,9 +9,10 @@ const WrapperStyled = styled.div`
   display: grid;
   grid-template-columns: auto auto;
   grid-gap: 20px;
-
+  margin-bottom: 50px;
   @media (max-width: 680px) {
     grid-template-columns: auto;
+    margin-bottom: 20px;
   }
 `
 
