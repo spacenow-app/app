@@ -449,8 +449,8 @@ const SpacePage = ({ match, location, history, ...props }) => {
               <Carousel photos={_convertedArrayPhotos(listing.photos)} height={imageHeight} />
             </Box>
 
-            <Grid justifyContent="space-between" columnGap="10px" columns={2}>
-              <Box display="flex" justifyContent="start">
+            <Grid columns={12}>
+              <Cell width={8} style={{ display: 'flex' }}>
                 <Box>
                   <Tag
                     icon={
@@ -475,8 +475,8 @@ const SpacePage = ({ match, location, history, ...props }) => {
                     {listing.settingsParent.subcategory.itemName}
                   </Tag>
                 </Box>
-              </Box>
-              <Cell style={{ justifySelf: 'end' }}>
+              </Cell>
+              <Cell width={4} style={{ justifySelf: 'end' }}>
                 <Tag>
                   {listing.listingData.bookingType
                     ? `${capitalize(listing.listingData.bookingType)} Booking`
