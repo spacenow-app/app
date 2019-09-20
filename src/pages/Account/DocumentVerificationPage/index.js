@@ -77,7 +77,7 @@ const DocumentVerificationPage = () => {
         <Cell width={1}>
           <Title type="h4" title="Your Documents" noMargin />
         </Cell>
-        <Cell width={1} middle justifySelf="end">
+        <Cell width={1} middle>
           {(!documents || documents.count === 0) && <Document isButton onDrop={_addDocument} />}
         </Cell>
         <Cell width={{ _: 1, medium: 2 }}>
@@ -91,7 +91,7 @@ const DocumentVerificationPage = () => {
       {!documents || documents.count === 0 ? (
         <BackgroundImage text="We didn't find any documents :(" />
       ) : (
-        <Box display="grid" gridTemplateColumns={{ _: '1fr 1fr', medium: '1fr 1fr 1fr' }} gridGap="30px">
+        <Box display="grid" gridTemplateColumns={{ _: '1fr 1fr', medium: '1fr 1fr 1fr' }} gridGap="30px" width="100%">
           {[].concat(documents.rows).map((item, index) => DocumentCard(dispatch, item, index))}
           <Document onDrop={_addDocument} />
         </Box>
