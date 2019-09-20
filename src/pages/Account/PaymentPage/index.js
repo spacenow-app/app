@@ -7,7 +7,7 @@ import { toast } from 'react-toastify'
 
 import { onGetPaymentAccount, onDeletePaymentAccount, onCreatePaymentAccount } from 'redux/ducks/payment'
 
-import { Wrapper, Title, Icon, Loader, BackgroundImage, Button, Grid, Cell, Table, Text } from 'components'
+import { Title, Icon, Loader, BackgroundImage, Button, Grid, Cell, Table, Text } from 'components'
 import { TypesModal, openModal } from 'redux/ducks/modal'
 
 const IconButton = styled.button`
@@ -93,7 +93,7 @@ const PaymentPage = () => {
                     Account
                   </Text>
                 </th>
-                <th>
+                <th style={{ textAlign: 'center' }}>
                   <Text fontSize="14px" fontFamily="semiBold" style={{ whiteSpace: 'nowrap' }}>
                     Options
                   </Text>
