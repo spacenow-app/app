@@ -2,6 +2,11 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import styled from 'styled-components'
 
+const CheckboxWraperStyled = styled.div`
+  display: grid;
+  grid-template-columns: min-content 1fr;
+`
+
 const CheckboxContainer = styled.div`
   display: inline-block;
   vertical-align: middle;
@@ -52,9 +57,6 @@ const LabelStyled = styled.span`
   color: #172439;
   font-size: 16px;
   margin: 0 8px;
-  display: block;
-  float: right;
-  width: 83%;
 
   @media only screen and (max-width: 600px) {
     font-size: 14px;
@@ -63,7 +65,7 @@ const LabelStyled = styled.span`
 `
 
 const Checkbox = ({ className, name, checked, label, handleCheckboxChange, disabled, ...props }) => (
-  <div>
+  <CheckboxWraperStyled>
     <label>
       <CheckboxContainer {...props} className={className}>
         <HiddenCheckbox
@@ -81,7 +83,7 @@ const Checkbox = ({ className, name, checked, label, handleCheckboxChange, disab
       </CheckboxContainer>
     </label>
     {label && <LabelStyled>{label}</LabelStyled>}
-  </div>
+  </CheckboxWraperStyled>
 )
 
 Checkbox.defaultProps = {

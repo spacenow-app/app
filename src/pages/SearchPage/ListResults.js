@@ -93,17 +93,17 @@ const ListResults = forwardRef(({ history, markers, onHoverItem, pagination, onP
         case 'capacity':
           return {
             icon: 'specification-capacity',
-            value: el.value === 0 ? 'Not mentioned' : `${toPlural('Person', el.value)}`
+            value: `${toPlural('Person', el.value)}`
           }
         case 'size':
           return {
             icon: 'specification-size',
-            value: el.value === 0 ? 'Not mentioned' : `${el.value} sqm`
+            value: `${el.value} sqm`
           }
         case 'meetingRooms':
           return {
             icon: 'specification-meetingroom-quantity',
-            value: el.value === 0 ? 'None available' : `${el.value} available`
+            value: `${el.value} available`
           }
         case 'isFurnished':
           return {
@@ -113,7 +113,7 @@ const ListResults = forwardRef(({ history, markers, onHoverItem, pagination, onP
         case 'carSpace':
           return {
             icon: 'category-desk',
-            value: el.value === 0 ? 'None available' : `${el.value} available`
+            value: `${el.value} available`
           }
         default:
           return {
@@ -132,6 +132,7 @@ const ListResults = forwardRef(({ history, markers, onHoverItem, pagination, onP
       }
 
       return (
+        obj.value !== 0 &&
         <Box key={el.id}>
           <Icon name={_getInfo(obj).icon} width="22px" />
           <Text fontSize="10px" ml="10px">
