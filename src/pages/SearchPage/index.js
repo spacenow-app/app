@@ -268,6 +268,7 @@ const SearchPage = ({ history, location }) => {
     if (!searchKey) {
       return
     }
+    refResults.current.scrollTop = 0;
     dispatch(onQuery(searchKey, filters, page))
   }
 

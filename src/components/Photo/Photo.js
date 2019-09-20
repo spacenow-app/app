@@ -59,13 +59,13 @@ const Photo = ({ onDrop, onCover, onDelete, url, isCover, ...props }) => {
                         stroke="#6ADD92"
                         fill="#FFFFFF"
                         name="star-outline"
-                        style={{ paddingRight: '5px' }}
+                        style={{ paddingRight: '5px', margin: '5px' }}
                       />
                     ) : (
-                        <Icon width="18px" fill="#6ADD92" name="star-full" style={{ paddingRight: '5px' }} />
+                        <Icon width="18px" fill="#6ADD92" name="star-full" style={{ paddingRight: '5px', margin: '5px' }} />
                       )
                   }
-                  style={{ width: 'max-content', height: '40px' }}
+                  style={{ width: 'max-content', height: '40px', margin: '5px' }}
                   onClick={onCover}
                 >
                   Cover
@@ -73,7 +73,7 @@ const Photo = ({ onDrop, onCover, onDelete, url, isCover, ...props }) => {
                 <Button
                   outline="true"
                   icon={<Icon width="15px" fill="#6ADD92" name="bin" />}
-                  style={{ width: '40px', height: '40px' }}
+                  style={{ width: '40px', height: '40px', margin: '5px' }}
                   onClick={onDelete}
                 />
               </FooterButton>
