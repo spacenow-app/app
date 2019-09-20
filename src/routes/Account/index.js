@@ -18,7 +18,7 @@ const Account = ({ match, ...props }) => {
       <Wrapper>
         <Box display="grid" gridTemplateColumns={{ small: '1fr', medium: '350px 1fr' }} gridColumnGap="30px" my="20px">
           <InnerMenu />
-          <Box display="grid">
+          <Box>
             <Switch>
               <Redirect exact from={match.path} to={`${match.path}/profile`} />
               <Route exact component={ProfilePage} path={`${match.path}/profile`} />
