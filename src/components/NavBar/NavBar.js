@@ -4,16 +4,28 @@ import { useDispatch, useSelector } from 'react-redux'
 import { Link, NavLink } from 'react-router-dom'
 import styled from 'styled-components'
 import { Navbar, Nav, NavDropdown } from 'react-bootstrap'
-import { Avatar, Box, AutoComplete, Button } from 'components'
+import { Avatar, Box, AutoComplete, Button, Text } from 'components'
 import { logout } from 'redux/ducks/auth'
 
 import { config } from 'variables'
 
 import logo from './spacenow_logo.png'
 
+const NavStyled = styled(Nav)`
+  align-items: center;
+
+  @media only screen and (max-width: 600px) {
+    align-items: initial;
+  }
+`
+
 const NavDropdownStyled = styled(NavDropdown)`
   &&& {
     .dropdown-toggle::after {
+      display: none;
+    }
+
+    @media only screen and (max-width: 600px) {
       display: none;
     }
   }
@@ -52,10 +64,16 @@ const NavLinkStyled = styled(NavLink)`
   padding-left: 0.5rem;
   color: #172439;
   text-decoration: none;
+  align-items: center;
 
   :hover {
     color: #51c482;
     text-decoration: none;
+  }
+
+  @media only screen and (max-width: 600px) {
+    align-items: initial;
+    border-bottom: 1px solid #ececec;
   }
 `
 
@@ -114,7 +132,7 @@ const NavBar = ({ history, shownSearch }) => {
     <Navbar expand="lg">
       <Link to="#" onClick={() => _handlerGoToLegancy()}>
         <Navbar.Brand>
-          <img alt="" src={logo} width={230} className="d-inline-block align-top" />
+          <img alt="" src={logo} width={200} className="d-inline-block align-top" />
         </Navbar.Brand>
       </Link>
       <Navbar.Toggle aria-controls="top-navbar-nav" />
@@ -141,8 +159,20 @@ const NavBar = ({ history, shownSearch }) => {
         </SearchBar>
       )}
       <Navbar.Collapse className="justify-content-end" id="top-navbar-nav">
-        <Nav style={{ alignItems: 'center' }}>
-          <NavLinkStyled to="/listing">List Your Space</NavLinkStyled>
+        <NavStyled>
+          {isAuthenticated && (
+            <Box
+              display={{ _: 'flex', small: 'none' }}
+              color="quartenary"
+              borderBottom="1px solid #ececec"
+              alignItems="center"
+              p="0.5rem"
+            >
+              <Avatar style={{ width: '30px', height: '30px', margin: 0 }} image={user.profile.picture || null} />
+              <Text ml="10px">{user.profile.firstName || 'User Profile'}</Text>
+            </Box>
+          )}
+          <NavLinkStyled to="/listing">List your space</NavLinkStyled>
           <NavLinkStyled to="#" onClick={() => _handlerGoToLegancy('help')}>
             Help
           </NavLinkStyled>
@@ -152,26 +182,35 @@ const NavBar = ({ history, shownSearch }) => {
               <NavLinkStyled to="/auth/signup">Sign Up</NavLinkStyled>
             </>
           ) : (
-            <NavDropdownStyled
-              alignRight
-              title={
-                <Box display="grid" gridTemplateColumns="auto auto" gridColumnGap="10px" color="quartenary">
-                  <span style={{ alignSelf: 'center' }}>{user.profile.firstName || 'User Profile'}</span>
-                  <Avatar style={{ width: '30px', height: '30px' }} image={user.profile.picture || null} />
-                </Box>
-              }
-              id="basic-nav-dropdown"
-            >
-              <DropdownItemStyled to="/account/profile">Profile</DropdownItemStyled>
-              <NavDropdown.Divider />
-              <DropdownItemStyled to="/account/listing">Dashboard</DropdownItemStyled>
-              <NavDropdown.Divider />
-              <DropdownItemStyled to="#" onClick={_handlerLogout}>
-                Logout
-              </DropdownItemStyled>
-            </NavDropdownStyled>
+            <>
+              <Box display={{ _: 'block', small: 'none' }}>
+                <NavLinkStyled to="/account/profile">Profile</NavLinkStyled>
+                <NavLinkStyled to="/account/listing">Dashboard</NavLinkStyled>
+                <NavLinkStyled to="#" onClick={_handlerLogout}>
+                  Logout
+                </NavLinkStyled>
+              </Box>
+              <NavDropdownStyled
+                alignRight
+                title={
+                  <Box display="grid" gridTemplateColumns="auto auto" gridColumnGap="10px" color="quartenary">
+                    <span style={{ alignSelf: 'center' }}>{user.profile.firstName || 'User Profile'}</span>
+                    <Avatar style={{ width: '30px', height: '30px' }} image={user.profile.picture || null} />
+                  </Box>
+                }
+                id="basic-nav-dropdown"
+              >
+                <DropdownItemStyled to="/account/profile">Profile</DropdownItemStyled>
+                <NavDropdown.Divider />
+                <DropdownItemStyled to="/account/listing">Dashboard</DropdownItemStyled>
+                <NavDropdown.Divider />
+                <DropdownItemStyled to="#" onClick={_handlerLogout}>
+                  Logout
+                </DropdownItemStyled>
+              </NavDropdownStyled>
+            </>
           )}
-        </Nav>
+        </NavStyled>
       </Navbar.Collapse>
     </Navbar>
   )
