@@ -13,6 +13,7 @@ const SpanStyled = styled.div`
   grid-column-gap: 10px;
   padding: ${props => (props.small ? '5px 10px' : '10px')};
   width: fit-content;
+  height: 50px;
   ${props =>
     props.icon &&
     css`
@@ -26,6 +27,7 @@ const TextStyled = styled.span`
   font-size: 12px;
   align-self: center;
   justify-self: start;
+  line-height: 1.2;
 `
 
 const Tag = ({ icon, small, children }) => (
