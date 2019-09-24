@@ -15,7 +15,7 @@ const Wrapper = styled.div`
 
 const ContainerList = styled.div`
   display: grid;
-  grid-template-columns: 420px 420px;
+  grid-template-columns: ${({ showMap }) => (showMap ? 'repeat(2, 400px)' : 'repeat(auto-fill, minmax(400px, 1fr))')};
   grid-column-gap: 25px;
   grid-row-gap: 25px;
 
@@ -31,6 +31,7 @@ const CardContainer = styled.div`
   box-shadow: 0 0 5px 1px #eee;
   border-radius: 6px;
   opacity: 1;
+  // min-width: 400px;
 
   :hover {
     box-shadow: 0 0 5px 1px #ddd;
@@ -70,145 +71,156 @@ const ContainerPagination = styled.div`
   justify-content: center;
 `
 
-const ListResults = forwardRef(({ history, markers, onHoverItem, pagination, onPageChanged, ...props }, ref) => {
-  const _parseCategoryIconName = (name, isSub) => {
-    const prefix = isSub ? 'sub-category-' : 'category-'
-    return prefix + name.replace(/([A-Z])/g, g => `-${g[0].toLowerCase()}`)
-  }
-
-  const _getCoverPhoto = object => {
-    if (object.photos.length <= 0) {
-      return ''
+const ListResults = forwardRef(
+  ({ history, markers, onHoverItem, pagination, onPageChanged, showMap, ...props }, ref) => {
+    const _parseCategoryIconName = (name, isSub) => {
+      const prefix = isSub ? 'sub-category-' : 'category-'
+      return prefix + name.replace(/([A-Z])/g, g => `-${g[0].toLowerCase()}`)
     }
-    const photoCover = object.photos.find(e => e.isCover)
-    if (photoCover) {
-      return photoCover.name
-    }
-    return object.photos[0].name
-  }
 
-  const _renderSpecifications = (spec, listingData) => {
-    const _getInfo = el => {
-      switch (el.field) {
-        case 'capacity':
-          return {
-            icon: 'specification-capacity',
-            value: `${toPlural('Person', el.value)}`
-          }
-        case 'size':
-          return {
-            icon: 'specification-size',
-            value: `${el.value} sqm`
-          }
-        case 'meetingRooms':
-          return {
-            icon: 'specification-meetingroom-quantity',
-            value: `${el.value} available`
-          }
-        case 'isFurnished':
-          return {
-            icon: el.value === 0 ? 'specification-furnished-no' : 'specification-furnished-yes',
-            value: el.value === 0 ? 'No' : 'Yes'
-          }
-        case 'carSpace':
-          return {
-            icon: 'category-desk',
-            value: `${el.value} available`
-          }
-        default:
-          return {
-            icon: '',
-            value: ''
-          }
+    const _getCoverPhoto = object => {
+      if (object.photos.length <= 0) {
+        return ''
       }
+      const photoCover = object.photos.find(e => e.isCover)
+      if (photoCover) {
+        return photoCover.name
+      }
+      return object.photos[0].name
     }
 
-    return spec.slice(0, 3).map(el => {
-      const specDataObject = JSON.parse(el.specData)
-
-      const obj = {
-        field: specDataObject.field,
-        value: listingData[specDataObject.field]
+    const _renderSpecifications = (spec, listingData) => {
+      const _getInfo = el => {
+        switch (el.field) {
+          case 'capacity':
+            return {
+              icon: 'specification-capacity',
+              value: `${toPlural('Person', el.value)}`
+            }
+          case 'size':
+            return {
+              icon: 'specification-size',
+              value: `${el.value} sqm`
+            }
+          case 'meetingRooms':
+            return {
+              icon: 'specification-meetingroom-quantity',
+              value: `${el.value} available`
+            }
+          case 'isFurnished':
+            return {
+              icon: el.value === 0 ? 'specification-furnished-no' : 'specification-furnished-yes',
+              value: el.value === 0 ? 'No' : 'Yes'
+            }
+          case 'carSpace':
+            return {
+              icon: 'category-desk',
+              value: `${el.value} available`
+            }
+          default:
+            return {
+              icon: '',
+              value: ''
+            }
+        }
       }
 
-      return (
-        obj.value !== 0 &&
-        <Box key={el.id}>
-          <Icon name={_getInfo(obj).icon} width="22px" />
-          <Text fontSize="10px" ml="10px">
-            {_getInfo(obj).value}
-          </Text>
-        </Box>
-      )
-    })
-  }
+      return spec.slice(0, 3).map(el => {
+        const specDataObject = JSON.parse(el.specData)
 
-  return (
-    <Wrapper ref={ref}>
-      <ContainerList>
-        {markers.map(item => {
-          return (
-            <CardContainer key={item.id} onMouseEnter={() => onHoverItem(item)} onMouseLeave={() => onHoverItem(null)}>
-              <CardImage src={_getCoverPhoto(item)} onClick={() => window.open(`/space/${item.id}`)} />
-              <CardContent>
-                <Box display="flex" justifyContent="start" mb="15px">
-                  <Box>
-                    <Tag
-                      small
-                      icon={<Icon width="24px" name={_parseCategoryIconName(item.category.otherItemName, false)} />}
-                    >
-                      {item.category.itemName}
-                    </Tag>
-                  </Box>
-                  <Box margin="0 10px">
-                    <Tag
-                      small
-                      icon={<Icon width="24px" name={_parseCategoryIconName(item.subcategory.otherItemName, true)} />}
-                    >
-                      {item.subcategory.itemName}
-                    </Tag>
-                  </Box>
-                </Box>
-                <CardTitle onClick={() => window.open(`/space/${item.id}`)}>{item.title}</CardTitle>
-                <Text display="block" fontFamily="regular" fontSize="14px" color="greyscale.1">
-                  {`${item.location.address1}, ${item.location.city}`}
-                </Text>
-                <Box
-                  my="10px"
-                  display="grid"
-                  gridTemplateColumns={item.specifications.length >= 3 ? 'auto auto auto' : 'auto auto'}
-                >
-                  {_renderSpecifications(item.specifications, item.listingData)}
-                </Box>
-                <Box display="grid" gridAutoFlow="column">
-                  <Text fontSize="14px">
-                    From:{' '}
-                    <Text fontSize="16px" fontFamily="bold">
-                      {`${item.listingData.currency || 'AUD'}$${item.listingData.basePrice}`}
-                    </Text>{' '}
-                    {item.bookingPeriod}
-                  </Text>
-                  <Box justifySelf="end" display="flex" alignItems="center">
-                    <Avatar width="30px" height="30px" image={item.host.profile && item.host.profile.picture} />
-                    <Text fontSize="12px" ml="10px" fontFamily="medium">
-                      {`${item.host.profile && item.host.profile.firstName}`}
-                    </Text>
-                  </Box>
-                </Box>
-              </CardContent>
-            </CardContainer>
+        const obj = {
+          field: specDataObject.field,
+          value: listingData[specDataObject.field]
+        }
+
+        return (
+          obj.value !== 0 && (
+            <Box key={el.id}>
+              <Icon name={_getInfo(obj).icon} width="22px" />
+              <Text fontSize="10px" ml="10px">
+                {_getInfo(obj).value}
+              </Text>
+            </Box>
           )
-        })}
-      </ContainerList>
-      <ContainerPagination>
-        <Pagination totalPages={pagination.totalPages} totalRecords={pagination.total} onPageChanged={onPageChanged} />
-      </ContainerPagination>
-    </Wrapper>
-  )
-})
+        )
+      })
+    }
+
+    return (
+      <Wrapper ref={ref}>
+        <ContainerList showMap={showMap}>
+          {markers.map(item => {
+            return (
+              <CardContainer
+                key={item.id}
+                onMouseEnter={() => onHoverItem(item)}
+                onMouseLeave={() => onHoverItem(null)}
+              >
+                <CardImage src={_getCoverPhoto(item)} onClick={() => window.open(`/space/${item.id}`)} />
+                <CardContent>
+                  <Box display="flex" justifyContent="start" mb="15px">
+                    <Box>
+                      <Tag
+                        small
+                        icon={<Icon width="24px" name={_parseCategoryIconName(item.category.otherItemName, false)} />}
+                      >
+                        {item.category.itemName}
+                      </Tag>
+                    </Box>
+                    <Box margin="0 10px">
+                      <Tag
+                        small
+                        icon={<Icon width="24px" name={_parseCategoryIconName(item.subcategory.otherItemName, true)} />}
+                      >
+                        {item.subcategory.itemName}
+                      </Tag>
+                    </Box>
+                  </Box>
+                  <CardTitle onClick={() => window.open(`/space/${item.id}`)}>{item.title}</CardTitle>
+                  <Text display="block" fontFamily="regular" fontSize="14px" color="greyscale.1">
+                    {`${item.location.address1}, ${item.location.city}`}
+                  </Text>
+                  <Box
+                    my="10px"
+                    display="grid"
+                    gridTemplateColumns={item.specifications.length >= 3 ? 'auto auto auto' : 'auto auto'}
+                  >
+                    {_renderSpecifications(item.specifications, item.listingData)}
+                  </Box>
+                  <Box display="grid" gridAutoFlow="column">
+                    <Text fontSize="14px">
+                      From:{' '}
+                      <Text fontSize="16px" fontFamily="bold">
+                        {`${item.listingData.currency || 'AUD'}$${item.listingData.basePrice}`}
+                      </Text>{' '}
+                      {item.bookingPeriod}
+                    </Text>
+                    <Box justifySelf="end" display="flex" alignItems="center">
+                      <Avatar width="30px" height="30px" image={item.host.profile && item.host.profile.picture} />
+                      <Text fontSize="12px" ml="10px" fontFamily="medium">
+                        {`${item.host.profile && item.host.profile.firstName}`}
+                      </Text>
+                    </Box>
+                  </Box>
+                </CardContent>
+              </CardContainer>
+            )
+          })}
+        </ContainerList>
+        <ContainerPagination>
+          <Pagination
+            totalPages={pagination.totalPages}
+            totalRecords={pagination.total}
+            onPageChanged={onPageChanged}
+          />
+        </ContainerPagination>
+      </Wrapper>
+    )
+  }
+)
 
 const comparisonFn = (prevProps, nextProps) => {
-  return prevProps.markers === nextProps.markers
+  return prevProps === nextProps
 }
 
 export default memo(ListResults, comparisonFn)
