@@ -44,7 +44,7 @@ Caption.defaultProps = {
 }
 
 Caption.propTypes = {
-  children: PropTypes.string.isRequired,
+  children: PropTypes.any.isRequired,
   type: PropTypes.oneOf(['large', 'medium', 'small'])
 }
 

@@ -33,18 +33,23 @@ const SearchBar = styled(Box)`
   width: 714px;
   padding: 0 20px;
 
-  @media only screen and (max-width: 600px) {
+  @media only screen and (max-width: 700px) {
     width: 100%;
+    grid-template-columns: auto;
+
+    button:nth-child(2) {
+      display: none;
+    }
   }
 `
 
 const FilterBar = styled.div`
   display: grid;
-  grid-template-columns: auto auto auto 1fr;
+  grid-template-columns: auto auto auto auto 1fr;
   grid-column-gap: 15px;
   padding: 0 20px;
 
-  @media only screen and (max-width: 600px) {
+  @media only screen and (max-width: 575px) {
     display: ${props => (props.show ? 'grid' : 'none')};
     grid-gap: 10px;
     padding: 0 20px;
@@ -59,7 +64,7 @@ const FilterBar = styled.div`
 const ContainerResults = styled.div`
   display: grid;
   grid-template-columns: auto 1fr;
-  grid-column-gap: 40px;
+  grid-column-gap: ${({ showMap }) => (showMap ? '40px' : '0')};
   width: 100%;
   height: calc(100vh - 312px);
   top: 312px;
@@ -96,6 +101,21 @@ const ItemSwitchStyled = styled.div`
   width: 200px;
   margin-top: 35px;
   margin-bottom: 35px;
+`
+
+const SwitchStyled = styled.div`
+  display: grid;
+  justify-self: end;
+  height: 42px;
+  border-radius: 75px;
+  border: 1px solid ${({ checked }) => (checked ? '#6adc91' : '#c4c4c4')};
+  padding: 9px 27px;
+  grid-template-columns: auto auto;
+  width: 197px;
+
+  @media (max-width: 945px) {
+    display: none;
+  }
 `
 
 const cleanParameter = value => {
@@ -135,6 +155,7 @@ const SearchPage = ({ history, location }) => {
     storage: /storage/i.test(queryCategory),
     retailAndHospitality: /retailAndHospitality/i.test(queryCategory)
   })
+  const [showMap, setShowMap] = useState(true)
   const { searchKey, result: searchResults, pagination } = useSelector(state => state.search.get, shallowEqual)
   const isLoading = useSelector(state => state.search.isLoading)
 
@@ -268,7 +289,7 @@ const SearchPage = ({ history, location }) => {
     if (!searchKey) {
       return
     }
-    refResults.current.scrollTop = 0;
+    refResults.current.scrollTop = 0
     dispatch(onQuery(searchKey, filters, page))
   }
 
@@ -513,7 +534,7 @@ const SearchPage = ({ history, location }) => {
               }}
             </Reference>
             {shouldShowFilter === 'price' && (
-              <Popper placement="bottom-end" modifiers={modifiers}>
+              <Popper placement="bottom-start" modifiers={modifiers}>
                 {({ ref, style, placement, arrowProps }) => {
                   return (
                     <Box
@@ -530,7 +551,6 @@ const SearchPage = ({ history, location }) => {
                         padding="30px"
                         marginTop="10px"
                         zIndex="2000001"
-                        width="400px"
                       >
                         <Text display="block" fontSize="14px">
                           Have a specific budget?
@@ -581,7 +601,7 @@ const SearchPage = ({ history, location }) => {
               }}
             </Reference>
             {shouldShowFilter === 'instantBooking' && (
-              <Popper placement="bottom-end" modifiers={modifiers}>
+              <Popper placement="bottom-start" modifiers={modifiers}>
                 {({ ref, style, placement, arrowProps }) => {
                   return (
                     <Box
@@ -625,6 +645,18 @@ const SearchPage = ({ history, location }) => {
               </Popper>
             )}
           </Manager>
+          <Manager>
+            <SwitchStyled showMap={showMap}>
+              <Text>Show map</Text>
+              <Switch
+                id="showMap"
+                name="showMap"
+                value={showMap}
+                checked={showMap === true}
+                handleCheckboxChange={(e, { checked }) => setShowMap(checked)}
+              />
+            </SwitchStyled>
+          </Manager>
         </FilterBar>
         <Line />
         <Box ml="25px">
@@ -647,13 +679,13 @@ const SearchPage = ({ history, location }) => {
           bg="rgba(255, 255, 255, 0.85)"
           left="0"
           right="0"
-          position="fixed"
+          position="absolute"
           onClick={() => setShouldShowFilter(false)}
         >
           {isLoading && <Loader text="Searching" />}
         </Box>
       )}
-      <ContainerResults>
+      <ContainerResults showMap={showMap}>
         <ListResults
           ref={refResults}
           markers={searchResults}
@@ -661,16 +693,19 @@ const SearchPage = ({ history, location }) => {
           history={history}
           pagination={pagination}
           onPageChanged={_onPagionationChange}
+          showMap={showMap}
         />
-        <ContainerMap>
-          <MapSearch
-            history={history}
-            position={latLng}
-            markers={markers}
-            onClickMarker={_onClickMarkerMap}
-            selectedMarker={selectedSpace}
-          />
-        </ContainerMap>
+        {showMap && (
+          <ContainerMap>
+            <MapSearch
+              history={history}
+              position={latLng}
+              markers={markers}
+              onClickMarker={_onClickMarkerMap}
+              selectedMarker={selectedSpace}
+            />
+          </ContainerMap>
+        )}
       </ContainerResults>
     </>
   )

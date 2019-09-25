@@ -20,7 +20,7 @@ import {
   Icon,
   Highlights,
   Loader,
-  Carousel,
+  CarouselListing,
   UserDetails,
   BookingCard,
   Checkbox,
@@ -141,8 +141,8 @@ const SpacePage = ({ match, location, history, ...props }) => {
   }, [location])
 
   useEffect(() => {
-    if (window.innerWidth < 768) {
-      setImageHeight(270)
+    if (window.innerWidth <= 991) {
+      setImageHeight(325)
     }
   }, [])
 
@@ -197,7 +197,7 @@ const SpacePage = ({ match, location, history, ...props }) => {
           <Highlights
             key={el.field}
             title={el.label}
-            name={value}
+            name={value.toString()}
             icon="specification-meetingroom-quantity"
             last={index === 2}
           />
@@ -216,7 +216,15 @@ const SpacePage = ({ match, location, history, ...props }) => {
         // const value = el.value === 0 ? 'None available’' : `${el.value} available`
         // return <Highlights title={el.label} name={value} icon="category-desk" last={index === 2} />
       }
-      return <Highlights key={el.field} title={el.label} name={el.value} icon="category-desk" last={index === 2} />
+      return (
+        <Highlights
+          key={el.field}
+          title={el.label}
+          name={el.value.toString()}
+          icon="category-desk"
+          last={index === 2}
+        />
+      )
     })
   }
 
@@ -440,262 +448,269 @@ const SpacePage = ({ match, location, history, ...props }) => {
   }
 
   return (
-    <Wrapper>
-      <Helmet title="View Listing - Spacenow" />
-      <GridStyled columns="auto 350px" columnGap="35px" rowGap="30px">
-        <Cell>
-          <Grid columns={1} rowGap="15px">
-            <Box>
-              <Carousel photos={_convertedArrayPhotos(listing.photos)} height={imageHeight} />
-            </Box>
+    <>
+      {(listing.photos.length > 1 || imageHeight === 325) && (
+        <Box mb="30px">
+          <CarouselListing photos={_convertedArrayPhotos(listing.photos)} />
+        </Box>
+      )}
+      <Wrapper>
+        <Helmet title="View Listing - Spacenow" />
+        <GridStyled columns="auto 350px" columnGap="35px" rowGap="30px">
+          <Cell>
+            <Grid columns={1} rowGap="15px">
+              {listing.photos.length === 1 && imageHeight !== 325 && (
+                <CarouselListing photos={_convertedArrayPhotos(listing.photos)} />
+              )}
 
-            <Grid columns={12}>
-              <Cell width={8} style={{ display: 'flex' }}>
+              <Grid columns={12}>
+                <Cell width={8} style={{ display: 'flex' }}>
+                  <Box>
+                    <Tag
+                      icon={
+                        <Icon
+                          width="24px"
+                          name={_parseCategoryIconName(listing.settingsParent.category.otherItemName, false)}
+                        />
+                      }
+                    >
+                      {listing.settingsParent.category.itemName}
+                    </Tag>
+                  </Box>
+                  <Box margin="0 10px">
+                    <Tag
+                      icon={
+                        <Icon
+                          width="24px"
+                          name={_parseCategoryIconName(listing.settingsParent.subcategory.otherItemName, true)}
+                        />
+                      }
+                    >
+                      {listing.settingsParent.subcategory.itemName}
+                    </Tag>
+                  </Box>
+                </Cell>
+                <Cell width={4} style={{ justifySelf: 'end' }}>
+                  <Tag>
+                    {listing.listingData.bookingType
+                      ? `${capitalize(listing.listingData.bookingType)} Booking`
+                      : 'No data'}
+                  </Tag>
+                </Cell>
+              </Grid>
+
+              <Grid columns={5}>
+                <CellStyled width={3}>
+                  <Title
+                    type="h4"
+                    title={listing.title}
+                    subtitle={_getAddress(listing.location)}
+                    subTitleSize={18}
+                    subTitleMargin={20}
+                    noMargin
+                  />
+                </CellStyled>
+                <CellStyled width={2} center>
+                  <Title
+                    type="h4"
+                    title={`$ ${Math.round((listing.listingData.basePrice || 0) * 100) / 100} ${listing.bookingPeriod}`}
+                    noMargin
+                    right
+                    style={{ marginTop: '5px' }}
+                  />
+                </CellStyled>
+              </Grid>
+
+              <Box>
+                <Title type="h5" title="Highlights" />
+                <Grid columns="repeat(auto-fit, minmax(120px, 1fr))" rowGap="50px">
+                  <Highlights
+                    title="Minimum term"
+                    name={_changeToPlural(
+                      listing.bookingPeriod,
+                      listing.listingData.minTerm ? listing.listingData.minTerm.toString() : '1'
+                    )}
+                    icon="specification-minimum-term"
+                  />
+                  <Highlights
+                    title="Opening Days"
+                    name={_getWeekName(listing.accessDays)}
+                    icon="specification-opening-days"
+                  />
+                  {objectSpecifications && _renderHighLights(objectSpecifications)}
+                </Grid>
+              </Box>
+
+              <Box>
+                <Title type="h5" title="Access Type" />
+                <Box
+                  display="grid"
+                  width="110px"
+                  height="130px"
+                  justifyContent="center"
+                  textAlign="center"
+                  fontFamily="MontSerrat-SemiBold"
+                  fontSize="14px"
+                  color={listing.listingData.accessType ? 'quartenary' : 'error'}
+                  borderColor={listing.listingData.accessType ? '' : 'error'}
+                >
+                  <Icon
+                    style={{ alignSelf: 'center', justifySelf: 'center' }}
+                    width="50px"
+                    fill="#6ADC91"
+                    name={
+                      listing.listingData.accessType &&
+                      `access-type-${listing.listingData.accessType
+                        .toLowerCase()
+                        .split(' ')
+                        .join('-')}`
+                    }
+                  />
+                  {listing.listingData.accessType ? <>{listing.listingData.accessType}</> : 'No Data'}
+                </Box>
+              </Box>
+
+              {listing.listingData.description ? (
                 <Box>
-                  <Tag
-                    icon={
-                      <Icon
-                        width="24px"
-                        name={_parseCategoryIconName(listing.settingsParent.category.otherItemName, false)}
-                      />
-                    }
-                  >
-                    {listing.settingsParent.category.itemName}
-                  </Tag>
+                  <Title type="h5" title="Description" />
+                  <p>{listing.listingData.description}</p>
                 </Box>
-                <Box margin="0 10px">
-                  <Tag
-                    icon={
-                      <Icon
-                        width="24px"
-                        name={_parseCategoryIconName(listing.settingsParent.subcategory.otherItemName, true)}
-                      />
-                    }
-                  >
-                    {listing.settingsParent.subcategory.itemName}
-                  </Tag>
+              ) : null}
+              {listing.amenities.length > 0 && (
+                <Box>
+                  <Title type="h5" title="Amenities" />
+                  <Grid columns="repeat(auto-fit, minmax(200px, auto))" rowGap="20px">
+                    {listing.amenities.map(item => {
+                      return (
+                        <Box key={item.id} display="grid" gridTemplateColumns="auto 1fr" gridColumnGap="20px">
+                          <Box width="54px" height="54px" borderRadius="100%" bg="primary">
+                            <Icon
+                              name={`amenitie-${item.settingsData.otherItemName}`}
+                              width="70%"
+                              height="100%"
+                              style={{ display: 'block', margin: 'auto' }}
+                            />
+                          </Box>
+                          <span style={{ alignSelf: 'center' }}>{item.settingsData.itemName}</span>
+                        </Box>
+                      )
+                    })}
+                  </Grid>
                 </Box>
-              </Cell>
-              <Cell width={4} style={{ justifySelf: 'end' }}>
-                <Tag>
-                  {listing.listingData.bookingType
-                    ? `${capitalize(listing.listingData.bookingType)} Booking`
-                    : 'No data'}
-                </Tag>
-              </Cell>
-            </Grid>
+              )}
 
-            <Grid columns={5}>
-              <CellStyled width={3}>
+              {listing.rules.length > 0 && (
+                <Box>
+                  <Title type="h5" title="Space Rules" />
+                  <Grid columns="repeat(auto-fit, minmax(200px, auto))" rowGap="20px">
+                    {listing.rules.map(item => {
+                      return <Checkbox disabled key={item.id} label={item.settingsData.itemName} name="rules" checked />
+                    })}
+                  </Grid>
+                </Box>
+              )}
+
+              <Box>
+                <Title type="h5" title="Availability" />
+                <TimeTable
+                  data={listing.accessDays.listingAccessHours}
+                  error={_getWeekName(listing.accessDays) === 'Closed'}
+                />
+              </Box>
+            </Grid>
+          </Cell>
+          <Cell id="booking-card">
+            <BookingCard
+              titleComponent={
                 <Title
-                  type="h4"
+                  type="h5"
                   title={listing.title}
                   subtitle={_getAddress(listing.location)}
-                  subTitleSize={18}
-                  subTitleMargin={20}
+                  subTitleMargin={10}
                   noMargin
                 />
-              </CellStyled>
-              <CellStyled width={2} center>
-                <Title
-                  type="h4"
-                  title={`$ ${Math.round((listing.listingData.basePrice || 0) * 100) / 100} ${listing.bookingPeriod}`}
-                  noMargin
-                  right
-                  style={{ marginTop: '5px' }}
-                />
-              </CellStyled>
-            </Grid>
-
-            <Box>
-              <Title type="h5" title="Highlights" />
-              <Grid columns="repeat(auto-fit, minmax(120px, 1fr))" rowGap="50px">
-                <Highlights
-                  title="Minimum term"
-                  name={_changeToPlural(
-                    listing.bookingPeriod,
-                    listing.listingData.minTerm ? listing.listingData.minTerm : 1
-                  )}
-                  icon="specification-minimum-term"
-                />
-                <Highlights
-                  title="Opening Days"
-                  name={_getWeekName(listing.accessDays)}
-                  icon="specification-opening-days"
-                />
-                {objectSpecifications && _renderHighLights(objectSpecifications)}
-              </Grid>
-            </Box>
-
-            <Box>
-              <Title type="h5" title="Access Type" />
-              <Box
-                display="grid"
-                width="110px"
-                height="130px"
-                justifyContent="center"
-                textAlign="center"
-                fontFamily="MontSerrat-SemiBold"
-                fontSize="14px"
-                color={listing.listingData.accessType ? 'quartenary' : 'error'}
-                borderColor={listing.listingData.accessType ? '' : 'error'}
-              >
-                <Icon
-                  style={{ alignSelf: 'center', justifySelf: 'center' }}
-                  width="50px"
-                  fill="#6ADC91"
-                  name={
-                    listing.listingData.accessType &&
-                    `access-type-${listing.listingData.accessType
-                      .toLowerCase()
-                      .split(' ')
-                      .join('-')}`
-                  }
-                />
-                {listing.listingData.accessType ? <>{listing.listingData.accessType}</> : 'No Data'}
-              </Box>
-            </Box>
-
-            {listing.listingData.description ? (
-              <Box>
-                <Title type="h5" title="Description" />
-                <p>{listing.listingData.description}</p>
-              </Box>
-            ) : null}
-            {listing.amenities.length > 0 && (
-              <Box>
-                <Title type="h5" title="Amenities" />
-                <Grid columns="repeat(auto-fit, minmax(200px, auto))" rowGap="20px">
-                  {listing.amenities.map(item => {
-                    return (
-                      <Box key={item.id} display="grid" gridTemplateColumns="auto 1fr" gridColumnGap="20px">
-                        <Box width="54px" height="54px" borderRadius="100%" bg="primary">
-                          <Icon
-                            name={`amenitie-${item.settingsData.otherItemName}`}
-                            width="70%"
-                            height="100%"
-                            style={{ display: 'block', margin: 'auto' }}
-                          />
-                        </Box>
-                        <span style={{ alignSelf: 'center' }}>{item.settingsData.itemName}</span>
-                      </Box>
-                    )
-                  })}
-                </Grid>
-              </Box>
-            )}
-
-            {listing.rules.length > 0 && (
-              <Box>
-                <Title type="h5" title="Space Rules" />
-                <Grid columns="repeat(auto-fit, minmax(200px, auto))" rowGap="20px">
-                  {listing.rules.map(item => {
-                    return <Checkbox disabled key={item.id} label={item.settingsData.itemName} name="rules" checked />
-                  })}
-                </Grid>
-              </Box>
-            )}
-
-            <Box>
-              <Title type="h5" title="Availability" />
-              <TimeTable
-                data={listing.accessDays.listingAccessHours}
-                error={_getWeekName(listing.accessDays) === 'Closed'}
-              />
-            </Box>
-          </Grid>
-        </Cell>
-        <Cell id="booking-card">
-          <BookingCard
-            titleComponent={
-              <Title
-                type="h5"
-                title={listing.title}
-                subtitle={_getAddress(listing.location)}
-                subTitleMargin={10}
-                noMargin
-              />
-            }
-            contentComponent={
-              <>
-                {_renderContentCard(listing.bookingPeriod)}
-                {listing.bookingPeriod !== 'hourly' &&
-                  (pendingBooking ? pendingBooking && pendingBooking.count === 0 : true) && (
-                    <Button
-                      onClick={e => _onSubmitBooking(e)}
-                      isLoading={isLoadingOnCreateReservation}
-                      disabled={_isPeriodValid(listing.bookingPeriod) || (user && user.id === listing.user.id)}
-                      fluid
-                    >
-                      {listing.listingData.bookingType === 'request' ? 'Booking Request' : 'Book Now'}
-                    </Button>
-                  )}
-              </>
-            }
-            footerComponent={
-              <>
-                <UserDetails
-                  hostname={listing.user.profile.displayName}
-                  imageProfile={listing.user.profile.picture}
-                  joined="2019"
-                />
-                <Box mt="15px">
-                  <IconBoxStyled>
-                    <Icon name="flag" width="10px" height="100%" style={{ paddingBottom: '5px' }} />
-                  </IconBoxStyled>
-                  <ReportSpaceStyled onClick={_reportSpace}>Report space</ReportSpaceStyled>
-                </Box>
-              </>
-            }
-          />
-        </Cell>
-      </GridStyled>
-
-      <Box mt="45px">
-        <Title type="h5" title="Location" />
-        <Map position={{ lat: Number(listing.location.lat), lng: Number(listing.location.lng) }} />
-      </Box>
-
-      <Box mb="45px">
-        <Title type="h5" title="Cancellation Policy" />
-        <Grid columns="repeat(auto-fit, minmax(350px, auto))">
-          <Cell>
-            <Title
-              noMargin
-              type="h5"
-              title="No Cancellation"
-              subTitleSize={16}
-              subtitle="Guest cannot cancel their booking. Note: This may affect the number of bookings received."
+              }
+              contentComponent={
+                <>
+                  {_renderContentCard(listing.bookingPeriod)}
+                  {listing.bookingPeriod !== 'hourly' &&
+                    (pendingBooking ? pendingBooking && pendingBooking.count === 0 : true) && (
+                      <Button
+                        onClick={e => _onSubmitBooking(e)}
+                        isLoading={isLoadingOnCreateReservation}
+                        disabled={_isPeriodValid(listing.bookingPeriod) || (user && user.id === listing.user.id)}
+                        fluid
+                      >
+                        {listing.listingData.bookingType === 'request' ? 'Booking Request' : 'Book Now'}
+                      </Button>
+                    )}
+                </>
+              }
+              footerComponent={
+                <>
+                  <UserDetails
+                    hostname={listing.user.profile.displayName}
+                    imageProfile={listing.user.profile.picture}
+                    joined="2019"
+                  />
+                  <Box mt="15px">
+                    <IconBoxStyled>
+                      <Icon name="flag" width="10px" height="100%" style={{ paddingBottom: '5px' }} />
+                    </IconBoxStyled>
+                    <ReportSpaceStyled onClick={_reportSpace}>Report space</ReportSpaceStyled>
+                  </Box>
+                </>
+              }
             />
           </Cell>
-          <Cell>
-            <ImageStyled alt="Cancellation Policy" src={GraphCancelattionImage} width="700px" />
-          </Cell>
-        </Grid>
-      </Box>
-      <BottomButtonMobile>
-        <Grid columns={2} style={{ alignItems: 'center' }}>
-          <Cell style={{ alignContent: 'center', justifyContent: 'left', display: 'grid' }}>
-            <span>
-              <span
-                style={{ fontFamily: 'Montserrat-Bold', fontSize: '18px' }}
-              >{`$ ${listing.listingData.basePrice} ${listing.listingData.currency}`}</span>
-              {` ${listing.bookingPeriod}`}
-            </span>
-          </Cell>
-          <Cell justifySelf="self-end">
-            <Button
-              size="sm"
-              onClick={() => {
-                document.getElementById('booking-card').scrollIntoView({ behavior: 'smooth' })
-              }}
-            >
-              Reserve
-            </Button>
-          </Cell>
-        </Grid>
-      </BottomButtonMobile>
-    </Wrapper>
+        </GridStyled>
+
+        <Box mt="45px">
+          <Title type="h5" title="Location" />
+          <Map position={{ lat: Number(listing.location.lat), lng: Number(listing.location.lng) }} />
+        </Box>
+
+        <Box mb="45px">
+          <Title type="h5" title="Cancellation Policy" />
+          <Grid columns="repeat(auto-fit, minmax(350px, auto))">
+            <Cell>
+              <Title
+                noMargin
+                type="h5"
+                title="No Cancellation"
+                subTitleSize={16}
+                subtitle="Guest cannot cancel their booking. Note: This may affect the number of bookings received."
+              />
+            </Cell>
+            <Cell>
+              <ImageStyled alt="Cancellation Policy" src={GraphCancelattionImage} width="700px" />
+            </Cell>
+          </Grid>
+        </Box>
+        <BottomButtonMobile>
+          <Grid columns={2} style={{ alignItems: 'center' }}>
+            <Cell style={{ alignContent: 'center', justifyContent: 'left', display: 'grid' }}>
+              <span>
+                <span
+                  style={{ fontFamily: 'Montserrat-Bold', fontSize: '18px' }}
+                >{`$ ${listing.listingData.basePrice} ${listing.listingData.currency}`}</span>
+                {` ${listing.bookingPeriod}`}
+              </span>
+            </Cell>
+            <Cell justifySelf="self-end">
+              <Button
+                size="sm"
+                onClick={() => {
+                  document.getElementById('booking-card').scrollIntoView({ behavior: 'smooth' })
+                }}
+              >
+                Reserve
+              </Button>
+            </Cell>
+          </Grid>
+        </BottomButtonMobile>
+      </Wrapper>
+    </>
   )
 }
 

@@ -15,7 +15,7 @@ const ImageStyled = styled.div`
 `
 
 const Image = props => (
-  <ImageStyled {...props} onClick={e => props.handleClick(e)}>
+  <ImageStyled {...props} onClick={e => (props.handleClick ? props.handleClick(e) : null)}>
     {props.src ? (
       props.type !== 'application/pdf' ? (
         <img src={props.src} alt={props.alt} width="100%" height="100%" />
