@@ -18,8 +18,8 @@ const SpanStyled = styled.div`
   border: 0 solid transparent;
   border-radius: 100%;
   cursor: ${props => (props.handleClick ? 'pointer' : 'default')};
-  background-color: #6adc91;
-  border-color: #6adc91;
+  background-color: ${props => (props.color ? props.color : '#6adc91')};
+  border-color: ${props => (props.color ? props.color : '#6adc91')};
   color: #172439;
 
   ${props =>
@@ -77,13 +77,15 @@ const Badge = props => (
 Badge.defaultProps = {
   rounded: false,
   handleClick: null,
-  children: ''
+  children: '',
+  color: '#6adc91'
 }
 
 Badge.propTypes = {
   rounded: PropTypes.bool,
   handleClick: PropTypes.func,
-  children: PropTypes.string
+  children: PropTypes.string,
+  color: PropTypes.string
 }
 
 export default Badge
