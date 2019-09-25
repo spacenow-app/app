@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import PropTypes from 'prop-types'
 import CarouselImported, { Modal, ModalGateway } from 'react-images'
-import { Image, Grid, Cell, Carousel, Box, Icon } from 'components'
+import { Image, Grid, Cell, Carousel } from 'components'
 import styled from 'styled-components'
 
 import NoPreviewBackgroundImage from './no-img-preview.jpg'
