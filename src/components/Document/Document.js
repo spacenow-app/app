@@ -20,7 +20,7 @@ const DocumentStyled = styled.div`
 const ButtonsStyled = styled.div`
   display: grid;
   height: 40px;
-  width: 200px;
+  min-width: 150px;
   font-size: 14px;
   border-radius: 30px;
   border: solid 1px #6adc91;
@@ -33,17 +33,16 @@ const ButtonsStyled = styled.div`
 const Document = ({ onDrop, ...props }) => {
   const { getRootProps, getInputProps } = useDropzone({ onDrop })
 
-  return (
-    !props.isButton ?
-      <DocumentStyled {...getRootProps()}>
-        <input {...getInputProps()} />
-        <Icon width="40px" fill="#CBCBCB" name="camera" />
-      </DocumentStyled>
-      :
-      <ButtonsStyled {...getRootProps()}>
-        <input {...getInputProps()} />
-        <Text color="white">Add Documents</Text>
-      </ButtonsStyled>
+  return !props.isButton ? (
+    <DocumentStyled {...getRootProps()}>
+      <input {...getInputProps()} />
+      <Icon width="40px" fill="#CBCBCB" name="camera" />
+    </DocumentStyled>
+  ) : (
+    <ButtonsStyled {...getRootProps()}>
+      <input {...getInputProps()} />
+      <Text color="white">Add Documents</Text>
+    </ButtonsStyled>
   )
 }
 

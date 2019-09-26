@@ -21,15 +21,15 @@ const Carousel = ({ photos, ...props }) => {
         container: base => ({
           ...base,
           backgroundColor: '#fafafa',
-          borderRadius: '15px'
+          borderRadius: props.borderRadius
         }),
         view: () => ({
           height: props.height,
           width: '100%',
-          borderRadius: '15px',
+          borderRadius: props.borderRadius,
           border: `${photos.length ? '1px solid #c4c4c4' : '1px solid #E05252'}`,
           '& > img': {
-            borderRadius: '15px',
+            borderRadius: props.borderRadius,
             width: '100%',
             height: '100%',
             objectFit: 'cover'
@@ -59,7 +59,8 @@ const Carousel = ({ photos, ...props }) => {
 
 Carousel.defaultProps = {
   photos: null,
-  height: 500
+  height: 550,
+  borderRadius: '15px'
 }
 
 Carousel.propTypes = {

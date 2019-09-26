@@ -7,38 +7,24 @@ import { toast } from 'react-toastify'
 
 import { onGetPaymentAccount, onDeletePaymentAccount, onCreatePaymentAccount } from 'redux/ducks/payment'
 
-import { Wrapper, Title, Icon, Loader, BackgroundImage, Button, Grid, Cell, Caption } from 'components'
+import { Title, Icon, Loader, BackgroundImage, Button, Grid, Cell, Table, Text } from 'components'
 import { TypesModal, openModal } from 'redux/ducks/modal'
 
-const ListGroup = styled.div`
-  margin: 50px;
-  display: grid;
-  grid-row-gap: 15px;
+const IconButton = styled.button`
+  background-color: transparent;
+  border: none;
+  cursor: pointer;
+  text-decoration: underline;
+  display: inline;
+  margin: 0;
+  padding: 0;
+
+  :hover,
+  :focus {
+    text-decoration: none;
+    outline: none;
+  }
 `
-
-const ListHeader = styled.div`
-  display: grid;
-  grid-template-columns: 1fr 1fr 1fr auto;
-  padding: 15px;
-`
-
-const ListItem = styled.div`
-  display: grid;
-  grid-template-columns: 1fr 1fr 1fr auto;
-  padding: 15px;
-  border: 1px solid #ececec;
-  border-radius: 15px;
-`
-
-const Options = styled.div`
-  width: 70px;
-`
-
-const AccountName = styled.span``
-
-const BSB = styled.span``
-
-const AccountNumber = styled.span``
 
 const PaymentPage = () => {
   const dispatch = useDispatch()
@@ -72,14 +58,14 @@ const PaymentPage = () => {
   if (isLoading) return <Loader text="Loading payment process" />
 
   return (
-    <Wrapper>
+    <>
       <Helmet title="Payment Preferences - Spacenow" />
       <Grid column="12">
         <Cell width={8}>
           <Title type="h3" title="Payment Preferences" />
         </Cell>
         <Cell width={4} middle justifySelf="end">
-          <Button size="sm" onClick={() => _addAccount()}>
+          <Button my="30px" size="sm" onClick={() => _addAccount()}>
             Add Account
           </Button>
         </Cell>
@@ -88,28 +74,60 @@ const PaymentPage = () => {
       {!details || !details.id ? (
         <BackgroundImage text="We didn't find any accounts :(" />
       ) : (
-          <ListGroup>
-            <ListHeader>
-              <Caption>First Name</Caption>
-              <Caption>BSB</Caption>
-              <Caption>Account</Caption>
-              <Options>
-                <Caption>Options</Caption>
-              </Options>
-            </ListHeader>
-            <ListItem>
-              <AccountName>{details.legal_entity.first_name}</AccountName>
-              <BSB>{details.external_accounts.data[0].routing_number}</BSB>
-              <AccountNumber>{details.external_accounts.data[0].last4}</AccountNumber>
-              <Options>
-                <a href="#" onClick={_handleRemoveAccount}>
-                  <Icon name="bin" width="25px" />
-                </a>
-              </Options>
-            </ListItem>
-          </ListGroup>
-        )}
-    </Wrapper>
+        <Grid columns={1}>
+          <Table responsive>
+            <thead>
+              <tr>
+                <th>
+                  <Text fontSize="14px" fontFamily="semiBold" style={{ whiteSpace: 'nowrap' }}>
+                    First Name
+                  </Text>
+                </th>
+                <th>
+                  <Text fontSize="14px" fontFamily="semiBold" style={{ whiteSpace: 'nowrap' }}>
+                    BSB
+                  </Text>
+                </th>
+                <th>
+                  <Text fontSize="14px" fontFamily="semiBold" style={{ whiteSpace: 'nowrap' }}>
+                    Account
+                  </Text>
+                </th>
+                <th style={{ textAlign: 'center' }}>
+                  <Text fontSize="14px" fontFamily="semiBold" style={{ whiteSpace: 'nowrap' }}>
+                    Options
+                  </Text>
+                </th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>
+                  <Text fontSize="14px" style={{ whiteSpace: 'nowrap' }}>
+                    {details.legal_entity.first_name}
+                  </Text>
+                </td>
+                <td>
+                  <Text fontSize="14px" style={{ whiteSpace: 'nowrap' }}>
+                    {details.external_accounts.data[0].routing_number}
+                  </Text>
+                </td>
+                <td>
+                  <Text fontSize="14px" style={{ whiteSpace: 'nowrap' }}>
+                    {details.external_accounts.data[0].last4}
+                  </Text>
+                </td>
+                <td align="center">
+                  <IconButton onClick={_handleRemoveAccount}>
+                    <Icon name="bin" style={{ fill: '#51C482' }} />
+                  </IconButton>
+                </td>
+              </tr>
+            </tbody>
+          </Table>
+        </Grid>
+      )}
+    </>
   )
 }
 
