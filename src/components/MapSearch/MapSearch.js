@@ -78,7 +78,7 @@ const CardContentUserTitle = styled.span`
 const MapSearch = withGoogleMap(props => {
   return (
     <GoogleMap
-      defaultZoom={13}
+      defaultZoom={15}
       center={{ lat: parseFloat(props.position.lat), lng: parseFloat(props.position.lng) }}
       defaultCenter={{ lat: parseFloat(props.position.lat), lng: parseFloat(props.position.lng) }}
       defaultOptions={{
