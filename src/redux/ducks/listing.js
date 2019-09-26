@@ -1,7 +1,7 @@
 /* eslint-disable no-console */
 import { gql } from 'apollo-boost'
 
-import { getClientWithAuth } from 'graphql/apolloClient'
+import { getClientWithAuth, getClient } from 'graphql/apolloClient'
 import errToMsg from 'utils/errToMsg'
 import { monthNames } from 'variables'
 import { camalize, isPositiveInt } from 'utils/strings'
@@ -45,7 +45,10 @@ export const Types = {
   PUBLISH_LISTING_FAILURE: 'PUBLISH_LISTING_FAILURE',
   LISTING_CLEAN_SPACE_AVAILABILITIES_REQUEST: 'LISTING_CLEAN_SPACE_AVAILABILITIES_REQUEST',
   LISTING_CLEAN_SPACE_AVAILABILITIES_SUCCESS: 'LISTING_CLEAN_SPACE_AVAILABILITIES_SUCCESS',
-  LISTING_CLEAN_SPACE_AVAILABILITIES_FAILURE: 'LISTING_CLEAN_SPACE_AVAILABILITIES_FAILURE'
+  LISTING_CLEAN_SPACE_AVAILABILITIES_FAILURE: 'LISTING_CLEAN_SPACE_AVAILABILITIES_FAILURE',
+  LISTING_CLAIM_REQUEST: 'LISTING_CLAIM_REQUEST',
+  LISTING_CLAIM_SUCCESS: 'LISTING_CLAIM_SUCCESS',
+  LISTING_CLAIM_FAILURE: 'LISTING_CLAIM_FAILURE'
 }
 
 // Initial State
@@ -105,6 +108,11 @@ const initialState = {
   cleanAvailabilities: {
     isLoading: false,
     isCleaned: false,
+    error: null
+  },
+  claim: {
+    isLoading: true,
+    isClaimed: false,
     error: null
   }
 }
@@ -474,6 +482,14 @@ const mutationPublish = gql`
 const mutationCleanListingAvailabilities = gql`
   mutation cleanListingAvailabilities($listingId: Int!) {
     cleanListingAvailabilities(listingId: $listingId) {
+      status
+    }
+  }
+`
+
+const mutationClaimListing = gql`
+  mutation claimListing($listingId: Int!) {
+    claimListing(listingId: $listingId) {
       status
     }
   }
@@ -850,6 +866,35 @@ export default function reducer(state = initialState, action) {
         }
       }
     }
+    case Types.LISTING_CLAIM_REQUEST: {
+      return {
+        ...state,
+        claim: {
+          isLoading: true,
+          isClaimed: false,
+          error: null
+        }
+      }
+    }
+    case Types.LISTING_CLAIM_SUCCESS: {
+      return {
+        ...state,
+        claim: {
+          isLoading: false,
+          isClaimed: true
+        }
+      }
+    }
+    case Types.LISTING_CLAIM_FAILURE: {
+      return {
+        ...state,
+        claim: {
+          isLoading: false,
+          isClaimed: false,
+          error: action.payload
+        }
+      }
+    }
     default:
       return state
   }
@@ -1106,5 +1151,21 @@ export const onCleanAvailabilitiesByListingId = id => async dispatch => {
     dispatch({ type: Types.LISTING_CLEAN_SPACE_AVAILABILITIES_SUCCESS, payload: data.cleanListingAvailabilities })
   } catch (err) {
     dispatch({ type: Types.LISTING_CLEAN_SPACE_AVAILABILITIES_FAILURE, payload: errToMsg(err) })
+  }
+}
+
+export const onClaimListing = (listingId, listingTitle) => async dispatch => {
+  dispatch({ type: Types.LISTING_CLAIM_REQUEST })
+  try {
+    const { data } = await getClient(dispatch).mutate({
+      mutation: mutationClaimListing,
+      variables: { listingId: parseInt(listingId, 10) }
+    })
+    console.log(data)
+    dispatch({ type: Types.LISTING_CLAIM_SUCCESS, payload: data.claimListing })
+    toast.success('Listing Claimed!!')
+    window.location.href = `https://spacenow.com/claim-your-space?listingId=${parseInt(listingId, 10)}&listingTitle=${listingTitle}`
+  } catch (err) {
+    dispatch({ type: Types.LISTING_CLAIM_FAILURE, payload: errToMsg(err) })
   }
 }
