@@ -80,7 +80,7 @@
   },
   {
     "featureType": "road.local",
-    "elementType": "labels.text.fill",
+    "elementType": "labels.text",
     "stylers": [
       {
         "visibility": "off"
@@ -93,6 +93,24 @@
     "stylers": [
       {
         "visibility": "on"
+      }
+    ]
+  },
+  {
+    "featureType": "road.highway",
+    "elementType": "geometry.fill",
+    "stylers": [
+      {
+        "color": "#fff2af"
+      }
+    ]
+  },
+  {
+    "featureType": "road.highway",
+    "elementType": "geometry.stroke",
+    "stylers": [
+      {
+        "color": "#f7d473"
       }
     ]
   },
