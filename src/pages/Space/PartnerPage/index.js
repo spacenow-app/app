@@ -78,7 +78,7 @@ const PartnerPage = ({ match, location, ...props }) => {
     const { address1 = '', city = '', zipcode = '', state = '', country = '' } = address
     const convertedAddress = `${address1 ? `${address1}, ` : ''} ${city ? `${city}, ` : ''} ${
       zipcode ? `${zipcode}, ` : ''
-    } ${state ? `${state}, ` : ''} ${country ? `${country}` : ''}`
+      } ${state ? `${state}, ` : ''} ${country ? `${country}` : ''}`
     return convertedAddress.replace(/\0.*$/g, '')
   }
 
@@ -100,15 +100,15 @@ const PartnerPage = ({ match, location, ...props }) => {
   const _convertedArrayPhotos = array => {
     return array.filter(el => el !== undefined).length > 0
       ? array
-          .filter(el => el !== undefined)
-          .map(el => ({
-            source: `https://api-assets.prod.cloud.spacenow.com?width=800&heigth=500&format=jpeg&path=${el.name}`
-          }))
+        .filter(el => el !== undefined)
+        .map(el => ({
+          source: `https://api-assets.prod.cloud.spacenow.com?width=800&heigth=500&format=jpeg&path=${el.name}`
+        }))
       : []
   }
 
   // Load the regular listing view
-  if (listing && listing.user.provider === 'spacenow') {
+  if (listing && listing.user.provider !== 'wework') {
     props.history.push(`/space/${match.params.id}`)
     return null
   }

@@ -2,6 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import styled from 'styled-components'
 import Avatar from '../Avatar'
+import Link from 'components/Link'
 
 const WrapperStyled = styled.div`
   display: grid;
@@ -45,7 +46,13 @@ const TextName = styled(TextDefaultStyled)`
 `
 
 const TextCity = styled(TextDefaultStyled)`
+  color: #707070;
+`
+
+const TextClaim = styled(Link)`
+  font-family: 'Montserrat-SemiBold';
   color: #707070v;
+  font-size: 12px;
 `
 
 const TextJoined = styled(TextDefaultStyled)`
@@ -65,6 +72,7 @@ const UserDetails = props => (
       <UserContainer>
         <TextName>{props.hostname}</TextName>
         {props.address && <TextCity>{props.address}</TextCity>}
+        {props.provider === 'generic' && <TextClaim to={'#'} onClick={props.onClaim}>Claim your listing!</TextClaim>}
       </UserContainer>
     </TopStyled>
     {props.joined && (
@@ -77,7 +85,8 @@ const UserDetails = props => (
 )
 
 UserDetails.defaultProps = {
-  imageProfile: null
+  imageProfile: null,
+  provider: 'spacenow'
 }
 
 UserDetails.propTypes = {
@@ -85,7 +94,9 @@ UserDetails.propTypes = {
   address: PropTypes.string,
   joined: PropTypes.string,
   imageProfile: PropTypes.string,
-  text: PropTypes.string
+  text: PropTypes.string,
+  provider: PropTypes.string,
+  onClaim: PropTypes.func
 }
 
 export default UserDetails

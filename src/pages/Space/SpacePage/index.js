@@ -35,7 +35,8 @@ import {
   onGetListingById,
   onGetAllSpecifications,
   onCleanAvailabilitiesByListingId,
-  onGetAvailabilitiesByListingId
+  onGetAvailabilitiesByListingId,
+  onClaimListing
 } from 'redux/ducks/listing'
 
 import { onCreateBooking, onGetPendingBooking } from 'redux/ducks/booking'
@@ -158,7 +159,7 @@ const SpacePage = ({ match, location, history, ...props }) => {
     const { address1 = '', city = '', zipcode = '', state = '', country = '' } = address
     const convertedAddress = `${address1 ? `${address1}, ` : ''} ${city ? `${city}, ` : ''} ${
       zipcode ? `${zipcode}, ` : ''
-    } ${state ? `${state}, ` : ''} ${country ? `${country}` : ''}`
+      } ${state ? `${state}, ` : ''} ${country ? `${country}` : ''}`
     return convertedAddress.replace(/\0.*$/g, '')
   }
 
@@ -175,6 +176,10 @@ const SpacePage = ({ match, location, history, ...props }) => {
     if (mon && tue && wed && thu && fri & sat && sun) return 'Everyday'
     if (!mon && !tue && !wed && !thu && !fri & !sat && !sun) return 'Closed'
     return 'Custom'
+  }
+
+  const _onClaimListing = () => {
+    dispatch(onClaimListing(match.params.id, listing.title))
   }
 
   const _renderHighLights = obj => {
@@ -233,10 +238,10 @@ const SpacePage = ({ match, location, history, ...props }) => {
   const _convertedArrayPhotos = array => {
     return array.filter(el => el !== undefined).length > 0
       ? array
-          .filter(el => el !== undefined)
-          .map(el => ({
-            source: `https://api-assets.prod.cloud.spacenow.com?width=800&heigth=500&format=jpeg&path=${el.name}`
-          }))
+        .filter(el => el !== undefined)
+        .map(el => ({
+          source: `https://api-assets.prod.cloud.spacenow.com?width=800&heigth=500&format=jpeg&path=${el.name}`
+        }))
       : []
   }
 
@@ -637,6 +642,8 @@ const SpacePage = ({ match, location, history, ...props }) => {
                 <UserDetails
                   hostname={listing.user.profile.displayName}
                   imageProfile={listing.user.profile.picture}
+                  provider={listing.user.provider}
+                  onClaim={_onClaimListing}
                   joined="2019"
                 />
                 <Box mt="15px">
