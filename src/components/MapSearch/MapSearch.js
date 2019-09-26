@@ -98,9 +98,9 @@ const MapSearch = withGoogleMap(props => {
             onClick={() => {
               props.onClickMarker(marker)
             }}
-            labelAnchor={mapPinIcon}
+            labelAnchor={{}}
             children={<div>{marker.price}</div>}
-            icon={null}
+            icon={mapPinIcon}
             labelStyle={{
               backgroundColor: 'white',
               fontSize: '16px',
