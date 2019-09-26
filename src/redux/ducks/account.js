@@ -67,8 +67,8 @@ const initialState = {
 
 // GraphQL
 const queryGetProfile = gql`
-  query getProfile($id: String!) {
-    getUserLegacyById(id: $id) {
+  query getProfile($id: String!, $token: String) {
+    getUserLegacyById(id: $id, $token: String) {
       id
       email
       emailConfirmed
