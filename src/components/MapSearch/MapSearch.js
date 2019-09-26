@@ -5,7 +5,6 @@ import { withGoogleMap, GoogleMap, InfoWindow } from 'react-google-maps'
 import MarkerWithLabel from 'react-google-maps/lib/components/addons/MarkerWithLabel'
 import { Avatar } from 'components'
 import defaultMapStyle from './default_map_style.json'
-import mapPinIcon from './spacenow_logo_pin.png'
 
 const CardContainer = styled.div`
   display: grid;
