@@ -10,15 +10,14 @@ import _ from 'lodash'
 
 import { nanDate, weekTimeTable } from 'variables'
 
-import { onGetAvailabilitiesByListingId, onGetAllHolidays , onUpdate } from 'redux/ducks/listing'
-
+import { onGetAvailabilitiesByListingId, onGetAllHolidays, onUpdate } from 'redux/ducks/listing'
 
 import {
   Title,
   Grid,
   Cell,
   TimeTable,
-  // Calendar,
+  Calendar,
   Switch,
   StepButtons,
   ToolTip,
@@ -38,6 +37,26 @@ const ItemSwitchStyled = styled.div`
   padding: 20px;
   display: grid;
   grid-template-columns: auto auto;
+`
+
+const CalendarContainerDesktop = styled.div`
+  @media only screen and (max-width: 991px) {
+    display: none;
+  }
+`
+
+const DatePickerMobile = styled(DatePicker)`
+  display: none;
+  @media only screen and (max-width: 991px) {
+    display: block;
+  }
+`
+
+const ListDatesContainerMobile = styled.div`
+  display: none;
+  @media only screen and (max-width: 991px) {
+    display: block;
+  }
 `
 
 const TIME_TABLE_INIT_STATE = {
@@ -334,18 +353,22 @@ const AvailabilityTab = ({ match, listing, history, setFatherValues }) => {
             title="Blocked dates"
             subtitle="Block out times when the space is not available within business opening hours."
           />
-          {/* <Calendar
-            fromMonth={new Date()}
-            handleDayClick={_onClickSelectDay}
-            selectedDays={selectedDates}
-            disabledDays={[]}
-            daysOfWeek={timeTableWeek}
-          /> */}
-          <DatePicker
+          <CalendarContainerDesktop>
+            <Calendar
+              fromMonth={new Date()}
+              handleDayClick={_onClickSelectDay}
+              selectedDays={selectedDates}
+              disabledDays={[]}
+              daysOfWeek={timeTableWeek}
+              colorSelected="#E05252"
+            />
+          </CalendarContainerDesktop>
+          <DatePickerMobile
             date={null}
             handleDateChange={_onClickSelectDay}
             hideOnDayClick={false}
             placeholder="Choose Dates"
+            colorSelected="#E05252"
             dayPickerProps={{
               selectedDays: selectedDates,
               modifiers: {
@@ -360,7 +383,9 @@ const AvailabilityTab = ({ match, listing, history, setFatherValues }) => {
               }
             }}
           />
-          <ListDates dates={selectedDates} onClickDate={(e, date) => _removeDate(date)} />
+          <ListDatesContainerMobile>
+            <ListDates dates={selectedDates} onClickDate={(e, date) => _removeDate(date)} badgeColor="#E05252" />
+          </ListDatesContainerMobile>
         </Cell>
         <Cell>
           <Title

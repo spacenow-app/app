@@ -55,7 +55,11 @@ const ListDates = props => {
               <MonthNameStyled>{month}</MonthNameStyled>
               <ContainerDatesStyled>
                 {datesGrouped[month].map(date => (
-                  <Badge key={date} handleClick={props.onClickDate && (e => props.onClickDate(e, date))}>
+                  <Badge
+                    key={date}
+                    handleClick={props.onClickDate && (e => props.onClickDate(e, date))}
+                    color={props.badgeColor}
+                  >
                     {format(_convertedDate(date), 'd')}
                   </Badge>
                 ))}
@@ -70,13 +74,15 @@ const ListDates = props => {
 }
 
 ListDates.defaultProps = {
-  onClickDate: null
+  onClickDate: null,
+  badgeColor: '#6adc91'
 }
 
 ListDates.propTypes = {
   theme: PropTypes.instanceOf(Object),
   onClickDate: PropTypes.func,
-  dates: PropTypes.instanceOf(Array).isRequired
+  dates: PropTypes.instanceOf(Array).isRequired,
+  badgeColor: PropTypes.string
 }
 
 export default ListDates

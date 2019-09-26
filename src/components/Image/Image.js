@@ -15,25 +15,32 @@ const ImageStyled = styled.div`
 `
 
 const Image = props => (
-  <ImageStyled {...props} onClick={e => props.handleClick(e)}>
+  <ImageStyled {...props} onClick={e => (props.handleClick ? props.handleClick(e) : null)}>
     {props.src ? (
-      props.type !== 'application/pdf' ?
-        <img src={props.src} alt={props.alt} width="100%" height="100%" /> :
-        <embed src={`https://drive.google.com/viewerng/
-viewer?embedded=true&url=${props.src}`} width="100%" height="100%" type="application/pdf" />
+      props.type !== 'application/pdf' ? (
+        <img src={props.src} alt={props.alt} width="100%" height="100%" />
+      ) : (
+        <embed
+          src={`https://drive.google.com/viewerng/
+viewer?embedded=true&url=${props.src}`}
+          width="100%"
+          height="100%"
+          type="application/pdf"
+        />
+      )
     ) : (
-        <svg
-          width={props.width}
-          height={props.height}
-          xmlns="http://www.w3.org/2000/svg"
-          aria-label={`A generic square placeholder image with a white border around it, making it resemble a photograph taken with an old instant camera: ${props.width}x${props.height}`}
-        >
-          <rect width="100%" height="100%" fill="#868e96" />
-          <text x="50%" y="50%" fill="#dee2e6" dy=".3em">
-            {/* {props.width}x{props.height} */}
-          </text>
-        </svg>
-      )}
+      <svg
+        width={props.width}
+        height={props.height}
+        xmlns="http://www.w3.org/2000/svg"
+        aria-label={`A generic square placeholder image with a white border around it, making it resemble a photograph taken with an old instant camera: ${props.width}x${props.height}`}
+      >
+        <rect width="100%" height="100%" fill="#868e96" />
+        <text x="50%" y="50%" fill="#dee2e6" dy=".3em">
+          {/* {props.width}x{props.height} */}
+        </text>
+      </svg>
+    )}
   </ImageStyled>
 )
 
@@ -42,7 +49,7 @@ Image.defaultProps = {
   src: '',
   alt: '...',
   width: '250px',
-  height: '200px',
+  height: '200px'
 }
 
 Image.propTypes = {
@@ -52,7 +59,7 @@ Image.propTypes = {
   alt: PropTypes.string,
   width: PropTypes.string,
   height: PropTypes.string,
-  type: PropTypes.string,
+  type: PropTypes.string
 }
 
 export { Image }

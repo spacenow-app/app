@@ -22,7 +22,11 @@ const WrapperStyled = styled.div`
     .DayPicker-Month {
       border-spacing: 10px;
       border-collapse: separate;
-    } 
+    }
+
+    .DayPicker-Months {
+      flex-wrap: nowrap;
+    }
 
     .DayPicker-Day {
       width: 50px;
@@ -35,12 +39,12 @@ const WrapperStyled = styled.div`
 
     .DayPicker:not(.DayPicker--interactionDisabled)
       .DayPicker-Day:not(.DayPicker-Day--disabled):not(.DayPicker-Day--selected):not(.DayPicker-Day--outside):hover {
-      background-color: #6adc91;
+      background-color: ${props => (props.colorSelected ? props.colorSelected : '#6adc91')};
     }
 
     .DayPicker-Day--selected:not(.DayPicker-Day--disabled):not(.DayPicker-Day--outside) {
       position: relative;
-      background-color: #6adc91;
+      background-color: ${props => (props.colorSelected ? props.colorSelected : '#6adc91')};
       color: #fff;
     }
 
@@ -86,14 +90,14 @@ const NavBarContainer = styled.div`
 
 const NavBatItem = styled.div`
   background-color: #6adc91;
-  height: 60px;
+  height: 50px;
   border-radius: 30px;
   color: #fff;
   display: grid;
   align-content: center
     ${props =>
-    props.left &&
-    css`
+      props.left &&
+      css`
         grid-template-columns: auto 1fr;
         > button {
           display: grid;
@@ -108,8 +112,8 @@ const NavBatItem = styled.div`
         }
       `}
     ${props =>
-    props.right &&
-    css`
+      props.right &&
+      css`
         grid-template-columns: 1fr auto;
         > button {
           display: grid;
@@ -163,10 +167,10 @@ const Caption = ({ date }) => {
 
 const Calendar = ({ selectedDays, disabledDays, daysOfWeek, handleDayClick, ...props }) => {
   return (
-    <WrapperStyled>
+    <WrapperStyled {...props}>
       <DayPicker
         {...props}
-        numberOfMonths={1}
+        numberOfMonths={2}
         disabledDays={[
           ...disabledDays.map(el => new Date(el)),
           {
@@ -184,12 +188,16 @@ const Calendar = ({ selectedDays, disabledDays, daysOfWeek, handleDayClick, ...p
     </WrapperStyled>
   )
 }
+Calendar.defaultProps = {
+  colorSelected: '#6adc91'
+}
 
 Calendar.propTypes = {
   selectedDays: PropTypes.instanceOf(Array),
   disabledDays: PropTypes.instanceOf(Array),
   daysOfWeek: PropTypes.instanceOf(Array),
-  handleDayClick: PropTypes.func
+  handleDayClick: PropTypes.func,
+  colorSelected: PropTypes.string
 }
 
 export default memo(Calendar, (prevProps, nextProps) => {

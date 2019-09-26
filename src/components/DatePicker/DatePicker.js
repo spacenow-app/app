@@ -82,12 +82,12 @@ const WrapperStyled = styled.div`
 
     .DayPicker:not(.DayPicker--interactionDisabled)
       .DayPicker-Day:not(.DayPicker-Day--disabled):not(.DayPicker-Day--selected):not(.DayPicker-Day--outside):hover {
-      background-color: #6adc91;
+      background-color: ${props => (props.colorSelected ? props.colorSelected : '#6adc91')};
     }
 
     .DayPicker-Day--selected:not(.DayPicker-Day--disabled):not(.DayPicker-Day--outside) {
       position: relative;
-      background-color: #6adc91;
+      background-color: ${props => (props.colorSelected ? props.colorSelected : '#6adc91')};
       color: #fff;
     }
 
@@ -193,11 +193,13 @@ const DatePicker = forwardRef(
 DatePicker.defaultProps = {
   size: 'md',
   format: 'dd/MM/yyyy',
-  placeholder: 'Choose Date'
+  placeholder: 'Choose Date',
+  colorSelected: '#6adc91'
 }
 
 DatePicker.propTypes = {
-  size: PropTypes.oneOf(['sm', 'md', 'lg'])
+  size: PropTypes.oneOf(['sm', 'md', 'lg']),
+  colorSelected: PropTypes.string
 }
 
 export default DatePicker

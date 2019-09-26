@@ -67,7 +67,7 @@ const SpaceDetailsPage = ({ match, history, location, ...props }) => {
 
   return (
     <Wrapper>
-      <Box mb="50px" mt="50px">
+      <Box my={{ _: '20px', medium: '40px' }}>
         <Box display="flex" justifyContent="start">
           <Box>
             <Tag
