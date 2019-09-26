@@ -1,7 +1,8 @@
 import React, { memo } from 'react'
 import styled from 'styled-components'
 import PropTypes from 'prop-types'
-import { withGoogleMap, GoogleMap, Marker, InfoWindow } from 'react-google-maps'
+import { withGoogleMap, GoogleMap, InfoWindow } from 'react-google-maps'
+import MarkerWithLabel from 'react-google-maps/lib/components/addons/MarkerWithLabel'
 import { Avatar } from 'components'
 import defaultMapStyle from './default_map_style.json'
 import mapPinIcon from './spacenow_logo_pin.png'
@@ -91,15 +92,23 @@ const MapSearch = withGoogleMap(props => {
     >
       {props.markers &&
         props.markers.map(marker => (
-          <Marker
+          <MarkerWithLabel
             key={marker.id}
             position={{ lat: parseFloat(marker.lat), lng: parseFloat(marker.lng) }}
             onClick={() => {
               props.onClickMarker(marker)
             }}
-            icon={{
-              url: mapPinIcon,
-              scaledSize: new window.google.maps.Size(30, 35)
+            defaultIcon={' '}
+            labelAnchor={{ x: 55, y: 40 }}
+            children={<div>{marker.price}</div>}
+            labelStyle={{
+              backgroundColor: 'white',
+              fontSize: '16px',
+              padding: '8px 14px',
+              borderRadius: '50px',
+              color: '#172439',
+              border: '1px solid #CBCBCB',
+              fontFamily: 'Montserrat-Bold'
             }}
           />
         ))}
