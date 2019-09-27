@@ -1,7 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import styled, { css } from 'styled-components'
-import { color } from 'styled-system'
+import { color, size } from 'styled-system'
 
 const SpanStyled = styled.div`
   border: 1px solid #cbcbcb;
@@ -13,13 +13,13 @@ const SpanStyled = styled.div`
   grid-column-gap: 10px;
   padding: ${props => (props.small ? '5px 10px' : '10px')};
   width: fit-content;
-  height: 50px;
   ${props =>
     props.icon &&
     css`
       grid-template-columns: 20px 1fr;
     `}
   ${color};
+  ${size};
 `
 
 const TextStyled = styled.span`
