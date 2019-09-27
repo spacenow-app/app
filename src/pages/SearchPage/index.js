@@ -250,7 +250,7 @@ const SearchPage = ({ history, location }) => {
     <>
       <Box>
         <NavBar shownSearch history={history} />
-        <Line />
+        <Line marginTop={0} />
         <Box display={{ _: 'block', small: 'none' }} mx="20px" mb="20px">
           <Button fluid size="sm" onClick={() => setShowFilterBar(!showFilterBar)}>
             {showFilterBar ? 'Hide Filters' : 'Show Filters'}
