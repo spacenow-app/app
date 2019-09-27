@@ -1,7 +1,6 @@
 import React, { useLayoutEffect, useEffect, useState, useRef } from 'react'
 import { useDispatch, shallowEqual, useSelector } from 'react-redux'
 import styled from 'styled-components'
-import { toast } from 'react-toastify'
 
 import {
   NavBar,
@@ -15,7 +14,6 @@ import {
   MapSearch,
   Slider,
   Switch,
-  AutoComplete,
   Loader
 } from 'components'
 
@@ -25,23 +23,6 @@ import numeral from 'numeral'
 import { onSearch, onQuery } from 'redux/ducks/search'
 
 import ListResults from './ListResults'
-
-const SearchBar = styled(Box)`
-  display: grid;
-  grid-template-columns: 1fr auto;
-  grid-column-gap: 20px;
-  width: 714px;
-  padding: 0 20px;
-
-  @media only screen and (max-width: 700px) {
-    width: 100%;
-    grid-template-columns: auto;
-
-    button:nth-child(2) {
-      display: none;
-    }
-  }
-`
 
 const FilterBar = styled.div`
   display: grid;
@@ -129,16 +110,14 @@ const SearchPage = ({ history, location }) => {
   const refResults = useRef()
 
   const queryParams = new URLSearchParams(location.search)
-  const queryLat = queryParams.get('lat')
-  const queryLng = queryParams.get('lng')
+  const queryLat = queryParams.get('lat') || -33.8688197
+  const queryLng = queryParams.get('lng') || 151.2092955
   const queryCategory = queryParams.get('category')
-  const queryLocation = cleanParameter(queryParams.get('location'))
+  const queryLocation = cleanParameter(queryParams.get('location') || 'Sydney, AU')
 
   const [selectedSpace, setSelectedSpace] = useState(null)
   const [shouldShowFilter, setShouldShowFilter] = useState(false)
   const [markers, setMarkers] = useState([])
-  const [address, setAddress] = useState(queryLocation || 'Sydney, AU')
-  const [latLng, setLatLng] = useState({ lat: queryLat || -33.8688197, lng: queryLng || 151.2092955 })
   const [filterPrice, setFilterPrice] = useState([0, 0])
   const [filterInstantBooking, setFilterInstantBooking] = useState(false)
   const [showFilterBar, setShowFilterBar] = useState(false)
@@ -173,14 +152,10 @@ const SearchPage = ({ history, location }) => {
 
   useEffect(() => {
     async function fetchData() {
-      if (queryLat && queryLng && queryCategory) {
-        await dispatch(onSearch(queryLat, queryLng, queryCategory))
-      } else {
-        await dispatch(onSearch(latLng.lat, latLng.lng))
-      }
+      await dispatch(onSearch(queryLat, queryLng, queryCategory))
     }
     fetchData()
-  }, [dispatch, queryLat, queryLng, queryCategory, latLng])
+  }, [dispatch, queryLat, queryLng, queryCategory, queryLocation])
 
   useEffect(() => {
     setMarkers(
@@ -252,34 +227,6 @@ const SearchPage = ({ history, location }) => {
     setShouldShowFilter(null)
   }
 
-  const _onSearch = (lat, lng, page = false) => {
-    if (!lat && !lng) {
-      toast.info('You must select a address!')
-      return
-    }
-    dispatch(onSearch(lat, lng, page))
-  }
-
-  const _onSelectedAddess = obj => {
-    const { position, address: objAddress } = obj
-    if (position) {
-      _onSearch(position.lat, position.lng)
-      setLatLng(position)
-    }
-    if (objAddress) {
-      setAddress(objAddress)
-    }
-  }
-
-  const _onHandleError = () => {
-    setLatLng({})
-  }
-
-  const _reset = () => {
-    setLatLng({})
-    setAddress('')
-  }
-
   const _onPagionationChange = page => {
     const filters = {
       filterCategory,
@@ -302,27 +249,7 @@ const SearchPage = ({ history, location }) => {
   return (
     <>
       <Box>
-        <NavBar />
-        <SearchBar>
-          <AutoComplete
-            searchOptions={{
-              types: ['geocode']
-            }}
-            address={address}
-            onChangeAddress={setAddress}
-            onHandleError={_onHandleError}
-            onSelectedAddess={_onSelectedAddess}
-            disabled={latLng && (latLng.lat || latLng.lng)}
-            closeButton={latLng && (latLng.lat || latLng.lng)}
-            onClickCloseButton={_reset}
-            size="sm"
-            placeholder="Sydney, AU"
-            label={null}
-          />
-          <Button size="sm" onClick={() => _onSearch(latLng.lat, latLng.lng)}>
-            Search
-          </Button>
-        </SearchBar>
+        <NavBar shownSearch history={history} />
         <Line />
         <Box display={{ _: 'block', small: 'none' }} mx="20px" mb="20px">
           <Button fluid size="sm" onClick={() => setShowFilterBar(!showFilterBar)}>
@@ -666,7 +593,7 @@ const SearchPage = ({ history, location }) => {
             noMargin
             title={
               <Text>
-                Showing results around <Text color="primary">{address}</Text>
+                Showing results around <Text color="primary">{queryLocation}</Text>
               </Text>
             }
           />
@@ -701,7 +628,7 @@ const SearchPage = ({ history, location }) => {
           <ContainerMap>
             <MapSearch
               history={history}
-              position={latLng}
+              position={{ lat: queryLat, lng: queryLng }}
               markers={markers}
               onClickMarker={_onClickMarkerMap}
               selectedMarker={selectedSpace}
