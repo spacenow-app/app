@@ -66,7 +66,7 @@ const ContainerResults = styled.div`
   grid-template-columns: auto 1fr;
   grid-column-gap: ${({ showMap }) => (showMap ? '40px' : '0')};
   width: 100%;
-  height: calc(100vh - 312px);
+  height: calc(100vh - 245px);
   top: 312px;
   padding: 0 20px;
 
@@ -76,7 +76,8 @@ const ContainerResults = styled.div`
 `
 
 const ContainerMap = styled.div`
-  margin-bottom: 20px;
+  // margin-bottom: 20px;
+  margin-top: -50px;
 
   .gm-style-iw-c {
     padding: 0 !important;
@@ -659,9 +660,10 @@ const SearchPage = ({ history, location }) => {
           </Manager>
         </FilterBar>
         <Line />
-        <Box ml="25px">
+        <Box ml="25px" my="25px">
           <Title
             type="h5"
+            noMargin
             title={
               <Text>
                 Showing results around <Text color="primary">{address}</Text>
