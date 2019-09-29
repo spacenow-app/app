@@ -78,7 +78,7 @@ const PartnerPage = ({ match, location, ...props }) => {
     const { address1 = '', city = '', zipcode = '', state = '', country = '' } = address
     const convertedAddress = `${address1 ? `${address1}, ` : ''} ${city ? `${city}, ` : ''} ${
       zipcode ? `${zipcode}, ` : ''
-      } ${state ? `${state}, ` : ''} ${country ? `${country}` : ''}`
+    } ${state ? `${state}, ` : ''} ${country ? `${country}` : ''}`
     return convertedAddress.replace(/\0.*$/g, '')
   }
 
@@ -100,10 +100,10 @@ const PartnerPage = ({ match, location, ...props }) => {
   const _convertedArrayPhotos = array => {
     return array.filter(el => el !== undefined).length > 0
       ? array
-        .filter(el => el !== undefined)
-        .map(el => ({
-          source: `https://api-assets.prod.cloud.spacenow.com?width=800&heigth=500&format=jpeg&path=${el.name}`
-        }))
+          .filter(el => el !== undefined)
+          .map(el => ({
+            source: `https://api-assets.prod.cloud.spacenow.com?width=800&heigth=500&format=jpeg&path=${el.name}`
+          }))
       : []
   }
 
@@ -200,7 +200,11 @@ const PartnerPage = ({ match, location, ...props }) => {
             </Box>
 
             <Box>
-              <Title type="h5" title="Access Type" />
+              <Title
+                type="h5"
+                title="Access Information"
+                subtitle="How you’ll gain access to this space. Your host will provide the following upon successful bookings:"
+              />
               <Box
                 display="grid"
                 border="1px solid"
@@ -212,7 +216,7 @@ const PartnerPage = ({ match, location, ...props }) => {
                 fontFamily="MontSerrat-SemiBold"
                 fontSize="14px"
                 color={listing.listingData.accessType ? 'quartenary' : 'error'}
-                borderColor={listing.listingData.accessType ? 'greyscale.4' : 'error'}
+                borderColor={listing.listingData.accessType ? '#c4c4c4' : 'error'}
               >
                 <Icon
                   style={{ alignSelf: 'center', justifySelf: 'center' }}

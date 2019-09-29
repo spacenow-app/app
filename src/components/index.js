@@ -51,6 +51,7 @@ import Pagination from './Pagination'
 import DatesDetail from './DatesDetail'
 import Table from './Table'
 import CarouselListing from './CarouselListing'
+import Footer from './Footer'
 
 export {
   Modal,
@@ -108,5 +109,6 @@ export {
   Pagination,
   DatesDetail,
   Table,
-  CarouselListing
+  CarouselListing,
+  Footer
 }

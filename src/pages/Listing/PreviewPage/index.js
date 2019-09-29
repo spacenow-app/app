@@ -307,7 +307,11 @@ const PreviewPage = ({ match, location, ...props }) => {
         </Box>
 
         <Box my="50px">
-          <Title type="h4" title="Access Type" />
+          <Title
+            type="h4"
+            title="Access Information"
+            subtitle="How you’ll gain access to this space. Your host will provide the following upon successful bookings:"
+          />
           <Box
             display="grid"
             border="1px solid"
@@ -319,7 +323,7 @@ const PreviewPage = ({ match, location, ...props }) => {
             fontFamily="MontSerrat-SemiBold"
             fontSize="14px"
             color={listing.listingData.accessType ? 'quartenary' : 'error'}
-            borderColor={listing.listingData.accessType ? 'greyscale.4' : 'error'}
+            borderColor={listing.listingData.accessType ? '#c4c4c4' : 'error'}
           >
             <Icon
               style={{ alignSelf: 'center', justifySelf: 'center' }}
@@ -404,7 +408,7 @@ const PreviewPage = ({ match, location, ...props }) => {
           <Map position={{ lat: Number(listing.location.lat), lng: Number(listing.location.lng) }} />
         </Box>
 
-        <Grid columns={1}>
+        {/* <Grid columns={1}>
           <Cell>
             <Title type="h4" title="Cancellation Policy" />
           </Cell>
@@ -424,7 +428,7 @@ const PreviewPage = ({ match, location, ...props }) => {
               </Cell>
             </Box>
           </Cell>
-        </Grid>
+        </Grid> */}
 
         <StepButtons
           prev={{ onClick: () => props.history.push(`/listing/space/${match.params.id}`) }}
