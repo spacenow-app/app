@@ -18,7 +18,7 @@ const initialState = {
     result: [],
     pagination: {
       page: 1,
-      perPage: 10,
+      perPage: 12,
       prePage: 1,
       nextPage: 2,
       total: 0,
