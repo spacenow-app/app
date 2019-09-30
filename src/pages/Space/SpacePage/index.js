@@ -524,7 +524,6 @@ const SpacePage = ({ match, location, history, ...props }) => {
                     title={`$ ${(Math.round((listing.listingData.basePrice || 0) * 100) / 100).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")} ${listing.bookingPeriod}`}
                     noMargin
                     right
-                    noMargin
                   />
                 </CellStyled>
               </Grid>
