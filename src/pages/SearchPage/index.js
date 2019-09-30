@@ -80,7 +80,8 @@ const ItemSwitchStyled = styled.div`
   padding: 20px;
   display: grid;
   grid-template-columns: auto auto;
-  width: 200px;
+  grid-column-gap: 10px;
+  width: 189px;
   margin-top: 35px;
   margin-bottom: 35px;
 `
@@ -91,9 +92,9 @@ const SwitchStyled = styled.div`
   height: 42px;
   border-radius: 75px;
   border: 1px solid ${({ checked }) => (checked ? '#6adc91' : '#c4c4c4')};
-  padding: 9px 27px;
+  padding: 9px 25px;
   grid-template-columns: auto auto;
-  width: 197px;
+  grid-column-gap: 10px;
 
   @media (max-width: 945px) {
     display: none;

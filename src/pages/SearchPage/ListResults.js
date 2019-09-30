@@ -45,6 +45,12 @@ const CardTitle = styled(Text)`
   white-space: nowrap;
   text-overflow: ellipsis;
   cursor: pointer;
+
+  @media (max-width: 945px) {
+    margin-bottom: 5px;
+    line-height: 1;
+    white-space: pre-wrap;
+  }
 `
 
 const CardImage = styled.img`

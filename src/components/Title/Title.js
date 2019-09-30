@@ -34,7 +34,6 @@ const H2Styled = styled.h2`
   @media (max-width: 576px) {
     font-size: 30px;
   }
-
 `
 
 const H3Styled = styled.h3`
