@@ -224,7 +224,7 @@ const SpecificationTab = ({
 
   const _handleChangeTitle = e => {
     const { name, value } = e.target
-    setFieldValue(name, value.substring(0, 25))
+    setFieldValue(name, value.substring(0, 100))
   }
 
   const _handleOnDrop = useCallback(
@@ -433,7 +433,7 @@ const formik = {
   validationSchema: Yup.object().shape({
     title: Yup.string()
       .typeError('Title need to be String')
-      .max(25, 'Maximum characters for Title field must be 25'),
+      .max(100, 'Maximum characters for Title field must be 100'),
     capacity: Yup.number().typeError('Capacity need to be number'),
     size: Yup.number().typeError('Size need to be number'),
     meetingRooms: Yup.number().typeError('Meeting Rooms need to be number'),
