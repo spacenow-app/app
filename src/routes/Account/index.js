@@ -2,7 +2,7 @@ import React, { Suspense, lazy } from 'react'
 import PropTypes from 'prop-types'
 import { Switch, Route, Redirect } from 'react-router-dom'
 
-import { Wrapper, Box } from 'components'
+import { Wrapper, Box, Footer } from 'components'
 import InnerMenu from './innerMenu'
 
 const ProfilePage = lazy(() => import('pages/Account/ProfilePage'))
@@ -30,6 +30,7 @@ const Account = ({ match, ...props }) => {
             </Switch>
           </Box>
         </Box>
+        <Footer />
       </Wrapper>
     </Suspense>
   )

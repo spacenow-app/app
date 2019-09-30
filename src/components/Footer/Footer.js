@@ -33,7 +33,7 @@ const AStyled = styled.a`
 
 const Footer = ({ value, disabled, ...props }) => {
   return (
-    <Box py="80px">
+    <Box py="100px">
       <GridStyled columns={`repeat(5, auto)`} columnGap="20px" rowGap="60px">
         <Cell width={1}>
           <ImgStyled src={pin} width="70px" />
@@ -43,9 +43,9 @@ const Footer = ({ value, disabled, ...props }) => {
             <Cell width={1} height={2}>
               <Title title="HOST" type="h6" noMargin />
             </Cell>
-            <Cell width={1} height={1}>
+            {/* <Cell width={1} height={1}>
               <AStyled href="#">About hosting</AStyled>
-            </Cell>
+            </Cell> */}
             <Cell width={1} height={1}>
               <Link to={`/listing/intro`} color="#a7aebb">
                 List a space
