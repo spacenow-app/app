@@ -20,10 +20,12 @@ import {
   BookingCard,
   Button,
   CarouselListing,
-  Footer
+  Footer,
+  CardSearch
 } from 'components'
 
 import { onGetListingById, onGetAllSpecifications } from 'redux/ducks/listing'
+import { onSearch } from 'redux/ducks/search'
 
 import FormPartner from './FormPartner'
 
@@ -55,10 +57,22 @@ const BottomButtonMobile = styled.div`
   }
 `
 
+const SimilarSpacesContainer = styled.div`
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+  grid-column-gap: 25px;
+  grid-row-gap: 25px;
+
+  @media (max-width: 945px) {
+    grid-template-columns: repeat(auto-fill, minmax(100%, 1fr));
+  }
+`
+
 const PartnerPage = ({ match, location, ...props }) => {
   const dispatch = useDispatch()
 
   const { object: listing, isLoading: isListingLoading } = useSelector(state => state.listing.get)
+  const { similar: similarResults } = useSelector(state => state.search)
   const [imageHeight, setImageHeight] = useState(500)
 
   useEffect(() => {
@@ -74,6 +88,13 @@ const PartnerPage = ({ match, location, ...props }) => {
       setImageHeight(325)
     }
   }, [])
+
+  useEffect(() => {
+    listing &&
+      dispatch(
+        onSearch(listing.location.lat, listing.location.lng, false, listing.settingsParent.category.id.toString(), 3)
+      )
+  }, [dispatch, listing])
 
   const _getAddress = address => {
     const { address1 = '', city = '', zipcode = '', state = '', country = '' } = address
@@ -298,6 +319,16 @@ const PartnerPage = ({ match, location, ...props }) => {
           <Title type="h5" title="Location" />
           <Map position={{ lat: Number(listing.location.lat), lng: Number(listing.location.lng) }} />
         </Box>
+        {similarResults.length === 3 && (
+          <Box mt="45px">
+            <Title type="h5" title="See more similar spaces" />
+            <SimilarSpacesContainer>
+              {similarResults.map(item => {
+                return <CardSearch item={item} key={item.id} />
+              })}
+            </SimilarSpacesContainer>
+          </Box>
+        )}
         <Footer />
         <BottomButtonMobile>
           <Grid columns={2} style={{ alignItems: 'center' }}>
