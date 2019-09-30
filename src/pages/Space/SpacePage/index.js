@@ -625,6 +625,7 @@ const SpacePage = ({ match, location, history, ...props }) => {
           </Cell>
           <Cell id="booking-card">
             <BookingCard
+              style={{ position: "sticky", top: "1px" }}
               titleComponent={
                 <Title
                   type="h5"
@@ -653,7 +654,7 @@ const SpacePage = ({ match, location, history, ...props }) => {
               footerComponent={
                 <>
                   <UserDetails
-                    hostname={listing.user.profile.displayName}
+                    hostname={listing.user.profile.firstName + ' ' + listing.user.profile.lastName}
                     imageProfile={listing.user.profile.picture}
                     provider={listing.user.provider}
                     onClaim={_onClaimListing}
