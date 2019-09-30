@@ -15,6 +15,8 @@ import {
   Slider,
   Switch,
   Loader
+  // Footer,
+  // Wrapper
 } from 'components'
 
 import { Manager, Reference, Popper } from 'react-popper'
@@ -637,6 +639,9 @@ const SearchPage = ({ history, location }) => {
           </ContainerMap>
         )}
       </ContainerResults>
+      {/* <Wrapper>
+        <Footer />
+      </Wrapper> */}
     </>
   )
 }

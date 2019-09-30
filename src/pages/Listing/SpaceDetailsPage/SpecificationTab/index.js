@@ -20,7 +20,7 @@ import { onUploadPhoto, onSetCoverPhoto, onDeletePhoto } from 'redux/ducks/photo
 
 import { openModal, TypesModal } from 'redux/ducks/modal'
 
-import { Title, Input, Checkbox, Select, TextArea, StepButtons, Loader, Photo, Box } from 'components'
+import { Title, Input, Checkbox, Select, TextArea, StepButtons, Loader, Photo, Box, Footer } from 'components'
 
 const WrapperStyled = styled.div`
   display: grid;
@@ -29,7 +29,6 @@ const WrapperStyled = styled.div`
   @media (max-width: 680px) {
     grid-row-gap: 20px;
   }
-
 `
 
 const SectionStyled = styled.div``
@@ -290,13 +289,13 @@ const SpecificationTab = ({
           {isLoadingSpecifications ? (
             <Loader />
           ) : (
-              <InputGroup>
-                {Object.keys(objectSpecifications).map(k => {
-                  const o = objectSpecifications[k]
-                  return <span key={o.field}>{_renderSpecifications(o)}</span>
-                })}
-              </InputGroup>
-            )}
+            <InputGroup>
+              {Object.keys(objectSpecifications).map(k => {
+                const o = objectSpecifications[k]
+                return <span key={o.field}>{_renderSpecifications(o)}</span>
+              })}
+            </InputGroup>
+          )}
         </SectionStyled>
         <SectionStyled>
           <Title
@@ -319,19 +318,19 @@ const SpecificationTab = ({
             {isLoadingAmenities ? (
               <Loader />
             ) : (
-                arrayAmenities.map(item => {
-                  return (
-                    <Checkbox
-                      key={item.id}
-                      label={item.itemName}
-                      name="amenities"
-                      value={item.id}
-                      checked={values.amenities.some(amenitie => amenitie.listSettingsId === item.id)}
-                      handleCheckboxChange={_handleCheckboxChange}
-                    />
-                  )
-                })
-              )}
+              arrayAmenities.map(item => {
+                return (
+                  <Checkbox
+                    key={item.id}
+                    label={item.itemName}
+                    name="amenities"
+                    value={item.id}
+                    checked={values.amenities.some(amenitie => amenitie.listSettingsId === item.id)}
+                    handleCheckboxChange={_handleCheckboxChange}
+                  />
+                )
+              })
+            )}
           </CheckboxGroup>
         </SectionStyled>
         <SectionStyled>
@@ -340,17 +339,17 @@ const SpecificationTab = ({
             {isLoadingRules ? (
               <Loader />
             ) : (
-                arrayRules.map(item => (
-                  <Checkbox
-                    key={item.id}
-                    label={item.itemName}
-                    name="rules"
-                    value={item.id}
-                    checked={values.rules.some(rule => rule.listSettingsId === item.id)}
-                    handleCheckboxChange={_handleCheckboxChange}
-                  />
-                ))
-              )}
+              arrayRules.map(item => (
+                <Checkbox
+                  key={item.id}
+                  label={item.itemName}
+                  name="rules"
+                  value={item.id}
+                  checked={values.rules.some(rule => rule.listSettingsId === item.id)}
+                  handleCheckboxChange={_handleCheckboxChange}
+                />
+              ))
+            )}
           </CheckboxGroupRules>
         </SectionStyled>
         <SectionStyled>
@@ -359,15 +358,15 @@ const SpecificationTab = ({
             {isLoadingAccessTypes ? (
               <Loader />
             ) : (
-                <Select value={values.accessType} name="accessType" onChange={_handleSelectChange}>
-                  {!values.accessType && <option>Select type of access</option>}
-                  {arrayAccessTypes.map(item => (
-                    <option key={item.id} value={item.itemName}>
-                      {item.itemName}
-                    </option>
-                  ))}
-                </Select>
-              )}
+              <Select value={values.accessType} name="accessType" onChange={_handleSelectChange}>
+                {!values.accessType && <option>Select type of access</option>}
+                {arrayAccessTypes.map(item => (
+                  <option key={item.id} value={item.itemName}>
+                    {item.itemName}
+                  </option>
+                ))}
+              </Select>
+            )}
           </Box>
         </SectionStyled>
         <SectionStyled>
@@ -380,19 +379,19 @@ const SpecificationTab = ({
             {isLoadingPhotos ? (
               <Loader />
             ) : (
-                <>
-                  {arrayPhotos.map((item, index) => (
-                    <Photo
-                      key={`photo-${index}`}
-                      onDrop={_handleOnDrop}
-                      url={item ? item.name : null}
-                      isCover={item ? item.isCover : false}
-                      onCover={_handleSetCoverPhoto(item ? item.id : '')}
-                      onDelete={_handleDeletePhoto(item ? item.id : '')}
-                    />
-                  ))}
-                </>
-              )}
+              <>
+                {arrayPhotos.map((item, index) => (
+                  <Photo
+                    key={`photo-${index}`}
+                    onDrop={_handleOnDrop}
+                    url={item ? item.name : null}
+                    isCover={item ? item.isCover : false}
+                    onCover={_handleSetCoverPhoto(item ? item.id : '')}
+                    onDelete={_handleDeletePhoto(item ? item.id : '')}
+                  />
+                ))}
+              </>
+            )}
           </PhotosGroup>
           <p>
             TIP: Take photos in landscape mode to capture as much of your space as possible. Shoot from corners to add
@@ -400,6 +399,7 @@ const SpecificationTab = ({
           </p>
         </SectionStyled>
         <StepButtons prev={{ onClick: _goBack }} next={{ onClick: () => props.history.push('booking') }} />
+        <Footer />
       </WrapperStyled>
     </form>
   )

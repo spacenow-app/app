@@ -23,7 +23,8 @@ import {
   ToolTip,
   Box,
   DatePicker,
-  ListDates
+  ListDates,
+  Footer
 } from 'components'
 
 const SwitchStyled = styled.div`
@@ -452,6 +453,7 @@ const AvailabilityTab = ({ match, listing, history, setFatherValues }) => {
           // next={{ onClick: () => history.push('cancellation') }}
           next={{ onClick: () => _onUpdateListing() }}
         />
+        <Footer />
       </Grid>
     </>
   )
