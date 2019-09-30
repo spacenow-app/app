@@ -3,7 +3,7 @@ import Helmet from 'react-helmet'
 import { withFormik } from 'formik'
 import * as Yup from 'yup'
 import numeral from 'numeral'
-import { Title, Select, Input, Caption, Radio, Cell, StepButtons, Box } from 'components'
+import { Title, Select, Input, Caption, Radio, Cell, StepButtons, Box, Footer } from 'components'
 import { capitalize, toPlural } from 'utils/strings'
 
 import GuestFeeIcon from './guest_fee_icon.svg'
@@ -44,8 +44,7 @@ const BookingTab = ({
   }
 
   return (
-    <Box display="grid" gridTemplateColumns={{ _: "1fr" }} gridGap={{_: "20px", medium: "40px"}}>
-    
+    <Box display="grid" gridTemplateColumns={{ _: '1fr' }} gridGap={{ _: '20px', medium: '40px' }}>
       <Helmet title="Listing Space Booking - Spacenow" />
       <Cell>
         <Title
@@ -53,60 +52,62 @@ const BookingTab = ({
           title="Booking Period"
           subtitle="Spacenow have four payment options: hourly, daily, weekly and monthly. These payment options determine more than just the displayed price for your guests. As a host, selecting the right option is important because it will manage your availability, payouts, and payment options for your guests."
         />
-        <Box display="grid" gridTemplateColumns={{ _: "1fr", medium: "1fr 1fr 1fr 1fr" }} gridGap="20px">
-          {listing.settingsParent.bookingPeriod.hourly !== 0 && <Radio
-            box
-            value="hourly"
-            name="bookingPeriod"
-            checked={values.bookingPeriod === 'hourly'}
-            disabled={listing.settingsParent.bookingPeriod.hourly === 0}
-            handleChange={_handleRadioChange}
-            label="Hourly"
-            text="Before you list by the hour, make sure both you and your space are ready for high turnover and regularly
+        <Box display="grid" gridTemplateColumns={{ _: '1fr', medium: '1fr 1fr 1fr 1fr' }} gridGap="20px">
+          {listing.settingsParent.bookingPeriod.hourly !== 0 && (
+            <Radio
+              box
+              value="hourly"
+              name="bookingPeriod"
+              checked={values.bookingPeriod === 'hourly'}
+              disabled={listing.settingsParent.bookingPeriod.hourly === 0}
+              handleChange={_handleRadioChange}
+              label="Hourly"
+              text="Before you list by the hour, make sure both you and your space are ready for high turnover and regularly
         handling guest access. Hourly guests pay Spacenow upfront, and we transfer the money to you after 48 hours
         upon completion."
-          /> }
-          {listing.settingsParent.bookingPeriod.daily !== 0 && 
-          <Radio
-            box
-            value="daily"
-            name="bookingPeriod"
-            checked={values.bookingPeriod === 'daily'}
-            disabled={listing.settingsParent.bookingPeriod.daily === 0}
-            handleChange={_handleRadioChange}
-            label="Daily"
-            text="From a guest perspective, daily spaces are a similar experience to a hotel; guests pay upfront for one-off stays. Spacenow transfers the money to you after 48 hours upon completion."
-          />
-          }
-          {listing.settingsParent.bookingPeriod.weekly !== 0 && 
-          <Radio
-            box
-            value="weekly"
-            name="bookingPeriod"
-            checked={values.bookingPeriod === 'weekly'}
-            disabled={listing.settingsParent.bookingPeriod.weekly === 0}
-            handleChange={_handleRadioChange}
-            label="Weekly"
-            text="A big advantage with weekly bookings is less admin for you, and recurring payments through direct deposit. Spacenow transfers the money to you 48 hours after completion of each week."
-          />
-          }
-          {listing.settingsParent.bookingPeriod.monthly !== 0 && 
-          <Radio
-            box
-            value="monthly"
-            name="bookingPeriod"
-            checked={values.bookingPeriod === 'monthly'}
-            disabled={listing.settingsParent.bookingPeriod.monthly === 0}
-            handleChange={_handleRadioChange}
-            label="Monthly"
-            text="Monthly spaces are the least effort to manage, but be sure you’re willing to commit to the longer length of time. Spacenow transfers the money to you 48 hours after completion of each month."
-          />
-          }
+            />
+          )}
+          {listing.settingsParent.bookingPeriod.daily !== 0 && (
+            <Radio
+              box
+              value="daily"
+              name="bookingPeriod"
+              checked={values.bookingPeriod === 'daily'}
+              disabled={listing.settingsParent.bookingPeriod.daily === 0}
+              handleChange={_handleRadioChange}
+              label="Daily"
+              text="From a guest perspective, daily spaces are a similar experience to a hotel; guests pay upfront for one-off stays. Spacenow transfers the money to you after 48 hours upon completion."
+            />
+          )}
+          {listing.settingsParent.bookingPeriod.weekly !== 0 && (
+            <Radio
+              box
+              value="weekly"
+              name="bookingPeriod"
+              checked={values.bookingPeriod === 'weekly'}
+              disabled={listing.settingsParent.bookingPeriod.weekly === 0}
+              handleChange={_handleRadioChange}
+              label="Weekly"
+              text="A big advantage with weekly bookings is less admin for you, and recurring payments through direct deposit. Spacenow transfers the money to you 48 hours after completion of each week."
+            />
+          )}
+          {listing.settingsParent.bookingPeriod.monthly !== 0 && (
+            <Radio
+              box
+              value="monthly"
+              name="bookingPeriod"
+              checked={values.bookingPeriod === 'monthly'}
+              disabled={listing.settingsParent.bookingPeriod.monthly === 0}
+              handleChange={_handleRadioChange}
+              label="Monthly"
+              text="Monthly spaces are the least effort to manage, but be sure you’re willing to commit to the longer length of time. Spacenow transfers the money to you 48 hours after completion of each month."
+            />
+          )}
         </Box>
       </Cell>
       <Cell>
         <Title type="h3" title="Price*" />
-        <Box display="grid" gridTemplateColumns={{ _: "1fr 2fr", medium: "1fr 2fr 2fr" }} gridGap="20px">
+        <Box display="grid" gridTemplateColumns={{ _: '1fr 2fr', medium: '1fr 2fr 2fr' }} gridGap="20px">
           <Cell width={1}>
             <Select label="Currency" name="currency" value={values.currency} onChange={_handleSelectChange}>
               <option value="AUD">AUD</option>
@@ -130,7 +131,7 @@ const BookingTab = ({
       <Cell>
         <Title type="h3" title="Minimum Term" subtitle="The shortest time you required a guest to stay" />
         <Caption>Period</Caption>
-        <Box display="grid" gridTemplateColumns={{ _: "1fr 1fr", medium: "1fr 1fr 1fr 1fr" }} gridGap="20px">
+        <Box display="grid" gridTemplateColumns={{ _: '1fr 1fr', medium: '1fr 1fr 1fr 1fr' }} gridGap="20px">
           <Cell width={1}>
             <Radio
               name="minTerm"
@@ -175,7 +176,7 @@ const BookingTab = ({
           title="Booking type"
           subtitle="Would you prefer to take an instant booking? Or confirm each booking manually?"
         />
-        <Box display="grid" gridTemplateColumns={{ _: "1fr", medium: "1fr 1fr" }} gridGap="20px">
+        <Box display="grid" gridTemplateColumns={{ _: '1fr', medium: '1fr 1fr' }} gridGap="20px">
           <Cell width={1}>
             <Radio
               box
@@ -208,7 +209,7 @@ const BookingTab = ({
           title="Booking Fee"
           subtitle="Incorporate Spacenow’s 10% commision into the price or push it onto the guest. Tip: Been competitive means more bookings."
         />
-        <Box display="grid" gridTemplateColumns={{ _: "1fr", medium: "1fr 1fr" }} gridGap="20px">
+        <Box display="grid" gridTemplateColumns={{ _: '1fr', medium: '1fr 1fr' }} gridGap="20px">
           <Cell width={1}>
             <Radio
               box
@@ -243,6 +244,7 @@ const BookingTab = ({
         prev={{ onClick: () => props.history.push('specification') }}
         next={{ onClick: () => props.history.push('availability') }}
       />
+      <Footer />
     </Box>
   )
 }

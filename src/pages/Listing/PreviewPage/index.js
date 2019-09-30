@@ -18,8 +18,8 @@ import {
   StepButtons,
   Loader,
   Checkbox,
-  Carousel
-  // Footer
+  Carousel,
+  Footer
 } from 'components'
 
 import { capitalize, toPlural } from 'utils/strings'
@@ -435,7 +435,7 @@ const PreviewPage = ({ match, location, ...props }) => {
           prev={{ onClick: () => props.history.push(`/listing/space/${match.params.id}`) }}
           next={{ onClick: () => _handlerPublish(), title: 'Publish' }}
         />
-        {/* <Footer /> */}
+        <Footer />
       </Wrapper>
     </>
   )
