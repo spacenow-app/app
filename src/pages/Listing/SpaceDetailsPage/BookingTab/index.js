@@ -53,48 +53,56 @@ const BookingTab = ({
           subtitle="Spacenow have four payment options: hourly, daily, weekly and monthly. These payment options determine more than just the displayed price for your guests. As a host, selecting the right option is important because it will manage your availability, payouts, and payment options for your guests."
         />
         <Box display="grid" gridTemplateColumns={{ _: '1fr', medium: '1fr 1fr 1fr 1fr' }} gridGap="20px">
-          <Radio
-            box
-            value="hourly"
-            name="bookingPeriod"
-            checked={values.bookingPeriod === 'hourly'}
-            disabled={listing.settingsParent.bookingPeriod.hourly === 0}
-            handleChange={_handleRadioChange}
-            label="Hourly"
-            text="Before you list by the hour, make sure both you and your space are ready for high turnover and regularly
+          {listing.settingsParent.bookingPeriod.hourly !== 0 && (
+            <Radio
+              box
+              value="hourly"
+              name="bookingPeriod"
+              checked={values.bookingPeriod === 'hourly'}
+              disabled={listing.settingsParent.bookingPeriod.hourly === 0}
+              handleChange={_handleRadioChange}
+              label="Hourly"
+              text="Before you list by the hour, make sure both you and your space are ready for high turnover and regularly
         handling guest access. Hourly guests pay Spacenow upfront, and we transfer the money to you after 48 hours
         upon completion."
-          />
-          <Radio
-            box
-            value="daily"
-            name="bookingPeriod"
-            checked={values.bookingPeriod === 'daily'}
-            disabled={listing.settingsParent.bookingPeriod.daily === 0}
-            handleChange={_handleRadioChange}
-            label="Daily"
-            text="From a guest perspective, daily spaces are a similar experience to a hotel; guests pay upfront for one-off stays. Spacenow transfers the money to you after 48 hours upon completion."
-          />
-          <Radio
-            box
-            value="weekly"
-            name="bookingPeriod"
-            checked={values.bookingPeriod === 'weekly'}
-            disabled={listing.settingsParent.bookingPeriod.weekly === 0}
-            handleChange={_handleRadioChange}
-            label="Weekly"
-            text="A big advantage with weekly bookings is less admin for you, and recurring payments through direct deposit. Spacenow transfers the money to you 48 hours after completion of each week."
-          />
-          <Radio
-            box
-            value="monthly"
-            name="bookingPeriod"
-            checked={values.bookingPeriod === 'monthly'}
-            disabled={listing.settingsParent.bookingPeriod.monthly === 0}
-            handleChange={_handleRadioChange}
-            label="Monthly"
-            text="Monthly spaces are the least effort to manage, but be sure you’re willing to commit to the longer length of time. Spacenow transfers the money to you 48 hours after completion of each month."
-          />
+            />
+          )}
+          {listing.settingsParent.bookingPeriod.daily !== 0 && (
+            <Radio
+              box
+              value="daily"
+              name="bookingPeriod"
+              checked={values.bookingPeriod === 'daily'}
+              disabled={listing.settingsParent.bookingPeriod.daily === 0}
+              handleChange={_handleRadioChange}
+              label="Daily"
+              text="From a guest perspective, daily spaces are a similar experience to a hotel; guests pay upfront for one-off stays. Spacenow transfers the money to you after 48 hours upon completion."
+            />
+          )}
+          {listing.settingsParent.bookingPeriod.weekly !== 0 && (
+            <Radio
+              box
+              value="weekly"
+              name="bookingPeriod"
+              checked={values.bookingPeriod === 'weekly'}
+              disabled={listing.settingsParent.bookingPeriod.weekly === 0}
+              handleChange={_handleRadioChange}
+              label="Weekly"
+              text="A big advantage with weekly bookings is less admin for you, and recurring payments through direct deposit. Spacenow transfers the money to you 48 hours after completion of each week."
+            />
+          )}
+          {listing.settingsParent.bookingPeriod.monthly !== 0 && (
+            <Radio
+              box
+              value="monthly"
+              name="bookingPeriod"
+              checked={values.bookingPeriod === 'monthly'}
+              disabled={listing.settingsParent.bookingPeriod.monthly === 0}
+              handleChange={_handleRadioChange}
+              label="Monthly"
+              text="Monthly spaces are the least effort to manage, but be sure you’re willing to commit to the longer length of time. Spacenow transfers the money to you 48 hours after completion of each month."
+            />
+          )}
         </Box>
       </Cell>
       <Cell>
@@ -205,7 +213,7 @@ const BookingTab = ({
           <Cell width={1}>
             <Radio
               box
-              value
+              value={false}
               name="isAbsorvedFee"
               checked={values.isAbsorvedFee}
               handleChange={_handleRadioChange}
@@ -219,7 +227,7 @@ const BookingTab = ({
           <Cell width={1}>
             <Radio
               box
-              value={false}
+              value
               name="isAbsorvedFee"
               checked={!values.isAbsorvedFee}
               handleChange={_handleRadioChange}

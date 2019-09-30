@@ -15,11 +15,11 @@ const _handleOnUpdateListing = dispatch => (listingId, status) => {
 }
 
 const _handleRedirect = id => {
-  window.location.href = `/space/${id}`
+  window.open(`/space/${id}`)
 }
 
 const _handleEditRedirect = id => {
-  window.location.href = `/listing/space/${id}/specification`
+  window.open(`/listing/space/${id}/specification`)
 }
 
 const _handleDelete = dispatch => id => {
@@ -133,10 +133,10 @@ const ListingPage = ({ ...props }) => {
       {!listings || listings.count === 0 ? (
         <BackgroundImage text="We didn't find any listings :(" />
       ) : (
-        <Grid columns={1} rowGap="30px">
-          {[].concat(listings.rows).map((item, index) => ListingCard(dispatch, item, index))}
-        </Grid>
-      )}
+          <Grid columns={1} rowGap="30px">
+            {[].concat(listings.rows).map((item, index) => ListingCard(dispatch, item, index))}
+          </Grid>
+        )}
     </>
   )
 }

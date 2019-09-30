@@ -150,7 +150,7 @@ const NavBar = ({ history, shownSearch }) => {
             closeButton={latLng && (latLng.lat || latLng.lng)}
             onClickCloseButton={_reset}
             size="sm"
-            placeholder="Sydney, AU"
+            placeholder="Ie. Sydney, AU"
             label={null}
           />
           <Button size="sm" onClick={_onSearch}>
