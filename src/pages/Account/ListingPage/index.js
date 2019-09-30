@@ -26,11 +26,22 @@ const _handleDelete = dispatch => id => {
   dispatch(onDeleteListing(id))
 }
 
+const _getCoverPhoto = object => {
+  if (object.photos.length <= 0) {
+    return ''
+  }
+  const photoCover = object.photos.find(e => e.isCover)
+  if (photoCover) {
+    return photoCover.name
+  }
+  return object.photos[0].name
+}
+
 const ListingCard = (dispatch, item, index) => {
   return (
     <Card.Horizontal key={index}>
       <Card.Horizontal.Image
-        src={item.photos.length > 0 ? item.photos[0].name : ''}
+        src={_getCoverPhoto(item)}
         handleClick={() => (item.isPublished ? _handleRedirect(item.id) : '')}
       />
       <Card.Horizontal.Body>

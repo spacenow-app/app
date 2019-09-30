@@ -176,6 +176,7 @@ const queryGetAllListingsByUser = gql`
         photos {
           id
           name
+          isCover
         }
         settingsParent {
           id

@@ -66,6 +66,17 @@ const _getTip = (status, userType) => {
   }
 }
 
+const _getCoverPhoto = object => {
+  if (object.photos.length <= 0) {
+    return ''
+  }
+  const photoCover = object.photos.find(e => e.isCover)
+  if (photoCover) {
+    return photoCover.name
+  }
+  return object.photos[0].name
+}
+
 const BookingCard = (dispatch, item, index, userType) => {
   let expire = addHours(convertedDate(item.createdAt), 24)
 
@@ -78,7 +89,7 @@ const BookingCard = (dispatch, item, index, userType) => {
   return (
     <Card.Horizontal key={index}>
       <Card.Horizontal.Image
-        src={item.listing.photos.length > 0 ? item.listing.photos[0].name : ''}
+        src={_getCoverPhoto(item.listing)}
         handleClick={() => _handleRedirect(item.listingId)}
       />
       <Card.Horizontal.Body>
