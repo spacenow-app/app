@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import Helmet from 'react-helmet'
 import styled from 'styled-components'
 
-import { Wrapper, Title, StepButtons, Input, Map, AutoComplete } from 'components'
+import { Wrapper, Title, StepButtons, Input, Map, AutoComplete, Footer } from 'components'
 
 import * as actions from 'redux/ducks/location'
 
@@ -17,7 +17,6 @@ const GroupInput = styled.div`
     grid-template-columns: 1fr;
     width: 100%;
   }
-
 `
 
 const LocationPage = props => {
@@ -82,6 +81,7 @@ const LocationPage = props => {
           isLoading
         }}
       />
+      <Footer />
     </Wrapper>
   )
 }

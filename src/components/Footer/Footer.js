@@ -1,6 +1,6 @@
 import React from 'react'
 import styled from 'styled-components'
-import { Wrapper, Grid, Cell, Link, Title, Text } from 'components'
+import { Box, Grid, Cell, Link, Title, Text } from 'components'
 import pin from './pin.png'
 import facebook from './facebook.png'
 import linkedin from './linkedin.png'
@@ -33,7 +33,7 @@ const AStyled = styled.a`
 
 const Footer = ({ value, disabled, ...props }) => {
   return (
-    <Wrapper py="80px">
+    <Box py="80px">
       <GridStyled columns={`repeat(5, auto)`} columnGap="20px" rowGap="60px">
         <Cell width={1}>
           <ImgStyled src={pin} width="70px" />
@@ -127,7 +127,7 @@ const Footer = ({ value, disabled, ...props }) => {
           </Grid>
         </Cell>
       </GridStyled>
-    </Wrapper>
+    </Box>
   )
 }
 
