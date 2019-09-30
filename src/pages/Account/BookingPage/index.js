@@ -95,7 +95,7 @@ const BookingCard = (dispatch, item, index, userType) => {
           noMargin
           subTitleMargin={0}
           type="h6"
-          title={<Text>AUD ${item.totalPrice.toFixed(2)}</Text>}
+          title={<Text>AUD ${item.totalPrice.toFixed(2).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}</Text>}
         />
         {(item.bookingState === 'pending' || item.bookingState === 'requested') && (
           <Card.Horizontal.ExpireOn
@@ -225,10 +225,10 @@ const BookingPage = ({ ...props }) => {
       {!bookings || bookings.count === 0 ? (
         <BackgroundImage text="We didn't find any bookings :(" />
       ) : (
-        <Grid columns={1} rowGap="30px">
-          {[].concat(bookings.items).map((item, index) => BookingCard(dispatch, item, index, userType))}
-        </Grid>
-      )}
+          <Grid columns={1} rowGap="30px">
+            {[].concat(bookings.items).map((item, index) => BookingCard(dispatch, item, index, userType))}
+          </Grid>
+        )}
     </>
   )
 }

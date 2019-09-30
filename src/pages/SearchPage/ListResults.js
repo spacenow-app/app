@@ -197,7 +197,7 @@ const ListResults = forwardRef(
                     <Text fontSize="14px">
                       From:{' '}
                       <Text fontSize="16px" fontFamily="bold">
-                        {`${item.listingData.currency || 'AUD'}$${item.listingData.basePrice}`}
+                        {`${item.listingData.currency || 'AUD'}$${item.listingData.basePrice.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}`}
                       </Text>{' '}
                       {item.bookingPeriod}
                     </Text>
