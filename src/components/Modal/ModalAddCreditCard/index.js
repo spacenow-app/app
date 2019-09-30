@@ -153,15 +153,15 @@ const formik = {
       .required(),
     expiry: Yup.string()
       .test(
-        'test-number', // this is used internally by yup
-        'Expiry date  invalid', // validation message
+        'test-expiry', // this is used internally by yup
+        'Expiry date is invalid', // validation message
         value => valid.expirationDate(value).isValid
       )
       .required(),
     cvc: Yup.string()
       .test(
-        'test-number', // this is used internally by yup
-        'Expiry date  invalid', // validation message
+        'test-cvc', // this is used internally by yup
+        'CVC number is invalid', // validation message
         value => valid.cvv(value).isValid
       )
       .required(),
