@@ -7,8 +7,8 @@ import { useSelector, useDispatch } from 'react-redux'
 import {
   Wrapper,
   Title,
-  Grid,
-  Cell,
+  // Grid,
+  // Cell,
   TimeTable,
   Map,
   Tag,
@@ -19,6 +19,7 @@ import {
   Loader,
   Checkbox,
   Carousel
+  // Footer
 } from 'components'
 
 import { capitalize, toPlural } from 'utils/strings'
@@ -34,11 +35,11 @@ import {
 
 import { openModal, TypesModal } from 'redux/ducks/modal'
 
-import GraphCancelattionImage from 'pages/Listing/SpaceDetailsPage/CancellationTab/graph_cancellation.png'
+// import GraphCancelattionImage from 'pages/Listing/SpaceDetailsPage/CancellationTab/graph_cancellation.png'
 
-const ImageStyled = styled.img`
-  width: 100%;
-`
+// const ImageStyled = styled.img`
+//   width: 100%;
+// `
 
 const TitlePrice = styled(Title)`
   @media only screen and (max-width: 991px) {
@@ -434,6 +435,7 @@ const PreviewPage = ({ match, location, ...props }) => {
           prev={{ onClick: () => props.history.push(`/listing/space/${match.params.id}`) }}
           next={{ onClick: () => _handlerPublish(), title: 'Publish' }}
         />
+        {/* <Footer /> */}
       </Wrapper>
     </>
   )

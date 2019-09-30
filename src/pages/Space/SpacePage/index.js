@@ -46,7 +46,7 @@ import { openModal, TypesModal } from 'redux/ducks/modal'
 
 import { sendMail } from 'redux/ducks/mail'
 
-import GraphCancelattionImage from 'pages/Listing/SpaceDetailsPage/CancellationTab/graph_cancellation.png'
+// import GraphCancelattionImage from 'pages/Listing/SpaceDetailsPage/CancellationTab/graph_cancellation.png'
 
 import config from 'variables/config'
 import WeeklyBooking from './WeeklyBooking'
@@ -58,9 +58,9 @@ const GridStyled = styled(Grid)`
   }
 `
 
-const ImageStyled = styled.img`
-  width: 100%;
-`
+// const ImageStyled = styled.img`
+//   width: 100%;
+// `
 
 const IconBoxStyled = styled.div`
   background: #6adc91;
@@ -701,6 +701,7 @@ const SpacePage = ({ match, location, history, ...props }) => {
             </Cell>
           </Grid>
         </Box> */}
+        <Footer />
         <BottomButtonMobile>
           <Grid columns={2} style={{ alignItems: 'center' }}>
             <Cell style={{ alignContent: 'center', justifyContent: 'left', display: 'grid' }}>
@@ -724,7 +725,6 @@ const SpacePage = ({ match, location, history, ...props }) => {
           </Grid>
         </BottomButtonMobile>
       </Wrapper>
-      <Footer />
     </>
   )
 }

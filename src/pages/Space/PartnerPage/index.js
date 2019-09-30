@@ -19,7 +19,8 @@ import {
   UserDetails,
   BookingCard,
   Button,
-  CarouselListing
+  CarouselListing,
+  Footer
 } from 'components'
 
 import { onGetListingById, onGetAllSpecifications } from 'redux/ducks/listing'
@@ -297,6 +298,7 @@ const PartnerPage = ({ match, location, ...props }) => {
           <Title type="h5" title="Location" />
           <Map position={{ lat: Number(listing.location.lat), lng: Number(listing.location.lng) }} />
         </Box>
+        <Footer />
         <BottomButtonMobile>
           <Grid columns={2} style={{ alignItems: 'center' }}>
             <Cell style={{ alignContent: 'center', justifyContent: 'left', display: 'grid' }}>

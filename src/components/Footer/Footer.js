@@ -1,19 +1,40 @@
 import React from 'react'
-import PropTypes from 'prop-types'
 import styled from 'styled-components'
-import { Wrapper, Grid, Cell, Link, Title, Text, Box } from 'components'
+import { Wrapper, Grid, Cell, Link, Title, Text } from 'components'
 import pin from './pin.png'
 import facebook from './facebook.png'
-import linedin from './linkedin.png'
+import linkedin from './linkedin.png'
 import youtube from './youtube.png'
 import twitter from './twitter.png'
 
 const ImgStyled = styled.img``
+const GridStyled = styled(Grid)`
+  @media only screen and (max-width: 991px) {
+    grid-template-columns: repeat(3, auto);
+  }
+
+  @media only screen and (max-width: 640px) {
+    grid-template-columns: repeat(1, auto);
+    justify-content: center;
+    & * {
+      text-align: center;
+    }
+  }
+`
+
+const AStyled = styled.a`
+  color: #a7aebb;
+
+  :hover {
+    text-decoration: none;
+    color: #a7aebb;
+  }
+`
 
 const Footer = ({ value, disabled, ...props }) => {
   return (
-    <Wrapper py="100px">
-      <Grid columns={`repeat(5, auto)`} columnGap="20px">
+    <Wrapper py="80px">
+      <GridStyled columns={`repeat(5, auto)`} columnGap="20px" rowGap="60px">
         <Cell width={1}>
           <ImgStyled src={pin} width="70px" />
         </Cell>
@@ -23,9 +44,7 @@ const Footer = ({ value, disabled, ...props }) => {
               <Title title="HOST" type="h6" noMargin />
             </Cell>
             <Cell width={1} height={1}>
-              <Link to="#" color="#a7aebb">
-                About hosting
-              </Link>
+              <AStyled href="#">About hosting</AStyled>
             </Cell>
             <Cell width={1} height={1}>
               <Link to={`/listing/intro`} color="#a7aebb">
@@ -33,9 +52,7 @@ const Footer = ({ value, disabled, ...props }) => {
               </Link>
             </Cell>
             <Cell width={1} height={1}>
-              <Link to="https://spacenow.com/event-space-sydney/" color="#a7aebb">
-                Request space
-              </Link>
+              <AStyled href="https://spacenow.com/event-space-sydney/">Request space</AStyled>
             </Cell>
           </Grid>
         </Cell>
@@ -45,24 +62,16 @@ const Footer = ({ value, disabled, ...props }) => {
               <Title title="COMPANY" type="h6" noMargin />
             </Cell>
             <Cell width={1} height={1}>
-              <Link to="https://spacenow.com/about/" color="#a7aebb">
-                About
-              </Link>
+              <AStyled href="https://spacenow.com/about/">About</AStyled>
             </Cell>
             <Cell width={1} height={1}>
-              <Link to="https://spacenow.com/help/" color="#a7aebb">
-                FAQ'S
-              </Link>
+              <AStyled href="https://spacenow.com/help/">FAQ'S</AStyled>
             </Cell>
             <Cell width={1} height={1}>
-              <Link to="https://spacenow.com/contact-us/" color="#a7aebb">
-                Contact us
-              </Link>
+              <AStyled href="https://spacenow.com/contact-us/">Contact us</AStyled>
             </Cell>
             <Cell width={1} height={1}>
-              <Link to="https://spacenow.com/blog/" color="#a7aebb">
-                Blog
-              </Link>
+              <AStyled href="https://spacenow.com/blog/">Blog</AStyled>
             </Cell>
           </Grid>
         </Cell>
@@ -72,19 +81,13 @@ const Footer = ({ value, disabled, ...props }) => {
               <Title title="FURTHER INFORMATION" type="h6" noMargin whiteSpace="nowrap" />
             </Cell>
             <Cell width={1} height={1}>
-              <Link to="https://spacenow.com/terms-conditions/" color="#a7aebb">
-                T&C'Ss
-              </Link>
+              <AStyled href="https://spacenow.com/terms-conditions/">T&C'Ss</AStyled>
             </Cell>
             <Cell width={1} height={1}>
-              <Link to="https://spacenow.com/privacy-policy/" color="#a7aebb">
-                Privacy Policy
-              </Link>
+              <AStyled href="https://spacenow.com/privacy-policy/">Privacy Policy</AStyled>
             </Cell>
             <Cell width={1} height={1}>
-              <Link to="https://spacenow.com/licenceagreement/" color="#a7aebb">
-                Licence Agreement
-              </Link>
+              <AStyled href="https://spacenow.com/licenceagreement/">Licence Agreement</AStyled>
             </Cell>
           </Grid>
         </Cell>
@@ -94,19 +97,36 @@ const Footer = ({ value, disabled, ...props }) => {
               <Title title="FOLLOW US" type="h6" noMargin />
             </Cell>
             <Cell width={1} height={1}>
-              <Box>
-                <Link>
-                  <ImgStyled src={facebook} height="32px" />
-                </Link>
-              </Box>
+              <Grid columns={`repeat(4, auto)`}>
+                <Cell>
+                  <AStyled href="https://www.facebook.com/spacenowaustralia/">
+                    <ImgStyled src={facebook} height="32px" />
+                  </AStyled>
+                </Cell>
+                <Cell>
+                  <AStyled href="https://www.linkedin.com/company/spacenow/">
+                    <ImgStyled src={linkedin} height="32px" />
+                  </AStyled>
+                </Cell>
+                <Cell>
+                  <AStyled href="https://www.youtube.com/channel/UCIq-FZwLqPS81bASw2EksTA">
+                    <ImgStyled src={youtube} height="32px" />
+                  </AStyled>
+                </Cell>
+                <Cell>
+                  <AStyled href="https://twitter.com/spacenow_aus">
+                    <ImgStyled src={twitter} height="32px" />
+                  </AStyled>
+                </Cell>
+              </Grid>
             </Cell>
             <Cell width={1} height={1}></Cell>
             <Cell width={1} height={1}>
-              <Text>Spacenow 2019</Text>
+              <Text color="#707070">©Spacenow 2019</Text>
             </Cell>
           </Grid>
         </Cell>
-      </Grid>
+      </GridStyled>
     </Wrapper>
   )
 }
