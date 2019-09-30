@@ -24,7 +24,8 @@ import {
   UserDetails,
   BookingCard,
   Checkbox,
-  Button
+  Button,
+  Footer
 } from 'components'
 
 import MonthlyBooking from './MonthlyBooking'
@@ -45,7 +46,7 @@ import { openModal, TypesModal } from 'redux/ducks/modal'
 
 import { sendMail } from 'redux/ducks/mail'
 
-import GraphCancelattionImage from 'pages/Listing/SpaceDetailsPage/CancellationTab/graph_cancellation.png'
+// import GraphCancelattionImage from 'pages/Listing/SpaceDetailsPage/CancellationTab/graph_cancellation.png'
 
 import config from 'variables/config'
 import WeeklyBooking from './WeeklyBooking'
@@ -57,9 +58,9 @@ const GridStyled = styled(Grid)`
   }
 `
 
-const ImageStyled = styled.img`
-  width: 100%;
-`
+// const ImageStyled = styled.img`
+//   width: 100%;
+// `
 
 const IconBoxStyled = styled.div`
   background: #6adc91;
@@ -159,7 +160,7 @@ const SpacePage = ({ match, location, history, ...props }) => {
     const { address1 = '', city = '', zipcode = '', state = '', country = '' } = address
     const convertedAddress = `${address1 ? `${address1}, ` : ''} ${city ? `${city}, ` : ''} ${
       zipcode ? `${zipcode}, ` : ''
-      } ${state ? `${state}, ` : ''} ${country ? `${country}` : ''}`
+    } ${state ? `${state}, ` : ''} ${country ? `${country}` : ''}`
     return convertedAddress.replace(/\0.*$/g, '')
   }
 
@@ -188,13 +189,15 @@ const SpacePage = ({ match, location, history, ...props }) => {
     return array.slice(0, 3).map((el, index) => {
       if (el.field === 'capacity') {
         const value = el.value === 0 ? 'Not mentioned' : `${toPlural('Person', el.value)}`
-        return (
+        return el.value === 0 ? null : (
           <Highlights key={el.field} title={el.label} name={value} icon="specification-capacity" last={index === 2} />
         )
       }
       if (el.field === 'size') {
         const value = el.value === 0 ? 'Not mentioned' : `${el.value} sqm`
-        return <Highlights key={el.field} title={el.label} name={value} icon="specification-size" last={index === 2} />
+        return el.value === 0 ? null : (
+          <Highlights key={el.field} title={el.label} name={value} icon="specification-size" last={index === 2} />
+        )
       }
       if (el.field === 'meetingRooms') {
         const value = el.value === 0 ? 'None available' : `${el.value} available`
@@ -246,10 +249,10 @@ const SpacePage = ({ match, location, history, ...props }) => {
   const _convertedArrayPhotos = array => {
     return array.filter(el => el !== undefined).length > 0
       ? array
-        .filter(el => el !== undefined)
-        .map(el => ({
-          source: `https://api-assets.prod.cloud.spacenow.com?width=800&heigth=500&format=jpeg&path=${el.name}`
-        }))
+          .filter(el => el !== undefined)
+          .map(el => ({
+            source: `https://api-assets.prod.cloud.spacenow.com?width=800&heigth=500&format=jpeg&path=${el.name}`
+          }))
       : []
   }
 
@@ -547,7 +550,11 @@ const SpacePage = ({ match, location, history, ...props }) => {
               </Box>
 
               <Box>
-                <Title type="h5" title="Access Type" />
+                <Title
+                  type="h5"
+                  title="Access Information"
+                  subtitle="How you’ll gain access to this space. Your host will provide the following upon successful bookings:"
+                />
                 <Box
                   display="grid"
                   width="110px"
@@ -557,7 +564,8 @@ const SpacePage = ({ match, location, history, ...props }) => {
                   fontFamily="MontSerrat-SemiBold"
                   fontSize="14px"
                   color={listing.listingData.accessType ? 'quartenary' : 'error'}
-                  borderColor={listing.listingData.accessType ? '' : 'error'}
+                  border={listing.listingData.accessType ? '1px solid #c4c4c4' : 'error'}
+                  borderRadius="10px"
                 >
                   <Icon
                     style={{ alignSelf: 'center', justifySelf: 'center' }}
@@ -646,7 +654,7 @@ const SpacePage = ({ match, location, history, ...props }) => {
                         disabled={_isPeriodValid(listing.bookingPeriod) || (user && user.id === listing.user.id)}
                         fluid
                       >
-                        {listing.listingData.bookingType === 'request' ? 'Booking Request' : 'Book Now'}
+                        {listing.listingData.bookingType === 'request' ? 'Booking Request' : 'Reserve'}
                       </Button>
                     )}
                 </>
@@ -677,7 +685,7 @@ const SpacePage = ({ match, location, history, ...props }) => {
           <Map position={{ lat: Number(listing.location.lat), lng: Number(listing.location.lng) }} />
         </Box>
 
-        <Box mb="45px">
+        {/* <Box mb="45px">
           <Title type="h5" title="Cancellation Policy" />
           <Grid columns="repeat(auto-fit, minmax(350px, auto))">
             <Cell>
@@ -693,7 +701,8 @@ const SpacePage = ({ match, location, history, ...props }) => {
               <ImageStyled alt="Cancellation Policy" src={GraphCancelattionImage} width="700px" />
             </Cell>
           </Grid>
-        </Box>
+        </Box> */}
+        <Footer />
         <BottomButtonMobile>
           <Grid columns={2} style={{ alignItems: 'center' }}>
             <Cell style={{ alignContent: 'center', justifyContent: 'left', display: 'grid' }}>
