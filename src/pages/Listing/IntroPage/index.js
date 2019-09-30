@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import styled from 'styled-components'
 import Helmet from 'react-helmet'
-import { Wrapper, Card, Title } from 'components'
+import { Wrapper, Card, Title, Footer } from 'components'
 import { config } from 'variables'
 // import FormContactUs from './FormContactUs'
 
@@ -58,6 +58,7 @@ class IntroPage extends Component {
             buttonHandleClick={() => this._goTo('multiple')}
           />
         </WrapperStyled>
+        <Footer />
       </Wrapper>
     )
   }

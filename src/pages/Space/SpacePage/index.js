@@ -181,7 +181,7 @@ const SpacePage = ({ match, location, history, ...props }) => {
     const { address1 = '', city = '', zipcode = '', state = '', country = '' } = address
     const convertedAddress = `${address1 ? `${address1}, ` : ''} ${city ? `${city}, ` : ''} ${
       zipcode ? `${zipcode}, ` : ''
-    } ${state ? `${state}, ` : ''} ${country ? `${country}` : ''}`
+      } ${state ? `${state}, ` : ''} ${country ? `${country}` : ''}`
     return convertedAddress.replace(/\0.*$/g, '')
   }
 
@@ -270,10 +270,10 @@ const SpacePage = ({ match, location, history, ...props }) => {
   const _convertedArrayPhotos = array => {
     return array.filter(el => el !== undefined).length > 0
       ? array
-          .filter(el => el !== undefined)
-          .map(el => ({
-            source: `https://api-assets.prod.cloud.spacenow.com?width=800&heigth=500&format=jpeg&path=${el.name}`
-          }))
+        .filter(el => el !== undefined)
+        .map(el => ({
+          source: `https://api-assets.prod.cloud.spacenow.com?width=800&heigth=500&format=jpeg&path=${el.name}`
+        }))
       : []
   }
 
@@ -542,10 +542,9 @@ const SpacePage = ({ match, location, history, ...props }) => {
                 <CellStyled width={2} center>
                   <Title
                     type="h4"
-                    title={`$ ${Math.round((listing.listingData.basePrice || 0) * 100) / 100} ${listing.bookingPeriod}`}
+                    title={`$ ${(Math.round((listing.listingData.basePrice || 0) * 100) / 100).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")} ${listing.bookingPeriod}`}
                     noMargin
                     right
-                    style={{ marginTop: '5px' }}
                   />
                 </CellStyled>
               </Grid>

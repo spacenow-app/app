@@ -2,7 +2,22 @@ import React, { useLayoutEffect, useEffect, useState, useRef } from 'react'
 import { useDispatch, shallowEqual, useSelector } from 'react-redux'
 import styled from 'styled-components'
 
-import { NavBar, Line, Title, Text, Input, Button, Box, Checkbox, MapSearch, Slider, Switch, Loader } from 'components'
+import {
+  NavBar,
+  Line,
+  Title,
+  Text,
+  Input,
+  Button,
+  Box,
+  Checkbox,
+  MapSearch,
+  Slider,
+  Switch,
+  Loader
+  // Footer,
+  // Wrapper
+} from 'components'
 
 import { Manager, Reference, Popper } from 'react-popper'
 import numeral from 'numeral'
@@ -624,6 +639,9 @@ const SearchPage = ({ history, location }) => {
           </ContainerMap>
         )}
       </ContainerResults>
+      {/* <Wrapper>
+        <Footer />
+      </Wrapper> */}
     </>
   )
 }

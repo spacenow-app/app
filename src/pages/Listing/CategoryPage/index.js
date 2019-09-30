@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
-import { Wrapper, Title, StepButtons, List, Caption, Loader } from 'components'
+import { Wrapper, Title, StepButtons, List, Caption, Loader, Footer } from 'components'
 
 import { onGetAllCategories } from 'redux/ducks/category'
 import { onCreate } from 'redux/ducks/listing'
@@ -90,6 +90,7 @@ const CategoryPage = props => {
           isLoading: isLoadingCreating
         }}
       />
+      <Footer />
     </Wrapper>
   )
 }
