@@ -49,7 +49,7 @@ const ListingCard = (dispatch, item, index) => {
           noMargin
           subTitleMargin={0}
           type="h6"
-          title={<Text>AUD ${item.listingData.basePrice ? item.listingData.basePrice.toFixed(2) : 0.0}</Text>}
+          title={<Text>AUD $ {item.listingData.basePrice ? item.listingData.basePrice.toFixed(2).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") : 0.0}</Text>}
         />
       </Card.Horizontal.Body>
       <Card.Horizontal.Dropdown alignRight>
