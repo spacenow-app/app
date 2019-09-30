@@ -318,6 +318,8 @@ const allListingFields = `
     profile {
       displayName
       picture
+      firstName
+      lastName
     }
   }
 `
