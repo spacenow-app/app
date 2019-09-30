@@ -25,7 +25,8 @@ import {
   BookingCard,
   Checkbox,
   Button,
-  Footer
+  Footer,
+  CardSearch
 } from 'components'
 
 import MonthlyBooking from './MonthlyBooking'
@@ -39,6 +40,8 @@ import {
   onGetAvailabilitiesByListingId,
   onClaimListing
 } from 'redux/ducks/listing'
+
+import { onSearch } from 'redux/ducks/search'
 
 import { onCreateBooking, onGetPendingBooking } from 'redux/ducks/booking'
 
@@ -102,6 +105,16 @@ const CellStyled = styled(Cell)`
     }
   }
 `
+const SimilarSpacesContainer = styled.div`
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+  grid-column-gap: 25px;
+  grid-row-gap: 25px;
+
+  @media (max-width: 945px) {
+    grid-template-columns: repeat(auto-fill, minmax(100%, 1fr));
+  }
+`
 
 const SpacePage = ({ match, location, history, ...props }) => {
   const dispatch = useDispatch()
@@ -114,6 +127,7 @@ const SpacePage = ({ match, location, history, ...props }) => {
   const { isAuthenticated } = useSelector(state => state.auth)
   const { isLoading: isLoadingOnCreateReservation } = useSelector(state => state.booking.create)
   const { object: pendingBooking } = useSelector(state => state.booking.pending)
+  const { similar: similarResults } = useSelector(state => state.search)
 
   const [datesSelected, setDatesSelected] = useState([])
   const [date, setDate] = useState('')
@@ -147,6 +161,13 @@ const SpacePage = ({ match, location, history, ...props }) => {
       setImageHeight(325)
     }
   }, [])
+
+  useEffect(() => {
+    listing &&
+      dispatch(
+        onSearch(listing.location.lat, listing.location.lng, false, listing.settingsParent.category.id.toString(), 3)
+      )
+  }, [dispatch, listing])
 
   if (listing && listing.user.provider === 'wework') {
     history.push(`/space/partner/${match.params.id}`)
@@ -633,7 +654,7 @@ const SpacePage = ({ match, location, history, ...props }) => {
           </Cell>
           <Cell id="booking-card">
             <BookingCard
-              style={{ position: "sticky", top: "1px" }}
+              style={{ position: 'sticky', top: '1px' }}
               titleComponent={
                 <Title
                   type="h5"
@@ -684,6 +705,17 @@ const SpacePage = ({ match, location, history, ...props }) => {
           <Title type="h5" title="Location" />
           <Map position={{ lat: Number(listing.location.lat), lng: Number(listing.location.lng) }} />
         </Box>
+
+        {similarResults.length === 3 && (
+          <Box mt="45px">
+            <Title type="h5" title="See more similar spaces" />
+            <SimilarSpacesContainer>
+              {similarResults.map(item => {
+                return <CardSearch item={item} key={item.id} />
+              })}
+            </SimilarSpacesContainer>
+          </Box>
+        )}
 
         {/* <Box mb="45px">
           <Title type="h5" title="Cancellation Policy" />

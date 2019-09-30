@@ -52,6 +52,7 @@ import DatesDetail from './DatesDetail'
 import Table from './Table'
 import CarouselListing from './CarouselListing'
 import Footer from './Footer'
+import CardSearch from './Card/CardSearch'
 
 export {
   Modal,
@@ -110,5 +111,6 @@ export {
   DatesDetail,
   Table,
   CarouselListing,
-  Footer
+  Footer,
+  CardSearch
 }

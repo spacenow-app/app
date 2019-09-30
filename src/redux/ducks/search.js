@@ -6,7 +6,8 @@ import errToMsg from 'utils/errToMsg'
 export const Types = {
   ON_SEARCH_REQUEST: 'ON_SEARCH_REQUEST',
   ON_SEARCH_SUCCESS: 'ON_SEARCH_SUCCESS',
-  ON_SEARCH_FAILURE: 'ON_SEARCH_FAILURE'
+  ON_SEARCH_FAILURE: 'ON_SEARCH_FAILURE',
+  ON_SEARCH_SIMILAR_SUCCESS: 'ON_SEARCH_SIMILAR_SUCCESS'
 }
 
 // Initial State
@@ -24,7 +25,8 @@ const initialState = {
       total: 0,
       totalPages: 0
     }
-  }
+  },
+  similar: []
 }
 
 const CATEGORIES = {
@@ -104,8 +106,8 @@ const searchResultFields = `
 `
 
 const querySearchByAddress = gql`
-  query searchByAddress($lat: String!, $lng: String!, $categories: String) {
-    searchByAddress(lat: $lat, lng: $lng, categories: $categories) {
+  query searchByAddress($lat: String!, $lng: String!, $categories: String, $limit: Int, $radius: Int) {
+    searchByAddress(lat: $lat, lng: $lng, categories: $categories, limit: $limit, radius: $radius) {
       __typename
       status
       searchKey
@@ -185,6 +187,13 @@ export default function reducer(state = initialState, action) {
         }
       }
     }
+    case Types.ON_SEARCH_SIMILAR_SUCCESS: {
+      return {
+        ...state,
+        isLoading: false,
+        similar: action.payload.result
+      }
+    }
     case Types.ON_SEARCH_FAILURE: {
       return {
         ...state,
@@ -197,32 +206,48 @@ export default function reducer(state = initialState, action) {
   }
 }
 
-export const onSearch = (lat, lng, categoryKey = false) => async dispatch => {
+export const onSearch = (lat, lng, categoryKey = false, categories = false, limit = false) => async dispatch => {
   dispatch({ type: Types.ON_SEARCH_REQUEST })
   try {
     const queryVariables = { lat: `${lat}`, lng: `${lng}` }
     if (categoryKey) {
       queryVariables.categories = CATEGORIES[categoryKey].join()
     }
+    if (categories) {
+      queryVariables.categories = categories
+    }
+    if (limit) {
+      queryVariables.limit = limit
+      queryVariables.radius = -1
+    }
     const { data } = await getClient().query({
       query: querySearchByAddress,
       variables: queryVariables
     })
-    dispatch({
-      type: Types.ON_SEARCH_SUCCESS,
-      payload: {
-        searchKey: data.searchByAddress.searchKey,
-        result: data.searchByAddress.result,
-        pagination: {
-          page: data.searchByAddress.page,
-          perPage: data.searchByAddress.perPage,
-          prePage: data.searchByAddress.prePage,
-          nextPage: data.searchByAddress.nextPage,
-          total: data.searchByAddress.total,
-          totalPages: data.searchByAddress.totalPages
+    if (limit === 3) {
+      dispatch({
+        type: Types.ON_SEARCH_SIMILAR_SUCCESS,
+        payload: {
+          result: data.searchByAddress.result
         }
-      }
-    })
+      })
+    } else {
+      dispatch({
+        type: Types.ON_SEARCH_SUCCESS,
+        payload: {
+          searchKey: data.searchByAddress.searchKey,
+          result: data.searchByAddress.result,
+          pagination: {
+            page: data.searchByAddress.page,
+            perPage: data.searchByAddress.perPage,
+            prePage: data.searchByAddress.prePage,
+            nextPage: data.searchByAddress.nextPage,
+            total: data.searchByAddress.total,
+            totalPages: data.searchByAddress.totalPages
+          }
+        }
+      })
+    }
   } catch (err) {
     dispatch({ type: Types.ON_SEARCH_FAILURE, payload: errToMsg(err) })
   }
