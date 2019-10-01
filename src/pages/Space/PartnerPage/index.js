@@ -21,7 +21,8 @@ import {
   Button,
   CarouselListing,
   Footer,
-  CardSearch
+  CardSearch,
+  Carousel
 } from 'components'
 
 import { onGetListingById, onGetAllSpecifications } from 'redux/ducks/listing'
@@ -141,18 +142,28 @@ const PartnerPage = ({ match, location, ...props }) => {
 
   return (
     <>
-      {(listing.photos.length > 1 || imageHeight === 325) && (
+      {imageHeight === 325 ||
+      (listing.photos.length > 1 &&
+        listing.settingsParent.category.otherItemName !== 'parking' &&
+        listing.settingsParent.category.otherItemName !== 'storage') ? (
         <Box mb="30px">
-          <CarouselListing photos={_convertedArrayPhotos(listing.photos)} height={imageHeight} />
+          <CarouselListing photos={_convertedArrayPhotos(listing.photos)} />
         </Box>
-      )}
+      ) : null}
       <Wrapper>
         <Helmet title="View Listing - Spacenow" />
         <GridStyled columns="auto 350px" columnGap="35px" rowGap="30px">
           <Box display="grid" gridRowGap="15px">
-            {listing.photos.length === 1 && imageHeight !== 325 && (
-              <CarouselListing photos={_convertedArrayPhotos(listing.photos)} height={imageHeight} />
-            )}
+            {listing.photos.length === 1 &&
+              listing.settingsParent.category.otherItemName !== 'parking' &&
+              listing.settingsParent.category.otherItemName !== 'storage' &&
+              imageHeight !== 325 && <CarouselListing photos={_convertedArrayPhotos(listing.photos)} />}
+
+            {imageHeight !== 325 &&
+            (listing.settingsParent.category.otherItemName === 'parking' ||
+              listing.settingsParent.category.otherItemName === 'storage') ? (
+              <Carousel photos={_convertedArrayPhotos(listing.photos)} />
+            ) : null}
 
             <Grid columns={12}>
               <CellStyled width={6}>

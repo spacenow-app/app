@@ -21,6 +21,7 @@ import {
   Highlights,
   Loader,
   CarouselListing,
+  Carousel,
   UserDetails,
   BookingCard,
   Checkbox,
@@ -181,7 +182,7 @@ const SpacePage = ({ match, location, history, ...props }) => {
     const { address1 = '', city = '', zipcode = '', state = '', country = '' } = address
     const convertedAddress = `${address1 ? `${address1}, ` : ''} ${city ? `${city}, ` : ''} ${
       zipcode ? `${zipcode}, ` : ''
-      } ${state ? `${state}, ` : ''} ${country ? `${country}` : ''}`
+    } ${state ? `${state}, ` : ''} ${country ? `${country}` : ''}`
     return convertedAddress.replace(/\0.*$/g, '')
   }
 
@@ -270,10 +271,10 @@ const SpacePage = ({ match, location, history, ...props }) => {
   const _convertedArrayPhotos = array => {
     return array.filter(el => el !== undefined).length > 0
       ? array
-        .filter(el => el !== undefined)
-        .map(el => ({
-          source: `https://api-assets.prod.cloud.spacenow.com?width=800&heigth=500&format=jpeg&path=${el.name}`
-        }))
+          .filter(el => el !== undefined)
+          .map(el => ({
+            source: `https://api-assets.prod.cloud.spacenow.com?width=800&heigth=500&format=jpeg&path=${el.name}`
+          }))
       : []
   }
 
@@ -478,19 +479,29 @@ const SpacePage = ({ match, location, history, ...props }) => {
 
   return (
     <>
-      {(listing.photos.length > 1 || imageHeight === 325) && (
+      {imageHeight === 325 ||
+      (listing.photos.length > 1 &&
+        listing.settingsParent.category.otherItemName !== 'parking' &&
+        listing.settingsParent.category.otherItemName !== 'storage') ? (
         <Box mb="30px">
           <CarouselListing photos={_convertedArrayPhotos(listing.photos)} />
         </Box>
-      )}
+      ) : null}
       <Wrapper>
         <Helmet title="View Listing - Spacenow" />
         <GridStyled columns="auto 350px" columnGap="35px" rowGap="30px">
           <Cell>
             <Grid columns={1} rowGap="15px">
-              {listing.photos.length === 1 && imageHeight !== 325 && (
-                <CarouselListing photos={_convertedArrayPhotos(listing.photos)} />
-              )}
+              {listing.photos.length === 1 &&
+                listing.settingsParent.category.otherItemName !== 'parking' &&
+                listing.settingsParent.category.otherItemName !== 'storage' &&
+                imageHeight !== 325 && <CarouselListing photos={_convertedArrayPhotos(listing.photos)} />}
+
+              {imageHeight !== 325 &&
+              (listing.settingsParent.category.otherItemName === 'parking' ||
+                listing.settingsParent.category.otherItemName === 'storage') ? (
+                <Carousel photos={_convertedArrayPhotos(listing.photos)} />
+              ) : null}
 
               <Grid columns={12}>
                 <Cell width={8} style={{ display: 'flex' }}>
@@ -542,7 +553,9 @@ const SpacePage = ({ match, location, history, ...props }) => {
                 <CellStyled width={2} center>
                   <Title
                     type="h4"
-                    title={`$ ${(Math.round((listing.listingData.basePrice || 0) * 100) / 100).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")} ${listing.bookingPeriod}`}
+                    title={`$ ${(Math.round((listing.listingData.basePrice || 0) * 100) / 100)
+                      .toString()
+                      .replace(/\B(?=(\d{3})+(?!\d))/g, ',')} ${listing.bookingPeriod}`}
                     noMargin
                     right
                   />
