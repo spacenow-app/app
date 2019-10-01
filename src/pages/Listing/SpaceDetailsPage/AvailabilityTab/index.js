@@ -266,8 +266,12 @@ const AvailabilityTab = ({ match, listing, history, setFatherValues }) => {
     if (selected) {
       const selectedIndex = copySelectedDates.findIndex(selectedDay => isSameDay(selectedDay, day))
       copySelectedDates.splice(selectedIndex, 1)
+      const isHolidayIndex = holidays.findIndex(isHoliday => isSameDay(isHoliday, day))
+      isHolidayIndex >= 0 && holidays.splice(isHolidayIndex, 1)
     } else {
       copySelectedDates.push(day)
+      const isHolidayIndex = holidaysArray.findIndex(isHoliday => isSameDay(isHoliday.originalDate, day))
+      isHolidayIndex >= 0 && holidays.push(day)
     }
     const arraySorted = _.sortBy([...copySelectedDates], item => item)
     setSelectedDates(arraySorted)
@@ -318,6 +322,9 @@ const AvailabilityTab = ({ match, listing, history, setFatherValues }) => {
   const _removeDate = date => {
     const newArray = _.filter(selectedDates, dateFromArray => !isSameDay(new Date(dateFromArray), date))
     setSelectedDates(newArray)
+
+    // const newArraySelected = selectedDates.filter(el => !holidaysArray.some(hl => isSameDay(hl.originalDate, el)))
+    // setHolidays(newarray)
   }
 
   // TODO: Remove when the next button goes to cancellation policy again.
