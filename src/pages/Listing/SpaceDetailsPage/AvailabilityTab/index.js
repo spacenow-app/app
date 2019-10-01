@@ -322,9 +322,8 @@ const AvailabilityTab = ({ match, listing, history, setFatherValues }) => {
   const _removeDate = date => {
     const newArray = _.filter(selectedDates, dateFromArray => !isSameDay(new Date(dateFromArray), date))
     setSelectedDates(newArray)
-
-    // const newArraySelected = selectedDates.filter(el => !holidaysArray.some(hl => isSameDay(hl.originalDate, el)))
-    // setHolidays(newarray)
+    const isHolidayIndex = holidays.findIndex(isHoliday => isSameDay(isHoliday, date))
+    isHolidayIndex >= 0 && holidays.splice(isHolidayIndex, 1)
   }
 
   // TODO: Remove when the next button goes to cancellation policy again.
