@@ -215,7 +215,7 @@ const BookingTab = ({
               box
               value={false}
               name="isAbsorvedFee"
-              checked={values.isAbsorvedFee}
+              checked={!values.isAbsorvedFee}
               handleChange={_handleRadioChange}
               label="Host Fee"
               text=" Incur the 10% service fee and the guest will not be passed an extra
@@ -229,7 +229,7 @@ const BookingTab = ({
               box
               value
               name="isAbsorvedFee"
-              checked={!values.isAbsorvedFee}
+              checked={values.isAbsorvedFee}
               handleChange={_handleRadioChange}
               label="Guest Fee"
               text="The guest pays the 10% service fee and you, the host, will receive
