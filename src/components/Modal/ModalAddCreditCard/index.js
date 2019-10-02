@@ -159,11 +159,8 @@ const formik = {
       )
       .required(),
     cvc: Yup.string()
-      .test(
-        'test-cvc', // this is used internally by yup
-        'CVC number is invalid', // validation message
-        value => valid.cvv(value, 4).isValid
-      )
+      .min(3)
+      .max(4)
       .required(),
     name: Yup.string().required()
   }),
