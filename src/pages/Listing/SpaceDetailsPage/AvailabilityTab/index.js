@@ -153,6 +153,21 @@ const AvailabilityTab = ({ match, listing, history, setFatherValues }) => {
     setTimeTableWeek(newTimeTableWeek.filter(el => el !== undefined))
   }, [timetable])
 
+  useEffect(() => {
+    const newarray = holidaysArray.filter(el => {
+      if (isAfter(new Date(), new Date(el.date))) {
+        return false
+      }
+      return true
+    })
+    setHolidays(
+      newarray
+        .map(o => selectedDates.filter(selectedDay => isSameDay(selectedDay, o.originalDate)))
+        .filter(res => res.length > 0)
+        .flatMap(res => res)
+    )
+  }, [holidaysArray, selectedDates])
+
   const _newDateTime = (hour, min) => {
     const h = new Date()
     const u = new Date(h.getFullYear(), h.getMonth(), h.getDate(), hour, min, h.getSeconds())
@@ -263,17 +278,19 @@ const AvailabilityTab = ({ match, listing, history, setFatherValues }) => {
 
   const _onClickSelectDay = (day, { selected }) => {
     const copySelectedDates = [...selectedDates]
+    const copyHolidays = [...holidays]
     if (selected) {
       const selectedIndex = copySelectedDates.findIndex(selectedDay => isSameDay(selectedDay, day))
       copySelectedDates.splice(selectedIndex, 1)
-      const isHolidayIndex = holidays.findIndex(isHoliday => isSameDay(isHoliday, day))
-      isHolidayIndex >= 0 && holidays.splice(isHolidayIndex, 1)
+      const isHolidayIndex = copyHolidays.findIndex(isHoliday => isSameDay(isHoliday, day))
+      isHolidayIndex >= 0 && copyHolidays.splice(isHolidayIndex, 1)
     } else {
       copySelectedDates.push(day)
       const isHolidayIndex = holidaysArray.findIndex(isHoliday => isSameDay(isHoliday.originalDate, day))
-      isHolidayIndex >= 0 && holidays.push(day)
+      isHolidayIndex >= 0 && copyHolidays.push(day)
     }
     const arraySorted = _.sortBy([...copySelectedDates], item => item)
+    setHolidays(copyHolidays)
     setSelectedDates(arraySorted)
   }
 
