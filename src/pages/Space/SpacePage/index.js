@@ -273,7 +273,8 @@ const SpacePage = ({ match, location, history, ...props }) => {
       ? array
           .filter(el => el !== undefined)
           .map(el => ({
-            source: `https://api-assets.prod.cloud.spacenow.com?width=800&heigth=500&format=jpeg&path=${el.name}`
+            source: `https://api-assets.prod.cloud.spacenow.com?width=800&heigth=500&format=jpeg&path=${el.name}`,
+            isCover: el.isCover
           }))
       : []
   }
