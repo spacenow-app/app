@@ -88,25 +88,30 @@ const BookingCard = (dispatch, item, index, userType) => {
 
   return (
     <Card.Horizontal key={index}>
-      <Card.Horizontal.Image
-        src={_getCoverPhoto(item.listing)}
-        handleClick={() => _handleRedirect(item.listingId)}
-      />
+      <Card.Horizontal.Image src={_getCoverPhoto(item.listing)} handleClick={() => _handleRedirect(item.listingId)} />
       <Card.Horizontal.Body>
         <Card.Horizontal.Title
           noMargin
           subTitleMargin={0}
           type="h6"
-          title={<Text width="200px">{item.listing.title || ''}</Text>}
+          title={<Text width={{ _: '220px', medium: '250px', large: '270px' }}>{item.listing.title || ''}</Text>}
           subtitle={
-            <Text width="220px">{`${item.listing.location.address1}, ${item.listing.location.city} ${item.listing.location.state}`}</Text>
+            <Text width="300px">{`${item.listing.location.address1}, ${item.listing.location.city} ${item.listing.location.state}`}</Text>
           }
         />
         <Card.Horizontal.Price
           noMargin
           subTitleMargin={0}
           type="h6"
-          title={<Text>AUD ${item.totalPrice.toFixed(2).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}</Text>}
+          title={
+            <Text>
+              AUD $
+              {item.totalPrice
+                .toFixed(2)
+                .toString()
+                .replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
+            </Text>
+          }
         />
         {(item.bookingState === 'pending' || item.bookingState === 'requested') && (
           <Card.Horizontal.ExpireOn
@@ -236,10 +241,10 @@ const BookingPage = ({ ...props }) => {
       {!bookings || bookings.count === 0 ? (
         <BackgroundImage text="We didn't find any bookings :(" />
       ) : (
-          <Grid columns={1} rowGap="30px">
-            {[].concat(bookings.items).map((item, index) => BookingCard(dispatch, item, index, userType))}
-          </Grid>
-        )}
+        <Grid columns={1} rowGap="30px">
+          {[].concat(bookings.items).map((item, index) => BookingCard(dispatch, item, index, userType))}
+        </Grid>
+      )}
     </>
   )
 }

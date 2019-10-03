@@ -1,6 +1,7 @@
 import React, { Suspense, lazy } from 'react'
 import PropTypes from 'prop-types'
 import { Switch, Route, Redirect } from 'react-router-dom'
+import styled from 'styled-components'
 
 import { Wrapper, Box, Footer } from 'components'
 import InnerMenu from './innerMenu'
@@ -12,11 +13,25 @@ const ListingPage = lazy(() => import('pages/Account/ListingPage'))
 const DocumentVerificationPage = lazy(() => import('pages/Account/DocumentVerificationPage'))
 const NotFoundPage = lazy(() => import('pages/NotFoundPage'))
 
+const BoxStyled = styled(Box)`
+  display: grid;
+  grid-column-gap: 30px;
+  grid-template-columns: 350px 1fr;
+
+  @media only screen and (max-width: 1199px) {
+    grid-template-columns: 280px 1fr;
+  }
+
+  @media (max-width: 767px) {
+    grid-template-columns: 1fr;
+  }
+`
+
 const Account = ({ match, ...props }) => {
   return (
     <Suspense fallback={<div>Loading...</div>}>
       <Wrapper>
-        <Box display="grid" gridTemplateColumns={{ small: '1fr', medium: '350px 1fr' }} gridColumnGap="30px" my="20px">
+        <BoxStyled my="20px">
           <InnerMenu />
           <Box>
             <Switch>
@@ -29,7 +44,7 @@ const Account = ({ match, ...props }) => {
               <Route component={NotFoundPage} />
             </Switch>
           </Box>
-        </Box>
+        </BoxStyled>
         <Footer />
       </Wrapper>
     </Suspense>

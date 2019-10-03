@@ -49,18 +49,26 @@ const ListingCard = (dispatch, item, index) => {
           noMargin
           subTitleMargin={0}
           type={'h6'}
-          title={<Text width={{ _: '200px', medium: '325px' }}>{item.title || ''}</Text>}
+          title={<Text width={{ _: '220px', medium: '250px', large: '270px' }}>{item.title || ''}</Text>}
           subtitle={
-            <Text
-              width={{ _: '200px', medium: '325px' }}
-            >{`${item.location.address1}, ${item.location.city} ${item.location.state}`}</Text>
+            <Text width="300px">{`${item.location.address1}, ${item.location.city} ${item.location.state}`}</Text>
           }
         />
         <Card.Horizontal.Price
           noMargin
           subTitleMargin={0}
           type="h6"
-          title={<Text>AUD $ {item.listingData.basePrice ? item.listingData.basePrice.toFixed(2).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") : 0.0}</Text>}
+          title={
+            <Text>
+              AUD ${' '}
+              {item.listingData.basePrice
+                ? item.listingData.basePrice
+                    .toFixed(2)
+                    .toString()
+                    .replace(/\B(?=(\d{3})+(?!\d))/g, ',')
+                : 0.0}
+            </Text>
+          }
         />
       </Card.Horizontal.Body>
       <Card.Horizontal.Dropdown alignRight>
@@ -144,10 +152,10 @@ const ListingPage = ({ ...props }) => {
       {!listings || listings.count === 0 ? (
         <BackgroundImage text="We didn't find any listings :(" />
       ) : (
-          <Grid columns={1} rowGap="30px">
-            {[].concat(listings.rows).map((item, index) => ListingCard(dispatch, item, index))}
-          </Grid>
-        )}
+        <Grid columns={1} rowGap="30px">
+          {[].concat(listings.rows).map((item, index) => ListingCard(dispatch, item, index))}
+        </Grid>
+      )}
     </>
   )
 }
