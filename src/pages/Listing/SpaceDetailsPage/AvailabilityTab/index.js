@@ -153,6 +153,20 @@ const AvailabilityTab = ({ match, listing, history, setFatherValues }) => {
     setTimeTableWeek(newTimeTableWeek.filter(el => el !== undefined))
   }, [timetable])
 
+  useEffect(() => {
+    const newarray = holidaysArray.filter(el => {
+      if (isAfter(new Date(), new Date(el.date))) {
+        return false
+      }
+      return true
+    })
+    setHolidays(
+      newarray
+        .map(o => selectedDates.filter(selectedDay => isSameDay(selectedDay, o.originalDate)))
+        .filter(res => res.length > 0)
+    )
+  }, [holidaysArray, holidays])
+
   const _newDateTime = (hour, min) => {
     const h = new Date()
     const u = new Date(h.getFullYear(), h.getMonth(), h.getDate(), hour, min, h.getSeconds())
