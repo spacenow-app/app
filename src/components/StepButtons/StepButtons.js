@@ -25,7 +25,7 @@ const StepButtons = ({ prev, next }) => {
     <Footer>
       <Left>
         {prev && (
-          <Button outline="true" disabled={prev.disabled} onClick={prev.onClick} isLoading={prev.isLoading}>
+          <Button outline disabled={prev.disabled} onClick={prev.onClick} isLoading={prev.isLoading}>
             {prev.title ? prev.title : 'Previous Step'}
           </Button>
         )}

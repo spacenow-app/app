@@ -166,7 +166,7 @@ const AvailabilityTab = ({ match, listing, history, setFatherValues }) => {
         .filter(res => res.length > 0)
         .flatMap(res => res)
     )
-  }, [holidaysArray])
+  }, [holidaysArray, selectedDates])
 
   const _newDateTime = (hour, min) => {
     const h = new Date()
