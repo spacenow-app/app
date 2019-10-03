@@ -105,7 +105,7 @@ const CarouselListing = ({ photos, ...props }) => {
                       <Image src={img.source} handleClick={_toggleModal} width="100%" height="552px" />
                     </Cell>
                   )) ||
-                  (index > 1 && index <= 5 && (
+                  (index >= 1 && index <= 5 && (
                     <Cell width={1} height={1} key={index}>
                       <Image src={img.source} handleClick={_toggleModal} width="100%" height="275px" />
                     </Cell>
