@@ -207,7 +207,7 @@ const BookingTab = ({
         <Title
           type="h3"
           title="Booking Fee"
-          subtitle="Incorporate Spacenow’s 10% commision into the price or push it onto the guest. Tip: Been competitive means more bookings."
+          subtitle="Incorporate Spacenow’s 10% commision into the price or push it onto the guest. Tip: Being competitive means more bookings."
         />
         <Box display="grid" gridTemplateColumns={{ _: '1fr', medium: '1fr 1fr' }} gridGap="20px">
           <Cell width={1}>

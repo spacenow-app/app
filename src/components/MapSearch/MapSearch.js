@@ -99,7 +99,7 @@ const MapSearch = withGoogleMap(props => {
             }}
             defaultIcon={' '}
             labelAnchor={{ x: 55, y: 40 }}
-            children={<div>{marker.price}</div>}
+            children={<div>{marker.price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')}</div>}
             labelStyle={{
               backgroundColor: 'white',
               fontSize: '16px',
