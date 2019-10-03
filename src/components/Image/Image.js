@@ -48,7 +48,7 @@ Image.defaultProps = {
   handleClick: null,
   src: '',
   alt: '...',
-  width: '250px',
+  // width: '250px',
   height: '200px'
 }
 

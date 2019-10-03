@@ -27,7 +27,11 @@ const Wrapper = styled.div`
     box-shadow: rgb(203, 203, 203) 10px 10px 20px 0px;
   }
 
-  @media (max-width: 576px) {
+  @media (max-width: 1199px) {
+    grid-template-columns: 200px auto auto;
+  }
+
+  @media (max-width: 991px) {
     grid-template-columns: 1fr;
     grid-template-areas:
       'image'

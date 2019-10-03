@@ -53,7 +53,7 @@ class IntroPage extends Component {
             type="icon"
             icon="multiple-space"
             title="Multiple spaces"
-            description="If you're listing more than one or 2 spaces, please contact us and we will be happy to help get everything set up on your behalf – get ready for the smoothest on boarding ever."
+            description="If you're listing more than one or 2 spaces, please contact us and we will be happy to help get everything set up on your behalf – get ready for the smoothest on boarding ever.<separate>"
             buttonText="Contact Us"
             buttonHandleClick={() => this._goTo('multiple')}
           />
