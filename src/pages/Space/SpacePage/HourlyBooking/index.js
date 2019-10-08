@@ -44,47 +44,46 @@ const ContactHost = ({
   listingData,
   hoursQuantity,
   onSetStartTime,
-  onSetEndTime
+  onSetEndTime,
+  onCalcHourlyPeriod
 }) => {
   return (
-    <form>
-      <WrapperStyled>
-        <DatePicker
-          label="Date"
-          date={date}
-          handleDateChange={o => onDateChange(o)}
-          placeholder="Choose a date"
-          dayPickerProps={{
-            selectedDays: [date],
-            modifiers: {
-              disabled: [
-                ...listingExceptionDates.map(o => new Date(o)),
-                {
-                  daysOfWeek: closingDays
-                },
-                {
-                  before: new Date()
-                }
-              ]
-            }
-          }}
-        />
-
-        <Grid columns={2}>
-          <Cell>
-            <LabelStyled>Start time</LabelStyled>
-            <TimePickerStyled>
-              <TimePicker value={startTime} onChange={time => onSetStartTime(time)} />
-            </TimePickerStyled>
-          </Cell>
-          <Cell>
-            <LabelStyled>End time</LabelStyled>
-            <TimePickerStyled>
-              <TimePicker value={endTime} onChange={time => onSetEndTime(time)} />
-            </TimePickerStyled>
-          </Cell>
-        </Grid>
-
+    <WrapperStyled>
+      <DatePicker
+        label="Date"
+        date={date}
+        handleDateChange={o => onDateChange(o)}
+        placeholder="Choose a date"
+        dayPickerProps={{
+          selectedDays: [date],
+          modifiers: {
+            disabled: [
+              ...listingExceptionDates.map(o => new Date(o)),
+              {
+                daysOfWeek: closingDays
+              },
+              {
+                before: new Date()
+              }
+            ]
+          }
+        }}
+      />
+      <Grid columns={2}>
+        <Cell>
+          <LabelStyled>Start time</LabelStyled>
+          <TimePickerStyled>
+            <TimePicker value={startTime} onChange={time => onSetStartTime(time)} onBlur={onCalcHourlyPeriod} />
+          </TimePickerStyled>
+        </Cell>
+        <Cell>
+          <LabelStyled>End time</LabelStyled>
+          <TimePickerStyled>
+            <TimePicker value={endTime} onChange={time => onSetEndTime(time)} onBlur={onCalcHourlyPeriod} />
+          </TimePickerStyled>
+        </Cell>
+      </Grid>
+      <p>
         {hoursQuantity > 0 && (
           <PriceDetail
             periodLabel={spelling(hoursQuantity)}
@@ -94,8 +93,8 @@ const ContactHost = ({
             quantity={1}
           />
         )}
-      </WrapperStyled>
-    </form>
+      </p>
+    </WrapperStyled>
   )
 }
 

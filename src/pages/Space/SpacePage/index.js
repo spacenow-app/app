@@ -132,7 +132,7 @@ const SpacePage = ({ match, location, history, ...props }) => {
   const [startTime, setStartTime] = useState('08:00')
   const [endTime, setEndTime] = useState('18:00')
   const [hoursQuantity, setHoursQuantity] = useState(0)
-  const [isTimeTableBlocked, setTimeTableBlocked] = useState(false)
+  const [hourlyError, setHourlyError] = useState('')
 
   useEffect(() => {
     dispatch(onGetListingById(match.params.id, null, true))
@@ -324,11 +324,11 @@ const SpacePage = ({ match, location, history, ...props }) => {
         />
       )
     }
-    if (bookingPeriod === 'hourly') {
-      if (isTimeTableBlocked) {
+    if (bookingPeriod === 'hourly' && bookingType !== 'poa') {
+      if (hourlyError) {
         return (
           <Box color="error" ml="23px">
-            {`The requested dates/time are not available.`}
+            {hourlyError}
           </Box>
         )
       }
@@ -344,6 +344,7 @@ const SpacePage = ({ match, location, history, ...props }) => {
           closingDays={_returnArrayAvailability(listing.accessDays)}
           onSetStartTime={_onSetStartTime}
           onSetEndTime={_onSetEndTime}
+          onCalcHourlyPeriod={_calcHourlyPeriod}
         />
       )
     }
@@ -403,7 +404,7 @@ const SpacePage = ({ match, location, history, ...props }) => {
       return true
     }
     if (bookingPeriod === 'hourly') {
-      return isTimeTableBlocked || hoursQuantity <= 0
+      return hourlyError || hoursQuantity <= 0
     }
     if (bookingPeriod === 'weekly') {
       if (date > 0 && period > 0) {
@@ -498,22 +499,20 @@ const SpacePage = ({ match, location, history, ...props }) => {
   }
 
   const _calcHourlyPeriod = () => {
-    onGetHourlyPeriod(startTime, endTime)
+    onGetHourlyPeriod(date, startTime, endTime)
       .then(value => {
         setHoursQuantity(value)
-        setTimeTableBlocked(false)
+        setHourlyError('')
       })
-      .catch(() => setTimeTableBlocked(true))
+      .catch((err) => setHourlyError(err))
   }
 
   const _onSetStartTime = (value) => {
     setStartTime(value)
-    _calcHourlyPeriod()
   }
 
   const _onSetEndTime = (value) => {
     setEndTime(value)
-    _calcHourlyPeriod()
   }
 
   return (
