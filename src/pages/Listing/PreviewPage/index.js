@@ -19,7 +19,8 @@ import {
   Loader,
   Checkbox,
   Carousel,
-  Footer
+  Footer,
+  Price
 } from 'components'
 
 import { capitalize, toPlural } from 'utils/strings'
@@ -216,8 +217,8 @@ const PreviewPage = ({ match, location, ...props }) => {
         <Helmet title="Listing Preview - Spacenow" />
         <Title type="h2" title="Just one more thing, review your space!" />
         <Carousel photos={_convertedArrayPhotos(arrayPhotos)} height={imageHeight} />
-        <Box my="15px" display="grid" gridTemplateColumns={{ _: '1fr', medium: '2fr 1fr' }} gridGap={'20px'}>
-          <Box display="grid" gridAutoColumns={{ _: 'max-content' }} gridAutoFlow={{ _: 'column' }} gridGap={'20px'}>
+        <Box my="15px" display="grid" gridTemplateColumns={{ _: '1fr', medium: '2fr 1fr' }} gridGap="20px">
+          <Box display="grid" gridAutoColumns={{ _: 'max-content' }} gridAutoFlow={{ _: 'column' }} gridGap="20px">
             <Tag
               icon={
                 <Icon
@@ -239,13 +240,15 @@ const PreviewPage = ({ match, location, ...props }) => {
               {listing.settingsParent.subcategory.itemName}
             </Tag>
           </Box>
-          <Box display="grid" justifySelf={{ _: 'start', medium: 'end' }}>
-            <Tag>
-              {listing.listingData.bookingType ? `${capitalize(listing.listingData.bookingType)} Booking` : 'No data'}
-            </Tag>
-          </Box>
+          {listing.listingData.bookingType !== 'poa' && (
+            <Box display="grid" justifySelf={{ _: 'start', medium: 'end' }}>
+              <Tag>
+                {listing.listingData.bookingType ? `${capitalize(listing.listingData.bookingType)} Booking` : 'No data'}
+              </Tag>
+            </Box>
+          )}
         </Box>
-        <Box my="30px" display="grid" gridTemplateColumns={{ _: '1fr', medium: '2fr 1fr' }} gridGap={'20px'}>
+        <Box my="30px" display="grid" gridTemplateColumns={{ _: '1fr', medium: '2fr 1fr' }} gridGap="20px">
           <Title
             type="h3"
             title={listing.title ? listing.title : 'Input Title'}
@@ -254,7 +257,22 @@ const PreviewPage = ({ match, location, ...props }) => {
             subTitleSize={18}
             noMargin
           />
-          <TitlePrice
+          <Price
+            currency={listing.listingData.currency}
+            price={listing.listingData.basePrice}
+            currencySymbol="$"
+            bookingPeriod={listing.bookingPeriod}
+            bookingType={listing.listingData.bookingType}
+            size="28px"
+            right
+            color={
+              (listing.listingData.basePrice === 0 || listing.listingData.basePrice === null) &&
+              listing.listingData.bookingType !== 'poa'
+                ? '#E05252'
+                : null
+            }
+          />
+          {/* <TitlePrice
             type="h4"
             title={`${listing.listingData.currency}$ ${Math.round((listing.listingData.basePrice || 0) * 100) / 100} ${
               listing.bookingPeriod
@@ -262,7 +280,7 @@ const PreviewPage = ({ match, location, ...props }) => {
             color={listing.listingData.basePrice === 0 || listing.listingData.basePrice === null ? '#E05252' : null}
             noMargin
             right
-          />
+          /> */}
         </Box>
 
         {/* <Grid columns={5}>
@@ -291,7 +309,7 @@ const PreviewPage = ({ match, location, ...props }) => {
       </Grid> */}
         <Box my="30px" display="grid" gridTemplateColumns={{ _: '1fr', medium: '1fr' }}>
           <Title type="h4" title="Highlights" />
-          <Box display="grid" gridTemplateColumns={{ _: '1fr 1fr', medium: '1fr 1fr 1fr 1fr 1fr' }} gridGap={'20px'}>
+          <Box display="grid" gridTemplateColumns={{ _: '1fr 1fr', medium: '1fr 1fr 1fr 1fr 1fr' }} gridGap="20px">
             <Highlights
               title="Minimum term"
               name={_changeToPlural(listing.bookingPeriod, listing.listingData.minTerm)}

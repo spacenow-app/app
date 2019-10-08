@@ -1,6 +1,6 @@
 /* eslint-disable react/no-array-index-key */
 /* eslint-disable no-console */
-import React from 'react'
+import React, { useState } from 'react'
 import styled from 'styled-components'
 import { withFormik } from 'formik'
 import * as Yup from 'yup'
@@ -46,11 +46,22 @@ const _getCoverPhoto = object => {
   return object.photos[0].name
 }
 
-const ContactHost = ({ values, errors, handleChange, handleBlur, setFieldValue, isValid, dispatch, user, listing }) => {
+const ContactHost = ({
+  values,
+  errors,
+  handleChange,
+  handleBlur,
+  setFieldValue,
+  isValid,
+  dispatch,
+  user,
+  isAuthenticated,
+  listing
+}) => {
+  console.log(user)
   const { isLoading: isSendingEmail } = useSelector(state => state.mail)
-
+  const [date, setDate] = useState(new Date())
   const _handleSubmit = () => {
-    setFieldValue('date', format(new Date(values.date), 'dd/MM/yyyy').toString())
     Object.assign(
       values,
       { listingPhoto: JSON.stringify(_getCoverPhoto(listing)) },
@@ -59,10 +70,11 @@ const ContactHost = ({ values, errors, handleChange, handleBlur, setFieldValue, 
       { listingCountry: listing.location.country },
       { hostName: listing.user.profile.displayName },
       { listingCurrency: listing.listingData.currency },
-      { listingPrice: listing.listingData.basePrice },
+      { listingPrice: listing.listingData.basePrice || 0 },
       { listingPeriod: listing.bookingPeriod },
-      { currentDate: format(new Date(), 'MMMM Mo, yyyy') },
-      { listingCategory: listing.settingsParent.category.itemName }
+      { currentDate: format(new Date(), 'MMMM do, yyyy') },
+      { listingCategory: listing.settingsParent.category.itemName },
+      { date: format(date, 'dd/MM/yyyy') }
     )
     const emailGuest = {
       template: 'contact-guest-hourly',
@@ -88,38 +100,39 @@ const ContactHost = ({ values, errors, handleChange, handleBlur, setFieldValue, 
       <WrapperStyled>
         <DatePicker
           label="Date"
-          name="date"
-          handleDateChange={date => setFieldValue('date', format(date, 'dd/MM/yyyy'))}
+          handleDateChange={date => setDate(date)}
           dayPickerProps={{
             disabledDays: [{ before: new Date() }]
           }}
-          value={values.date}
-          error={errors.startTime}
-          onChange={handleChange}
+          value={date}
         />
 
-        <Grid columns={2}>
-          <Cell>
-            <LabelStyled>Start time</LabelStyled>
-            <TimePickerStyled>
-              <TimePicker
-                value={format(startTimeInitial, 'HH:mm')}
-                onChange={time => _handleTimeChange('startTime', time)}
-              />
-            </TimePickerStyled>
-          </Cell>
-          <Cell>
-            <LabelStyled>End time</LabelStyled>
-            <TimePickerStyled>
-              <TimePicker
-                value={format(endTimeInitial, 'HH:mm')}
-                onChange={time => _handleTimeChange('endTime', time)}
-              />
-            </TimePickerStyled>
-          </Cell>
-        </Grid>
+        {listing.listingData.bookingType !== 'poa' && (
+          <>
+            <Grid columns={2}>
+              <Cell>
+                <LabelStyled>Start time</LabelStyled>
+                <TimePickerStyled>
+                  <TimePicker
+                    value={format(startTimeInitial, 'HH:mm')}
+                    onChange={time => _handleTimeChange('startTime', time)}
+                  />
+                </TimePickerStyled>
+              </Cell>
+              <Cell>
+                <LabelStyled>End time</LabelStyled>
+                <TimePickerStyled>
+                  <TimePicker
+                    value={format(endTimeInitial, 'HH:mm')}
+                    onChange={time => _handleTimeChange('endTime', time)}
+                  />
+                </TimePickerStyled>
+              </Cell>
+            </Grid>
+          </>
+        )}
 
-        {!user && (
+        {!isAuthenticated && (
           <>
             <Input
               label="Full Name*"
@@ -177,13 +190,11 @@ const formik = {
     return {
       guestName: props.user && props.user.id ? `${props.user.profile.firstName} ${props.user.profile.lastName}` : '',
       guestEmail: props.user && props.user.id ? props.user.email : '',
-      date: new Date(),
       startTime: format(new Date('January 31 1980 08:00'), 'HH:mm'),
       endTime: format(new Date('January 31 1980 18:00'), 'HH:mm')
     }
   },
   validationSchema: Yup.object().shape({
-    date: Yup.string(),
     startTime: Yup.string(),
     endTime: Yup.string(),
     guestEmail: Yup.string().required('Email field is required'),

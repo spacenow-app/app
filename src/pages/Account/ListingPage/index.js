@@ -2,7 +2,7 @@ import React, { useEffect } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import Helmet from 'react-helmet'
 import { onGetListingsByUser, onUpdateListing, onDeleteListing } from 'redux/ducks/account'
-import { Card, Text, Icon, Loader, BackgroundImage, Grid, Cell, Title, Button } from 'components'
+import { Card, Text, Icon, Loader, BackgroundImage, Grid, Cell, Title, Button, Price } from 'components'
 
 const _parseCategoryIconName = (name, isSub) => {
   let prefix = 'category-'
@@ -48,7 +48,7 @@ const ListingCard = (dispatch, item, index) => {
         <Card.Horizontal.Title
           noMargin
           subTitleMargin={0}
-          type={'h6'}
+          type="h6"
           title={<Text width={{ _: '220px', medium: '250px', large: '270px' }}>{item.title || ''}</Text>}
           subtitle={
             <Text width="300px">{`${item.location.address1}, ${item.location.city} ${item.location.state}`}</Text>
@@ -59,15 +59,22 @@ const ListingCard = (dispatch, item, index) => {
           subTitleMargin={0}
           type="h6"
           title={
-            <Text>
-              AUD ${' '}
-              {item.listingData.basePrice
-                ? item.listingData.basePrice
-                    .toFixed(2)
-                    .toString()
-                    .replace(/\B(?=(\d{3})+(?!\d))/g, ',')
-                : 0.0}
-            </Text>
+            // <Text>
+            //   AUD ${' '}
+            //   {item.listingData.basePrice
+            //     ? item.listingData.basePrice
+            //         .toFixed(2)
+            //         .toString()
+            //         .replace(/\B(?=(\d{3})+(?!\d))/g, ',')
+            //     : 0.0}
+            // </Text>
+            <Price
+              currency="AUD"
+              price={item.listingData.basePrice || 0}
+              currencySymbol="$"
+              bookingType={item.listingData.bookingType}
+              size="18px"
+            />
           }
         />
       </Card.Horizontal.Body>

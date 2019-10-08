@@ -3,7 +3,7 @@ import Helmet from 'react-helmet'
 import { withFormik } from 'formik'
 import * as Yup from 'yup'
 import numeral from 'numeral'
-import { Title, Select, Input, Caption, Radio, Cell, StepButtons, Box, Footer } from 'components'
+import { Title, Select, Input, Caption, Radio, Cell, StepButtons, Box, Footer, Checkbox } from 'components'
 import { capitalize, toPlural } from 'utils/strings'
 
 import GuestFeeIcon from './guest_fee_icon.svg'
@@ -42,6 +42,7 @@ const BookingTab = ({
     }
     return toPlural(capitalize(string.slice(0, -2)), number)
   }
+  console.log(values)
 
   return (
     <Box display="grid" gridTemplateColumns={{ _: '1fr' }} gridGap={{ _: '20px', medium: '40px' }}>
@@ -121,9 +122,11 @@ const BookingTab = ({
               placeholder="100.00"
               name="basePrice"
               error={errors.basePrice}
-              value={numeral(values.basePrice).format('0[.]00')} // prettier-ignore
+              value={numeral(values.bookingType === 'poa' ? 0 : values.basePrice).format('0[.]00')} // prettier-ignore
               onChange={handleChange}
               onBlur={handleBlur}
+              disabled={values.bookingType === 'poa'}
+              backgroundColor={values.bookingType === 'poa' ? 'greyscale.4' : 'white'}
             />
           </Cell>
         </Box>
@@ -176,7 +179,7 @@ const BookingTab = ({
           title="Booking type"
           subtitle="Would you prefer to take an instant booking? Or confirm each booking manually?"
         />
-        <Box display="grid" gridTemplateColumns={{ _: '1fr', medium: '1fr 1fr' }} gridGap="20px">
+        <Box display="grid" gridTemplateColumns={{ _: '1fr', medium: '1fr 1fr 1fr' }} gridGap="20px">
           <Cell width={1}>
             <Radio
               box
@@ -198,6 +201,18 @@ const BookingTab = ({
               handleChange={_handleRadioChange}
               label=" Request Booking"
               text="If you want to be notified of a request before it’s booked, select
+                this option."
+            />
+          </Cell>
+          <Cell width={1}>
+            <Radio
+              box
+              value="poa"
+              name="bookingType"
+              checked={values.bookingType === 'poa'}
+              handleChange={_handleRadioChange}
+              label=" POA"
+              text="If you want to be contacted, select
                 this option."
             />
           </Cell>
@@ -269,11 +284,17 @@ const formik = {
     }
     return {}
   },
-  validationSchema: Yup.object().shape({
-    basePrice: Yup.number()
-      .positive('Must be above 0.')
-      .typeError('Need to be number.')
-  }),
+  validationSchema: props =>
+    Yup.object().shape({
+      basePrice: Yup.number().typeError('Need to be number.')
+      // .test('positive-If', 'Must be above 0.', price => {
+      //   console.log(Yup.ref('bookingType'))
+      //   return (
+      //     (props.listing.listingData.bookingType != 'poa' && price > 0) ||
+      //     props.listing.listingData.bookingType === 'poa'
+      //   )
+      // })
+    }),
   enableReinitialize: false,
   isInitialValid: true
 }

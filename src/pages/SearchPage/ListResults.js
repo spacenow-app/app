@@ -1,6 +1,6 @@
 import React, { memo, forwardRef } from 'react'
 import styled from 'styled-components'
-import { Box, Text, Icon, Tag, Avatar, Pagination } from 'components'
+import { Box, Text, Icon, Tag, Avatar, Pagination, Price, Grid } from 'components'
 import { toPlural } from 'utils/strings'
 
 const Wrapper = styled.div`
@@ -193,21 +193,25 @@ const ListResults = forwardRef(
                   >
                     {_renderSpecifications(item.specifications, item.listingData)}
                   </Box>
-                  <Box display="grid" gridAutoFlow="column">
-                    <Text fontSize="14px">
-                      From:{' '}
-                      <Text fontSize="16px" fontFamily="bold">
-                        {`${item.listingData.currency || 'AUD'}$${item.listingData.basePrice.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}`}
-                      </Text>{' '}
-                      {item.bookingPeriod}
-                    </Text>
+                  <Grid columns={item.listingData.bookingType !== 'poa' ? '50px auto auto' : 'auto auto'} columnGap="0">
+                    {item.listingData.bookingType !== 'poa' && <Text fontSize="14px">From: &nbsp; </Text>}
+                    <Price
+                      currency={item.listingData.currency}
+                      price={item.listingData.basePrice}
+                      currencySymbol="$"
+                      bookingPeriod={item.bookingPeriod}
+                      bookingType={item.listingData.bookingType}
+                      size="16px"
+                      lightPeriod
+                    />
+
                     <Box justifySelf="end" display="flex" alignItems="center">
                       <Avatar width="30px" height="30px" image={item.host.profile && item.host.profile.picture} />
                       <Text fontSize="12px" ml="10px" fontFamily="medium">
                         {`${item.host.profile && item.host.profile.firstName}`}
                       </Text>
                     </Box>
-                  </Box>
+                  </Grid>
                 </CardContent>
               </CardContainer>
             )

@@ -27,12 +27,9 @@ import {
   Checkbox,
   Button,
   Footer,
-  CardSearch
+  CardSearch,
+  Price
 } from 'components'
-
-import MonthlyBooking from './MonthlyBooking'
-import PendingBooking from './PenidngBooking'
-import ContactHost from './ContactHost'
 
 import {
   onGetListingById,
@@ -53,6 +50,9 @@ import { sendMail } from 'redux/ducks/mail'
 // import GraphCancelattionImage from 'pages/Listing/SpaceDetailsPage/CancellationTab/graph_cancellation.png'
 
 import config from 'variables/config'
+import ContactHost from './ContactHost'
+import PendingBooking from './PenidngBooking'
+import MonthlyBooking from './MonthlyBooking'
 import WeeklyBooking from './WeeklyBooking'
 import DailyBooking from './DailyBooking'
 
@@ -314,8 +314,8 @@ const SpacePage = ({ match, location, history, ...props }) => {
     return arr
   }
 
-  const _renderContentCard = bookingPeriod => {
-    if (pendingBooking && pendingBooking.items && pendingBooking.items.length > 0) {
+  const _renderContentCard = (bookingPeriod, bookingType) => {
+    if (pendingBooking && pendingBooking.items && pendingBooking.items.length > 0 && bookingType !== 'poa') {
       return (
         <PendingBooking
           booking={pendingBooking.items[0]}
@@ -325,10 +325,10 @@ const SpacePage = ({ match, location, history, ...props }) => {
         />
       )
     }
-    if (bookingPeriod === 'hourly') {
-      return <ContactHost user={user} listing={listing} dispatch={dispatch} />
+    if (bookingPeriod === 'hourly' || bookingType === 'poa') {
+      return <ContactHost user={user} isAuthenticated={isAuthenticated} listing={listing} dispatch={dispatch} />
     }
-    if (bookingPeriod === 'daily') {
+    if (bookingPeriod === 'daily' && bookingType !== 'poa') {
       return (
         <div>
           <DailyBooking
@@ -348,7 +348,7 @@ const SpacePage = ({ match, location, history, ...props }) => {
         </div>
       )
     }
-    if (bookingPeriod === 'weekly') {
+    if (bookingPeriod === 'weekly' && bookingType !== 'poa') {
       if (period < listing.listingData.minTerm) setPeriod(listing.listingData.minTerm)
       return (
         <WeeklyBooking
@@ -363,7 +363,7 @@ const SpacePage = ({ match, location, history, ...props }) => {
       )
     }
 
-    if (bookingPeriod === 'monthly') {
+    if (bookingPeriod === 'monthly' && bookingType !== 'poa') {
       if (period < listing.listingData.minTerm) setPeriod(listing.listingData.minTerm)
 
       return (
@@ -454,7 +454,7 @@ const SpacePage = ({ match, location, history, ...props }) => {
           { guest: `${user.profile.firstName} ${user.profile.lastName}` },
           { guestId: user.id },
           { spaceId: listing.id },
-          { currentDate: format(new Date(), 'MMMM Mo, yyyy') }
+          { currentDate: format(new Date(), 'MMMM do, yyyy') }
         )
 
         const emailData = {
@@ -531,17 +531,15 @@ const SpacePage = ({ match, location, history, ...props }) => {
                     </Tag>
                   </Box>
                 </Cell>
-                <Cell width={4} style={{ justifySelf: 'end' }}>
-                  <Tag>
-                    {listing.listingData.bookingType
-                      ? `${capitalize(listing.listingData.bookingType)} Booking`
-                      : 'No data'}
-                  </Tag>
-                </Cell>
+                {listing.listingData.bookingType && listing.listingData.bookingType !== 'poa' && (
+                  <Cell width={4} style={{ justifySelf: 'end' }}>
+                    <Tag>{capitalize(listing.listingData.bookingType)} Booking</Tag>
+                  </Cell>
+                )}
               </Grid>
 
-              <Grid columns={5}>
-                <CellStyled width={3}>
+              <Grid columns={12}>
+                <CellStyled width={7}>
                   <Title
                     type="h4"
                     title={listing.title}
@@ -551,13 +549,14 @@ const SpacePage = ({ match, location, history, ...props }) => {
                     noMargin
                   />
                 </CellStyled>
-                <CellStyled width={2} center>
-                  <Title
-                    type="h4"
-                    title={`$ ${(Math.round((listing.listingData.basePrice || 0) * 100) / 100)
-                      .toString()
-                      .replace(/\B(?=(\d{3})+(?!\d))/g, ',')} ${listing.bookingPeriod}`}
-                    noMargin
+                <CellStyled width={5} center>
+                  <Price
+                    currency={listing.listingData.currency}
+                    price={listing.listingData.basePrice}
+                    currencySymbol="$"
+                    bookingPeriod={listing.bookingPeriod}
+                    bookingType={listing.listingData.bookingType}
+                    size="28px"
                     right
                   />
                 </CellStyled>
@@ -583,39 +582,41 @@ const SpacePage = ({ match, location, history, ...props }) => {
                 </Grid>
               </Box>
 
-              <Box>
-                <Title
-                  type="h5"
-                  title="Access Information"
-                  subtitle="How you’ll gain access to this space. Your host will provide the following upon successful bookings:"
-                />
-                <Box
-                  display="grid"
-                  width="110px"
-                  height="130px"
-                  justifyContent="center"
-                  textAlign="center"
-                  fontFamily="MontSerrat-SemiBold"
-                  fontSize="14px"
-                  color={listing.listingData.accessType ? 'quartenary' : 'error'}
-                  border={listing.listingData.accessType ? '1px solid #c4c4c4' : 'error'}
-                  borderRadius="10px"
-                >
-                  <Icon
-                    style={{ alignSelf: 'center', justifySelf: 'center' }}
-                    width="50px"
-                    fill="#6ADC91"
-                    name={
-                      listing.listingData.accessType &&
-                      `access-type-${listing.listingData.accessType
-                        .toLowerCase()
-                        .split(' ')
-                        .join('-')}`
-                    }
+              {listing.listingData.accessType && (
+                <Box>
+                  <Title
+                    type="h5"
+                    title="Access Information"
+                    subtitle="How you’ll gain access to this space. Your host will provide the following upon successful bookings:"
                   />
-                  {listing.listingData.accessType ? <>{listing.listingData.accessType}</> : 'No Data'}
+                  <Box
+                    display="grid"
+                    width="110px"
+                    height="130px"
+                    justifyContent="center"
+                    textAlign="center"
+                    fontFamily="MontSerrat-SemiBold"
+                    fontSize="14px"
+                    color={listing.listingData.accessType ? 'quartenary' : 'error'}
+                    border={listing.listingData.accessType ? '1px solid #c4c4c4' : 'error'}
+                    borderRadius="10px"
+                  >
+                    <Icon
+                      style={{ alignSelf: 'center', justifySelf: 'center' }}
+                      width="50px"
+                      fill="#6ADC91"
+                      name={
+                        listing.listingData.accessType &&
+                        `access-type-${listing.listingData.accessType
+                          .toLowerCase()
+                          .split(' ')
+                          .join('-')}`
+                      }
+                    />
+                    {listing.listingData.accessType ? <>{listing.listingData.accessType}</> : 'No Data'}
+                  </Box>
                 </Box>
-              </Box>
+              )}
               {listing.listingData.description ? (
                 <Box>
                   <Title type="h5" title="Description" />
@@ -679,8 +680,9 @@ const SpacePage = ({ match, location, history, ...props }) => {
               }
               contentComponent={
                 <>
-                  {_renderContentCard(listing.bookingPeriod)}
+                  {_renderContentCard(listing.bookingPeriod, listing.listingData.bookingType)}
                   {listing.bookingPeriod !== 'hourly' &&
+                    listing.listingData.bookingType !== 'poa' &&
                     (pendingBooking ? pendingBooking && pendingBooking.count === 0 : true) && (
                       <Button
                         onClick={e => _onSubmitBooking(e)}
@@ -696,7 +698,7 @@ const SpacePage = ({ match, location, history, ...props }) => {
               footerComponent={
                 <>
                   <UserDetails
-                    hostname={listing.user.profile.firstName + ' ' + listing.user.profile.lastName}
+                    hostname={`${listing.user.profile.firstName} ${listing.user.profile.lastName}`}
                     imageProfile={listing.user.profile.picture}
                     provider={listing.user.provider}
                     onClaim={_onClaimListing}
@@ -751,12 +753,16 @@ const SpacePage = ({ match, location, history, ...props }) => {
         <BottomButtonMobile>
           <Grid columns={2} style={{ alignItems: 'center' }}>
             <Cell style={{ alignContent: 'center', justifyContent: 'left', display: 'grid' }}>
-              <span>
-                <span
-                  style={{ fontFamily: 'Montserrat-Bold', fontSize: '18px' }}
-                >{`$ ${listing.listingData.basePrice} ${listing.listingData.currency}`}</span>
-                {` ${listing.bookingPeriod}`}
-              </span>
+              <Price
+                currency={listing.listingData.currency}
+                price={listing.listingData.basePrice}
+                currencySymbol="$"
+                bookingPeriod={listing.bookingPeriod}
+                bookingType={listing.listingData.bookingType}
+                size="18px"
+                left
+                lightPeriod
+              />
             </Cell>
             <Cell justifySelf="self-end">
               <Button
