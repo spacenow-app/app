@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import PropTypes from 'prop-types'
 import Helmet from 'react-helmet'
-import styled from 'styled-components'
 import { useSelector, useDispatch } from 'react-redux'
 
 import {
@@ -42,11 +41,11 @@ import { openModal, TypesModal } from 'redux/ducks/modal'
 //   width: 100%;
 // `
 
-const TitlePrice = styled(Title)`
-  @media only screen and (max-width: 991px) {
-    float: left !important;
-  }
-`
+// const TitlePrice = styled(Title)`
+//   @media only screen and (max-width: 991px) {
+//     float: left !important;
+//   }
+// `
 
 const PreviewPage = ({ match, location, ...props }) => {
   const dispatch = useDispatch()
