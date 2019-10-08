@@ -1,8 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import styled from 'styled-components'
-import _ from 'lodash'
-import { Box, Text } from 'components'
+import { Text } from 'components'
 
 const ContainerStyled = styled.span`
   display: grid;
