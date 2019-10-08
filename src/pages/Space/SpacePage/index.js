@@ -47,15 +47,12 @@ import { openModal, TypesModal } from 'redux/ducks/modal'
 
 import { sendMail } from 'redux/ducks/mail'
 
-// import GraphCancelattionImage from 'pages/Listing/SpaceDetailsPage/CancellationTab/graph_cancellation.png'
-
 import config from 'variables/config'
 
 import WeeklyBooking from './WeeklyBooking'
 import DailyBooking from './DailyBooking'
 import MonthlyBooking from './MonthlyBooking'
 import PendingBooking from './PenidngBooking'
-import ContactHost from './ContactHost'
 import HourlyBooking from './HourlyBooking'
 
 const GridStyled = styled(Grid)`
@@ -63,10 +60,6 @@ const GridStyled = styled(Grid)`
     grid-template-columns: 100%;
   }
 `
-
-// const ImageStyled = styled.img`
-//   width: 100%;
-// `
 
 const IconBoxStyled = styled.div`
   background: #6adc91;
@@ -136,7 +129,10 @@ const SpacePage = ({ match, location, history, ...props }) => {
   const [date, setDate] = useState('')
   const [period, setPeriod] = useState(1)
   const [imageHeight, setImageHeight] = useState(500)
+  const [startTime, setStartTime] = useState('08:00')
+  const [endTime, setEndTime] = useState('18:00')
   const [hoursQuantity, setHoursQuantity] = useState(0)
+  const [isTimeTableBlocked, setTimeTableBlocked] = useState(false)
 
   useEffect(() => {
     dispatch(onGetListingById(match.params.id, null, true))
@@ -329,7 +325,27 @@ const SpacePage = ({ match, location, history, ...props }) => {
       )
     }
     if (bookingPeriod === 'hourly') {
-      return <HourlyBooking user={user} listingData={listing.listingData} hoursQuantity={hoursQuantity} calcHourlyPeriod={calcHourlyPeriod} />
+      if (isTimeTableBlocked) {
+        return (
+          <Box color="error" ml="23px">
+            {`The requested dates/time are not available.`}
+          </Box>
+        )
+      }
+      return (
+        <HourlyBooking
+          date={date}
+          startTime={startTime}
+          endTime={endTime}
+          hoursQuantity={hoursQuantity}
+          listingExceptionDates={availabilities}
+          listingData={listing.listingData}
+          onDateChange={_onDateChange}
+          closingDays={_returnArrayAvailability(listing.accessDays)}
+          onSetStartTime={_onSetStartTime}
+          onSetEndTime={_onSetEndTime}
+        />
+      )
     }
     if (bookingPeriod === 'daily' && bookingType !== 'poa') {
       return (
@@ -387,7 +403,7 @@ const SpacePage = ({ match, location, history, ...props }) => {
       return true
     }
     if (bookingPeriod === 'hourly') {
-      return true
+      return isTimeTableBlocked || hoursQuantity <= 0
     }
     if (bookingPeriod === 'weekly') {
       if (date > 0 && period > 0) {
@@ -481,8 +497,23 @@ const SpacePage = ({ match, location, history, ...props }) => {
     dispatch(openModal(TypesModal.MODAL_TYPE_REPORT_LISTING, options))
   }
 
-  const calcHourlyPeriod = (startTime, endTime) => {
-    onGetHourlyPeriod(startTime, endTime).then(hourlyPeriod => setHoursQuantity(hourlyPeriod))
+  const _calcHourlyPeriod = () => {
+    onGetHourlyPeriod(startTime, endTime)
+      .then(value => {
+        setHoursQuantity(value)
+        setTimeTableBlocked(false)
+      })
+      .catch(() => setTimeTableBlocked(true))
+  }
+
+  const _onSetStartTime = (value) => {
+    setStartTime(value)
+    _calcHourlyPeriod()
+  }
+
+  const _onSetEndTime = (value) => {
+    setEndTime(value)
+    _calcHourlyPeriod()
   }
 
   return (
