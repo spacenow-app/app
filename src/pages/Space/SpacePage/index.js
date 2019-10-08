@@ -41,7 +41,7 @@ import {
 
 import { onSearch } from 'redux/ducks/search'
 
-import { onCreateBooking, onGetPendingBooking } from 'redux/ducks/booking'
+import { onCreateBooking, onGetPendingBooking, onGetHourlyPeriod } from 'redux/ducks/booking'
 
 import { openModal, TypesModal } from 'redux/ducks/modal'
 
@@ -50,11 +50,13 @@ import { sendMail } from 'redux/ducks/mail'
 // import GraphCancelattionImage from 'pages/Listing/SpaceDetailsPage/CancellationTab/graph_cancellation.png'
 
 import config from 'variables/config'
-import ContactHost from './ContactHost'
-import PendingBooking from './PenidngBooking'
-import MonthlyBooking from './MonthlyBooking'
+
 import WeeklyBooking from './WeeklyBooking'
 import DailyBooking from './DailyBooking'
+import MonthlyBooking from './MonthlyBooking'
+import PendingBooking from './PenidngBooking'
+import ContactHost from './ContactHost'
+import HourlyBooking from './HourlyBooking'
 
 const GridStyled = styled(Grid)`
   @media only screen and (max-width: 991px) {
@@ -134,6 +136,7 @@ const SpacePage = ({ match, location, history, ...props }) => {
   const [date, setDate] = useState('')
   const [period, setPeriod] = useState(1)
   const [imageHeight, setImageHeight] = useState(500)
+  const [hoursQuantity, setHoursQuantity] = useState(0)
 
   useEffect(() => {
     dispatch(onGetListingById(match.params.id, null, true))
@@ -325,8 +328,8 @@ const SpacePage = ({ match, location, history, ...props }) => {
         />
       )
     }
-    if (bookingPeriod === 'hourly' || bookingType === 'poa') {
-      return <ContactHost user={user} isAuthenticated={isAuthenticated} listing={listing} dispatch={dispatch} />
+    if (bookingPeriod === 'hourly') {
+      return <HourlyBooking user={user} listingData={listing.listingData} hoursQuantity={hoursQuantity} calcHourlyPeriod={calcHourlyPeriod} />
     }
     if (bookingPeriod === 'daily' && bookingType !== 'poa') {
       return (
@@ -362,10 +365,8 @@ const SpacePage = ({ match, location, history, ...props }) => {
         />
       )
     }
-
     if (bookingPeriod === 'monthly' && bookingType !== 'poa') {
       if (period < listing.listingData.minTerm) setPeriod(listing.listingData.minTerm)
-
       return (
         <MonthlyBooking
           period={period}
@@ -385,7 +386,9 @@ const SpacePage = ({ match, location, history, ...props }) => {
     if (user && user.userId === listing.userId) {
       return true
     }
-    if (bookingPeriod === 'hourly') return true
+    if (bookingPeriod === 'hourly') {
+      return true
+    }
     if (bookingPeriod === 'weekly') {
       if (date > 0 && period > 0) {
         return false
@@ -476,6 +479,10 @@ const SpacePage = ({ match, location, history, ...props }) => {
       }
     }
     dispatch(openModal(TypesModal.MODAL_TYPE_REPORT_LISTING, options))
+  }
+
+  const calcHourlyPeriod = (startTime, endTime) => {
+    onGetHourlyPeriod(startTime, endTime).then(hourlyPeriod => setHoursQuantity(hourlyPeriod))
   }
 
   return (
@@ -680,19 +687,17 @@ const SpacePage = ({ match, location, history, ...props }) => {
               }
               contentComponent={
                 <>
-                  {_renderContentCard(listing.bookingPeriod, listing.listingData.bookingType)}
-                  {listing.bookingPeriod !== 'hourly' &&
-                    listing.listingData.bookingType !== 'poa' &&
-                    (pendingBooking ? pendingBooking && pendingBooking.count === 0 : true) && (
-                      <Button
-                        onClick={e => _onSubmitBooking(e)}
-                        isLoading={isLoadingOnCreateReservation}
-                        disabled={_isPeriodValid(listing.bookingPeriod) || (user && user.id === listing.user.id)}
-                        fluid
-                      >
-                        {listing.listingData.bookingType === 'request' ? 'Booking Request' : 'Reserve'}
-                      </Button>
-                    )}
+                  {_renderContentCard(listing.bookingPeriod)}
+                  {(pendingBooking ? pendingBooking && pendingBooking.count === 0 : true) && (
+                    <Button
+                      onClick={e => _onSubmitBooking(e)}
+                      isLoading={isLoadingOnCreateReservation}
+                      disabled={_isPeriodValid(listing.bookingPeriod) || (user && user.id === listing.user.id)}
+                      fluid
+                    >
+                      {listing.listingData.bookingType === 'request' ? 'Booking Request' : 'Reserve'}
+                    </Button>
+                  )}
                 </>
               }
               footerComponent={

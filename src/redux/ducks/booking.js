@@ -693,3 +693,9 @@ export const onAcceptDeclineByEmail = (bookingId, emailAction, userId) => dispat
       resolve()
     }
   })
+
+  export const onGetHourlyPeriod = (startTime, endTime) => {
+    return new Promise(async (resolve, reject) => {
+      resolve(3)
+    })
+  }
