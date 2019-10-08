@@ -22,7 +22,8 @@ import {
   CarouselListing,
   Footer,
   CardSearch,
-  Carousel
+  Carousel,
+  Price
 } from 'components'
 
 import { onGetListingById, onGetAllSpecifications } from 'redux/ducks/listing'
@@ -209,12 +210,14 @@ const PartnerPage = ({ match, location, ...props }) => {
                 />
               </CellStyled>
               <CellStyled width={2} center>
-                <Title
-                  type="h4"
-                  title={`$ ${Math.round((listing.listingData.basePrice || 0) * 100) / 100} ${listing.bookingPeriod}`}
-                  noMargin
+                <Price
+                  currency={listing.listingData.currency}
+                  price={listing.listingData.basePrice}
+                  currencySymbol="$"
+                  bookingPeriod={listing.bookingPeriod}
+                  bookingType={listing.listingData.bookingType}
+                  size="28px"
                   right
-                  style={{ marginTop: '5px' }}
                 />
               </CellStyled>
             </Grid>
@@ -232,40 +235,42 @@ const PartnerPage = ({ match, location, ...props }) => {
               </Grid>
             </Box>
 
-            <Box>
-              <Title
-                type="h5"
-                title="Access Information"
-                subtitle="How you’ll gain access to this space. Your host will provide the following upon successful bookings:"
-              />
-              <Box
-                display="grid"
-                border="1px solid"
-                borderRadius="10px"
-                width="110px"
-                height="130px"
-                justifyContent="center"
-                textAlign="center"
-                fontFamily="MontSerrat-SemiBold"
-                fontSize="14px"
-                color={listing.listingData.accessType ? 'quartenary' : 'error'}
-                borderColor={listing.listingData.accessType ? '#c4c4c4' : 'error'}
-              >
-                <Icon
-                  style={{ alignSelf: 'center', justifySelf: 'center' }}
-                  width="50px"
-                  fill={listing.listingData.accessType ? '#6ADC91' : '#E05252'}
-                  name={
-                    listing.listingData.accessType &&
-                    `access-type-${listing.listingData.accessType
-                      .toLowerCase()
-                      .split(' ')
-                      .join('-')}`
-                  }
+            {listing.listingData.accessType && (
+              <Box>
+                <Title
+                  type="h5"
+                  title="Access Information"
+                  subtitle="How you’ll gain access to this space. Your host will provide the following upon successful bookings:"
                 />
-                {listing.listingData.accessType ? <>{listing.listingData.accessType}</> : 'No Data'}
+                <Box
+                  display="grid"
+                  border="1px solid"
+                  borderRadius="10px"
+                  width="110px"
+                  height="130px"
+                  justifyContent="center"
+                  textAlign="center"
+                  fontFamily="MontSerrat-SemiBold"
+                  fontSize="14px"
+                  color={listing.listingData.accessType ? 'quartenary' : 'error'}
+                  borderColor={listing.listingData.accessType ? '#c4c4c4' : 'error'}
+                >
+                  <Icon
+                    style={{ alignSelf: 'center', justifySelf: 'center' }}
+                    width="50px"
+                    fill={listing.listingData.accessType ? '#6ADC91' : '#E05252'}
+                    name={
+                      listing.listingData.accessType &&
+                      `access-type-${listing.listingData.accessType
+                        .toLowerCase()
+                        .split(' ')
+                        .join('-')}`
+                    }
+                  />
+                  {listing.listingData.accessType}
+                </Box>
               </Box>
-            </Box>
+            )}
 
             {listing.listingData.description ? (
               <Box>
@@ -344,12 +349,16 @@ const PartnerPage = ({ match, location, ...props }) => {
         <BottomButtonMobile>
           <Grid columns={2} style={{ alignItems: 'center' }}>
             <Cell style={{ alignContent: 'center', justifyContent: 'left', display: 'grid' }}>
-              <span>
-                <span
-                  style={{ fontFamily: 'Montserrat-Bold', fontSize: '18px' }}
-                >{`$ ${listing.listingData.basePrice} ${listing.listingData.currency}`}</span>
-                {` ${listing.bookingPeriod}`}
-              </span>
+              <Price
+                currency={listing.listingData.currency}
+                price={listing.listingData.basePrice}
+                currencySymbol="$"
+                bookingPeriod={listing.bookingPeriod}
+                bookingType={listing.listingData.bookingType}
+                size="18px"
+                left
+                lightPeriod
+              />
             </Cell>
             <Cell justifySelf="self-end">
               <Button

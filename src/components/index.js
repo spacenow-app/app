@@ -53,6 +53,7 @@ import Table from './Table'
 import CarouselListing from './CarouselListing'
 import Footer from './Footer'
 import CardSearch from './Card/CardSearch'
+import Price from './Price'
 
 export {
   Modal,
@@ -112,5 +113,6 @@ export {
   Table,
   CarouselListing,
   Footer,
-  CardSearch
+  CardSearch,
+  Price
 }

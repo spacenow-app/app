@@ -5,7 +5,7 @@ import Helmet from 'react-helmet'
 import { onGetBookingsByUser } from 'redux/ducks/account'
 import { onDeclineBooking, onAcceptBooking, onAcceptDeclineByEmail } from 'redux/ducks/booking'
 import { TypesModal, openModal } from 'redux/ducks/modal'
-import { Card, Text, Icon, Loader, BackgroundImage, Grid, Cell, Title, Dropdown } from 'components'
+import { Card, Text, Icon, Loader, BackgroundImage, Grid, Cell, Title, Dropdown, Price } from 'components'
 import { convertedDate } from 'utils/date'
 
 const _parseCategoryIconName = (name, isSub) => {
@@ -84,8 +84,8 @@ const BookingCard = (dispatch, item, index, userType) => {
 
   if (userType === 'guest') expire = addMinutes(convertedDate(item.createdAt), 15)
 
-  let expiryDate = format(expire, 'dd/MM/yyyy') + ' at ' + format(expire, 'HH:mm')
-
+  const expiryDate = `${format(expire, 'dd/MM/yyyy')} at ${format(expire, 'HH:mm')}`
+  console.log(item)
   return (
     <Card.Horizontal key={index}>
       <Card.Horizontal.Image src={_getCoverPhoto(item.listing)} handleClick={() => _handleRedirect(item.listingId)} />
@@ -104,13 +104,14 @@ const BookingCard = (dispatch, item, index, userType) => {
           subTitleMargin={0}
           type="h6"
           title={
-            <Text>
-              AUD $
-              {item.totalPrice
-                .toFixed(2)
-                .toString()
-                .replace(/\B(?=(\d{3})+(?!\d))/g, ',')}
-            </Text>
+            <Price
+              currency={item.currency}
+              price={item.totalPrice}
+              currencySymbol="$"
+              // bookingPeriod={item.priceType}
+              bookingType={item.bookingType}
+              size="18px"
+            />
           }
         />
         {(item.bookingState === 'pending' || item.bookingState === 'requested') && (
@@ -176,7 +177,7 @@ const BookingCard = (dispatch, item, index, userType) => {
         <Card.Horizontal.OverlayTrigger
           overlay={<Card.Horizontal.ToolTip>{_getTip(item.bookingState, userType)}</Card.Horizontal.ToolTip>}
         >
-          <Card.Horizontal.Label bg={item.bookingState} color={'white'}>
+          <Card.Horizontal.Label bg={item.bookingState} color="white">
             {item.bookingState}
           </Card.Horizontal.Label>
         </Card.Horizontal.OverlayTrigger>
@@ -225,8 +226,8 @@ const BookingPage = ({ ...props }) => {
         <Cell width={6}>
           <Title type="h4" title="Your Bookings" />
         </Cell>
-        <Cell width={6} middle justifySelf={'end'}>
-          <Dropdown alignRight size={'sm'} style={{ margin: '30px 0' }}>
+        <Cell width={6} middle justifySelf="end">
+          <Dropdown alignRight size="sm" style={{ margin: '30px 0' }}>
             <Dropdown.Toggle size="sm">
               <Text color="primary">User Type</Text>
             </Dropdown.Toggle>

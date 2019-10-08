@@ -166,6 +166,7 @@ const queryGetAllListingsByUser = gql`
         listingData {
           id
           basePrice
+          bookingType
         }
         location {
           id
