@@ -5,41 +5,71 @@ import errToMsg from 'utils/errToMsg'
 
 // Actions
 export const Types = {
-  GET_ALL_CATEGORIES_START: 'GET_ALL_CATEGORIES_START',
-  GET_ALL_CATEGORIES_SUCCESS: 'GET_ALL_CATEGORIES_SUCCESS',
-  GET_ALL_CATEGORIES_ERROR: 'GET_ALL_CATEGORIES_ERROR'
+  GET_ROOT_CATEGORIES_START: 'GET_ROOT_CATEGORIES_START',
+  GET_ROOT_CATEGORIES_SUCCESS: 'GET_ROOT_CATEGORIES_SUCCESS',
+  GET_ROOT_CATEGORIES_ERROR: 'GET_ROOT_CATEGORIES_ERROR',
+  GET_CATEGORY_START: 'GET_CATEGORY_START',
+  GET_CATEGORY_SUCCESS: 'GET_CATEGORY_SUCCESS',
+  GET_CATEGORY_ERROR: 'GET_CATEGORY_ERROR'
 }
 
 // Initial State
 const initialState = {
-  isLoading: false,
-  error: {
-    message: null
+  rootCategories: {
+    object: [],
+    isLoading: false,
+    error: null
   },
-  get: {
-    categories: []
+  category: {
+    object: null,
+    isLoading: false,
+    error: null
   }
 }
 
-// GraphQL
-const queryGetAllCategories = gql`
-  query getCategoriesLegacy {
-    getCategoriesLegacy {
+// // GraphQL
+// const queryGetRootCategories = gql`
+//   query getCategoriesLegacy {
+//     getCategoriesLegacy {
+//       id
+//       itemName
+//       otherItemName
+//       subCategories {
+//         id
+//         itemName
+//         otherItemName
+//         bookingPeriod {
+//           id
+//           listSettingsParentId
+//           hourly
+//           daily
+//           weekly
+//           monthly
+//         }
+//       }
+//     }
+//   }
+// `
+
+const queryGetRootCategories = gql`
+  query GetRootCategories {
+    getRootCategories {
+      count
+      rows
+    }
+  }
+`
+
+const queryGetCategory = gql`
+  query GetCategory($id: ID!) {
+    getCategory(id: $id) {
       id
-      itemName
-      otherItemName
-      subCategories {
+      name
+      slug
+      children {
         id
-        itemName
-        otherItemName
-        bookingPeriod {
-          id
-          listSettingsParentId
-          hourly
-          daily
-          weekly
-          monthly
-        }
+        name
+        slug
       }
     }
   }
@@ -48,30 +78,61 @@ const queryGetAllCategories = gql`
 // Reducer
 export default function reducer(state = initialState, action) {
   switch (action.type) {
-    case Types.GET_ALL_CATEGORIES_START: {
+    case Types.GET_ROOT_CATEGORIES_START: {
       return {
         ...state,
-        isLoading: true
-      }
-    }
-    case Types.GET_ALL_CATEGORIES_SUCCESS: {
-      return {
-        ...state,
-        isLoading: false,
-        get: {
-          categories: action.payload
+        rootCategories: {
+          isLoading: true
         }
       }
     }
-    case Types.GET_ALL_CATEGORIES_ERROR: {
+    case Types.GET_ROOT_CATEGORIES_SUCCESS: {
       return {
         ...state,
-        isLoading: false,
-        get: {
-          categories: []
-        },
-        error: {
-          message: action.payload
+        rootCategories: {
+          isLoading: false,
+          object: action.payload
+        }
+      }
+    }
+    case Types.GET_ROOT_CATEGORIES_ERROR: {
+      return {
+        ...state,
+        rootCategories: {
+          isLoading: false,
+          object: [],
+          error: {
+            message: action.payload
+          }
+        }
+      }
+    }
+    case Types.GET_CATEGORY_START: {
+      return {
+        ...state,
+        category: {
+          isLoading: true
+        }
+      }
+    }
+    case Types.GET_CATEGORY_SUCCESS: {
+      return {
+        ...state,
+        category: {
+          isLoading: false,
+          object: action.payload
+        }
+      }
+    }
+    case Types.GET_CATEGORY_ERROR: {
+      return {
+        ...state,
+        category: {
+          isLoading: false,
+          object: [],
+          error: {
+            message: action.payload
+          }
         }
       }
     }
@@ -81,34 +142,65 @@ export default function reducer(state = initialState, action) {
 }
 
 // Action Creators
-const getAllCategoriesStart = () => {
-  return { type: Types.GET_ALL_CATEGORIES_START }
+const getRootCategoriesStart = () => {
+  return { type: Types.GET_ROOT_CATEGORIES_START }
 }
 
-const getAllCategoriesSuccess = categoriesResponse => {
+const getRootCategoriesSuccess = categoriesResponse => {
   return {
-    type: Types.GET_ALL_CATEGORIES_SUCCESS,
+    type: Types.GET_ROOT_CATEGORIES_SUCCESS,
     payload: categoriesResponse
   }
 }
 
-const getAllCategoriesFailed = error => {
+const getRootCategoriesFailed = error => {
   return {
-    type: Types.GET_ALL_CATEGORIES_ERROR,
+    type: Types.GET_ROOT_CATEGORIES_ERROR,
     payload: error
   }
 }
 
-// Side Effects
-export const onGetAllCategories = () => async dispatch => {
-  dispatch(getAllCategoriesStart())
+const getCategoryStart = () => {
+  return { type: Types.GET_CATEGORY_START }
+}
+
+const getCategorySuccess = categoryResponse => {
+  return {
+    type: Types.GET_CATEGORY_SUCCESS,
+    payload: categoryResponse
+  }
+}
+
+const getCategoryFailed = error => {
+  return {
+    type: Types.GET_CATEGORY_ERROR,
+    payload: error
+  }
+}
+
+export const onGetRootCategories = () => async dispatch => {
+  dispatch(getRootCategoriesStart())
   try {
     const { data } = await getClientWithAuth(dispatch).query({
-      query: queryGetAllCategories,
+      query: queryGetRootCategories,
       fetchPolicy: 'network-only'
     })
-    dispatch(getAllCategoriesSuccess(data.getCategoriesLegacy))
+    dispatch(getRootCategoriesSuccess(data.getRootCategories.rows))
   } catch (err) {
-    dispatch(getAllCategoriesFailed(errToMsg(err)))
+    dispatch(getRootCategoriesFailed(errToMsg(err)))
+  }
+}
+
+export const onGetCategory = (id) => async dispatch => {
+  dispatch(getCategoryStart())
+  try {
+    const { data } = await getClientWithAuth(dispatch).query({
+      query: queryGetCategory,
+      variables: id,
+      fetchPolicy: 'network-only'
+    })
+    dispatch(getCategorySuccess(data.getCategory))
+  } catch (err) {
+    dispatch(getCategoryFailed(errToMsg(err)))
   }
 }

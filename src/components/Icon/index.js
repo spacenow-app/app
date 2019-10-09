@@ -2,14 +2,43 @@ import React, { cloneElement } from 'react'
 import { ReactComponent as SingleSpace } from './svg/single-space.svg'
 import { ReactComponent as MultipleSpace } from './svg/multiple-space.svg'
 // Category
-import { ReactComponent as CategoryCoworking } from './svg/category/category_coworking.svg'
-import { ReactComponent as CategoryDesk } from './svg/category/category_desk.svg'
-import { ReactComponent as CategoryEvents } from './svg/category/category_events.svg'
-import { ReactComponent as CategoryHospitality } from './svg/category/category_hospitality.svg'
-import { ReactComponent as CategoryMeetingRoom } from './svg/category/category_meeting_room.svg'
-import { ReactComponent as CategoryOffice } from './svg/category/category_office.svg'
-import { ReactComponent as CategoryParking } from './svg/category/category_parking.svg'
-import { ReactComponent as CategoryStorage } from './svg/category/category_storage.svg'
+import { ReactComponent as CategoryCoworking } from './svg/category/coworking.svg'
+import { ReactComponent as CategoryDesk } from './svg/category/desk.svg'
+import { ReactComponent as CategoryEvents } from './svg/category/events.svg'
+import { ReactComponent as CategoryHospitality } from './svg/category/hospitality.svg'
+import { ReactComponent as CategoryMeetingRoom } from './svg/category/meeting-room.svg'
+import { ReactComponent as CategoryOffice } from './svg/category/office.svg'
+import { ReactComponent as CategoryParking } from './svg/category/parking.svg'
+import { ReactComponent as CategoryStorage } from './svg/category/storage.svg'
+import { ReactComponent as CategoryBoardRoom } from './svg/category/board-room.svg'
+import { ReactComponent as CategoryBusiness } from './svg/category/business.svg'
+import { ReactComponent as CategoryCafe } from './svg/category/cafe.svg'
+import { ReactComponent as CategoryCarPark } from './svg/category/car-park.svg'
+import { ReactComponent as CategoryCarRvBoat } from './svg/category/car-rv-boat.svg'
+import { ReactComponent as CategoryConferenceRoom } from './svg/category/conference-room.svg'
+import { ReactComponent as CategoryConference } from './svg/category/conference.svg'
+import { ReactComponent as CategoryCorporate } from './svg/category/corporate.svg'
+import { ReactComponent as CategoryCreativeSpaces } from './svg/category/creative-spaces.svg'
+import { ReactComponent as CategoryDriveway } from './svg/category/driveway.svg'
+import { ReactComponent as CategoryEntireOffice } from './svg/category/entire-office.svg'
+import { ReactComponent as CategoryFoodtruck } from './svg/category/food-truck.svg'
+import { ReactComponent as CategoryFunctionCentre } from './svg/category/function-centre.svg'
+import { ReactComponent as CategoryGarage } from './svg/category/garage.svg'
+import { ReactComponent as CategoryHealthFitness } from './svg/category/health-fitness.svg'
+import { ReactComponent as CategoryKitchen } from './svg/category/kitchen.svg'
+import { ReactComponent as CategoryMarketStalls } from './svg/category/market-stalls.svg'
+import { ReactComponent as CategoryPersonal } from './svg/category/personal.svg'
+import { ReactComponent as CategoryPopupRetail } from './svg/category/popup-retail.svg'
+import { ReactComponent as CategoryPrivateOffice } from './svg/category/private-office.svg'
+import { ReactComponent as CategoryPrivateRoom } from './svg/category/private-room.svg'
+import { ReactComponent as CategoryRestaurant } from './svg/category/restaurant.svg'
+import { ReactComponent as CategoryRetail } from './svg/category/retail.svg'
+import { ReactComponent as CategorySports } from './svg/category/sports.svg'
+import { ReactComponent as CategoryTrainingRoom } from './svg/category/training-room.svg'
+import { ReactComponent as CategoryVenue } from './svg/category/venue.svg'
+import { ReactComponent as CategoryWeddingVenue } from './svg/category/wedding-venue.svg'
+import { ReactComponent as CategoryWineStorage } from './svg/category/wine-storage.svg'
+
 // Sub-Category
 import { ReactComponent as SubCategoryBoardRoom } from './svg/sub-category/sub_category_board_room.svg'
 import { ReactComponent as SubCategoryBusiness } from './svg/sub-category/sub_category_business.svg'
@@ -172,7 +201,37 @@ const Icons = {
   'category-office': <CategoryOffice />,
   'category-parking': <CategoryParking />,
   'category-storage': <CategoryStorage />,
-  'category-venue': <SubCategoryVenue />,
+  'category-venue': <CategoryVenue />,
+  'category-boardroom': <CategoryBoardRoom />,
+  'category-business': <CategoryBusiness />,
+  'category-cafe': <CategoryCafe />,
+  'category-car-park': <CategoryCarPark />,
+  'category-car-rv-boat': <CategoryCarRvBoat />,
+  'category-conference-room': <CategoryConferenceRoom />,
+  'category-conference': <CategoryConference />,
+  'category-corporate': <CategoryCorporate />,
+  'category-creative-spaces': <CategoryCreativeSpaces />,
+  'category-desk': <CategoryDesk />,
+  'category-driveway': <CategoryDriveway />,
+  'category-entire-office': <CategoryEntireOffice />,
+  'category-food-truck': <CategoryFoodtruck />,
+  'category-function-centre': <CategoryFunctionCentre />,
+  'category-garage': <CategoryGarage />,
+  'category-health-fitness': <CategoryHealthFitness />,
+  'category-kitchen': <CategoryKitchen />,
+  'category-market-stalls': <CategoryMarketStalls />,
+  'category-meeting-room': <CategoryMeetingRoom />,
+  'category-personal': <CategoryPersonal />,
+  'category-popup': <CategoryPopupRetail />,
+  'category-private-office': <CategoryPrivateOffice />,
+  'category-private-room': <CategoryPrivateRoom />,
+  'category-restaurant': <CategoryRestaurant />,
+  'category-retail': <CategoryRetail />,
+  'category-sports': <CategorySports />,
+  'category-training-room': <CategoryTrainingRoom />,
+  'category-venue': <CategoryVenue />,
+  'category-wedding': <CategoryWeddingVenue />,
+  'category-wine-storage': <CategoryWineStorage />,
   'sub-category-boardroom': <SubCategoryBoardRoom />,
   'sub-category-business': <SubCategoryBusiness />,
   'sub-category-cafe': <SubCategoryCafe />,

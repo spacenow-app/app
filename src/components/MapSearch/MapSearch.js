@@ -74,11 +74,21 @@ const CardContentUserTitle = styled.span`
   font-family: 'MontSerrat-Medium';
   margin-left: 5px;
 `
-
 const MapSearch = withGoogleMap(props => {
+
   return (
     <GoogleMap
       defaultZoom={15}
+      fitBounds={{
+        nw: {
+          lat: 50.01038826014866,
+          lng: -118.6525866875
+        },
+        se: {
+          lat: 32.698335045970396,
+          lng: -92.0217273125
+        }
+      }}
       center={{ lat: parseFloat(props.position.lat), lng: parseFloat(props.position.lng) }}
       defaultCenter={{ lat: parseFloat(props.position.lat), lng: parseFloat(props.position.lng) }}
       defaultOptions={{

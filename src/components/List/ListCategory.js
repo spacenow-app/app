@@ -100,11 +100,11 @@ const ListCategory = ({
   spaceBetween,
   ...props
 }) => {
-  useEffect(() => {}, [data, itemSelected])
+  useEffect(() => { }, [data, itemSelected])
 
-  const _parseIconName = (isSub, name) => {
+  const _parseIconName = (name) => {
     let prefix = 'category-'
-    if (isSub) prefix = 'sub-category-'
+    // if (isSub) prefix = 'sub-category-'
     return prefix + name.replace(/([A-Z])/g, g => `-${g[0].toLowerCase()}`)
   }
 
@@ -127,16 +127,16 @@ const ListCategory = ({
           {circular ? (
             <>
               <IconContainer active={itemSelected && item.id === itemSelected.id}>
-                <IconStyled name={_parseIconName(circular, item.otherItemName)} fill="#172439" />
+                <IconStyled name={_parseIconName(item.slug)} fill="#172439" />
               </IconContainer>
-              <TitleStyled circular>{item.itemName}</TitleStyled>
+              <TitleStyled circular>{item.name}</TitleStyled>
             </>
           ) : (
-            <>
-              <IconStyled name={_parseIconName(circular, item.otherItemName)} fill="#172439" />
-              <TitleStyled>{item.itemName}</TitleStyled>
-            </>
-          )}
+              <>
+                <IconStyled name={_parseIconName(item.slug)} fill="#172439" />
+                <TitleStyled>{item.name}</TitleStyled>
+              </>
+            )}
         </ListItem>
       ))}
     </List>
@@ -148,7 +148,7 @@ ListCategory.propsType = {}
 ListCategory.defaultProps = {
   circular: false,
   itemSelected: false,
-  handleItemClick: () => {}
+  handleItemClick: () => { }
 }
 
 export default ListCategory
