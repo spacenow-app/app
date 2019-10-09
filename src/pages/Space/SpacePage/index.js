@@ -41,7 +41,7 @@ import {
 
 import { onSearch } from 'redux/ducks/search'
 
-import { onCreateBooking, onGetPendingBooking, onGetHourlyPeriod } from 'redux/ducks/booking'
+import { onCreateBooking, onGetPendingBooking, onGetHourlyAvailability } from 'redux/ducks/booking'
 
 import { openModal, TypesModal } from 'redux/ducks/modal'
 
@@ -500,12 +500,17 @@ const SpacePage = ({ match, location, history, ...props }) => {
   }
 
   const _calcHourlyPeriod = () => {
-    onGetHourlyPeriod(startTime, endTime)
-      .then(value => {
-        setPeriod(value)
-        setHourlyError('')
-      })
-      .catch(err => setHourlyError(err))
+    if (date) {
+      onGetHourlyAvailability(listing.id, date, startTime, endTime)
+        .then(o => {
+          setPeriod(o.hours)
+          setHourlyError('')
+          if (!o.isAvailable) {
+            setHourlyError(`Not available in this period`)
+          }
+        })
+        .catch(err => setHourlyError(err))
+    }
   }
 
   const _onSetStartTime = value => {

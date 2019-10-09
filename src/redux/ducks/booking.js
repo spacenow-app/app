@@ -360,11 +360,12 @@ const queryGetListingInfo = gql`
   }
 `
 
-const queryGetHourlyPeriod = gql`
-  query getHourlyPeriod($checkInHour: String!, $checkOutHour: String!) {
-    getHourlyPeriod(checkInHour: $checkInHour, checkOutHour: $checkOutHour) {
+const queryGetHourlyAvailability = gql`
+  query getHourlyAvailability($listingId: Int!, $date: String!, $checkInHour: String!, $checkOutHour: String!) {
+    getHourlyAvailability(listingId: $listingId, date: $date, checkInHour: $checkInHour, checkOutHour: $checkOutHour) {
       __typename
       hours
+      isAvailable
     }
   }
 `
@@ -707,15 +708,18 @@ export const onAcceptDeclineByEmail = (bookingId, emailAction, userId) => dispat
     }
   })
 
-export const onGetHourlyPeriod = (startTime, endTime) => {
+export const onGetHourlyAvailability = (listingId, date, startTime, endTime) => {
   return new Promise(async (resolve, reject) => {
     try {
       const { data } = await getClient().query({
-        query: queryGetHourlyPeriod,
-        variables: { checkInHour: startTime, checkOutHour: endTime },
+        query: queryGetHourlyAvailability,
+        variables: { listingId, date, checkInHour: startTime, checkOutHour: endTime },
         fetchPolicy: 'network-only'
       })
-      resolve(data.getHourlyPeriod.hours)
+      resolve({
+        hours: data.getHourlyAvailability.hours,
+        isAvailable: data.getHourlyAvailability.isAvailable
+      })
     } catch (err) {
       reject(errToMsg(err))
     }

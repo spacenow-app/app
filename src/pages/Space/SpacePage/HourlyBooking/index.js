@@ -54,6 +54,7 @@ const ContactHost = ({
           label="Date"
           date={date}
           handleDateChange={o => onDateChange(o)}
+          onBlur={onCalcHourlyPeriod}
           placeholder="Choose a date"
           dayPickerProps={{
             selectedDays: [date],
