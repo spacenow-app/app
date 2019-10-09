@@ -108,14 +108,13 @@ const ListingCard = (dispatch, item, index) => {
         >
           {item.settingsParent.subcategory.itemName}
         </Card.Horizontal.Tag>
-        {item.isReady && (
-          <Card.Horizontal.Button
-            size="xs"
-            onClick={() => _handleOnUpdateListing(dispatch)(item.id, !item.isPublished)}
-          >
-            {item.isPublished ? 'Unpublish' : 'Publish'}
-          </Card.Horizontal.Button>
-        )}
+        <Card.Horizontal.Button
+          size="xs"
+          onClick={() => _handleOnUpdateListing(dispatch)(item.id, !item.isPublished)}
+          disabled={!item.isReady && !item.isPublished}
+        >
+          {item.isPublished ? 'Unpublish' : 'Publish'}
+        </Card.Horizontal.Button>
       </Card.Horizontal.Footer>
     </Card.Horizontal>
   )
