@@ -450,7 +450,7 @@ const PreviewPage = ({ match, location, ...props }) => {
 
         <StepButtons
           prev={{ onClick: () => props.history.push(`/listing/space/${match.params.id}`) }}
-          next={{ onClick: () => _handlerPublish(), title: 'Publish' }}
+          next={{ onClick: () => _handlerPublish(), title: 'Publish', disabled: !listing.isReady }}
         />
         <Footer />
       </Wrapper>
