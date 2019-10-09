@@ -58,7 +58,6 @@ const ContactHost = ({
   isAuthenticated,
   listing
 }) => {
-  console.log(user)
   const { isLoading: isSendingEmail } = useSelector(state => state.mail)
   const [date, setDate] = useState(new Date())
   const _handleSubmit = () => {

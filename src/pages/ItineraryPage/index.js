@@ -285,7 +285,7 @@ const ItineraryPage = ({ match, location, history, ...props }) => {
   return (
     <Wrapper>
       <Helmet title="Itinerary - Spacenow" />
-      <Box mb="50px" mt={{ _: "20px", medium: "10px" }}>
+      <Box mb="50px" mt={{ _: '20px', medium: '10px' }}>
         <Title title="You're all booked in." color="#6adc91" noMargin type="h2" />
         <Title title="Enjoy your space!" noMargin type="h2" />
       </Box>
@@ -313,26 +313,26 @@ const ItineraryPage = ({ match, location, history, ...props }) => {
             {isListingLoading ? (
               <Loader sm />
             ) : (
-                <>
-                  <Cell width={12}>
-                    <Title
-                      type="h4"
-                      title={listing.title}
-                      subtitle={`${listing.location.city}, ${listing.location.country}`}
-                      subTitleMargin={5}
-                    />
-                  </Cell>
-                  <Cell width={12}>
-                    <Title
-                      type="h6"
-                      title="Address"
-                      noMargin
-                      subtitle={`${listing.location.address1}, ${listing.location.city}, ${listing.location.zipcode}, ${listing.location.state}, ${listing.location.country}`}
-                      subTitleMargin={5}
-                    />
-                  </Cell>
-                </>
-              )}
+              <>
+                <Cell width={12}>
+                  <Title
+                    type="h4"
+                    title={listing.title}
+                    subtitle={`${listing.location.city}, ${listing.location.country}`}
+                    subTitleMargin={5}
+                  />
+                </Cell>
+                <Cell width={12}>
+                  <Title
+                    type="h6"
+                    title="Address"
+                    noMargin
+                    subtitle={`${listing.location.address1}, ${listing.location.city}, ${listing.location.zipcode}, ${listing.location.state}, ${listing.location.country}`}
+                    subTitleMargin={5}
+                  />
+                </Cell>
+              </>
+            )}
             <CellStyled width={10}>
               {booking.priceType === 'daily' ? (
                 <Box m="0">
@@ -340,28 +340,30 @@ const ItineraryPage = ({ match, location, history, ...props }) => {
                   <ListDates dates={booking.reservations} />
                 </Box>
               ) : (
-                  <Box mt="20px">
-                    <DatesDetail
-                      startDate={startDate}
-                      endDate={endDate}
-                      period={booking.period}
-                      priceType={booking.priceType}
-                    />
-                  </Box>
-                )}
+                <Box mt="20px">
+                  <DatesDetail
+                    startDate={startDate}
+                    endDate={endDate}
+                    period={booking.period}
+                    priceType={booking.priceType}
+                    checkInHour={booking.checkInHour}
+                    checkOutHour={booking.checkOutHour}
+                  />
+                </Box>
+              )}
             </CellStyled>
 
             <CellStyled width={10}>
               {isListingLoading ? (
                 <Loader sm />
               ) : (
-                  <Box my="30px">
-                    <TimeTable
-                      data={listing.accessDays.listingAccessHours}
-                      error={_getWeekName(listing.accessDays) === 'Closed'}
-                    />
-                  </Box>
-                )}
+                <Box my="30px">
+                  <TimeTable
+                    data={listing.accessDays.listingAccessHours}
+                    error={_getWeekName(listing.accessDays) === 'Closed'}
+                  />
+                </Box>
+              )}
             </CellStyled>
           </Grid>
         </Cell>

@@ -149,6 +149,8 @@ class ComponentToPrint extends React.Component {
                   endDate={endDate}
                   period={booking.period}
                   priceType={booking.priceType}
+                  checkInHour={booking.checkInHour}
+                  checkOutHour={booking.checkOutHour}
                 />
               </Box>
             )}

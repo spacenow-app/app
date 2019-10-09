@@ -190,6 +190,8 @@ const queryGetBookingById = gql`
       guestId
       checkIn
       checkOut
+      checkInHour
+      checkOutHour
       reservations
       listing {
         id
@@ -237,13 +239,11 @@ const queryGetBookingById = gql`
             updatedAt
           }
         }
-
         listingData {
           listingId
           isAbsorvedFee
           basePrice
         }
-
         location {
           id
           country

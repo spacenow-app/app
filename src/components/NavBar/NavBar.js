@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 import React, { useState } from 'react'
 import PropTypes from 'prop-types'
 import { useDispatch, useSelector } from 'react-redux'
@@ -104,7 +105,7 @@ const NavBar = ({ history, shownSearch }) => {
     dispatch(logout())
   }
 
-  const _onHandleError = e => console.log(e)
+  const _onHandleError = e => console.error(e)
 
   const _onSelectedAddess = obj => {
     const { position, address: objAddress } = obj
