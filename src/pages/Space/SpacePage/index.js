@@ -193,10 +193,10 @@ const SpacePage = ({ match, location, history, ...props }) => {
 
   const _getWeekName = days => {
     const { mon, tue, wed, thu, fri, sat, sun } = days
-    if (mon && tue && wed && thu && fri & !sat && !sun) return 'Weekdays'
-    if (!mon && !tue && !wed && !thu && !fri & sat && sun) return 'Weekends'
-    if (mon && tue && wed && thu && fri & sat && sun) return 'Everyday'
-    if (!mon && !tue && !wed && !thu && !fri & !sat && !sun) return 'Closed'
+    if (mon && tue && wed && thu && fri && !sat && !sun) return 'Weekdays'
+    if (!mon && !tue && !wed && !thu && !fri && sat && sun) return 'Weekends'
+    if (mon && tue && wed && thu && fri && sat && sun) return 'Everyday'
+    if (!mon && !tue && !wed && !thu && !fri && !sat && !sun) return 'Closed'
     return 'Custom'
   }
 
@@ -278,22 +278,22 @@ const SpacePage = ({ match, location, history, ...props }) => {
       : []
   }
 
-  const _onDateChangeArray = date => {
-    const find = _.find(datesSelected, dateFromArray => isSameDay(new Date(dateFromArray), date))
+  const _onDateChangeArray = value => {
+    const find = _.find(datesSelected, dateFromArray => isSameDay(new Date(dateFromArray), value))
     if (find) {
-      _removeDate(date)
+      _removeDate(value)
       return
     }
-    const arraySorted = _.sortBy([...datesSelected, date], item => item)
+    const arraySorted = _.sortBy([...datesSelected, value], item => item)
     setDatesSelected(arraySorted)
   }
 
-  const _onDateChange = date => {
-    setDate(date)
+  const _onDateChange = value => {
+    setDate(value)
   }
 
-  const _removeDate = date => {
-    const newArray = _.filter(datesSelected, dateFromArray => !isSameDay(new Date(dateFromArray), date))
+  const _removeDate = value => {
+    const newArray = _.filter(datesSelected, dateFromArray => !isSameDay(new Date(dateFromArray), value))
     setDatesSelected(newArray)
   }
 
@@ -325,27 +325,27 @@ const SpacePage = ({ match, location, history, ...props }) => {
       )
     }
     if (bookingPeriod === 'hourly' && bookingType !== 'poa') {
-      if (hourlyError) {
-        return (
-          <Box color="error" ml="23px">
-            {hourlyError}
-          </Box>
-        )
-      }
       return (
-        <HourlyBooking
-          date={date}
-          startTime={startTime}
-          endTime={endTime}
-          hoursQuantity={hoursQuantity}
-          listingExceptionDates={availabilities}
-          listingData={listing.listingData}
-          onDateChange={_onDateChange}
-          closingDays={_returnArrayAvailability(listing.accessDays)}
-          onSetStartTime={_onSetStartTime}
-          onSetEndTime={_onSetEndTime}
-          onCalcHourlyPeriod={_calcHourlyPeriod}
-        />
+        <>
+          <HourlyBooking
+            date={date}
+            startTime={startTime}
+            endTime={endTime}
+            hoursQuantity={hoursQuantity}
+            listingExceptionDates={availabilities}
+            listingData={listing.listingData}
+            onDateChange={_onDateChange}
+            closingDays={_returnArrayAvailability(listing.accessDays)}
+            onSetStartTime={_onSetStartTime}
+            onSetEndTime={_onSetEndTime}
+            onCalcHourlyPeriod={_calcHourlyPeriod}
+          />
+          {hourlyError && (
+            <Box color="error" ml="23px">
+              {hourlyError}
+            </Box>
+          )}
+        </>
       )
     }
     if (bookingPeriod === 'daily' && bookingType !== 'poa') {
@@ -404,7 +404,7 @@ const SpacePage = ({ match, location, history, ...props }) => {
       return true
     }
     if (bookingPeriod === 'hourly') {
-      return hourlyError || hoursQuantity <= 0
+      return hourlyError !== '' || hoursQuantity <= 0 || !date
     }
     if (bookingPeriod === 'weekly') {
       if (date > 0 && period > 0) {
@@ -499,19 +499,19 @@ const SpacePage = ({ match, location, history, ...props }) => {
   }
 
   const _calcHourlyPeriod = () => {
-    onGetHourlyPeriod(date, startTime, endTime)
+    onGetHourlyPeriod(startTime, endTime)
       .then(value => {
         setHoursQuantity(value)
         setHourlyError('')
       })
-      .catch((err) => setHourlyError(err))
+      .catch(err => setHourlyError(err))
   }
 
-  const _onSetStartTime = (value) => {
+  const _onSetStartTime = value => {
     setStartTime(value)
   }
 
-  const _onSetEndTime = (value) => {
+  const _onSetEndTime = value => {
     setEndTime(value)
   }
 

@@ -3,7 +3,7 @@ import { gql } from 'apollo-boost'
 import { toast } from 'react-toastify'
 import crypto from 'crypto'
 
-import { getClientWithAuth } from 'graphql/apolloClient'
+import { getClientWithAuth, getClient } from 'graphql/apolloClient'
 import errToMsg from 'utils/errToMsg'
 
 // Actions
@@ -356,6 +356,15 @@ const queryGetListingInfo = gql`
   }
 `
 
+const queryGetHourlyPeriod = gql`
+  query getHourlyPeriod($checkInHour: String!, $checkOutHour: String!) {
+    getHourlyPeriod(checkInHour: $checkInHour, checkOutHour: $checkOutHour) {
+      __typename
+      hours
+    }
+  }
+`
+
 export default function reducer(state = initialState, action) {
   switch (action.type) {
     case Types.CREATE_BOOKING_START: {
@@ -694,8 +703,17 @@ export const onAcceptDeclineByEmail = (bookingId, emailAction, userId) => dispat
     }
   })
 
-  export const onGetHourlyPeriod = (startTime, endTime) => {
-    return new Promise(async (resolve, reject) => {
-      resolve(3)
-    })
-  }
+export const onGetHourlyPeriod = (startTime, endTime) => {
+  return new Promise(async (resolve, reject) => {
+    try {
+      const { data } = await getClient().query({
+        query: queryGetHourlyPeriod,
+        variables: { checkInHour: startTime, checkOutHour: endTime },
+        fetchPolicy: 'network-only'
+      })
+      resolve(data.getHourlyPeriod.hours)
+    } catch (err) {
+      reject(errToMsg(err))
+    }
+  })
+}
