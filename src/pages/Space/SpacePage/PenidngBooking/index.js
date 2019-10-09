@@ -25,6 +25,9 @@ function spelling(periodType, reference) {
     case 'monthly':
       label = 'Month'
       break
+    case 'hourly':
+      label = 'Hour'
+      break
     default:
       label = 'Day'
   }
@@ -34,7 +37,7 @@ function spelling(periodType, reference) {
 
 const _renderContentCard = booking => {
   const expiry = addMinutes(new Date(booking.createdAt), 30)
-  const expiryDate = `${format(expiry, 'dd/MM/yyyy')  } at ${  format(expiry, 'HH:mm')}`
+  const expiryDate = `${format(expiry, 'dd/MM/yyyy')} at ${format(expiry, 'HH:mm')}`
   const startDate = booking.reservations[0]
   const endDate = booking.reservations[booking.reservations.length - 1]
 

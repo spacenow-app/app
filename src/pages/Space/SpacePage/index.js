@@ -130,8 +130,7 @@ const SpacePage = ({ match, location, history, ...props }) => {
   const [period, setPeriod] = useState(1)
   const [imageHeight, setImageHeight] = useState(500)
   const [startTime, setStartTime] = useState('08:00')
-  const [endTime, setEndTime] = useState('18:00')
-  const [hoursQuantity, setHoursQuantity] = useState(0)
+  const [endTime, setEndTime] = useState('09:00')
   const [hourlyError, setHourlyError] = useState('')
 
   useEffect(() => {
@@ -331,7 +330,7 @@ const SpacePage = ({ match, location, history, ...props }) => {
             date={date}
             startTime={startTime}
             endTime={endTime}
-            hoursQuantity={hoursQuantity}
+            hoursQuantity={period}
             listingExceptionDates={availabilities}
             listingData={listing.listingData}
             onDateChange={_onDateChange}
@@ -404,7 +403,7 @@ const SpacePage = ({ match, location, history, ...props }) => {
       return true
     }
     if (bookingPeriod === 'hourly') {
-      return hourlyError !== '' || hoursQuantity <= 0 || !date
+      return hourlyError !== '' || period <= 0 || !date
     }
     if (bookingPeriod === 'weekly') {
       if (date > 0 && period > 0) {
@@ -441,7 +440,9 @@ const SpacePage = ({ match, location, history, ...props }) => {
       bookingType: listing.listingData.bookingType,
       reservations: listing.bookingPeriod === 'daily' ? datesSelected : [date],
       period: date ? period : datesSelected.length,
-      isAbsorvedFee: listing.listingData.isAbsorvedFee
+      isAbsorvedFee: listing.listingData.isAbsorvedFee,
+      checkInHour: startTime,
+      checkOutHour: endTime
     }
     if (!isAuthenticated) {
       history.push(`/auth/signin`, {
@@ -501,7 +502,7 @@ const SpacePage = ({ match, location, history, ...props }) => {
   const _calcHourlyPeriod = () => {
     onGetHourlyPeriod(startTime, endTime)
       .then(value => {
-        setHoursQuantity(value)
+        setPeriod(value)
         setHourlyError('')
       })
       .catch(err => setHourlyError(err))

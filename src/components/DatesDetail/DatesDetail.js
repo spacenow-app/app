@@ -39,6 +39,9 @@ function spelling(periodType, reference) {
     case 'monthly':
       label = 'Month'
       break
+    case 'hourly':
+      label = 'Hour'
+      break
     default:
       label = 'Day'
   }

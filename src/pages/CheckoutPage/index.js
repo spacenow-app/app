@@ -101,6 +101,9 @@ const CheckoutPage = ({ match, location, history, ...props }) => {
       case 'monthly':
         label = 'Month'
         break
+      case 'hourly':
+        label = 'Hour'
+        break
       default:
         label = 'Day'
     }
@@ -164,9 +167,9 @@ const CheckoutPage = ({ match, location, history, ...props }) => {
               <ListDates dates={reservation.reservations} />
             </>
           ) : (
-              // <BookingDates reservationData={[]} />
-              <></>
-            )}
+            // <BookingDates reservationData={[]} />
+            <></>
+          )}
 
           <TimeTable data={listing.accessDays.listingAccessHours} />
 
@@ -225,10 +228,10 @@ const CheckoutPage = ({ match, location, history, ...props }) => {
                         {card.isLoading ? (
                           <Loader icon width="20px" height="20px" />
                         ) : (
-                            <IconButton onClick={_handleRemoveCard(card)}>
-                              <Icon name="bin" style={{ fill: '#51C482' }} />
-                            </IconButton>
-                          )}
+                          <IconButton onClick={_handleRemoveCard(card)}>
+                            <Icon name="bin" style={{ fill: '#51C482' }} />
+                          </IconButton>
+                        )}
                       </td>
                     </tr>
                   ))}
@@ -236,8 +239,8 @@ const CheckoutPage = ({ match, location, history, ...props }) => {
               </Table>
             </>
           ) : (
-              <Text>You don't have any credit cards yet, please add one :)</Text>
-            )}
+            <Text>You don't have any credit cards yet, please add one :)</Text>
+          )}
 
           <Button size="sm" onClick={_addNewCard} isLoading={isCreating}>
             Add Card
@@ -279,10 +282,10 @@ const CheckoutPage = ({ match, location, history, ...props }) => {
                 />
                 <PriceDetail
                   margin="0"
-                  periodLabel={_spelling(reservation.listing.bookingPeriod, reservation.reservations.length)}
+                  periodLabel={_spelling(reservation.listing.bookingPeriod, reservation.period)}
                   price={listing.listingData.basePrice}
                   isAbsorvedFee={listing.listingData.isAbsorvedFee}
-                  days={reservation.reservations.length}
+                  days={reservation.period}
                   quantity={1}
                 />
               </Box>

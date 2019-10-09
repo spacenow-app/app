@@ -86,6 +86,8 @@ const mutationCreateBooking = gql`
     $reservations: [String]!
     $period: Int!
     $isAbsorvedFee: Boolean
+    $checkInHour: String!
+    $checkOutHour: String!
   ) {
     createBooking(
       listingId: $listingId
@@ -98,6 +100,8 @@ const mutationCreateBooking = gql`
       reservations: $reservations
       period: $period
       isAbsorvedFee: $isAbsorvedFee
+      checkInHour: $checkInHour
+      checkOutHour: $checkOutHour
     ) {
       bookingId
     }
