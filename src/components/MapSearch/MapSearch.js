@@ -3,7 +3,7 @@ import styled from 'styled-components'
 import PropTypes from 'prop-types'
 import { withGoogleMap, GoogleMap, InfoWindow } from 'react-google-maps'
 import MarkerWithLabel from 'react-google-maps/lib/components/addons/MarkerWithLabel'
-import { Avatar } from 'components'
+import { Avatar, Price } from 'components'
 import defaultMapStyle from './default_map_style.json'
 
 const CardContainer = styled.div`
@@ -91,25 +91,37 @@ const MapSearch = withGoogleMap(props => {
     >
       {props.markers &&
         props.markers.map(marker => (
-          <MarkerWithLabel
-            key={marker.id}
-            position={{ lat: parseFloat(marker.lat), lng: parseFloat(marker.lng) }}
-            onClick={() => {
-              props.onClickMarker(marker)
-            }}
-            defaultIcon={' '}
-            labelAnchor={{ x: 55, y: 40 }}
-            children={<div>{marker.price.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',')}</div>}
-            labelStyle={{
-              backgroundColor: 'white',
-              fontSize: '16px',
-              padding: '8px 14px',
-              borderRadius: '50px',
-              color: '#172439',
-              border: '1px solid #CBCBCB',
-              fontFamily: 'Montserrat-Bold'
-            }}
-          />
+          <>
+            <MarkerWithLabel
+              key={marker.id}
+              position={{ lat: parseFloat(marker.lat), lng: parseFloat(marker.lng) }}
+              onClick={() => {
+                props.onClickMarker(marker)
+              }}
+              defaultIcon=" "
+              labelAnchor={{ x: 55, y: 40 }}
+              children={
+                <Price
+                  key={`price-${marker.id}`}
+                  currency={marker.currency}
+                  price={marker.price}
+                  currencySymbol="$"
+                  bookingPeriod={marker.bookingPeriod}
+                  bookingType={marker.bookingType}
+                  size="16px"
+                />
+              }
+              labelStyle={{
+                backgroundColor: 'white',
+                fontSize: '16px',
+                padding: '8px 14px',
+                borderRadius: '50px',
+                color: '#172439',
+                border: '1px solid #CBCBCB',
+                fontFamily: 'Montserrat-Bold'
+              }}
+            />
+          </>
         ))}
 
       {props.selectedMarker && (
