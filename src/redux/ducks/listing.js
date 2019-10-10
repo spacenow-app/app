@@ -1163,10 +1163,12 @@ export const onClaimListing = (listingId, listingTitle) => async dispatch => {
       mutation: mutationClaimListing,
       variables: { listingId: parseInt(listingId, 10) }
     })
-    console.log(data)
     dispatch({ type: Types.LISTING_CLAIM_SUCCESS, payload: data.claimListing })
     toast.success('Listing Claimed!!')
-    window.location.href = `https://spacenow.com/claim-your-space?listingId=${parseInt(listingId, 10)}&listingTitle=${listingTitle}`
+    window.location.href = `https://spacenow.com/claim-your-space?listingId=${parseInt(
+      listingId,
+      10
+    )}&listingTitle=${listingTitle}`
   } catch (err) {
     dispatch({ type: Types.LISTING_CLAIM_FAILURE, payload: errToMsg(err) })
   }

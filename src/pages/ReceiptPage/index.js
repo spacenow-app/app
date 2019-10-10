@@ -34,6 +34,9 @@ function spelling(periodType, reference) {
     case 'monthly':
       label = 'Month'
       break
+    case 'hourly':
+      label = 'Hour'
+      break
     default:
       label = 'Day'
   }
@@ -146,6 +149,8 @@ class ComponentToPrint extends React.Component {
                   endDate={endDate}
                   period={booking.period}
                   priceType={booking.priceType}
+                  checkInHour={booking.checkInHour}
+                  checkOutHour={booking.checkOutHour}
                 />
               </Box>
             )}

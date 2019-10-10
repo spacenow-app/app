@@ -42,7 +42,6 @@ const BookingTab = ({
     }
     return toPlural(capitalize(string.slice(0, -2)), number)
   }
-  console.log(values)
 
   return (
     <Box display="grid" gridTemplateColumns={{ _: '1fr' }} gridGap={{ _: '20px', medium: '40px' }}>
@@ -287,13 +286,6 @@ const formik = {
   validationSchema: props =>
     Yup.object().shape({
       basePrice: Yup.number().typeError('Need to be number.')
-      // .test('positive-If', 'Must be above 0.', price => {
-      //   console.log(Yup.ref('bookingType'))
-      //   return (
-      //     (props.listing.listingData.bookingType != 'poa' && price > 0) ||
-      //     props.listing.listingData.bookingType === 'poa'
-      //   )
-      // })
     }),
   enableReinitialize: false,
   isInitialValid: true

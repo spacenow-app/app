@@ -3,7 +3,7 @@ import { gql } from 'apollo-boost'
 import { toast } from 'react-toastify'
 import crypto from 'crypto'
 
-import { getClientWithAuth } from 'graphql/apolloClient'
+import { getClientWithAuth, getClient } from 'graphql/apolloClient'
 import errToMsg from 'utils/errToMsg'
 
 // Actions
@@ -86,6 +86,8 @@ const mutationCreateBooking = gql`
     $reservations: [String]!
     $period: Int!
     $isAbsorvedFee: Boolean
+    $checkInHour: String!
+    $checkOutHour: String!
   ) {
     createBooking(
       listingId: $listingId
@@ -98,6 +100,8 @@ const mutationCreateBooking = gql`
       reservations: $reservations
       period: $period
       isAbsorvedFee: $isAbsorvedFee
+      checkInHour: $checkInHour
+      checkOutHour: $checkOutHour
     ) {
       bookingId
     }
@@ -186,6 +190,8 @@ const queryGetBookingById = gql`
       guestId
       checkIn
       checkOut
+      checkInHour
+      checkOutHour
       reservations
       listing {
         id
@@ -233,13 +239,11 @@ const queryGetBookingById = gql`
             updatedAt
           }
         }
-
         listingData {
           listingId
           isAbsorvedFee
           basePrice
         }
-
         location {
           id
           country
@@ -352,6 +356,16 @@ const queryGetListingInfo = gql`
           otherItemName
         }
       }
+    }
+  }
+`
+
+const queryGetHourlyAvailability = gql`
+  query getHourlyAvailability($listingId: Int!, $date: String!, $checkInHour: String!, $checkOutHour: String!) {
+    getHourlyAvailability(listingId: $listingId, date: $date, checkInHour: $checkInHour, checkOutHour: $checkOutHour) {
+      __typename
+      hours
+      isAvailable
     }
   }
 `
@@ -693,3 +707,21 @@ export const onAcceptDeclineByEmail = (bookingId, emailAction, userId) => dispat
       resolve()
     }
   })
+
+export const onGetHourlyAvailability = (listingId, date, startTime, endTime) => {
+  return new Promise(async (resolve, reject) => {
+    try {
+      const { data } = await getClient().query({
+        query: queryGetHourlyAvailability,
+        variables: { listingId, date, checkInHour: startTime, checkOutHour: endTime },
+        fetchPolicy: 'network-only'
+      })
+      resolve({
+        hours: data.getHourlyAvailability.hours,
+        isAvailable: data.getHourlyAvailability.isAvailable
+      })
+    } catch (err) {
+      reject(errToMsg(err))
+    }
+  })
+}
