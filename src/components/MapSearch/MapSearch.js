@@ -1,7 +1,7 @@
 import React, { memo } from 'react'
 import styled from 'styled-components'
 import PropTypes from 'prop-types'
-import { withGoogleMap, GoogleMap, InfoWindow, Children } from 'react-google-maps'
+import { withGoogleMap, GoogleMap, InfoWindow } from 'react-google-maps'
 import MarkerWithLabel from 'react-google-maps/lib/components/addons/MarkerWithLabel'
 import { Avatar, Price } from 'components'
 import defaultMapStyle from './default_map_style.json'
