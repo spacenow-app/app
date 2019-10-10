@@ -168,8 +168,10 @@ const SearchPage = ({ history, location }) => {
         lng: +item.location.lng,
         photo: _getCoverPhoto(item),
         title: item.title,
-        price: `${item.listingData.currency || 'AUD'}$${item.listingData.basePrice}`,
+        price: item.listingData.basePrice,
+        currency: item.listingData.currency || 'AUD',
         period: item.bookingPeriod,
+        bookingType: item.listingData.bookingType,
         host: {
           photo: (item.host.profile && item.host.profile.picture) || '',
           name: (item.host.profile && item.host.profile.firstName) || 'User'
