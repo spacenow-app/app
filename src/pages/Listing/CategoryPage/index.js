@@ -43,6 +43,7 @@ const CategoryPage = props => {
 
   const _handleSubCategoryClick = (_, value) => {
     setCategorySelected(value)
+    // setSubCategorySelected(value)
   }
 
   const _handlerCreateDraft = () =>

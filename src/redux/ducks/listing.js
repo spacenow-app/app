@@ -402,8 +402,8 @@ const queryGetAvailabilities = gql`
 `
 
 const mutationCreate = gql`
-  mutation createOrUpdateListing($locationId: Int!, $listSettingsParentId: Int!) {
-    createOrUpdateListing(locationId: $locationId, listSettingsParentId: $listSettingsParentId) {
+  mutation createOrUpdateListing($locationId: Int!, $categoryId: ID!) {
+    createOrUpdateListing(locationId: $locationId, categoryId: $categoryId) {
       ${allListingFields}
     }
   }
@@ -412,7 +412,7 @@ const mutationCreate = gql`
 const mutationUpdate = gql`
   mutation createOrUpdateListing(
     $locationId: Int!
-    $listSettingsParentId: Int!
+    $categoryId: ID!
     $listingId: Int!
     $title: String
     $accessType: String
@@ -440,7 +440,7 @@ const mutationUpdate = gql`
   ) {
     createOrUpdateListing(
       locationId: $locationId
-      listSettingsParentId: $listSettingsParentId
+      categoryId: $categoryId
       listingId: $listingId
       title: $title
       accessType: $accessType
@@ -1055,14 +1055,14 @@ export const onGetAllHolidays = () => async dispatch => {
   }
 }
 
-export const onCreate = (locationId, listSettingsParentId, history) => async dispatch => {
+export const onCreate = (locationId, categoryId, history) => async dispatch => {
   dispatch({ type: Types.CREATE_LISTING_START })
   try {
     const { data } = await getClientWithAuth(dispatch).mutate({
       mutation: mutationCreate,
       variables: {
         locationId,
-        listSettingsParentId
+        categoryId
       }
     })
     dispatch({ type: Types.CREATE_LISTING_SUCCESS, payload: data.createOrUpdateListing })
