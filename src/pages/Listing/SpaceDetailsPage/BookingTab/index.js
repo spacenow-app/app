@@ -203,7 +203,7 @@ const BookingTab = ({
                 this option."
             />
           </Cell>
-          <Cell width={1}>
+          {/* <Cell width={1}>
             <Radio
               box
               value="poa"
@@ -214,7 +214,7 @@ const BookingTab = ({
               text="If you want to be contacted, select
                 this option."
             />
-          </Cell>
+          </Cell> */}
         </Box>
       </Cell>
       <Cell>
@@ -285,7 +285,9 @@ const formik = {
   },
   validationSchema: props =>
     Yup.object().shape({
-      basePrice: Yup.number().typeError('Need to be number.')
+      basePrice: Yup.number()
+        .typeError('Need to be number.')
+        .positive('Must be above 0.')
     }),
   enableReinitialize: false,
   isInitialValid: true
