@@ -28,7 +28,8 @@ import {
   Button,
   Footer,
   CardSearch,
-  Price
+  Price,
+  Review
 } from 'components'
 
 import {
@@ -130,7 +131,7 @@ const SpacePage = ({ match, location, history, ...props }) => {
   const { isLoading: isLoadingOnCreateReservation } = useSelector(state => state.booking.create)
   const { object: pendingBooking } = useSelector(state => state.booking.pending)
   const { similar: similarResults } = useSelector(state => state.search)
-  const { publicReviews } = useSelector(state => state.reviews.get)
+  const { public: publicReviews } = useSelector(state => state.reviews.get)
 
   const [datesSelected, setDatesSelected] = useState([])
   const [date, setDate] = useState('')
@@ -177,7 +178,7 @@ const SpacePage = ({ match, location, history, ...props }) => {
 
   useEffect(() => {
     listing && dispatch(onGetPublicReviews(listing.id))
-  }, [dispatch, listing, publicReviews])
+  }, [dispatch, listing])
 
   if (listing && listing.user.provider === 'wework') {
     history.push(`/space/partner/${match.params.id}`)
@@ -768,7 +769,22 @@ const SpacePage = ({ match, location, history, ...props }) => {
         <Box mt="45px">
           <Title type="h5" title="Reviews" />
           <ReviewsContainer>
-            <></>
+            {publicReviews &&
+              publicReviews.length > 0 &&
+              publicReviews.map(o => {
+                return (
+                  <p>
+                    <Review
+                      id={1}
+                      userName={'Arthemus'}
+                      userPicture={'https://sandpit-spacenow-images.s3.ap-southeast-2.amazonaws.com/avatar/d82c553568f933d47e28effcd5675b35.png'}
+                      date={new Date()}
+                      comment={'Some ordinary comment...'}
+                      rating={2}
+                    />
+                  </p>
+                )
+              })}
           </ReviewsContainer>
         </Box>
 
