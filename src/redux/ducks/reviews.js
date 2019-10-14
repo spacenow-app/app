@@ -25,17 +25,30 @@ const initialState = {
   }
 }
 
+const reviewFields = `
+  __typename
+  id
+  reservationId
+  listId
+  reviewContent
+  rating
+  createdAt
+  author {
+    __typename
+    id
+    profile {
+      __typename
+      profileId
+      firstName
+      picture
+    }
+  }
+`
+
 const queryGetPublicReviews = gql`
   query getPublicReviews($listingId: Int!) {
     getPublicReviews(listingId: $listingId) {
-      __typename
-      id
-      reservationId
-      listId
-      authorId
-      reviewContent
-      rating
-      createdAt
+      ${reviewFields}
     }
   }
 `
@@ -43,15 +56,7 @@ const queryGetPublicReviews = gql`
 const queryGetPrivateReviews = gql`
   query getPrivateReviews($listingId: Int!) {
     getPrivateReviews(listingId: $listingId) {
-      __typename
-      id
-      reservationId
-      listId
-      authorId
-      reviewContent
-      privateFeedback
-      rating
-      createdAt
+      ${reviewFields}
     }
   }
 `
@@ -64,14 +69,7 @@ const mutationCreateReview = gql`
       privateComment: $privateComment
       rating: $rating
     ) {
-      __typename
-      id
-      reservationId
-      listId
-      authorId
-      reviewContent
-      rating
-      createdAt
+      ${reviewFields}
     }
   }
 `

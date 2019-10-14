@@ -796,8 +796,8 @@ const SpacePage = ({ match, location, history, ...props }) => {
                   <>
                     <Review
                       id={o.id}
-                      userName={'Arthemus'}
-                      userPicture={'https://sandpit-spacenow-images.s3.ap-southeast-2.amazonaws.com/avatar/d82c553568f933d47e28effcd5675b35.png'}
+                      userName={o.author.profile && o.author.profile.firstName}
+                      userPicture={o.author.profile && o.author.profile.picture}
                       date={new Date(o.createdAt)}
                       comment={o.reviewContent}
                       rating={o.rating}
