@@ -47,6 +47,8 @@ import { openModal, TypesModal } from 'redux/ducks/modal'
 
 import { sendMail } from 'redux/ducks/mail'
 
+import { onGetPublicReviews } from 'redux/ducks/reviews'
+
 import config from 'variables/config'
 
 import WeeklyBooking from './WeeklyBooking'
@@ -112,6 +114,10 @@ const SimilarSpacesContainer = styled.div`
   }
 `
 
+const ReviewsContainer = styled.div`
+  display: grid;
+`
+
 const SpacePage = ({ match, location, history, ...props }) => {
   const dispatch = useDispatch()
 
@@ -124,6 +130,7 @@ const SpacePage = ({ match, location, history, ...props }) => {
   const { isLoading: isLoadingOnCreateReservation } = useSelector(state => state.booking.create)
   const { object: pendingBooking } = useSelector(state => state.booking.pending)
   const { similar: similarResults } = useSelector(state => state.search)
+  const { publicReviews } = useSelector(state => state.reviews.get)
 
   const [datesSelected, setDatesSelected] = useState([])
   const [date, setDate] = useState('')
@@ -167,6 +174,10 @@ const SpacePage = ({ match, location, history, ...props }) => {
         onSearch(listing.location.lat, listing.location.lng, false, listing.settingsParent.category.id.toString(), 3)
       )
   }, [dispatch, listing])
+
+  useEffect(() => {
+    listing && dispatch(onGetPublicReviews(listing.id))
+  }, [dispatch, listing, publicReviews])
 
   if (listing && listing.user.provider === 'wework') {
     history.push(`/space/partner/${match.params.id}`)
@@ -752,6 +763,13 @@ const SpacePage = ({ match, location, history, ...props }) => {
         <Box mt="45px">
           <Title type="h5" title="Location" />
           <Map position={{ lat: Number(listing.location.lat), lng: Number(listing.location.lng) }} />
+        </Box>
+
+        <Box mt="45px">
+          <Title type="h5" title="Reviews" />
+          <ReviewsContainer>
+            <></>
+          </ReviewsContainer>
         </Box>
 
         {similarResults.length === 3 && (
