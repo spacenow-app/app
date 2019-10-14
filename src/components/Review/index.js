@@ -1,9 +1,9 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import styled from 'styled-components'
-import { addMinutes, format, addHours, isAfter } from 'date-fns'
-import StarRatingComponent from 'react-star-rating-component'
-import { Box, Text, Icon, Tag, Avatar } from 'components'
+import { format } from 'date-fns'
+
+import { Box, Text, Avatar } from 'components'
 
 const Container = styled.div`
   background: #ffffff 0% 0% no-repeat padding-box;
