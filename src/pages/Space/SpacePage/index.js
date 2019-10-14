@@ -199,9 +199,7 @@ const SpacePage = ({ match, location, history, ...props }) => {
     return 'Custom'
   }
 
-  const _onClaimListing = () => {
-    dispatch(onClaimListing(match.params.id, listing.title))
-  }
+  const _onClaimListing = () => dispatch(onClaimListing(match.params.id, listing.title))
 
   const _renderHighLights = obj => {
     const array = Object.keys(obj).map(i => obj[i])
@@ -287,18 +285,14 @@ const SpacePage = ({ match, location, history, ...props }) => {
     setDatesSelected(arraySorted)
   }
 
-  const _onDateChange = value => {
-    setDate(value)
-  }
+  const _onDateChange = value => setDate(value)
 
   const _removeDate = value => {
     const newArray = _.filter(datesSelected, dateFromArray => !isSameDay(new Date(dateFromArray), value))
     setDatesSelected(newArray)
   }
 
-  const _handleChangePeriod = e => {
-    setPeriod(Number(e.target.value))
-  }
+  const _handleChangePeriod = e => setPeriod(Number(e.target.value))
 
   const _returnArrayAvailability = accessDays => {
     const arr = []
@@ -482,6 +476,7 @@ const SpacePage = ({ match, location, history, ...props }) => {
           template: 'report-listing',
           data: JSON.stringify(values)
         }
+
         await dispatch(sendMail(emailData))
 
         dispatch(
@@ -513,13 +508,9 @@ const SpacePage = ({ match, location, history, ...props }) => {
     }
   }
 
-  const _onSetStartTime = value => {
-    setStartTime(value)
-  }
+  const _onSetStartTime = value => setStartTime(value)
 
-  const _onSetEndTime = value => {
-    setEndTime(value)
-  }
+  const _onSetEndTime = value => setEndTime(value)
 
   return (
     <>
@@ -580,7 +571,6 @@ const SpacePage = ({ match, location, history, ...props }) => {
                   </Cell>
                 )}
               </Grid>
-
               <Grid columns={12}>
                 <CellStyled width={7}>
                   <Title
@@ -660,12 +650,14 @@ const SpacePage = ({ match, location, history, ...props }) => {
                   </Box>
                 </Box>
               )}
+
               {listing.listingData.description ? (
                 <Box>
                   <Title type="h5" title="Description" />
                   <p>{listing.listingData.description}</p>
                 </Box>
               ) : null}
+
               {listing.amenities.length > 0 && (
                 <Box>
                   <Title type="h5" title="Amenities" />
@@ -773,24 +765,8 @@ const SpacePage = ({ match, location, history, ...props }) => {
           </Box>
         )}
 
-        {/* <Box mb="45px">
-          <Title type="h5" title="Cancellation Policy" />
-          <Grid columns="repeat(auto-fit, minmax(350px, auto))">
-            <Cell>
-              <Title
-                noMargin
-                type="h5"
-                title="No Cancellation"
-                subTitleSize={16}
-                subtitle="Guest cannot cancel their booking. Note: This may affect the number of bookings received."
-              />
-            </Cell>
-            <Cell>
-              <ImageStyled alt="Cancellation Policy" src={GraphCancelattionImage} width="700px" />
-            </Cell>
-          </Grid>
-        </Box> */}
         <Footer />
+
         <BottomButtonMobile>
           <Grid columns={2} style={{ alignItems: 'center' }}>
             <Cell style={{ alignContent: 'center', justifyContent: 'left', display: 'grid' }}>
