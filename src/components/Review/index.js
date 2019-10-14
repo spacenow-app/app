@@ -2,6 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import styled from 'styled-components'
 import { addMinutes, format, addHours, isAfter } from 'date-fns'
+import StarRatingComponent from 'react-star-rating-component'
 import { Box, Text, Icon, Tag, Avatar } from 'components'
 
 const Container = styled.div`
@@ -10,10 +11,6 @@ const Container = styled.div`
   border-radius: 6px;
   opacity: 1;
   man-width: 400px;
-
-  :hover {
-    box-shadow: 0 0 5px 1px #ddd;
-  }
 `
 
 const AvatarContainer = styled.div`
@@ -43,7 +40,7 @@ const Review = ({ id, userName, userPicture, date, comment, rating }) => {
       <CommentContainer>
         <Box display="flex" justifyContent="start" mb="15px">
           <AvatarContainer>
-            <Avatar width="30px" height="30px" image={userPicture} />
+            <Avatar width="36px" height="36px" image={userPicture} />
           </AvatarContainer>
           <Text fontSize="12px" ml="10px" fontFamily="medium">
             {`${userName}`}

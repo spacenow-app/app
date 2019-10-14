@@ -35,6 +35,7 @@ const queryGetPublicReviews = gql`
       authorId
       reviewContent
       rating
+      createdAt
     }
   }
 `
@@ -50,6 +51,7 @@ const queryGetPrivateReviews = gql`
       reviewContent
       privateFeedback
       rating
+      createdAt
     }
   }
 `
@@ -69,6 +71,7 @@ const mutationCreateReview = gql`
       authorId
       reviewContent
       rating
+      createdAt
     }
   }
 `

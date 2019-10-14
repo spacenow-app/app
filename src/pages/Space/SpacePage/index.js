@@ -29,7 +29,8 @@ import {
   Footer,
   CardSearch,
   Price,
-  Review
+  Review,
+  Text
 } from 'components'
 
 import {
@@ -524,6 +525,15 @@ const SpacePage = ({ match, location, history, ...props }) => {
 
   const _onSetEndTime = value => setEndTime(value)
 
+  const _getRatingAvg = () => {
+    if (publicReviews) {
+      const countReviews = publicReviews.length
+      const totalRatings = publicReviews.map(o => o.rating).reduce((a, b) => a + b)
+      return (totalRatings / countReviews).toFixed(2)
+    }
+    return 0
+  }
+
   return (
     <>
       {imageHeight === 325 ||
@@ -768,21 +778,32 @@ const SpacePage = ({ match, location, history, ...props }) => {
 
         <Box mt="45px">
           <Title type="h5" title="Reviews" />
+          {publicReviews && publicReviews.length > 0 && (
+            <>
+              <Icon width="40px" fill="#6ADD92" name="star-full" />
+              <Text fontSize="12px" ml="10px" fontFamily="medium" color="greyscale.1">{`${_getRatingAvg()}`}</Text>
+              <Text fontSize="12px" ml="10px" fontFamily="medium" color="greyscale.1">|</Text>
+              <Text fontSize="12px" ml="10px" fontFamily="medium">{`${publicReviews.length}`}</Text>
+              <Text fontSize="12px" ml="10px" fontFamily="medium" color="greyscale.1">comments</Text>
+            </>
+          )}
+          <hr />
           <ReviewsContainer>
             {publicReviews &&
               publicReviews.length > 0 &&
               publicReviews.map(o => {
                 return (
-                  <p>
+                  <>
                     <Review
-                      id={1}
+                      id={o.id}
                       userName={'Arthemus'}
                       userPicture={'https://sandpit-spacenow-images.s3.ap-southeast-2.amazonaws.com/avatar/d82c553568f933d47e28effcd5675b35.png'}
-                      date={new Date()}
-                      comment={'Some ordinary comment...'}
-                      rating={2}
+                      date={new Date(o.createdAt)}
+                      comment={o.reviewContent}
+                      rating={o.rating}
                     />
-                  </p>
+                    <br/>
+                  </>
                 )
               })}
           </ReviewsContainer>
