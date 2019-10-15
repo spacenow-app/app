@@ -1,5 +1,6 @@
 /* eslint-disable no-console */
 import { gql } from 'apollo-boost'
+import { toast } from 'react-toastify'
 
 import { getClientWithAuth, getClient } from 'graphql/apolloClient'
 import errToMsg from 'utils/errToMsg'
@@ -11,6 +12,7 @@ export const Types = {
   REVIEWS_PRIVATE_REQUEST: 'REVIEWS_PRIVATE_REQUEST',
   REVIEWS_PRIVATE_SUCCESS: 'REVIEWS_PRIVATE_SUCCESS',
   REVIEWS_PRIVATE_FAILURE: 'REVIEWS_PRIVATE_FAILURE',
+  REVIEWS_CREATE_RESET: 'REVIEWS_CREATE_RESET',
   REVIEWS_CREATE_REQUEST: 'REVIEWS_CREATE_REQUEST',
   REVIEWS_CREATE_SUCCESS: 'REVIEWS_CREATE_SUCCESS',
   REVIEWS_CREATE_FAILURE: 'REVIEWS_CREATE_FAILURE'
@@ -21,6 +23,10 @@ const initialState = {
   get: {
     public: [],
     private: [],
+    error: null
+  },
+  create: {
+    status: null,
     error: null
   }
 }
@@ -142,13 +148,24 @@ export default function reducer(state = initialState, action) {
         }
       }
     }
+    case Types.REVIEWS_CREATE_RESET: {
+      return {
+        ...state,
+        isLoading: true,
+        create: {
+          ...state.get,
+          status: null,
+          error: null
+        }
+      }
+    }
     case Types.REVIEWS_CREATE_REQUEST: {
       return {
         ...state,
         isLoading: true,
-        get: {
+        create: {
           ...state.get,
-          public: [],
+          status: null,
           error: null
         }
       }
@@ -157,9 +174,9 @@ export default function reducer(state = initialState, action) {
       return {
         ...state,
         isLoading: false,
-        get: {
+        create: {
           ...state.get,
-          public: action.payload,
+          status: 'OK',
           error: null
         }
       }
@@ -170,7 +187,7 @@ export default function reducer(state = initialState, action) {
         isLoading: false,
         get: {
           ...state.get,
-          public: [],
+          status: 'FAILURE',
           error: action.payload
         }
       }
@@ -208,15 +225,19 @@ export const onGetPrivateReviews = listingId => async dispatch => {
   }
 }
 
+export const onPrepareReview = () => async dispatch => dispatch({ type: Types.REVIEWS_CREATE_RESET })
+
 export const onCreateReview = (bookingId, publicComment, privateComment, rating) => async dispatch => {
   dispatch({ type: Types.REVIEWS_CREATE_REQUEST })
   try {
-    const { data } = await getClientWithAuth(dispatch).mutate({
-      query: mutationCreateReview,
+    await getClientWithAuth(dispatch).mutate({
+      mutation: mutationCreateReview,
       variables: { bookingId, publicComment, privateComment, rating }
     })
-    dispatch({ type: Types.REVIEWS_CREATE_SUCCESS, payload: data.createReview })
+    dispatch({ type: Types.REVIEWS_CREATE_SUCCESS })
   } catch (err) {
-    dispatch({ type: Types.REVIEWS_CREATE_FAILURE, payload: errToMsg(err) })
+    const msg = errToMsg(err)
+    if (msg === 'FEEDBACK_EXISTING') toast.warning(`You already provided a review for this space`)
+    dispatch({ type: Types.REVIEWS_CREATE_FAILURE, payload: msg })
   }
 }

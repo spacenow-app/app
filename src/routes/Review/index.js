@@ -9,7 +9,7 @@ const Review = ({ match }) => {
   return (
     <Suspense fallback={<div>Loading...</div>}>
       <Switch>
-        <Route exact component={ReviewPage} path={`${match.path}/:key`} />
+        <Route exact component={ReviewPage} path={`${match.path}/:id`} />
         <Route component={NotFoundPage} />
       </Switch>
     </Suspense>
