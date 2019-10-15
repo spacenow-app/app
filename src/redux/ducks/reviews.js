@@ -37,7 +37,12 @@ const reviewFields = `
   reservationId
   listId
   reviewContent
-  rating
+  ratingOverall
+  ratingCheckIn
+  ratingHost
+  ratingValue
+  ratingCleanliness
+  ratingLocation
   createdAt
   author {
     __typename
@@ -68,12 +73,27 @@ const queryGetPrivateReviews = gql`
 `
 
 const mutationCreateReview = gql`
-  mutation createReview($bookingId: String!, $publicComment: String!, $privateComment: String, $rating: Int!) {
+  mutation createReview(
+    $bookingId: String!, 
+    $publicComment: String!, 
+    $privateComment: String, 
+    $ratingOverall: Int!,
+    $ratingCheckIn: Int!,
+    $ratingHost: Int!,
+    $ratingValue: Int!,
+    $ratingCleanliness: Int!,
+    $ratingLocation: Int!
+  ) {
     createReview(
       bookingId: $bookingId
       publicComment: $publicComment
       privateComment: $privateComment
-      rating: $rating
+      ratingOverall: $ratingOverall
+      ratingCheckIn: $ratingCheckIn
+      ratingHost: $ratingHost
+      ratingValue: $ratingValue
+      ratingCleanliness: $ratingCleanliness
+      ratingLocation: $ratingLocation
     ) {
       ${reviewFields}
     }
@@ -227,12 +247,30 @@ export const onGetPrivateReviews = listingId => async dispatch => {
 
 export const onPrepareReview = () => async dispatch => dispatch({ type: Types.REVIEWS_CREATE_RESET })
 
-export const onCreateReview = (bookingId, publicComment, privateComment, rating) => async dispatch => {
+export const onCreateReview = (
+  bookingId,
+  publicComment,
+  ratingOverall,
+  ratingCheckIn,
+  ratingHost,
+  ratingValue,
+  ratingCleanliness,
+  ratingLocation
+) => async dispatch => {
   dispatch({ type: Types.REVIEWS_CREATE_REQUEST })
   try {
     await getClientWithAuth(dispatch).mutate({
       mutation: mutationCreateReview,
-      variables: { bookingId, publicComment, privateComment, rating }
+      variables: {
+        bookingId,
+        publicComment,
+        ratingOverall,
+        ratingCheckIn,
+        ratingHost,
+        ratingValue,
+        ratingCleanliness,
+        ratingLocation
+      }
     })
     dispatch({ type: Types.REVIEWS_CREATE_SUCCESS })
   } catch (err) {
