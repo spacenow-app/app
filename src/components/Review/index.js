@@ -1,17 +1,18 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import styled from 'styled-components'
-import { format } from 'date-fns'
 
-import { Box, Text, Avatar } from 'components'
+import { Box, Text, Avatar, Grid } from 'components'
 
-const Container = styled.div`
-  background: #ffffff 0% 0% no-repeat padding-box;
-  box-shadow: 0 0 5px 1px #eee;
-  border-radius: 6px;
-  opacity: 1;
-  man-width: 400px;
-`
+import { monthNames } from 'variables'
+
+// const Container = styled.div`
+//   background: #ffffff 0% 0% no-repeat padding-box;
+//   box-shadow: 0 0 5px 1px #eee;
+//   border-radius: 6px;
+//   opacity: 1;
+//   man-width: 400px;
+// `
 
 const AvatarContainer = styled.div`
   display: block;
@@ -29,31 +30,31 @@ const AvatarContainer = styled.div`
   }
 `
 
-const CommentContainer = styled.div`
-  padding: 25px;
-  line-height: 2;
-`
+// const CommentContainer = styled.div`
+//   padding: 25px;
+//   line-height: 2;
+// `
 
 const Review = ({ id, userName, userPicture, date, comment, rating }) => {
   return (
-    <Container key={id}>
-      <CommentContainer>
-        <Box display="flex" justifyContent="start" mb="15px">
-          <AvatarContainer>
-            <Avatar width="36px" height="36px" image={userPicture} />
-          </AvatarContainer>
+    <>
+      <Box display="flex" justifyContent="start" mb="15px">
+        <AvatarContainer>
+          <Avatar width="42px" height="42px" image={userPicture} />
+        </AvatarContainer>
+        <Grid columns={1}>
           <Text fontSize="12px" ml="10px" fontFamily="medium">
             {`${userName}`}
           </Text>
           <Text fontSize="12px" ml="10px" fontFamily="medium" color="greyscale.1">
-            {`${format(date, 'dd/MM/yyyy')}`}
+            {monthNames[date.getMonth()]} {date.getFullYear()}
           </Text>
-        </Box>
-        <Box display="flex" justifyContent="start" mb="15px">
-          {comment}
-        </Box>
-      </CommentContainer>
-    </Container>
+        </Grid>
+      </Box>
+      <Box display="flex" justifyContent="start" mb="15px">
+        {comment}
+      </Box>
+    </>
   )
 }
 

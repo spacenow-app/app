@@ -5,6 +5,7 @@ import { useSelector, useDispatch } from 'react-redux'
 import styled from 'styled-components'
 import _ from 'lodash'
 import { isSameDay, format } from 'date-fns'
+import StarRatingComponent from 'react-star-rating-component'
 
 import { capitalize, toPlural } from 'utils/strings'
 
@@ -29,8 +30,7 @@ import {
   Footer,
   CardSearch,
   Price,
-  Review,
-  Text
+  Review
 } from 'components'
 
 import {
@@ -105,6 +105,7 @@ const CellStyled = styled(Cell)`
     }
   }
 `
+
 const SimilarSpacesContainer = styled.div`
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
@@ -116,8 +117,27 @@ const SimilarSpacesContainer = styled.div`
   }
 `
 
-const ReviewsContainer = styled.div`
-  display: grid;
+const TitleStarContainer = styled.div`
+  font-size: 24px;
+  margin-top: 27px;
+`
+
+const StarContainer = styled.div`
+  // .dv-star-rating-empty-star {
+  //   color: #fff !important;
+  // }
+`
+
+const Label = styled.label`
+  font-size: 14px;
+  font-family: 'Montserrat-Medium';
+  color: #172439;
+`
+
+const ContainerMobile = styled.div`
+  @media screen and (max-width: 600px) {
+    display: none;
+  }
 `
 
 const SpacePage = ({ match, location, history, ...props }) => {
@@ -703,6 +723,87 @@ const SpacePage = ({ match, location, history, ...props }) => {
                 </Box>
               )}
 
+              {publicReviews && publicReviews.length > 0 && (
+                <>
+                  <Box display="grid" gridTemplateColumns="200px auto">
+                    <Title type="h5" title={`Reviews (${publicReviews.length})`} />
+                    <TitleStarContainer>
+                      <StarRatingComponent
+                        name="ratingOverall"
+                        starCount={5}
+                        value={4}
+                        starColor="#6ADC91"
+                        editing={false}
+                      />
+                    </TitleStarContainer>
+                  </Box>
+                  <ContainerMobile>
+                    <Box display="grid" gridTemplateColumns="auto 1fr auto 1fr" gridColumnGap="20px">
+                      <Label>Cleanliness</Label>
+                      <Cell style={{ alignContent: 'center', justifyContent: 'left', display: 'grid' }}>
+                        <StarContainer>
+                          <StarRatingComponent
+                            name="ratingCleanliness"
+                            starCount={5}
+                            value={2}
+                            starColor="#6ADC91"
+                            editing={false}
+                          />
+                        </StarContainer>
+                      </Cell>
+                      <Label>Value</Label>
+                      <Cell style={{ alignContent: 'center', justifyContent: 'left', display: 'grid' }}>
+                        <StarContainer>
+                          <StarRatingComponent
+                            name="ratingValue"
+                            starCount={5}
+                            value={2}
+                            starColor="#6ADC91"
+                            editing={false}
+                          />
+                        </StarContainer>
+                      </Cell>
+                      <Label>Check-in</Label>
+                      <Cell style={{ alignContent: 'center', justifyContent: 'left', display: 'grid' }}>
+                        <StarContainer>
+                          <StarRatingComponent
+                            name="ratingCheckIn"
+                            starCount={5}
+                            value={2}
+                            starColor="#6ADC91"
+                            editing={false}
+                          />
+                        </StarContainer>
+                      </Cell>
+                      <Label>Location</Label>
+                      <Cell style={{ alignContent: 'center', justifyContent: 'left', display: 'grid' }}>
+                        <StarContainer>
+                          <StarRatingComponent
+                            name="ratingLocation"
+                            starCount={5}
+                            value={2}
+                            starColor="#6ADC91"
+                            editing={false}
+                          />
+                        </StarContainer>
+                      </Cell>
+                    </Box>
+                  </ContainerMobile>
+                  {publicReviews.map(o => {
+                    return (
+                      <Review
+                        id={o.id}
+                        userName={o.author.profile && o.author.profile.firstName}
+                        userPicture={o.author.profile && o.author.profile.picture}
+                        date={new Date(o.createdAt)}
+                        comment={o.reviewContent}
+                        rating={o.rating}
+                      />
+                    )
+                  })}
+                </>
+              )}
+
               {listing.rules.length > 0 && (
                 <Box>
                   <Title type="h5" title="Space Rules" />
@@ -774,39 +875,6 @@ const SpacePage = ({ match, location, history, ...props }) => {
         <Box mt="45px">
           <Title type="h5" title="Location" />
           <Map position={{ lat: Number(listing.location.lat), lng: Number(listing.location.lng) }} />
-        </Box>
-
-        <Box mt="45px">
-          <Title type="h5" title="Reviews" />
-          {publicReviews && publicReviews.length > 0 && (
-            <>
-              <Icon width="40px" fill="#6ADD92" name="star-full" />
-              <Text fontSize="12px" ml="10px" fontFamily="medium" color="greyscale.1">{`${_getRatingAvg()}`}</Text>
-              <Text fontSize="12px" ml="10px" fontFamily="medium" color="greyscale.1">|</Text>
-              <Text fontSize="12px" ml="10px" fontFamily="medium">{`${publicReviews.length}`}</Text>
-              <Text fontSize="12px" ml="10px" fontFamily="medium" color="greyscale.1">comments</Text>
-            </>
-          )}
-          <hr />
-          <ReviewsContainer>
-            {publicReviews &&
-              publicReviews.length > 0 &&
-              publicReviews.map(o => {
-                return (
-                  <>
-                    <Review
-                      id={o.id}
-                      userName={o.author.profile && o.author.profile.firstName}
-                      userPicture={o.author.profile && o.author.profile.picture}
-                      date={new Date(o.createdAt)}
-                      comment={o.reviewContent}
-                      rating={o.rating}
-                    />
-                    <br/>
-                  </>
-                )
-              })}
-          </ReviewsContainer>
         </Box>
 
         {similarResults.length === 3 && (
