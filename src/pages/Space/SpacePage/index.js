@@ -539,10 +539,10 @@ const SpacePage = ({ match, location, history, ...props }) => {
 
   const _onSetEndTime = value => setEndTime(value)
 
-  const _getRatingAvg = () => {
+  const _getRatingAvg = field => {
     if (publicReviews) {
       const countReviews = publicReviews.length
-      const totalRatings = publicReviews.map(o => o.rating).reduce((a, b) => a + b)
+      const totalRatings = publicReviews.map(o => o[`rating${field}`]).reduce((a, b) => a + b)
       return (totalRatings / countReviews).toFixed(2)
     }
     return 0
@@ -722,26 +722,26 @@ const SpacePage = ({ match, location, history, ...props }) => {
                   <Box display="grid" gridTemplateColumns="200px auto">
                     <Title type="h5" title={`Reviews (${publicReviews.length})`} />
                     <TitleStarContainer>
-                      <StarRatingComponent name="ratingOverall" starCount={5} value={4} editing={false} />
+                      <StarRatingComponent name="ratingOverall" value={_getRatingAvg('Overall')} editing={false} />
                     </TitleStarContainer>
                   </Box>
                   <ContainerMobile>
                     <Box display="grid" gridTemplateColumns="auto 1fr auto 1fr" gridColumnGap="20px">
                       <Label>Cleanliness</Label>
                       <Cell style={{ alignContent: 'center', justifyContent: 'left', display: 'grid' }}>
-                        <StarRatingComponent name="ratingCleanliness" starCount={5} value={2} editing={false} />
+                        <StarRatingComponent name="ratingCleanliness" value={_getRatingAvg('Cleanliness')} editing={false} />
                       </Cell>
                       <Label>Value</Label>
                       <Cell style={{ alignContent: 'center', justifyContent: 'left', display: 'grid' }}>
-                        <StarRatingComponent name="ratingValue" starCount={5} value={2} editing={false} />
+                        <StarRatingComponent name="ratingValue" value={_getRatingAvg('Value')} editing={false} />
                       </Cell>
                       <Label>Check-in</Label>
                       <Cell style={{ alignContent: 'center', justifyContent: 'left', display: 'grid' }}>
-                        <StarRatingComponent name="ratingCheckIn" starCount={5} value={2} editing={false} />
+                        <StarRatingComponent name="ratingCheckIn" value={_getRatingAvg('CheckIn')} editing={false} />
                       </Cell>
                       <Label>Location</Label>
                       <Cell style={{ alignContent: 'center', justifyContent: 'left', display: 'grid' }}>
-                        <StarRatingComponent name="ratingLocation" starCount={5} value={2} editing={false} />
+                        <StarRatingComponent name="ratingLocation" value={_getRatingAvg('Location')} editing={false} />
                       </Cell>
                     </Box>
                   </ContainerMobile>

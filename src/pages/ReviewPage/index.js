@@ -108,7 +108,6 @@ const ReviewPage = ({ match }) => {
                 <StarContainer>
                   <StarRatingComponent
                     name="ratingOverall"
-                    starCount={5}
                     value={ratingOverall}
                     onStarClick={o => setRatingOverall(o)}
                   />
@@ -116,7 +115,6 @@ const ReviewPage = ({ match }) => {
                 <StarContainer>
                   <StarRatingComponent
                     name="ratingCheckIn"
-                    starCount={5}
                     value={ratingCheckIn}
                     onStarClick={o => setRatingCheckIn(o)}
                   />
@@ -125,20 +123,10 @@ const ReviewPage = ({ match }) => {
                 <Label>Host</Label>
                 <Label>Value</Label>
                 <StarContainer>
-                  <StarRatingComponent
-                    name="ratingHost"
-                    starCount={5}
-                    value={ratingHost}
-                    onStarClick={o => setRatingHost(o)}
-                  />
+                  <StarRatingComponent name="ratingHost" value={ratingHost} onStarClick={o => setRatingHost(o)} />
                 </StarContainer>
                 <StarContainer>
-                  <StarRatingComponent
-                    name="ratingValue"
-                    starCount={5}
-                    value={ratingValue}
-                    onStarClick={o => setRatingValue(o)}
-                  />
+                  <StarRatingComponent name="ratingValue" value={ratingValue} onStarClick={o => setRatingValue(o)} />
                 </StarContainer>
 
                 <Label>Cleanliness</Label>
@@ -146,7 +134,6 @@ const ReviewPage = ({ match }) => {
                 <StarContainer>
                   <StarRatingComponent
                     name="ratingCleanliness"
-                    starCount={5}
                     value={ratingCleanliness}
                     onStarClick={o => setRatingCleanliness(o)}
                   />
@@ -154,7 +141,6 @@ const ReviewPage = ({ match }) => {
                 <StarContainer>
                   <StarRatingComponent
                     name="ratingLocation"
-                    starCount={5}
                     value={ratingLocation}
                     onStarClick={o => setRatingLocation(o)}
                   />
