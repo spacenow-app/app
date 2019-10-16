@@ -2,12 +2,23 @@ import React, { useEffect, useState } from 'react'
 import PropTypes from 'prop-types'
 import styled from 'styled-components'
 import { useSelector, useDispatch } from 'react-redux'
-import StarRatingComponent from 'react-star-rating-component'
 
 import { onGetBooking } from 'redux/ducks/booking'
 import { onPrepareReview, onCreateReview } from 'redux/ducks/reviews'
 
-import { Grid, Wrapper, Title, Button, Box, Text, Loader, Link, TextArea, Footer } from 'components'
+import {
+  Grid,
+  Wrapper,
+  Title,
+  Button,
+  Box,
+  Text,
+  Loader,
+  Link,
+  TextArea,
+  Footer,
+  StarRatingComponent
+} from 'components'
 
 const Label = styled.label`
   font-size: 14px;

@@ -5,7 +5,6 @@ import { useSelector, useDispatch } from 'react-redux'
 import styled from 'styled-components'
 import _ from 'lodash'
 import { isSameDay, format } from 'date-fns'
-import StarRatingComponent from 'react-star-rating-component'
 
 import { capitalize, toPlural } from 'utils/strings'
 
@@ -30,7 +29,8 @@ import {
   Footer,
   CardSearch,
   Price,
-  Review
+  Review,
+  StarRatingComponent
 } from 'components'
 
 import {
@@ -120,12 +120,6 @@ const SimilarSpacesContainer = styled.div`
 const TitleStarContainer = styled.div`
   font-size: 24px;
   margin-top: 27px;
-`
-
-const StarContainer = styled.div`
-  // .dv-star-rating-empty-star {
-  //   color: #fff !important;
-  // }
 `
 
 const Label = styled.label`
@@ -728,64 +722,26 @@ const SpacePage = ({ match, location, history, ...props }) => {
                   <Box display="grid" gridTemplateColumns="200px auto">
                     <Title type="h5" title={`Reviews (${publicReviews.length})`} />
                     <TitleStarContainer>
-                      <StarRatingComponent
-                        name="ratingOverall"
-                        starCount={5}
-                        value={4}
-                        starColor="#6ADC91"
-                        editing={false}
-                      />
+                      <StarRatingComponent name="ratingOverall" starCount={5} value={4} editing={false} />
                     </TitleStarContainer>
                   </Box>
                   <ContainerMobile>
                     <Box display="grid" gridTemplateColumns="auto 1fr auto 1fr" gridColumnGap="20px">
                       <Label>Cleanliness</Label>
                       <Cell style={{ alignContent: 'center', justifyContent: 'left', display: 'grid' }}>
-                        <StarContainer>
-                          <StarRatingComponent
-                            name="ratingCleanliness"
-                            starCount={5}
-                            value={2}
-                            starColor="#6ADC91"
-                            editing={false}
-                          />
-                        </StarContainer>
+                        <StarRatingComponent name="ratingCleanliness" starCount={5} value={2} editing={false} />
                       </Cell>
                       <Label>Value</Label>
                       <Cell style={{ alignContent: 'center', justifyContent: 'left', display: 'grid' }}>
-                        <StarContainer>
-                          <StarRatingComponent
-                            name="ratingValue"
-                            starCount={5}
-                            value={2}
-                            starColor="#6ADC91"
-                            editing={false}
-                          />
-                        </StarContainer>
+                        <StarRatingComponent name="ratingValue" starCount={5} value={2} editing={false} />
                       </Cell>
                       <Label>Check-in</Label>
                       <Cell style={{ alignContent: 'center', justifyContent: 'left', display: 'grid' }}>
-                        <StarContainer>
-                          <StarRatingComponent
-                            name="ratingCheckIn"
-                            starCount={5}
-                            value={2}
-                            starColor="#6ADC91"
-                            editing={false}
-                          />
-                        </StarContainer>
+                        <StarRatingComponent name="ratingCheckIn" starCount={5} value={2} editing={false} />
                       </Cell>
                       <Label>Location</Label>
                       <Cell style={{ alignContent: 'center', justifyContent: 'left', display: 'grid' }}>
-                        <StarContainer>
-                          <StarRatingComponent
-                            name="ratingLocation"
-                            starCount={5}
-                            value={2}
-                            starColor="#6ADC91"
-                            editing={false}
-                          />
-                        </StarContainer>
+                        <StarRatingComponent name="ratingLocation" starCount={5} value={2} editing={false} />
                       </Cell>
                     </Box>
                   </ContainerMobile>

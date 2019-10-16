@@ -55,6 +55,7 @@ import Footer from './Footer'
 import CardSearch from './Card/CardSearch'
 import Price from './Price'
 import Review from './Review'
+import StarRatingComponent from './Review/StarRatingComponent'
 
 export {
   Modal,
@@ -116,5 +117,6 @@ export {
   Footer,
   CardSearch,
   Price,
-  Review
+  Review,
+  StarRatingComponent
 }
