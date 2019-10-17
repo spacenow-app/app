@@ -184,10 +184,24 @@ const queryGetBookingById = gql`
       bookingId
       guestServiceFee
       hostId
+      host {
+        id
+        profile {
+          profileId
+          firstName
+        }
+      }
       paymentState
       updatedAt
       priceType
       guestId
+      guest {
+        id
+        profile {
+          profileId
+          firstName
+        }
+      }
       checkIn
       checkOut
       checkInHour

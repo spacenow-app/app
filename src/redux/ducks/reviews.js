@@ -72,19 +72,19 @@ const queryGetPrivateReviews = gql`
   }
 `
 
-const mutationCreateReview = gql`
-  mutation createReview(
-    $bookingId: String!, 
-    $publicComment: String!, 
-    $privateComment: String, 
-    $ratingOverall: Int!,
-    $ratingCheckIn: Int!,
-    $ratingHost: Int!,
-    $ratingValue: Int!,
-    $ratingCleanliness: Int!,
+const mutationCreateReviewFromGuest = gql`
+  mutation createReviewFromGuest(
+    $bookingId: String!
+    $publicComment: String!
+    $privateComment: String
+    $ratingOverall: Int!
+    $ratingCheckIn: Int!
+    $ratingHost: Int!
+    $ratingValue: Int!
+    $ratingCleanliness: Int!
     $ratingLocation: Int!
   ) {
-    createReview(
+    createReviewFromGuest(
       bookingId: $bookingId
       publicComment: $publicComment
       privateComment: $privateComment
@@ -95,7 +95,15 @@ const mutationCreateReview = gql`
       ratingCleanliness: $ratingCleanliness
       ratingLocation: $ratingLocation
     ) {
-      ${reviewFields}
+      __typename
+    }
+  }
+`
+
+const mutationCreateReviewFromHost = gql`
+  mutation createReviewFromHost($bookingId: String!, $publicComment: String!, $ratingOverall: Int!) {
+    createReviewFromHost(bookingId: $bookingId, publicComment: $publicComment, ratingOverall: $ratingOverall) {
+      __typename
     }
   }
 `
@@ -247,7 +255,7 @@ export const onGetPrivateReviews = listingId => async dispatch => {
 
 export const onPrepareReview = () => async dispatch => dispatch({ type: Types.REVIEWS_CREATE_RESET })
 
-export const onCreateReview = (
+export const onCreateReviewFromGuest = (
   bookingId,
   publicComment,
   ratingOverall,
@@ -260,7 +268,7 @@ export const onCreateReview = (
   dispatch({ type: Types.REVIEWS_CREATE_REQUEST })
   try {
     await getClientWithAuth(dispatch).mutate({
-      mutation: mutationCreateReview,
+      mutation: mutationCreateReviewFromGuest,
       variables: {
         bookingId,
         publicComment,
@@ -275,7 +283,34 @@ export const onCreateReview = (
     dispatch({ type: Types.REVIEWS_CREATE_SUCCESS })
   } catch (err) {
     const msg = errToMsg(err)
-    if (msg === 'FEEDBACK_EXISTING') toast.warning(`You already provided a review for this space`)
+    if (msg === 'FEEDBACK_EXISTING') {
+      toast.warning(`You have already provided a review for this space.`)
+    } else {
+      toast.error(msg)
+    }
+    dispatch({ type: Types.REVIEWS_CREATE_FAILURE, payload: msg })
+  }
+}
+
+export const onCreateReviewFromHost = (bookingId, publicComment, ratingOverall) => async dispatch => {
+  dispatch({ type: Types.REVIEWS_CREATE_REQUEST })
+  try {
+    await getClientWithAuth(dispatch).mutate({
+      mutation: mutationCreateReviewFromHost,
+      variables: {
+        bookingId,
+        publicComment,
+        ratingOverall
+      }
+    })
+    dispatch({ type: Types.REVIEWS_CREATE_SUCCESS })
+  } catch (err) {
+    const msg = errToMsg(err)
+    if (msg === 'FEEDBACK_EXISTING') {
+      toast.warning(`You have already provided a review for this space.`)
+    } else {
+      toast.error(msg)
+    }
     dispatch({ type: Types.REVIEWS_CREATE_FAILURE, payload: msg })
   }
 }

@@ -4,7 +4,7 @@ import styled from 'styled-components'
 import { useSelector, useDispatch } from 'react-redux'
 
 import { onGetBooking } from 'redux/ducks/booking'
-import { onPrepareReview, onCreateReview } from 'redux/ducks/reviews'
+import { onPrepareReview, onCreateReviewFromHost } from 'redux/ducks/reviews'
 
 import {
   Grid,
@@ -31,16 +31,11 @@ const StarContainer = styled.div`
   font-size: 24px;
 `
 
-const ReviewPage = ({ match }) => {
+const HostReviewPage = ({ match }) => {
   const dispatch = useDispatch()
 
-  const [publicComment, setPublicComment] = useState('')
+  const [comment, setComment] = useState('')
   const [ratingOverall, setRatingOverall] = useState(0)
-  const [ratingCheckIn, setRatingCheckIn] = useState(0)
-  const [ratingHost, setRatingHost] = useState(0)
-  const [ratingValue, setRatingValue] = useState(0)
-  const [ratingCleanliness, setRatingCleanliness] = useState(0)
-  const [ratingLocation, setRatingLocation] = useState(0)
 
   const { status: createWithSuccess } = useSelector(state => state.reviews.create)
   const { object: reservation, isLoading: isLoadingGetBooking } = useSelector(state => state.booking.get)
@@ -56,18 +51,7 @@ const ReviewPage = ({ match }) => {
 
   const handleSubmit = e => {
     e.preventDefault()
-    dispatch(
-      onCreateReview(
-        match.params.id,
-        publicComment,
-        ratingOverall,
-        ratingCheckIn,
-        ratingHost,
-        ratingValue,
-        ratingCleanliness,
-        ratingLocation
-      )
-    )
+    dispatch(onCreateReviewFromHost(match.params.id, comment, ratingOverall))
   }
 
   if (isLoadingGetBooking) {
@@ -97,14 +81,13 @@ const ReviewPage = ({ match }) => {
             <Box display="grid" gridRowGap="10px">
               <Text fontSize="14px" ml="10px" fontFamily="medium">{`Hi ${guest.profile.firstName}`}</Text>
               <Text fontSize="14px" ml="10px" fontFamily="medium" color="greyscale.1">
-                {`Now that you’ve checked-out of ${reservation.listing.title}, please take a minute to review your time there. All feedback
-                helps us to make the community stronger. We ask you to provide an overall rating for the space, your
-                host and some aspects of the space in particular.`}
+                {`Now that your guest ${reservation.guest.profile.firstName} has checked-out, please take a minute to review their time with you. All
+                feedback helps us to make the community stronger. We ask you to provide an overall rating for your
+                guest, please consider tidiness, communication and respect of the space.`}
               </Text>
-
-              <Grid columns={2} rows={1} gap="2px">
+              <br />
+              <Grid columns={1} rows={1} gap="2px">
                 <Label>Overall</Label>
-                <Label>Check-in</Label>
                 <StarContainer>
                   <StarRatingComponent
                     name="ratingOverall"
@@ -112,49 +95,16 @@ const ReviewPage = ({ match }) => {
                     onStarClick={o => setRatingOverall(o)}
                   />
                 </StarContainer>
-                <StarContainer>
-                  <StarRatingComponent
-                    name="ratingCheckIn"
-                    value={ratingCheckIn}
-                    onStarClick={o => setRatingCheckIn(o)}
-                  />
-                </StarContainer>
-
-                <Label>Host</Label>
-                <Label>Value</Label>
-                <StarContainer>
-                  <StarRatingComponent name="ratingHost" value={ratingHost} onStarClick={o => setRatingHost(o)} />
-                </StarContainer>
-                <StarContainer>
-                  <StarRatingComponent name="ratingValue" value={ratingValue} onStarClick={o => setRatingValue(o)} />
-                </StarContainer>
-
-                <Label>Cleanliness</Label>
-                <Label>Location</Label>
-                <StarContainer>
-                  <StarRatingComponent
-                    name="ratingCleanliness"
-                    value={ratingCleanliness}
-                    onStarClick={o => setRatingCleanliness(o)}
-                  />
-                </StarContainer>
-                <StarContainer>
-                  <StarRatingComponent
-                    name="ratingLocation"
-                    value={ratingLocation}
-                    onStarClick={o => setRatingLocation(o)}
-                  />
-                </StarContainer>
               </Grid>
-
+              <br />
               <TextArea
                 label="Comment"
-                placeholder="Please tell us about your experience."
+                placeholder="Please tell us about your experience with your latest guest."
                 type="text"
                 name="publicComment"
-                value={publicComment}
-                onChange={e => setPublicComment(e.target.value)}
-                onBlur={e => setPublicComment(e.target.value)}
+                value={comment}
+                onChange={e => setComment(e.target.value)}
+                onBlur={e => setComment(e.target.value)}
               />
               <Button fluid type="submit">
                 Submit
@@ -168,8 +118,8 @@ const ReviewPage = ({ match }) => {
   )
 }
 
-ReviewPage.propTypes = {
+HostReviewPage.propTypes = {
   match: PropTypes.instanceOf(Object).isRequired
 }
 
-export default ReviewPage
+export default HostReviewPage
