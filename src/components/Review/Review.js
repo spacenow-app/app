@@ -6,6 +6,8 @@ import { Box, Text, Avatar, Grid } from 'components'
 
 import { monthNames } from 'variables'
 
+import ReadMoreComponent from './ReadMoreComponent'
+
 const AvatarContainer = styled.div`
   display: block;
   font-family: 'MontSerrat-Bold';
@@ -19,6 +21,15 @@ const AvatarContainer = styled.div`
     margin-bottom: 5px;
     line-height: 1;
     white-space: pre-wrap;
+  }
+`
+
+const ReadMoreContainer = styled.div`
+  .read-more-button {
+    display: inline-block;
+    margin-left: 3px;
+    color: #6adc91;
+    cursor: pointer;
   }
 `
 
@@ -39,7 +50,9 @@ const Review = ({ id, userName, userPicture, date, comment, rating }) => {
         </Grid>
       </Box>
       <Box display="flex" justifyContent="start" mb="15px">
-        {comment}
+        <ReadMoreContainer>
+          <ReadMoreComponent text={comment} min={80} ideal={100} max={280} readMoreText="Read more" />
+        </ReadMoreContainer>
       </Box>
     </>
   )

@@ -729,7 +729,11 @@ const SpacePage = ({ match, location, history, ...props }) => {
                     <Box display="grid" gridTemplateColumns="auto 1fr auto 1fr" gridColumnGap="20px">
                       <Label>Cleanliness</Label>
                       <Cell style={{ alignContent: 'center', justifyContent: 'left', display: 'grid' }}>
-                        <StarRatingComponent name="ratingCleanliness" value={_getRatingAvg('Cleanliness')} editing={false} />
+                        <StarRatingComponent
+                          name="ratingCleanliness"
+                          value={_getRatingAvg('Cleanliness')}
+                          editing={false}
+                        />
                       </Cell>
                       <Label>Value</Label>
                       <Cell style={{ alignContent: 'center', justifyContent: 'left', display: 'grid' }}>
