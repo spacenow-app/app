@@ -14,6 +14,7 @@ import mail from './ducks/mail'
 import landing from './ducks/landing'
 import search from './ducks/search'
 import booking from './ducks/booking'
+import message from './ducks/message'
 
 export default combineReducers({
   modal,
@@ -29,5 +30,6 @@ export default combineReducers({
   landing,
   account,
   search,
-  booking
+  booking,
+  message
 })

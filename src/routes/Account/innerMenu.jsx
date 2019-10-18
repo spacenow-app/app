@@ -26,12 +26,13 @@ const InnerMenu = ({ ...props }) => {
       height="fit-content"
     >
       <Avatar image={user.profile.picture || null} onDrop={_handleOnDrop} />
-      <Title type={'h5'} title={`${user.profile.firstName} ${user.profile.lastName}`} />
-      <Link to={`/account/profile`}>Profile</Link>
-      <Link to={`/account/document-verification`}>Document Verification</Link>
-      <Link to={`/account/payment`}>Payment Preferences</Link>
-      <Link to={`/account/listing`}>Your Listings</Link>
-      <Link to={`/account/booking`}>Your Bookings</Link>
+      <Title type="h5" title={`${user.profile.firstName} ${user.profile.lastName}`} />
+      <Link to="/account/profile">Profile</Link>
+      <Link to="/account/messages">Messages</Link>
+      <Link to="/account/document-verification">Document Verification</Link>
+      <Link to="/account/payment">Payment Preferences</Link>
+      <Link to="/account/listing">Your Listings</Link>
+      <Link to="/account/booking">Your Bookings</Link>
     </Box>
   )
 }

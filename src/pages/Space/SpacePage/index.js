@@ -28,7 +28,8 @@ import {
   Button,
   Footer,
   CardSearch,
-  Price
+  Price,
+  Link
 } from 'components'
 
 import {
@@ -46,6 +47,8 @@ import { onCreateBooking, onGetPendingBooking } from 'redux/ducks/booking'
 import { openModal, TypesModal } from 'redux/ducks/modal'
 
 import { sendMail } from 'redux/ducks/mail'
+
+import { onCreateMessage } from 'redux/ducks/message'
 
 // import GraphCancelattionImage from 'pages/Listing/SpaceDetailsPage/CancellationTab/graph_cancellation.png'
 
@@ -478,6 +481,24 @@ const SpacePage = ({ match, location, history, ...props }) => {
     dispatch(openModal(TypesModal.MODAL_TYPE_REPORT_LISTING, options))
   }
 
+  const _contactHost = () => {
+    const options = {
+      onConfirm: _sendMessage
+    }
+    dispatch(openModal(TypesModal.MODAL_TYPE_SEND_MESSAGE, options))
+  }
+
+  const _sendMessage = content => {
+    const values = {
+      content,
+      listingId: listing.id,
+      guestId: user.id,
+      hostId: listing.userId
+    }
+    console.log(values)
+    dispatch(onCreateMessage(values))
+  }
+
   return (
     <>
       {imageHeight === 325 ||
@@ -623,6 +644,11 @@ const SpacePage = ({ match, location, history, ...props }) => {
                   <p>{listing.listingData.description}</p>
                 </Box>
               ) : null}
+              <Box fontFamily="bold">
+                <Link to="#" onClick={_contactHost}>
+                  Contact host
+                </Link>
+              </Box>
               {listing.amenities.length > 0 && (
                 <Box>
                   <Title type="h5" title="Amenities" />
