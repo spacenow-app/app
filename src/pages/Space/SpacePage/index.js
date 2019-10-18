@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState, createRef } from 'react'
 import PropTypes from 'prop-types'
 import Helmet from 'react-helmet'
 import { useSelector, useDispatch } from 'react-redux'
@@ -28,7 +28,10 @@ import {
   Button,
   Footer,
   CardSearch,
-  Price
+  Price,
+  Review,
+  StarRatingComponent,
+  Pagination
 } from 'components'
 
 import {
@@ -46,6 +49,8 @@ import { onCreateBooking, onGetPendingBooking, onGetHourlyAvailability } from 'r
 import { openModal, TypesModal } from 'redux/ducks/modal'
 
 import { sendMail } from 'redux/ducks/mail'
+
+import { onGetPublicReviews } from 'redux/ducks/reviews'
 
 import config from 'variables/config'
 
@@ -101,6 +106,7 @@ const CellStyled = styled(Cell)`
     }
   }
 `
+
 const SimilarSpacesContainer = styled.div`
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
@@ -112,7 +118,32 @@ const SimilarSpacesContainer = styled.div`
   }
 `
 
+const TitleStarContainer = styled.div`
+  font-size: 24px;
+  margin-top: 27px;
+`
+
+const Label = styled.label`
+  font-size: 14px;
+  font-family: 'Montserrat-Medium';
+  color: #172439;
+`
+
+const ContainerMobile = styled.div`
+  @media screen and (max-width: 600px) {
+    display: none;
+  }
+`
+
+const ContainerPagination = styled.div`
+  margin-top: 25px;
+  display: flex;
+  justify-content: center;
+`
+
 const SpacePage = ({ match, location, history, ...props }) => {
+  const reviewRef = createRef()
+
   const dispatch = useDispatch()
 
   const { object: listing, isLoading: isListingLoading } = useSelector(state => state.listing.get)
@@ -124,6 +155,7 @@ const SpacePage = ({ match, location, history, ...props }) => {
   const { isLoading: isLoadingOnCreateReservation } = useSelector(state => state.booking.create)
   const { object: pendingBooking } = useSelector(state => state.booking.pending)
   const { similar: similarResults } = useSelector(state => state.search)
+  const { public: publicReviews, totalPages } = useSelector(state => state.reviews.get)
 
   const [datesSelected, setDatesSelected] = useState([])
   const [date, setDate] = useState('')
@@ -168,6 +200,10 @@ const SpacePage = ({ match, location, history, ...props }) => {
       )
   }, [dispatch, listing])
 
+  useEffect(() => {
+    listing && dispatch(onGetPublicReviews(listing.id))
+  }, [dispatch, listing])
+
   if (listing && listing.user.provider === 'wework') {
     history.push(`/space/partner/${match.params.id}`)
   }
@@ -199,9 +235,7 @@ const SpacePage = ({ match, location, history, ...props }) => {
     return 'Custom'
   }
 
-  const _onClaimListing = () => {
-    dispatch(onClaimListing(match.params.id, listing.title))
-  }
+  const _onClaimListing = () => dispatch(onClaimListing(match.params.id, listing.title))
 
   const _renderHighLights = obj => {
     const array = Object.keys(obj).map(i => obj[i])
@@ -287,18 +321,14 @@ const SpacePage = ({ match, location, history, ...props }) => {
     setDatesSelected(arraySorted)
   }
 
-  const _onDateChange = value => {
-    setDate(value)
-  }
+  const _onDateChange = value => setDate(value)
 
   const _removeDate = value => {
     const newArray = _.filter(datesSelected, dateFromArray => !isSameDay(new Date(dateFromArray), value))
     setDatesSelected(newArray)
   }
 
-  const _handleChangePeriod = e => {
-    setPeriod(Number(e.target.value))
-  }
+  const _handleChangePeriod = e => setPeriod(Number(e.target.value))
 
   const _returnArrayAvailability = accessDays => {
     const arr = []
@@ -482,6 +512,7 @@ const SpacePage = ({ match, location, history, ...props }) => {
           template: 'report-listing',
           data: JSON.stringify(values)
         }
+
         await dispatch(sendMail(emailData))
 
         dispatch(
@@ -513,12 +544,22 @@ const SpacePage = ({ match, location, history, ...props }) => {
     }
   }
 
-  const _onSetStartTime = value => {
-    setStartTime(value)
+  const _onSetStartTime = value => setStartTime(value)
+
+  const _onSetEndTime = value => setEndTime(value)
+
+  const _getRatingAvg = field => {
+    if (publicReviews) {
+      const countReviews = publicReviews.length
+      const totalRatings = publicReviews.map(o => o[`rating${field}`]).reduce((a, b) => a + b)
+      return (totalRatings / countReviews).toFixed(2)
+    }
+    return 0
   }
 
-  const _onSetEndTime = value => {
-    setEndTime(value)
+  const _onPagionationChange = page => {
+    reviewRef.current.scrollIntoView({ behavior: 'smooth', block: 'start' })
+    dispatch(onGetPublicReviews(listing.id, page))
   }
 
   return (
@@ -580,7 +621,6 @@ const SpacePage = ({ match, location, history, ...props }) => {
                   </Cell>
                 )}
               </Grid>
-
               <Grid columns={12}>
                 <CellStyled width={7}>
                   <Title
@@ -660,12 +700,14 @@ const SpacePage = ({ match, location, history, ...props }) => {
                   </Box>
                 </Box>
               )}
+
               {listing.listingData.description ? (
                 <Box>
                   <Title type="h5" title="Description" />
                   <p>{listing.listingData.description}</p>
                 </Box>
               ) : null}
+
               {listing.amenities.length > 0 && (
                 <Box>
                   <Title type="h5" title="Amenities" />
@@ -688,6 +730,61 @@ const SpacePage = ({ match, location, history, ...props }) => {
                   </Grid>
                 </Box>
               )}
+
+              {publicReviews && publicReviews.length > 0 && (
+                <>
+                  <Box display="grid" gridTemplateColumns="200px auto" ref={reviewRef}>
+                    <Title type="h5" title={`Reviews (${publicReviews.length})`} />
+                    <TitleStarContainer>
+                      <StarRatingComponent name="ratingOverall" value={_getRatingAvg('Overall')} editing={false} />
+                    </TitleStarContainer>
+                  </Box>
+                  <ContainerMobile>
+                    <Box display="grid" gridTemplateColumns="auto 1fr auto 1fr" gridColumnGap="20px">
+                      <Label>Cleanliness</Label>
+                      <Cell style={{ alignContent: 'center', justifyContent: 'left', display: 'grid' }}>
+                        <StarRatingComponent
+                          name="ratingCleanliness"
+                          value={_getRatingAvg('Cleanliness')}
+                          editing={false}
+                        />
+                      </Cell>
+                      <Label>Value</Label>
+                      <Cell style={{ alignContent: 'center', justifyContent: 'left', display: 'grid' }}>
+                        <StarRatingComponent name="ratingValue" value={_getRatingAvg('Value')} editing={false} />
+                      </Cell>
+                      <Label>Check-in</Label>
+                      <Cell style={{ alignContent: 'center', justifyContent: 'left', display: 'grid' }}>
+                        <StarRatingComponent name="ratingCheckIn" value={_getRatingAvg('CheckIn')} editing={false} />
+                      </Cell>
+                      <Label>Location</Label>
+                      <Cell style={{ alignContent: 'center', justifyContent: 'left', display: 'grid' }}>
+                        <StarRatingComponent name="ratingLocation" value={_getRatingAvg('Location')} editing={false} />
+                      </Cell>
+                    </Box>
+                  </ContainerMobile>
+                  {publicReviews.map(o => {
+                    return (
+                      <Review
+                        id={o.id}
+                        userName={o.author.profile && o.author.profile.firstName}
+                        userPicture={o.author.profile && o.author.profile.picture}
+                        date={new Date(o.createdAt)}
+                        comment={o.reviewContent}
+                        rating={o.rating}
+                      />
+                    )
+                  })}
+                </>
+              )}
+
+              <ContainerPagination>
+                <Pagination
+                  totalPages={totalPages}
+                  totalRecords={publicReviews.length}
+                  onPageChanged={_onPagionationChange}
+                />
+              </ContainerPagination>
 
               {listing.rules.length > 0 && (
                 <Box>
@@ -773,24 +870,8 @@ const SpacePage = ({ match, location, history, ...props }) => {
           </Box>
         )}
 
-        {/* <Box mb="45px">
-          <Title type="h5" title="Cancellation Policy" />
-          <Grid columns="repeat(auto-fit, minmax(350px, auto))">
-            <Cell>
-              <Title
-                noMargin
-                type="h5"
-                title="No Cancellation"
-                subTitleSize={16}
-                subtitle="Guest cannot cancel their booking. Note: This may affect the number of bookings received."
-              />
-            </Cell>
-            <Cell>
-              <ImageStyled alt="Cancellation Policy" src={GraphCancelattionImage} width="700px" />
-            </Cell>
-          </Grid>
-        </Box> */}
         <Footer />
+
         <BottomButtonMobile>
           <Grid columns={2} style={{ alignItems: 'center' }}>
             <Cell style={{ alignContent: 'center', justifyContent: 'left', display: 'grid' }}>

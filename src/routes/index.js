@@ -17,6 +17,7 @@ const LandingPages = lazy(() => import('routes/LandingPages'))
 const Checkout = lazy(() => import('routes/Checkout'))
 const Itinerary = lazy(() => import('routes/Itinerary'))
 const Receipt = lazy(() => import('routes/Receipt'))
+const Review = lazy(() => import('routes/Review'))
 
 const Routes = props => {
   const dispatch = useDispatch()
@@ -109,6 +110,12 @@ const Routes = props => {
                       path={`${otherProps.match.path}receipt`}
                       isAuthenticated={isAuthenticated}
                       component={Receipt}
+                    />
+                    <Route
+                      {...otherProps}
+                      path={`${otherProps.match.path}review`}
+                      isAuthenticated={isAuthenticated}
+                      component={Review}
                     />
                     <Route component={NotFoundPage} />
                   </Switch>
