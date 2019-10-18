@@ -117,6 +117,7 @@ export default class ReadMoreComponent extends React.Component {
           <span className="displayed-text">
             {swapLastPunctuation(this.state.primaryText)}
             <span style={{ display: 'none' }}>{this.state.secondaryText}</span>
+            <br/>
             <div className="read-more-button" onClick={this.setStatus.bind(this)}>
               {this.state.readMoreText}
             </div>

@@ -26,8 +26,6 @@ const AvatarContainer = styled.div`
 
 const ReadMoreContainer = styled.div`
   .read-more-button {
-    display: inline-block;
-    margin-left: 3px;
     color: #6adc91;
     cursor: pointer;
   }
