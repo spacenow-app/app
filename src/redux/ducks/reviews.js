@@ -5,6 +5,8 @@ import { toast } from 'react-toastify'
 import { getClientWithAuth, getClient } from 'graphql/apolloClient'
 import errToMsg from 'utils/errToMsg'
 
+const DEFAULT_PAGE_SIZE = 7
+
 export const Types = {
   REVIEWS_PUBLIC_REQUEST: 'REVIEWS_PUBLIC_REQUEST',
   REVIEWS_PUBLIC_SUCCESS: 'REVIEWS_PUBLIC_SUCCESS',
@@ -22,6 +24,7 @@ const initialState = {
   isLoading: false,
   get: {
     public: [],
+    totalPages: 0,
     private: [],
     error: null
   },
@@ -57,9 +60,12 @@ const reviewFields = `
 `
 
 const queryGetPublicReviews = gql`
-  query getPublicReviews($listingId: Int!) {
-    getPublicReviews(listingId: $listingId) {
-      ${reviewFields}
+  query getPublicReviews($listingId: Int!, $page: Int, $pageSize: Int) {
+    getPublicReviews(listingId: $listingId, page: $page, pageSize: $pageSize) {
+      totalPages
+      result {
+        ${reviewFields}
+      }
     }
   }
 `
@@ -117,6 +123,7 @@ export default function reducer(state = initialState, action) {
         get: {
           ...state.get,
           public: [],
+          totalPages: 0,
           error: null
         }
       }
@@ -127,7 +134,8 @@ export default function reducer(state = initialState, action) {
         isLoading: false,
         get: {
           ...state.get,
-          public: action.payload,
+          public: action.payload.result,
+          totalPages: action.payload.totalPages,
           error: null
         }
       }
@@ -139,6 +147,7 @@ export default function reducer(state = initialState, action) {
         get: {
           ...state.get,
           public: [],
+          totalPages: 0,
           error: action.payload
         }
       }
@@ -225,12 +234,12 @@ export default function reducer(state = initialState, action) {
   }
 }
 
-export const onGetPublicReviews = listingId => async dispatch => {
+export const onGetPublicReviews = (listingId, page = 1) => async dispatch => {
   dispatch({ type: Types.REVIEWS_PUBLIC_REQUEST })
   try {
     const { data } = await getClient().query({
       query: queryGetPublicReviews,
-      variables: { listingId },
+      variables: { listingId, page, pageSize: DEFAULT_PAGE_SIZE },
       fetchPolicy: 'network-only'
     })
     dispatch({ type: Types.REVIEWS_PUBLIC_SUCCESS, payload: data.getPublicReviews })

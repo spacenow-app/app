@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState, createRef } from 'react'
 import PropTypes from 'prop-types'
 import Helmet from 'react-helmet'
 import { useSelector, useDispatch } from 'react-redux'
@@ -30,7 +30,8 @@ import {
   CardSearch,
   Price,
   Review,
-  StarRatingComponent
+  StarRatingComponent,
+  Pagination
 } from 'components'
 
 import {
@@ -134,7 +135,15 @@ const ContainerMobile = styled.div`
   }
 `
 
+const ContainerPagination = styled.div`
+  margin-top: 25px;
+  display: flex;
+  justify-content: center;
+`
+
 const SpacePage = ({ match, location, history, ...props }) => {
+  const reviewRef = createRef()
+
   const dispatch = useDispatch()
 
   const { object: listing, isLoading: isListingLoading } = useSelector(state => state.listing.get)
@@ -146,7 +155,7 @@ const SpacePage = ({ match, location, history, ...props }) => {
   const { isLoading: isLoadingOnCreateReservation } = useSelector(state => state.booking.create)
   const { object: pendingBooking } = useSelector(state => state.booking.pending)
   const { similar: similarResults } = useSelector(state => state.search)
-  const { public: publicReviews } = useSelector(state => state.reviews.get)
+  const { public: publicReviews, totalPages } = useSelector(state => state.reviews.get)
 
   const [datesSelected, setDatesSelected] = useState([])
   const [date, setDate] = useState('')
@@ -548,6 +557,11 @@ const SpacePage = ({ match, location, history, ...props }) => {
     return 0
   }
 
+  const _onPagionationChange = page => {
+    reviewRef.current.scrollIntoView({ behavior: 'smooth', block: 'start' })
+    dispatch(onGetPublicReviews(listing.id, page))
+  }
+
   return (
     <>
       {imageHeight === 325 ||
@@ -719,7 +733,7 @@ const SpacePage = ({ match, location, history, ...props }) => {
 
               {publicReviews && publicReviews.length > 0 && (
                 <>
-                  <Box display="grid" gridTemplateColumns="200px auto">
+                  <Box display="grid" gridTemplateColumns="200px auto" ref={reviewRef}>
                     <Title type="h5" title={`Reviews (${publicReviews.length})`} />
                     <TitleStarContainer>
                       <StarRatingComponent name="ratingOverall" value={_getRatingAvg('Overall')} editing={false} />
@@ -763,6 +777,14 @@ const SpacePage = ({ match, location, history, ...props }) => {
                   })}
                 </>
               )}
+
+              <ContainerPagination>
+                <Pagination
+                  totalPages={totalPages}
+                  totalRecords={publicReviews.length}
+                  onPageChanged={_onPagionationChange}
+                />
+              </ContainerPagination>
 
               {listing.rules.length > 0 && (
                 <Box>
