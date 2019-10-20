@@ -1,4 +1,5 @@
 import React, { memo, forwardRef } from 'react'
+import PropTypes from 'prop-types'
 import styled from 'styled-components'
 import { Box, Text, Icon, Tag, Avatar, Pagination, Price, Grid } from 'components'
 import { toPlural } from 'utils/strings'
@@ -130,24 +131,21 @@ const ListResults = forwardRef(
             }
         }
       }
-
       return spec.slice(0, 3).map(el => {
         const specDataObject = JSON.parse(el.specData)
-
         const obj = {
           field: specDataObject.field,
           value: listingData[specDataObject.field]
         }
-
-        return (
-          obj.value !== 0 && (
-            <Box key={el.id}>
-              <Icon name={_getInfo(obj).icon} width="22px" />
-              <Text fontSize="10px" ml="10px">
-                {_getInfo(obj).value}
-              </Text>
-            </Box>
-          )
+        return obj.value && obj.value !== 0 ? (
+          <Box key={el.id}>
+            <Icon name={_getInfo(obj).icon} width="22px" />
+            <Text fontSize="10px" ml="10px">
+              {_getInfo(obj).value}
+            </Text>
+          </Box>
+        ) : (
+          <></>
         )
       })
     }
@@ -204,7 +202,6 @@ const ListResults = forwardRef(
                       size="16px"
                       lightPeriod
                     />
-
                     <Box justifySelf="end" display="flex" alignItems="center">
                       <Avatar width="30px" height="30px" image={item.host.profile && item.host.profile.picture} />
                       <Text fontSize="12px" ml="10px" fontFamily="medium">
@@ -231,6 +228,15 @@ const ListResults = forwardRef(
 
 const comparisonFn = (prevProps, nextProps) => {
   return prevProps === nextProps
+}
+
+ListResults.propTypes = {
+  markers: PropTypes.instanceOf(Object).isRequired,
+  pagination: PropTypes.instanceOf(Object).isRequired,
+  history: PropTypes.instanceOf(Object).isRequired,
+  onHoverItem: PropTypes.instanceOf(Object).isRequired,
+  onPageChanged: PropTypes.instanceOf(Object).isRequired,
+  showMap: PropTypes.bool.isRequired
 }
 
 export default memo(ListResults, comparisonFn)
