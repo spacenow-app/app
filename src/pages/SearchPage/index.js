@@ -88,8 +88,15 @@ const SwitchStyled = styled.div`
   }
 `
 
-const cleanParameter = value => {
-  if (!value) return undefined
+const getParamOrDefault = (location, param, defaultValue) => {
+  const queryParams = new URLSearchParams(location)
+  const value = queryParams.get(param)
+  if (value === '' || value === 'undefined' || !value) return defaultValue
+  return value
+}
+
+const cleaningLocation = value => {
+  if (!value) return 'Sydney, AU'
   return value.replace('+', ' ')
 }
 
@@ -97,11 +104,10 @@ const SearchPage = ({ history, location }) => {
   const dispatch = useDispatch()
   const refResults = useRef()
 
-  const queryParams = new URLSearchParams(location.search)
-  const queryLat = queryParams.get('lat') || -33.8688197
-  const queryLng = queryParams.get('lng') || 151.2092955
-  const queryCategory = queryParams.get('category')
-  const queryLocation = cleanParameter(queryParams.get('location') || 'Sydney, AU')
+  const queryLat = getParamOrDefault(location.search, 'lat', '-33.8688197')
+  const queryLng = getParamOrDefault(location.search, 'lng', '151.2092955')
+  const queryCategory = getParamOrDefault(location.search, 'category', null)
+  const queryLocation = cleaningLocation(getParamOrDefault(location.search, 'location', 'Sydney, AU'))
 
   const [selectedSpace, setSelectedSpace] = useState(null)
   const [shouldShowFilter, setShouldShowFilter] = useState(false)
