@@ -124,6 +124,12 @@ const ListResults = forwardRef(
               icon: 'category-desk',
               value: `${el.value} available`
             }
+          case 'spaceType': {
+            return {
+              icon: `specification-${el.value.toLowerCase()}`,
+              value: `${el.value}`
+            }
+          }
           default:
             return {
               icon: '',
