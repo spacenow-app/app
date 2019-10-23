@@ -104,15 +104,12 @@ const CardSearch = ({ item, ...props }) => {
           }
       }
     }
-
     return spec.slice(0, 3).map(el => {
       const specDataObject = JSON.parse(el.specData)
-
       const obj = {
         field: specDataObject.field,
         value: listingData[specDataObject.field]
       }
-
       return (
         obj.value !== 0 && (
           <Box key={el.id}>
@@ -127,11 +124,7 @@ const CardSearch = ({ item, ...props }) => {
   }
 
   return (
-    <CardContainer
-      key={item.id}
-      // onMouseEnter={() => onHoverItem(item)}
-      // onMouseLeave={() => onHoverItem(null)}
-    >
+    <CardContainer key={item.id}>
       <CardImage src={_getCoverPhoto(item)} onClick={() => window.open(`/space/${item.id}`)} />
       <CardContent>
         <Box display="flex" justifyContent="start" mb="15px">
@@ -178,7 +171,7 @@ const CardSearch = ({ item, ...props }) => {
 }
 
 CardSearch.propTypes = {
-  item: PropTypes.object.isRequired
+  item: PropTypes.instanceOf(Object).isRequired
 }
 
 export default CardSearch

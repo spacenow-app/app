@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState, createRef } from 'react'
 import PropTypes from 'prop-types'
 import Helmet from 'react-helmet'
 import { useSelector, useDispatch } from 'react-redux'
@@ -29,7 +29,10 @@ import {
   Footer,
   CardSearch,
   Price,
-  Link
+  Link,
+  Review,
+  StarRatingComponent,
+  Pagination
 } from 'components'
 
 import {
@@ -42,7 +45,7 @@ import {
 
 import { onSearch } from 'redux/ducks/search'
 
-import { onCreateBooking, onGetPendingBooking } from 'redux/ducks/booking'
+import { onCreateBooking, onGetPendingBooking, onGetHourlyAvailability } from 'redux/ducks/booking'
 
 import { openModal, TypesModal } from 'redux/ducks/modal'
 
@@ -51,23 +54,21 @@ import { sendMail } from 'redux/ducks/mail'
 import { onCreateMessage } from 'redux/ducks/message'
 
 // import GraphCancelattionImage from 'pages/Listing/SpaceDetailsPage/CancellationTab/graph_cancellation.png'
+import { onGetPublicReviews } from 'redux/ducks/reviews'
 
 import config from 'variables/config'
-import ContactHost from './ContactHost'
-import PendingBooking from './PenidngBooking'
-import MonthlyBooking from './MonthlyBooking'
+
 import WeeklyBooking from './WeeklyBooking'
 import DailyBooking from './DailyBooking'
+import MonthlyBooking from './MonthlyBooking'
+import PendingBooking from './PenidngBooking'
+import HourlyBooking from './HourlyBooking'
 
 const GridStyled = styled(Grid)`
   @media only screen and (max-width: 991px) {
     grid-template-columns: 100%;
   }
 `
-
-// const ImageStyled = styled.img`
-//   width: 100%;
-// `
 
 const IconBoxStyled = styled.div`
   background: #6adc91;
@@ -109,6 +110,7 @@ const CellStyled = styled(Cell)`
     }
   }
 `
+
 const SimilarSpacesContainer = styled.div`
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
@@ -120,7 +122,32 @@ const SimilarSpacesContainer = styled.div`
   }
 `
 
+const TitleStarContainer = styled.div`
+  font-size: 24px;
+  margin-top: 27px;
+`
+
+const Label = styled.label`
+  font-size: 14px;
+  font-family: 'Montserrat-Medium';
+  color: #172439;
+`
+
+const ContainerMobile = styled.div`
+  @media screen and (max-width: 600px) {
+    display: none;
+  }
+`
+
+const ContainerPagination = styled.div`
+  margin-top: 25px;
+  display: flex;
+  justify-content: center;
+`
+
 const SpacePage = ({ match, location, history, ...props }) => {
+  const reviewRef = createRef()
+
   const dispatch = useDispatch()
 
   const { object: listing, isLoading: isListingLoading } = useSelector(state => state.listing.get)
@@ -132,11 +159,15 @@ const SpacePage = ({ match, location, history, ...props }) => {
   const { isLoading: isLoadingOnCreateReservation } = useSelector(state => state.booking.create)
   const { object: pendingBooking } = useSelector(state => state.booking.pending)
   const { similar: similarResults } = useSelector(state => state.search)
+  const { public: publicReviews, totalPages } = useSelector(state => state.reviews.get)
 
   const [datesSelected, setDatesSelected] = useState([])
   const [date, setDate] = useState('')
   const [period, setPeriod] = useState(1)
   const [imageHeight, setImageHeight] = useState(500)
+  const [startTime, setStartTime] = useState('08:00')
+  const [endTime, setEndTime] = useState('09:00')
+  const [hourlyError, setHourlyError] = useState('')
 
   useEffect(() => {
     dispatch(onGetListingById(match.params.id, null, true))
@@ -173,6 +204,10 @@ const SpacePage = ({ match, location, history, ...props }) => {
       )
   }, [dispatch, listing])
 
+  useEffect(() => {
+    listing && dispatch(onGetPublicReviews(listing.id))
+  }, [dispatch, listing])
+
   if (listing && listing.user.provider === 'wework') {
     history.push(`/space/partner/${match.params.id}`)
   }
@@ -197,16 +232,14 @@ const SpacePage = ({ match, location, history, ...props }) => {
 
   const _getWeekName = days => {
     const { mon, tue, wed, thu, fri, sat, sun } = days
-    if (mon && tue && wed && thu && fri & !sat && !sun) return 'Weekdays'
-    if (!mon && !tue && !wed && !thu && !fri & sat && sun) return 'Weekends'
-    if (mon && tue && wed && thu && fri & sat && sun) return 'Everyday'
-    if (!mon && !tue && !wed && !thu && !fri & !sat && !sun) return 'Closed'
+    if (mon && tue && wed && thu && fri && !sat && !sun) return 'Weekdays'
+    if (!mon && !tue && !wed && !thu && !fri && sat && sun) return 'Weekends'
+    if (mon && tue && wed && thu && fri && sat && sun) return 'Everyday'
+    if (!mon && !tue && !wed && !thu && !fri && !sat && !sun) return 'Closed'
     return 'Custom'
   }
 
-  const _onClaimListing = () => {
-    dispatch(onClaimListing(match.params.id, listing.title))
-  }
+  const _onClaimListing = () => dispatch(onClaimListing(match.params.id, listing.title))
 
   const _renderHighLights = obj => {
     const array = Object.keys(obj).map(i => obj[i])
@@ -282,28 +315,24 @@ const SpacePage = ({ match, location, history, ...props }) => {
       : []
   }
 
-  const _onDateChangeArray = date => {
-    const find = _.find(datesSelected, dateFromArray => isSameDay(new Date(dateFromArray), date))
+  const _onDateChangeArray = value => {
+    const find = _.find(datesSelected, dateFromArray => isSameDay(new Date(dateFromArray), value))
     if (find) {
-      _removeDate(date)
+      _removeDate(value)
       return
     }
-    const arraySorted = _.sortBy([...datesSelected, date], item => item)
+    const arraySorted = _.sortBy([...datesSelected, value], item => item)
     setDatesSelected(arraySorted)
   }
 
-  const _onDateChange = date => {
-    setDate(date)
-  }
+  const _onDateChange = value => setDate(value)
 
-  const _removeDate = date => {
-    const newArray = _.filter(datesSelected, dateFromArray => !isSameDay(new Date(dateFromArray), date))
+  const _removeDate = value => {
+    const newArray = _.filter(datesSelected, dateFromArray => !isSameDay(new Date(dateFromArray), value))
     setDatesSelected(newArray)
   }
 
-  const _handleChangePeriod = e => {
-    setPeriod(Number(e.target.value))
-  }
+  const _handleChangePeriod = e => setPeriod(Number(e.target.value))
 
   const _returnArrayAvailability = accessDays => {
     const arr = []
@@ -328,8 +357,29 @@ const SpacePage = ({ match, location, history, ...props }) => {
         />
       )
     }
-    if (bookingPeriod === 'hourly' || bookingType === 'poa') {
-      return <ContactHost user={user} isAuthenticated={isAuthenticated} listing={listing} dispatch={dispatch} />
+    if (bookingPeriod === 'hourly' && bookingType !== 'poa') {
+      return (
+        <>
+          <HourlyBooking
+            date={date}
+            startTime={startTime}
+            endTime={endTime}
+            hoursQuantity={period}
+            listingExceptionDates={availabilities}
+            listingData={listing.listingData}
+            onDateChange={_onDateChange}
+            closingDays={_returnArrayAvailability(listing.accessDays)}
+            onSetStartTime={_onSetStartTime}
+            onSetEndTime={_onSetEndTime}
+            onCalcHourlyPeriod={_calcHourlyPeriod}
+          />
+          {hourlyError && (
+            <Box color="error" ml="23px">
+              {hourlyError}
+            </Box>
+          )}
+        </>
+      )
     }
     if (bookingPeriod === 'daily' && bookingType !== 'poa') {
       return (
@@ -365,10 +415,8 @@ const SpacePage = ({ match, location, history, ...props }) => {
         />
       )
     }
-
     if (bookingPeriod === 'monthly' && bookingType !== 'poa') {
       if (period < listing.listingData.minTerm) setPeriod(listing.listingData.minTerm)
-
       return (
         <MonthlyBooking
           period={period}
@@ -388,7 +436,9 @@ const SpacePage = ({ match, location, history, ...props }) => {
     if (user && user.userId === listing.userId) {
       return true
     }
-    if (bookingPeriod === 'hourly') return true
+    if (bookingPeriod === 'hourly') {
+      return hourlyError !== '' || period <= 0 || !date
+    }
     if (bookingPeriod === 'weekly') {
       if (date > 0 && period > 0) {
         return false
@@ -424,7 +474,9 @@ const SpacePage = ({ match, location, history, ...props }) => {
       bookingType: listing.listingData.bookingType,
       reservations: listing.bookingPeriod === 'daily' ? datesSelected : [date],
       period: date ? period : datesSelected.length,
-      isAbsorvedFee: listing.listingData.isAbsorvedFee
+      isAbsorvedFee: listing.listingData.isAbsorvedFee,
+      checkInHour: startTime,
+      checkOutHour: endTime
     }
     if (!isAuthenticated) {
       history.push(`/auth/signin`, {
@@ -464,6 +516,7 @@ const SpacePage = ({ match, location, history, ...props }) => {
           template: 'report-listing',
           data: JSON.stringify(values)
         }
+
         await dispatch(sendMail(emailData))
 
         dispatch(
@@ -496,6 +549,38 @@ const SpacePage = ({ match, location, history, ...props }) => {
       hostId: listing.userId
     }
     dispatch(onCreateMessage(values))
+  }
+
+  const _calcHourlyPeriod = () => {
+    if (date) {
+      onGetHourlyAvailability(listing.id, date, startTime, endTime)
+        .then(o => {
+          setPeriod(o.hours)
+          setHourlyError('')
+          if (!o.isAvailable) {
+            setHourlyError(`Not available in this period`)
+          }
+        })
+        .catch(err => setHourlyError(err))
+    }
+  }
+
+  const _onSetStartTime = value => setStartTime(value)
+
+  const _onSetEndTime = value => setEndTime(value)
+
+  const _getRatingAvg = field => {
+    if (publicReviews) {
+      const countReviews = publicReviews.length
+      const totalRatings = publicReviews.map(o => o[`rating${field}`]).reduce((a, b) => a + b)
+      return (totalRatings / countReviews).toFixed(2)
+    }
+    return 0
+  }
+
+  const _onPagionationChange = page => {
+    reviewRef.current.scrollIntoView({ behavior: 'smooth', block: 'start' })
+    dispatch(onGetPublicReviews(listing.id, page))
   }
 
   return (
@@ -557,7 +642,6 @@ const SpacePage = ({ match, location, history, ...props }) => {
                   </Cell>
                 )}
               </Grid>
-
               <Grid columns={12}>
                 <CellStyled width={7}>
                   <Title
@@ -637,6 +721,7 @@ const SpacePage = ({ match, location, history, ...props }) => {
                   </Box>
                 </Box>
               )}
+
               {listing.listingData.description ? (
                 <Box>
                   <Title type="h5" title="Description" />
@@ -648,6 +733,7 @@ const SpacePage = ({ match, location, history, ...props }) => {
                   Contact host
                 </Link>
               </Box>
+
               {listing.amenities.length > 0 && (
                 <Box>
                   <Title type="h5" title="Amenities" />
@@ -670,6 +756,61 @@ const SpacePage = ({ match, location, history, ...props }) => {
                   </Grid>
                 </Box>
               )}
+
+              {publicReviews && publicReviews.length > 0 && (
+                <>
+                  <Box display="grid" gridTemplateColumns="200px auto" ref={reviewRef}>
+                    <Title type="h5" title={`Reviews (${publicReviews.length})`} />
+                    <TitleStarContainer>
+                      <StarRatingComponent name="ratingOverall" value={_getRatingAvg('Overall')} editing={false} />
+                    </TitleStarContainer>
+                  </Box>
+                  <ContainerMobile>
+                    <Box display="grid" gridTemplateColumns="auto 1fr auto 1fr" gridColumnGap="20px">
+                      <Label>Cleanliness</Label>
+                      <Cell style={{ alignContent: 'center', justifyContent: 'left', display: 'grid' }}>
+                        <StarRatingComponent
+                          name="ratingCleanliness"
+                          value={_getRatingAvg('Cleanliness')}
+                          editing={false}
+                        />
+                      </Cell>
+                      <Label>Value</Label>
+                      <Cell style={{ alignContent: 'center', justifyContent: 'left', display: 'grid' }}>
+                        <StarRatingComponent name="ratingValue" value={_getRatingAvg('Value')} editing={false} />
+                      </Cell>
+                      <Label>Check-in</Label>
+                      <Cell style={{ alignContent: 'center', justifyContent: 'left', display: 'grid' }}>
+                        <StarRatingComponent name="ratingCheckIn" value={_getRatingAvg('CheckIn')} editing={false} />
+                      </Cell>
+                      <Label>Location</Label>
+                      <Cell style={{ alignContent: 'center', justifyContent: 'left', display: 'grid' }}>
+                        <StarRatingComponent name="ratingLocation" value={_getRatingAvg('Location')} editing={false} />
+                      </Cell>
+                    </Box>
+                  </ContainerMobile>
+                  {publicReviews.map(o => {
+                    return (
+                      <Review
+                        id={o.id}
+                        userName={o.author.profile && o.author.profile.firstName}
+                        userPicture={o.author.profile && o.author.profile.picture}
+                        date={new Date(o.createdAt)}
+                        comment={o.reviewContent}
+                        rating={o.rating}
+                      />
+                    )
+                  })}
+                </>
+              )}
+
+              <ContainerPagination>
+                <Pagination
+                  totalPages={totalPages}
+                  totalRecords={publicReviews.length}
+                  onPageChanged={_onPagionationChange}
+                />
+              </ContainerPagination>
 
               {listing.rules.length > 0 && (
                 <Box>
@@ -705,19 +846,17 @@ const SpacePage = ({ match, location, history, ...props }) => {
               }
               contentComponent={
                 <>
-                  {_renderContentCard(listing.bookingPeriod, listing.listingData.bookingType)}
-                  {listing.bookingPeriod !== 'hourly' &&
-                    listing.listingData.bookingType !== 'poa' &&
-                    (pendingBooking ? pendingBooking && pendingBooking.count === 0 : true) && (
-                      <Button
-                        onClick={e => _onSubmitBooking(e)}
-                        isLoading={isLoadingOnCreateReservation}
-                        disabled={_isPeriodValid(listing.bookingPeriod) || (user && user.id === listing.user.id)}
-                        fluid
-                      >
-                        {listing.listingData.bookingType === 'request' ? 'Booking Request' : 'Reserve'}
-                      </Button>
-                    )}
+                  {_renderContentCard(listing.bookingPeriod)}
+                  {(pendingBooking ? pendingBooking && pendingBooking.count === 0 : true) && (
+                    <Button
+                      onClick={e => _onSubmitBooking(e)}
+                      isLoading={isLoadingOnCreateReservation}
+                      disabled={_isPeriodValid(listing.bookingPeriod) || (user && user.id === listing.user.id)}
+                      fluid
+                    >
+                      {listing.listingData.bookingType === 'request' ? 'Booking Request' : 'Reserve'}
+                    </Button>
+                  )}
                 </>
               }
               footerComponent={
@@ -757,24 +896,8 @@ const SpacePage = ({ match, location, history, ...props }) => {
           </Box>
         )}
 
-        {/* <Box mb="45px">
-          <Title type="h5" title="Cancellation Policy" />
-          <Grid columns="repeat(auto-fit, minmax(350px, auto))">
-            <Cell>
-              <Title
-                noMargin
-                type="h5"
-                title="No Cancellation"
-                subTitleSize={16}
-                subtitle="Guest cannot cancel their booking. Note: This may affect the number of bookings received."
-              />
-            </Cell>
-            <Cell>
-              <ImageStyled alt="Cancellation Policy" src={GraphCancelattionImage} width="700px" />
-            </Cell>
-          </Grid>
-        </Box> */}
         <Footer />
+
         <BottomButtonMobile>
           <Grid columns={2} style={{ alignItems: 'center' }}>
             <Cell style={{ alignContent: 'center', justifyContent: 'left', display: 'grid' }}>

@@ -39,6 +39,9 @@ function spelling(periodType, reference) {
     case 'monthly':
       label = 'Month'
       break
+    case 'hourly':
+      label = 'Hour'
+      break
     default:
       label = 'Day'
   }
@@ -46,7 +49,7 @@ function spelling(periodType, reference) {
   return label
 }
 
-const DatesDetail = ({ startDate, endDate, period, priceType, ...props }) => {
+const DatesDetail = ({ startDate, endDate, period, priceType, checkInHour, checkOutHour, ...props }) => {
   return (
     <Grid columns={1} rows={2} rowGap="20px">
       <Box>
@@ -54,16 +57,32 @@ const DatesDetail = ({ startDate, endDate, period, priceType, ...props }) => {
         <br />
         <LeftStyled>{`${period} ${spelling(priceType, period)}`}</LeftStyled>
       </Box>
-      <Box>
-        <ContentStyled>
-          <LeftTitleStyled>Start date</LeftTitleStyled>
-          <RightTitleStyled {...props}>End date</RightTitleStyled>
-        </ContentStyled>
-        <ContentStyled>
-          <LeftStyled>{format(convertedDate(startDate), 'dd/MM/yyyy')}</LeftStyled>
-          <RightStyled {...props}>{format(convertedDate(endDate), 'dd/MM/yyyy')}</RightStyled>
-        </ContentStyled>
-      </Box>
+
+      {priceType !== 'hourly' && (
+        <Box>
+          <ContentStyled>
+            <LeftTitleStyled>Start date</LeftTitleStyled>
+            <RightTitleStyled {...props}>End date</RightTitleStyled>
+          </ContentStyled>
+          <ContentStyled>
+            <LeftStyled>{format(convertedDate(startDate), 'dd/MM/yyyy')}</LeftStyled>
+            <RightStyled {...props}>{format(convertedDate(endDate), 'dd/MM/yyyy')}</RightStyled>
+          </ContentStyled>
+        </Box>
+      )}
+
+      {priceType === 'hourly' && (
+        <Box>
+          <ContentStyled>
+            <LeftTitleStyled>Start hour</LeftTitleStyled>
+            <RightTitleStyled {...props}>End hour</RightTitleStyled>
+          </ContentStyled>
+          <ContentStyled>
+            <LeftStyled>{checkInHour}</LeftStyled>
+            <RightStyled {...props}>{checkOutHour}</RightStyled>
+          </ContentStyled>
+        </Box>
+      )}
     </Grid>
   )
 }
@@ -77,6 +96,8 @@ DatesDetail.propTypes = {
   endDate: PropTypes.string.isRequired,
   period: PropTypes.number.isRequired,
   priceType: PropTypes.string.isRequired,
+  checkInHour: PropTypes.string,
+  checkOutHour: PropTypes.string,
   alignLeft: PropTypes.bool
 }
 

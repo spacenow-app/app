@@ -56,6 +56,8 @@ import CardSearch from './CardSearch'
 import Price from './Price'
 import MessageCard from './MessageCard'
 import MessageDetailCard from './MessageDetailCard'
+import Review from './Review'
+import StarRatingComponent from './Review/StarRatingComponent'
 
 export {
   Modal,
@@ -118,5 +120,7 @@ export {
   CardSearch,
   Price,
   MessageCard,
-  MessageDetailCard
+  MessageDetailCard,
+  Review,
+  StarRatingComponent
 }

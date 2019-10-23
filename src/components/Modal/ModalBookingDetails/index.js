@@ -7,14 +7,7 @@ import { useDispatch } from 'react-redux'
 import { closeModal } from 'redux/ducks/modal'
 import { onDeclineBooking, onAcceptBooking } from 'redux/ducks/booking'
 
-const ModalBookingDetails = ({
-  onConfirm,
-  options,
-  booking,
-  userType,
-  ...props
-}) => {
-
+const ModalBookingDetails = ({ onConfirm, options, booking, userType, ...props }) => {
   const dispatch = useDispatch()
 
   const _convertedArrayPhotos = array => {
@@ -29,17 +22,30 @@ const ModalBookingDetails = ({
     return prefix + name.replace(/([A-Z])/g, g => `-${g[0].toLowerCase()}`)
   }
 
-  const _spelling = (reference) => {
-    let label = 'Day';
-    if (reference > 1) label = 'Days';
-    return label;
+  const _spelling = (periodType, reference) => {
+    let label = 'Day'
+    switch (periodType) {
+      case 'weekly':
+        label = 'Week'
+        break
+      case 'monthly':
+        label = 'Month'
+        break
+      case 'hourly':
+        label = 'Hour'
+        break
+      default:
+        label = 'Day'
+    }
+    if (reference > 1) label = `${label}s`
+    return label
   }
 
-  const _declineBooking = (bookingId) => {
+  const _declineBooking = bookingId => {
     dispatch(onDeclineBooking(bookingId))
   }
 
-  const _acceptBooking = (bookingId) => {
+  const _acceptBooking = bookingId => {
     dispatch(onAcceptBooking(bookingId))
   }
 
@@ -47,35 +53,58 @@ const ModalBookingDetails = ({
     <Modal show onHide={() => dispatch(closeModal())} centered size="lg">
       {options.title && (
         <Modal.Header closeButton>
-          <Modal.Title><Title noMargin type={"h5"} title={options.title} /></Modal.Title>
+          <Modal.Title>
+            <Title noMargin type={'h5'} title={options.title} />
+          </Modal.Title>
         </Modal.Header>
       )}
       <Modal.Body>
         <Carousel photos={_convertedArrayPhotos(booking.listing.photos)} height={300} />
         <Box my="40px" display="grid" gridTemplateColumns="auto auto 1fr" gridColumnGap="10px">
-          <Tag icon={<Icon width="24px" name={_parseCategoryIconName(booking.listing.settingsParent.category.otherItemName, false)} />}>
+          <Tag
+            icon={
+              <Icon
+                width="24px"
+                name={_parseCategoryIconName(booking.listing.settingsParent.category.otherItemName, false)}
+              />
+            }
+          >
             {booking.listing.settingsParent.category.itemName}
           </Tag>
-          <Tag icon={<Icon width="24px" name={_parseCategoryIconName(booking.listing.settingsParent.subcategory.otherItemName, true)} />}>
+          <Tag
+            icon={
+              <Icon
+                width="24px"
+                name={_parseCategoryIconName(booking.listing.settingsParent.subcategory.otherItemName, true)}
+              />
+            }
+          >
             {booking.listing.settingsParent.subcategory.itemName}
           </Tag>
-          <Label justify={`end`} bg={booking.bookingState} color={'white'}>{booking.bookingState}</Label>
+          <Label justify={`end`} bg={booking.bookingState} color={'white'}>
+            {booking.bookingState}
+          </Label>
         </Box>
         <Box my="40px">
-          <Title type="h4" title={booking.listing.title} subtitle={`${booking.listing.location.address1}, ${booking.listing.location.city} ${booking.listing.location.state}`} subTitleMargin={0} />
+          <Title
+            type="h4"
+            title={booking.listing.title}
+            subtitle={`${booking.listing.location.address1}, ${booking.listing.location.city} ${booking.listing.location.state}`}
+            subTitleMargin={0}
+          />
         </Box>
         <ListDates dates={booking.reservations} />
         {booking.reservations.length > 0 && (
           <PriceDetail
-            periodLabel={_spelling(booking.reservations.length)}
+            periodLabel={_spelling(booking.priceType, booking.period)}
             price={booking.basePrice}
             isAbsorvedFee={booking.hostServiceFee !== 0}
-            days={booking.reservations.length}
+            days={booking.period}
             quantity={1}
           />
         )}
       </Modal.Body>
-      {(booking.bookingState === 'requested' && userType === 'host') &&
+      {booking.bookingState === 'requested' && userType === 'host' && (
         <Modal.Footer>
           <Button size={`sm`} color={`red`} onClick={() => _declineBooking(booking.bookingId)}>
             {options.buttonDeclineBookingText || 'Decline Booking'}
@@ -84,7 +113,7 @@ const ModalBookingDetails = ({
             {options.buttonAcceptBookingText || 'Accept Booking'}
           </Button>
         </Modal.Footer>
-      }
+      )}
     </Modal>
   )
 }
