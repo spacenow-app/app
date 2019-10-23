@@ -1,8 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import styled from 'styled-components'
-import { Box, Text, Icon, UserDetails, Grid, Cell, Link } from 'components'
-import { onReadMessage } from 'redux/ducks/message'
+import { Box, Text, UserDetails, Grid, Cell } from 'components'
 
 const CardContainerGrid = styled(Grid)`
   height: 144px;
@@ -23,17 +22,13 @@ const CardContainerGrid = styled(Grid)`
 
 const MessageCard = ({ item, userType, history, dispatch, ...props }) => {
   const _onClick = async id => {
-    await dispatch(onReadMessage(id))
     history.push(`message/${id}`)
   }
 
   return (
     <CardContainerGrid key={item.id} alignContent="center" column={12} onClick={() => _onClick(item.id)}>
       <Cell width={5}>
-        <UserDetails
-          hostname={userType === 'host' ? item.guest.profile.displayName : item.host.profile.displayName}
-          // address={userType === 'host'}
-        />
+        <UserDetails hostname={userType === 'host' ? item.guest.profile.displayName : item.host.profile.displayName} />
       </Cell>
       <Cell width={6}>
         <Grid columns="85px auto">

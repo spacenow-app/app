@@ -12,7 +12,7 @@ const TextAreaStyled = styled.textarea`
   color: #646464;
   padding: 20px;
   width: 100%;
-  min-height: 150px;
+  min-height: ${props => (props.height ? props.height : '150px')};
   border-radius: 8px;
   border: 1px solid #c4c4c4;
 
@@ -49,7 +49,8 @@ TextArea.defaultProps = {
 }
 
 TextArea.propTypes = {
-  label: PropTypes.string
+  label: PropTypes.string,
+  height: PropTypes.string
 }
 
 export default TextArea

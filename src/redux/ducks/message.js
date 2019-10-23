@@ -1,6 +1,8 @@
 import { gql } from 'apollo-boost'
 import { getClientWithAuth } from 'graphql/apolloClient'
 import errToMsg from 'utils/errToMsg'
+import _ from 'lodash'
+import { toast } from 'react-toastify'
 
 // Actions
 export const Types = {
@@ -16,21 +18,12 @@ export const Types = {
   READ_MESSAGE_REQUEST: 'READ_MESSAGE_REQUEST',
   READ_MESSAGE_SUCCESS: 'READ_MESSAGE_SUCCESS',
   READ_MESSAGE_ERROR: 'READ_MESSAGE_ERROR',
-  COUNT_UNREAD_MESSAGE_REQUEST: 'COUNT_UNREAD_MESSAGE_REQUEST',
-  COUNT_UNREAD_MESSAGE_SUCCESS: 'COUNT_UNREAD_MESSAGE_SUCCESS',
-  COUNT_UNREAD_MESSAGE_ERROR: 'COUNT_UNREAD_MESSAGE_ERROR',
   CREATE_MESSAGE_ITEM_REQUEST: 'CREATE_MESSAGE_ITEM_REQUEST',
   CREATE_MESSAGE_ITEM_SUCCESS: 'CREATE_MESSAGE_ITEM_SUCCESS',
   CREATE_MESSAGE_ITEM_ERROR: 'CREATE_MESSAGE_ITEM_ERROR',
-  // GET_MESSAGE_ITEMS_REQUEST: 'GET_MESSAGE_ITEMS_REQUEST',
-  // GET_MESSAGE_ITEMS_SUCCESS: 'GET_MESSAGE_ITEMS_SUCCESS',
-  // GET_MESSAGE_ITEMS_ERROR: 'GET_MESSAGE_ITEMS_ERROR',
-  READ_MESSAGE_ITEM_REQUEST: 'READ_MESSAGE_ITEM_REQUEST',
-  READ_MESSAGE_ITEM_SUCCESS: 'READ_MESSAGE_ITEM_SUCCESS',
-  READ_MESSAGE_ITEM_ERROR: 'READ_MESSAGE_ITEM_ERROR'
-  // COUNT_UNREAD_MESSAGE_ITEMS_REQUEST: 'COUNT_UNREAD_MESSAGE_ITEMS_REQUEST',
-  // COUNT_UNREAD_MESSAGE_ITEMS_SUCCESS: 'COUNT_UNREAD_MESSAGE_ITEMS_SUCCESS',
-  // COUNT_UNREAD_MESSAGE_ITEMS_ERROR: 'COUNT_UNREAD_MESSAGE_ITEMS_ERROR'
+  GET_MESSAGE_ITEMS_REQUEST: 'GET_MESSAGE_ITEMS_REQUEST',
+  GET_MESSAGE_ITEMS_SUCCESS: 'GET_MESSAGE_ITEMS_SUCCESS',
+  GET_MESSAGE_ITEMS_ERROR: 'GET_MESSAGE_ITEMS_ERROR'
 }
 
 // Initial State
@@ -45,9 +38,7 @@ const initialState = {
   },
   get: {
     isLoading: true,
-    object: {
-      messageItems: null
-    }
+    object: null
   },
   create: {
     object: null
@@ -55,17 +46,9 @@ const initialState = {
   read: {
     isRead: null
   },
-  unread: {
-    count: null
-  },
   getItems: {
-    array: null
-  },
-  readItem: {
-    isReadItem: null
-  },
-  unreadItems: {
-    count: null
+    isLoading: true,
+    object: {}
   }
 }
 
@@ -74,16 +57,20 @@ const messageFields = `
   id
   guest {
     __typename
+    id
     profile {
       __typename
       displayName
+      picture
     }
   }
   host {
     __typename
+    id
     profile {
       __typename
       displayName
+      picture
     }
   }
   listing {
@@ -101,7 +88,9 @@ const messageItemFields = `
   sent {
     __typename
     id
-    email
+    profile {
+      picture
+    }
   }
   content
   isRead
@@ -129,9 +118,6 @@ const getMessage = gql`
   query getMessage($id: String!) {
     getMessage(id: $id) {
       ${messageFields}
-      messageItems {
-        ${messageItemFields}
-      }
     }
   }
 `
@@ -145,17 +131,9 @@ const createMessage = gql`
 `
 
 const readMessage = gql`
-  mutation readMessage($id: String!) {
-    readMessage(id: $id) {
+  mutation readMessage($id: String!, $userId: String!) {
+    readMessage(id: $id, userId: $userId) {
       isRead
-    }
-  }
-`
-
-const countUnreadMessages = gql`
-  query countUnreadMessages($id: String!, $type: String!) {
-    countUnreadMessages(id: $id, type: $type) {
-      count
     }
   }
 `
@@ -168,32 +146,16 @@ const createMessageItem = gql`
   }
 `
 
-// const getMessageItems = gql`
-//   query getMessageItems($id: String!, $pageIndex: Int!, $pageSize: Int!) {
-//     getMessageItems(id: $id, pageIndex: $pageIndex, pageSize: $pageSize) {
-//       count
-//       rows {
-//         ${messageItemFields}
-//       }
-//     }
-//   }
-// `
-
-// const readMessageItem = gql`
-//   mutation readMessageItem($id: String!) {
-//     readMessageItems(id: $id) {
-//       isRead
-//     }
-//   }
-// `
-
-// const countUnreadMessageItems = gql`
-//   query countUnreadMessageItems($id: String!) {
-//     countUnreadMessageItems(id: $id) {
-//       count
-//     }
-//   }
-// `
+const getMessageItems = gql`
+  query getMessageItems($id: String!, $pageIndex: Int!, $pageSize: Int!) {
+    getMessageItems(id: $id, pageIndex: $pageIndex, pageSize: $pageSize) {
+      count
+      rows {
+        ${messageItemFields}
+      }
+    }
+  }
+`
 
 // Reducer
 export default function reducer(state = initialState, action) {
@@ -295,30 +257,6 @@ export default function reducer(state = initialState, action) {
         }
       }
     }
-    case Types.COUNT_UNREAD_MESSAGE_REQUEST: {
-      return {
-        ...state,
-        isLoading: true
-      }
-    }
-    case Types.COUNT_UNREAD_MESSAGE_SUCCESS: {
-      return {
-        ...state,
-        isLoading: false,
-        unread: {
-          count: action.payload
-        }
-      }
-    }
-    case Types.COUNT_UNREAD_MESSAGE_ERROR: {
-      return {
-        ...state,
-        isLoading: false,
-        error: {
-          message: action.payload
-        }
-      }
-    }
     case Types.CREATE_MESSAGE_ITEM_REQUEST: {
       return {
         ...state,
@@ -329,11 +267,11 @@ export default function reducer(state = initialState, action) {
       return {
         ...state,
         isLoading: false,
-        get: {
-          ...state.get,
+        getItems: {
+          isLoading: false,
           object: {
-            ...state.get.object,
-            messageItems: [action.payload, ...state.get.object.messageItems]
+            ...state.getItems.object,
+            rows: [action.payload, ...state.getItems.object.rows]
           }
         }
       }
@@ -347,78 +285,31 @@ export default function reducer(state = initialState, action) {
         }
       }
     }
-    // case Types.GET_MESSAGE_ITEMS_REQUEST: {
-    //   return {
-    //     ...state,
-    //     isLoading: true
-    //   }
-    // }
-    // case Types.GET_MESSAGE_ITEMS_SUCCESS: {
-    //   return {
-    //     ...state,
-    //     isLoading: false,
-    //     getItems: {
-    //       array: action.payload
-    //     }
-    //   }
-    // }
-    // case Types.GET_MESSAGE_ITEMS_ERROR: {
-    //   return {
-    //     ...state,
-    //     isLoading: false,
-    //     error: {
-    //       message: action.payload
-    //     }
-    //   }
-    // }
-    // case Types.READ_MESSAGE_ITEM_REQUEST: {
-    //   return {
-    //     ...state,
-    //     isLoading: true
-    //   }
-    // }
-    // case Types.READ_MESSAGE_ITEM_SUCCESS: {
-    //   return {
-    //     ...state,
-    //     isLoading: false,
-    //     readItem: {
-    //       isRead: action.payload
-    //     }
-    //   }
-    // }
-    // case Types.READ_MESSAGE_ITEM_ERROR: {
-    //   return {
-    //     ...state,
-    //     isLoading: false,
-    //     error: {
-    //       message: action.payload
-    //     }
-    //   }
-    // }
-    // case Types.COUNT_UNREAD_MESSAGE_ITEMS_REQUEST: {
-    //   return {
-    //     ...state,
-    //     isLoading: true
-    //   }
-    // }
-    // case Types.COUNT_UNREAD_MESSAGE_ITEMS_SUCCESS: {
-    //   return {
-    //     ...state,
-    //     isLoading: false,
-    //     unreadItems: {
-    //       count: action.payload
-    //     }
-    //   }
-    // }
-    // case Types.COUNT_UNREAD_MESSAGE_ITEMS_ERROR: {
-    //   return {
-    //     ...state,
-    //     isLoading: false,
-    //     error: {
-    //       message: action.payload
-    //     }
-    //   }
-    // }
+    case Types.GET_MESSAGE_ITEMS_REQUEST: {
+      return {
+        ...state,
+        isLoading: true
+      }
+    }
+    case Types.GET_MESSAGE_ITEMS_SUCCESS: {
+      return {
+        ...state,
+        isLoading: false,
+        getItems: {
+          isLoading: false,
+          object: _.mergeWith(state.getItems.object, action.payload, _customizer)
+        }
+      }
+    }
+    case Types.GET_MESSAGE_ITEMS_ERROR: {
+      return {
+        ...state,
+        isLoading: false,
+        error: {
+          message: action.payload
+        }
+      }
+    }
     default:
       return state
   }
@@ -430,7 +321,11 @@ export default function reducer(state = initialState, action) {
 export const onGetMessagesByUser = args => async dispatch => {
   dispatch({ type: Types.GET_MESSAGES_USER_REQUEST })
   try {
-    const { data } = await getClientWithAuth(dispatch).query({ query: getMessagesByUser, variables: args })
+    const { data } = await getClientWithAuth(dispatch).query({
+      query: getMessagesByUser,
+      variables: args,
+      fetchPolicy: 'network-only'
+    })
     dispatch({ type: Types.GET_MESSAGES_USER_SUCCESS, payload: data.getMessagesByUser })
   } catch (err) {
     dispatch({ type: Types.GET_MESSAGES_USER_ERROR, payload: errToMsg(err) })
@@ -452,28 +347,20 @@ export const onCreateMessage = values => async dispatch => {
   try {
     const { data } = await getClientWithAuth(dispatch).mutate({ mutation: createMessage, variables: values })
     dispatch({ type: Types.CREATE_MESSAGE_SUCCESS, payload: data.createMessage })
+    toast.success(`Your message was sent to the host.`)
   } catch (err) {
     dispatch({ type: Types.CREATE_MESSAGE_ERROR, payload: errToMsg(err) })
+    toast.error(`Problem sending the message, try again later.`)
   }
 }
 
-export const onReadMessage = id => async dispatch => {
+export const onReadMessage = (id, userId) => async dispatch => {
   dispatch({ type: Types.READ_MESSAGE_REQUEST })
   try {
-    const { data } = await getClientWithAuth(dispatch).mutate({ mutation: readMessage, variables: { id } })
+    const { data } = await getClientWithAuth(dispatch).mutate({ mutation: readMessage, variables: { id, userId } })
     dispatch({ type: Types.READ_MESSAGE_SUCCESS, payload: data.readMessage })
   } catch (err) {
     dispatch({ type: Types.READ_MESSAGE_ERROR, payload: errToMsg(err) })
-  }
-}
-
-export const onCountUnreadMessage = () => async dispatch => {
-  dispatch({ type: Types.COUNT_UNREAD_MESSAGE_REQUEST })
-  try {
-    const { data } = await getClientWithAuth(dispatch).query({ query: countUnreadMessages })
-    dispatch({ type: Types.COUNT_UNREAD_MESSAGE_SUCCESS, payload: data.countUnreadMessages })
-  } catch (err) {
-    dispatch({ type: Types.COUNT_UNREAD_MESSAGE_ERROR, payload: errToMsg(err) })
   }
 }
 
@@ -487,32 +374,19 @@ export const onCreateMessageItem = values => async dispatch => {
   }
 }
 
-// export const onGetMessageItems = () => async dispatch => {
-//   dispatch({ type: Types.GET_MESSAGE_ITEMS_REQUEST })
-//   try {
-//     const { data } = await getClientWithAuth(dispatch).query({ query: getMessageItems })
-//     dispatch({ type: Types.GET_MESSAGE_ITEMS_SUCCESS, payload: data.getMessageItems })
-//   } catch (err) {
-//     dispatch({ type: Types.GET_MESSAGE_ITEMS_ERROR, payload: errToMsg(err) })
-//   }
-// }
+export const onGetMessageItems = values => async dispatch => {
+  dispatch({ type: Types.GET_MESSAGE_ITEMS_REQUEST })
+  try {
+    const { data } = await getClientWithAuth(dispatch).query({ query: getMessageItems, variables: values })
+    dispatch({ type: Types.GET_MESSAGE_ITEMS_SUCCESS, payload: data.getMessageItems })
+  } catch (err) {
+    dispatch({ type: Types.GET_MESSAGE_ITEMS_ERROR, payload: errToMsg(err) })
+  }
+}
 
-// export const onReadMessageItem = () => async dispatch => {
-//   dispatch({ type: Types.READ_MESSAGE_ITEM_REQUEST })
-//   try {
-//     const { data } = await getClientWithAuth(dispatch).query({ query: readMessageItem })
-//     dispatch({ type: Types.READ_MESSAGE_ITEM_SUCCESS, payload: data.readMessageItems })
-//   } catch (err) {
-//     dispatch({ type: Types.READ_MESSAGE_ITEM_ERROR, payload: errToMsg(err) })
-//   }
-// }
-
-// export const onCountUnreadMessageItem = id => async dispatch => {
-//   dispatch({ type: Types.COUNT_UNREAD_MESSAGE_ITEMS_REQUEST })
-//   try {
-//     const { data } = await getClientWithAuth(dispatch).query({ query: countUnreadMessageItems, variables: { id } })
-//     dispatch({ type: Types.COUNT_UNREAD_MESSAGE_ITEMS_SUCCESS, payload: data.countUnreadMessageItems })
-//   } catch (err) {
-//     dispatch({ type: Types.COUNT_UNREAD_MESSAGE_ITEMS_ERROR, payload: errToMsg(err) })
-//   }
-// }
+// Helpers
+const _customizer = (objValue, srcValue) => {
+  if (_.isArray(objValue)) {
+    return objValue.concat(srcValue)
+  }
+}

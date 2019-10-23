@@ -1,8 +1,8 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import styled from 'styled-components'
-import Avatar from '../Avatar'
 import Link from 'components/Link'
+import Avatar from '../Avatar'
 
 const WrapperStyled = styled.div`
   display: grid;
@@ -72,7 +72,11 @@ const UserDetails = props => (
       <UserContainer>
         <TextName>{props.hostname}</TextName>
         {props.address && <TextCity>{props.address}</TextCity>}
-        {props.provider === 'generic' && <TextClaim to={'#'} onClick={props.onClaim}>Claim your listing!</TextClaim>}
+        {props.provider === 'generic' && (
+          <TextClaim to="#" onClick={props.onClaim}>
+            Claim your listing!
+          </TextClaim>
+        )}
       </UserContainer>
     </TopStyled>
     {props.joined && (
@@ -96,7 +100,8 @@ UserDetails.propTypes = {
   imageProfile: PropTypes.string,
   text: PropTypes.string,
   provider: PropTypes.string,
-  onClaim: PropTypes.func
+  onClaim: PropTypes.func,
+  right: PropTypes.bool
 }
 
 export default UserDetails

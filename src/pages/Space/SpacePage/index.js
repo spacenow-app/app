@@ -495,7 +495,6 @@ const SpacePage = ({ match, location, history, ...props }) => {
       guestId: user.id,
       hostId: listing.userId
     }
-    console.log(values)
     dispatch(onCreateMessage(values))
   }
 
@@ -644,8 +643,8 @@ const SpacePage = ({ match, location, history, ...props }) => {
                   <p>{listing.listingData.description}</p>
                 </Box>
               ) : null}
-              <Box fontFamily="bold">
-                <Link to="#" onClick={_contactHost}>
+              <Box mt="20px" fontFamily="bold">
+                <Link to="#" onClick={_contactHost} style={{ textDecoration: 'underline' }}>
                   Contact host
                 </Link>
               </Box>

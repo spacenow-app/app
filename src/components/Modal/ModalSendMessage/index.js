@@ -1,16 +1,13 @@
 import React, { useState } from 'react'
 import PropTypes from 'prop-types'
 import { Modal } from 'react-bootstrap'
-import { withFormik } from 'formik'
-import { Button, Box, Title, Input, TextArea } from 'components'
+import { Button, Title, TextArea } from 'components'
 
-import { useSelector, useDispatch } from 'react-redux'
+import { useDispatch } from 'react-redux'
 import { closeModal } from 'redux/ducks/modal'
 
 const ModalSendMessage = ({ onConfirm }) => {
   const dispatch = useDispatch()
-
-  // const { isLoading: isLoading } = useSelector(state => state.mail)
 
   const [content, setContent] = useState('')
 
@@ -36,11 +33,7 @@ const ModalSendMessage = ({ onConfirm }) => {
         <TextArea onChange={_onchange} value={content} name="content" />
       </Modal.Body>
       <Modal.Footer>
-        <Button
-          disabled={content === ''}
-          onClick={handleConfirm}
-          // isLoading={stepOne ? false : isSendingEmail}
-        >
+        <Button disabled={content === ''} onClick={handleConfirm}>
           Send message
         </Button>
       </Modal.Footer>
@@ -49,8 +42,7 @@ const ModalSendMessage = ({ onConfirm }) => {
 }
 
 ModalSendMessage.propTypes = {
-  onConfirm: PropTypes.func.isRequired,
-  ...withFormik.propTypes
+  onConfirm: PropTypes.func.isRequired
 }
 
 export default ModalSendMessage

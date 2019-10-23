@@ -23,8 +23,8 @@ const MessagePage = ({ match, location, history, ...props }) => {
   const pageSize = 2
 
   useEffect(() => {
-    user && dispatch(onGetMessagesByUser({ id: user.id, type: userType, pageIndex, pageSize }))
-  }, [dispatch, user])
+    user && dispatch(onGetMessagesByUser({ id: user.id, type: userType, pageIndex: 0, pageSize }))
+  }, [dispatch, user, userType])
 
   const _handleChange = type => {
     setUserType(type)
@@ -57,7 +57,7 @@ const MessagePage = ({ match, location, history, ...props }) => {
         </Cell>
       </Grid>
 
-      {!messages || messages.length === 0 ? (
+      {!messages || messages.rows.length === 0 ? (
         <BackgroundImage text="We didn't find any messages :(" />
       ) : (
         <>
@@ -65,7 +65,14 @@ const MessagePage = ({ match, location, history, ...props }) => {
             <Loader />
           ) : (
             messages.rows.map(item => (
-              <MessageCard key={item.id} item={item} userType={userType} history={history} dispatch={dispatch} />
+              <MessageCard
+                key={item.id}
+                item={item}
+                userType={userType}
+                userId={user.id}
+                history={history}
+                dispatch={dispatch}
+              />
             ))
           )}
         </>
