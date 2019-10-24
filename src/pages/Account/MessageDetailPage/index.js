@@ -51,7 +51,7 @@ const MessageDetailPage = ({ match, location, history, ...props }) => {
       content,
       sentBy: user.id,
       messageId: message.id,
-      isRead: 1
+      isRead: 0
     }
     match && match.params && dispatch(onCreateMessageItem(values))
     setContent('')
