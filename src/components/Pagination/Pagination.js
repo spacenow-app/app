@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import PropTypes from 'prop-types'
 import styled, { css } from 'styled-components'
 import { Pagination as PaginationImported } from 'react-bootstrap'
@@ -99,9 +99,21 @@ const PaginationNext = styled(PaginationImported.Next)`
   }
 `
 
-const Pagination = ({ totalRecords, totalPages, pageNeighbours, pageLimit, onPageChanged, ...props }) => {
+const Pagination = ({
+  totalRecords,
+  totalPages,
+  pageNeighbours,
+  pageLimit,
+  onPageChanged,
+  pageIndex = null,
+  ...props
+}) => {
   const [currentPage, setCurrentPage] = useState(1)
   const pageNeighbour = Math.max(0, Math.min(pageNeighbours, 2))
+
+  useEffect(() => {
+    setCurrentPage(pageIndex + 1)
+  }, [pageIndex])
 
   if (!totalRecords || totalPages === 1) return null
 

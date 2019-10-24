@@ -29,6 +29,7 @@ import {
   Footer,
   CardSearch,
   Price,
+  Link,
   Review,
   StarRatingComponent,
   Pagination
@@ -50,6 +51,9 @@ import { openModal, TypesModal } from 'redux/ducks/modal'
 
 import { sendMail } from 'redux/ducks/mail'
 
+import { onCreateMessage } from 'redux/ducks/message'
+
+// import GraphCancelattionImage from 'pages/Listing/SpaceDetailsPage/CancellationTab/graph_cancellation.png'
 import { onGetPublicReviews } from 'redux/ducks/reviews'
 
 import config from 'variables/config'
@@ -530,6 +534,23 @@ const SpacePage = ({ match, location, history, ...props }) => {
     dispatch(openModal(TypesModal.MODAL_TYPE_REPORT_LISTING, options))
   }
 
+  const _contactHost = () => {
+    const options = {
+      onConfirm: _sendMessage
+    }
+    dispatch(openModal(TypesModal.MODAL_TYPE_SEND_MESSAGE, options))
+  }
+
+  const _sendMessage = content => {
+    const values = {
+      content,
+      listingId: listing.id,
+      guestId: user.id,
+      hostId: listing.userId
+    }
+    dispatch(onCreateMessage(values))
+  }
+
   const _calcHourlyPeriod = () => {
     if (date) {
       onGetHourlyAvailability(listing.id, date, startTime, endTime)
@@ -707,6 +728,13 @@ const SpacePage = ({ match, location, history, ...props }) => {
                   <p>{listing.listingData.description}</p>
                 </Box>
               ) : null}
+              {isAuthenticated && (
+                <Box mt="20px" fontFamily="bold">
+                  <Link to="#" onClick={_contactHost} style={{ textDecoration: 'underline' }}>
+                    Contact host
+                  </Link>
+                </Box>
+              )}
 
               {listing.amenities.length > 0 && (
                 <Box>
