@@ -173,6 +173,9 @@ export default function reducer(state = initialState, action) {
         list: {
           isLoading: false,
           array: action.payload
+        },
+        getItems: {
+          object: null
         }
       }
     }
