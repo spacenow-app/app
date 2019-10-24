@@ -40,7 +40,7 @@ const Routes = props => {
         <ToastContainer hideProgressBar />
         <Modal />
         <Switch>
-          <PublicRoute
+          {/* <PublicRoute
             path="/404"
             handlerCheckAuthentication={() => {}}
             isAuthenticated={null}
@@ -50,7 +50,7 @@ const Routes = props => {
                 <NotFoundPage {...otherProps} />
               </>
             )}
-          />
+          /> */}
           <PublicRoute
             {...props}
             path="/auth"
