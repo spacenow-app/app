@@ -20,7 +20,7 @@ const MessagePage = ({ match, location, history, ...props }) => {
   const [userType, setUserType] = useState('guest')
   const [pageIndex, setPageIndex] = useState(0)
 
-  const pageSize = 2
+  const pageSize = 10
 
   useEffect(() => {
     user && dispatch(onGetMessagesByUser({ id: user.id, type: userType, pageIndex: 0, pageSize }))
