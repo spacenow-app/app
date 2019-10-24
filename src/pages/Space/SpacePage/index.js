@@ -728,11 +728,13 @@ const SpacePage = ({ match, location, history, ...props }) => {
                   <p>{listing.listingData.description}</p>
                 </Box>
               ) : null}
-              <Box mt="20px" fontFamily="bold">
-                <Link to="#" onClick={_contactHost} style={{ textDecoration: 'underline' }}>
-                  Contact host
-                </Link>
-              </Box>
+              {isAuthenticated && (
+                <Box mt="20px" fontFamily="bold">
+                  <Link to="#" onClick={_contactHost} style={{ textDecoration: 'underline' }}>
+                    Contact host
+                  </Link>
+                </Box>
+              )}
 
               {listing.amenities.length > 0 && (
                 <Box>
