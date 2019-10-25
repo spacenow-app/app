@@ -32,7 +32,8 @@ import {
   Link,
   Review,
   StarRatingComponent,
-  Pagination
+  Pagination,
+  Text
 } from 'components'
 
 import {
@@ -244,13 +245,11 @@ const SpacePage = ({ match, location, history, ...props }) => {
   const _renderHighLights = obj => {
     let array = Object.keys(obj).map(i => obj[i])
     array = array.filter(el => el.value !== 0)
-    console.log(array)
     const arrayLen = array.length
     let last = 2
     if (arrayLen < 3) {
       last = arrayLen - 1
     }
-    console.log(last)
     return array.slice(0, 3).map((el, index) => {
       if (el.field === 'capacity') {
         const value = el.value === 0 ? 'Not mentioned' : `${toPlural('Person', el.value)}`
@@ -605,6 +604,32 @@ const SpacePage = ({ match, location, history, ...props }) => {
     dispatch(onGetPublicReviews(listing.id, page))
   }
 
+  const _renderTextAccessInfo = accessType => {
+    if (accessType === 'Person') {
+      return <Text fontFamily="MontSerrat-Regular">You will be greeted at reception. Please present your email*</Text>
+    }
+    if (accessType === 'Swipe Card') {
+      return <Text fontFamily="MontSerrat-Regular">You will need to collect a swipe card. Deposit may apply*</Text>
+    }
+    if (accessType === 'Host') {
+      return <Text fontFamily="MontSerrat-Regular">You will be in contact with your host upon booking.</Text>
+    }
+    if (accessType === 'Keys') {
+      return <Text fontFamily="MontSerrat-Regular">You will need to pick up keys. Deposit may apply*</Text>
+    }
+    return <Text fontFamily="MontSerrat-Regular">Details of entry will be issued upon successful booking.</Text>
+  }
+
+  const _renderTitleAccessInfo = accessType => {
+    if (accessType === 'Person') {
+      return <Text lineHeight={1}>{accessType} at reception</Text>
+    }
+    if (accessType === 'Host') {
+      return <Text lineHeight={1}>{accessType} will meet you</Text>
+    }
+    return <Text lineHeight={1}>{accessType}</Text>
+  }
+
   return (
     <>
       {imageHeight === 325 ||
@@ -717,29 +742,31 @@ const SpacePage = ({ match, location, history, ...props }) => {
                   />
                   <Box
                     display="grid"
-                    width="110px"
-                    height="130px"
-                    justifyContent="center"
-                    textAlign="center"
+                    width="278px"
+                    height="170px"
+                    gridTemplateRows="repeat(3, auto)"
+                    padding="20px"
                     fontFamily="MontSerrat-SemiBold"
                     fontSize="14px"
                     color={listing.listingData.accessType ? 'quartenary' : 'error'}
                     border={listing.listingData.accessType ? '1px solid #c4c4c4' : 'error'}
                     borderRadius="10px"
                   >
-                    <Icon
-                      style={{ alignSelf: 'center', justifySelf: 'center' }}
-                      width="50px"
-                      fill="#6ADC91"
-                      name={
-                        listing.listingData.accessType &&
-                        `access-type-${listing.listingData.accessType
-                          .toLowerCase()
-                          .split(' ')
-                          .join('-')}`
-                      }
-                    />
-                    {listing.listingData.accessType ? <>{listing.listingData.accessType}</> : 'No Data'}
+                    <Box mb="10px">
+                      <Icon
+                        width="50px"
+                        fill="#6ADC91"
+                        name={
+                          listing.listingData.accessType &&
+                          `access-type-${listing.listingData.accessType
+                            .toLowerCase()
+                            .split(' ')
+                            .join('-')}`
+                        }
+                      />
+                    </Box>
+                    {_renderTitleAccessInfo(listing.listingData.accessType)}
+                    {_renderTextAccessInfo(listing.listingData.accessType)}
                   </Box>
                 </Box>
               )}
