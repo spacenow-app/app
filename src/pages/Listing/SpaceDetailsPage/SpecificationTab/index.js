@@ -259,6 +259,7 @@ const SpecificationTab = ({
     }
     dispatch(openModal(TypesModal.MODAL_TYPE_CONFIRM, options))
   }
+  console.log(arrayAccessTypes)
 
   return (
     <form>
@@ -360,11 +361,14 @@ const SpecificationTab = ({
             ) : (
               <Select value={values.accessType} name="accessType" onChange={_handleSelectChange}>
                 {!values.accessType && <option>Select type of access</option>}
-                {arrayAccessTypes.map(item => (
-                  <option key={item.id} value={item.itemName}>
-                    {item.itemName}
-                  </option>
-                ))}
+                {arrayAccessTypes.map(
+                  item =>
+                    item.itemName !== 'Receptionist' && (
+                      <option key={item.id} value={item.itemName}>
+                        {item.itemName}
+                      </option>
+                    )
+                )}
               </Select>
             )}
           </Box>
