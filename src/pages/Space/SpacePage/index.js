@@ -242,19 +242,32 @@ const SpacePage = ({ match, location, history, ...props }) => {
   const _onClaimListing = () => dispatch(onClaimListing(match.params.id, listing.title))
 
   const _renderHighLights = obj => {
-    const array = Object.keys(obj).map(i => obj[i])
-
+    let array = Object.keys(obj).map(i => obj[i])
+    array = array.filter(el => el.value !== 0)
+    console.log(array)
+    const arrayLen = array.length
+    let last = 2
+    if (arrayLen < 3) {
+      last = arrayLen - 1
+    }
+    console.log(last)
     return array.slice(0, 3).map((el, index) => {
       if (el.field === 'capacity') {
         const value = el.value === 0 ? 'Not mentioned' : `${toPlural('Person', el.value)}`
         return el.value === 0 ? null : (
-          <Highlights key={el.field} title={el.label} name={value} icon="specification-capacity" last={index === 2} />
+          <Highlights
+            key={el.field}
+            title={el.label}
+            name={value}
+            icon="specification-capacity"
+            last={index === last}
+          />
         )
       }
       if (el.field === 'size') {
         const value = el.value === 0 ? 'Not mentioned' : `${el.value} sqm`
         return el.value === 0 ? null : (
-          <Highlights key={el.field} title={el.label} name={value} icon="specification-size" last={index === 2} />
+          <Highlights key={el.field} title={el.label} name={value} icon="specification-size" last={index === last} />
         )
       }
       if (el.field === 'meetingRooms') {
@@ -265,22 +278,31 @@ const SpacePage = ({ match, location, history, ...props }) => {
             title={el.label}
             name={value.toString()}
             icon="specification-meetingroom-quantity"
-            last={index === 2}
+            last={index === last}
           />
         )
       }
       if (el.field === 'isFurnished') {
         const value = el.value === 0 ? 'No’' : 'Yes'
         const icon = el.value === 0 ? 'specification-furnished-no' : 'specification-furnished-yes'
-        return <Highlights key={el.field} title={el.label} name={value} icon={icon} last={index === 2} />
+        return <Highlights key={el.field} title={el.label} name={value} icon={icon} last={index === last} />
       }
       if (el.field === 'carSpace') {
-        // const value = el.value === 0 ? 'None available’' : `${el.value} available`
-        // return <Highlights title={el.label} name={value} icon="category-desk" last={index === 2} />
+        const value = el.value === 0 ? 'None available' : `${el.value} available`
+        return el.value === 0 ? null : (
+          <Highlights title={el.label} name={value} icon="specification-car-park" last={index === last} />
+        )
       }
-      if (el.field === 'isFurnished') {
-        // const value = el.value === 0 ? 'None available’' : `${el.value} available`
-        // return <Highlights title={el.label} name={value} icon="category-desk" last={index === 2} />
+      if (el.field === 'spaceType') {
+        const value = el.value === 0 ? 'None available' : `${el.value}`
+        return (
+          <Highlights
+            title={el.label}
+            name={value}
+            icon={value === 'Covered' ? 'specification-covered' : 'specification-uncovered'}
+            last={index === last}
+          />
+        )
       }
       return (
         <Highlights
@@ -288,7 +310,7 @@ const SpacePage = ({ match, location, history, ...props }) => {
           title={el.label}
           name={el.value.toString()}
           icon="category-desk"
-          last={index === 2}
+          last={index === last}
         />
       )
     })
