@@ -1,36 +1,36 @@
 import React from 'react'
 import styled from 'styled-components'
-import { Button, Icon } from 'components'
+import { Button, Icon, Box } from 'components'
 
 const Wrapper = styled.div`
   display: grid;
   max-width: 575px;
   max-height: 700px;
-  padding: 50px;
+  padding: 35px 40px;
   border: 1px solid #c4c4c4;
   border-radius: 15px;
-  grid-row-gap: 45px;
+  grid-row-gap: 20px;
 `
 const Title = styled.div`
-  text-align: center;
   color: #172439;
   font-size: 24px;
   font-family: 'Montserrat-Bold';
+  width: 95%;
 `
 const Description = styled.div`
   color: #172439;
   font-size: 14px;
-  text-align: center;
   height: fit-content;
 `
 
 const IconStyled = styled(Icon)`
-  max-height: 270px;
+  max-height: 70px;
+  text-align: right;
+  fill: #6adc91;
+  width: 60px;
 `
 
-const ButtonStyled = styled(Button)`
-  justify-self: center;
-`
+const ButtonStyled = styled(Button)``
 
 const addLineBreaks = description => {
   return description.split('<separate>').map((text, index) => {
@@ -44,10 +44,14 @@ const addLineBreaks = description => {
   })
 }
 
-const CardIcon = ({ icon, title, description, buttonText, buttonHandleClick }) => {
+const CardIcon = ({ icon, title, description, buttonText, buttonHandleClick, icon2 }) => {
   return (
     <Wrapper>
-      <IconStyled name={icon} />
+      <Box>
+        <IconStyled name={icon} />
+        {icon2 && <IconStyled name={icon2} />}
+      </Box>
+
       <Title>{title}</Title>
       <Description>{addLineBreaks(description)}</Description>
       <ButtonStyled onClick={buttonHandleClick}>{buttonText}</ButtonStyled>
