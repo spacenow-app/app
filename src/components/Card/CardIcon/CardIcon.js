@@ -15,12 +15,12 @@ const Title = styled.div`
   color: #172439;
   font-size: 24px;
   font-family: 'Montserrat-Bold';
-  width: 95%;
 `
 const Description = styled.div`
   color: #172439;
   font-size: 14px;
   height: fit-content;
+  width: 95%;
 `
 
 const IconStyled = styled(Icon)`
