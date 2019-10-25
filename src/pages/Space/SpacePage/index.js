@@ -720,7 +720,7 @@ const SpacePage = ({ match, location, history, ...props }) => {
                     title="Minimum term"
                     name={_changeToPlural(
                       listing.bookingPeriod,
-                      listing.listingData.minTerm ? listing.listingData.minTerm.toString() : '1'
+                      listing.listingData.minTerm ? listing.listingData.minTerm : 1
                     )}
                     icon="specification-minimum-term"
                   />
