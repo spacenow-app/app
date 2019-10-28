@@ -432,11 +432,11 @@ const SearchPage = ({ history, location }) => {
                           </Text>
                         </div>
                         <Box display="flex" justifyContent="space-between">
-                          <Button size="sm" outline onClick={_onQueryFilter}>
-                            Update Search
-                          </Button>
                           <Button size="sm" outline onClick={() => setShouldShowFilter(false)}>
                             Close
+                          </Button>
+                          <Button size="sm" outline onClick={_onQueryFilter}>
+                            Update Search
                           </Button>
                         </Box>
                       </Box>
