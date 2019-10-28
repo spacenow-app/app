@@ -25,10 +25,6 @@ const ContentStyled = styled.div`
 const FooterStyled = styled.div`
   justify-self: stretch;
 `
-const Divider = styled.hr`
-  color: #cbcbcb;
-  margin-bottom: 40px;
-`
 
 const BottomStyled = styled.div`
   margin-top: 10px;
@@ -53,7 +49,6 @@ const BookingCard = props => (
       )}
       {props.footerComponent && (
         <div>
-          {props.contentComponent && <Divider />}
           <FooterStyled>
             {cloneElement(props.footerComponent, {
               ...props.footerComponent.props
