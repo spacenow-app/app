@@ -940,14 +940,14 @@ const SpacePage = ({ match, location, history, ...props }) => {
                 />
               }
               bottomComponent={
-                <Grid columns={12} columnGap="1px">
-                  <Cell width={4} />
-                  <Cell width={1}>
+                <Grid columns={24} columnGap="1px">
+                  <Cell width={7} />
+                  <Cell width={2}>
                     <IconBoxStyled>
                       <Icon name="flag" width="10px" height="100%" style={{ paddingBottom: '5px' }} />
                     </IconBoxStyled>
                   </Cell>
-                  <Cell width={7}>
+                  <Cell width={15}>
                     <ReportSpaceStyled onClick={_reportSpace}>Report this listing</ReportSpaceStyled>
                   </Cell>
                 </Grid>
