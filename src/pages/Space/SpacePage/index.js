@@ -860,11 +860,12 @@ const SpacePage = ({ match, location, history, ...props }) => {
               </ContainerPagination>
 
               {listing.rules.length > 0 && (
-                <Box>
+                <Box width="80%">
                   <Title type="h5" title="Space Rules" />
                   <Grid columns="repeat(auto-fit, minmax(200px, auto))" rowGap="20px">
                     {listing.rules.map(item => {
-                      return <Checkbox disabled key={item.id} label={item.settingsData.itemName} name="rules" checked />
+                      // return <Checkbox disabled key={item.id} label={item.settingsData.itemName} name="rules" checked />
+                      return <Text>{item.settingsData.itemName} </Text>
                     })}
                   </Grid>
                 </Box>
