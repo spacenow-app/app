@@ -25,10 +25,6 @@ const ContentStyled = styled.div`
 const FooterStyled = styled.div`
   justify-self: stretch;
 `
-const Divider = styled.hr`
-  color: #cbcbcb;
-  margin-bottom: 40px;
-`
 
 const BottomStyled = styled.div`
   margin-top: 10px;
