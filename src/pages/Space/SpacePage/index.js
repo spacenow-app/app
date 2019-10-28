@@ -24,7 +24,6 @@ import {
   Carousel,
   UserDetails,
   BookingCard,
-  Checkbox,
   Button,
   Footer,
   CardSearch,
@@ -890,10 +889,11 @@ const SpacePage = ({ match, location, history, ...props }) => {
                     currencySymbol="$"
                     bookingPeriod={listing.bookingPeriod}
                     bookingType={listing.listingData.bookingType}
-                    size="24px"
-                    periodSize="14px"
+                    size="28px"
+                    periodSize="11px"
                     left
                     lightPeriod
+                    lightPrice
                   />
                   {publicReviews && publicReviews.length > 0 && (
                     <Box mb="-20px">
@@ -902,7 +902,9 @@ const SpacePage = ({ match, location, history, ...props }) => {
                           <StarRatingComponent name="ratingOverall" value={_getRatingAvg('Overall')} editing={false} />
                         </Cell>
                         <Cell width={6}>
-                          <Text fontSize="12px">({publicReviews.length} Reviews)</Text>
+                          <Text fontSize="9px">
+                            ({publicReviews.length} Review{(publicReviews.length > 1 && 's') || ''})
+                          </Text>
                         </Cell>
                       </Grid>
                     </Box>
@@ -938,14 +940,14 @@ const SpacePage = ({ match, location, history, ...props }) => {
                 />
               }
               bottomComponent={
-                <Grid columns={12} columnGap="1px">
-                  <Cell width={4} />
-                  <Cell width={1}>
+                <Grid columns={24} columnGap="1px">
+                  <Cell width={7} />
+                  <Cell width={2}>
                     <IconBoxStyled>
                       <Icon name="flag" width="10px" height="100%" style={{ paddingBottom: '5px' }} />
                     </IconBoxStyled>
                   </Cell>
-                  <Cell width={7}>
+                  <Cell width={15}>
                     <ReportSpaceStyled onClick={_reportSpace}>Report this listing</ReportSpaceStyled>
                   </Cell>
                 </Grid>

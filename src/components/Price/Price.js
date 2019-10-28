@@ -4,7 +4,7 @@ import styled from 'styled-components'
 import { Text } from 'components'
 
 const ContainerStyled = styled.span`
-  font-family: Montserrat-Bold;
+  font-family: ${props => (props.lightPrice ? 'Montserrat-SemiBold' : 'Montserrat-Bold')}};
   display: grid;
   line-heigh: 1;
   text-align: ${props => {
@@ -28,16 +28,14 @@ const Price = ({ currency, currencySymbol, price, bookingPeriod, bookingType, si
   return (
     <ContainerStyled {...props}>
       {bookingType !== 'poa' ? (
-        <Text fontSize={size} fontFamily="Montserrat-Bold" {...props}>
+        <Text fontSize={size} {...props}>
           {`${currency || ''} ${currencySymbol}${(Math.round((price || 0) * 100) / 100)
             .toString()
             .replace(/\B(?=(\d{3})+(?!\d))/g, ',')} `}
           <TextStyled {...props}>{bookingPeriod || ''}</TextStyled>
         </Text>
       ) : (
-        <Text fontSize={size} fontFamily="Montserrat-Bold">
-          POA
-        </Text>
+        <Text fontSize={size}>POA</Text>
       )}
     </ContainerStyled>
   )
@@ -57,7 +55,8 @@ Price.propTypes = {
   bookingType: PropTypes.string.isRequired,
   size: PropTypes.string,
   right: PropTypes.bool,
-  lightPeriod: PropTypes.bool
+  lightPeriod: PropTypes.bool,
+  lightPrice: PropTypes.bool
 }
 
 export default Price

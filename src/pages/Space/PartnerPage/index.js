@@ -311,7 +311,7 @@ const PartnerPage = ({ match, location, ...props }) => {
             </Grid>
 
             <Grid columns={6}>
-              <CellStyled width={3}>
+              <CellStyled width={6}>
                 <Title
                   type="h4"
                   title={listing.title}
@@ -321,7 +321,7 @@ const PartnerPage = ({ match, location, ...props }) => {
                   noMargin
                 />
               </CellStyled>
-              <CellStyled width={3} center>
+              {/* <CellStyled width={3} center>
                 <Price
                   currency={listing.listingData.currency}
                   price={listing.listingData.basePrice}
@@ -331,7 +331,7 @@ const PartnerPage = ({ match, location, ...props }) => {
                   size="28px"
                   right
                 />
-              </CellStyled>
+              </CellStyled> */}
             </Grid>
 
             {/* <Box>
@@ -444,13 +444,19 @@ const PartnerPage = ({ match, location, ...props }) => {
           <Box id="booking-card">
             <BookingCard
               titleComponent={
-                <Title
-                  type="h5"
-                  title={listing.title}
-                  subtitle={_getAddress(listing.location)}
-                  subTitleMargin={10}
-                  noMargin
-                />
+                <>
+                  <Price
+                    price={listing.listingData.basePrice}
+                    currencySymbol="$"
+                    bookingPeriod={listing.bookingPeriod}
+                    bookingType={listing.listingData.bookingType}
+                    size="28px"
+                    periodSize="11px"
+                    left
+                    lightPeriod
+                    lightPrice
+                  />
+                </>
               }
               contentComponent={<FormPartner {...props} listing={listing} dispatch={dispatch} />}
               footerComponent={
