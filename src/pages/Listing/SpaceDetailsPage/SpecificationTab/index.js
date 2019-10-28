@@ -259,7 +259,6 @@ const SpecificationTab = ({
     }
     dispatch(openModal(TypesModal.MODAL_TYPE_CONFIRM, options))
   }
-  console.log(arrayAccessTypes)
 
   return (
     <form>
@@ -365,7 +364,7 @@ const SpecificationTab = ({
                   item =>
                     item.itemName !== 'Receptionist' && (
                       <option key={item.id} value={item.itemName}>
-                        {item.itemName}
+                        {item.itemName === 'Person' ? `${item.itemName} at reception` : item.itemName}
                       </option>
                     )
                 )}

@@ -738,7 +738,7 @@ const SpacePage = ({ match, location, history, ...props }) => {
                   <Title
                     type="h5"
                     title="Access Information"
-                    subtitle="How you’ll gain access to this space. Your host will provide the following upon successful bookings:"
+                    subtitle="How you’ll gain access to this space. Your host will provide the following upon successful booking:"
                   />
                   <Box
                     display="grid"
