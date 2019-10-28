@@ -63,6 +63,7 @@ import DailyBooking from './DailyBooking'
 import MonthlyBooking from './MonthlyBooking'
 import PendingBooking from './PenidngBooking'
 import HourlyBooking from './HourlyBooking'
+import FormPartner from '../PartnerPage/FormPartner'
 
 const GridStyled = styled(Grid)`
   @media only screen and (max-width: 991px) {
@@ -363,6 +364,10 @@ const SpacePage = ({ match, location, history, ...props }) => {
   }
 
   const _renderContentCard = (bookingPeriod, bookingType) => {
+    console.log('user', user)
+    if (listing.user.provider === 'generic') {
+      return <FormPartner {...props} listing={listing} dispatch={dispatch} />
+    }
     if (pendingBooking && pendingBooking.items && pendingBooking.items.length > 0 && bookingType !== 'poa') {
       return (
         <PendingBooking
@@ -916,14 +921,16 @@ const SpacePage = ({ match, location, history, ...props }) => {
                   {_renderContentCard(listing.bookingPeriod)}
                   {(pendingBooking ? pendingBooking && pendingBooking.count === 0 : true) && (
                     <>
-                      <Button
-                        onClick={e => _onSubmitBooking(e)}
-                        isLoading={isLoadingOnCreateReservation}
-                        disabled={_isPeriodValid(listing.bookingPeriod) || (user && user.id === listing.user.id)}
-                        fluid
-                      >
-                        {listing.listingData.bookingType === 'request' ? 'Booking Request' : 'Reserve'}
-                      </Button>
+                      {listing.user.provider !== 'generic' && (
+                        <Button
+                          onClick={e => _onSubmitBooking(e)}
+                          isLoading={isLoadingOnCreateReservation}
+                          disabled={_isPeriodValid(listing.bookingPeriod) || (user && user.id === listing.user.id)}
+                          fluid
+                        >
+                          {listing.listingData.bookingType === 'request' ? 'Booking Request' : 'Reserve'}
+                        </Button>
+                      )}
                       <Box width="100%" textAlign="center">
                         <Text fontSize="11px">You won't be charged at this point</Text>
                       </Box>
