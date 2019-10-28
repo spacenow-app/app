@@ -7,7 +7,7 @@ import * as Yup from 'yup'
 import { format } from 'date-fns'
 import { DateUtils } from 'react-day-picker'
 
-import { Title, Input, Select, TextArea, Button, DatePicker } from 'components'
+import { Input, TextArea, Button, DatePicker } from 'components'
 
 import { onSendHubSpotForm } from 'redux/ducks/integration'
 
