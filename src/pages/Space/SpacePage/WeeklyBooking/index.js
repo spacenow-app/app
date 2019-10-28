@@ -12,12 +12,11 @@ function spelling(reference) {
 const WeeklyBooking = props => {
   const { date, onDateChange, listingExceptionDates, closingDays, handleChangePeriod, period, listingData } = props
 
-  let dates = [{ key: 0, value: 0, name: 'Choose a Period' }]
+  const dates = [{ key: 0, value: 0, name: 'Choose a Period' }]
 
   for (let i = props.listingData.minTerm; i < 13; i++) {
     dates.push({ key: i, value: i, name: `${i} ${spelling(i)}` })
   }
-
   return (
     <Grid columns={1} rowGap="40px">
       <Grid columns={1} rowGap="10px">
@@ -54,7 +53,7 @@ const WeeklyBooking = props => {
 
 WeeklyBooking.defaultProps = {
   date: '',
-  period: 0
+  period: 1
 }
 
 WeeklyBooking.propTypes = {

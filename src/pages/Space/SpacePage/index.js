@@ -72,17 +72,13 @@ const GridStyled = styled(Grid)`
 `
 
 const IconBoxStyled = styled.div`
-  background: #6adc91;
-  border-radius: 50%;
   width: 20px;
   height: 20px;
   text-align: center;
-  float: left;
-  margin-right: 10px;
+  margin-top: 5px;
 `
 
 const ReportSpaceStyled = styled.span`
-  font-family: Montserrat-SemiBold;
   font-size: 12px;
   cursor: pointer;
 `
@@ -690,7 +686,7 @@ const SpacePage = ({ match, location, history, ...props }) => {
                 )}
               </Grid>
               <Grid columns={12}>
-                <CellStyled width={7}>
+                <CellStyled width={12}>
                   <Title
                     type="h4"
                     title={listing.title}
@@ -700,7 +696,7 @@ const SpacePage = ({ match, location, history, ...props }) => {
                     noMargin
                   />
                 </CellStyled>
-                <CellStyled width={5} center>
+                {/* <CellStyled width={5} center>
                   <Price
                     currency={listing.listingData.currency}
                     price={listing.listingData.basePrice}
@@ -710,7 +706,7 @@ const SpacePage = ({ match, location, history, ...props }) => {
                     size="28px"
                     right
                   />
-                </CellStyled>
+                </CellStyled> */}
               </Grid>
 
               <Box>
@@ -887,45 +883,71 @@ const SpacePage = ({ match, location, history, ...props }) => {
             <BookingCard
               style={{ position: 'sticky', top: '1px' }}
               titleComponent={
-                <Title
-                  type="h5"
-                  title={listing.title}
-                  subtitle={_getAddress(listing.location)}
-                  subTitleMargin={10}
-                  noMargin
-                />
+                <>
+                  <Price
+                    price={listing.listingData.basePrice}
+                    currencySymbol="$"
+                    bookingPeriod={listing.bookingPeriod}
+                    bookingType={listing.listingData.bookingType}
+                    size="24px"
+                    periodSize="14px"
+                    left
+                    lightPeriod
+                  />
+                  {publicReviews && publicReviews.length > 0 && (
+                    <Box mb="-20px">
+                      <Grid columns={12} alignContent="center">
+                        <Cell width={4}>
+                          <StarRatingComponent name="ratingOverall" value={_getRatingAvg('Overall')} editing={false} />
+                        </Cell>
+                        <Cell width={6}>
+                          <Text fontSize="12px">({publicReviews.length} Reviews)</Text>
+                        </Cell>
+                      </Grid>
+                    </Box>
+                  )}
+                </>
               }
               contentComponent={
                 <>
                   {_renderContentCard(listing.bookingPeriod)}
                   {(pendingBooking ? pendingBooking && pendingBooking.count === 0 : true) && (
-                    <Button
-                      onClick={e => _onSubmitBooking(e)}
-                      isLoading={isLoadingOnCreateReservation}
-                      disabled={_isPeriodValid(listing.bookingPeriod) || (user && user.id === listing.user.id)}
-                      fluid
-                    >
-                      {listing.listingData.bookingType === 'request' ? 'Booking Request' : 'Reserve'}
-                    </Button>
+                    <>
+                      <Button
+                        onClick={e => _onSubmitBooking(e)}
+                        isLoading={isLoadingOnCreateReservation}
+                        disabled={_isPeriodValid(listing.bookingPeriod) || (user && user.id === listing.user.id)}
+                        fluid
+                      >
+                        {listing.listingData.bookingType === 'request' ? 'Booking Request' : 'Reserve'}
+                      </Button>
+                      <Box width="100%" textAlign="center">
+                        <Text fontSize="11px">You won't be charged at this point</Text>
+                      </Box>
+                    </>
                   )}
                 </>
               }
               footerComponent={
-                <>
-                  <UserDetails
-                    hostname={`${listing.user.profile.firstName} ${listing.user.profile.lastName}`}
-                    imageProfile={listing.user.profile.picture}
-                    provider={listing.user.provider}
-                    onClaim={_onClaimListing}
-                    joined="2019"
-                  />
-                  <Box mt="15px">
+                <UserDetails
+                  hostname={`${listing.user.profile.firstName} ${listing.user.profile.lastName}`}
+                  imageProfile={listing.user.profile.picture}
+                  provider={listing.user.provider}
+                  onClaim={_onClaimListing}
+                />
+              }
+              bottomComponent={
+                <Grid columns={12} columnGap="1px">
+                  <Cell width={4} />
+                  <Cell width={1}>
                     <IconBoxStyled>
                       <Icon name="flag" width="10px" height="100%" style={{ paddingBottom: '5px' }} />
                     </IconBoxStyled>
-                    <ReportSpaceStyled onClick={_reportSpace}>Report space</ReportSpaceStyled>
-                  </Box>
-                </>
+                  </Cell>
+                  <Cell width={7}>
+                    <ReportSpaceStyled onClick={_reportSpace}>Report this listing</ReportSpaceStyled>
+                  </Cell>
+                </Grid>
               }
             />
           </Cell>
