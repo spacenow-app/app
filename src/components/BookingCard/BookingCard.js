@@ -53,7 +53,6 @@ const BookingCard = props => (
       )}
       {props.footerComponent && (
         <div>
-          {props.contentComponent && <Divider />}
           <FooterStyled>
             {cloneElement(props.footerComponent, {
               ...props.footerComponent.props
