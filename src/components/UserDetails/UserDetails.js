@@ -50,9 +50,14 @@ const TextCity = styled(TextDefaultStyled)`
 `
 
 const TextClaim = styled(Link)`
-  font-family: 'Montserrat-SemiBold';
-  color: #707070v;
-  font-size: 12px;
+  font-size: 11px;
+  color: #172439;
+  text-decoration: underline;
+
+  :hover {
+    color: #172439;
+    text-decoration: underline;
+  }
 `
 
 const TextJoined = styled(TextDefaultStyled)`
@@ -65,16 +70,22 @@ const TextBottom = styled.span`
   font-size: 12px;
 `
 
+const TextTitleClaim = styled(TextDefaultStyled)`
+  line-height: 0.5;
+  margin-top: 10px;
+`
+
 const UserDetails = props => (
   <WrapperStyled>
     <TopStyled>
       <Avatar small image={props.imageProfile} />
       <UserContainer>
-        <TextName>{props.hostname}</TextName>
-        {props.address && <TextCity>{props.address}</TextCity>}
+        {props.provider !== 'generic' && <TextName>{props.hostname}</TextName>}
+        {props.address && props.provider !== 'generic' && <TextCity>{props.address}</TextCity>}
+        {props.provider === 'generic' && <TextTitleClaim>Is this your space?</TextTitleClaim>}
         {props.provider === 'generic' && (
           <TextClaim to="#" onClick={props.onClaim}>
-            Claim your listing!
+            Click here to claim
           </TextClaim>
         )}
       </UserContainer>

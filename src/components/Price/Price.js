@@ -21,6 +21,7 @@ const TextStyled = styled(Text)`
   font-family: ${props => {
     if (props.lightPeriod) return 'Montserrat-Regular'
   }};
+  font-size: ${props => (props.periodSize ? props.periodSize : props.size)};
 `
 
 const Price = ({ currency, currencySymbol, price, bookingPeriod, bookingType, size, ...props }) => {
@@ -28,7 +29,7 @@ const Price = ({ currency, currencySymbol, price, bookingPeriod, bookingType, si
     <ContainerStyled {...props}>
       {bookingType !== 'poa' ? (
         <Text fontSize={size} fontFamily="Montserrat-Bold" {...props}>
-          {`${currency} ${currencySymbol}${(Math.round((price || 0) * 100) / 100)
+          {`${currency || ''} ${currencySymbol}${(Math.round((price || 0) * 100) / 100)
             .toString()
             .replace(/\B(?=(\d{3})+(?!\d))/g, ',')} `}
           <TextStyled {...props}>{bookingPeriod || ''}</TextStyled>
@@ -43,7 +44,6 @@ const Price = ({ currency, currencySymbol, price, bookingPeriod, bookingType, si
 }
 
 Price.defaultProps = {
-  currency: 'EUR',
   currencySymbol: '$',
   price: 0,
   size: '28px'
