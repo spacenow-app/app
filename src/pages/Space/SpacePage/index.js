@@ -63,7 +63,7 @@ import DailyBooking from './DailyBooking'
 import MonthlyBooking from './MonthlyBooking'
 import PendingBooking from './PenidngBooking'
 import HourlyBooking from './HourlyBooking'
-import FormPartner from '../PartnerPage/FormPartner'
+import GenericForm from './GenericForm'
 
 const GridStyled = styled(Grid)`
   @media only screen and (max-width: 991px) {
@@ -364,9 +364,8 @@ const SpacePage = ({ match, location, history, ...props }) => {
   }
 
   const _renderContentCard = (bookingPeriod, bookingType) => {
-    console.log('user', user)
     if (listing.user.provider === 'generic') {
-      return <FormPartner {...props} listing={listing} dispatch={dispatch} />
+      return <GenericForm {...props} listing={listing} dispatch={dispatch} />
     }
     if (pendingBooking && pendingBooking.items && pendingBooking.items.length > 0 && bookingType !== 'poa') {
       return (
