@@ -773,7 +773,7 @@ const SpacePage = ({ match, location, history, ...props }) => {
               {listing.listingData.description ? (
                 <Box>
                   <Title type="h5" title="Description" />
-                  <p>{listing.listingData.description}</p>
+                  {listing.listingData.description.split('\n').map(o => <p>{o}</p>)}
                 </Box>
               ) : null}
               {isAuthenticated && (
