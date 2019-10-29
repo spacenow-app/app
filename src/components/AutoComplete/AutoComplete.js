@@ -60,6 +60,11 @@ const AutoComplete = props => {
       onSelect={_handleOnSelect}
       onError={props.onHandleError}
       shouldFetchSuggestions={props.address.length > 2}
+      searchOptions={{
+        location: new window.google.maps.LatLng(-34, 151),
+        radius: 2000,
+        types: ['address']
+      }}
     >
       {({ getInputProps, suggestions, getSuggestionItemProps, loading }) => (
         <div>
