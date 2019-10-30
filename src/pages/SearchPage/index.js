@@ -365,7 +365,7 @@ const SearchPage = ({ history, location }) => {
               {({ ref }) => {
                 return (
                   <Button outline size="sm" ref={ref} onClick={() => setShouldShowFilter('duration')}>
-                    Duration
+                    Frequency
                   </Button>
                 )
               }}
@@ -519,7 +519,7 @@ const SearchPage = ({ history, location }) => {
               {({ ref }) => {
                 return (
                   <Button outline size="sm" ref={ref} onClick={() => setShouldShowFilter('instantBooking')}>
-                    Instant
+                    Instant Booking
                   </Button>
                 )
               }}
