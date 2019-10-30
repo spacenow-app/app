@@ -2,19 +2,20 @@ import React, { useEffect, useState } from 'react'
 import PropTypes from 'prop-types'
 import Helmet from 'react-helmet'
 import { useSelector, useDispatch } from 'react-redux'
+import styled from 'styled-components'
 
 import {
   Wrapper,
   Title,
-  // Grid,
-  // Cell,
+  Grid,
+  Cell,
   TimeTable,
   Map,
   Tag,
   Box,
   Icon,
   Highlights,
-  StepButtons,
+  Button,
   Loader,
   Checkbox,
   Carousel,
@@ -35,17 +36,17 @@ import {
 
 import { openModal, TypesModal } from 'redux/ducks/modal'
 
-// import GraphCancelattionImage from 'pages/Listing/SpaceDetailsPage/CancellationTab/graph_cancellation.png'
+const CellStyled = styled(Cell)`
+  @media (max-width: 680px) {
+    grid-column-end: span 12;
+  }
+`
 
-// const ImageStyled = styled.img`
-//   width: 100%;
-// `
-
-// const TitlePrice = styled(Title)`
-//   @media only screen and (max-width: 991px) {
-//     float: left !important;
-//   }
-// `
+const CellDesktop = styled(Cell)`
+  @media (max-width: 680px) {
+    display: none;
+  }
+`
 
 const PreviewPage = ({ match, location, ...props }) => {
   const dispatch = useDispatch()
@@ -179,6 +180,10 @@ const PreviewPage = ({ match, location, ...props }) => {
     }
   }
 
+  const _handlerSaveContinue = () => {
+    window.location.href = `/account/listing`
+  }
+
   const _convertedArrayPhotos = array => {
     return array.filter(el => el !== undefined).length > 0
       ? array.filter(el => el !== undefined).map(el => ({ source: el.name }))
@@ -271,41 +276,8 @@ const PreviewPage = ({ match, location, ...props }) => {
                 : null
             }
           />
-          {/* <TitlePrice
-            type="h4"
-            title={`${listing.listingData.currency}$ ${Math.round((listing.listingData.basePrice || 0) * 100) / 100} ${
-              listing.bookingPeriod
-            }`}
-            color={listing.listingData.basePrice === 0 || listing.listingData.basePrice === null ? '#E05252' : null}
-            noMargin
-            right
-          /> */}
         </Box>
 
-        {/* <Grid columns={5}>
-        <Cell width={3}>
-          <Title
-            type="h3"
-            title={listing.title ? listing.title : 'Input Title'}
-            color={!listing.title ? '#E05252' : null}
-            subtitle={_getAddress(listing.location)}
-            subTitleSize={18}
-            noMargin
-          />
-        </Cell>
-        <Cell width={2} center>
-          <Title
-            type="h4"
-            title={`${listing.listingData.currency}$ ${Math.round((listing.listingData.basePrice || 0) * 100) / 100} ${
-              listing.bookingPeriod
-            }`}
-            color={listing.listingData.basePrice === 0 || listing.listingData.basePrice === null ? '#E05252' : null}
-            noMargin
-            right
-            style={{ marginTop: '5px' }}
-          />
-        </Cell>
-      </Grid> */}
         <Box my="30px" display="grid" gridTemplateColumns={{ _: '1fr', medium: '1fr' }}>
           <Title type="h4" title="Highlights" />
           <Box display="grid" gridTemplateColumns={{ _: '1fr 1fr', medium: '1fr 1fr 1fr 1fr 1fr' }} gridGap="20px">
@@ -426,32 +398,25 @@ const PreviewPage = ({ match, location, ...props }) => {
           <Map position={{ lat: Number(listing.location.lat), lng: Number(listing.location.lng) }} />
         </Box>
 
-        {/* <Grid columns={1}>
-          <Cell>
-            <Title type="h4" title="Cancellation Policy" />
-          </Cell>
-          <Cell>
-            <Box display="grid" gridTemplateColumns={{ _: '1fr', medium: '1fr 2fr' }} gridGap="20px">
-              <Cell width={1}>
-                <Title
-                  noMargin
-                  type="h4"
-                  title="No Cancellation"
-                  subTitleSize={16}
-                  subtitle="Guest cannot cancel their booking. Note: This may affect the number of bookings received."
-                />
-              </Cell>
-              <Cell width={1}>
-                <ImageStyled alt="Cancellation Policy" src={GraphCancelattionImage} />
-              </Cell>
-            </Box>
-          </Cell>
-        </Grid> */}
+        <Grid columns={12}>
+          <CellStyled width={2}>
+            <Button fluid outline onClick={() => props.history.push(`/listing/space/${match.params.id}`)}>
+              {`Previous Step`}
+            </Button>
+          </CellStyled>
+          <CellDesktop width={6} />
+          <CellStyled width={2}>
+            <Button fluid outline onClick={() => _handlerSaveContinue()} disabled={!listing.isReady}>
+              {`Save & Continue`}
+            </Button>
+          </CellStyled>
+          <CellStyled width={2}>
+            <Button fluid onClick={() => _handlerPublish()} disabled={!listing.isReady}>
+              {`Publish`}
+            </Button>
+          </CellStyled>
+        </Grid>
 
-        <StepButtons
-          prev={{ onClick: () => props.history.push(`/listing/space/${match.params.id}`) }}
-          next={{ onClick: () => _handlerPublish(), title: 'Publish', disabled: !listing.isReady }}
-        />
         <Footer />
       </Wrapper>
     </>
