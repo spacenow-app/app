@@ -2,8 +2,7 @@ import React, { useState, useEffect } from 'react'
 
 import { DatePicker, ListDates, PriceDetail } from 'components'
 import { DateUtils } from 'react-day-picker'
-import { eachDayOfInterval, isSameDay, format } from 'date-fns'
-import _ from 'lodash'
+import { eachDayOfInterval, isSameDay } from 'date-fns'
 
 function spelling(reference) {
   let label = 'Day'
@@ -58,9 +57,9 @@ const DailyBooking = ({
     // Remove Exception days from dates selected
     let filteredDates = datesSelected
     listingExceptionDates.map(date => {
-      filteredDates = filteredDates.filter(exeption => {
+      return (filteredDates = filteredDates.filter(exeption => {
         return !isSameDay(new Date(date), new Date(exeption))
-      })
+      }))
     })
 
     // Remove closing days from dates selected
@@ -72,7 +71,7 @@ const DailyBooking = ({
     })
 
     setListDates(filteredDates)
-  }, [datesSelected])
+  }, [datesSelected, closingDays, listingExceptionDates])
 
   useEffect(() => {
     if (JSON.stringify(listDates) !== JSON.stringify(datesSelected)) {
