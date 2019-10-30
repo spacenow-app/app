@@ -1,6 +1,9 @@
-import React from 'react'
+import React, { useState, useEffect } from 'react'
 
 import { DatePicker, ListDates, PriceDetail } from 'components'
+import { DateUtils } from 'react-day-picker'
+import { eachDayOfInterval, isSameDay, format } from 'date-fns'
+import _ from 'lodash'
 
 function spelling(reference) {
   let label = 'Day'
@@ -15,19 +18,100 @@ const DailyBooking = ({
   listingExceptionDates,
   closingDays,
   listingData,
-  removeDate
-}) => (
-  <>
-    <DatePicker
-      label="Start Date"
-      date={null}
-      handleDateChange={onDateChange}
-      hideOnDayClick={focus}
-      placeholder="Choose Dates"
-      dayPickerProps={{
-        selectedDays: [...datesSelected.map(el => new Date(el))],
-        modifiers: {
-          disabled: [
+  removeDate,
+  setDatesSelected
+}) => {
+  const [from, setFrom] = useState(undefined)
+  const [to, setTo] = useState(undefined)
+  const [range, setRange] = useState(undefined)
+  const [listDates, setListDates] = useState(datesSelected)
+  const modifiers = { start: from, end: to }
+
+  const _handleDayClick = day => {
+    const rangeInput = DateUtils.addDayToRange(day, range)
+    rangeInput.from ? setDatesSelected([rangeInput.from]) : setDatesSelected([])
+    if (rangeInput.from && rangeInput.to) {
+      const h = rangeInput.from.getHours()
+      const m = rangeInput.from.getMinutes()
+      const s = rangeInput.from.getSeconds()
+      const ms = rangeInput.from.getMilliseconds()
+      setDatesSelected(
+        eachDayOfInterval({ start: rangeInput.from, end: rangeInput.to }).map(date => {
+          date.setHours(h)
+          date.setMinutes(m)
+          date.setSeconds(s)
+          date.setMilliseconds(ms)
+          return date
+        })
+      )
+    }
+    setRange(rangeInput)
+    setFrom(rangeInput.from)
+    setTo(rangeInput.to)
+  }
+
+  useEffect(() => {
+    setRange({ from: datesSelected[0], to: datesSelected[datesSelected.length - 1] })
+    setFrom(datesSelected[0])
+    setTo(datesSelected[datesSelected.length - 1])
+
+    // Remove Exception days from dates selected
+    let filteredDates = datesSelected
+    listingExceptionDates.map(date => {
+      filteredDates = filteredDates.filter(exeption => {
+        return !isSameDay(new Date(date), new Date(exeption))
+      })
+    })
+
+    // Remove closing days from dates selected
+    let isClose = []
+    filteredDates = filteredDates.filter(element => {
+      const dt = new Date(element)
+      isClose = closingDays.filter(res => res === dt.getDay())
+      return isClose.length === 0
+    })
+
+    setListDates(filteredDates)
+  }, [datesSelected])
+
+  useEffect(() => {
+    if (JSON.stringify(listDates) !== JSON.stringify(datesSelected)) {
+      setDatesSelected(listDates)
+    }
+  }, [listDates])
+
+  return (
+    <>
+      {/* <DatePicker
+        label="Start Date"
+        date={null}
+        handleDateChange={onDateChange}
+        hideOnDayClick={focus}
+        placeholder="Choose Dates"
+        dayPickerProps={{
+          selectedDays: [...datesSelected.map(el => new Date(el))],
+          modifiers: {
+            disabled: [
+              ...listingExceptionDates.map(el => new Date(el)),
+              {
+                daysOfWeek: closingDays
+              },
+              {
+                before: new Date()
+              }
+            ]
+          }
+        }}
+      /> */}
+      <DatePicker
+        label="Dates"
+        date={null}
+        handleDateChange={date => _handleDayClick(date)}
+        hideOnDayClick={false}
+        placeholder="Choose Dates"
+        inputProps={{ readOnly: true }}
+        dayPickerProps={{
+          disabledDays: [
             ...listingExceptionDates.map(el => new Date(el)),
             {
               daysOfWeek: closingDays
@@ -35,20 +119,24 @@ const DailyBooking = ({
             {
               before: new Date()
             }
-          ]
-        }
-      }}
-    />
-    <ListDates dates={datesSelected} onClickDate={(e, date) => removeDate(date)} />
-    {datesSelected.length > 0 && (
-      <PriceDetail
-        periodLabel={spelling(datesSelected.length)}
-        price={listingData.basePrice}
-        isAbsorvedFee={listingData.isAbsorvedFee}
-        days={datesSelected.length}
-        quantity={1}
+          ],
+          numberOfMonths: 1,
+          selectedDays: [from, { from, to }],
+          modifiers: { modifiers }
+        }}
       />
-    )}
-  </>
-)
+      <ListDates dates={listDates} /> {/* onClickDate={(e, date) => removeDate(date)} */}
+      {listDates.length > 0 && (
+        <PriceDetail
+          periodLabel={spelling(listDates.length)}
+          price={listingData.basePrice}
+          isAbsorvedFee={listingData.isAbsorvedFee}
+          days={listDates.length}
+          quantity={1}
+        />
+      )}
+    </>
+  )
+}
+
 export default DailyBooking

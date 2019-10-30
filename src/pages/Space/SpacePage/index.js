@@ -407,6 +407,7 @@ const SpacePage = ({ match, location, history, ...props }) => {
           <DailyBooking
             focus={!(datesSelected && datesSelected.length > 0)}
             onDateChange={_onDateChangeArray}
+            setDatesSelected={setDatesSelected}
             datesSelected={datesSelected}
             removeDate={_removeDate}
             listingExceptionDates={availabilities}
