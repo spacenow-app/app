@@ -1,3 +1,4 @@
+/* eslint-disable  */
 import React, { useState, useEffect } from 'react'
 
 import { DatePicker, ListDates, PriceDetail } from 'components'
@@ -74,7 +75,7 @@ const DailyBooking = ({
   }, [datesSelected, closingDays, listingExceptionDates])
 
   useEffect(() => {
-    if (JSON.stringify(listDates) !== JSON.stringify(datesSelected)) {
+    if (listDates.length > 0 && JSON.stringify(listDates) !== JSON.stringify(datesSelected)) {
       setDatesSelected(listDates)
     }
   }, [listDates])
