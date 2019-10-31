@@ -304,13 +304,13 @@ const SearchPage = ({ history, location }) => {
             <Reference>
               {({ ref }) => {
                 return (
-                  <Button outline size="sm" ref={ref} onClick={() => setShouldShowFilter('category')}>
-                    Category
+                  <Button outline size="sm" ref={ref} onClick={() => setShouldShowFilter('dates')}>
+                    Dates
                   </Button>
                 )
               }}
             </Reference>
-            {shouldShowFilter === 'category' && (
+            {shouldShowFilter === 'dates' && (
               <Popper placement="top-end" modifiers={modifiers}>
                 {({ ref, style, placement, arrowProps }) => {
                   return (
@@ -330,73 +330,43 @@ const SearchPage = ({ history, location }) => {
                         zIndex="2000001"
                       >
                         <div>
-                          <Checkbox
-                            label={<Text fontFamily="bold">Workspace</Text>}
-                            checked={filterCategory.workspace}
-                            handleCheckboxChange={(e, { checked }) =>
-                              setFilterCategory({ ...filterCategory, workspace: !checked })
-                            }
+                          <CalendarContainerDesktop>
+                            <Calendar
+                              fromMonth={new Date()}
+                              handleDayClick={_onClickSelectDay}
+                              selectedDays={filterSelectedDates}
+                              disabledDays={[]}
+                              daysOfWeek={[]}
+                              colorSelected="#E05252"
+                            />
+                          </CalendarContainerDesktop>
+                          <DatePickerMobile
+                            date={null}
+                            handleDateChange={_onClickSelectDay}
+                            hideOnDayClick={false}
+                            placeholder="Choose Dates"
+                            colorSelected="#E05252"
+                            dayPickerProps={{
+                              selectedDays: filterSelectedDates,
+                              modifiers: {
+                                disabled: [
+                                  {
+                                    daysOfWeek: []
+                                  },
+                                  {
+                                    before: new Date()
+                                  }
+                                ]
+                              }
+                            }}
                           />
-                          <Text display="block" ml="28px" mb="20px">
-                            I’m looking for a desk, office or coworking space
-                          </Text>
-                          <Checkbox
-                            label={<Text fontFamily="bold">Meeting space</Text>}
-                            checked={filterCategory.meetingSpace}
-                            handleCheckboxChange={(e, { checked }) =>
-                              setFilterCategory({ ...filterCategory, meetingSpace: !checked })
-                            }
-                          />
-                          <Text display="block" ml="28px" mb="20px">
-                            I’m looking for a space to hold a meeting
-                          </Text>
-                          <Checkbox
-                            label={<Text fontFamily="bold">Event space</Text>}
-                            checked={filterCategory.eventSpace}
-                            handleCheckboxChange={(e, { checked }) =>
-                              setFilterCategory({ ...filterCategory, eventSpace: !checked })
-                            }
-                          />
-                          <Text display="block" ml="28px" mb="20px">
-                            I’m looking for a space to hold an event
-                          </Text>
-                          <Checkbox
-                            label={<Text fontFamily="bold">Parking</Text>}
-                            checked={filterCategory.parking}
-                            handleCheckboxChange={(e, { checked }) =>
-                              setFilterCategory({ ...filterCategory, parking: !checked })
-                            }
-                          />
-                          <Text display="block" ml="28px" mb="20px">
-                            I’m looking for a place to park my vehicle
-                          </Text>
-                          <Checkbox
-                            label={<Text fontFamily="bold">Storage</Text>}
-                            checked={filterCategory.storage}
-                            handleCheckboxChange={(e, { checked }) =>
-                              setFilterCategory({ ...filterCategory, storage: !checked })
-                            }
-                          />
-                          <Text display="block" ml="28px" mb="20px">
-                            I’m looking for a place to store items or goods
-                          </Text>
-                          <Checkbox
-                            label={<Text fontFamily="bold">Retail & Hospitality</Text>}
-                            checked={filterCategory.retailAndHospitality}
-                            handleCheckboxChange={(e, { checked }) =>
-                              setFilterCategory({ ...filterCategory, retailAndHospitality: !checked })
-                            }
-                          />
-                          <Text display="block" ml="28px" mb="20px">
-                            I’m looking to rent a place for business
-                          </Text>
                         </div>
                         <Box display="flex" justifyContent="space-between">
-                          <Button size="sm" outline onClick={_onQueryFilter}>
-                            Update Search
-                          </Button>
                           <Button size="sm" outline onClick={() => setShouldShowFilter(false)}>
                             Close
+                          </Button>
+                          <Button size="sm" outline onClick={_onQueryFilter}>
+                            Update Search
                           </Button>
                         </Box>
                       </Box>
@@ -498,83 +468,6 @@ const SearchPage = ({ history, location }) => {
             <Reference>
               {({ ref }) => {
                 return (
-                  <Button outline size="sm" ref={ref} onClick={() => setShouldShowFilter('dates')}>
-                    Dates
-                  </Button>
-                )
-              }}
-            </Reference>
-            {shouldShowFilter === 'dates' && (
-              <Popper placement="top-end" modifiers={modifiers}>
-                {({ ref, style, placement, arrowProps }) => {
-                  return (
-                    <Box
-                      ref={ref}
-                      style={{ ...style, zIndex: 5000000 }}
-                      width={{ _: '90vw', small: 'auto' }}
-                      data-placement={placement}
-                    >
-                      <div ref={arrowProps.ref} style={arrowProps.style} />
-                      <Box
-                        borderRadius="6px"
-                        bg="white"
-                        border="1px solid #cbcbcb"
-                        padding="30px"
-                        marginTop="10px"
-                        zIndex="2000001"
-                      >
-                        <div>
-                          <CalendarContainerDesktop>
-                            <Calendar
-                              fromMonth={new Date()}
-                              handleDayClick={_onClickSelectDay}
-                              selectedDays={filterSelectedDates}
-                              disabledDays={[]}
-                              daysOfWeek={[]}
-                              colorSelected="#E05252"
-                            />
-                          </CalendarContainerDesktop>
-                          <DatePickerMobile
-                            date={null}
-                            handleDateChange={_onClickSelectDay}
-                            hideOnDayClick={false}
-                            placeholder="Choose Dates"
-                            colorSelected="#E05252"
-                            dayPickerProps={{
-                              selectedDays: filterSelectedDates,
-                              modifiers: {
-                                disabled: [
-                                  {
-                                    daysOfWeek: []
-                                  },
-                                  {
-                                    before: new Date()
-                                  }
-                                ]
-                              }
-                            }}
-                          />
-                        </div>
-                        <Box display="flex" justifyContent="space-between">
-                          <Button size="sm" outline onClick={() => setShouldShowFilter(false)}>
-                            Close
-                          </Button>
-                          <Button size="sm" outline onClick={_onQueryFilter}>
-                            Update Search
-                          </Button>
-                        </Box>
-                      </Box>
-                    </Box>
-                  )
-                }}
-              </Popper>
-            )}
-          </Manager>
-
-          <Manager>
-            <Reference>
-              {({ ref }) => {
-                return (
                   <Button outline size="sm" ref={ref} onClick={() => setShouldShowFilter('price')}>
                     Price
                   </Button>
@@ -623,6 +516,113 @@ const SearchPage = ({ history, location }) => {
                           />
                         </Box>
                         <Box mt="30px" display="flex" justifyContent="space-between">
+                          <Button size="sm" outline onClick={_onQueryFilter}>
+                            Update Search
+                          </Button>
+                          <Button size="sm" outline onClick={() => setShouldShowFilter(false)}>
+                            Close
+                          </Button>
+                        </Box>
+                      </Box>
+                    </Box>
+                  )
+                }}
+              </Popper>
+            )}
+          </Manager>
+
+          <Manager>
+            <Reference>
+              {({ ref }) => {
+                return (
+                  <Button outline size="sm" ref={ref} onClick={() => setShouldShowFilter('category')}>
+                    Category
+                  </Button>
+                )
+              }}
+            </Reference>
+            {shouldShowFilter === 'category' && (
+              <Popper placement="top-end" modifiers={modifiers}>
+                {({ ref, style, placement, arrowProps }) => {
+                  return (
+                    <Box
+                      ref={ref}
+                      style={{ ...style, zIndex: 5000000 }}
+                      width={{ _: '90vw', small: 'auto' }}
+                      data-placement={placement}
+                    >
+                      <div ref={arrowProps.ref} style={arrowProps.style} />
+                      <Box
+                        borderRadius="6px"
+                        bg="white"
+                        border="1px solid #cbcbcb"
+                        padding="30px"
+                        marginTop="10px"
+                        zIndex="2000001"
+                      >
+                        <div>
+                          <Checkbox
+                            label={<Text fontFamily="bold">Workspace</Text>}
+                            checked={filterCategory.workspace}
+                            handleCheckboxChange={(e, { checked }) =>
+                              setFilterCategory({ ...filterCategory, workspace: !checked })
+                            }
+                          />
+                          <Text display="block" ml="28px" mb="20px">
+                            I’m looking for a desk, office or coworking space
+                          </Text>
+                          <Checkbox
+                            label={<Text fontFamily="bold">Meeting space</Text>}
+                            checked={filterCategory.meetingSpace}
+                            handleCheckboxChange={(e, { checked }) =>
+                              setFilterCategory({ ...filterCategory, meetingSpace: !checked })
+                            }
+                          />
+                          <Text display="block" ml="28px" mb="20px">
+                            I’m looking for a space to hold a meeting
+                          </Text>
+                          <Checkbox
+                            label={<Text fontFamily="bold">Event space</Text>}
+                            checked={filterCategory.eventSpace}
+                            handleCheckboxChange={(e, { checked }) =>
+                              setFilterCategory({ ...filterCategory, eventSpace: !checked })
+                            }
+                          />
+                          <Text display="block" ml="28px" mb="20px">
+                            I’m looking for a space to hold an event
+                          </Text>
+                          <Checkbox
+                            label={<Text fontFamily="bold">Parking</Text>}
+                            checked={filterCategory.parking}
+                            handleCheckboxChange={(e, { checked }) =>
+                              setFilterCategory({ ...filterCategory, parking: !checked })
+                            }
+                          />
+                          <Text display="block" ml="28px" mb="20px">
+                            I’m looking for a place to park my vehicle
+                          </Text>
+                          <Checkbox
+                            label={<Text fontFamily="bold">Storage</Text>}
+                            checked={filterCategory.storage}
+                            handleCheckboxChange={(e, { checked }) =>
+                              setFilterCategory({ ...filterCategory, storage: !checked })
+                            }
+                          />
+                          <Text display="block" ml="28px" mb="20px">
+                            I’m looking for a place to store items or goods
+                          </Text>
+                          <Checkbox
+                            label={<Text fontFamily="bold">Retail & Hospitality</Text>}
+                            checked={filterCategory.retailAndHospitality}
+                            handleCheckboxChange={(e, { checked }) =>
+                              setFilterCategory({ ...filterCategory, retailAndHospitality: !checked })
+                            }
+                          />
+                          <Text display="block" ml="28px" mb="20px">
+                            I’m looking to rent a place for business
+                          </Text>
+                        </div>
+                        <Box display="flex" justifyContent="space-between">
                           <Button size="sm" outline onClick={_onQueryFilter}>
                             Update Search
                           </Button>
