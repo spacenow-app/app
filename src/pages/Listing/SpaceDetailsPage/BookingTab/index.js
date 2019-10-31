@@ -146,28 +146,28 @@ const BookingTab = ({
           <Cell width={1}>
             <Radio
               name="minTerm"
-              value={2}
-              checked={values.minTerm === 2}
+              value={values.bookingPeriod !== 'monthly' ? 2 : 3}
+              checked={values.minTerm === (values.bookingPeriod !== 'monthly' ? 2 : 3)}
               handleChange={_handleRadioChange}
-              label={_changeToPlural(values.bookingPeriod, 2)}
+              label={_changeToPlural(values.bookingPeriod, values.bookingPeriod !== 'monthly' ? 2 : 3)}
             />
           </Cell>
           <Cell width={1}>
             <Radio
               name="minTerm"
-              value={5}
-              checked={values.minTerm === 5}
+              value={values.bookingPeriod === 'hourly' || values.bookingPeriod === 'weekly' ? 4 : values.bookingPeriod === 'monthly' ? 6 : 5}
+              checked={values.minTerm === (values.bookingPeriod === 'hourly' || values.bookingPeriod === 'weekly' ? 4 : values.bookingPeriod === 'monthly' ? 6 : 5)}
               handleChange={_handleRadioChange}
-              label={_changeToPlural(values.bookingPeriod, 5)}
+              label={_changeToPlural(values.bookingPeriod, values.bookingPeriod === 'hourly' || values.bookingPeriod === 'weekly' ? 4 : values.bookingPeriod === 'monthly' ? 6 : 5)}
             />
           </Cell>
           <Cell width={1}>
             <Radio
               name="minTerm"
-              value={7}
-              checked={values.minTerm === 7}
+              value={values.bookingPeriod === 'hourly' || values.bookingPeriod === 'weekly' ? 8 : values.bookingPeriod === 'monthly' ? 12 : 7}
+              checked={values.minTerm === (values.bookingPeriod === 'hourly' || values.bookingPeriod === 'weekly' ? 8 : values.bookingPeriod === 'monthly' ? 12 : 7)}
               handleChange={_handleRadioChange}
-              label={_changeToPlural(values.bookingPeriod, 7)}
+              label={_changeToPlural(values.bookingPeriod, values.bookingPeriod === 'hourly' || values.bookingPeriod === 'weekly' ? 8 : values.bookingPeriod === 'monthly' ? 12 : 7)}
             />
           </Cell>
         </Box>
