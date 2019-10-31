@@ -1,8 +1,25 @@
 import React, { useLayoutEffect, useEffect, useState, useRef } from 'react'
 import { useDispatch, shallowEqual, useSelector } from 'react-redux'
 import styled from 'styled-components'
+import { isAfter, isBefore, isSameDay } from 'date-fns'
+import _ from 'lodash'
 
-import { NavBar, Line, Title, Text, Input, Button, Box, Checkbox, MapSearch, Slider, Switch, Loader } from 'components'
+import {
+  NavBar,
+  Line,
+  Title,
+  Text,
+  Input,
+  Button,
+  Box,
+  Checkbox,
+  MapSearch,
+  Slider,
+  Switch,
+  Loader,
+  DatePicker,
+  Calendar
+} from 'components'
 
 import { Manager, Reference, Popper } from 'react-popper'
 import numeral from 'numeral'
@@ -13,7 +30,7 @@ import ListResults from './ListResults'
 
 const FilterBar = styled.div`
   display: grid;
-  grid-template-columns: auto auto auto auto 1fr;
+  grid-template-columns: auto auto auto auto auto 1fr;
   grid-column-gap: 15px;
   padding: 0 20px;
 
@@ -88,6 +105,20 @@ const SwitchStyled = styled.div`
   }
 `
 
+const CalendarContainerDesktop = styled.div`
+  @media only screen and (max-width: 991px) {
+    display: none;
+  }
+`
+
+const DatePickerMobile = styled(DatePicker)`
+  display: none;
+  @media only screen and (max-width: 991px) {
+    display: block;
+    padding: 10px;
+  }
+`
+
 const getParamOrDefault = (location, param, defaultValue) => {
   const queryParams = new URLSearchParams(location)
   const value = queryParams.get(param)
@@ -130,6 +161,8 @@ const SearchPage = ({ history, location }) => {
     retailAndHospitality: /retailAndHospitality/i.test(queryCategory)
   })
   const [showMap, setShowMap] = useState(true)
+  const [filterSelectedDates, setFilterSelectedDates] = useState([])
+
   const { searchKey, result: searchResults, pagination } = useSelector(state => state.search.get, shallowEqual)
   const isLoading = useSelector(state => state.search.isLoading)
 
@@ -235,6 +268,18 @@ const SearchPage = ({ history, location }) => {
     }
     refResults.current.scrollTop = 0
     dispatch(onQuery(searchKey, filters, page))
+  }
+
+  const _onClickSelectDay = (day, { selected }) => {
+    const copySelectedDates = [...filterSelectedDates]
+    if (selected) {
+      const selectedIndex = copySelectedDates.findIndex(selectedDay => isSameDay(selectedDay, day))
+      copySelectedDates.splice(selectedIndex, 1)
+    } else {
+      copySelectedDates.push(day)
+    }
+    const arraySorted = _.sortBy([...copySelectedDates], item => item)
+    setFilterSelectedDates(arraySorted)
   }
 
   const modifiers = {
@@ -430,6 +475,83 @@ const SearchPage = ({ history, location }) => {
                           <Text display="block" ml="28px" mb="20px">
                             I want to find space on a monthly basis
                           </Text>
+                        </div>
+                        <Box display="flex" justifyContent="space-between">
+                          <Button size="sm" outline onClick={() => setShouldShowFilter(false)}>
+                            Close
+                          </Button>
+                          <Button size="sm" outline onClick={_onQueryFilter}>
+                            Update Search
+                          </Button>
+                        </Box>
+                      </Box>
+                    </Box>
+                  )
+                }}
+              </Popper>
+            )}
+          </Manager>
+
+          <Manager>
+            <Reference>
+              {({ ref }) => {
+                return (
+                  <Button outline size="sm" ref={ref} onClick={() => setShouldShowFilter('dates')}>
+                    Dates
+                  </Button>
+                )
+              }}
+            </Reference>
+            {shouldShowFilter === 'dates' && (
+              <Popper placement="top-end" modifiers={modifiers}>
+                {({ ref, style, placement, arrowProps }) => {
+                  return (
+                    <Box
+                      ref={ref}
+                      style={{ ...style, zIndex: 5000000 }}
+                      width={{ _: '90vw', small: 'auto' }}
+                      data-placement={placement}
+                    >
+                      <div ref={arrowProps.ref} style={arrowProps.style} />
+                      <Box
+                        borderRadius="6px"
+                        bg="white"
+                        border="1px solid #cbcbcb"
+                        padding="30px"
+                        marginTop="10px"
+                        zIndex="2000001"
+                      >
+                        <div>
+                          <CalendarContainerDesktop>
+                            <Calendar
+                              fromMonth={new Date()}
+                              handleDayClick={_onClickSelectDay}
+                              selectedDays={filterSelectedDates}
+                              disabledDays={[]}
+                              daysOfWeek={[]}
+                              colorSelected="#E05252"
+                            />
+                          </CalendarContainerDesktop>
+                          <DatePickerMobile
+                            date={null}
+                            handleDateChange={_onClickSelectDay}
+                            hideOnDayClick={false}
+                            placeholder="Choose Dates"
+                            colorSelected="#E05252"
+                            dayPickerProps={{
+                              selectedDays: filterSelectedDates,
+                              modifiers: {
+                                disabled: [
+                                  {
+                                    daysOfWeek: []
+                                  },
+                                  {
+                                    before: new Date()
+                                  }
+                                ]
+                              }
+                            }}
+                          />
                         </div>
                         <Box display="flex" justifyContent="space-between">
                           <Button size="sm" outline onClick={() => setShouldShowFilter(false)}>
