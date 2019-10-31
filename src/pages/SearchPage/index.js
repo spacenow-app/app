@@ -1,7 +1,7 @@
 import React, { useLayoutEffect, useEffect, useState, useRef } from 'react'
 import { useDispatch, shallowEqual, useSelector } from 'react-redux'
 import styled from 'styled-components'
-import { isAfter, isBefore, isSameDay } from 'date-fns'
+import { isSameDay } from 'date-fns'
 import _ from 'lodash'
 
 import {
@@ -250,7 +250,8 @@ const SearchPage = ({ history, location }) => {
       filterCategory,
       filterDuration,
       filterInstantBooking,
-      filterPrice
+      filterPrice,
+      filterSelectedDates
     }
     dispatch(onQuery(searchKey, filters))
     setShouldShowFilter(null)
@@ -261,7 +262,8 @@ const SearchPage = ({ history, location }) => {
       filterCategory,
       filterDuration,
       filterInstantBooking,
-      filterPrice
+      filterPrice,
+      filterSelectedDates
     }
     if (!searchKey) {
       return
