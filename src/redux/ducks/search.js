@@ -132,6 +132,7 @@ const querySearchByFilters = gql`
     $priceMin: Float,
     $priceMax: Float,
     $instant: String,
+    $availability: [String],
     $page: Int
   ) {
     searchByFilters(
@@ -141,6 +142,7 @@ const querySearchByFilters = gql`
       priceMin: $priceMin,
       priceMax: $priceMax,
       instant: $instant,
+      availability: $availability,
       page: $page
     ) {
       __typename
@@ -271,7 +273,8 @@ export const onQuery = (searchKey, filters, page = null) => async dispatch => {
         .join() || '',
     priceMin: filters.filterPrice[0] || 0,
     priceMax: filters.filterPrice[1] || 0,
-    instant: filters.filterInstantBooking ? filters.filterInstantBooking.toString() : ''
+    instant: filters.filterInstantBooking ? filters.filterInstantBooking.toString() : '',
+    availability: filters.filterSelectedDates ? filters.filterSelectedDates.map(o => o.toString()) : []
   }
   try {
     const { data } = await getClient().query({
@@ -283,6 +286,7 @@ export const onQuery = (searchKey, filters, page = null) => async dispatch => {
         priceMin: filter.priceMin,
         priceMax: filter.priceMax,
         instant: filter.instant,
+        availability: filter.availability,
         page
       }
     })

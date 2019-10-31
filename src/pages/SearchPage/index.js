@@ -1,8 +1,25 @@
 import React, { useLayoutEffect, useEffect, useState, useRef } from 'react'
 import { useDispatch, shallowEqual, useSelector } from 'react-redux'
 import styled from 'styled-components'
+import { isSameDay } from 'date-fns'
+import _ from 'lodash'
 
-import { NavBar, Line, Title, Text, Input, Button, Box, Checkbox, MapSearch, Slider, Switch, Loader } from 'components'
+import {
+  NavBar,
+  Line,
+  Title,
+  Text,
+  Input,
+  Button,
+  Box,
+  Checkbox,
+  MapSearch,
+  Slider,
+  Switch,
+  Loader,
+  DatePicker,
+  Calendar
+} from 'components'
 
 import { Manager, Reference, Popper } from 'react-popper'
 import numeral from 'numeral'
@@ -13,7 +30,7 @@ import ListResults from './ListResults'
 
 const FilterBar = styled.div`
   display: grid;
-  grid-template-columns: auto auto auto auto 1fr;
+  grid-template-columns: auto auto auto auto auto 1fr;
   grid-column-gap: 15px;
   padding: 0 20px;
 
@@ -88,6 +105,20 @@ const SwitchStyled = styled.div`
   }
 `
 
+const CalendarContainerDesktop = styled.div`
+  @media only screen and (max-width: 991px) {
+    display: none;
+  }
+`
+
+const DatePickerMobile = styled(DatePicker)`
+  display: none;
+  @media only screen and (max-width: 991px) {
+    display: block;
+    padding: 10px;
+  }
+`
+
 const getParamOrDefault = (location, param, defaultValue) => {
   const queryParams = new URLSearchParams(location)
   const value = queryParams.get(param)
@@ -130,6 +161,8 @@ const SearchPage = ({ history, location }) => {
     retailAndHospitality: /retailAndHospitality/i.test(queryCategory)
   })
   const [showMap, setShowMap] = useState(true)
+  const [filterSelectedDates, setFilterSelectedDates] = useState([])
+
   const { searchKey, result: searchResults, pagination } = useSelector(state => state.search.get, shallowEqual)
   const isLoading = useSelector(state => state.search.isLoading)
 
@@ -217,7 +250,8 @@ const SearchPage = ({ history, location }) => {
       filterCategory,
       filterDuration,
       filterInstantBooking,
-      filterPrice
+      filterPrice,
+      filterSelectedDates
     }
     dispatch(onQuery(searchKey, filters))
     setShouldShowFilter(null)
@@ -228,13 +262,26 @@ const SearchPage = ({ history, location }) => {
       filterCategory,
       filterDuration,
       filterInstantBooking,
-      filterPrice
+      filterPrice,
+      filterSelectedDates
     }
     if (!searchKey) {
       return
     }
     refResults.current.scrollTop = 0
     dispatch(onQuery(searchKey, filters, page))
+  }
+
+  const _onClickSelectDay = (day, { selected }) => {
+    const copySelectedDates = [...filterSelectedDates]
+    if (selected) {
+      const selectedIndex = copySelectedDates.findIndex(selectedDay => isSameDay(selectedDay, day))
+      copySelectedDates.splice(selectedIndex, 1)
+    } else {
+      copySelectedDates.push(day)
+    }
+    const arraySorted = _.sortBy([...copySelectedDates], item => item)
+    setFilterSelectedDates(arraySorted)
   }
 
   const modifiers = {
@@ -257,13 +304,13 @@ const SearchPage = ({ history, location }) => {
             <Reference>
               {({ ref }) => {
                 return (
-                  <Button outline size="sm" ref={ref} onClick={() => setShouldShowFilter('category')}>
-                    Category
+                  <Button outline size="sm" ref={ref} onClick={() => setShouldShowFilter('dates')}>
+                    Dates
                   </Button>
                 )
               }}
             </Reference>
-            {shouldShowFilter === 'category' && (
+            {shouldShowFilter === 'dates' && (
               <Popper placement="top-end" modifiers={modifiers}>
                 {({ ref, style, placement, arrowProps }) => {
                   return (
@@ -283,73 +330,43 @@ const SearchPage = ({ history, location }) => {
                         zIndex="2000001"
                       >
                         <div>
-                          <Checkbox
-                            label={<Text fontFamily="bold">Workspace</Text>}
-                            checked={filterCategory.workspace}
-                            handleCheckboxChange={(e, { checked }) =>
-                              setFilterCategory({ ...filterCategory, workspace: !checked })
-                            }
+                          <CalendarContainerDesktop>
+                            <Calendar
+                              fromMonth={new Date()}
+                              handleDayClick={_onClickSelectDay}
+                              selectedDays={filterSelectedDates}
+                              disabledDays={[]}
+                              daysOfWeek={[]}
+                              colorSelected="#E05252"
+                            />
+                          </CalendarContainerDesktop>
+                          <DatePickerMobile
+                            date={null}
+                            handleDateChange={_onClickSelectDay}
+                            hideOnDayClick={false}
+                            placeholder="Choose Dates"
+                            colorSelected="#E05252"
+                            dayPickerProps={{
+                              selectedDays: filterSelectedDates,
+                              modifiers: {
+                                disabled: [
+                                  {
+                                    daysOfWeek: []
+                                  },
+                                  {
+                                    before: new Date()
+                                  }
+                                ]
+                              }
+                            }}
                           />
-                          <Text display="block" ml="28px" mb="20px">
-                            I’m looking for a desk, office or coworking space
-                          </Text>
-                          <Checkbox
-                            label={<Text fontFamily="bold">Meeting space</Text>}
-                            checked={filterCategory.meetingSpace}
-                            handleCheckboxChange={(e, { checked }) =>
-                              setFilterCategory({ ...filterCategory, meetingSpace: !checked })
-                            }
-                          />
-                          <Text display="block" ml="28px" mb="20px">
-                            I’m looking for a space to hold a meeting
-                          </Text>
-                          <Checkbox
-                            label={<Text fontFamily="bold">Event space</Text>}
-                            checked={filterCategory.eventSpace}
-                            handleCheckboxChange={(e, { checked }) =>
-                              setFilterCategory({ ...filterCategory, eventSpace: !checked })
-                            }
-                          />
-                          <Text display="block" ml="28px" mb="20px">
-                            I’m looking for a space to hold an event
-                          </Text>
-                          <Checkbox
-                            label={<Text fontFamily="bold">Parking</Text>}
-                            checked={filterCategory.parking}
-                            handleCheckboxChange={(e, { checked }) =>
-                              setFilterCategory({ ...filterCategory, parking: !checked })
-                            }
-                          />
-                          <Text display="block" ml="28px" mb="20px">
-                            I’m looking for a place to park my vehicle
-                          </Text>
-                          <Checkbox
-                            label={<Text fontFamily="bold">Storage</Text>}
-                            checked={filterCategory.storage}
-                            handleCheckboxChange={(e, { checked }) =>
-                              setFilterCategory({ ...filterCategory, storage: !checked })
-                            }
-                          />
-                          <Text display="block" ml="28px" mb="20px">
-                            I’m looking for a place to store items or goods
-                          </Text>
-                          <Checkbox
-                            label={<Text fontFamily="bold">Retail & Hospitality</Text>}
-                            checked={filterCategory.retailAndHospitality}
-                            handleCheckboxChange={(e, { checked }) =>
-                              setFilterCategory({ ...filterCategory, retailAndHospitality: !checked })
-                            }
-                          />
-                          <Text display="block" ml="28px" mb="20px">
-                            I’m looking to rent a place for business
-                          </Text>
                         </div>
                         <Box display="flex" justifyContent="space-between">
-                          <Button size="sm" outline onClick={_onQueryFilter}>
-                            Update Search
-                          </Button>
                           <Button size="sm" outline onClick={() => setShouldShowFilter(false)}>
                             Close
+                          </Button>
+                          <Button size="sm" outline onClick={_onQueryFilter}>
+                            Update Search
                           </Button>
                         </Box>
                       </Box>
@@ -365,7 +382,7 @@ const SearchPage = ({ history, location }) => {
               {({ ref }) => {
                 return (
                   <Button outline size="sm" ref={ref} onClick={() => setShouldShowFilter('duration')}>
-                    Duration
+                    Frequency
                   </Button>
                 )
               }}
@@ -518,8 +535,115 @@ const SearchPage = ({ history, location }) => {
             <Reference>
               {({ ref }) => {
                 return (
+                  <Button outline size="sm" ref={ref} onClick={() => setShouldShowFilter('category')}>
+                    Category
+                  </Button>
+                )
+              }}
+            </Reference>
+            {shouldShowFilter === 'category' && (
+              <Popper placement="top-end" modifiers={modifiers}>
+                {({ ref, style, placement, arrowProps }) => {
+                  return (
+                    <Box
+                      ref={ref}
+                      style={{ ...style, zIndex: 5000000 }}
+                      width={{ _: '90vw', small: 'auto' }}
+                      data-placement={placement}
+                    >
+                      <div ref={arrowProps.ref} style={arrowProps.style} />
+                      <Box
+                        borderRadius="6px"
+                        bg="white"
+                        border="1px solid #cbcbcb"
+                        padding="30px"
+                        marginTop="10px"
+                        zIndex="2000001"
+                      >
+                        <div>
+                          <Checkbox
+                            label={<Text fontFamily="bold">Workspace</Text>}
+                            checked={filterCategory.workspace}
+                            handleCheckboxChange={(e, { checked }) =>
+                              setFilterCategory({ ...filterCategory, workspace: !checked })
+                            }
+                          />
+                          <Text display="block" ml="28px" mb="20px">
+                            I’m looking for a desk, office or coworking space
+                          </Text>
+                          <Checkbox
+                            label={<Text fontFamily="bold">Meeting space</Text>}
+                            checked={filterCategory.meetingSpace}
+                            handleCheckboxChange={(e, { checked }) =>
+                              setFilterCategory({ ...filterCategory, meetingSpace: !checked })
+                            }
+                          />
+                          <Text display="block" ml="28px" mb="20px">
+                            I’m looking for a space to hold a meeting
+                          </Text>
+                          <Checkbox
+                            label={<Text fontFamily="bold">Event space</Text>}
+                            checked={filterCategory.eventSpace}
+                            handleCheckboxChange={(e, { checked }) =>
+                              setFilterCategory({ ...filterCategory, eventSpace: !checked })
+                            }
+                          />
+                          <Text display="block" ml="28px" mb="20px">
+                            I’m looking for a space to hold an event
+                          </Text>
+                          <Checkbox
+                            label={<Text fontFamily="bold">Parking</Text>}
+                            checked={filterCategory.parking}
+                            handleCheckboxChange={(e, { checked }) =>
+                              setFilterCategory({ ...filterCategory, parking: !checked })
+                            }
+                          />
+                          <Text display="block" ml="28px" mb="20px">
+                            I’m looking for a place to park my vehicle
+                          </Text>
+                          <Checkbox
+                            label={<Text fontFamily="bold">Storage</Text>}
+                            checked={filterCategory.storage}
+                            handleCheckboxChange={(e, { checked }) =>
+                              setFilterCategory({ ...filterCategory, storage: !checked })
+                            }
+                          />
+                          <Text display="block" ml="28px" mb="20px">
+                            I’m looking for a place to store items or goods
+                          </Text>
+                          <Checkbox
+                            label={<Text fontFamily="bold">Retail & Hospitality</Text>}
+                            checked={filterCategory.retailAndHospitality}
+                            handleCheckboxChange={(e, { checked }) =>
+                              setFilterCategory({ ...filterCategory, retailAndHospitality: !checked })
+                            }
+                          />
+                          <Text display="block" ml="28px" mb="20px">
+                            I’m looking to rent a place for business
+                          </Text>
+                        </div>
+                        <Box display="flex" justifyContent="space-between">
+                          <Button size="sm" outline onClick={_onQueryFilter}>
+                            Update Search
+                          </Button>
+                          <Button size="sm" outline onClick={() => setShouldShowFilter(false)}>
+                            Close
+                          </Button>
+                        </Box>
+                      </Box>
+                    </Box>
+                  )
+                }}
+              </Popper>
+            )}
+          </Manager>
+
+          <Manager>
+            <Reference>
+              {({ ref }) => {
+                return (
                   <Button outline size="sm" ref={ref} onClick={() => setShouldShowFilter('instantBooking')}>
-                    Instant
+                    Instant Booking
                   </Button>
                 )
               }}
