@@ -931,7 +931,7 @@ const SpacePage = ({ match, location, history, ...props }) => {
                         <Button
                           onClick={e => _onSubmitBooking(e)}
                           isLoading={isLoadingOnCreateReservation}
-                          disabled={_isPeriodValid(listing.bookingPeriod) || (user && user.id == listing.user.id)}
+                          // disabled={_isPeriodValid(listing.bookingPeriod) || (user && user.id == listing.user.id)}
                           fluid
                         >
                           {listing.listingData.bookingType === 'request' ? 'Booking Request' : 'Reserve'}
