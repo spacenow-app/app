@@ -111,7 +111,7 @@ const DailyBooking = ({
         }}
       />
       <ListDates dates={listDates} /> {/* onClickDate={(e, date) => removeDate(date)} */}
-      {dates && listDates.length > 0 && (
+      {listDates.length > 0 && (
         <PriceDetail
           periodLabel={spelling(listDates.length)}
           price={listingData.basePrice}
