@@ -1,3 +1,4 @@
+/* eslint-disable eqeqeq */
 import React, { useEffect, useState, createRef } from 'react'
 import PropTypes from 'prop-types'
 import Helmet from 'react-helmet'
@@ -248,8 +249,8 @@ const SpacePage = ({ match, location, history, ...props }) => {
     }
     return array.slice(0, 3).map((el, index) => {
       if (el.field === 'capacity') {
-        const value = el.value === 0 ? 'Not mentioned' : `${toPlural('Person', el.value)}`
-        return el.value === 0 ? null : (
+        const value = el.value == 0 ? 'Not mentioned' : `${toPlural('Person', el.value)}`
+        return el.value == 0 ? null : (
           <Highlights
             key={el.field}
             title={el.label}
@@ -260,13 +261,13 @@ const SpacePage = ({ match, location, history, ...props }) => {
         )
       }
       if (el.field === 'size') {
-        const value = el.value === 0 ? 'Not mentioned' : `${el.value} sqm`
-        return el.value === 0 ? null : (
+        const value = el.value == 0 ? 'Not mentioned' : `${el.value} sqm`
+        return el.value == 0 ? null : (
           <Highlights key={el.field} title={el.label} name={value} icon="specification-size" last={index === last} />
         )
       }
       if (el.field === 'meetingRooms') {
-        const value = el.value === 0 ? 'None available' : `${el.value} available`
+        const value = el.value == 0 ? 'None available' : `${el.value} available`
         return (
           <Highlights
             key={el.field}
@@ -278,18 +279,18 @@ const SpacePage = ({ match, location, history, ...props }) => {
         )
       }
       if (el.field === 'isFurnished') {
-        const value = el.value === 0 ? 'No’' : 'Yes'
-        const icon = el.value === 0 ? 'specification-furnished-no' : 'specification-furnished-yes'
+        const value = el.value == 0 ? 'No' : 'Yes'
+        const icon = el.value == 0 ? 'specification-furnished-no' : 'specification-furnished-yes'
         return <Highlights key={el.field} title={el.label} name={value} icon={icon} last={index === last} />
       }
       if (el.field === 'carSpace') {
-        const value = el.value === 0 ? 'None available' : `${el.value} available`
-        return el.value === 0 ? null : (
+        const value = el.value == 0 ? 'None available' : `${el.value} available`
+        return el.value == 0 ? null : (
           <Highlights title={el.label} name={value} icon="specification-car-park" last={index === last} />
         )
       }
       if (el.field === 'spaceType') {
-        const value = el.value === 0 ? 'None available' : `${el.value}`
+        const value = el.value == 0 ? 'None available' : `${el.value}`
         return (
           <Highlights
             title={el.label}
@@ -632,7 +633,7 @@ const SpacePage = ({ match, location, history, ...props }) => {
 
   return (
     <>
-      {imageHeight === 325 ||
+      {imageHeight == 325 ||
       (listing.photos.length > 1 &&
         listing.settingsParent.category.otherItemName !== 'parking' &&
         listing.settingsParent.category.otherItemName !== 'storage') ? (
@@ -645,7 +646,7 @@ const SpacePage = ({ match, location, history, ...props }) => {
         <GridStyled columns="auto 350px" columnGap="35px" rowGap="30px">
           <Cell>
             <Grid columns={1} rowGap="15px">
-              {listing.photos.length === 1 &&
+              {listing.photos.length == 1 &&
                 listing.settingsParent.category.otherItemName !== 'parking' &&
                 listing.settingsParent.category.otherItemName !== 'storage' &&
                 imageHeight !== 325 && <CarouselListing photos={_convertedArrayPhotos(listing.photos)} />}
@@ -919,13 +920,13 @@ const SpacePage = ({ match, location, history, ...props }) => {
               contentComponent={
                 <>
                   {_renderContentCard(listing.bookingPeriod)}
-                  {(pendingBooking ? pendingBooking && pendingBooking.count === 0 : true) && (
+                  {(pendingBooking ? pendingBooking && pendingBooking.count == 0 : true) && (
                     <>
                       {listing.user.provider !== 'generic' && (
                         <Button
                           onClick={e => _onSubmitBooking(e)}
                           isLoading={isLoadingOnCreateReservation}
-                          disabled={_isPeriodValid(listing.bookingPeriod) || (user && user.id === listing.user.id)}
+                          disabled={_isPeriodValid(listing.bookingPeriod) || (user && user.id == listing.user.id)}
                           fluid
                         >
                           {listing.listingData.bookingType === 'request' ? 'Booking Request' : 'Reserve'}
@@ -968,7 +969,7 @@ const SpacePage = ({ match, location, history, ...props }) => {
           <Map position={{ lat: Number(listing.location.lat), lng: Number(listing.location.lng) }} />
         </Box>
 
-        {similarResults.length === 3 && (
+        {similarResults.length == 3 && (
           <Box mt="45px">
             <Title type="h5" title="See more similar spaces" />
             <SimilarSpacesContainer>
