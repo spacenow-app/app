@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import styled from 'styled-components'
 import { withFormik } from 'formik'
 
@@ -45,13 +45,21 @@ const ContactHost = ({
   hoursQuantity,
   onSetStartTime,
   onSetEndTime,
-  onCalcHourlyPeriod
+  onCalcHourlyPeriod,
+  inputFocus
 }) => {
+
+  const [dayPicker, setDayPicker] = useState('')
+  useEffect(() => {
+    if (dayPicker.input && inputFocus) dayPicker.input.focus()
+  }, [dayPicker.input, inputFocus])
+
   return (
     <>
       <WrapperStyled>
         <DatePicker
           label="Date"
+          ref={el => setDayPicker(el)}
           date={date}
           handleDateChange={o => onDateChange(o)}
           onBlur={onCalcHourlyPeriod}

@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import PropTypes from 'prop-types'
 
 import { DatePicker, Select, PriceDetail, Grid } from 'components'
@@ -10,7 +10,7 @@ function spelling(reference) {
 }
 
 const MonthlyBooking = props => {
-  const { date, onDateChange, listingExceptionDates, closingDays, handleChangePeriod, period, listingData } = props
+  const { date, onDateChange, listingExceptionDates, closingDays, handleChangePeriod, period, listingData, inputFocus } = props
 
   let dates = [{ key: 0, value: 0, name: 'Choose a Period' }]
 
@@ -18,10 +18,16 @@ const MonthlyBooking = props => {
     dates.push({ key: i, value: i, name: `${i} ${spelling(i)}` })
   }
 
+  const [dayPicker, setDayPicker] = useState('')
+  useEffect(() => {
+    if (dayPicker.input && inputFocus) dayPicker.input.focus()
+  }, [dayPicker.input, inputFocus])
+
   return (
     <Grid columns={1} rowGap="40px">
       <Grid columns={1} rowGap="10px">
         <DatePicker
+          ref={el => setDayPicker(el)}
           label="Start Day"
           value={date}
           handleDateChange={onDateChange}

@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 
 import { DatePicker, ListDates, PriceDetail } from 'components'
 
@@ -15,11 +15,21 @@ const DailyBooking = ({
   listingExceptionDates,
   closingDays,
   listingData,
-  removeDate
-}) => (
+  removeDate,
+  inputFocus
+}) => {
+
+  const [dayPicker, setDayPicker] = useState('')
+
+  useEffect(() => {
+    if (dayPicker.input && inputFocus) dayPicker.input.focus()
+  }, [dayPicker.input, inputFocus])
+
+  return (
   <>
     <DatePicker
       label="Start Date"
+      ref={el => setDayPicker(el)}
       date={null}
       handleDateChange={onDateChange}
       hideOnDayClick={focus}
@@ -50,5 +60,6 @@ const DailyBooking = ({
       />
     )}
   </>
-)
+  )
+}
 export default DailyBooking
