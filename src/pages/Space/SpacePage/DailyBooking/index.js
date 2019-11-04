@@ -90,6 +90,7 @@ const DailyBooking = ({
     <>
       <DatePicker
         label="Dates"
+        ref={el => setDayPicker(el)}
         date={null}
         handleDateChange={date => _handleDayClick(date)}
         hideOnDayClick={false}
