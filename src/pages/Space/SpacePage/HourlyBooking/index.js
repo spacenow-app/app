@@ -93,7 +93,7 @@ const ContactHost = ({
             </TimePickerStyled>
           </Cell>
         </Grid>
-        {hoursQuantity > 0 && (
+        {date && hoursQuantity > 0 && (
           <PriceDetail
             periodLabel={spelling(hoursQuantity)}
             price={listingData.basePrice}

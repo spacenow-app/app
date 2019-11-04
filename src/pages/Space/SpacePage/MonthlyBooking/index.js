@@ -24,7 +24,8 @@ const MonthlyBooking = props => {
   }, [dayPicker.input, inputFocus])
 
   return (
-    <Grid columns={1} rowGap="40px">
+    <>
+    <Grid columns={1} rowGap="40px" style={{marginBottom: '20px'}}>
       <Grid columns={1} rowGap="10px">
         <DatePicker
           ref={el => setDayPicker(el)}
@@ -47,14 +48,17 @@ const MonthlyBooking = props => {
         />
         <Select label="Period" options={dates} handleChange={handleChangePeriod} value={period} />
       </Grid>
-      <PriceDetail
-        periodLabel={spelling(period)}
-        price={listingData.basePrice}
-        isAbsorvedFee={listingData.isAbsorvedFee}
-        days={period}
-        quantity={1}
-      />
+      {date &&
+        <PriceDetail
+          periodLabel={spelling(period)}
+          price={listingData.basePrice}
+          isAbsorvedFee={listingData.isAbsorvedFee}
+          days={period}
+          quantity={1}
+        />
+      }
     </Grid>
+    </>
   )
 }
 

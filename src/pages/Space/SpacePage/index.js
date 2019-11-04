@@ -411,10 +411,10 @@ const SpacePage = ({ match, location, history, ...props }) => {
       return hourlyError !== '' || period <= 0 || !date
     }
     if (bookingPeriod === 'weekly') {
-      return date > 0 && period > 0
+      return !date
     }
     if (bookingPeriod === 'monthly') {
-      return date > 0 && period > 0
+      return !date
     }
     if (bookingPeriod === 'daily') {
       if (listing.listingData.minTerm > 0) {
