@@ -166,6 +166,7 @@ const SpacePage = ({ match, location, history, ...props }) => {
   const [startTime, setStartTime] = useState('08:00')
   const [endTime, setEndTime] = useState('09:00')
   const [hourlyError, setHourlyError] = useState('')
+  const [focusInput, setFocusInput] = useState(false)
 
   useEffect(() => {
     dispatch(onGetListingById(match.params.id, null, true))
@@ -382,6 +383,7 @@ const SpacePage = ({ match, location, history, ...props }) => {
       return (
         <>
           <HourlyBooking
+            inputFocus={focusInput}
             date={date}
             startTime={startTime}
             endTime={endTime}
@@ -407,6 +409,7 @@ const SpacePage = ({ match, location, history, ...props }) => {
         <div>
           <DailyBooking
             focus={!(datesSelected && datesSelected.length > 0)}
+            inputFocus={focusInput}
             onDateChange={_onDateChangeArray}
             setDatesSelected={setDatesSelected}
             datesSelected={datesSelected}
@@ -415,7 +418,7 @@ const SpacePage = ({ match, location, history, ...props }) => {
             closingDays={_returnArrayAvailability(listing.accessDays)}
             listingData={listing.listingData}
           />
-          {_isPeriodValid(listing.bookingPeriod) && datesSelected.length >= 1 && (
+          {datesSelected.length >= 1 && (
             <Box color="error" ml="23px">
               {`Minimum ${listing.listingData.minTerm} days is required`}
             </Box>
@@ -427,6 +430,7 @@ const SpacePage = ({ match, location, history, ...props }) => {
       if (period < listing.listingData.minTerm) setPeriod(listing.listingData.minTerm)
       return (
         <WeeklyBooking
+          inputFocus={focusInput}
           period={period}
           handleChangePeriod={_handleChangePeriod}
           date={date}
@@ -441,6 +445,7 @@ const SpacePage = ({ match, location, history, ...props }) => {
       if (period < listing.listingData.minTerm) setPeriod(listing.listingData.minTerm)
       return (
         <MonthlyBooking
+          inputFocus={focusInput}
           period={period}
           handleChangePeriod={_handleChangePeriod}
           date={date}
@@ -462,16 +467,10 @@ const SpacePage = ({ match, location, history, ...props }) => {
       return hourlyError !== '' || period <= 0 || !date
     }
     if (bookingPeriod === 'weekly') {
-      if (date > 0 && period > 0) {
-        return false
-      }
-      return true
+      return !date
     }
     if (bookingPeriod === 'monthly') {
-      if (date > 0 && period > 0) {
-        return false
-      }
-      return true
+      return !date
     }
     if (bookingPeriod === 'daily') {
       if (listing.listingData.minTerm > 0) {
@@ -486,6 +485,12 @@ const SpacePage = ({ match, location, history, ...props }) => {
   }
 
   const _onSubmitBooking = async () => {
+
+    if (_isPeriodValid(listing.bookingPeriod)){
+      setFocusInput(true);
+      return
+    }
+
     const object = {
       listingId: listing.id,
       hostId: listing.userId,
