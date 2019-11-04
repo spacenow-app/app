@@ -12,7 +12,7 @@ function spelling(reference) {
 
 const WeeklyBooking = ({ date, onDateChange, listingExceptionDates, closingDays, handleChangePeriod, period, listingData, inputFocus }) => {
 
-  let dates = [{ key: 0, value: 0, name: 'Choose a Period' }]
+  const dates = [{ key: 0, value: 0, name: 'Choose a Period' }]
 
   for (let i = listingData.minTerm; i < 13; i++) {
     dates.push({ key: i, value: i, name: `${i} ${spelling(i)}` })
@@ -22,7 +22,7 @@ const WeeklyBooking = ({ date, onDateChange, listingExceptionDates, closingDays,
   useEffect(() => {
     if (dayPicker.input && inputFocus) dayPicker.input.focus()
   }, [dayPicker.input, inputFocus])
-
+  
   return (
     <>
     <Grid columns={1} rowGap="40px" style={{marginBottom: '20px'}}>

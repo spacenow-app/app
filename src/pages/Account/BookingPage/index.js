@@ -85,7 +85,7 @@ const BookingCard = (dispatch, item, index, userType) => {
   if (userType === 'guest') expire = addMinutes(convertedDate(item.createdAt), 15)
 
   const expiryDate = `${format(expire, 'dd/MM/yyyy')} at ${format(expire, 'HH:mm')}`
-  
+
   return (
     <Card.Horizontal key={index}>
       <Card.Horizontal.Image src={_getCoverPhoto(item.listing)} handleClick={() => _handleRedirect(item.listingId)} />

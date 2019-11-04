@@ -38,6 +38,18 @@ const CATEGORIES = {
   retailAndHospitality: [573]
 }
 
+const searchBaseFields = `
+  status
+  searchKey
+  page
+  perPage
+  prePage
+  nextPage
+  total
+  totalPages
+  frequencies
+`
+
 const searchResultFields = `
   id
   userId
@@ -109,14 +121,7 @@ const querySearchByAddress = gql`
   query searchByAddress($lat: String!, $lng: String!, $categories: String, $limit: Int, $radius: Int) {
     searchByAddress(lat: $lat, lng: $lng, categories: $categories, limit: $limit, radius: $radius) {
       __typename
-      status
-      searchKey
-      page
-      perPage
-      prePage
-      nextPage
-      total
-      totalPages
+      ${searchBaseFields}
       result {
         ${searchResultFields}
       }
@@ -132,6 +137,7 @@ const querySearchByFilters = gql`
     $priceMin: Float,
     $priceMax: Float,
     $instant: String,
+    $availability: [String],
     $page: Int
   ) {
     searchByFilters(
@@ -141,17 +147,11 @@ const querySearchByFilters = gql`
       priceMin: $priceMin,
       priceMax: $priceMax,
       instant: $instant,
+      availability: $availability,
       page: $page
     ) {
       __typename
-      status
-      searchKey
-      page
-      perPage
-      prePage
-      nextPage
-      total
-      totalPages
+      ${searchBaseFields}
       result {
         ${searchResultFields}
       }
@@ -176,6 +176,7 @@ export default function reducer(state = initialState, action) {
           ...state.get,
           searchKey: action.payload.searchKey,
           result: action.payload.result,
+          frequencies: action.payload.frequencies,
           pagination: {
             page: action.payload.pagination.page,
             perPage: action.payload.pagination.perPage,
@@ -237,6 +238,7 @@ export const onSearch = (lat, lng, categoryKey = false, categories = false, limi
         payload: {
           searchKey: data.searchByAddress.searchKey,
           result: data.searchByAddress.result,
+          frequencies: data.searchByAddress.frequencies,
           pagination: {
             page: data.searchByAddress.page,
             perPage: data.searchByAddress.perPage,
@@ -271,7 +273,8 @@ export const onQuery = (searchKey, filters, page = null) => async dispatch => {
         .join() || '',
     priceMin: filters.filterPrice[0] || 0,
     priceMax: filters.filterPrice[1] || 0,
-    instant: filters.filterInstantBooking ? filters.filterInstantBooking.toString() : ''
+    instant: filters.filterInstantBooking ? filters.filterInstantBooking.toString() : '',
+    availability: filters.filterSelectedDates ? filters.filterSelectedDates.map(o => o.toString()) : []
   }
   try {
     const { data } = await getClient().query({
@@ -283,6 +286,7 @@ export const onQuery = (searchKey, filters, page = null) => async dispatch => {
         priceMin: filter.priceMin,
         priceMax: filter.priceMax,
         instant: filter.instant,
+        availability: filter.availability,
         page
       }
     })
@@ -291,6 +295,7 @@ export const onQuery = (searchKey, filters, page = null) => async dispatch => {
       payload: {
         searchKey: data.searchByFilters.searchKey,
         result: data.searchByFilters.result,
+        frequencies: data.searchByFilters.frequencies,
         pagination: {
           page: data.searchByFilters.page,
           perPage: data.searchByFilters.perPage,

@@ -1,6 +1,8 @@
 import React, { useLayoutEffect, useEffect, useState, useRef } from 'react'
 import { useDispatch, shallowEqual, useSelector } from 'react-redux'
 import styled from 'styled-components'
+import { isSameDay } from 'date-fns'
+import _ from 'lodash'
 
 import {
   NavBar,
@@ -14,9 +16,9 @@ import {
   MapSearch,
   Slider,
   Switch,
-  Loader
-  // Footer,
-  // Wrapper
+  Loader,
+  DatePicker,
+  Calendar
 } from 'components'
 
 import { Manager, Reference, Popper } from 'react-popper'
@@ -28,7 +30,7 @@ import ListResults from './ListResults'
 
 const FilterBar = styled.div`
   display: grid;
-  grid-template-columns: auto auto auto auto 1fr;
+  grid-template-columns: auto auto auto auto auto 1fr;
   grid-column-gap: 15px;
   padding: 0 20px;
 
@@ -103,8 +105,29 @@ const SwitchStyled = styled.div`
   }
 `
 
-const cleanParameter = value => {
-  if (!value) return undefined
+const CalendarContainerDesktop = styled.div`
+  @media only screen and (max-width: 991px) {
+    display: none;
+  }
+`
+
+const DatePickerMobile = styled(DatePicker)`
+  display: none;
+  @media only screen and (max-width: 991px) {
+    display: block;
+    padding: 10px;
+  }
+`
+
+const getParamOrDefault = (location, param, defaultValue) => {
+  const queryParams = new URLSearchParams(location)
+  const value = queryParams.get(param)
+  if (value === '' || value === 'undefined' || !value) return defaultValue
+  return value
+}
+
+const cleaningLocation = value => {
+  if (!value) return 'Sydney, AU'
   return value.replace('+', ' ')
 }
 
@@ -112,11 +135,10 @@ const SearchPage = ({ history, location }) => {
   const dispatch = useDispatch()
   const refResults = useRef()
 
-  const queryParams = new URLSearchParams(location.search)
-  const queryLat = queryParams.get('lat') || -33.8688197
-  const queryLng = queryParams.get('lng') || 151.2092955
-  const queryCategory = queryParams.get('category')
-  const queryLocation = cleanParameter(queryParams.get('location') || 'Sydney, AU')
+  const queryLat = getParamOrDefault(location.search, 'lat', '-33.8688197')
+  const queryLng = getParamOrDefault(location.search, 'lng', '151.2092955')
+  const queryCategory = getParamOrDefault(location.search, 'category', null)
+  const queryLocation = cleaningLocation(getParamOrDefault(location.search, 'location', 'Sydney, AU'))
 
   const [selectedSpace, setSelectedSpace] = useState(null)
   const [shouldShowFilter, setShouldShowFilter] = useState(false)
@@ -139,7 +161,12 @@ const SearchPage = ({ history, location }) => {
     retailAndHospitality: /retailAndHospitality/i.test(queryCategory)
   })
   const [showMap, setShowMap] = useState(true)
-  const { searchKey, result: searchResults, pagination } = useSelector(state => state.search.get, shallowEqual)
+  const [filterSelectedDates, setFilterSelectedDates] = useState([])
+
+  const { searchKey, result: searchResults, pagination, frequencies } = useSelector(
+    state => state.search.get,
+    shallowEqual
+  )
   const isLoading = useSelector(state => state.search.isLoading)
 
   useLayoutEffect(() => {
@@ -226,7 +253,8 @@ const SearchPage = ({ history, location }) => {
       filterCategory,
       filterDuration,
       filterInstantBooking,
-      filterPrice
+      filterPrice,
+      filterSelectedDates
     }
     dispatch(onQuery(searchKey, filters))
     setShouldShowFilter(null)
@@ -237,13 +265,26 @@ const SearchPage = ({ history, location }) => {
       filterCategory,
       filterDuration,
       filterInstantBooking,
-      filterPrice
+      filterPrice,
+      filterSelectedDates
     }
     if (!searchKey) {
       return
     }
     refResults.current.scrollTop = 0
     dispatch(onQuery(searchKey, filters, page))
+  }
+
+  const _onClickSelectDay = (day, { selected }) => {
+    const copySelectedDates = [...filterSelectedDates]
+    if (selected) {
+      const selectedIndex = copySelectedDates.findIndex(selectedDay => isSameDay(selectedDay, day))
+      copySelectedDates.splice(selectedIndex, 1)
+    } else {
+      copySelectedDates.push(day)
+    }
+    const arraySorted = _.sortBy([...copySelectedDates], item => item)
+    setFilterSelectedDates(arraySorted)
   }
 
   const modifiers = {
@@ -262,6 +303,83 @@ const SearchPage = ({ history, location }) => {
           </Button>
         </Box>
         <FilterBar show={showFilterBar}>
+          <Manager>
+            <Reference>
+              {({ ref }) => {
+                return (
+                  <Button outline size="sm" ref={ref} onClick={() => setShouldShowFilter('dates')}>
+                    Dates
+                  </Button>
+                )
+              }}
+            </Reference>
+            {shouldShowFilter === 'dates' && (
+              <Popper placement="top-end" modifiers={modifiers}>
+                {({ ref, style, placement, arrowProps }) => {
+                  return (
+                    <Box
+                      ref={ref}
+                      style={{ ...style, zIndex: 5000000 }}
+                      width={{ _: '90vw', small: 'auto' }}
+                      data-placement={placement}
+                    >
+                      <div ref={arrowProps.ref} style={arrowProps.style} />
+                      <Box
+                        borderRadius="6px"
+                        bg="white"
+                        border="1px solid #cbcbcb"
+                        padding="30px"
+                        marginTop="10px"
+                        zIndex="2000001"
+                      >
+                        <div>
+                          <CalendarContainerDesktop>
+                            <Calendar
+                              fromMonth={new Date()}
+                              handleDayClick={_onClickSelectDay}
+                              selectedDays={filterSelectedDates}
+                              disabledDays={[]}
+                              daysOfWeek={[]}
+                              colorSelected="#E05252"
+                            />
+                          </CalendarContainerDesktop>
+                          <DatePickerMobile
+                            date={null}
+                            handleDateChange={_onClickSelectDay}
+                            hideOnDayClick={false}
+                            placeholder="Choose Dates"
+                            colorSelected="#E05252"
+                            dayPickerProps={{
+                              selectedDays: filterSelectedDates,
+                              modifiers: {
+                                disabled: [
+                                  {
+                                    daysOfWeek: []
+                                  },
+                                  {
+                                    before: new Date()
+                                  }
+                                ]
+                              }
+                            }}
+                          />
+                        </div>
+                        <Box display="flex" justifyContent="space-between">
+                          <Button size="sm" outline onClick={_onQueryFilter}>
+                            Update Search
+                          </Button>
+                          <Button size="sm" outline onClick={() => setShouldShowFilter(false)}>
+                            Close
+                          </Button>
+                        </Box>
+                      </Box>
+                    </Box>
+                  )
+                }}
+              </Popper>
+            )}
+          </Manager>
+
           <Manager>
             <Reference>
               {({ ref }) => {
@@ -374,7 +492,7 @@ const SearchPage = ({ history, location }) => {
               {({ ref }) => {
                 return (
                   <Button outline size="sm" ref={ref} onClick={() => setShouldShowFilter('duration')}>
-                    Duration
+                    Frequency
                   </Button>
                 )
               }}
@@ -399,46 +517,62 @@ const SearchPage = ({ history, location }) => {
                         zIndex="2000001"
                       >
                         <div>
-                          <Checkbox
-                            label={<Text fontFamily="bold">Hourly</Text>}
-                            checked={filterDuration.hourly}
-                            handleCheckboxChange={(e, { checked }) =>
-                              setFilterDuration({ ...filterDuration, hourly: !checked })
-                            }
-                          />
-                          <Text display="block" ml="28px" mb="20px">
-                            I want to find space on a hourly basis
-                          </Text>
-                          <Checkbox
-                            label={<Text fontFamily="bold">Daily</Text>}
-                            checked={filterDuration.daily}
-                            handleCheckboxChange={(e, { checked }) =>
-                              setFilterDuration({ ...filterDuration, daily: !checked })
-                            }
-                          />
-                          <Text display="block" ml="28px" mb="20px">
-                            I want to find space on a daily basis
-                          </Text>
-                          <Checkbox
-                            label={<Text fontFamily="bold">Weekly</Text>}
-                            checked={filterDuration.weekly}
-                            handleCheckboxChange={(e, { checked }) =>
-                              setFilterDuration({ ...filterDuration, weekly: !checked })
-                            }
-                          />
-                          <Text display="block" ml="28px" mb="20px">
-                            I want to find space on a weekly basis
-                          </Text>
-                          <Checkbox
-                            label={<Text fontFamily="bold">Monthly</Text>}
-                            checked={filterDuration.monthly}
-                            handleCheckboxChange={(e, { checked }) =>
-                              setFilterDuration({ ...filterDuration, monthly: !checked })
-                            }
-                          />
-                          <Text display="block" ml="28px" mb="20px">
-                            I want to find space on a monthly basis
-                          </Text>
+                          {frequencies.includes('hourly') && (
+                            <>
+                              <Checkbox
+                                label={<Text fontFamily="bold">Hourly</Text>}
+                                checked={filterDuration.hourly}
+                                handleCheckboxChange={(e, { checked }) =>
+                                  setFilterDuration({ ...filterDuration, hourly: !checked })
+                                }
+                              />
+                              <Text display="block" ml="28px" mb="20px">
+                                I want to find space on a hourly basis
+                              </Text>
+                            </>
+                          )}
+                          {frequencies.includes('daily') && (
+                            <>
+                              <Checkbox
+                                label={<Text fontFamily="bold">Daily</Text>}
+                                checked={filterDuration.daily}
+                                handleCheckboxChange={(e, { checked }) =>
+                                  setFilterDuration({ ...filterDuration, daily: !checked })
+                                }
+                              />
+                              <Text display="block" ml="28px" mb="20px">
+                                I want to find space on a daily basis
+                              </Text>
+                            </>
+                          )}
+                          {frequencies.includes('weekly') && (
+                            <>
+                              <Checkbox
+                                label={<Text fontFamily="bold">Weekly</Text>}
+                                checked={filterDuration.weekly}
+                                handleCheckboxChange={(e, { checked }) =>
+                                  setFilterDuration({ ...filterDuration, weekly: !checked })
+                                }
+                              />
+                              <Text display="block" ml="28px" mb="20px">
+                                I want to find space on a weekly basis
+                              </Text>
+                            </>
+                          )}
+                          {frequencies.includes('monthly') && (
+                            <>
+                              <Checkbox
+                                label={<Text fontFamily="bold">Monthly</Text>}
+                                checked={filterDuration.monthly}
+                                handleCheckboxChange={(e, { checked }) =>
+                                  setFilterDuration({ ...filterDuration, monthly: !checked })
+                                }
+                              />
+                              <Text display="block" ml="28px" mb="20px">
+                                I want to find space on a monthly basis
+                              </Text>
+                            </>
+                          )}
                         </div>
                         <Box display="flex" justifyContent="space-between">
                           <Button size="sm" outline onClick={_onQueryFilter}>
@@ -528,7 +662,7 @@ const SearchPage = ({ history, location }) => {
               {({ ref }) => {
                 return (
                   <Button outline size="sm" ref={ref} onClick={() => setShouldShowFilter('instantBooking')}>
-                    Instant
+                    Instant Booking
                   </Button>
                 )
               }}
@@ -641,9 +775,6 @@ const SearchPage = ({ history, location }) => {
           </ContainerMap>
         )}
       </ContainerResults>
-      {/* <Wrapper>
-        <Footer />
-      </Wrapper> */}
     </>
   )
 }

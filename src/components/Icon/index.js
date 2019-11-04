@@ -58,6 +58,8 @@ import { ReactComponent as AccessTypePerson } from './svg/access-type/access_typ
 import { ReactComponent as AccessTypeSmartLock } from './svg/access-type/access_type_smart_lock.svg'
 import { ReactComponent as AccessTypSwipeCard } from './svg/access-type/access_type_swipe_card.svg'
 import { ReactComponent as AccessTypeReceptionist } from './svg/access-type/access_type_receptionist.svg'
+import { ReactComponent as AccessTypeHost } from './svg/access-type/access_type_host.svg'
+import { ReactComponent as AccessTypePinCode } from './svg/access-type/access_type_pin_code.svg'
 
 // Specifications
 import { ReactComponent as SpecificationCapacity } from './svg/specifications/specification_capacity.svg'
@@ -208,6 +210,8 @@ const Icons = {
   'access-type-person': <AccessTypePerson />,
   'access-type-smart-lock': <AccessTypeSmartLock />,
   'access-type-swipe-card': <AccessTypSwipeCard />,
+  'access-type-host': <AccessTypeHost />,
+  'access-type-pin-code': <AccessTypePinCode />,
   'access-type-receptionist': <AccessTypeReceptionist />,
   'specification-capacity': <SpecificationCapacity />,
   'specification-car-large': <SpecificationCarLarge />,

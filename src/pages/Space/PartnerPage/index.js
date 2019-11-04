@@ -23,10 +23,12 @@ import {
   Footer,
   CardSearch,
   Carousel,
-  Price
+  Price,
+  Text
 } from 'components'
 
 import { onGetListingById, onGetAllSpecifications } from 'redux/ducks/listing'
+import { capitalize, toPlural } from 'utils/strings'
 import { onSearch } from 'redux/ducks/search'
 
 import FormPartner from './FormPartner'
@@ -75,6 +77,7 @@ const PartnerPage = ({ match, location, ...props }) => {
 
   const { object: listing, isLoading: isListingLoading } = useSelector(state => state.listing.get)
   const { similar: similarResults } = useSelector(state => state.search)
+  const { object: objectSpecifications } = useSelector(state => state.listing.specifications)
   const [imageHeight, setImageHeight] = useState(500)
 
   useEffect(() => {
@@ -129,6 +132,115 @@ const PartnerPage = ({ match, location, ...props }) => {
             source: `https://api-assets.prod.cloud.spacenow.com?width=800&heigth=500&format=jpeg&path=${el.name}`
           }))
       : []
+  }
+
+  const _renderHighLights = obj => {
+    let array = Object.keys(obj).map(i => obj[i])
+    array = array.filter(el => el.value !== 0)
+    const arrayLen = array.length
+    let last = 2
+    if (arrayLen < 3) {
+      last = arrayLen - 1
+    }
+    return array.slice(0, 3).map((el, index) => {
+      if (el.field === 'capacity') {
+        const value = el.value === 0 ? 'Not mentioned' : `${toPlural('Person', el.value)}`
+        return el.value === 0 ? null : (
+          <Highlights
+            key={el.field}
+            title={el.label}
+            name={value}
+            icon="specification-capacity"
+            last={index === last}
+          />
+        )
+      }
+      if (el.field === 'size') {
+        const value = el.value === 0 ? 'Not mentioned' : `${el.value} sqm`
+        return el.value === 0 ? null : (
+          <Highlights key={el.field} title={el.label} name={value} icon="specification-size" last={index === last} />
+        )
+      }
+      if (el.field === 'meetingRooms') {
+        const value = el.value === 0 ? 'None available' : `${el.value} available`
+        return (
+          <Highlights
+            key={el.field}
+            title={el.label}
+            name={value.toString()}
+            icon="specification-meetingroom-quantity"
+            last={index === last}
+          />
+        )
+      }
+      if (el.field === 'isFurnished') {
+        const value = el.value === 0 ? 'No’' : 'Yes'
+        const icon = el.value === 0 ? 'specification-furnished-no' : 'specification-furnished-yes'
+        return <Highlights key={el.field} title={el.label} name={value} icon={icon} last={index === last} />
+      }
+      if (el.field === 'carSpace') {
+        const value = el.value === 0 ? 'None available' : `${el.value} available`
+        return el.value === 0 ? null : (
+          <Highlights title={el.label} name={value} icon="specification-car-park" last={index === last} />
+        )
+      }
+      if (el.field === 'spaceType') {
+        const value = el.value === 0 ? 'None available' : `${el.value}`
+        return (
+          <Highlights
+            title={el.label}
+            name={value}
+            icon={value === 'Covered' ? 'specification-covered' : 'specification-uncovered'}
+            last={index === last}
+          />
+        )
+      }
+      return (
+        <Highlights
+          key={el.field}
+          title={el.label}
+          name={el.value.toString()}
+          icon="category-desk"
+          last={index === last}
+        />
+      )
+    })
+  }
+
+  const _changeToPlural = (string, number) => {
+    if (!string) {
+      return 'No Data'
+    }
+    if (string === 'daily') {
+      return toPlural(capitalize('day'), number)
+    }
+    return toPlural(capitalize(string.slice(0, -2)), number)
+  }
+
+  const _renderTextAccessInfo = accessType => {
+    if (accessType === 'Person') {
+      return <Text fontFamily="MontSerrat-Regular">You will be greeted at reception. Please present your email*</Text>
+    }
+    if (accessType === 'Swipe Card') {
+      return <Text fontFamily="MontSerrat-Regular">You will need to collect a swipe card. Deposit may apply*</Text>
+    }
+    if (accessType === 'Host') {
+      return <Text fontFamily="MontSerrat-Regular">You will be in contact with your host upon booking.</Text>
+    }
+    if (accessType === 'Keys') {
+      return <Text fontFamily="MontSerrat-Regular">You will need to pick up keys. Deposit may apply*</Text>
+    }
+    return <Text fontFamily="MontSerrat-Regular">Details of entry will be issued upon successful booking.</Text>
+  }
+
+  const _renderTitleAccessInfo = accessType => {
+    if (accessType === 'Person') {
+      return <Text lineHeight={1}>{accessType} at reception</Text>
+    }
+    if (accessType === 'Host') {
+      return <Text lineHeight={1}>{accessType} will meet you</Text>
+    }
+    return <Text lineHeight={1}>{accessType}</Text>
   }
 
   // Load the regular listing view
@@ -193,13 +305,13 @@ const PartnerPage = ({ match, location, ...props }) => {
                   </Tag>
                 </Box>
               </CellStyled>
-              <CellStyled width={6} justifySelf="end">
+              {/* <CellStyled width={6} justifySelf="end">
                 <UserDetails hostname={listing.user.profile.displayName} imageProfile={listing.user.profile.picture} />
-              </CellStyled>
+              </CellStyled> */}
             </Grid>
 
-            <Grid columns={5}>
-              <CellStyled width={3}>
+            <Grid columns={6}>
+              <CellStyled width={6}>
                 <Title
                   type="h4"
                   title={listing.title}
@@ -209,7 +321,7 @@ const PartnerPage = ({ match, location, ...props }) => {
                   noMargin
                 />
               </CellStyled>
-              <CellStyled width={2} center>
+              {/* <CellStyled width={3} center>
                 <Price
                   currency={listing.listingData.currency}
                   price={listing.listingData.basePrice}
@@ -219,10 +331,10 @@ const PartnerPage = ({ match, location, ...props }) => {
                   size="28px"
                   right
                 />
-              </CellStyled>
+              </CellStyled> */}
             </Grid>
 
-            <Box>
+            {/* <Box>
               <Title type="h5" title="Highlights" />
               <Grid columns={5}>
                 <Highlights
@@ -233,6 +345,26 @@ const PartnerPage = ({ match, location, ...props }) => {
                   last
                 />
               </Grid>
+            </Box> */}
+
+            <Box>
+              <Title type="h5" title="Highlights" />
+              <Grid columns="repeat(auto-fit, minmax(120px, 1fr))" rowGap="50px">
+                <Highlights
+                  title="Minimum term"
+                  name={_changeToPlural(
+                    listing.bookingPeriod,
+                    listing.listingData.minTerm ? listing.listingData.minTerm : 1
+                  )}
+                  icon="specification-minimum-term"
+                />
+                <Highlights
+                  title="Opening Days"
+                  name={_getWeekName(listing.accessDays)}
+                  icon="specification-opening-days"
+                />
+                {objectSpecifications && _renderHighLights(objectSpecifications)}
+              </Grid>
             </Box>
 
             {listing.listingData.accessType && (
@@ -240,34 +372,35 @@ const PartnerPage = ({ match, location, ...props }) => {
                 <Title
                   type="h5"
                   title="Access Information"
-                  subtitle="How you’ll gain access to this space. Your host will provide the following upon successful bookings:"
+                  subtitle="How you’ll gain access to this space. Your host will provide the following upon successful booking:"
                 />
                 <Box
                   display="grid"
-                  border="1px solid"
-                  borderRadius="10px"
-                  width="110px"
-                  height="130px"
-                  justifyContent="center"
-                  textAlign="center"
+                  width="278px"
+                  height="170px"
+                  gridTemplateRows="repeat(3, auto)"
+                  padding="20px"
                   fontFamily="MontSerrat-SemiBold"
                   fontSize="14px"
                   color={listing.listingData.accessType ? 'quartenary' : 'error'}
-                  borderColor={listing.listingData.accessType ? '#c4c4c4' : 'error'}
+                  border={listing.listingData.accessType ? '1px solid #c4c4c4' : 'error'}
+                  borderRadius="10px"
                 >
-                  <Icon
-                    style={{ alignSelf: 'center', justifySelf: 'center' }}
-                    width="50px"
-                    fill={listing.listingData.accessType ? '#6ADC91' : '#E05252'}
-                    name={
-                      listing.listingData.accessType &&
-                      `access-type-${listing.listingData.accessType
-                        .toLowerCase()
-                        .split(' ')
-                        .join('-')}`
-                    }
-                  />
-                  {listing.listingData.accessType}
+                  <Box mb="10px">
+                    <Icon
+                      width="50px"
+                      fill="#6ADC91"
+                      name={
+                        listing.listingData.accessType &&
+                        `access-type-${listing.listingData.accessType
+                          .toLowerCase()
+                          .split(' ')
+                          .join('-')}`
+                      }
+                    />
+                  </Box>
+                  {_renderTitleAccessInfo(listing.listingData.accessType)}
+                  {_renderTextAccessInfo(listing.listingData.accessType)}
                 </Box>
               </Box>
             )}
@@ -311,13 +444,19 @@ const PartnerPage = ({ match, location, ...props }) => {
           <Box id="booking-card">
             <BookingCard
               titleComponent={
-                <Title
-                  type="h5"
-                  title={listing.title}
-                  subtitle={_getAddress(listing.location)}
-                  subTitleMargin={10}
-                  noMargin
-                />
+                <>
+                  <Price
+                    price={listing.listingData.basePrice}
+                    currencySymbol="$"
+                    bookingPeriod={listing.bookingPeriod}
+                    bookingType={listing.listingData.bookingType}
+                    size="28px"
+                    periodSize="11px"
+                    left
+                    lightPeriod
+                    lightPrice
+                  />
+                </>
               }
               contentComponent={<FormPartner {...props} listing={listing} dispatch={dispatch} />}
               footerComponent={

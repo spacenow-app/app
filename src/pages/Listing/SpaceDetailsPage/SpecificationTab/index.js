@@ -360,11 +360,14 @@ const SpecificationTab = ({
             ) : (
               <Select value={values.accessType} name="accessType" onChange={_handleSelectChange}>
                 {!values.accessType && <option>Select type of access</option>}
-                {arrayAccessTypes.map(item => (
-                  <option key={item.id} value={item.itemName}>
-                    {item.itemName}
-                  </option>
-                ))}
+                {arrayAccessTypes.map(
+                  item =>
+                    item.itemName !== 'Receptionist' && (
+                      <option key={item.id} value={item.itemName}>
+                        {item.itemName === 'Person' ? `${item.itemName} at reception` : item.itemName}
+                      </option>
+                    )
+                )}
               </Select>
             )}
           </Box>

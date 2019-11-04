@@ -1,7 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import styled from 'styled-components'
-import { Box, Text, Icon, Tag, Avatar } from 'components'
+import { Box, Text, Icon, Tag, Avatar, Price } from 'components'
 import { toPlural } from 'utils/strings'
 
 const CardContainer = styled.div`
@@ -104,15 +104,12 @@ const CardSearch = ({ item, ...props }) => {
           }
       }
     }
-
     return spec.slice(0, 3).map(el => {
       const specDataObject = JSON.parse(el.specData)
-
       const obj = {
         field: specDataObject.field,
         value: listingData[specDataObject.field]
       }
-
       return (
         obj.value !== 0 && (
           <Box key={el.id}>
@@ -127,11 +124,7 @@ const CardSearch = ({ item, ...props }) => {
   }
 
   return (
-    <CardContainer
-      key={item.id}
-      // onMouseEnter={() => onHoverItem(item)}
-      // onMouseLeave={() => onHoverItem(null)}
-    >
+    <CardContainer key={item.id}>
       <CardImage src={_getCoverPhoto(item)} onClick={() => window.open(`/space/${item.id}`)} />
       <CardContent>
         <Box display="flex" justifyContent="start" mb="15px">
@@ -158,13 +151,23 @@ const CardSearch = ({ item, ...props }) => {
           {_renderSpecifications(item.specifications, item.listingData)}
         </Box>
         <Box display="grid" gridAutoFlow="column">
-          <Text fontSize="14px">
-            From:{' '}
-            <Text fontSize="16px" fontFamily="bold">
+          <Text fontSize="14px">From: </Text>
+          {/* <Text fontSize="16px" fontFamily="bold">
               {`${item.listingData.currency || 'AUD'}$${item.listingData.basePrice}`}
             </Text>{' '}
-            {item.bookingPeriod}
-          </Text>
+            {item.bookingPeriod} */}
+          <Price
+            currency={item.listingData.currency}
+            price={item.listingData.basePrice}
+            currencySymbol="$"
+            bookingPeriod={item.bookingPeriod}
+            bookingType={item.listingData.bookingType}
+            size="16px"
+            periodSize="14px"
+            left
+            lightPeriod
+          />
+
           <Box justifySelf="end" display="flex" alignItems="center">
             <Avatar width="30px" height="30px" image={item.host.profile && item.host.profile.picture} />
             <Text fontSize="12px" ml="10px" fontFamily="medium">
@@ -178,7 +181,7 @@ const CardSearch = ({ item, ...props }) => {
 }
 
 CardSearch.propTypes = {
-  item: PropTypes.object.isRequired
+  item: PropTypes.instanceOf(Object).isRequired
 }
 
 export default CardSearch

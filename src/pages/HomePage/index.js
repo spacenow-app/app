@@ -1,7 +1,7 @@
 import { useEffect } from 'react'
 import { config } from 'variables'
 
-export default props => {
+export default () => {
   useEffect(() => {
     window.location.href = config.static
   }, [])

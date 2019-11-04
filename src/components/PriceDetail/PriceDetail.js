@@ -44,51 +44,55 @@ const RightStyled = styled.span`
 `
 
 const PriceDetail = props => (
-  <WrapperStyled {...props}>
-    <ContentStyled>
-      <LeftTitleStyled>Description</LeftTitleStyled>
-      <RightTitleStyled>Value ({`${props.currency} ${props.currencySymbol}`})</RightTitleStyled>
-    </ContentStyled>
-    <ContentStyled>
-      <LeftStyled>{`${props.currency} ${props.currencySymbol} ${props.price
-        .toFixed(2)
-        .replace(/\d(?=(\d{3})+\.)/g, '$&,')} x ${props.days} ${props.periodLabel}`}</LeftStyled>
-      <RightStyled>{`${props.currency} ${props.currencySymbol}${(props.price * props.days)
-        .toFixed(2)
-        .replace(/\d(?=(\d{3})+\.)/g, '$&,')}`}</RightStyled>
-    </ContentStyled>
-    <ContentStyled>
-      <LeftStyled>Quantity x{props.quantity}</LeftStyled>
-      <RightStyled>{`${props.currency} ${props.currencySymbol}${(props.price * props.days * props.quantity)
-        .toFixed(2)
-        .replace(/\d(?=(\d{3})+\.)/g, '$&,')}`}</RightStyled>
-    </ContentStyled>
-    <ContentStyled>
-      <LeftStyled>Service fee</LeftStyled>
-      <RightStyled>
-        {props.isAbsorvedFee
-          ? `${props.currency} ${props.currencySymbol}${(props.price * props.days * props.quantity * IS_ABSORVE)
-              .toFixed(2)
-              .replace(/\d(?=(\d{3})+\.)/g, '$&,')}`
-          : `${props.currency} ${props.currencySymbol}${(props.price * props.days * props.quantity * NO_ABSORVE)
+  <>
+    {props.price && (
+      <WrapperStyled {...props}>
+        <ContentStyled>
+          <LeftTitleStyled>Description</LeftTitleStyled>
+          <RightTitleStyled>Value ({`${props.currency} ${props.currencySymbol}`})</RightTitleStyled>
+        </ContentStyled>
+        <ContentStyled>
+          <LeftStyled>{`${props.currency} ${props.currencySymbol} ${props.price
+            .toFixed(2)
+            .replace(/\d(?=(\d{3})+\.)/g, '$&,')} x ${props.days} ${props.periodLabel}`}</LeftStyled>
+          <RightStyled>{`${props.currency} ${props.currencySymbol}${(props.price * props.days)
+            .toFixed(2)
+            .replace(/\d(?=(\d{3})+\.)/g, '$&,')}`}</RightStyled>
+        </ContentStyled>
+        <ContentStyled>
+          <LeftStyled>Quantity x{props.quantity}</LeftStyled>
+          <RightStyled>{`${props.currency} ${props.currencySymbol}${(props.price * props.days * props.quantity)
+            .toFixed(2)
+            .replace(/\d(?=(\d{3})+\.)/g, '$&,')}`}</RightStyled>
+        </ContentStyled>
+        <ContentStyled>
+          <LeftStyled>Service fee</LeftStyled>
+          <RightStyled>
+            {props.isAbsorvedFee
+              ? `${props.currency} ${props.currencySymbol}${(props.price * props.days * props.quantity * IS_ABSORVE)
+                  .toFixed(2)
+                  .replace(/\d(?=(\d{3})+\.)/g, '$&,')}`
+              : `${props.currency} ${props.currencySymbol}${(props.price * props.days * props.quantity * NO_ABSORVE)
+                  .toFixed(2)
+                  .replace(/\d(?=(\d{3})+\.)/g, '$&,')}`}
+          </RightStyled>
+        </ContentStyled>
+        <ContentStyled>
+          <LeftStyled>Total</LeftStyled>
+          <RightStyled>
+            {`${props.currency} ${props.currencySymbol}${_.sum([
+              props.price * props.days * props.quantity,
+              props.isAbsorvedFee
+                ? props.price * props.days * props.quantity * IS_ABSORVE
+                : props.price * props.days * props.quantity * NO_ABSORVE
+            ])
               .toFixed(2)
               .replace(/\d(?=(\d{3})+\.)/g, '$&,')}`}
-      </RightStyled>
-    </ContentStyled>
-    <ContentStyled>
-      <LeftStyled>Total</LeftStyled>
-      <RightStyled>
-        {`${props.currency} ${props.currencySymbol}${_.sum([
-          props.price * props.days * props.quantity,
-          props.isAbsorvedFee
-            ? props.price * props.days * props.quantity * IS_ABSORVE
-            : props.price * props.days * props.quantity * NO_ABSORVE
-        ])
-          .toFixed(2)
-          .replace(/\d(?=(\d{3})+\.)/g, '$&,')}`}
-      </RightStyled>
-    </ContentStyled>
-  </WrapperStyled>
+          </RightStyled>
+        </ContentStyled>
+      </WrapperStyled>
+    )}
+  </>
 )
 
 PriceDetail.defaultProps = {

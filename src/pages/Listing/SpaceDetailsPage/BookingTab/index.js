@@ -146,28 +146,28 @@ const BookingTab = ({
           <Cell width={1}>
             <Radio
               name="minTerm"
-              value={2}
-              checked={values.minTerm === 2}
+              value={values.bookingPeriod !== 'monthly' ? 2 : 3}
+              checked={values.minTerm === (values.bookingPeriod !== 'monthly' ? 2 : 3)}
               handleChange={_handleRadioChange}
-              label={_changeToPlural(values.bookingPeriod, 2)}
+              label={_changeToPlural(values.bookingPeriod, values.bookingPeriod !== 'monthly' ? 2 : 3)}
             />
           </Cell>
           <Cell width={1}>
             <Radio
               name="minTerm"
-              value={5}
-              checked={values.minTerm === 5}
+              value={values.bookingPeriod === 'hourly' || values.bookingPeriod === 'weekly' ? 4 : values.bookingPeriod === 'monthly' ? 6 : 5}
+              checked={values.minTerm === (values.bookingPeriod === 'hourly' || values.bookingPeriod === 'weekly' ? 4 : values.bookingPeriod === 'monthly' ? 6 : 5)}
               handleChange={_handleRadioChange}
-              label={_changeToPlural(values.bookingPeriod, 5)}
+              label={_changeToPlural(values.bookingPeriod, values.bookingPeriod === 'hourly' || values.bookingPeriod === 'weekly' ? 4 : values.bookingPeriod === 'monthly' ? 6 : 5)}
             />
           </Cell>
           <Cell width={1}>
             <Radio
               name="minTerm"
-              value={7}
-              checked={values.minTerm === 7}
+              value={values.bookingPeriod === 'hourly' || values.bookingPeriod === 'weekly' ? 8 : values.bookingPeriod === 'monthly' ? 12 : 7}
+              checked={values.minTerm === (values.bookingPeriod === 'hourly' || values.bookingPeriod === 'weekly' ? 8 : values.bookingPeriod === 'monthly' ? 12 : 7)}
               handleChange={_handleRadioChange}
-              label={_changeToPlural(values.bookingPeriod, 7)}
+              label={_changeToPlural(values.bookingPeriod, values.bookingPeriod === 'hourly' || values.bookingPeriod === 'weekly' ? 8 : values.bookingPeriod === 'monthly' ? 12 : 7)}
             />
           </Cell>
         </Box>
@@ -203,7 +203,7 @@ const BookingTab = ({
                 this option."
             />
           </Cell>
-          <Cell width={1}>
+          {/* <Cell width={1}>
             <Radio
               box
               value="poa"
@@ -214,7 +214,7 @@ const BookingTab = ({
               text="If you want to be contacted, select
                 this option."
             />
-          </Cell>
+          </Cell> */}
         </Box>
       </Cell>
       <Cell>
@@ -227,9 +227,9 @@ const BookingTab = ({
           <Cell width={1}>
             <Radio
               box
-              value={false}
+              value
               name="isAbsorvedFee"
-              checked={!values.isAbsorvedFee}
+              checked={values.isAbsorvedFee}
               handleChange={_handleRadioChange}
               label="Host Fee"
               text=" Incur the 10% service fee and the guest will not be passed an extra
@@ -241,9 +241,9 @@ const BookingTab = ({
           <Cell width={1}>
             <Radio
               box
-              value
+              value={false}
               name="isAbsorvedFee"
-              checked={values.isAbsorvedFee}
+              checked={!values.isAbsorvedFee}
               handleChange={_handleRadioChange}
               label="Guest Fee"
               text="The guest pays the 10% service fee and you, the host, will receive
@@ -285,7 +285,9 @@ const formik = {
   },
   validationSchema: props =>
     Yup.object().shape({
-      basePrice: Yup.number().typeError('Need to be number.')
+      basePrice: Yup.number()
+        .typeError('Need to be number.')
+        .positive('Must be above 0.')
     }),
   enableReinitialize: false,
   isInitialValid: true

@@ -52,8 +52,12 @@ import DatesDetail from './DatesDetail'
 import Table from './Table'
 import CarouselListing from './CarouselListing'
 import Footer from './Footer'
-import CardSearch from './Card/CardSearch'
+import CardSearch from './CardSearch'
 import Price from './Price'
+import MessageCard from './MessageCard'
+import MessageDetailCard from './MessageDetailCard'
+import Review from './Review'
+import StarRatingComponent from './Review/StarRatingComponent'
 
 export {
   Modal,
@@ -114,5 +118,9 @@ export {
   CarouselListing,
   Footer,
   CardSearch,
-  Price
+  Price,
+  MessageCard,
+  MessageDetailCard,
+  Review,
+  StarRatingComponent
 }

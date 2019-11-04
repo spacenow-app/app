@@ -122,6 +122,7 @@ export const Types = {
   AUTH_FAILURE: 'AUTH_FAILURE',
   AUTH_CLEAN_ERROR: 'AUTH_CLEAN_ERROR',
   AUTH_LOGOUT: 'AUTH_LOGOUT',
+  AUTH_TOKEN_VERIFYING: 'AUTH_TOKEN_VERIFYING',
   AUTH_TOKEN_VERIFY_SUCCESS: 'AUTH_TOKEN_VERIFY_SUCCESS',
   AUTH_TOKEN_VERIFY_FAILURE: 'AUTH_TOKEN_VERIFY_FAILURE'
 }
@@ -137,11 +138,19 @@ const initialState = {
 
 export default function reducer(state = initialState, action) {
   switch (action.type) {
-    case Types.AUTH_SIGNIN_REQUEST:
+    case Types.AUTH_SIGNUP_REQUEST: {
+      deleteToken()
+      return {
+        ...state
+      }
+    }
+    case Types.AUTH_SIGNIN_REQUEST: {
+      deleteToken()
       return {
         ...state,
         isLoading: true
       }
+    }
     case Types.AUTH_SIGNIN_SUCCESS: {
       return {
         ...state,
@@ -150,51 +159,61 @@ export default function reducer(state = initialState, action) {
         redirectToReferrer: action.from
       }
     }
-    case Types.AUTH_FAILURE:
+    case Types.AUTH_FAILURE: {
+      deleteToken()
       return {
         ...state,
         isLoading: false,
         isAuthenticated: false,
         error: action.payload
       }
+    }
     case Types.AUTH_TOKEN_VERIFY_SUCCESS:
       return {
         ...state,
         isAuthenticated: true,
-        isLoading: false,
+        isLoading: false
       }
-    case Types.AUTH_TOKEN_VERIFY_FAILURE:
+    case Types.AUTH_TOKEN_VERIFY_FAILURE: {
+      deleteToken()
       return {
         ...state,
         isLoading: false,
-        isAuthenticated: false,
+        isAuthenticated: false
       }
+    }
     case Types.AUTH_CLEAN_ERROR:
       return {
         ...state,
         error: null
       }
-    case Types.AUTH_LOGOUT:
+    case Types.AUTH_LOGOUT: {
+      deleteToken()
       return {
         ...initialState,
         isLoading: false
       }
-    case Types.AUTH_RESET_PASSWORD_REQUEST:
+    }
+    case Types.AUTH_RESET_PASSWORD_REQUEST: {
+      deleteToken()
       return {
         ...state,
         isLoadingResetPassword: true
       }
+    }
     case Types.AUTH_RESET_PASSWORD_SUCCESS:
       return {
         ...state,
         isLoadingResetPassword: false
       }
-    case Types.AUTH_RESET_PASSWORD_FAILURE:
+    case Types.AUTH_RESET_PASSWORD_FAILURE: {
+      deleteToken()
       return {
         ...state,
         isLoadingResetPassword: false,
         error: action.payload
       }
+    }
     default:
       return state
   }
@@ -202,34 +221,33 @@ export default function reducer(state = initialState, action) {
 
 // Action Creators
 export const onTokenValidation = () => async dispatch => {
-  const idToken = getByName(config.token_name)
-  if (!idToken) {
-    dispatch({ type: Types.AUTH_TOKEN_VERIFY_FAILURE })
-    return
-  }
+  dispatch({ type: Types.AUTH_TOKEN_VERIFYING })
   try {
-    const { data } = await getClient().mutate({
-      variables: { token: idToken },
-      mutation: mutationTokenValidate
-    })
-    if (data && data.tokenValidate) {
-      if (data.tokenValidate.status && data.tokenValidate.status === 'OK') {
-        dispatch({ type: Types.AUTH_TOKEN_VERIFY_SUCCESS })
-        dispatch({ type: AccountTypes.ACC_GET_PROFILE_SUCCESS, payload: data.tokenValidate.user })
-        return
+    const idToken = getByName(config.token_name)
+    if (idToken) {
+      const { data } = await getClient().mutate({
+        variables: { token: idToken },
+        mutation: mutationTokenValidate
+      })
+      if (data && data.tokenValidate) {
+        if (data.tokenValidate.status && data.tokenValidate.status === 'OK') {
+          dispatch({ type: Types.AUTH_TOKEN_VERIFY_SUCCESS })
+          dispatch({ type: AccountTypes.ACC_GET_PROFILE_SUCCESS, payload: data.tokenValidate.user })
+          return
+        }
       }
     }
-    deleteToken()
     dispatch({ type: Types.AUTH_TOKEN_VERIFY_FAILURE })
   } catch (err) {
-    deleteToken()
     dispatch({ type: Types.AUTH_TOKEN_VERIFY_FAILURE })
   }
 }
 
 export const onIsTokenExists = () => dispatch => {
   const idToken = getByName(config.token_name)
-  if (!idToken || idToken.length <= 0) dispatch({ type: Types.AUTH_TOKEN_VERIFY_FAILURE, payload: 'No token found' })
+  if (!idToken || idToken.length <= 0) {
+    dispatch({ type: Types.AUTH_TOKEN_VERIFY_FAILURE, payload: 'No token found' })
+  }
 }
 
 export const signin = (email, password, from) => async dispatch => {
@@ -351,8 +369,5 @@ export const facebookSignin = facebookResponse => async dispatch => {
 }
 
 export const logout = () => async dispatch => {
-  deleteToken()
-  dispatch({
-    type: Types.AUTH_LOGOUT
-  })
+  dispatch({ type: Types.AUTH_LOGOUT })
 }

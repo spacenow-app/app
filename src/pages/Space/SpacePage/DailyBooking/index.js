@@ -27,7 +27,6 @@ const DailyBooking = ({
   const [range, setRange] = useState(undefined)
   const [listDates, setListDates] = useState(datesSelected)
   const modifiers = { start: from, end: to }
-
   const [dayPicker, setDayPicker] = useState('')
 
   useEffect(() => {

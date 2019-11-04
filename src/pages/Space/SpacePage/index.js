@@ -1,4 +1,5 @@
-import React, { useEffect, useState } from 'react'
+/* eslint-disable eqeqeq */
+import React, { useEffect, useState, createRef } from 'react'
 import PropTypes from 'prop-types'
 import Helmet from 'react-helmet'
 import { useSelector, useDispatch } from 'react-redux'
@@ -24,11 +25,15 @@ import {
   Carousel,
   UserDetails,
   BookingCard,
-  Checkbox,
   Button,
   Footer,
   CardSearch,
-  Price
+  Price,
+  Link,
+  Review,
+  StarRatingComponent,
+  Pagination,
+  Text
 } from 'components'
 
 import {
@@ -47,6 +52,11 @@ import { openModal, TypesModal } from 'redux/ducks/modal'
 
 import { sendMail } from 'redux/ducks/mail'
 
+import { onCreateMessage } from 'redux/ducks/message'
+
+// import GraphCancelattionImage from 'pages/Listing/SpaceDetailsPage/CancellationTab/graph_cancellation.png'
+import { onGetPublicReviews } from 'redux/ducks/reviews'
+
 import config from 'variables/config'
 
 import WeeklyBooking from './WeeklyBooking'
@@ -54,6 +64,7 @@ import DailyBooking from './DailyBooking'
 import MonthlyBooking from './MonthlyBooking'
 import PendingBooking from './PenidngBooking'
 import HourlyBooking from './HourlyBooking'
+import GenericForm from './GenericForm'
 
 const GridStyled = styled(Grid)`
   @media only screen and (max-width: 991px) {
@@ -62,17 +73,13 @@ const GridStyled = styled(Grid)`
 `
 
 const IconBoxStyled = styled.div`
-  background: #6adc91;
-  border-radius: 50%;
   width: 20px;
   height: 20px;
   text-align: center;
-  float: left;
-  margin-right: 10px;
+  margin-top: 5px;
 `
 
 const ReportSpaceStyled = styled.span`
-  font-family: Montserrat-SemiBold;
   font-size: 12px;
   cursor: pointer;
 `
@@ -101,6 +108,7 @@ const CellStyled = styled(Cell)`
     }
   }
 `
+
 const SimilarSpacesContainer = styled.div`
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
@@ -112,7 +120,32 @@ const SimilarSpacesContainer = styled.div`
   }
 `
 
+const TitleStarContainer = styled.div`
+  font-size: 24px;
+  margin-top: 27px;
+`
+
+const Label = styled.label`
+  font-size: 14px;
+  font-family: 'Montserrat-Medium';
+  color: #172439;
+`
+
+const ContainerMobile = styled.div`
+  @media screen and (max-width: 600px) {
+    display: none;
+  }
+`
+
+const ContainerPagination = styled.div`
+  margin-top: 25px;
+  display: flex;
+  justify-content: center;
+`
+
 const SpacePage = ({ match, location, history, ...props }) => {
+  const reviewRef = createRef()
+
   const dispatch = useDispatch()
 
   const { object: listing, isLoading: isListingLoading } = useSelector(state => state.listing.get)
@@ -124,6 +157,7 @@ const SpacePage = ({ match, location, history, ...props }) => {
   const { isLoading: isLoadingOnCreateReservation } = useSelector(state => state.booking.create)
   const { object: pendingBooking } = useSelector(state => state.booking.pending)
   const { similar: similarResults } = useSelector(state => state.search)
+  const { public: publicReviews, totalPages } = useSelector(state => state.reviews.get)
 
   const [datesSelected, setDatesSelected] = useState([])
   const [date, setDate] = useState('')
@@ -169,6 +203,10 @@ const SpacePage = ({ match, location, history, ...props }) => {
       )
   }, [dispatch, listing])
 
+  useEffect(() => {
+    listing && dispatch(onGetPublicReviews(listing.id))
+  }, [dispatch, listing])
+
   if (listing && listing.user.provider === 'wework') {
     history.push(`/space/partner/${match.params.id}`)
   }
@@ -200,50 +238,68 @@ const SpacePage = ({ match, location, history, ...props }) => {
     return 'Custom'
   }
 
-  const _onClaimListing = () => {
-    dispatch(onClaimListing(match.params.id, listing.title))
-  }
+  const _onClaimListing = () => dispatch(onClaimListing(match.params.id, listing.title))
 
   const _renderHighLights = obj => {
-    const array = Object.keys(obj).map(i => obj[i])
-
+    let array = Object.keys(obj).map(i => obj[i])
+    array = array.filter(el => el.value !== 0)
+    const arrayLen = array.length
+    let last = 2
+    if (arrayLen < 3) {
+      last = arrayLen - 1
+    }
     return array.slice(0, 3).map((el, index) => {
       if (el.field === 'capacity') {
-        const value = el.value === 0 ? 'Not mentioned' : `${toPlural('Person', el.value)}`
-        return el.value === 0 ? null : (
-          <Highlights key={el.field} title={el.label} name={value} icon="specification-capacity" last={index === 2} />
+        const value = el.value == 0 ? 'Not mentioned' : `${toPlural('Person', el.value)}`
+        return el.value == 0 ? null : (
+          <Highlights
+            key={el.field}
+            title={el.label}
+            name={value}
+            icon="specification-capacity"
+            last={index === last}
+          />
         )
       }
       if (el.field === 'size') {
-        const value = el.value === 0 ? 'Not mentioned' : `${el.value} sqm`
-        return el.value === 0 ? null : (
-          <Highlights key={el.field} title={el.label} name={value} icon="specification-size" last={index === 2} />
+        const value = el.value == 0 ? 'Not mentioned' : `${el.value} sqm`
+        return el.value == 0 ? null : (
+          <Highlights key={el.field} title={el.label} name={value} icon="specification-size" last={index === last} />
         )
       }
       if (el.field === 'meetingRooms') {
-        const value = el.value === 0 ? 'None available' : `${el.value} available`
+        const value = el.value == 0 ? 'None available' : `${el.value} available`
         return (
           <Highlights
             key={el.field}
             title={el.label}
             name={value.toString()}
             icon="specification-meetingroom-quantity"
-            last={index === 2}
+            last={index === last}
           />
         )
       }
       if (el.field === 'isFurnished') {
-        const value = el.value === 0 ? 'No’' : 'Yes'
-        const icon = el.value === 0 ? 'specification-furnished-no' : 'specification-furnished-yes'
-        return <Highlights key={el.field} title={el.label} name={value} icon={icon} last={index === 2} />
+        const value = el.value == 0 ? 'No' : 'Yes'
+        const icon = el.value == 0 ? 'specification-furnished-no' : 'specification-furnished-yes'
+        return <Highlights key={el.field} title={el.label} name={value} icon={icon} last={index === last} />
       }
       if (el.field === 'carSpace') {
-        // const value = el.value === 0 ? 'None available’' : `${el.value} available`
-        // return <Highlights title={el.label} name={value} icon="category-desk" last={index === 2} />
+        const value = el.value == 0 ? 'None available' : `${el.value} available`
+        return el.value == 0 ? null : (
+          <Highlights title={el.label} name={value} icon="specification-car-park" last={index === last} />
+        )
       }
-      if (el.field === 'isFurnished') {
-        // const value = el.value === 0 ? 'None available’' : `${el.value} available`
-        // return <Highlights title={el.label} name={value} icon="category-desk" last={index === 2} />
+      if (el.field === 'spaceType') {
+        const value = el.value == 0 ? 'None available' : `${el.value}`
+        return (
+          <Highlights
+            title={el.label}
+            name={value}
+            icon={value === 'Covered' ? 'specification-covered' : 'specification-uncovered'}
+            last={index === last}
+          />
+        )
       }
       return (
         <Highlights
@@ -251,7 +307,7 @@ const SpacePage = ({ match, location, history, ...props }) => {
           title={el.label}
           name={el.value.toString()}
           icon="category-desk"
-          last={index === 2}
+          last={index === last}
         />
       )
     })
@@ -288,18 +344,14 @@ const SpacePage = ({ match, location, history, ...props }) => {
     setDatesSelected(arraySorted)
   }
 
-  const _onDateChange = value => {
-    setDate(value)
-  }
+  const _onDateChange = value => setDate(value)
 
   const _removeDate = value => {
     const newArray = _.filter(datesSelected, dateFromArray => !isSameDay(new Date(dateFromArray), value))
     setDatesSelected(newArray)
   }
 
-  const _handleChangePeriod = e => {
-    setPeriod(Number(e.target.value))
-  }
+  const _handleChangePeriod = e => setPeriod(Number(e.target.value))
 
   const _returnArrayAvailability = accessDays => {
     const arr = []
@@ -314,6 +366,9 @@ const SpacePage = ({ match, location, history, ...props }) => {
   }
 
   const _renderContentCard = (bookingPeriod, bookingType) => {
+    if (listing.user.provider === 'generic') {
+      return <GenericForm {...props} listing={listing} dispatch={dispatch} />
+    }
     if (pendingBooking && pendingBooking.items && pendingBooking.items.length > 0 && bookingType !== 'poa') {
       return (
         <PendingBooking
@@ -356,6 +411,7 @@ const SpacePage = ({ match, location, history, ...props }) => {
             focus={!(datesSelected && datesSelected.length > 0)}
             inputFocus={focusInput}
             onDateChange={_onDateChangeArray}
+            setDatesSelected={setDatesSelected}
             datesSelected={datesSelected}
             removeDate={_removeDate}
             listingExceptionDates={availabilities}
@@ -487,6 +543,7 @@ const SpacePage = ({ match, location, history, ...props }) => {
           template: 'report-listing',
           data: JSON.stringify(values)
         }
+
         await dispatch(sendMail(emailData))
 
         dispatch(
@@ -504,6 +561,23 @@ const SpacePage = ({ match, location, history, ...props }) => {
     dispatch(openModal(TypesModal.MODAL_TYPE_REPORT_LISTING, options))
   }
 
+  const _contactHost = () => {
+    const options = {
+      onConfirm: _sendMessage
+    }
+    dispatch(openModal(TypesModal.MODAL_TYPE_SEND_MESSAGE, options))
+  }
+
+  const _sendMessage = content => {
+    const values = {
+      content,
+      listingId: listing.id,
+      guestId: user.id,
+      hostId: listing.userId
+    }
+    dispatch(onCreateMessage(values))
+  }
+
   const _calcHourlyPeriod = () => {
     if (date) {
       onGetHourlyAvailability(listing.id, date, startTime, endTime)
@@ -518,17 +592,53 @@ const SpacePage = ({ match, location, history, ...props }) => {
     }
   }
 
-  const _onSetStartTime = value => {
-    setStartTime(value)
+  const _onSetStartTime = value => setStartTime(value)
+
+  const _onSetEndTime = value => setEndTime(value)
+
+  const _getRatingAvg = field => {
+    if (publicReviews) {
+      const countReviews = publicReviews.length
+      const totalRatings = publicReviews.map(o => o[`rating${field}`]).reduce((a, b) => a + b)
+      return (totalRatings / countReviews).toFixed(2)
+    }
+    return 0
   }
 
-  const _onSetEndTime = value => {
-    setEndTime(value)
+  const _onPagionationChange = page => {
+    reviewRef.current.scrollIntoView({ behavior: 'smooth', block: 'start' })
+    dispatch(onGetPublicReviews(listing.id, page))
+  }
+
+  const _renderTextAccessInfo = accessType => {
+    if (accessType === 'Person') {
+      return <Text fontFamily="MontSerrat-Regular">You will be greeted at reception. Please present your email*</Text>
+    }
+    if (accessType === 'Swipe Card') {
+      return <Text fontFamily="MontSerrat-Regular">You will need to collect a swipe card. Deposit may apply*</Text>
+    }
+    if (accessType === 'Host') {
+      return <Text fontFamily="MontSerrat-Regular">You will be in contact with your host upon booking.</Text>
+    }
+    if (accessType === 'Keys') {
+      return <Text fontFamily="MontSerrat-Regular">You will need to pick up keys. Deposit may apply*</Text>
+    }
+    return <Text fontFamily="MontSerrat-Regular">Details of entry will be issued upon successful booking.</Text>
+  }
+
+  const _renderTitleAccessInfo = accessType => {
+    if (accessType === 'Person') {
+      return <Text lineHeight={1}>{accessType} at reception</Text>
+    }
+    if (accessType === 'Host') {
+      return <Text lineHeight={1}>{accessType} will meet you</Text>
+    }
+    return <Text lineHeight={1}>{accessType}</Text>
   }
 
   return (
     <>
-      {imageHeight === 325 ||
+      {imageHeight == 325 ||
       (listing.photos.length > 1 &&
         listing.settingsParent.category.otherItemName !== 'parking' &&
         listing.settingsParent.category.otherItemName !== 'storage') ? (
@@ -541,7 +651,7 @@ const SpacePage = ({ match, location, history, ...props }) => {
         <GridStyled columns="auto 350px" columnGap="35px" rowGap="30px">
           <Cell>
             <Grid columns={1} rowGap="15px">
-              {listing.photos.length === 1 &&
+              {listing.photos.length == 1 &&
                 listing.settingsParent.category.otherItemName !== 'parking' &&
                 listing.settingsParent.category.otherItemName !== 'storage' &&
                 imageHeight !== 325 && <CarouselListing photos={_convertedArrayPhotos(listing.photos)} />}
@@ -585,9 +695,8 @@ const SpacePage = ({ match, location, history, ...props }) => {
                   </Cell>
                 )}
               </Grid>
-
               <Grid columns={12}>
-                <CellStyled width={7}>
+                <CellStyled width={12}>
                   <Title
                     type="h4"
                     title={listing.title}
@@ -597,7 +706,7 @@ const SpacePage = ({ match, location, history, ...props }) => {
                     noMargin
                   />
                 </CellStyled>
-                <CellStyled width={5} center>
+                {/* <CellStyled width={5} center>
                   <Price
                     currency={listing.listingData.currency}
                     price={listing.listingData.basePrice}
@@ -607,7 +716,7 @@ const SpacePage = ({ match, location, history, ...props }) => {
                     size="28px"
                     right
                   />
-                </CellStyled>
+                </CellStyled> */}
               </Grid>
 
               <Box>
@@ -617,7 +726,7 @@ const SpacePage = ({ match, location, history, ...props }) => {
                     title="Minimum term"
                     name={_changeToPlural(
                       listing.bookingPeriod,
-                      listing.listingData.minTerm ? listing.listingData.minTerm.toString() : '1'
+                      listing.listingData.minTerm ? listing.listingData.minTerm : 1
                     )}
                     icon="specification-minimum-term"
                   />
@@ -635,42 +744,53 @@ const SpacePage = ({ match, location, history, ...props }) => {
                   <Title
                     type="h5"
                     title="Access Information"
-                    subtitle="How you’ll gain access to this space. Your host will provide the following upon successful bookings:"
+                    subtitle="How you’ll gain access to this space. Your host will provide the following upon successful booking:"
                   />
                   <Box
                     display="grid"
-                    width="110px"
-                    height="130px"
-                    justifyContent="center"
-                    textAlign="center"
+                    width="278px"
+                    height="170px"
+                    gridTemplateRows="repeat(3, auto)"
+                    padding="20px"
                     fontFamily="MontSerrat-SemiBold"
                     fontSize="14px"
                     color={listing.listingData.accessType ? 'quartenary' : 'error'}
                     border={listing.listingData.accessType ? '1px solid #c4c4c4' : 'error'}
                     borderRadius="10px"
                   >
-                    <Icon
-                      style={{ alignSelf: 'center', justifySelf: 'center' }}
-                      width="50px"
-                      fill="#6ADC91"
-                      name={
-                        listing.listingData.accessType &&
-                        `access-type-${listing.listingData.accessType
-                          .toLowerCase()
-                          .split(' ')
-                          .join('-')}`
-                      }
-                    />
-                    {listing.listingData.accessType ? <>{listing.listingData.accessType}</> : 'No Data'}
+                    <Box mb="10px">
+                      <Icon
+                        width="50px"
+                        fill="#6ADC91"
+                        name={
+                          listing.listingData.accessType &&
+                          `access-type-${listing.listingData.accessType
+                            .toLowerCase()
+                            .split(' ')
+                            .join('-')}`
+                        }
+                      />
+                    </Box>
+                    {_renderTitleAccessInfo(listing.listingData.accessType)}
+                    {_renderTextAccessInfo(listing.listingData.accessType)}
                   </Box>
                 </Box>
               )}
+
               {listing.listingData.description ? (
                 <Box>
                   <Title type="h5" title="Description" />
-                  <p>{listing.listingData.description}</p>
+                  {listing.listingData.description.split('\n').map(o => <p>{o}</p>)}
                 </Box>
               ) : null}
+              {isAuthenticated && (
+                <Box mt="20px" fontFamily="bold">
+                  <Link to="#" onClick={_contactHost} style={{ textDecoration: 'underline' }}>
+                    Contact host
+                  </Link>
+                </Box>
+              )}
+
               {listing.amenities.length > 0 && (
                 <Box>
                   <Title type="h5" title="Amenities" />
@@ -694,12 +814,68 @@ const SpacePage = ({ match, location, history, ...props }) => {
                 </Box>
               )}
 
+              {publicReviews && publicReviews.length > 0 && (
+                <>
+                  <Box display="grid" gridTemplateColumns="200px auto" ref={reviewRef}>
+                    <Title type="h5" title={`Reviews (${publicReviews.length})`} />
+                    <TitleStarContainer>
+                      <StarRatingComponent name="ratingOverall" value={_getRatingAvg('Overall')} editing={false} />
+                    </TitleStarContainer>
+                  </Box>
+                  <ContainerMobile>
+                    <Box display="grid" gridTemplateColumns="auto 1fr auto 1fr" gridColumnGap="20px">
+                      <Label>Cleanliness</Label>
+                      <Cell style={{ alignContent: 'center', justifyContent: 'left', display: 'grid' }}>
+                        <StarRatingComponent
+                          name="ratingCleanliness"
+                          value={_getRatingAvg('Cleanliness')}
+                          editing={false}
+                        />
+                      </Cell>
+                      <Label>Value</Label>
+                      <Cell style={{ alignContent: 'center', justifyContent: 'left', display: 'grid' }}>
+                        <StarRatingComponent name="ratingValue" value={_getRatingAvg('Value')} editing={false} />
+                      </Cell>
+                      <Label>Check-in</Label>
+                      <Cell style={{ alignContent: 'center', justifyContent: 'left', display: 'grid' }}>
+                        <StarRatingComponent name="ratingCheckIn" value={_getRatingAvg('CheckIn')} editing={false} />
+                      </Cell>
+                      <Label>Location</Label>
+                      <Cell style={{ alignContent: 'center', justifyContent: 'left', display: 'grid' }}>
+                        <StarRatingComponent name="ratingLocation" value={_getRatingAvg('Location')} editing={false} />
+                      </Cell>
+                    </Box>
+                  </ContainerMobile>
+                  {publicReviews.map(o => {
+                    return (
+                      <Review
+                        id={o.id}
+                        userName={o.author.profile && o.author.profile.firstName}
+                        userPicture={o.author.profile && o.author.profile.picture}
+                        date={new Date(o.createdAt)}
+                        comment={o.reviewContent}
+                        rating={o.rating}
+                      />
+                    )
+                  })}
+                </>
+              )}
+
+              <ContainerPagination>
+                <Pagination
+                  totalPages={totalPages}
+                  totalRecords={publicReviews.length}
+                  onPageChanged={_onPagionationChange}
+                />
+              </ContainerPagination>
+
               {listing.rules.length > 0 && (
-                <Box>
+                <Box width="80%">
                   <Title type="h5" title="Space Rules" />
                   <Grid columns="repeat(auto-fit, minmax(200px, auto))" rowGap="20px">
                     {listing.rules.map(item => {
-                      return <Checkbox disabled key={item.id} label={item.settingsData.itemName} name="rules" checked />
+                      // return <Checkbox disabled key={item.id} label={item.settingsData.itemName} name="rules" checked />
+                      return <Text>{item.settingsData.itemName} </Text>
                     })}
                   </Grid>
                 </Box>
@@ -718,45 +894,76 @@ const SpacePage = ({ match, location, history, ...props }) => {
             <BookingCard
               style={{ position: 'sticky', top: '1px' }}
               titleComponent={
-                <Title
-                  type="h5"
-                  title={listing.title}
-                  subtitle={_getAddress(listing.location)}
-                  subTitleMargin={10}
-                  noMargin
-                />
+                <>
+                  <Price
+                    price={listing.listingData.basePrice}
+                    currencySymbol="$"
+                    bookingPeriod={listing.bookingPeriod}
+                    bookingType={listing.listingData.bookingType}
+                    size="28px"
+                    periodSize="11px"
+                    left
+                    lightPeriod
+                    lightPrice
+                  />
+                  {publicReviews && publicReviews.length > 0 && (
+                    <Box mb="-20px">
+                      <Grid columns={12} alignContent="center">
+                        <Cell width={4}>
+                          <StarRatingComponent name="ratingOverall" value={_getRatingAvg('Overall')} editing={false} />
+                        </Cell>
+                        <Cell width={6}>
+                          <Text fontSize="9px">
+                            ({publicReviews.length} Review{(publicReviews.length > 1 && 's') || ''})
+                          </Text>
+                        </Cell>
+                      </Grid>
+                    </Box>
+                  )}
+                </>
               }
               contentComponent={
                 <>
                   {_renderContentCard(listing.bookingPeriod)}
-                  {(pendingBooking ? pendingBooking && pendingBooking.count === 0 : true) && (
-                    <Button
-                      onClick={e => _onSubmitBooking(e)}
-                      isLoading={isLoadingOnCreateReservation}
-                      // disabled={user && user.id === listing.user.id}
-                      fluid
-                    >
-                      {listing.listingData.bookingType === 'request' ? 'Booking Request' : 'Reserve'}
-                    </Button>
+                  {(pendingBooking ? pendingBooking && pendingBooking.count == 0 : true) && (
+                    <>
+                      {listing.user.provider !== 'generic' && (
+                        <Button
+                          onClick={e => _onSubmitBooking(e)}
+                          isLoading={isLoadingOnCreateReservation}
+                          disabled={_isPeriodValid(listing.bookingPeriod) || (user && user.id == listing.user.id)}
+                          fluid
+                        >
+                          {listing.listingData.bookingType === 'request' ? 'Booking Request' : 'Reserve'}
+                        </Button>
+                      )}
+                      <Box width="100%" textAlign="center">
+                        <Text fontSize="11px">You won't be charged at this point</Text>
+                      </Box>
+                    </>
                   )}
                 </>
               }
               footerComponent={
-                <>
-                  <UserDetails
-                    hostname={`${listing.user.profile.firstName} ${listing.user.profile.lastName}`}
-                    imageProfile={listing.user.profile.picture}
-                    provider={listing.user.provider}
-                    onClaim={_onClaimListing}
-                    joined="2019"
-                  />
-                  <Box mt="15px">
+                <UserDetails
+                  hostname={`${listing.user.profile.firstName} ${listing.user.profile.lastName}`}
+                  imageProfile={listing.user.profile.picture}
+                  provider={listing.user.provider}
+                  onClaim={_onClaimListing}
+                />
+              }
+              bottomComponent={
+                <Grid columns={24} columnGap="1px">
+                  <Cell width={7} />
+                  <Cell width={2}>
                     <IconBoxStyled>
                       <Icon name="flag" width="10px" height="100%" style={{ paddingBottom: '5px' }} />
                     </IconBoxStyled>
-                    <ReportSpaceStyled onClick={_reportSpace}>Report space</ReportSpaceStyled>
-                  </Box>
-                </>
+                  </Cell>
+                  <Cell width={15}>
+                    <ReportSpaceStyled onClick={_reportSpace}>Report this listing</ReportSpaceStyled>
+                  </Cell>
+                </Grid>
               }
             />
           </Cell>
@@ -767,7 +974,7 @@ const SpacePage = ({ match, location, history, ...props }) => {
           <Map position={{ lat: Number(listing.location.lat), lng: Number(listing.location.lng) }} />
         </Box>
 
-        {similarResults.length === 3 && (
+        {similarResults.length == 3 && (
           <Box mt="45px">
             <Title type="h5" title="See more similar spaces" />
             <SimilarSpacesContainer>
@@ -778,24 +985,8 @@ const SpacePage = ({ match, location, history, ...props }) => {
           </Box>
         )}
 
-        {/* <Box mb="45px">
-          <Title type="h5" title="Cancellation Policy" />
-          <Grid columns="repeat(auto-fit, minmax(350px, auto))">
-            <Cell>
-              <Title
-                noMargin
-                type="h5"
-                title="No Cancellation"
-                subTitleSize={16}
-                subtitle="Guest cannot cancel their booking. Note: This may affect the number of bookings received."
-              />
-            </Cell>
-            <Cell>
-              <ImageStyled alt="Cancellation Policy" src={GraphCancelattionImage} width="700px" />
-            </Cell>
-          </Grid>
-        </Box> */}
         <Footer />
+
         <BottomButtonMobile>
           <Grid columns={2} style={{ alignItems: 'center' }}>
             <Cell style={{ alignContent: 'center', justifyContent: 'left', display: 'grid' }}>

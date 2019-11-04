@@ -1,8 +1,9 @@
 /* eslint-disable no-console */
 import { gql } from 'apollo-boost'
 import { getClientWithAuth } from 'graphql/apolloClient'
-
 import { toast } from 'react-toastify'
+
+import errToMsg from 'utils/errToMsg'
 
 // Action Types
 export const Types = {
@@ -72,6 +73,7 @@ const queryGetProfile = gql`
       id
       email
       emailConfirmed
+      provider
       profile {
         __typename
         status
@@ -524,8 +526,8 @@ export const onUpdateListing = (listingId, status) => async dispatch => {
     toast.success('Listing updated successfully')
     dispatch({ type: Types.ACC_UPDATE_LISTING_SUCCESS, payload: data.publish })
   } catch (error) {
-    toast.error(error.message)
-    dispatch({ type: Types.ACC_UPDATE_LISTING_ERROR, payload: error.message })
+    toast.error(errToMsg(error.message))
+    dispatch({ type: Types.ACC_UPDATE_LISTING_ERROR, payload: errToMsg(error.message) })
   }
 }
 
@@ -539,8 +541,8 @@ export const onDeleteListing = listingId => async dispatch => {
     toast.success('Listing removed successfully')
     dispatch({ type: Types.ACC_DELETE_LISTING_SUCCESS, payload: { listingId } })
   } catch (error) {
-    toast.error(error.message)
-    dispatch({ type: Types.ACC_DELETE_LISTING_ERROR, payload: error.message })
+    toast.error(errToMsg(error.message))
+    dispatch({ type: Types.ACC_DELETE_LISTING_ERROR, payload: errToMsg(error.message) })
   }
 }
 
@@ -554,8 +556,8 @@ export const onUpdateProfile = (userId, input) => async dispatch => {
     toast.success('Profile updated successfully')
     dispatch({ type: Types.ACC_UPDATE_PROFILE_SUCCESS, payload: input })
   } catch (error) {
-    toast.error(error.message)
-    dispatch({ type: Types.ACC_UPDATE_PROFILE_ERROR, payload: error.message })
+    toast.error(errToMsg(error.message))
+    dispatch({ type: Types.ACC_UPDATE_PROFILE_ERROR, payload: errToMsg(error.message) })
   }
 }
 
@@ -569,8 +571,8 @@ export const onUpdateProfilePicture = (file, userId) => async dispatch => {
     toast.success('Profile updated successfully')
     dispatch({ type: Types.ACC_UPDATE_PROFILE_PICTURE_SUCCESS, payload: data.updateProfilePicture })
   } catch (error) {
-    toast.error(error.message)
-    dispatch({ type: Types.ACC_UPDATE_PROFILE_PICTURE_ERROR, payload: error.message })
+    toast.error(errToMsg(error.message))
+    dispatch({ type: Types.ACC_UPDATE_PROFILE_PICTURE_ERROR, payload: errToMsg(error.message) })
   }
 }
 
@@ -584,8 +586,8 @@ export const onUploadDocument = (userId, file) => async dispatch => {
     toast.success('Document uploaded successfully')
     dispatch({ type: Types.ACC_UPLOAD_DOCUMENT_SUCCESS, payload: data.uploadDocument })
   } catch (error) {
-    toast.error(error.message)
-    dispatch({ type: Types.ACC_UPLOAD_DOCUMENT_ERROR, payload: error.message })
+    toast.error(errToMsg(error.message))
+    dispatch({ type: Types.ACC_UPLOAD_DOCUMENT_ERROR, payload: errToMsg(error.message) })
   }
 }
 
@@ -599,7 +601,7 @@ export const onResendLink = email => async dispatch => {
     toast.success('Email verification sent successfully')
     dispatch({ type: Types.ACC_GET_RESEND_LINK_SUCCESS })
   } catch (error) {
-    toast.error(error.message)
+    toast.error(errToMsg(error.message))
     dispatch({ type: Types.ACC_GET_RESEND_LINK_ERROR })
   }
 }
