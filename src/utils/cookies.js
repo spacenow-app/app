@@ -1,3 +1,5 @@
+import config from 'variables/config'
+
 const getByName = cname => {
   const name = `${cname}=`
   const ca = document.cookie.split(';')
@@ -14,11 +16,11 @@ const getByName = cname => {
 }
 
 const setToken = (token, expires) => {
-  document.cookie = `id_token=${token};expires=${expires};path=/`
+  document.cookie = `id_token=${token};expires=${expires};path=/;domain=${config.domain}`
 }
 
 const deleteToken = () => {
-  document.cookie = 'id_token= ;expires=Thu, 01 Jan 1970 00:00:00 GMT;path=/'
+  document.cookie = `id_token= ;expires=Thu, 01 Jan 1970 00:00:00 GMT;path=/;domain=${config.domain}`
 }
 
 /**
