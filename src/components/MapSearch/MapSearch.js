@@ -65,8 +65,14 @@ const CardContentPrice = styled.span`
   font-family: 'MontSerrat-Bold';
 `
 
-const CardContentUser = styled.div`
-  display: flex;
+const MarkerStyled = styled.div`
+background-color: green;
+font-size: 16px;
+padding: 8px 14px;
+borderRadius: 50px;
+color: #172439;
+border: 1px solid #CBCBCB;
+font-family: Montserrat-Bold;
 `
 
 const CardContentUserTitle = styled.span`
@@ -99,6 +105,7 @@ const MapSearch = withGoogleMap(props => {
                 props.onClickMarker(marker)
               }}
               defaultIcon=" "
+              raiseOnDrag={true}
               labelAnchor={{ x: 55, y: 40 }}
               children={
                 <Price
@@ -111,12 +118,13 @@ const MapSearch = withGoogleMap(props => {
                   size="16px"
                 />
               }
+              zIndex={(props.selectedMarker && props.selectedMarker.id === marker.id) ? 2 : 1}
               labelStyle={{
-                backgroundColor: 'white',
+                backgroundColor: props.selectedMarker ? props.selectedMarker.id === marker.id ? '#6adc91' : '#ffffff' : '#ffffff',
                 fontSize: '16px',
                 padding: '8px 14px',
                 borderRadius: '50px',
-                color: '#172439',
+                color: props.selectedMarker ? props.selectedMarker.id === marker.id ? '#ffffff' : '#172439' : '#172439',
                 border: '1px solid #CBCBCB',
                 fontFamily: 'Montserrat-Bold'
               }}
@@ -124,34 +132,35 @@ const MapSearch = withGoogleMap(props => {
           </>
         ))}
 
-      {props.selectedMarker && (
-        <InfoWindow
-          onCloseClick={() => {
-            props.onClickMarker(null)
-          }}
-          position={{
-            lat: props.selectedMarker.lat,
-            lng: props.selectedMarker.lng
-          }}
-        >
-          <CardContainer>
-            <CardImage
-              src={props.selectedMarker.photo}
-              onClick={() => props.history.push(`/space/${props.selectedMarker.id}`)}
-            />
-            <CardContent>
-              <CardContentTitle>{props.selectedMarker.title}</CardContentTitle>
-              <CardContentTextPrice>
-                From <CardContentPrice>{props.selectedMarker.price}</CardContentPrice> {props.selectedMarker.period}
-              </CardContentTextPrice>
-              <CardContentUser>
-                <Avatar width="30px" height="30px" image={props.selectedMarker.host.photo} />
-                <CardContentUserTitle>{props.selectedMarker.host.name}</CardContentUserTitle>
-              </CardContentUser>
-            </CardContent>
-          </CardContainer>
-        </InfoWindow>
-      )}
+      { // props.selectedMarker && (
+        // <InfoWindow
+        //   onCloseClick={() => {
+        //     props.onClickMarker(null)
+        //   }}
+        //   position={{
+        //     lat: props.selectedMarker.lat,
+        //     lng: props.selectedMarker.lng
+        //   }}
+        // >
+        //   <CardContainer>
+        //     <CardImage
+        //       src={props.selectedMarker.photo}
+        //       onClick={() => props.history.push(`/space/${props.selectedMarker.id}`)}
+        //     />
+        //     <CardContent>
+        //       <CardContentTitle>{props.selectedMarker.title}</CardContentTitle>
+        //       <CardContentTextPrice>
+        //         From <CardContentPrice>{props.selectedMarker.price}</CardContentPrice> {props.selectedMarker.period}
+        //       </CardContentTextPrice>
+        //       <CardContentUser>
+        //         <Avatar width="30px" height="30px" image={props.selectedMarker.host.photo} />
+        //         <CardContentUserTitle>{props.selectedMarker.host.name}</CardContentUserTitle>
+        //       </CardContentUser>
+        //     </CardContent>
+        //   </CardContainer>
+        // </InfoWindow>
+        //)
+      }
     </GoogleMap>
   )
 })
