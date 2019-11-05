@@ -109,6 +109,12 @@ const PartnerPage = ({ match, location, ...props }) => {
     return convertedAddress.replace(/\0.*$/g, '')
   }
 
+  const _getSuburb = address => {
+    const { city = '' } = address
+    const convertedAddress = `${city ? `${city}` : ''}`
+    return convertedAddress.replace(/\0.*$/g, '')
+  }
+
   const _parseCategoryIconName = (name, isSub) => {
     let prefix = 'category-'
     if (isSub) prefix = 'sub-category-'
@@ -264,7 +270,7 @@ const PartnerPage = ({ match, location, ...props }) => {
         </Box>
       ) : null}
       <Wrapper>
-        <Helmet title="View Listing - Spacenow" />
+      <Helmet title={`${listing.title} / ${_getSuburb(listing.location)}`} />
         <GridStyled columns="auto 350px" columnGap="35px" rowGap="30px">
           <Box display="grid" gridRowGap="15px">
             {listing.photos.length === 1 &&
