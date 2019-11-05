@@ -29,7 +29,7 @@ const Price = ({ currency, currencySymbol, price, bookingPeriod, bookingType, si
     <ContainerStyled {...props}>
       {bookingType !== 'poa' ? (
         <Text fontSize={size} {...props}>
-          {`${currency || ''} ${currencySymbol}${(Math.round((price || 0) * 100) / 100)
+          {`${currency || ''} ${currencySymbol}${(Math.round((price || 0) * 100) / 100).toFixed(2)
             .toString()
             .replace(/\B(?=(\d{3})+(?!\d))/g, ',')} `}
           <TextStyled {...props}>{bookingPeriod || ''}</TextStyled>
