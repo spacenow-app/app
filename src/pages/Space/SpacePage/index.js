@@ -223,6 +223,12 @@ const SpacePage = ({ match, location, history, ...props }) => {
     return convertedAddress.replace(/\0.*$/g, '')
   }
 
+  const _getSuburb = address => {
+    const { city = '' } = address
+    const convertedAddress = `${city ? `${city}` : ''}`
+    return convertedAddress.replace(/\0.*$/g, '')
+  }
+
   const _parseCategoryIconName = (name, isSub) => {
     let prefix = 'category-'
     if (isSub) prefix = 'sub-category-'
@@ -654,7 +660,7 @@ const SpacePage = ({ match, location, history, ...props }) => {
         </Box>
       ) : null}
       <Wrapper>
-        <Helmet title="View Listing - Spacenow" />
+        <Helmet title={`${listing.title} / ${_getSuburb(listing.location)}`} />
         <GridStyled columns="auto 350px" columnGap="35px" rowGap="30px">
           <Cell>
             <Grid columns={1} rowGap="15px">
