@@ -20,7 +20,7 @@ const setToken = (token, expires) => {
 }
 
 const deleteToken = () => {
-  document.cookie = `id_token= ;expires=Thu, 01 Jan 1970 00:00:00 GMT;path=/;domain=${config.domain}`
+  document.cookie = `id_token= ;expires=Thu, 01 Jan 1970 00:00:00 GMT;path=/`
 }
 
 /**
