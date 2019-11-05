@@ -530,13 +530,20 @@ const SpacePage = ({ match, location, history, ...props }) => {
         const sendData = values
         Object.assign(
           sendData,
-          { spaceOwner: listing.user.profile.displayName },
-          { spaceOwnerEmail: listing.user.email },
+          { hostName: listing.user.profile.displayName },
+          { hostEmail: listing.user.email },
           { email: config.admin_email },
           { guest: `${user.profile.firstName} ${user.profile.lastName}` },
+          { guestEmail: user.email },
           { guestId: user.id },
           { spaceId: listing.id },
-          { currentDate: format(new Date(), 'MMMM do, yyyy') }
+          { currentDate: format(new Date(), 'MMMM do, yyyy') },
+          { listingPhoto: _convertedArrayPhotos(listing.photos)[0].source },
+          { listingTitle: listing.title },
+          { listingAddress: `${listing.location.address1}, ${listing.location.city}` },
+          { basePrice: listing.listingData.basePrice },
+          { priceType: listing.bookingPeriod },
+          { category: listing.settingsParent.category.otherItemName }
         )
 
         const emailData = {
@@ -780,7 +787,9 @@ const SpacePage = ({ match, location, history, ...props }) => {
               {listing.listingData.description ? (
                 <Box>
                   <Title type="h5" title="Description" />
-                  {listing.listingData.description.split('\n').map(o => <p>{o}</p>)}
+                  {listing.listingData.description.split('\n').map(o => (
+                    <p>{o}</p>
+                  ))}
                 </Box>
               ) : null}
               {isAuthenticated && (
