@@ -25,7 +25,7 @@ const Small = styled.div`
 `
 
 const ExtraSmall = styled.div`
-  font-size: 18px;
+  font-size: 1rem;
   ${baseStyle};
 `
 
