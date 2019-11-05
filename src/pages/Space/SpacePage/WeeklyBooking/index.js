@@ -1,5 +1,6 @@
-import React from 'react'
-import PropTypes from 'prop-types'
+import React, { useEffect, useState } from 'react'
+import { withFormik } from 'formik'
+// import PropTypes from 'prop-types'
 
 import { DatePicker, Select, PriceDetail, Grid } from 'components'
 
@@ -9,18 +10,25 @@ function spelling(reference) {
   return label
 }
 
-const WeeklyBooking = props => {
-  const { date, onDateChange, listingExceptionDates, closingDays, handleChangePeriod, period, listingData } = props
+const WeeklyBooking = ({ date, onDateChange, listingExceptionDates, closingDays, handleChangePeriod, period, listingData, inputFocus }) => {
 
   const dates = [{ key: 0, value: 0, name: 'Choose a Period' }]
 
-  for (let i = props.listingData.minTerm; i < 13; i++) {
+  for (let i = listingData.minTerm; i < 13; i++) {
     dates.push({ key: i, value: i, name: `${i} ${spelling(i)}` })
   }
+
+  const [dayPicker, setDayPicker] = useState('')
+  useEffect(() => {
+    if (dayPicker.input && inputFocus) dayPicker.input.focus()
+  }, [dayPicker.input, inputFocus])
+  
   return (
-    <Grid columns={1} rowGap="40px">
+    <>
+    <Grid columns={1} rowGap="40px" style={{marginBottom: '20px'}}>
       <Grid columns={1} rowGap="10px">
         <DatePicker
+          ref={el => setDayPicker(el)}
           label="Start Day"
           value={date}
           handleDateChange={onDateChange}
@@ -40,26 +48,40 @@ const WeeklyBooking = props => {
         />
         <Select label="Period" options={dates} handleChange={handleChangePeriod} value={period} />
       </Grid>
-      <PriceDetail
-        periodLabel={spelling(period)}
-        price={listingData.basePrice}
-        isAbsorvedFee={listingData.isAbsorvedFee}
-        days={period}
-        quantity={1}
-      />
+      
+      {date &&
+        <PriceDetail
+          periodLabel={spelling(period)}
+          price={listingData.basePrice}
+          isAbsorvedFee={listingData.isAbsorvedFee}
+          days={period}
+          quantity={1}
+        />
+      }
     </Grid>
+    </>
   )
 }
 
-WeeklyBooking.defaultProps = {
-  date: '',
-  period: 1
+const formik = {
+  displayName: 'WeeklyBooking_Form',
+  enableReinitialize: true,
+  isInitialValid: false
 }
 
 WeeklyBooking.propTypes = {
-  date: PropTypes.any,
-  period: PropTypes.number,
-  listingData: PropTypes.instanceOf(Object).isRequired
+  ...withFormik.propTypes
 }
 
-export default WeeklyBooking
+// WeeklyBooking.defaultProps = {
+//   date: '',
+//   period: 0
+// }
+
+// WeeklyBooking.propTypes = {
+//   date: PropTypes.any,
+//   period: PropTypes.number,
+//   listingData: PropTypes.instanceOf(Object).isRequired
+// }
+
+export default withFormik(formik)(WeeklyBooking)

@@ -19,13 +19,19 @@ const DailyBooking = ({
   closingDays,
   listingData,
   removeDate,
-  setDatesSelected
+  setDatesSelected,
+  inputFocus
 }) => {
   const [from, setFrom] = useState(undefined)
   const [to, setTo] = useState(undefined)
   const [range, setRange] = useState(undefined)
   const [listDates, setListDates] = useState(datesSelected)
   const modifiers = { start: from, end: to }
+  const [dayPicker, setDayPicker] = useState('')
+
+  useEffect(() => {
+    if (dayPicker.input && inputFocus) dayPicker.input.focus()
+  }, [dayPicker.input, inputFocus])
 
   const _handleDayClick = day => {
     const rangeInput = DateUtils.addDayToRange(day, range)
@@ -82,29 +88,9 @@ const DailyBooking = ({
 
   return (
     <>
-      {/* <DatePicker
-        label="Start Date"
-        date={null}
-        handleDateChange={onDateChange}
-        hideOnDayClick={focus}
-        placeholder="Choose Dates"
-        dayPickerProps={{
-          selectedDays: [...datesSelected.map(el => new Date(el))],
-          modifiers: {
-            disabled: [
-              ...listingExceptionDates.map(el => new Date(el)),
-              {
-                daysOfWeek: closingDays
-              },
-              {
-                before: new Date()
-              }
-            ]
-          }
-        }}
-      /> */}
       <DatePicker
         label="Dates"
+        ref={el => setDayPicker(el)}
         date={null}
         handleDateChange={date => _handleDayClick(date)}
         hideOnDayClick={false}

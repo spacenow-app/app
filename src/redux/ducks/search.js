@@ -38,6 +38,18 @@ const CATEGORIES = {
   retailAndHospitality: [573]
 }
 
+const searchBaseFields = `
+  status
+  searchKey
+  page
+  perPage
+  prePage
+  nextPage
+  total
+  totalPages
+  frequencies
+`
+
 const searchResultFields = `
   id
   userId
@@ -109,14 +121,7 @@ const querySearchByAddress = gql`
   query searchByAddress($lat: String!, $lng: String!, $categories: String, $limit: Int, $radius: Int) {
     searchByAddress(lat: $lat, lng: $lng, categories: $categories, limit: $limit, radius: $radius) {
       __typename
-      status
-      searchKey
-      page
-      perPage
-      prePage
-      nextPage
-      total
-      totalPages
+      ${searchBaseFields}
       result {
         ${searchResultFields}
       }
@@ -146,14 +151,7 @@ const querySearchByFilters = gql`
       page: $page
     ) {
       __typename
-      status
-      searchKey
-      page
-      perPage
-      prePage
-      nextPage
-      total
-      totalPages
+      ${searchBaseFields}
       result {
         ${searchResultFields}
       }
@@ -178,6 +176,7 @@ export default function reducer(state = initialState, action) {
           ...state.get,
           searchKey: action.payload.searchKey,
           result: action.payload.result,
+          frequencies: action.payload.frequencies,
           pagination: {
             page: action.payload.pagination.page,
             perPage: action.payload.pagination.perPage,
@@ -239,6 +238,7 @@ export const onSearch = (lat, lng, categoryKey = false, categories = false, limi
         payload: {
           searchKey: data.searchByAddress.searchKey,
           result: data.searchByAddress.result,
+          frequencies: data.searchByAddress.frequencies,
           pagination: {
             page: data.searchByAddress.page,
             perPage: data.searchByAddress.perPage,
@@ -295,6 +295,7 @@ export const onQuery = (searchKey, filters, page = null) => async dispatch => {
       payload: {
         searchKey: data.searchByFilters.searchKey,
         result: data.searchByFilters.result,
+        frequencies: data.searchByFilters.frequencies,
         pagination: {
           page: data.searchByFilters.page,
           perPage: data.searchByFilters.perPage,

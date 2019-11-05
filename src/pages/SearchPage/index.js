@@ -163,7 +163,10 @@ const SearchPage = ({ history, location }) => {
   const [showMap, setShowMap] = useState(true)
   const [filterSelectedDates, setFilterSelectedDates] = useState([])
 
-  const { searchKey, result: searchResults, pagination } = useSelector(state => state.search.get, shallowEqual)
+  const { searchKey, result: searchResults, pagination, frequencies } = useSelector(
+    state => state.search.get,
+    shallowEqual
+  )
   const isLoading = useSelector(state => state.search.isLoading)
 
   useLayoutEffect(() => {
@@ -362,160 +365,6 @@ const SearchPage = ({ history, location }) => {
                           />
                         </div>
                         <Box display="flex" justifyContent="space-between">
-                          <Button size="sm" outline onClick={() => setShouldShowFilter(false)}>
-                            Close
-                          </Button>
-                          <Button size="sm" outline onClick={_onQueryFilter}>
-                            Update Search
-                          </Button>
-                        </Box>
-                      </Box>
-                    </Box>
-                  )
-                }}
-              </Popper>
-            )}
-          </Manager>
-
-          <Manager>
-            <Reference>
-              {({ ref }) => {
-                return (
-                  <Button outline size="sm" ref={ref} onClick={() => setShouldShowFilter('duration')}>
-                    Frequency
-                  </Button>
-                )
-              }}
-            </Reference>
-            {shouldShowFilter === 'duration' && (
-              <Popper placement="top-end" modifiers={modifiers}>
-                {({ ref, style, placement, arrowProps }) => {
-                  return (
-                    <Box
-                      ref={ref}
-                      style={{ ...style, zIndex: 5000000 }}
-                      width={{ _: '90vw', small: 'auto' }}
-                      data-placement={placement}
-                    >
-                      <div ref={arrowProps.ref} style={arrowProps.style} />
-                      <Box
-                        borderRadius="6px"
-                        bg="white"
-                        border="1px solid #cbcbcb"
-                        padding="30px"
-                        marginTop="10px"
-                        zIndex="2000001"
-                      >
-                        <div>
-                          <Checkbox
-                            label={<Text fontFamily="bold">Hourly</Text>}
-                            checked={filterDuration.hourly}
-                            handleCheckboxChange={(e, { checked }) =>
-                              setFilterDuration({ ...filterDuration, hourly: !checked })
-                            }
-                          />
-                          <Text display="block" ml="28px" mb="20px">
-                            I want to find space on a hourly basis
-                          </Text>
-                          <Checkbox
-                            label={<Text fontFamily="bold">Daily</Text>}
-                            checked={filterDuration.daily}
-                            handleCheckboxChange={(e, { checked }) =>
-                              setFilterDuration({ ...filterDuration, daily: !checked })
-                            }
-                          />
-                          <Text display="block" ml="28px" mb="20px">
-                            I want to find space on a daily basis
-                          </Text>
-                          <Checkbox
-                            label={<Text fontFamily="bold">Weekly</Text>}
-                            checked={filterDuration.weekly}
-                            handleCheckboxChange={(e, { checked }) =>
-                              setFilterDuration({ ...filterDuration, weekly: !checked })
-                            }
-                          />
-                          <Text display="block" ml="28px" mb="20px">
-                            I want to find space on a weekly basis
-                          </Text>
-                          <Checkbox
-                            label={<Text fontFamily="bold">Monthly</Text>}
-                            checked={filterDuration.monthly}
-                            handleCheckboxChange={(e, { checked }) =>
-                              setFilterDuration({ ...filterDuration, monthly: !checked })
-                            }
-                          />
-                          <Text display="block" ml="28px" mb="20px">
-                            I want to find space on a monthly basis
-                          </Text>
-                        </div>
-                        <Box display="flex" justifyContent="space-between">
-                          <Button size="sm" outline onClick={() => setShouldShowFilter(false)}>
-                            Close
-                          </Button>
-                          <Button size="sm" outline onClick={_onQueryFilter}>
-                            Update Search
-                          </Button>
-                        </Box>
-                      </Box>
-                    </Box>
-                  )
-                }}
-              </Popper>
-            )}
-          </Manager>
-
-          <Manager>
-            <Reference>
-              {({ ref }) => {
-                return (
-                  <Button outline size="sm" ref={ref} onClick={() => setShouldShowFilter('price')}>
-                    Price
-                  </Button>
-                )
-              }}
-            </Reference>
-            {shouldShowFilter === 'price' && (
-              <Popper placement="bottom-start" modifiers={modifiers}>
-                {({ ref, style, placement, arrowProps }) => {
-                  return (
-                    <Box
-                      ref={ref}
-                      style={{ ...style, zIndex: 5000000 }}
-                      width={{ _: '90vw', small: 'auto' }}
-                      data-placement={placement}
-                    >
-                      <div ref={arrowProps.ref} style={arrowProps.style} />
-                      <Box
-                        borderRadius="6px"
-                        bg="white"
-                        border="1px solid #cbcbcb"
-                        padding="30px"
-                        marginTop="10px"
-                        zIndex="2000001"
-                      >
-                        <Text display="block" fontSize="14px">
-                          Have a specific budget?
-                        </Text>
-                        <Text display="block" fontSize="14px">
-                          Set the minimum and maximum price.
-                        </Text>
-                        <Box my="20px">
-                          <Slider defaultValue={filterPrice} value={filterPrice} handleChange={setFilterPrice} />
-                        </Box>
-                        <Box display="grid" gridTemplateColumns="1fr auto 1fr" gridColumnGap="15px" alignItems="center">
-                          <Input
-                            label="Min"
-                            value={numeral(filterPrice[0]).format('$0,0[.]00')}
-                            onChange={e => _onChangeInputPrice(e, 'min')}
-                          />
-                          <Text mt="30px">To</Text>
-                          <Input
-                            label="Max"
-                            value={numeral(filterPrice[1]).format('$0,0[.]00')}
-                            onChange={e => _onChangeInputPrice(e, 'max')}
-                          />
-                        </Box>
-                        <Box mt="30px" display="flex" justifyContent="space-between">
                           <Button size="sm" outline onClick={_onQueryFilter}>
                             Update Search
                           </Button>
@@ -623,6 +472,176 @@ const SearchPage = ({ history, location }) => {
                           </Text>
                         </div>
                         <Box display="flex" justifyContent="space-between">
+                          <Button size="sm" outline onClick={_onQueryFilter}>
+                            Update Search
+                          </Button>
+                          <Button size="sm" outline onClick={() => setShouldShowFilter(false)}>
+                            Close
+                          </Button>
+                        </Box>
+                      </Box>
+                    </Box>
+                  )
+                }}
+              </Popper>
+            )}
+          </Manager>
+
+          <Manager>
+            <Reference>
+              {({ ref }) => {
+                return (
+                  <Button outline size="sm" ref={ref} onClick={() => setShouldShowFilter('duration')}>
+                    Frequency
+                  </Button>
+                )
+              }}
+            </Reference>
+            {shouldShowFilter === 'duration' && (
+              <Popper placement="top-end" modifiers={modifiers}>
+                {({ ref, style, placement, arrowProps }) => {
+                  return (
+                    <Box
+                      ref={ref}
+                      style={{ ...style, zIndex: 5000000 }}
+                      width={{ _: '90vw', small: 'auto' }}
+                      data-placement={placement}
+                    >
+                      <div ref={arrowProps.ref} style={arrowProps.style} />
+                      <Box
+                        borderRadius="6px"
+                        bg="white"
+                        border="1px solid #cbcbcb"
+                        padding="30px"
+                        marginTop="10px"
+                        zIndex="2000001"
+                      >
+                        <div>
+                          {frequencies.includes('hourly') && (
+                            <>
+                              <Checkbox
+                                label={<Text fontFamily="bold">Hourly</Text>}
+                                checked={filterDuration.hourly}
+                                handleCheckboxChange={(e, { checked }) =>
+                                  setFilterDuration({ ...filterDuration, hourly: !checked })
+                                }
+                              />
+                              <Text display="block" ml="28px" mb="20px">
+                                I want to find space on a hourly basis
+                              </Text>
+                            </>
+                          )}
+                          {frequencies.includes('daily') && (
+                            <>
+                              <Checkbox
+                                label={<Text fontFamily="bold">Daily</Text>}
+                                checked={filterDuration.daily}
+                                handleCheckboxChange={(e, { checked }) =>
+                                  setFilterDuration({ ...filterDuration, daily: !checked })
+                                }
+                              />
+                              <Text display="block" ml="28px" mb="20px">
+                                I want to find space on a daily basis
+                              </Text>
+                            </>
+                          )}
+                          {frequencies.includes('weekly') && (
+                            <>
+                              <Checkbox
+                                label={<Text fontFamily="bold">Weekly</Text>}
+                                checked={filterDuration.weekly}
+                                handleCheckboxChange={(e, { checked }) =>
+                                  setFilterDuration({ ...filterDuration, weekly: !checked })
+                                }
+                              />
+                              <Text display="block" ml="28px" mb="20px">
+                                I want to find space on a weekly basis
+                              </Text>
+                            </>
+                          )}
+                          {frequencies.includes('monthly') && (
+                            <>
+                              <Checkbox
+                                label={<Text fontFamily="bold">Monthly</Text>}
+                                checked={filterDuration.monthly}
+                                handleCheckboxChange={(e, { checked }) =>
+                                  setFilterDuration({ ...filterDuration, monthly: !checked })
+                                }
+                              />
+                              <Text display="block" ml="28px" mb="20px">
+                                I want to find space on a monthly basis
+                              </Text>
+                            </>
+                          )}
+                        </div>
+                        <Box display="flex" justifyContent="space-between">
+                          <Button size="sm" outline onClick={_onQueryFilter}>
+                            Update Search
+                          </Button>
+                          <Button size="sm" outline onClick={() => setShouldShowFilter(false)}>
+                            Close
+                          </Button>
+                        </Box>
+                      </Box>
+                    </Box>
+                  )
+                }}
+              </Popper>
+            )}
+          </Manager>
+
+          <Manager>
+            <Reference>
+              {({ ref }) => {
+                return (
+                  <Button outline size="sm" ref={ref} onClick={() => setShouldShowFilter('price')}>
+                    Price
+                  </Button>
+                )
+              }}
+            </Reference>
+            {shouldShowFilter === 'price' && (
+              <Popper placement="bottom-start" modifiers={modifiers}>
+                {({ ref, style, placement, arrowProps }) => {
+                  return (
+                    <Box
+                      ref={ref}
+                      style={{ ...style, zIndex: 5000000 }}
+                      width={{ _: '90vw', small: 'auto' }}
+                      data-placement={placement}
+                    >
+                      <div ref={arrowProps.ref} style={arrowProps.style} />
+                      <Box
+                        borderRadius="6px"
+                        bg="white"
+                        border="1px solid #cbcbcb"
+                        padding="30px"
+                        marginTop="10px"
+                        zIndex="2000001"
+                      >
+                        <Text display="block" fontSize="14px">
+                          Have a specific budget?
+                        </Text>
+                        <Text display="block" fontSize="14px">
+                          Set the minimum and maximum price.
+                        </Text>
+                        <Box my="20px">
+                          <Slider defaultValue={filterPrice} value={filterPrice} handleChange={setFilterPrice} />
+                        </Box>
+                        <Box display="grid" gridTemplateColumns="1fr auto 1fr" gridColumnGap="15px" alignItems="center">
+                          <Input
+                            label="Min"
+                            value={numeral(filterPrice[0]).format('$0,0[.]00')}
+                            onChange={e => _onChangeInputPrice(e, 'min')}
+                          />
+                          <Text mt="30px">To</Text>
+                          <Input
+                            label="Max"
+                            value={numeral(filterPrice[1]).format('$0,0[.]00')}
+                            onChange={e => _onChangeInputPrice(e, 'max')}
+                          />
+                        </Box>
+                        <Box mt="30px" display="flex" justifyContent="space-between">
                           <Button size="sm" outline onClick={_onQueryFilter}>
                             Update Search
                           </Button>
