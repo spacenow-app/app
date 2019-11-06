@@ -546,7 +546,7 @@ const SpacePage = ({ match, location, history, ...props }) => {
           { listingPhoto: _convertedArrayPhotos(listing.photos)[0].source },
           { listingTitle: listing.title },
           { listingAddress: `${listing.location.address1}, ${listing.location.city}` },
-          { basePrice: listing.listingData.basePrice },
+          { basePrice: listing.listingData.basePrice.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,') },
           { priceType: listing.bookingPeriod },
           { category: listing.settingsParent.category.otherItemName }
         )
