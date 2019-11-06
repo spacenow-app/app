@@ -159,7 +159,7 @@ const formik = {
         'Expiry date is invalid', // validation message
         value => valid.expirationDate(value).isValid
       )
-      .test('test-expiry-format', 'Expiry date format is invalid', value => /^\d{2}\/\d{2}$/.test(value))
+      .test('test-expiry-format', 'Expiry date is invalid, maybe / is missing', value => /^\d{2}\/\d{2}$/.test(value))
       .required(),
     cvc: Yup.string()
       .min(3)
