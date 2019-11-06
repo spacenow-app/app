@@ -11,11 +11,13 @@ const SignupPage = ({ values, touched, errors, handleChange, handleBlur, isValid
   const { isLoading } = useSelector(state => state.auth)
 
   const responseFacebook = response => {
-    dispatch(facebookSignin(response))
+    const { state } = props.location
+    dispatch(facebookSignin(response, (state && state.from) || false))
   }
 
   const responseGoogle = response => {
-    dispatch(googleSignin(response))
+    const { state } = props.location
+    dispatch(googleSignin(response, (state && state.from) || false))
   }
 
   const handleSubmit = e => {
