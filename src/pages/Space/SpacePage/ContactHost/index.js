@@ -71,7 +71,7 @@ const ContactHost = ({
       { listingCurrency: listing.listingData.currency },
       { listingPrice: listing.listingData.basePrice || 0 },
       { listingPeriod: listing.bookingPeriod },
-      { currentDate: format(new Date(), 'MMMM do, yyyy') },
+      { currentDate: format(new Date(), 'EEEE MMMM d, YYYY') },
       { listingCategory: listing.settingsParent.category.itemName },
       { date: format(date, 'dd/MM/yyyy') }
     )
