@@ -97,10 +97,10 @@ const SpaceDetailsPage = ({ match, history, location, ...props }) => {
       </Box>
       <Tab>
         <TabItem nav to={`${match.url}/specification`}>
-          Specification
+          About
         </TabItem>
         <TabItem nav to={`${match.url}/booking`}>
-          Booking
+          Pricing
         </TabItem>
         <TabItem nav to={`${match.url}/availability`}>
           Availability

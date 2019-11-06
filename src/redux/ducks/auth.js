@@ -270,7 +270,7 @@ export const signin = (email, password, from) => async dispatch => {
   }
 }
 
-export const signup = (name, email, password) => async dispatch => {
+export const signup = (name, email, password, from) => async dispatch => {
   dispatch({ type: Types.AUTH_SIGNUP_REQUEST })
   try {
     const { data } = await getClient().mutate({
@@ -279,7 +279,7 @@ export const signup = (name, email, password) => async dispatch => {
     })
     const signupReturn = data.signup
     setToken(signupReturn.token, signupReturn.expiresIn)
-    dispatch({ type: Types.AUTH_SIGNIN_SUCCESS })
+    dispatch({ type: Types.AUTH_SIGNIN_SUCCESS, from })
     dispatch({ type: AccountTypes.ACC_GET_PROFILE_SUCCESS, payload: signupReturn.user })
   } catch (err) {
     toast.error(errToMsg(err))

@@ -5,7 +5,7 @@ import * as Yup from 'yup'
 import { NavBar, Wrapper, Box, Input, Button, Text, Title, Link, Line, ButtonSocial } from 'components'
 import { signin, googleSignin, facebookSignin } from 'redux/ducks/auth'
 
-const SigninPage = ({ values, touched, errors, handleChange, handleBlur, isValid, ...props }) => {
+const SigninPage = ({ values, touched, errors, handleChange, handleBlur, isValid, history, ...props }) => {
   const dispatch = useDispatch()
 
   const { isLoading } = useSelector(state => state.auth)
@@ -22,6 +22,12 @@ const SigninPage = ({ values, touched, errors, handleChange, handleBlur, isValid
     e.preventDefault()
     const { state } = props.location
     dispatch(signin(values.email, values.password, (state && state.from) || false))
+  }
+
+  const handleSignup = e => {
+    e.preventDefault()
+    const { state } = props.location
+    history.push(`/auth/signup`, { from: state.from })
   }
 
   return (
@@ -63,7 +69,7 @@ const SigninPage = ({ values, touched, errors, handleChange, handleBlur, isValid
               <Link to="forgot_password">Forgot password?</Link>
               <Line margin="0" />
               <Text display="block">
-                Don't have an account? <Link to="signup">Create one now</Link>
+                Don't have an account? <Link to="signup" onClick={handleSignup}>Create one now</Link>
               </Text>
             </Box>
           </form>
