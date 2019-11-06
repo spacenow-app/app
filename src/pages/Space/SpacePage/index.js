@@ -542,7 +542,7 @@ const SpacePage = ({ match, location, history, ...props }) => {
           { guestEmail: user.email },
           { guestId: user.id },
           { spaceId: listing.id },
-          { currentDate: format(new Date(), 'EEEE MMMM d, YYYY') },
+          { currentDate: format(new Date(), 'EEEE MMMM d, yyyy') },
           { listingPhoto: _convertedArrayPhotos(listing.photos)[0].source },
           { listingTitle: listing.title },
           { listingAddress: `${listing.location.address1}, ${listing.location.city}` },
