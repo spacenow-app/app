@@ -60,7 +60,9 @@ const ModalAddBankDetails = ({
   return (
     <ModalStyled show centered onHide={() => dispatch(closeModal())}>
       <Modal.Header closeButton>
-        <Modal.Title><Title noMargin type={"h5"} title={"Add New Credit Card"} /></Modal.Title>
+        <Modal.Title>
+          <Title noMargin type={'h5'} title={'Add New Credit Card'} />
+        </Modal.Title>
       </Modal.Header>
       <Modal.Body>
         <Cards
@@ -99,7 +101,7 @@ const ModalAddBankDetails = ({
               label="Expiry"
               placeholder="**/**"
               name="expiry"
-              pattern="\d\d/\d\d"
+              pattern="^\d{2}\/\d{2}$"
               error={touched.expiry && errors.expiry}
               value={values.expiry}
               onChange={handleChange}
@@ -157,6 +159,7 @@ const formik = {
         'Expiry date is invalid', // validation message
         value => valid.expirationDate(value).isValid
       )
+      .test('test-expiry-format', 'Expiry date format is invalid', value => /^\d{2}\/\d{2}$/.test(value))
       .required(),
     cvc: Yup.string()
       .min(3)
