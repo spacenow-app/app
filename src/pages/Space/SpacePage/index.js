@@ -424,7 +424,7 @@ const SpacePage = ({ match, location, history, ...props }) => {
             closingDays={_returnArrayAvailability(listing.accessDays)}
             listingData={listing.listingData}
           />
-          {datesSelected.length >= 1 && (
+          {!(datesSelected && datesSelected.length > 0) && (
             <Box color="error" ml="23px">
               {`Minimum ${listing.listingData.minTerm} days is required`}
             </Box>
