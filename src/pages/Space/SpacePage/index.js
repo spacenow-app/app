@@ -635,6 +635,9 @@ const SpacePage = ({ match, location, history, ...props }) => {
     if (accessType === 'Keys') {
       return <Text fontFamily="MontSerrat-Regular">You will need to pick up keys. Deposit may apply*</Text>
     }
+    if (accessType === 'Secure Code') {
+      return <Text fontFamily="MontSerrat-Regular">You will need to type your secure code to access the space.</Text>
+    }
     return <Text fontFamily="MontSerrat-Regular">Details of entry will be issued upon successful booking.</Text>
   }
 

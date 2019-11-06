@@ -235,6 +235,7 @@ const Icons = {
   'amenitie-alarm': <AmenitieAlarm />,
   'amenitie-alcoholLicense': <AmenitieAlcoholLicense />,
   'amenitie-avEquipment': <AmenitieAvEquip />,
+  'amenitie-bar': <AmenitieBartender />,
   'amenitie-bartender': <AmenitieBartender />,
   'amenitie-beachfront': <AmenitieBeachfront />,
   'amenitie-bikeFriendly': <AmenitieBikeFriendly />,

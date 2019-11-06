@@ -200,7 +200,7 @@ const ListResults = forwardRef(
                   <Grid columns={item.listingData.bookingType !== 'poa' ? '50px auto auto' : 'auto auto'} columnGap="0">
                     {item.listingData.bookingType !== 'poa' && <Text fontSize="14px">From: &nbsp; </Text>}
                     <Price
-                      currency={item.listingData.currency}
+                      // currency={item.listingData.currency}
                       price={item.listingData.basePrice}
                       currencySymbol="$"
                       bookingPeriod={item.bookingPeriod}
