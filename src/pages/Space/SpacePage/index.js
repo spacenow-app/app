@@ -491,9 +491,8 @@ const SpacePage = ({ match, location, history, ...props }) => {
   }
 
   const _onSubmitBooking = async () => {
-
-    if (_isPeriodValid(listing.bookingPeriod)){
-      setFocusInput(true);
+    if (_isPeriodValid(listing.bookingPeriod)) {
+      setFocusInput(true)
       return
     }
 
@@ -543,11 +542,11 @@ const SpacePage = ({ match, location, history, ...props }) => {
           { guestEmail: user.email },
           { guestId: user.id },
           { spaceId: listing.id },
-          { currentDate: format(new Date(), 'MMMM do, yyyy') },
+          { currentDate: format(new Date(), 'EEEE d MMMM, yyyy') },
           { listingPhoto: _convertedArrayPhotos(listing.photos)[0].source },
           { listingTitle: listing.title },
           { listingAddress: `${listing.location.address1}, ${listing.location.city}` },
-          { basePrice: listing.listingData.basePrice },
+          { basePrice: listing.listingData.basePrice.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,') },
           { priceType: listing.bookingPeriod },
           { category: listing.settingsParent.category.otherItemName }
         )

@@ -23,11 +23,12 @@ const SignupPage = ({ values, touched, errors, handleChange, handleBlur, isValid
   const handleSubmit = e => {
     e.preventDefault()
     const { state } = props.location
+    const name = values.fullName
     dispatch(
       signup(
         {
-          first: values.fullName.split(' ')[0],
-          last: values.fullName.replace(/(\w+\s+)(\w+\s+)(\w+)/, '$2$3')
+          first: name.split(' ')[0],
+          last: name.substring(name.indexOf(' '), name.length).trim()
         },
         values.email,
         values.password, 

@@ -1,7 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import styled from 'styled-components'
-import { Box, Text, Icon, Tag, Avatar, Price } from 'components'
+import { Box, Text, Icon, Tag, Avatar, Price, Grid } from 'components'
 import { toPlural } from 'utils/strings'
 
 const CardContainer = styled.div`
@@ -48,7 +48,7 @@ const CardImage = styled.img`
   }
 `
 const CardContent = styled.div`
-  padding: 25px;
+  padding: 25px 25px 15px 25px;
   line-height: 2;
 `
 
@@ -150,14 +150,9 @@ const CardSearch = ({ item, ...props }) => {
         >
           {_renderSpecifications(item.specifications, item.listingData)}
         </Box>
-        <Box display="grid" gridAutoFlow="column">
+        <Grid display="grid" columns={item.listingData.bookingType !== 'poa' ? '50px auto auto' : 'auto auto'} style={{paddingTop: "15px", borderTop: "1px solid #ccc"}}>
           <Text fontSize="14px">From: </Text>
-          {/* <Text fontSize="16px" fontFamily="bold">
-              {`${item.listingData.currency || 'AUD'}$${item.listingData.basePrice}`}
-            </Text>{' '}
-            {item.bookingPeriod} */}
           <Price
-            currency={item.listingData.currency}
             price={item.listingData.basePrice}
             currencySymbol="$"
             bookingPeriod={item.bookingPeriod}
@@ -167,14 +162,13 @@ const CardSearch = ({ item, ...props }) => {
             left
             lightPeriod
           />
-
           <Box justifySelf="end" display="flex" alignItems="center">
             <Avatar width="30px" height="30px" image={item.host.profile && item.host.profile.picture} />
             <Text fontSize="12px" ml="10px" fontFamily="medium">
               {`${item.host.profile && item.host.profile.firstName}`}
             </Text>
           </Box>
-        </Box>
+        </Grid>
       </CardContent>
     </CardContainer>
   )
