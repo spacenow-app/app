@@ -328,7 +328,7 @@ export const resetPassword = (token, password, history) => async dispatch => {
   }
 }
 
-export const googleSignin = googleResponse => async dispatch => {
+export const googleSignin = (googleResponse, from) => async dispatch => {
   dispatch({ type: Types.AUTH_SIGNIN_REQUEST })
   try {
     const { data } = await getClient().mutate({
@@ -337,7 +337,7 @@ export const googleSignin = googleResponse => async dispatch => {
     })
     const signinReturn = data.tokenGoogleValidate
     setToken(signinReturn.token, signinReturn.expiresIn)
-    dispatch({ type: Types.AUTH_SIGNIN_SUCCESS })
+    dispatch({ type: Types.AUTH_SIGNIN_SUCCESS, from })
     dispatch({ type: AccountTypes.ACC_GET_PROFILE_SUCCESS, payload: signinReturn.user })
   } catch (err) {
     toast.error(errToMsg(err))
@@ -348,7 +348,7 @@ export const googleSignin = googleResponse => async dispatch => {
   }
 }
 
-export const facebookSignin = facebookResponse => async dispatch => {
+export const facebookSignin = (facebookResponse, from) => async dispatch => {
   dispatch({ type: Types.AUTH_SIGNIN_REQUEST })
   try {
     const { data } = await getClient().mutate({
@@ -357,7 +357,7 @@ export const facebookSignin = facebookResponse => async dispatch => {
     })
     const signinReturn = data.tokenFacebookValidate
     setToken(signinReturn.token, signinReturn.expiresIn)
-    dispatch({ type: Types.AUTH_SIGNIN_SUCCESS })
+    dispatch({ type: Types.AUTH_SIGNIN_SUCCESS, from })
     dispatch({ type: AccountTypes.ACC_GET_PROFILE_SUCCESS, payload: signinReturn.user })
   } catch (err) {
     toast.error(errToMsg(err))
