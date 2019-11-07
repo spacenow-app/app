@@ -41,7 +41,11 @@ const FormPartner = ({
   const _handleSubmit = () => {
     // TODO: Uncoment when WEWORK API ready
     // dispatch(onCreateWeWorkReferral(values))
-    dispatch(onSendHubSpotForm(values))
+    validateForm().then(() => {
+      if(isValid)
+        dispatch(onSendHubSpotForm(values))
+    })
+    
   }
 
   const arrayDesks = ['1-10', '10-20', '20-50', '50-100', '100-1000']
@@ -138,7 +142,7 @@ const FormPartner = ({
           />
         </SectionStyled>
 
-        <Button width="100%" onClick={() => _handleSubmit()} disabled={!isValid}>
+        <Button width="100%" onClick={() => _handleSubmit()}>
           SUBMIT INTRODUCTION
         </Button>
       </WrapperStyled>

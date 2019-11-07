@@ -6,20 +6,23 @@ import { NavBar, Wrapper, Box, Input, Button, Text, Title, Link, Line, ButtonSoc
 import { signup, googleSignin, facebookSignin } from 'redux/ducks/auth'
 import { config } from 'variables'
 
-const SignupPage = ({ values, touched, errors, handleChange, handleBlur, isValid }) => {
+const SignupPage = ({ values, touched, errors, handleChange, handleBlur, isValid, ...props }) => {
   const dispatch = useDispatch()
   const { isLoading } = useSelector(state => state.auth)
 
   const responseFacebook = response => {
-    dispatch(facebookSignin(response))
+    const { state } = props.location
+    dispatch(facebookSignin(response, (state && state.from) || false))
   }
 
   const responseGoogle = response => {
-    dispatch(googleSignin(response))
+    const { state } = props.location
+    dispatch(googleSignin(response, (state && state.from) || false))
   }
 
   const handleSubmit = e => {
     e.preventDefault()
+    const { state } = props.location
     const name = values.fullName
     dispatch(
       signup(
@@ -28,7 +31,8 @@ const SignupPage = ({ values, touched, errors, handleChange, handleBlur, isValid
           last: name.substring(name.indexOf(' '), name.length).trim()
         },
         values.email,
-        values.password
+        values.password, 
+        (state && state.from) || false
       )
     )
   }

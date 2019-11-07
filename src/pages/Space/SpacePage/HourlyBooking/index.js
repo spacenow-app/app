@@ -36,6 +36,7 @@ function spelling(reference) {
 
 const ContactHost = ({
   onDateChange,
+  onDayPickerHide,
   date,
   startTime,
   endTime,
@@ -62,6 +63,7 @@ const ContactHost = ({
           ref={el => setDayPicker(el)}
           date={date}
           handleDateChange={o => onDateChange(o)}
+          handleDayPickerHide={onDayPickerHide}
           onBlur={onCalcHourlyPeriod}
           placeholder="Choose a date"
           dayPickerProps={{
