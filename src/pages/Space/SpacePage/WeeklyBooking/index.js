@@ -10,7 +10,7 @@ function spelling(reference) {
   return label
 }
 
-const WeeklyBooking = ({ date, onDateChange, listingExceptionDates, closingDays, handleChangePeriod, period, listingData, inputFocus }) => {
+const WeeklyBooking = ({ date, onDateChange, onDayPickerHide, listingExceptionDates, closingDays, handleChangePeriod, period, listingData, inputFocus }) => {
 
   const dates = [{ key: 0, value: 0, name: 'Choose a Period' }]
 
@@ -32,6 +32,7 @@ const WeeklyBooking = ({ date, onDateChange, listingExceptionDates, closingDays,
           label="Start Day"
           value={date}
           handleDateChange={onDateChange}
+          handleDayPickerHide={onDayPickerHide}
           dayPickerProps={{
             modifiers: {
               disabled: [

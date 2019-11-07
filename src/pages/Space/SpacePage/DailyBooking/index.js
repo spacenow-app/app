@@ -14,6 +14,7 @@ function spelling(reference) {
 const DailyBooking = ({
   focus,
   onDateChange,
+  onDayPickerHide,
   datesSelected,
   listingExceptionDates,
   closingDays,
@@ -93,6 +94,7 @@ const DailyBooking = ({
         ref={el => setDayPicker(el)}
         date={null}
         handleDateChange={date => _handleDayClick(date)}
+        handleDayPickerHide={onDayPickerHide}
         hideOnDayClick={false}
         placeholder="Choose Dates"
         inputProps={{ readOnly: true }}

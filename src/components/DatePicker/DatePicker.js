@@ -152,7 +152,7 @@ const Label = styled.label`
 `
 
 const DatePicker = forwardRef(
-  ({ label, handleDateChange, dayPickerProps, format, placeholder, value, ...props }, ref) => {
+  ({ label, handleDateChange, handleDayPickerHide, dayPickerProps, format, placeholder, value, ...props }, ref) => {
     const formatDate = (date, formatFunc, locale) => {
       return dateFnsFormat(date, formatFunc, { locale })
     }
@@ -181,6 +181,7 @@ const DatePicker = forwardRef(
           parseDate={parseDate}
           formatDate={formatDate}
           onDayChange={handleDateChange}
+          onDayPickerHide={handleDayPickerHide}
           dayPickerProps={{
             ...dayPickerProps
           }}
