@@ -350,14 +350,22 @@ const SpacePage = ({ match, location, history, ...props }) => {
     setDatesSelected(arraySorted)
   }
 
-  const _onDateChange = value => setDate(value)
+  const _onDayPickerHide = () => {
+    setFocusInput(false)
+  }
+
+  const _onDateChange = value => { 
+    setDate(value) 
+  }
 
   const _removeDate = value => {
     const newArray = _.filter(datesSelected, dateFromArray => !isSameDay(new Date(dateFromArray), value))
     setDatesSelected(newArray)
   }
 
-  const _handleChangePeriod = e => setPeriod(Number(e.target.value))
+  const _handleChangePeriod = e => {
+    setPeriod(Number(e.target.value))
+  }
 
   const _returnArrayAvailability = accessDays => {
     const arr = []
@@ -397,6 +405,7 @@ const SpacePage = ({ match, location, history, ...props }) => {
             listingExceptionDates={availabilities}
             listingData={listing.listingData}
             onDateChange={_onDateChange}
+            onDayPickerHide={_onDayPickerHide}
             closingDays={_returnArrayAvailability(listing.accessDays)}
             onSetStartTime={_onSetStartTime}
             onSetEndTime={_onSetEndTime}
@@ -417,6 +426,7 @@ const SpacePage = ({ match, location, history, ...props }) => {
             focus={!(datesSelected && datesSelected.length > 0)}
             inputFocus={focusInput}
             onDateChange={_onDateChangeArray}
+            onDayPickerHide={_onDayPickerHide}
             setDatesSelected={setDatesSelected}
             datesSelected={datesSelected}
             removeDate={_removeDate}
@@ -441,6 +451,7 @@ const SpacePage = ({ match, location, history, ...props }) => {
           handleChangePeriod={_handleChangePeriod}
           date={date}
           onDateChange={_onDateChange}
+          onDayPickerHide={_onDayPickerHide}
           listingExceptionDates={availabilities}
           closingDays={_returnArrayAvailability(listing.accessDays)}
           listingData={listing.listingData}
@@ -456,6 +467,7 @@ const SpacePage = ({ match, location, history, ...props }) => {
           handleChangePeriod={_handleChangePeriod}
           date={date}
           onDateChange={_onDateChange}
+          onDayPickerHide={_onDayPickerHide}
           listingExceptionDates={availabilities}
           closingDays={_returnArrayAvailability(listing.accessDays)}
           listingData={listing.listingData}
@@ -491,7 +503,7 @@ const SpacePage = ({ match, location, history, ...props }) => {
   }
 
   const _onSubmitBooking = async () => {
-    if (_isPeriodValid(listing.bookingPeriod)) {
+    if (_isPeriodValid(listing.bookingPeriod) || !(datesSelected.length > 0)) {
       setFocusInput(true)
       return
     }

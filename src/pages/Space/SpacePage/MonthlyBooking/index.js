@@ -10,7 +10,7 @@ function spelling(reference) {
 }
 
 const MonthlyBooking = props => {
-  const { date, onDateChange, listingExceptionDates, closingDays, handleChangePeriod, period, listingData, inputFocus } = props
+  const { date, onDateChange, onDayPickerHide, listingExceptionDates, closingDays, handleChangePeriod, period, listingData, inputFocus } = props
 
   let dates = [{ key: 0, value: 0, name: 'Choose a Period' }]
 
@@ -32,6 +32,7 @@ const MonthlyBooking = props => {
           label="Start Day"
           value={date}
           handleDateChange={onDateChange}
+          handleDayPickerHide={onDayPickerHide}
           dayPickerProps={{
             modifiers: {
               disabled: [
