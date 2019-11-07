@@ -41,8 +41,11 @@ const FormPartner = ({
   const _handleSubmit = () => {
     // TODO: Uncoment when WEWORK API ready
     // dispatch(onCreateWeWorkReferral(values))
-    if(isValid)
-      dispatch(onSendHubSpotForm(values))
+    validateForm().then(() => {
+      if(isValid)
+        dispatch(onSendHubSpotForm(values))
+    })
+    
   }
 
   const arrayDesks = ['1-10', '10-20', '20-50', '50-100', '100-1000']
