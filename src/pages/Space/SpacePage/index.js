@@ -548,9 +548,9 @@ const SpacePage = ({ match, location, history, ...props }) => {
           { listingAddress: `${listing.location.address1}, ${listing.location.city}` },
           { basePrice: listing.listingData.basePrice.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,') },
           { priceType: listing.bookingPeriod },
-          { category: listing.settingsParent.category.otherItemName }
+          { category: listing.settingsParent.category.otherItemName },
+          { spaceLink: window.location.href }
         )
-
         const emailData = {
           template: 'report-listing',
           data: JSON.stringify(values)
