@@ -65,6 +65,7 @@ import MonthlyBooking from './MonthlyBooking'
 import PendingBooking from './PenidngBooking'
 import HourlyBooking from './HourlyBooking'
 import GenericForm from './GenericForm'
+// import RequestForm from './RequestForm'
 
 const GridStyled = styled(Grid)`
   @media only screen and (max-width: 991px) {
@@ -167,6 +168,7 @@ const SpacePage = ({ match, location, history, ...props }) => {
   const [endTime, setEndTime] = useState('09:00')
   const [hourlyError, setHourlyError] = useState('')
   const [focusInput, setFocusInput] = useState(false)
+  const [isValid, setIsValid] = useState(true)
 
   useEffect(() => {
     dispatch(onGetListingById(match.params.id, null, true))
@@ -387,6 +389,7 @@ const SpacePage = ({ match, location, history, ...props }) => {
       return (
         <PendingBooking
           booking={pendingBooking.items[0]}
+          bookingType={bookingType}
           listing={listing.listingData}
           dispatch={dispatch}
           history={history}
@@ -434,7 +437,7 @@ const SpacePage = ({ match, location, history, ...props }) => {
             closingDays={_returnArrayAvailability(listing.accessDays)}
             listingData={listing.listingData}
           />
-          {!(datesSelected && datesSelected.length > 0) && (
+          {!isValid && (
             <Box color="error" ml="23px">
               {`Minimum ${listing.listingData.minTerm} days is required`}
             </Box>
@@ -485,10 +488,10 @@ const SpacePage = ({ match, location, history, ...props }) => {
       return hourlyError !== '' || period <= 0 || !date
     }
     if (bookingPeriod === 'weekly') {
-      return !date
+      return typeof date !== "object"
     }
     if (bookingPeriod === 'monthly') {
-      return !date
+      return typeof date !== "object"
     }
     if (bookingPeriod === 'daily') {
       if (listing.listingData.minTerm > 0) {
@@ -503,10 +506,12 @@ const SpacePage = ({ match, location, history, ...props }) => {
   }
 
   const _onSubmitBooking = async () => {
-    if (_isPeriodValid(listing.bookingPeriod) || !(datesSelected.length > 0)) {
+    if (_isPeriodValid(listing.bookingPeriod)) {
       setFocusInput(true)
+      setIsValid(false)
       return
     }
+    setIsValid(true)
 
     const object = {
       listingId: listing.id,
@@ -953,7 +958,7 @@ const SpacePage = ({ match, location, history, ...props }) => {
               }
               contentComponent={
                 <>
-                  {_renderContentCard(listing.bookingPeriod)}
+                  {_renderContentCard(listing.bookingPeriod, listing.listingData.bookingType)}
                   {(pendingBooking ? pendingBooking && pendingBooking.count == 0 : true) && (
                     <>
                       {listing.user.provider !== 'generic' && (

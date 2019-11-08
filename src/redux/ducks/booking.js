@@ -606,7 +606,12 @@ export const onCreateBooking = (object, history) => async dispatch => {
       variables: object
     })
     dispatch({ type: Types.CREATE_BOOKING_SUCCESS, payload: data.createBooking })
-    history.push(`/checkout/${data.createBooking.bookingId}`)
+    if(object.bookingType !== "request")
+      history.push(`/checkout/${data.createBooking.bookingId}`)
+    else {
+      toast.success("Booking Successfully Requested!!!")
+      dispatch(onGetPendingBooking(object.listingId, object.guestId))
+    }
   } catch (err) {
     dispatch({ type: Types.CREATE_BOOKING_FAILURE, payload: errToMsg(err) })
   }
