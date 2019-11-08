@@ -38,9 +38,9 @@ const WrapperStyled = styled.div`
       // left: 3px;
       // right: 2px;
       top: 0px;
-      // border-bottom-left-radius: 28px;
-      // border-bottom-right-radius: 28px;
-      border-radius: 28px;
+      border-bottom-left-radius: 6px;
+      border-bottom-right-radius: 6px;
+      border-radius: 6px;
     }
 
     .DayPicker,
@@ -53,13 +53,17 @@ const WrapperStyled = styled.div`
     .DayPicker-WeekdaysRow {
       display: grid;
       grid-auto-flow: column;
-      grid-gap: 5px;
+      // grid-gap: 5px;
     }
 
     .DayPicker-Week {
       display: grid;
       grid-auto-flow: column;
-      grid-gap: 5px;
+      // grid-gap: 0px;
+
+      :nth-child(5n) {
+        border-bottom: 1px solid #cbcbcb;
+      }
     }
 
     .DayPicker-Weekday {
@@ -78,6 +82,12 @@ const WrapperStyled = styled.div`
       display: grid;
       justify-content: center;
       align-items: center;
+      border-radius: 0;
+      border: 1px solid #cbcbcb;
+      border-bottom: 0;
+      :nth-child(n + 2) {
+        border-left: 0;
+      }
     }
 
     .DayPicker:not(.DayPicker--interactionDisabled)
@@ -168,7 +178,7 @@ const DatePicker = forwardRef(
       }
       return undefined
     }
-
+    const hola = true
     return (
       <WrapperStyled {...props}>
         {label && <Label>{label}</Label>}
