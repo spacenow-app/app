@@ -5,6 +5,7 @@ import styled from 'styled-components'
 import { withFormik } from 'formik'
 import * as Yup from 'yup'
 import { Input, Select, TextArea, Button, Box, Link, Text } from 'components'
+
 import { onUpdateProfile, onResendLink } from 'redux/ducks/account'
 
 const WrapperStyled = styled.div`
@@ -31,35 +32,51 @@ const FormProfile = ({
   isValid,
   ...props
 }) => {
+  const { user } = props
+
   const _handleSelectChange = e => {
     const { name, value } = e.target
     setFieldValue(name, value)
   }
 
   const _handleSubmit = () => {
-    dispatch(onUpdateProfile(props.user.id, values))
+    dispatch(onUpdateProfile(user.id, values))
   }
 
   const _handleResendLink = () => {
-    dispatch(onResendLink(props.user.email))
+    dispatch(onResendLink(user.email))
   }
 
   return (
     <form>
       <WrapperStyled>
         <SectionStyled>
-          <Input
-            label="Email*"
-            placeholder="Email"
-            name="email"
-            disabled
-            value={props.user.email}
-            borderColor={!props.user.emailConfirmed ? 'warning.0' : 'primary'}
-            backgroundColor={!props.user.emailConfirmed ? 'warning.1' : 'greyscale.4'}
-            color={props.user.emailConfirmed ? 'greyscale.1' : ''}
-            error={!props.user.emailConfirmed}
-          />
-          {!props.user.emailConfirmed && (
+          {user.type === 'email' && user.emailConfirmed ? (
+            <Input
+              label="Email*"
+              placeholder="Email"
+              name="email"
+              value={values.email}
+              borderColor={!user.emailConfirmed ? 'warning.0' : 'primary'}
+              backgroundColor={!user.emailConfirmed ? 'warning.1' : ''}
+              error={!user.emailConfirmed}
+              onChange={handleChange}
+              onBlur={handleBlur}
+            />
+          ) : (
+            <Input
+              label="Email"
+              placeholder="Email"
+              name="email"
+              disabled
+              value={user.email}
+              borderColor={!user.emailConfirmed ? 'warning.0' : 'primary'}
+              backgroundColor={!user.emailConfirmed ? 'warning.1' : 'greyscale.4'}
+              color={user.emailConfirmed ? 'greyscale.1' : ''}
+              error={!user.emailConfirmed}
+            />
+          )}
+          {!user.emailConfirmed && (
             <Text fontSize={12} marginLeft="18px">
               Email not verified{' '}
               <Link color="error" to="#" onClick={() => _handleResendLink()}>
@@ -160,21 +177,23 @@ const FormProfile = ({
 const formik = {
   displayName: 'FormProfile',
   mapPropsToValues: props => {
-    const { profile } = props.user
+    const { user } = props
 
-    if (profile) {
+    if (user.profile) {
       return {
-        firstName: profile.firstName || '',
-        lastName: profile.lastName || '',
-        dateOfBirth: profile.dateOfBirth || '',
-        gender: profile.gender || '',
-        phoneNumber: profile.phoneNumber || '',
-        info: profile.info || ''
+        email: user.email,
+        firstName: user.profile.firstName || '',
+        lastName: user.profile.lastName || '',
+        dateOfBirth: user.profile.dateOfBirth || '',
+        gender: user.profile.gender || '',
+        phoneNumber: user.profile.phoneNumber || '',
+        info: user.profile.info || ''
       }
     }
     return {}
   },
   validationSchema: Yup.object().shape({
+    email: Yup.string().required('Email field is required'),
     firstName: Yup.string().required('First name field is required'),
     lastName: Yup.string().required('Last name field is required'),
     dateOfBirth: Yup.date(),
