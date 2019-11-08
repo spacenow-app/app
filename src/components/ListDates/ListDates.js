@@ -7,7 +7,7 @@ import { monthNames } from 'variables'
 import Badge from '../Badge'
 
 const WrapperStyled = styled.div`
-  margin: 25px 0;
+  margin: ${props => props.hasMargin ? "25px" : "0"};
 `
 
 const ContainerStyled = styled.div`
@@ -75,14 +75,16 @@ const ListDates = props => {
 
 ListDates.defaultProps = {
   onClickDate: null,
-  badgeColor: '#6adc91'
+  badgeColor: '#6adc91',
+  hasMargin: true
 }
 
 ListDates.propTypes = {
   theme: PropTypes.instanceOf(Object),
   onClickDate: PropTypes.func,
   dates: PropTypes.instanceOf(Array).isRequired,
-  badgeColor: PropTypes.string
+  badgeColor: PropTypes.string,
+  hasMargin: PropTypes.bool
 }
 
 export default ListDates

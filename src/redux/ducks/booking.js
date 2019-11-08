@@ -88,6 +88,7 @@ const mutationCreateBooking = gql`
     $isAbsorvedFee: Boolean
     $checkInHour: String!
     $checkOutHour: String!
+    $message: String
   ) {
     createBooking(
       listingId: $listingId
@@ -102,6 +103,7 @@ const mutationCreateBooking = gql`
       isAbsorvedFee: $isAbsorvedFee
       checkInHour: $checkInHour
       checkOutHour: $checkOutHour
+      message: $message
     ) {
       bookingId
     }

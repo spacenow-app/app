@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import styled from 'styled-components'
 import { withFormik } from 'formik'
 
-import { DatePicker, TimePicker, Grid, Cell, PriceDetail } from 'components'
+import { DatePicker, TimePicker, Grid, Cell, PriceDetail, TextArea } from 'components'
 
 const WrapperStyled = styled.div`
   display: grid;
@@ -47,7 +47,9 @@ const ContactHost = ({
   onSetStartTime,
   onSetEndTime,
   onCalcHourlyPeriod,
-  inputFocus
+  inputFocus,
+  handleMessageChange,
+  message
 }) => {
 
   const [dayPicker, setDayPicker] = useState('')
@@ -95,6 +97,12 @@ const ContactHost = ({
             </TimePickerStyled>
           </Cell>
         </Grid>
+        <TextArea
+          label="Additional notes"
+          name="message"
+          value={message}
+          onChange={handleMessageChange}
+        />
         {date && hoursQuantity > 0 && (
           <PriceDetail
             periodLabel={spelling(hoursQuantity)}
