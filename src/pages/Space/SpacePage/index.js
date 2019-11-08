@@ -166,6 +166,7 @@ const SpacePage = ({ match, location, history, ...props }) => {
   const [imageHeight, setImageHeight] = useState(500)
   const [startTime, setStartTime] = useState('08:00')
   const [endTime, setEndTime] = useState('09:00')
+  const [message, setMessage] = useState('')
   const [hourlyError, setHourlyError] = useState('')
   const [focusInput, setFocusInput] = useState(false)
   const [isValid, setIsValid] = useState(true)
@@ -424,7 +425,7 @@ const SpacePage = ({ match, location, history, ...props }) => {
     }
     if (bookingPeriod === 'daily' && bookingType !== 'poa') {
       return (
-        <div>
+        <React.Fragment>
           <DailyBooking
             focus={!(datesSelected && datesSelected.length > 0)}
             inputFocus={focusInput}
@@ -436,13 +437,15 @@ const SpacePage = ({ match, location, history, ...props }) => {
             listingExceptionDates={availabilities}
             closingDays={_returnArrayAvailability(listing.accessDays)}
             listingData={listing.listingData}
+            message={message}
+            handleMessageChange={_handleMessageChange}
           />
           {!isValid && (
             <Box color="error" ml="23px">
               {`Minimum ${listing.listingData.minTerm} days is required`}
             </Box>
           )}
-        </div>
+        </React.Fragment>
       )
     }
     if (bookingPeriod === 'weekly' && bookingType !== 'poa') {
@@ -525,7 +528,8 @@ const SpacePage = ({ match, location, history, ...props }) => {
       period: date ? period : datesSelected.length,
       isAbsorvedFee: listing.listingData.isAbsorvedFee,
       checkInHour: startTime,
-      checkOutHour: endTime
+      checkOutHour: endTime,
+      message: message
     }
     if (!isAuthenticated) {
       history.push(`/auth/signin`, {
@@ -624,6 +628,10 @@ const SpacePage = ({ match, location, history, ...props }) => {
   const _onSetStartTime = value => setStartTime(value)
 
   const _onSetEndTime = value => setEndTime(value)
+
+  const _handleMessageChange = e => {
+    setMessage(e.target.value)
+  }
 
   const _getRatingAvg = field => {
     if (publicReviews) {

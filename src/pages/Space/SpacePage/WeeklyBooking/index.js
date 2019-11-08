@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import { withFormik } from 'formik'
 // import PropTypes from 'prop-types'
 
-import { DatePicker, Select, PriceDetail, Grid } from 'components'
+import { DatePicker, Select, PriceDetail, Grid, TextArea } from 'components'
 
 function spelling(reference) {
   let label = 'Week'
@@ -10,17 +10,9 @@ function spelling(reference) {
   return label
 }
 
-const WeeklyBooking = ({
-  date,
-  onDateChange,
-  onDayPickerHide,
-  listingExceptionDates,
-  closingDays,
-  handleChangePeriod,
-  period,
-  listingData,
-  inputFocus
-}) => {
+
+  const WeeklyBooking = ({ date, onDateChange, onDayPickerHide, listingExceptionDates, closingDays, handleChangePeriod, period, listingData, inputFocus, handleMessageChange, message }) => {
+
   const dates = [{ key: 0, value: 0, name: 'Choose a Period' }]
 
   for (let i = listingData.minTerm; i < 13; i++) {
@@ -34,29 +26,35 @@ const WeeklyBooking = ({
 
   return (
     <>
-      <Grid columns={1} rowGap="40px" style={{ marginBottom: '20px' }}>
-        <Grid columns={1} rowGap="10px">
-          <DatePicker
-            ref={el => setDayPicker(el)}
-            label="Start Day"
-            value={date}
-            handleDateChange={onDateChange}
-            handleDayPickerHide={onDayPickerHide}
-            dayPickerProps={{
-              modifiers: {
-                disabled: [
-                  ...listingExceptionDates.map(el => new Date(el)),
-                  {
-                    daysOfWeek: closingDays
-                  },
-                  {
-                    before: new Date()
-                  }
-                ]
-              }
-            }}
-          />
-          <Select label="Period" options={dates} handleChange={handleChangePeriod} value={period} />
+    <Grid columns={1} rowGap="40px" style={{marginBottom: '20px'}}>
+      <Grid columns={1} rowGap="10px">
+        <DatePicker
+          ref={el => setDayPicker(el)}
+          label="Start Day"
+          value={date}
+          handleDateChange={onDateChange}
+          handleDayPickerHide={onDayPickerHide}
+          dayPickerProps={{
+            modifiers: {
+              disabled: [
+                ...listingExceptionDates.map(el => new Date(el)),
+                {
+                  daysOfWeek: closingDays
+                },
+                {
+                  before: new Date()
+                }
+              ]
+            }
+          }}
+        />
+        <Select label="Period" options={dates} handleChange={handleChangePeriod} value={period} />
+        <TextArea
+          label="Additional notes"
+          name="message"
+          value={message}
+          onChange={handleMessageChange}
+        />
         </Grid>
 
         {date && (

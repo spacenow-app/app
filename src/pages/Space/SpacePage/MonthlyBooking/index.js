@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import PropTypes from 'prop-types'
 
-import { DatePicker, Select, PriceDetail, Grid } from 'components'
+import { DatePicker, Select, PriceDetail, Grid, TextArea } from 'components'
 
 function spelling(reference) {
   let label = 'Month'
@@ -10,7 +10,7 @@ function spelling(reference) {
 }
 
 const MonthlyBooking = props => {
-  const { date, onDateChange, onDayPickerHide, listingExceptionDates, closingDays, handleChangePeriod, period, listingData, inputFocus } = props
+  const { date, onDateChange, onDayPickerHide, listingExceptionDates, closingDays, handleChangePeriod, period, listingData, inputFocus, handleMessageChange, message } = props
 
   let dates = [{ key: 0, value: 0, name: 'Choose a Period' }]
 
@@ -48,6 +48,12 @@ const MonthlyBooking = props => {
           }}
         />
         <Select label="Period" options={dates} handleChange={handleChangePeriod} value={period} />
+        <TextArea
+          label="Additional notes"
+          name="message"
+          value={message}
+          onChange={handleMessageChange}
+        />
       </Grid>
       {date &&
         <PriceDetail
