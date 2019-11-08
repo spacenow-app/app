@@ -65,6 +65,7 @@ import MonthlyBooking from './MonthlyBooking'
 import PendingBooking from './PenidngBooking'
 import HourlyBooking from './HourlyBooking'
 import GenericForm from './GenericForm'
+import RequestForm from './RequestForm'
 
 const GridStyled = styled(Grid)`
   @media only screen and (max-width: 991px) {
@@ -383,10 +384,14 @@ const SpacePage = ({ match, location, history, ...props }) => {
     if (listing.user.provider === 'generic') {
       return <GenericForm {...props} listing={listing} dispatch={dispatch} />
     }
+    // if (bookingType === 'request') {
+    //   return <RequestForm {...props} listing={listing} dispatch={dispatch} />
+    // }
     if (pendingBooking && pendingBooking.items && pendingBooking.items.length > 0 && bookingType !== 'poa') {
       return (
         <PendingBooking
           booking={pendingBooking.items[0]}
+          bookingType={bookingType}
           listing={listing.listingData}
           dispatch={dispatch}
           history={history}
@@ -953,7 +958,7 @@ const SpacePage = ({ match, location, history, ...props }) => {
               }
               contentComponent={
                 <>
-                  {_renderContentCard(listing.bookingPeriod)}
+                  {_renderContentCard(listing.bookingPeriod, listing.listingData.bookingType)}
                   {(pendingBooking ? pendingBooking && pendingBooking.count == 0 : true) && (
                     <>
                       {listing.user.provider !== 'generic' && (
