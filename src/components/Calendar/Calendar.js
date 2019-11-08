@@ -15,7 +15,7 @@ const WrapperStyled = styled.div`
 
     .DayPicker-Weekday {
       color: #172439;
-      font-size: 18px;
+      font-size: 16px;
       // font-family: 'Montserrat-Medium';
     }
 
