@@ -48,12 +48,15 @@ const WeeklyBooking = ({ date, onDateChange, onDayPickerHide, listingExceptionDa
           }}
         />
         <Select label="Period" options={dates} handleChange={handleChangePeriod} value={period} />
+        {
+        listingData.bookingType === 'request' && 
         <TextArea
           label="Additional notes"
           name="message"
           value={message}
           onChange={handleMessageChange}
         />
+      }
       </Grid>
       
       {date &&

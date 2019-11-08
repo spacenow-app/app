@@ -97,12 +97,15 @@ const ContactHost = ({
             </TimePickerStyled>
           </Cell>
         </Grid>
-        <TextArea
-          label="Additional notes"
-          name="message"
-          value={message}
-          onChange={handleMessageChange}
-        />
+        {
+          listingData.bookingType === 'request' && 
+          <TextArea
+            label="Additional notes"
+            name="message"
+            value={message}
+            onChange={handleMessageChange}
+          />
+        }
         {date && hoursQuantity > 0 && (
           <PriceDetail
             periodLabel={spelling(hoursQuantity)}
