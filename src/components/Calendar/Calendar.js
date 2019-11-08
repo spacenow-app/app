@@ -14,14 +14,15 @@ const WrapperStyled = styled.div`
     }
 
     .DayPicker-Weekday {
-      color: #6adc91;
-      font-size: 18px;
-      font-family: 'Montserrat-SemiBold';
+      color: #172439;
+      font-size: 16px;
+      // font-family: 'Montserrat-Medium';
     }
 
-    .DayPicker-Month {
-      border-spacing: 10px;
-      border-collapse: separate;
+    .DayPicker-Week {
+      :nth-child(5n) {
+        border-bottom: 1px solid #cbcbcb;
+      }
     }
 
     .DayPicker-Months {
@@ -35,6 +36,13 @@ const WrapperStyled = styled.div`
       max-width: 50px;
       font-family: 'Montserrat-Medium';
       font-size: 16px;
+
+      border-radius: 0;
+      border: 1px solid #cbcbcb;
+      border-bottom: 0;
+      :nth-child(n + 2) {
+        border-left: 0;
+      }
     }
 
     .DayPicker:not(.DayPicker--interactionDisabled)
@@ -89,10 +97,10 @@ const NavBarContainer = styled.div`
 `
 
 const NavBatItem = styled.div`
-  background-color: #6adc91;
+  background-color: transparent;
   height: 50px;
-  border-radius: 30px;
-  color: #fff;
+  border-radius: 8px;
+  color: #172439;
   display: grid;
   align-content: center
     ${props =>
@@ -137,25 +145,29 @@ const ButtonTemp = styled.button`
   background: transparent;
   border: none;
   font-size: 20px;
-  color: #fff;
+  color: #172439;
+  border: 1px solid #cbcbcb;
+  border-radius: 6px;
+  // padding: 0 20px;
 `
 
 const TitleTemp = styled.span`
   justify-self: center;
   align-self: center;
-  font-family: 'Montserrat-Bold';
+  // font-family: 'Montserrat-Bold';
+  font-size: 20px;
 `
 
 const Navbar = ({ month, onPreviousClick, onNextClick, localeUtils, showPreviousButton, showNextButton }) => {
   return (
     <NavBarContainer>
       <NavBatItem left>
-        {showPreviousButton && <ButtonTemp onClick={() => onPreviousClick()}>←</ButtonTemp>}
+        {showPreviousButton && <ButtonTemp onClick={() => onPreviousClick()}>⟵</ButtonTemp>}
         <TitleTemp>{localeUtils.formatMonthTitle(month)}</TitleTemp>
       </NavBatItem>
       <NavBatItem right>
         <TitleTemp>{localeUtils.formatMonthTitle(DateUtils.addMonths(month, 1))}</TitleTemp>
-        {showNextButton && <ButtonTemp onClick={() => onNextClick()}>→</ButtonTemp>}
+        {showNextButton && <ButtonTemp onClick={() => onNextClick()}>⟶</ButtonTemp>}
       </NavBatItem>
     </NavBarContainer>
   )

@@ -29,7 +29,7 @@ import {
   Footer,
   CardSearch,
   Price,
-  Link,
+  // Link,
   Review,
   StarRatingComponent,
   Pagination,
@@ -52,7 +52,7 @@ import { openModal, TypesModal } from 'redux/ducks/modal'
 
 import { sendMail } from 'redux/ducks/mail'
 
-import { onCreateMessage } from 'redux/ducks/message'
+// import { onCreateMessage } from 'redux/ducks/message'
 
 // import GraphCancelattionImage from 'pages/Listing/SpaceDetailsPage/CancellationTab/graph_cancellation.png'
 import { onGetPublicReviews } from 'redux/ducks/reviews'
@@ -357,8 +357,8 @@ const SpacePage = ({ match, location, history, ...props }) => {
     setFocusInput(false)
   }
 
-  const _onDateChange = value => { 
-    setDate(value) 
+  const _onDateChange = value => {
+    setDate(value)
   }
 
   const _removeDate = value => {
@@ -569,9 +569,9 @@ const SpacePage = ({ match, location, history, ...props }) => {
           { listingAddress: `${listing.location.address1}, ${listing.location.city}` },
           { basePrice: listing.listingData.basePrice.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,') },
           { priceType: listing.bookingPeriod },
-          { category: listing.settingsParent.category.otherItemName }
+          { category: listing.settingsParent.category.otherItemName },
+          { spaceLink: window.location.href }
         )
-
         const emailData = {
           template: 'report-listing',
           data: JSON.stringify(values)
@@ -594,22 +594,22 @@ const SpacePage = ({ match, location, history, ...props }) => {
     dispatch(openModal(TypesModal.MODAL_TYPE_REPORT_LISTING, options))
   }
 
-  const _contactHost = () => {
-    const options = {
-      onConfirm: _sendMessage
-    }
-    dispatch(openModal(TypesModal.MODAL_TYPE_SEND_MESSAGE, options))
-  }
+  // const _contactHost = () => {
+  //   const options = {
+  //     onConfirm: _sendMessage
+  //   }
+  //   dispatch(openModal(TypesModal.MODAL_TYPE_SEND_MESSAGE, options))
+  // }
 
-  const _sendMessage = content => {
-    const values = {
-      content,
-      listingId: listing.id,
-      guestId: user.id,
-      hostId: listing.userId
-    }
-    dispatch(onCreateMessage(values))
-  }
+  // const _sendMessage = content => {
+  //   const values = {
+  //     content,
+  //     listingId: listing.id,
+  //     guestId: user.id,
+  //     hostId: listing.userId
+  //   }
+  //   dispatch(onCreateMessage(values))
+  // }
 
   const _calcHourlyPeriod = () => {
     if (date) {
@@ -825,13 +825,13 @@ const SpacePage = ({ match, location, history, ...props }) => {
                   ))}
                 </Box>
               ) : null}
-              {isAuthenticated && (
+              {/* {isAuthenticated && (
                 <Box mt="20px" fontFamily="bold">
                   <Link to="#" onClick={_contactHost} style={{ textDecoration: 'underline' }}>
                     Contact host
                   </Link>
                 </Box>
-              )}
+              )} */}
 
               {listing.amenities.length > 0 && (
                 <Box>

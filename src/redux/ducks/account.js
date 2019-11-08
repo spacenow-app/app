@@ -74,6 +74,7 @@ const queryGetProfile = gql`
       email
       emailConfirmed
       provider
+      type
       profile {
         __typename
         status
