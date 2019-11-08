@@ -115,7 +115,7 @@ const PendingBooking = ({ booking, bookingType, listing, dispatch, history }) =>
       days={booking.period}
       quantity={1}
     />
-    <Grid columns={2}>
+    <Grid columns={bookingType !== "request" ? 2 : 1}>
       <Cell md={6}>
         <Button fluid error onClick={() => _onCancelBooking(booking, dispatch)}>
           Cancel
