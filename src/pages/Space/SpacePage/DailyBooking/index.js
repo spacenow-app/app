@@ -120,12 +120,15 @@ const DailyBooking = ({
           modifiers: { modifiers }
         }}
       />
-      <TextArea
-        label="Additional notes"
-        name="message"
-        value={message}
-        onChange={handleMessageChange}
-      />
+      {
+        listingData.bookingType === 'request' && 
+        <TextArea
+          label="Additional notes"
+          name="message"
+          value={message}
+          onChange={handleMessageChange}
+        />
+      }
       {listDates.length > 0 && (
         <WrapperStyled>
           <ListDates dates={listDates} hasMargin={false} />
