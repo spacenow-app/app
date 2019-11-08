@@ -4,7 +4,8 @@ import React from 'react'
 import styled from 'styled-components'
 import { withFormik } from 'formik'
 import * as Yup from 'yup'
-import { Input, Select, TextArea, Button, Box, Link, Text } from 'components'
+import { format } from 'date-fns'
+import { Input, Select, TextArea, Button, Box, Link, Text, DatePicker } from 'components'
 
 import { onUpdateProfile, onResendLink } from 'redux/ducks/account'
 
@@ -40,7 +41,9 @@ const FormProfile = ({
   }
 
   const _handleSubmit = () => {
-    dispatch(onUpdateProfile(user.id, values))
+    const profilePayload = { ...values }
+    if (values.dateOfBirth) profilePayload.dateOfBirth = format(values.dateOfBirth, 'yyyy-MM-dd')
+    dispatch(onUpdateProfile(user.id, profilePayload))
   }
 
   const _handleResendLink = () => {
@@ -134,24 +137,12 @@ const FormProfile = ({
           </SectionStyled>
 
           <SectionStyled>
-            <Input
-              type="date"
-              label="Date of Birth"
-              placeholder="DD/MM/YYYY"
-              name="dateOfBirth"
-              error={errors.dateOfBirth}
-              value={values.dateOfBirth}
-              onChange={handleChange}
-              onBlur={handleBlur}
-            />
-            {/* <DatePicker
+            <DatePicker
               label="Date of Birth"
               value={values.dateOfBirth}
-              handleDateChange={date => {
-                return setFieldValue('dateOfBirth', date)
-              }}
+              handleDateChange={date => setFieldValue('dateOfBirth', date)}
               captionMargin="0 0 .5rem 25px"
-            /> */}
+            />
           </SectionStyled>
         </Box>
 
@@ -184,7 +175,7 @@ const formik = {
         email: user.email,
         firstName: user.profile.firstName || '',
         lastName: user.profile.lastName || '',
-        dateOfBirth: user.profile.dateOfBirth || '',
+        dateOfBirth: user.profile.dateOfBirth ? new Date(user.profile.dateOfBirth) : new Date(),
         gender: user.profile.gender || '',
         phoneNumber: user.profile.phoneNumber || '',
         info: user.profile.info || ''
@@ -196,10 +187,10 @@ const formik = {
     email: Yup.string().required('Email field is required'),
     firstName: Yup.string().required('First name field is required'),
     lastName: Yup.string().required('Last name field is required'),
-    dateOfBirth: Yup.date(),
-    gender: Yup.string(),
-    phoneNumber: Yup.string(),
-    info: Yup.string()
+    dateOfBirth: Yup.date().notRequired(),
+    gender: Yup.string().notRequired(),
+    phoneNumber: Yup.string().notRequired(),
+    info: Yup.string().notRequired()
   }),
   enableReinitialize: true,
   isInitialValid: false
