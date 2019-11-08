@@ -14,9 +14,9 @@ const WrapperStyled = styled.div`
     }
 
     .DayPicker-Weekday {
-      color: #6adc91;
+      color: #172439;
       font-size: 18px;
-      font-family: 'Montserrat-SemiBold';
+      // font-family: 'Montserrat-Medium';
     }
 
     .DayPicker-Week {
