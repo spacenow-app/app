@@ -25,10 +25,10 @@ const CarouselListing = ({ photos, ...props }) => {
       return [{ source: NoPreviewBackgroundImage }]
     }
 
-    let indexCover = array.findIndex(el => el.isCover)
+    const indexCover = array.findIndex(el => el.isCover)
 
     if (indexCover >= 0) {
-      let coverPhoto = array.find(el => el.isCover)
+      const coverPhoto = array.find(el => el.isCover)
       array.splice(indexCover, 1)
       array.unshift(coverPhoto)
     }
@@ -37,8 +37,17 @@ const CarouselListing = ({ photos, ...props }) => {
   }
 
   const [modalIsOpen, setModalIsOpen] = useState(false)
+  const [photosOrdered, setPhotosOrdered] = useState(_verifyPhotos(photos))
 
-  const _toggleModal = () => {
+  const _toggleModal = e => {
+    if (e.target.src) {
+      const pIndex = photosOrdered.findIndex(res => res.source === e.target.getAttribute('src'))
+      let one = photosOrdered.slice(0)
+      let two = photosOrdered.slice(0)
+      one = one.splice(0, pIndex)
+      two = two.splice(pIndex, two.length)
+      setPhotosOrdered(two.concat(one))
+    }
     setModalIsOpen(!modalIsOpen)
   }
 
@@ -50,7 +59,7 @@ const CarouselListing = ({ photos, ...props }) => {
           <ModalGateway>
             {modalIsOpen ? (
               <Modal onClose={_toggleModal}>
-                <CarouselImported views={_verifyPhotos(photos)} />
+                <CarouselImported views={photosOrdered} />
               </Modal>
             ) : null}
           </ModalGateway>

@@ -10,7 +10,8 @@ function spelling(reference) {
   return label
 }
 
-const WeeklyBooking = ({ date, onDateChange, onDayPickerHide, listingExceptionDates, closingDays, handleChangePeriod, period, listingData, inputFocus, handleMessageChange, message }) => {
+
+  const WeeklyBooking = ({ date, onDateChange, onDayPickerHide, listingExceptionDates, closingDays, handleChangePeriod, period, listingData, inputFocus, handleMessageChange, message }) => {
 
   const dates = [{ key: 0, value: 0, name: 'Choose a Period' }]
 
@@ -22,7 +23,7 @@ const WeeklyBooking = ({ date, onDateChange, onDayPickerHide, listingExceptionDa
   useEffect(() => {
     if (dayPicker.input && inputFocus) dayPicker.input.focus()
   }, [dayPicker.input, inputFocus])
-  
+
   return (
     <>
     <Grid columns={1} rowGap="40px" style={{marginBottom: '20px'}}>
@@ -54,18 +55,18 @@ const WeeklyBooking = ({ date, onDateChange, onDayPickerHide, listingExceptionDa
           value={message}
           onChange={handleMessageChange}
         />
+        </Grid>
+
+        {date && (
+          <PriceDetail
+            periodLabel={spelling(period)}
+            price={listingData.basePrice}
+            isAbsorvedFee={listingData.isAbsorvedFee}
+            days={period}
+            quantity={1}
+          />
+        )}
       </Grid>
-      
-      {date &&
-        <PriceDetail
-          periodLabel={spelling(period)}
-          price={listingData.basePrice}
-          isAbsorvedFee={listingData.isAbsorvedFee}
-          days={period}
-          quantity={1}
-        />
-      }
-    </Grid>
     </>
   )
 }
