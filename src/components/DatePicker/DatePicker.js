@@ -178,7 +178,7 @@ const DatePicker = forwardRef(
       }
       return undefined
     }
-    const hola = true
+
     return (
       <WrapperStyled {...props}>
         {label && <Label>{label}</Label>}
