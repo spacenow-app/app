@@ -608,8 +608,10 @@ export const onCreateBooking = (object, history) => async dispatch => {
     dispatch({ type: Types.CREATE_BOOKING_SUCCESS, payload: data.createBooking })
     if(object.bookingType !== "request")
       history.push(`/checkout/${data.createBooking.bookingId}`)
-    toast.success("Booking Successfully Requested!!!")
-    dispatch({ type: Types.GET_PENDING_BOOKING_REQUEST })
+    else {
+      toast.success("Booking Successfully Requested!!!")
+      dispatch(onGetPendingBooking(object.listingId, object.guestId))
+    }
   } catch (err) {
     dispatch({ type: Types.CREATE_BOOKING_FAILURE, payload: errToMsg(err) })
   }
