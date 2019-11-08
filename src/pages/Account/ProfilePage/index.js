@@ -11,6 +11,7 @@ const ProfilePage = ({ ...props }) => {
   const dispatch = useDispatch()
 
   const queryParams = new URLSearchParams(props.location.search)
+
   const confirmationToken = queryParams.get('confirmation')
 
   const {

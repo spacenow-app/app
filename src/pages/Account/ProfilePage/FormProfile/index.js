@@ -4,7 +4,9 @@ import React from 'react'
 import styled from 'styled-components'
 import { withFormik } from 'formik'
 import * as Yup from 'yup'
-import { Input, Select, TextArea, Button, Box, Link, Text } from 'components'
+import { format } from 'date-fns'
+import { Input, Select, TextArea, Button, Box, Link, Text, DatePicker } from 'components'
+
 import { onUpdateProfile, onResendLink } from 'redux/ducks/account'
 
 const WrapperStyled = styled.div`
@@ -31,35 +33,53 @@ const FormProfile = ({
   isValid,
   ...props
 }) => {
+  const { user } = props
+
   const _handleSelectChange = e => {
     const { name, value } = e.target
     setFieldValue(name, value)
   }
 
   const _handleSubmit = () => {
-    dispatch(onUpdateProfile(props.user.id, values))
+    const profilePayload = { ...values }
+    if (values.dateOfBirth) profilePayload.dateOfBirth = format(values.dateOfBirth, 'yyyy-MM-dd')
+    dispatch(onUpdateProfile(user.id, profilePayload))
   }
 
   const _handleResendLink = () => {
-    dispatch(onResendLink(props.user.email))
+    dispatch(onResendLink(user.email))
   }
 
   return (
     <form>
       <WrapperStyled>
         <SectionStyled>
-          <Input
-            label="Email*"
-            placeholder="Email"
-            name="email"
-            disabled
-            value={props.user.email}
-            borderColor={!props.user.emailConfirmed ? 'warning.0' : 'primary'}
-            backgroundColor={!props.user.emailConfirmed ? 'warning.1' : 'greyscale.4'}
-            color={props.user.emailConfirmed ? 'greyscale.1' : ''}
-            error={!props.user.emailConfirmed}
-          />
-          {!props.user.emailConfirmed && (
+          {user.type === 'email' && user.emailConfirmed ? (
+            <Input
+              label="Email*"
+              placeholder="Email"
+              name="email"
+              value={values.email}
+              borderColor={!user.emailConfirmed ? 'warning.0' : 'primary'}
+              backgroundColor={!user.emailConfirmed ? 'warning.1' : ''}
+              error={!user.emailConfirmed}
+              onChange={handleChange}
+              onBlur={handleBlur}
+            />
+          ) : (
+            <Input
+              label="Email"
+              placeholder="Email"
+              name="email"
+              disabled
+              value={user.email}
+              borderColor={!user.emailConfirmed ? 'warning.0' : 'primary'}
+              backgroundColor={!user.emailConfirmed ? 'warning.1' : 'greyscale.4'}
+              color={user.emailConfirmed ? 'greyscale.1' : ''}
+              error={!user.emailConfirmed}
+            />
+          )}
+          {!user.emailConfirmed && (
             <Text fontSize={12} marginLeft="18px">
               Email not verified{' '}
               <Link color="error" to="#" onClick={() => _handleResendLink()}>
@@ -117,24 +137,12 @@ const FormProfile = ({
           </SectionStyled>
 
           <SectionStyled>
-            <Input
-              type="date"
-              label="Date of Birth"
-              placeholder="DD/MM/YYYY"
-              name="dateOfBirth"
-              error={errors.dateOfBirth}
-              value={values.dateOfBirth}
-              onChange={handleChange}
-              onBlur={handleBlur}
-            />
-            {/* <DatePicker
+            <DatePicker
               label="Date of Birth"
               value={values.dateOfBirth}
-              handleDateChange={date => {
-                return setFieldValue('dateOfBirth', date)
-              }}
+              handleDateChange={date => setFieldValue('dateOfBirth', date)}
               captionMargin="0 0 .5rem 25px"
-            /> */}
+            />
           </SectionStyled>
         </Box>
 
@@ -160,27 +168,29 @@ const FormProfile = ({
 const formik = {
   displayName: 'FormProfile',
   mapPropsToValues: props => {
-    const { profile } = props.user
+    const { user } = props
 
-    if (profile) {
+    if (user.profile) {
       return {
-        firstName: profile.firstName || '',
-        lastName: profile.lastName || '',
-        dateOfBirth: profile.dateOfBirth || '',
-        gender: profile.gender || '',
-        phoneNumber: profile.phoneNumber || '',
-        info: profile.info || ''
+        email: user.email,
+        firstName: user.profile.firstName || '',
+        lastName: user.profile.lastName || '',
+        dateOfBirth: user.profile.dateOfBirth ? new Date(user.profile.dateOfBirth) : new Date(),
+        gender: user.profile.gender || '',
+        phoneNumber: user.profile.phoneNumber || '',
+        info: user.profile.info || ''
       }
     }
     return {}
   },
   validationSchema: Yup.object().shape({
+    email: Yup.string().required('Email field is required'),
     firstName: Yup.string().required('First name field is required'),
     lastName: Yup.string().required('Last name field is required'),
-    dateOfBirth: Yup.date(),
-    gender: Yup.string(),
-    phoneNumber: Yup.string(),
-    info: Yup.string()
+    dateOfBirth: Yup.date().notRequired(),
+    gender: Yup.string().notRequired(),
+    phoneNumber: Yup.string().notRequired(),
+    info: Yup.string().notRequired()
   }),
   enableReinitialize: true,
   isInitialValid: false
