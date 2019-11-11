@@ -3,6 +3,7 @@ import { useSelector, useDispatch } from 'react-redux'
 import Helmet from 'react-helmet'
 import { onGetListingsByUser, onUpdateListing, onDeleteListing } from 'redux/ducks/account'
 import { Card, Text, Icon, Loader, BackgroundImage, Grid, Cell, Title, Button, Price } from 'components'
+import { cropPicture } from 'utils/images'
 
 const _parseCategoryIconName = (name, isSub) => {
   let prefix = 'category-'
@@ -32,9 +33,9 @@ const _getCoverPhoto = object => {
   }
   const photoCover = object.photos.find(e => e.isCover)
   if (photoCover) {
-    return photoCover.name
+    return cropPicture(photoCover.name)
   }
-  return object.photos[0].name
+  return cropPicture(object.photos[0].name)
 }
 
 const ListingCard = (dispatch, item, index) => {

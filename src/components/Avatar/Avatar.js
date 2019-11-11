@@ -2,8 +2,10 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import styled from 'styled-components'
 import { layout } from 'styled-system'
-import defaultPic from './defaultPic.png'
 import { useDropzone } from 'react-dropzone'
+import { cropPicture } from 'utils/images'
+
+import defaultPic from './defaultPic.png'
 
 const AvatarStyled = styled.div`
   border-radius: 50%;
@@ -47,13 +49,12 @@ const Avatar = ({ onDrop, image, small, large, ...props }) => {
   const { getRootProps, getInputProps } = useDropzone({ onDrop, accept: 'image/jpeg, image/png' })
 
   return onDrop === undefined ? (
-    <AvatarStyled {...props} src={image} small={small} large={large} />
+    <AvatarStyled {...props} src={cropPicture(image)} small={small} large={large} />
   ) : (
-    <AvatarStyled {...props} src={image} small={small} large={large} {...getRootProps()}>
+    <AvatarStyled {...props} src={cropPicture(image)} small={small} large={large} {...getRootProps()}>
       <input {...getInputProps()} />
     </AvatarStyled>
   )
-  // <AvatarStyled {...props} src={image} small={small} large={large} />
 }
 
 Avatar.defaultProps = {

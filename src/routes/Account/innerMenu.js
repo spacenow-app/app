@@ -10,7 +10,7 @@ const InnerMenu = ({ ...props }) => {
   const { user } = useSelector(state => state.account.get)
 
   const _handleOnDrop = useCallback(
-    acceptedFiles => acceptedFiles.map(async file => await dispatch(onUpdateProfilePicture(file, user.id))),
+    acceptedFiles => acceptedFiles.map(async file => dispatch(onUpdateProfilePicture(file, user.id))),
     [dispatch, user.id]
   )
 

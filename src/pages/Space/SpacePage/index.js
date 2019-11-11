@@ -8,6 +8,7 @@ import _ from 'lodash'
 import { isSameDay, format } from 'date-fns'
 
 import { capitalize, toPlural } from 'utils/strings'
+import { cropPicture } from 'utils/images'
 
 import {
   Wrapper,
@@ -337,7 +338,7 @@ const SpacePage = ({ match, location, history, ...props }) => {
       ? array
           .filter(el => el !== undefined)
           .map(el => ({
-            source: `https://api-assets.prod.cloud.spacenow.com?width=800&heigth=500&format=jpeg&path=${el.name}`,
+            source: cropPicture(el.name, 800, 500),
             isCover: el.isCover
           }))
       : []
@@ -491,10 +492,10 @@ const SpacePage = ({ match, location, history, ...props }) => {
       return hourlyError !== '' || period <= 0 || !date
     }
     if (bookingPeriod === 'weekly') {
-      return typeof date !== "object"
+      return typeof date !== 'object'
     }
     if (bookingPeriod === 'monthly') {
-      return typeof date !== "object"
+      return typeof date !== 'object'
     }
     if (bookingPeriod === 'daily') {
       if (listing.listingData.minTerm > 0) {
