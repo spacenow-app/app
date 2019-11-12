@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import { withFormik } from 'formik'
 // import PropTypes from 'prop-types'
 
-import { DatePicker, Select, PriceDetail, Grid } from 'components'
+import { DatePicker, Select, PriceDetail, Grid, TextArea } from 'components'
 
 function spelling(reference) {
   let label = 'Week'
@@ -20,7 +20,9 @@ const WeeklyBooking = ({
   period,
   listingData,
   inputFocus,
-  hidePrice
+  hidePrice,
+  handleMessageChange,
+  message
 }) => {
   const dates = [{ key: 0, value: 0, name: 'Choose a Period' }]
 
@@ -58,6 +60,10 @@ const WeeklyBooking = ({
             }}
           />
           <Select label={hidePrice ? '' : 'Period'} options={dates} handleChange={handleChangePeriod} value={period} />
+
+          {listingData.bookingType === 'request' && !hidePrice && (
+            <TextArea label="Additional notes" name="message" value={message} onChange={handleMessageChange} />
+          )}
         </Grid>
 
         {date && !hidePrice && (

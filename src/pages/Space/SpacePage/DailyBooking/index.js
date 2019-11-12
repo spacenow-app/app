@@ -1,9 +1,14 @@
 /* eslint-disable  */
 import React, { useState, useEffect } from 'react'
-
-import { DatePicker, ListDates, PriceDetail } from 'components'
+import styled from 'styled-components'
+import { DatePicker, ListDates, PriceDetail, TextArea } from 'components'
 import { DateUtils } from 'react-day-picker'
 import { eachDayOfInterval, isSameDay } from 'date-fns'
+
+const WrapperStyled = styled.div`
+  display: grid;
+  grid-row-gap: 10px;
+`
 
 function spelling(reference) {
   let label = 'Day'
@@ -22,7 +27,9 @@ const DailyBooking = ({
   removeDate,
   setDatesSelected,
   inputFocus,
-  hidePrice
+  hidePrice,
+  handleMessageChange,
+  message
 }) => {
   const [from, setFrom] = useState(undefined)
   const [to, setTo] = useState(undefined)
@@ -89,7 +96,7 @@ const DailyBooking = ({
   }, [listDates])
 
   return (
-    <>
+    <WrapperStyled>
       <DatePicker
         label={hidePrice ? '' : 'Dates'}
         ref={el => setDayPicker(el)}
@@ -114,18 +121,23 @@ const DailyBooking = ({
           modifiers: { modifiers }
         }}
       />
-      {!hidePrice && <ListDates dates={listDates} />}
-      {/* onClickDate={(e, date) => removeDate(date)} */}
-      {listDates.length > 0 && !hidePrice && (
-        <PriceDetail
-          periodLabel={spelling(listDates.length)}
-          price={listingData.basePrice}
-          isAbsorvedFee={listingData.isAbsorvedFee}
-          days={listDates.length}
-          quantity={1}
-        />
+
+      {listingData.bookingType === 'request' && !hidePrice && (
+        <TextArea label="Additional notes" name="message" value={message} onChange={handleMessageChange} />
       )}
-    </>
+      {listDates.length > 0 && !hidePrice && (
+        <WrapperStyled>
+          <ListDates dates={listDates} hasMargin={false} />
+          <PriceDetail
+            periodLabel={spelling(listDates.length)}
+            price={listingData.basePrice}
+            isAbsorvedFee={listingData.isAbsorvedFee}
+            days={listDates.length}
+            quantity={1}
+          />
+        </WrapperStyled>
+      )}
+    </WrapperStyled>
   )
 }
 
