@@ -1,7 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import styled from 'styled-components'
-import { Box, Text, UserDetails, Grid, Cell } from 'components'
+import { Box, Text, UserDetails, Grid, Cell, Link } from 'components'
 
 const CardContainerGrid = styled(Grid)`
   height: 144px;
@@ -26,8 +26,14 @@ const MessageCard = ({ item, userType, history, dispatch, ...props }) => {
   }
 
   return (
-    <CardContainerGrid key={item.id} alignContent="center" column={12} onClick={() => _onClick(item.id)}>
-      <Cell width={5}>
+    <CardContainerGrid
+      key={item.id}
+      alignContent="center"
+      column={12}
+      columnGap="15px"
+      onClick={() => _onClick(item.id)}
+    >
+      <Cell width={4}>
         <UserDetails hostname={userType === 'host' ? item.guest.profile.displayName : item.host.profile.displayName} />
       </Cell>
       <Cell width={6}>
@@ -52,11 +58,11 @@ const MessageCard = ({ item, userType, history, dispatch, ...props }) => {
           </Box>
         )}
       </Cell>
-      {/* <Cell width={2}>
+      <Cell width={2}>
         <Link>Save Chat</Link>
         <br />
         <Link>Archive</Link>
-      </Cell> */}
+      </Cell>
     </CardContainerGrid>
   )
 }

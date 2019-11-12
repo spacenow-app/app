@@ -41,12 +41,15 @@ const MessageDetailPage = ({ match, location, history, ...props }) => {
   console.log('isMessageLoading', isMessageLoading)
 
   const pageSize = 5
-
+  console.log(match.params)
+  console.log(user)
   useEffect(() => {
+    console.log(' match.params.id', match.params.id)
     match && match.params && user && dispatch(onReadMessage(match.params.id, user.id))
     match && match.params && dispatch(onGetMessage(match.params.id))
     match && match.params && dispatch(onGetMessageItems({ id: match.params.id, pageIndex: 0, pageSize }))
   }, [dispatch, match, user])
+
   console.log('messageItems', messageItems)
 
   const _onSubmit = () => {
@@ -88,7 +91,7 @@ const MessageDetailPage = ({ match, location, history, ...props }) => {
           <Title type="h3" title="Conversation" />
         </Cell>
         <CellStyled width={6}>
-          {!isMessageLoading && (
+          {!isMessageLoading && message && (
             <>
               <TopStyled>
                 <UserContainer>

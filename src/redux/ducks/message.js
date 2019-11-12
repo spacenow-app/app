@@ -45,6 +45,7 @@ const initialState = {
     isRead: null
   },
   getItems: {
+    isLoading: true,
     object: {}
   }
 }
@@ -288,15 +289,18 @@ export default function reducer(state = initialState, action) {
         ...state,
         isLoading: true,
         getItems: {
+          isLoading: true,
           ...state.getItems
         }
       }
     }
     case Types.GET_MESSAGE_ITEMS_SUCCESS: {
+      console.log('action', action.payload)
       return {
         ...state,
         isLoading: false,
         getItems: {
+          isLoading: false,
           object: _.mergeWith(state.getItems.object, action.payload, _customizer)
         }
       }
