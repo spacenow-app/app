@@ -36,13 +36,13 @@ const CardContainer = styled.div`
   opacity: 1;
   // min-width: 400px;
   display: grid;
-  grid-template-columns: ${({ showMap }) => (showMap ? '1fr 2fr' : '1fr')};
+  grid-template-columns: ${({ showMap }) => (showMap ? '357px auto' : '1fr')};
 
   :hover {
     box-shadow: 0 0 5px 1px #ddd;
   }
 
-  @media (max-width: 600px) {
+  @media (max-width: 768px) {
     grid-template-columns: 1fr;
   }
 `
@@ -55,7 +55,7 @@ const CardTitle = styled(Text)`
   text-overflow: ellipsis;
   cursor: pointer;
 
-  @media (max-width: 945px) {
+  @media (max-width: 768px) {
     margin-bottom: 5px;
     line-height: 1;
     white-space: pre-wrap;
@@ -64,14 +64,13 @@ const CardTitle = styled(Text)`
 
 const CardImage = styled.img`
   width: 100%;
-  height: ${({ showMap }) => (showMap ? '248px' : '280px')};
+  height: ${({ showMap }) => (showMap ? '100%' : '280px')};
   display: block;
-  border-top-left-radius: 6px;
-  border-top-right-radius: 6px;
+  border-radius: 6px;
   cursor: pointer;
   object-fit: cover;
 
-  @media (max-width: 945px) {
+  @media (max-width: 768px) {
     height: 200px;
   }
 `
@@ -79,7 +78,7 @@ const CardContent = styled.div`
   padding: ${({ showMap }) => (showMap ? '15px 40px' : '25px')};
   line-height: 2;
 
-  @media (max-width: 600px) {
+  @media (max-width: 768px) {
     padding: 25px;
   }
 `
