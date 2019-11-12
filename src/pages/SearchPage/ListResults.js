@@ -92,7 +92,6 @@ const ContainerPagination = styled.div`
 
 const ListResults = forwardRef(
   ({ history, markers, onHoverItem, pagination, onPageChanged, showMap, ...props }, ref) => {
-    console.log('showMap', showMap)
     const _parseCategoryIconName = (name, isSub) => {
       const prefix = isSub ? 'sub-category-' : 'category-'
       return prefix + name.replace(/([A-Z])/g, g => `-${g[0].toLowerCase()}`)
