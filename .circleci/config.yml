@@ -55,7 +55,7 @@ jobs:
             GENERATE_SOURCEMAP=false INLINE_RUNTIME_CHUNK=false REACT_APP_LEGACY=${SANDPIT_REACT_APP_LEGACY}
             REACT_APP_GRAPH_HOST=${SANDPIT_REACT_APP_GRAPH_HOST} REACT_APP_STATIC_PAGES=https://app.sandpit.cloud.spacenow.com/search
             REACT_APP_GOOGLE_APP_ID=${SANDPIT_REACT_APP_GOOGLE_APP_ID} REACT_APP_FACEBOOK_APP_ID=${SANDPIT_REACT_APP_FACEBOOK_APP_ID}
-            REACT_APP_DOMAIN=.sandpit.cloud.spacenow.com yarn build
+            REACT_APP_DOMAIN=.sandpit.cloud.spacenow.com REACT_APP_ASSETS_API_HOST=https://api-assets.sandpit.cloud.spacenow.com yarn build
       - persist_to_workspace:
           root: ~/repo
           paths:
@@ -106,7 +106,7 @@ jobs:
             GENERATE_SOURCEMAP=false INLINE_RUNTIME_CHUNK=false REACT_APP_LEGACY=${PROD_REACT_APP_LEGACY}
             REACT_APP_GRAPH_HOST=${PROD_REACT_APP_GRAPH_HOST} REACT_APP_STATIC_PAGES=https://spacenow.com
             REACT_APP_GOOGLE_APP_ID=${PROD_REACT_APP_GOOGLE_APP_ID} REACT_APP_FACEBOOK_APP_ID=${PROD_REACT_APP_FACEBOOK_APP_ID}
-            REACT_APP_DOMAIN=.spacenow.com yarn build
+            REACT_APP_DOMAIN=.spacenow.com REACT_APP_ASSETS_API_HOST=https://api-assets.prod.cloud.spacenow.com yarn build
       - persist_to_workspace:
           root: ~/repo
           paths:

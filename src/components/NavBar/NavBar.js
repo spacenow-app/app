@@ -169,7 +169,7 @@ const NavBar = ({ history, shownSearch }) => {
               alignItems="center"
               p="0.5rem"
             >
-              <Avatar style={{ width: '30px', height: '30px', margin: 0 }} image={user.profile.picture || null} />
+              <Avatar style={{ width: '30px', height: '30px', margin: 0 }} image={user.profile.picture} />
               <Text ml="10px">{user.profile.firstName || 'User Profile'}</Text>
             </Box>
           )}
@@ -183,34 +183,34 @@ const NavBar = ({ history, shownSearch }) => {
               <NavLinkStyled to="/auth/signup">Sign Up</NavLinkStyled>
             </>
           ) : (
-              <>
-                <Box display={{ _: 'block', small: 'none' }}>
-                  <NavLinkStyled to="/account/profile">Profile</NavLinkStyled>
-                  <NavLinkStyled to="/account/listing">Dashboard</NavLinkStyled>
-                  <NavLinkStyled to="#" onClick={_handlerLogout}>
-                    Logout
+            <>
+              <Box display={{ _: 'block', small: 'none' }}>
+                <NavLinkStyled to="/account/profile">Profile</NavLinkStyled>
+                <NavLinkStyled to="/account/listing">Dashboard</NavLinkStyled>
+                <NavLinkStyled to="#" onClick={_handlerLogout}>
+                  Logout
                 </NavLinkStyled>
-                </Box>
-                <NavDropdownStyled
-                  alignRight
-                  title={
-                    <Box display="grid" gridTemplateColumns="auto auto" gridColumnGap="10px" color="quartenary">
-                      <span style={{ alignSelf: 'center' }}>{user.profile.firstName || 'User Profile'}</span>
-                      <Avatar style={{ width: '30px', height: '30px' }} image={user.profile.picture || null} />
-                    </Box>
-                  }
-                  id="basic-nav-dropdown"
-                >
-                  <DropdownItemStyled to="/account/profile">Profile</DropdownItemStyled>
-                  <NavDropdown.Divider />
-                  <DropdownItemStyled to="/account/listing">Dashboard</DropdownItemStyled>
-                  <NavDropdown.Divider />
-                  <DropdownItemStyled to="#" onClick={_handlerLogout}>
-                    Logout
+              </Box>
+              <NavDropdownStyled
+                alignRight
+                title={
+                  <Box display="grid" gridTemplateColumns="auto auto" gridColumnGap="10px" color="quartenary">
+                    <span style={{ alignSelf: 'center' }}>{user.profile.firstName || 'User Profile'}</span>
+                    <Avatar style={{ width: '30px', height: '30px' }} image={user.profile.picture} />
+                  </Box>
+                }
+                id="basic-nav-dropdown"
+              >
+                <DropdownItemStyled to="/account/profile">Profile</DropdownItemStyled>
+                <NavDropdown.Divider />
+                <DropdownItemStyled to="/account/listing">Dashboard</DropdownItemStyled>
+                <NavDropdown.Divider />
+                <DropdownItemStyled to="#" onClick={_handlerLogout}>
+                  Logout
                 </DropdownItemStyled>
-                </NavDropdownStyled>
-              </>
-            )}
+              </NavDropdownStyled>
+            </>
+          )}
         </NavStyled>
       </Navbar.Collapse>
     </Navbar>

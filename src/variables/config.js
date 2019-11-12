@@ -8,7 +8,8 @@ const config = {
   token_name: 'id_token',
   admin_email: 'admin@spacenow.com',
   facebook_app_id: process.env.REACT_APP_FACEBOOK_APP_ID,
-  google_app_id: process.env.REACT_APP_GOOGLE_APP_ID
+  google_app_id: process.env.REACT_APP_GOOGLE_APP_ID,
+  assetsAPI: process.env.REACT_APP_ASSETS_API_HOST
 }
 
 export default config

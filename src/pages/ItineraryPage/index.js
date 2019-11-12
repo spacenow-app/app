@@ -5,6 +5,7 @@ import { useSelector, useDispatch } from 'react-redux'
 import styled from 'styled-components'
 import { toast } from 'react-toastify'
 import { toPlural } from 'utils/strings'
+import { cropPicture } from 'utils/images'
 
 import {
   Wrapper,
@@ -98,9 +99,9 @@ const _getCoverPhoto = object => {
   }
   const photoCover = object.photos.find(e => e.isCover)
   if (photoCover) {
-    return photoCover.name
+    return cropPicture(photoCover.name)
   }
-  return object.photos[0].name
+  return cropPicture(object.photos[0].name)
 }
 
 const _renderSpecifications = (spec, listingData) => {

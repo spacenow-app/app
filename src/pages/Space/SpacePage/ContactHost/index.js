@@ -11,6 +11,8 @@ import { Input, TextArea, Button, DatePicker, TimePicker, Grid, Cell } from 'com
 
 import { sendMail } from 'redux/ducks/mail'
 
+import { cropPicture } from 'utils/images'
+
 const WrapperStyled = styled.div`
   display: grid;
   grid-row-gap: 10px;
@@ -41,9 +43,9 @@ const _getCoverPhoto = object => {
   }
   const photoCover = object.photos.find(e => e.isCover)
   if (photoCover) {
-    return photoCover.name
+    return cropPicture(photoCover.name)
   }
-  return object.photos[0].name
+  return cropPicture(object.photos[0].name)
 }
 
 const ContactHost = ({

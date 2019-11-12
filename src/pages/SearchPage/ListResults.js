@@ -4,6 +4,8 @@ import styled from 'styled-components'
 import { Box, Text, Icon, Tag, Avatar, Pagination, Price, Grid } from 'components'
 import { toPlural } from 'utils/strings'
 
+import { cropPicture } from 'utils/images'
+
 const Wrapper = styled.div`
   overflow-y: scroll;
   height: 100%;
@@ -91,9 +93,9 @@ const ListResults = forwardRef(
       }
       const photoCover = object.photos.find(e => e.isCover)
       if (photoCover) {
-        return photoCover.name
+        return cropPicture(photoCover.name)
       }
-      return object.photos[0].name
+      return cropPicture(object.photos[0].name)
     }
 
     const _renderSpecifications = (spec, listingData) => {

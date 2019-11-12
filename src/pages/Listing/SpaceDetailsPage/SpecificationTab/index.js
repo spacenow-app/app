@@ -22,6 +22,8 @@ import { openModal, TypesModal } from 'redux/ducks/modal'
 
 import { Title, Input, Checkbox, Select, TextArea, StepButtons, Loader, Photo, Box, Footer } from 'components'
 
+import { cropPicture } from 'utils/images'
+
 const WrapperStyled = styled.div`
   display: grid;
   grid-row-gap: 80px;
@@ -387,7 +389,7 @@ const SpecificationTab = ({
                   <Photo
                     key={`photo-${index}`}
                     onDrop={_handleOnDrop}
-                    url={item ? item.name : null}
+                    url={item ? cropPicture(item.name) : null}
                     isCover={item ? item.isCover : false}
                     onCover={_handleSetCoverPhoto(item ? item.id : '')}
                     onDelete={_handleDeletePhoto(item ? item.id : '')}

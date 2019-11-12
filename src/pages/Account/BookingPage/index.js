@@ -7,6 +7,7 @@ import { onDeclineBooking, onAcceptBooking, onAcceptDeclineByEmail } from 'redux
 import { TypesModal, openModal } from 'redux/ducks/modal'
 import { Card, Text, Icon, Loader, BackgroundImage, Grid, Cell, Title, Dropdown, Price } from 'components'
 import { convertedDate } from 'utils/date'
+import { cropPicture } from 'utils/images'
 
 const _parseCategoryIconName = (name, isSub) => {
   let prefix = 'category-'
@@ -72,9 +73,9 @@ const _getCoverPhoto = object => {
   }
   const photoCover = object.photos.find(e => e.isCover)
   if (photoCover) {
-    return photoCover.name
+    return cropPicture(photoCover.name)
   }
-  return object.photos[0].name
+  return cropPicture(object.photos[0].name)
 }
 
 const BookingCard = (dispatch, item, index, userType) => {
