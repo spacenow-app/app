@@ -16,7 +16,7 @@ const CardContainerGrid = styled(Grid)`
   cursor: pointer;
 
   :hover {
-    box-shadow: 0 0 5px 1px #ddd;
+    box-shadow: 0 1px 5px 1px #ddd;
   }
 `
 

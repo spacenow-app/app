@@ -28,7 +28,7 @@ const InnerMenu = ({ ...props }) => {
       <Avatar image={user.profile.picture || null} onDrop={_handleOnDrop} />
       <Title type="h5" title={`${user.profile.firstName} ${user.profile.lastName}`} />
       <Link to="/account/profile">Profile</Link>
-      {/* <Link to="/account/messages">Messages</Link> */}
+      <Link to="/account/messages">Messages</Link>
       <Link to="/account/document-verification">Document Verification</Link>
       <Link to="/account/payment">Payment Preferences</Link>
       <Link to="/account/listing">Your Listings</Link>

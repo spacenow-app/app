@@ -19,7 +19,8 @@ const WeeklyBooking = ({
   handleChangePeriod,
   period,
   listingData,
-  inputFocus
+  inputFocus,
+  hidePrice
 }) => {
   const dates = [{ key: 0, value: 0, name: 'Choose a Period' }]
 
@@ -38,7 +39,7 @@ const WeeklyBooking = ({
         <Grid columns={1} rowGap="10px">
           <DatePicker
             ref={el => setDayPicker(el)}
-            label="Start Day"
+            label={hidePrice ? '' : 'Start Day'}
             value={date}
             handleDateChange={onDateChange}
             handleDayPickerHide={onDayPickerHide}
@@ -56,10 +57,10 @@ const WeeklyBooking = ({
               }
             }}
           />
-          <Select label="Period" options={dates} handleChange={handleChangePeriod} value={period} />
+          <Select label={hidePrice ? '' : 'Period'} options={dates} handleChange={handleChangePeriod} value={period} />
         </Grid>
 
-        {date && (
+        {date && !hidePrice && (
           <PriceDetail
             periodLabel={spelling(period)}
             price={listingData.basePrice}

@@ -2,8 +2,8 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import styled from 'styled-components'
 import { layout } from 'styled-system'
-import defaultPic from './defaultPic.png'
 import { useDropzone } from 'react-dropzone'
+import defaultPic from './defaultPic.png'
 
 const AvatarStyled = styled.div`
   border-radius: 50%;

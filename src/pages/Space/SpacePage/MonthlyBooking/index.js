@@ -10,9 +10,20 @@ function spelling(reference) {
 }
 
 const MonthlyBooking = props => {
-  const { date, onDateChange, onDayPickerHide, listingExceptionDates, closingDays, handleChangePeriod, period, listingData, inputFocus } = props
+  const {
+    date,
+    onDateChange,
+    onDayPickerHide,
+    listingExceptionDates,
+    closingDays,
+    handleChangePeriod,
+    period,
+    listingData,
+    inputFocus,
+    hidePrice
+  } = props
 
-  let dates = [{ key: 0, value: 0, name: 'Choose a Period' }]
+  const dates = [{ key: 0, value: 0, name: 'Choose a Period' }]
 
   for (let i = props.listingData.minTerm; i < 13; i++) {
     dates.push({ key: i, value: i, name: `${i} ${spelling(i)}` })
@@ -25,40 +36,40 @@ const MonthlyBooking = props => {
 
   return (
     <>
-    <Grid columns={1} rowGap="40px" style={{marginBottom: '20px'}}>
-      <Grid columns={1} rowGap="10px">
-        <DatePicker
-          ref={el => setDayPicker(el)}
-          label="Start Day"
-          value={date}
-          handleDateChange={onDateChange}
-          handleDayPickerHide={onDayPickerHide}
-          dayPickerProps={{
-            modifiers: {
-              disabled: [
-                ...listingExceptionDates.map(el => new Date(el)),
-                {
-                  daysOfWeek: closingDays
-                },
-                {
-                  before: new Date()
-                }
-              ]
-            }
-          }}
-        />
-        <Select label="Period" options={dates} handleChange={handleChangePeriod} value={period} />
+      <Grid columns={1} rowGap="40px" style={{ marginBottom: '20px' }}>
+        <Grid columns={1} rowGap="10px">
+          <DatePicker
+            ref={el => setDayPicker(el)}
+            label={hidePrice ? '' : 'Start Day'}
+            value={date}
+            handleDateChange={onDateChange}
+            handleDayPickerHide={onDayPickerHide}
+            dayPickerProps={{
+              modifiers: {
+                disabled: [
+                  ...listingExceptionDates.map(el => new Date(el)),
+                  {
+                    daysOfWeek: closingDays
+                  },
+                  {
+                    before: new Date()
+                  }
+                ]
+              }
+            }}
+          />
+          <Select label={hidePrice ? '' : 'Period'} options={dates} handleChange={handleChangePeriod} value={period} />
+        </Grid>
+        {date && !hidePrice && (
+          <PriceDetail
+            periodLabel={spelling(period)}
+            price={listingData.basePrice}
+            isAbsorvedFee={listingData.isAbsorvedFee}
+            days={period}
+            quantity={1}
+          />
+        )}
       </Grid>
-      {date &&
-        <PriceDetail
-          periodLabel={spelling(period)}
-          price={listingData.basePrice}
-          isAbsorvedFee={listingData.isAbsorvedFee}
-          days={period}
-          quantity={1}
-        />
-      }
-    </Grid>
     </>
   )
 }

@@ -21,7 +21,8 @@ const DailyBooking = ({
   listingData,
   removeDate,
   setDatesSelected,
-  inputFocus
+  inputFocus,
+  hidePrice
 }) => {
   const [from, setFrom] = useState(undefined)
   const [to, setTo] = useState(undefined)
@@ -90,7 +91,7 @@ const DailyBooking = ({
   return (
     <>
       <DatePicker
-        label="Dates"
+        label={hidePrice ? '' : 'Dates'}
         ref={el => setDayPicker(el)}
         date={null}
         handleDateChange={date => _handleDayClick(date)}
@@ -113,8 +114,9 @@ const DailyBooking = ({
           modifiers: { modifiers }
         }}
       />
-      <ListDates dates={listDates} /> {/* onClickDate={(e, date) => removeDate(date)} */}
-      {listDates.length > 0 && (
+      {!hidePrice && <ListDates dates={listDates} />}
+      {/* onClickDate={(e, date) => removeDate(date)} */}
+      {listDates.length > 0 && !hidePrice && (
         <PriceDetail
           periodLabel={spelling(listDates.length)}
           price={listingData.basePrice}

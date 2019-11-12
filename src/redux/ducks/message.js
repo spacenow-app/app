@@ -33,11 +33,9 @@ const initialState = {
     message: null
   },
   list: {
-    isLoading: true,
     array: null
   },
   get: {
-    isLoading: true,
     object: null
   },
   create: {
@@ -47,7 +45,6 @@ const initialState = {
     isRead: null
   },
   getItems: {
-    isLoading: true,
     object: {}
   }
 }
@@ -171,7 +168,6 @@ export default function reducer(state = initialState, action) {
         ...state,
         isLoading: false,
         list: {
-          isLoading: false,
           array: action.payload
         },
         getItems: {
@@ -271,7 +267,6 @@ export default function reducer(state = initialState, action) {
         ...state,
         isLoading: false,
         getItems: {
-          isLoading: false,
           object: {
             ...state.getItems.object,
             rows: [action.payload, ...state.getItems.object.rows]
@@ -291,7 +286,10 @@ export default function reducer(state = initialState, action) {
     case Types.GET_MESSAGE_ITEMS_REQUEST: {
       return {
         ...state,
-        isLoading: true
+        isLoading: true,
+        getItems: {
+          ...state.getItems
+        }
       }
     }
     case Types.GET_MESSAGE_ITEMS_SUCCESS: {
@@ -299,7 +297,6 @@ export default function reducer(state = initialState, action) {
         ...state,
         isLoading: false,
         getItems: {
-          isLoading: false,
           object: _.mergeWith(state.getItems.object, action.payload, _customizer)
         }
       }

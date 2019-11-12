@@ -16,7 +16,8 @@ const MessagePage = ({ match, location, history, ...props }) => {
   const dispatch = useDispatch()
   const { user } = useSelector(state => state.account.get)
 
-  const { array: messages, isLoading: isMessageLoading } = useSelector(state => state.message.list)
+  const { array: messages } = useSelector(state => state.message.list)
+  const { isLoading: isMessageLoading } = useSelector(state => state.message)
   const [userType, setUserType] = useState('guest')
   const [pageIndex, setPageIndex] = useState(0)
 
@@ -57,12 +58,12 @@ const MessagePage = ({ match, location, history, ...props }) => {
         </Cell>
       </Grid>
 
-      {!messages || messages.rows.length === 0 ? (
-        <BackgroundImage text="We didn't find any messages :(" />
+      {isMessageLoading ? (
+        <Loader />
       ) : (
         <>
-          {isMessageLoading ? (
-            <Loader />
+          {!messages || messages.rows.length === 0 ? (
+            <BackgroundImage text="We didn't find any messages :(" />
           ) : (
             messages.rows.map(item => (
               <MessageCard

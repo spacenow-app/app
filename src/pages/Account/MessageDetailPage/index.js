@@ -32,11 +32,13 @@ const MessageDetailPage = ({ match, location, history, ...props }) => {
   const dispatch = useDispatch()
 
   const { user } = useSelector(state => state.account.get)
-  const { object: message, isLoading: isMessageLoading } = useSelector(state => state.message.get)
+  const { object: message } = useSelector(state => state.message.get)
+  const { isLoading: isMessageLoading } = useSelector(state => state.message)
   const { object: messageItems, isLoading: isItemsLoading } = useSelector(state => state.message.getItems)
   const [content, setContent] = useState('')
   const [pageIndex, setPageIndex] = useState(0)
   const [scroller, setScroller] = useState(null)
+  console.log('isMessageLoading', isMessageLoading)
 
   const pageSize = 5
 
@@ -45,6 +47,7 @@ const MessageDetailPage = ({ match, location, history, ...props }) => {
     match && match.params && dispatch(onGetMessage(match.params.id))
     match && match.params && dispatch(onGetMessageItems({ id: match.params.id, pageIndex: 0, pageSize }))
   }, [dispatch, match, user])
+  console.log('messageItems', messageItems)
 
   const _onSubmit = () => {
     const values = {
