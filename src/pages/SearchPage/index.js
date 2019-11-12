@@ -50,7 +50,7 @@ const FilterBar = styled.div`
 
 const ContainerResults = styled.div`
   display: grid;
-  grid-template-columns: auto 1fr;
+  grid-template-columns: ${({ showMap }) => (showMap ? 'auto 1fr' : 'auto')};
   grid-column-gap: ${({ showMap }) => (showMap ? '40px' : '0')};
   width: 100%;
   height: calc(100vh - 245px);
