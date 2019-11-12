@@ -18,7 +18,7 @@ const Wrapper = styled.div`
 
 const ContainerList = styled.div`
   display: grid;
-  grid-template-columns: ${({ showMap }) => (showMap ? 'repeat(2, 400px)' : 'repeat(auto-fill, minmax(400px, 1fr))')};
+  grid-template-columns: ${({ showMap }) => (showMap ? 'repeat(1, 800px)' : 'repeat(auto-fill, minmax(400px, 1fr))')};
   grid-column-gap: 25px;
   grid-row-gap: 25px;
 
@@ -35,9 +35,15 @@ const CardContainer = styled.div`
   border-radius: 6px;
   opacity: 1;
   // min-width: 400px;
+  display: grid;
+  grid-template-columns: ${({ showMap }) => (showMap ? '1fr 2fr' : '1fr')};
 
   :hover {
     box-shadow: 0 0 5px 1px #ddd;
+  }
+
+  @media (max-width: 600px) {
+    grid-template-columns: 1fr;
   }
 `
 const CardTitle = styled(Text)`
@@ -58,7 +64,7 @@ const CardTitle = styled(Text)`
 
 const CardImage = styled.img`
   width: 100%;
-  height: 280px;
+  height: ${({ showMap }) => (showMap ? '248px' : '280px')};
   display: block;
   border-top-left-radius: 6px;
   border-top-right-radius: 6px;
@@ -70,8 +76,12 @@ const CardImage = styled.img`
   }
 `
 const CardContent = styled.div`
-  padding: 25px;
+  padding: ${({ showMap }) => (showMap ? '15px 40px' : '25px')};
   line-height: 2;
+
+  @media (max-width: 600px) {
+    padding: 25px;
+  }
 `
 
 const ContainerPagination = styled.div`
@@ -82,6 +92,7 @@ const ContainerPagination = styled.div`
 
 const ListResults = forwardRef(
   ({ history, markers, onHoverItem, pagination, onPageChanged, showMap, ...props }, ref) => {
+    console.log('showMap', showMap)
     const _parseCategoryIconName = (name, isSub) => {
       const prefix = isSub ? 'sub-category-' : 'category-'
       return prefix + name.replace(/([A-Z])/g, g => `-${g[0].toLowerCase()}`)
@@ -167,9 +178,14 @@ const ListResults = forwardRef(
                 key={item.id}
                 onMouseEnter={() => onHoverItem(item)}
                 onMouseLeave={() => onHoverItem(null)}
+                showMap={showMap}
               >
-                <CardImage src={_getCoverPhoto(item)} onClick={() => window.open(`/space/${item.id}`)} />
-                <CardContent>
+                <CardImage
+                  showMap={showMap}
+                  src={_getCoverPhoto(item)}
+                  onClick={() => window.open(`/space/${item.id}`)}
+                />
+                <CardContent showMap={showMap}>
                   <Box display="flex" justifyContent="start" mb="15px">
                     <Box>
                       <Tag
@@ -196,6 +212,9 @@ const ListResults = forwardRef(
                     my="10px"
                     display="grid"
                     gridTemplateColumns={item.specifications.length >= 3 ? 'auto auto auto' : 'auto auto'}
+                    justifyContent="space-between"
+                    borderBottom="1px solid #eee"
+                    paddingBottom="10px"
                   >
                     {_renderSpecifications(item.specifications, item.listingData)}
                   </Box>
