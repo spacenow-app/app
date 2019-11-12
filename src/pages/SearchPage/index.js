@@ -26,6 +26,8 @@ import numeral from 'numeral'
 
 import { onSearch, onQuery } from 'redux/ducks/search'
 
+import { cropPicture } from 'utils/images'
+
 import ListResults from './ListResults'
 
 const FilterBar = styled.div`
@@ -221,7 +223,7 @@ const SearchPage = ({ history, location }) => {
       price: `${object.listingData.currency || 'AUD'}$${object.listingData.basePrice}`,
       period: object.bookingPeriod,
       host: {
-        photo: (object.host.profile && object.host.profile.picture) || '',
+        photo: (object.host.profile && cropPicture(object.host.profile.picture)) || '',
         name: (object.host.profile && object.host.profile.firstName) || 'User'
       }
     })
@@ -233,9 +235,9 @@ const SearchPage = ({ history, location }) => {
     }
     const photoCover = object.photos.find(e => e.isCover)
     if (photoCover) {
-      return photoCover.name
+      return cropPicture(photoCover.name)
     }
-    return object.photos[0].name
+    return cropPicture(object.photos[0].name)
   }
 
   const _onClickMarkerMap = object => {

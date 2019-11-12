@@ -4,6 +4,8 @@ import styled from 'styled-components'
 import { Box, Text, Icon, Tag, Avatar, Price, Grid } from 'components'
 import { toPlural } from 'utils/strings'
 
+import { cropPicture } from 'utils/images'
+
 const CardContainer = styled.div`
   /* height: 540px; */
   background: #ffffff 0% 0% no-repeat padding-box;
@@ -64,9 +66,9 @@ const CardSearch = ({ item, ...props }) => {
     }
     const photoCover = object.photos.find(e => e.isCover)
     if (photoCover) {
-      return photoCover.name
+      return cropPicture(photoCover.name)
     }
-    return object.photos[0].name
+    return cropPicture(object.photos[0].name)
   }
 
   const _renderSpecifications = (spec, listingData) => {
@@ -150,7 +152,11 @@ const CardSearch = ({ item, ...props }) => {
         >
           {_renderSpecifications(item.specifications, item.listingData)}
         </Box>
-        <Grid display="grid" columns={item.listingData.bookingType !== 'poa' ? '50px auto auto' : 'auto auto'} style={{paddingTop: "15px", borderTop: "1px solid #ccc"}}>
+        <Grid
+          display="grid"
+          columns={item.listingData.bookingType !== 'poa' ? '50px auto auto' : 'auto auto'}
+          style={{ paddingTop: '15px', borderTop: '1px solid #ccc' }}
+        >
           <Text fontSize="14px">From: </Text>
           <Price
             price={item.listingData.basePrice}

@@ -24,6 +24,7 @@ import {
 } from 'components'
 
 import { capitalize, toPlural } from 'utils/strings'
+import { cropPicture } from 'utils/images'
 
 import {
   onGetListingById,
@@ -186,7 +187,7 @@ const PreviewPage = ({ match, location, ...props }) => {
 
   const _convertedArrayPhotos = array => {
     return array.filter(el => el !== undefined).length > 0
-      ? array.filter(el => el !== undefined).map(el => ({ source: el.name }))
+      ? array.filter(el => el !== undefined).map(el => ({ source: cropPicture(el.name) }))
       : []
   }
 

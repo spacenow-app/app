@@ -29,6 +29,7 @@ import {
 
 import { onGetListingById, onGetAllSpecifications } from 'redux/ducks/listing'
 import { capitalize, toPlural } from 'utils/strings'
+import { cropPicture } from 'utils/images'
 import { onSearch } from 'redux/ducks/search'
 
 import FormPartner from './FormPartner'
@@ -132,11 +133,7 @@ const PartnerPage = ({ match, location, ...props }) => {
 
   const _convertedArrayPhotos = array => {
     return array.filter(el => el !== undefined).length > 0
-      ? array
-          .filter(el => el !== undefined)
-          .map(el => ({
-            source: `https://api-assets.prod.cloud.spacenow.com?width=800&heigth=500&format=jpeg&path=${el.name}`
-          }))
+      ? array.filter(el => el !== undefined).map(el => ({ source: cropPicture(el.name, 800, 500) }))
       : []
   }
 
@@ -270,7 +267,7 @@ const PartnerPage = ({ match, location, ...props }) => {
         </Box>
       ) : null}
       <Wrapper>
-      <Helmet title={`Find the perfect space for ${listing.settingsParent.category.otherItemName} in ${_getSuburb(listing.location)}. ${listing.listingData.description.substring(0, 100)}`} />
+        <Helmet title={`Find the perfect space for ${listing.settingsParent.category.otherItemName} in ${_getSuburb(listing.location)}. ${listing.listingData.description.substring(0, 100)}`} />
         <GridStyled columns="auto 350px" columnGap="35px" rowGap="30px">
           <Box display="grid" gridRowGap="15px">
             {listing.photos.length === 1 &&

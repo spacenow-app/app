@@ -7,12 +7,14 @@ import { useDispatch } from 'react-redux'
 import { closeModal } from 'redux/ducks/modal'
 import { onDeclineBooking, onAcceptBooking } from 'redux/ducks/booking'
 
+import { cropPicture } from 'utils/images'
+
 const ModalBookingDetails = ({ onConfirm, options, booking, userType, ...props }) => {
   const dispatch = useDispatch()
 
   const _convertedArrayPhotos = array => {
     return array.filter(el => el !== undefined).length > 0
-      ? array.filter(el => el !== undefined).map(el => ({ source: el.name }))
+      ? array.filter(el => el !== undefined).map(el => ({ source: cropPicture(el.name) }))
       : []
   }
 
