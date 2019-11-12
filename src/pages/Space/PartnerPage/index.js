@@ -270,7 +270,7 @@ const PartnerPage = ({ match, location, ...props }) => {
         </Box>
       ) : null}
       <Wrapper>
-      <Helmet title={`${listing.title} / ${_getSuburb(listing.location)}`} />
+      <Helmet title={`Find the perfect space for ${listing.settingsParent.category.otherItemName} in ${_getSuburb(listing.location)}. ${listing.listingData.description.substring(0, 100)}`} />
         <GridStyled columns="auto 350px" columnGap="35px" rowGap="30px">
           <Box display="grid" gridRowGap="15px">
             {listing.photos.length === 1 &&
