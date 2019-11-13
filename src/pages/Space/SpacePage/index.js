@@ -153,7 +153,7 @@ const VideoOverlay = styled.div`
   width: 100%;
   height: 100%;
   background-color: rgba(221, 221, 221, 0.3);
-  padding: 120px 0;
+  padding: 110px 0;
   z-index: 2147483647;
   pointer-events: none;
   cursor: pointer;
