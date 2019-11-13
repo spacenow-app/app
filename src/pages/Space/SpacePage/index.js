@@ -847,7 +847,7 @@ const SpacePage = ({ match, location, history, ...props }) => {
                     width="100%"
                     height="auto"
                     controls
-                    style={{ borderBottom: '1px solid transparent', maxHeight: '450px' }}
+                    style={{ borderBottom: '1px solid transparent', maxHeight: '380px' }}
                   >
                     <source src={video.name} type="video/mp4" />
                   </video>
