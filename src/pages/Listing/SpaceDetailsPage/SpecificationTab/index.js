@@ -13,14 +13,15 @@ import {
   onGetAllAccessTypes,
   onGetAllAmenities,
   onGetAllSpecifications,
-  onGetPhotosByListingId
+  onGetPhotosByListingId,
+  onGetVideoByListingId
 } from 'redux/ducks/listing'
 
 import { onUploadPhoto, onSetCoverPhoto, onDeletePhoto } from 'redux/ducks/photo'
 
 import { openModal, TypesModal } from 'redux/ducks/modal'
 
-import { Title, Input, Checkbox, Select, TextArea, StepButtons, Loader, Photo, Box, Footer } from 'components'
+import { Title, Input, Checkbox, Select, TextArea, StepButtons, Loader, Photo, Box, Footer, Video } from 'components'
 
 import { cropPicture } from 'utils/images'
 
@@ -88,6 +89,7 @@ const SpecificationTab = ({
   const { array: arrayAccessTypes, isLoading: isLoadingAccessTypes } = useSelector(state => state.listing.accessTypes)
   const { array: arrayAmenities, isLoading: isLoadingAmenities } = useSelector(state => state.listing.amenities)
   const { array: arrayPhotos, isLoading: isLoadingPhotos } = useSelector(state => state.listing.photos)
+  const { object: video, isLoading: isLoadingVideo } = useSelector(state => state.listing.video)
   const { object: objectSpecifications, isLoading: isLoadingSpecifications } = useSelector(
     state => state.listing.specifications
   )
@@ -98,6 +100,7 @@ const SpecificationTab = ({
     dispatch(onGetAllRules())
     dispatch(onGetAllAccessTypes())
     dispatch(onGetPhotosByListingId(listing.id))
+    dispatch(onGetVideoByListingId(listing.id))
   }, [dispatch, listing.id, listing.listingData, listing.settingsParent.id, listing.settingsParent.subcategory.id])
 
   useEffect(() => {
@@ -246,6 +249,21 @@ const SpecificationTab = ({
   const _handleDeletePhoto = photoId => async () => {
     await dispatch(onDeletePhoto(listing.id, photoId))
     await dispatch(onGetPhotosByListingId(listing.id))
+  }
+
+  const _handleOnDropVideo = useCallback(
+    acceptedFiles => {
+      acceptedFiles.map(async file => {
+        await dispatch(onUploadPhoto(file, listing.id))
+        await dispatch(onGetVideoByListingId(listing.id))
+      })
+    },
+    [dispatch, listing.id]
+  )
+
+  const _handleDeleteVideo = photoId => async () => {
+    await dispatch(onDeletePhoto(listing.id, photoId))
+    await dispatch(onGetVideoByListingId(listing.id))
   }
 
   const _goBack = () => {
@@ -402,6 +420,30 @@ const SpecificationTab = ({
             TIP: Take photos in landscape mode to capture as much of your space as possible. Shoot from corners to add
             perspective. Spaces look best in natural light. Include all areas your guest can access.
           </p>
+        </SectionStyled>
+        <SectionStyled>
+          <Title
+            type="h3"
+            title="Video*"
+            subtitle="Videos help guests see more of the space and make it easier for them to get a better understanding of it."
+          />
+          <Box width="196px">
+            {isLoadingVideo ? (
+              <Loader />
+            ) : (
+              <>
+                <Video
+                  onDrop={_handleOnDropVideo}
+                  url={video ? video.name : null}
+                  onDelete={_handleDeleteVideo(video ? video.id : '')}
+                />
+              </>
+            )}
+          </Box>
+          {/* <p>
+            TIP: Take photos in landscape mode to capture as much of your space as possible. Shoot from corners to add
+            perspective. Spaces look best in natural light. Include all areas your guest can access.
+          </p> */}
         </SectionStyled>
         <StepButtons prev={{ onClick: _goBack }} next={{ onClick: () => props.history.push('booking') }} />
         <Footer />

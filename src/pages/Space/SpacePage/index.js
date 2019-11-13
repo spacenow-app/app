@@ -42,7 +42,8 @@ import {
   onGetAllSpecifications,
   onCleanAvailabilitiesByListingId,
   onGetAvailabilitiesByListingId,
-  onClaimListing
+  onClaimListing,
+  onGetVideoByListingId
 } from 'redux/ducks/listing'
 
 import { onSearch } from 'redux/ducks/search'
@@ -160,6 +161,7 @@ const SpacePage = ({ match, location, history, ...props }) => {
   const { object: pendingBooking } = useSelector(state => state.booking.pending)
   const { similar: similarResults } = useSelector(state => state.search)
   const { public: publicReviews, totalPages } = useSelector(state => state.reviews.get)
+  const { object: video, isLoading: isLoadingVideo } = useSelector(state => state.listing.video)
 
   const [datesSelected, setDatesSelected] = useState([])
   const [date, setDate] = useState('')
@@ -174,6 +176,7 @@ const SpacePage = ({ match, location, history, ...props }) => {
 
   useEffect(() => {
     dispatch(onGetListingById(match.params.id, null, true))
+    dispatch(onGetVideoByListingId(parseInt(match.params.id)))
     dispatch(onCleanAvailabilitiesByListingId(match.params.id))
   }, [dispatch, match.params.id])
 
@@ -530,7 +533,7 @@ const SpacePage = ({ match, location, history, ...props }) => {
       isAbsorvedFee: listing.listingData.isAbsorvedFee,
       checkInHour: startTime,
       checkOutHour: endTime,
-      message: message
+      message
     }
     if (!isAuthenticated) {
       history.push(`/auth/signin`, {
@@ -688,7 +691,11 @@ const SpacePage = ({ match, location, history, ...props }) => {
         </Box>
       ) : null}
       <Wrapper>
-        <Helmet title={`Find the perfect space for ${listing.settingsParent.category.otherItemName} in ${_getSuburb(listing.location)}. ${listing.listingData.description.substring(0, 100)}`} />
+        <Helmet
+          title={`Find the perfect space for ${listing.settingsParent.category.otherItemName} in ${_getSuburb(
+            listing.location
+          )}. ${listing.listingData.description ? listing.listingData.description.substring(0, 100) : ''}`}
+        />
         <GridStyled columns="auto 350px" columnGap="35px" rowGap="30px">
           <Cell>
             <Grid columns={1} rowGap="15px">
@@ -833,6 +840,19 @@ const SpacePage = ({ match, location, history, ...props }) => {
                   </Link>
                 </Box>
               )} */}
+              {video.name ? (
+                <Box>
+                  <Title type="h5" title="Video" />
+                  <video
+                    width="500px"
+                    height="auto"
+                    controls
+                    style={{ borderBottom: '1px solid transparent', maxHeight: '350px' }}
+                  >
+                    <source src={video.name} type="video/mp4" />
+                  </video>
+                </Box>
+              ) : null}
 
               {listing.amenities.length > 0 && (
                 <Box>

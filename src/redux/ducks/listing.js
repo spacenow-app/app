@@ -48,7 +48,10 @@ export const Types = {
   LISTING_CLEAN_SPACE_AVAILABILITIES_FAILURE: 'LISTING_CLEAN_SPACE_AVAILABILITIES_FAILURE',
   LISTING_CLAIM_REQUEST: 'LISTING_CLAIM_REQUEST',
   LISTING_CLAIM_SUCCESS: 'LISTING_CLAIM_SUCCESS',
-  LISTING_CLAIM_FAILURE: 'LISTING_CLAIM_FAILURE'
+  LISTING_CLAIM_FAILURE: 'LISTING_CLAIM_FAILURE',
+  LISTING_GET_VIDEO_REQUEST: 'LISTING_GET_VIDEO_REQUEST',
+  LISTING_GET_VIDEO_SUCCESS: 'LISTING_GET_VIDEO_SUCCESS',
+  LISTING_GET_VIDEO_FAILURE: 'LISTING_GET_VIDEO_FAILURE'
 }
 
 // Initial State
@@ -97,6 +100,11 @@ const initialState = {
   },
   photos: {
     array: new Array(6),
+    isLoading: true,
+    error: null
+  },
+  video: {
+    object: {},
     isLoading: true,
     error: null
   },
@@ -380,6 +388,21 @@ const queryGetAllHolidays = gql`
 const queryGetPhotosByListingId = gql`
   query getPhotosByListingId($listingId: Int!) {
     getPhotosByListingId(listingId: $listingId) {
+      id
+      listingId
+      name
+      isCover
+      bucket
+      region
+      key
+      type
+    }
+  }
+`
+
+const queryGetVideoByListingId = gql`
+  query getVideoByListingId($listingId: Int!) {
+    getVideoByListingId(listingId: $listingId) {
       id
       listingId
       name
@@ -897,6 +920,36 @@ export default function reducer(state = initialState, action) {
         }
       }
     }
+    case Types.LISTING_GET_VIDEO_REQUEST: {
+      return {
+        ...state,
+        video: {
+          ...state.video,
+          isLoading: true,
+          error: null
+        }
+      }
+    }
+    case Types.LISTING_GET_VIDEO_SUCCESS: {
+      return {
+        ...state,
+        video: {
+          ...state.video,
+          isLoading: false,
+          object: action.payload
+        }
+      }
+    }
+    case Types.LISTING_GET_VIDEO_FAILURE: {
+      return {
+        ...state,
+        video: {
+          ...state.video,
+          isLoading: false,
+          error: action.payload
+        }
+      }
+    }
     default:
       return state
   }
@@ -992,6 +1045,20 @@ export const onGetPhotosByListingId = listingId => async dispatch => {
       fetchPolicy: 'network-only'
     })
     dispatch({ type: Types.LISTING_GET_PHOTOS_SUCCESS, payload: data.getPhotosByListingId })
+  } catch (err) {
+    dispatch({ type: Types.LISTING_GET_PHOTOS_FAILURE, payload: errToMsg(err) })
+  }
+}
+
+export const onGetVideoByListingId = listingId => async dispatch => {
+  dispatch({ type: Types.LISTING_GET_VIDEO_REQUEST })
+  try {
+    const { data } = await getClientWithAuth(dispatch).query({
+      query: queryGetVideoByListingId,
+      variables: { listingId },
+      fetchPolicy: 'network-only'
+    })
+    dispatch({ type: Types.LISTING_GET_VIDEO_SUCCESS, payload: data.getVideoByListingId })
   } catch (err) {
     dispatch({ type: Types.LISTING_GET_PHOTOS_FAILURE, payload: errToMsg(err) })
   }
