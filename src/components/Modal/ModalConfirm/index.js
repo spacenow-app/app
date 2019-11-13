@@ -26,16 +26,16 @@ const ModalConfirm = ({ onConfirm, onCancel, options }) => {
       {options.title && (
         <Modal.Header closeButton>
           <Modal.Title>
-            <Title noMargin type={'h5'} title={options.title} />
+            <Title noMargin type="h5" title={options.title} />
           </Modal.Title>
         </Modal.Header>
       )}
       {options.text && <Modal.Body>{options.text}</Modal.Body>}
       <Modal.Footer>
-        <Button size={`sm`} outline="true" onClick={() => handleConfirm(false)}>
+        <Button fluid size="sm" outline="true" onClick={() => handleConfirm(false)}>
           {options.buttonCancelText || 'No'}
         </Button>
-        <Button size={`sm`} onClick={() => handleConfirm(true)}>
+        <Button fluid size="sm" onClick={() => handleConfirm(true)}>
           {options.buttonConfirmText || 'Yes'}
         </Button>
       </Modal.Footer>
