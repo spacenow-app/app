@@ -146,6 +146,31 @@ const ContainerPagination = styled.div`
   justify-content: center;
 `
 
+const VideoOverlay = styled.div`
+  position: absolute;
+  top: 0px;
+  text-align: center;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(221, 221, 221, 0.3);
+  padding: 120px 0;
+  z-index: 2147483647;
+  pointer-events: none;
+  cursor: pointer;
+  @media screen and (max-width: 1199px) {
+    padding: 80px 0;
+  }
+  @media screen and (max-width: 991px) {
+    padding: 100px 0;
+  }
+  @media screen and (max-width: 767px) {
+    padding: 70px 0;
+  }
+  @media screen and (max-width: 480px) {
+    padding: 30px 0;
+  }
+`
+
 const SpacePage = ({ match, location, history, ...props }) => {
   const reviewRef = createRef()
 
@@ -161,7 +186,7 @@ const SpacePage = ({ match, location, history, ...props }) => {
   const { object: pendingBooking } = useSelector(state => state.booking.pending)
   const { similar: similarResults } = useSelector(state => state.search)
   const { public: publicReviews, totalPages } = useSelector(state => state.reviews.get)
-  const { object: video } = useSelector(state => state.listing.video)
+  const { object: videoInput } = useSelector(state => state.listing.video)
 
   const [datesSelected, setDatesSelected] = useState([])
   const [date, setDate] = useState('')
@@ -173,6 +198,9 @@ const SpacePage = ({ match, location, history, ...props }) => {
   const [hourlyError, setHourlyError] = useState('')
   const [focusInput, setFocusInput] = useState(false)
   const [isValid, setIsValid] = useState(true)
+  const [showPlay, setShowPlay] = useState(true)
+
+  const videoTag = document.getElementsByTagName('video')[0]
 
   useEffect(() => {
     dispatch(onGetListingById(match.params.id, null, true))
@@ -680,6 +708,17 @@ const SpacePage = ({ match, location, history, ...props }) => {
     return <Text lineHeight={1}>{accessType}</Text>
   }
 
+  const _handlePlayVideo = () => {
+    if (videoTag && videoTag.paused && videoTag.currentTime !== videoTag.duration) {
+      videoTag.play()
+      setShowPlay(false)
+    } else {
+      videoTag.pause()
+      setShowPlay(true)
+    }
+    videoTag.currentTime === videoTag.duration && videoTag.load()
+  }
+
   return (
     <>
       {imageHeight == 325 ||
@@ -840,18 +879,31 @@ const SpacePage = ({ match, location, history, ...props }) => {
                   </Link>
                 </Box>
               )} */}
-              {video.name ? (
-                <Box>
-                  <Title type="h5" title="Video" />
-                  <video
-                    width="100%"
-                    height="auto"
-                    controls
-                    style={{ borderBottom: '1px solid transparent', maxHeight: '380px' }}
-                  >
-                    <source src={video.name} type="video/mp4" />
-                  </video>
-                </Box>
+              {videoInput.name ? (
+                <>
+                  <Box zIndex="1">
+                    <Title type="h5" title="Video" />
+                    <Box position="relative">
+                      <video
+                        onClick={_handlePlayVideo}
+                        width="100%"
+                        height="auto"
+                        // controls
+                        style={{ borderBottom: '1px solid transparent', maxHeight: '380px', cursor: 'pointer' }}
+                        onEnded={_handlePlayVideo}
+                      >
+                        <source src={videoInput.name} type="video/mp4" />
+                      </video>
+                      {showPlay && (
+                        <VideoOverlay>
+                          <Icon width="70px" name="play" />
+                          <br />
+                          <Text color="#fff">Watch this video</Text>
+                        </VideoOverlay>
+                      )}
+                    </Box>
+                  </Box>
+                </>
               ) : null}
 
               {listing.amenities.length > 0 && (
@@ -1036,6 +1088,17 @@ const SpacePage = ({ match, location, history, ...props }) => {
           <Title type="h5" title="Location" />
           <Map position={{ lat: Number(listing.location.lat), lng: Number(listing.location.lng) }} />
         </Box>
+
+        {/* <Box mt="45px">
+          <Title type="h5" title="Cancellation Policy" />
+          <Text fontFamily="">Flexible</Text><br/>
+          <Text>
+            Guests may cancel their booking up until 7 days before the start time and will receive a full refund
+            (Including all Fees) of their booking price. Guests may cancel their booking between 7 days and 14 hours
+            before the start time and receive a 50% refund (excluding Fees) of their booking price. Bookings cancelled
+            less than 24 hours before the start time are not refundable.
+          </Text>
+        </Box> */}
 
         {similarResults.length == 3 && (
           <Box mt="45px">
