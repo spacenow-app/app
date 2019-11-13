@@ -161,7 +161,7 @@ const SpacePage = ({ match, location, history, ...props }) => {
   const { object: pendingBooking } = useSelector(state => state.booking.pending)
   const { similar: similarResults } = useSelector(state => state.search)
   const { public: publicReviews, totalPages } = useSelector(state => state.reviews.get)
-  const { object: video, isLoading: isLoadingVideo } = useSelector(state => state.listing.video)
+  const { object: video } = useSelector(state => state.listing.video)
 
   const [datesSelected, setDatesSelected] = useState([])
   const [date, setDate] = useState('')
