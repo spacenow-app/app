@@ -2,7 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import styled from 'styled-components'
 import { useDropzone } from 'react-dropzone'
-import { Icon, Box, Button } from 'components'
+import { Icon, Box, Button, Text } from 'components'
 
 const WrapperStyled = styled.div`
   display: grid;
@@ -39,8 +39,16 @@ const FooterButton = styled.div`
 `
 
 const Video = ({ onDrop, onDelete, url, isCover, ...props }) => {
-  const { getRootProps, getInputProps, isDragActive } = useDropzone({ onDrop, accept: 'video/mp4' })
-
+  const maxSize = 1e7
+  const { getRootProps, getInputProps, isDragActive, rejectedFiles } = useDropzone({
+    onDrop,
+    accept: 'video/mp4',
+    minSize: 0,
+    maxSize // 5242880
+  })
+  console.log('rejectedFiles', rejectedFiles)
+  const isFileTooLarge = rejectedFiles.length > 0 && rejectedFiles[0].size > maxSize
+  console.log('isFileTooLarge', isFileTooLarge)
   return (
     <WrapperStyled>
       <ContentStyled>
@@ -80,6 +88,11 @@ const Video = ({ onDrop, onDelete, url, isCover, ...props }) => {
           } */}
         </StyledDiv>
       </ContentStyled>
+      {isFileTooLarge && (
+        <Text color="#C45151" fontSize="12px">
+          File is too large. Max size: 10MB
+        </Text>
+      )}
     </WrapperStyled>
   )
 }
