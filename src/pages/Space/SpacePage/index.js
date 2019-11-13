@@ -844,10 +844,10 @@ const SpacePage = ({ match, location, history, ...props }) => {
                 <Box>
                   <Title type="h5" title="Video" />
                   <video
-                    width="500px"
+                    width="100%"
                     height="auto"
                     controls
-                    style={{ borderBottom: '1px solid transparent', maxHeight: '350px' }}
+                    style={{ borderBottom: '1px solid transparent', maxHeight: '450px' }}
                   >
                     <source src={video.name} type="video/mp4" />
                   </video>
