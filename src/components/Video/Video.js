@@ -46,9 +46,8 @@ const Video = ({ onDrop, onDelete, url, isCover, ...props }) => {
     minSize: 0,
     maxSize // 5242880
   })
-  console.log('rejectedFiles', rejectedFiles)
   const isFileTooLarge = rejectedFiles.length > 0 && rejectedFiles[0].size > maxSize
-  console.log('isFileTooLarge', isFileTooLarge)
+
   return (
     <WrapperStyled>
       <ContentStyled>
