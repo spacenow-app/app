@@ -171,6 +171,19 @@ const VideoOverlay = styled.div`
   }
 `
 
+const CustomVideo = styled.video`
+  height: auto;
+  border-bottom: 1px solid transparent;
+  max-height: 380px;
+  cursor: pointer;
+  @media screen and (max-width: 767px) {
+    max-height: 280px;
+  }
+  @media screen and (max-width: 480px) {
+    max-height: 200px;
+  }
+`
+
 const SpacePage = ({ match, location, history, ...props }) => {
   const reviewRef = createRef()
 
@@ -884,16 +897,14 @@ const SpacePage = ({ match, location, history, ...props }) => {
                   <Box zIndex="1">
                     <Title type="h5" title="Video" />
                     <Box position="relative">
-                      <video
+                      <CustomVideo
                         onClick={_handlePlayVideo}
                         width="100%"
-                        height="auto"
                         // controls
-                        style={{ borderBottom: '1px solid transparent', maxHeight: '380px', cursor: 'pointer' }}
                         onEnded={_handlePlayVideo}
                       >
                         <source src={videoInput.name} type="video/mp4" />
-                      </video>
+                      </CustomVideo>
                       {showPlay && (
                         <VideoOverlay>
                           <Icon width="70px" name="play" />
