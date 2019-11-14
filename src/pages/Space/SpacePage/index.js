@@ -34,7 +34,8 @@ import {
   Review,
   StarRatingComponent,
   Pagination,
-  Text
+  Text,
+  Image
 } from 'components'
 
 import {
@@ -885,6 +886,7 @@ const SpacePage = ({ match, location, history, ...props }) => {
                   ))}
                 </Box>
               ) : null}
+              {/* DONT DISPLAY CONTACT HOST WHEN listing.user.provider === 'external' */}
               {/* {isAuthenticated && (
                 <Box mt="20px" fontFamily="bold">
                   <Link to="#" onClick={_contactHost} style={{ textDecoration: 'underline' }}>
@@ -917,7 +919,7 @@ const SpacePage = ({ match, location, history, ...props }) => {
                 </>
               ) : null}
 
-              {listing.amenities.length > 0 && (
+              {listing.amenities.length > 0 && listing.user.provider !== 'external' && (
                 <Box>
                   <Title type="h5" title="Amenities" />
                   <Grid columns="repeat(auto-fit, minmax(200px, auto))" rowGap="20px">
@@ -1021,6 +1023,11 @@ const SpacePage = ({ match, location, history, ...props }) => {
               style={{ position: 'sticky', top: '1px' }}
               titleComponent={
                 <>
+                  {listing.user.provider === 'external' && (
+                    <Text fontSize="28px" style={{ float: 'left', marginRight: '10px' }}>
+                      From
+                    </Text>
+                  )}
                   <Price
                     price={listing.listingData.basePrice}
                     currencySymbol="$"
@@ -1050,10 +1057,11 @@ const SpacePage = ({ match, location, history, ...props }) => {
               }
               contentComponent={
                 <>
-                  {_renderContentCard(listing.bookingPeriod, listing.listingData.bookingType)}
+                  {listing.user.provider !== 'external' &&
+                    _renderContentCard(listing.bookingPeriod, listing.listingData.bookingType)}
                   {(pendingBooking ? pendingBooking && pendingBooking.count == 0 : true) && (
                     <>
-                      {listing.user.provider !== 'generic' && (
+                      {listing.user.provider !== 'generic' && listing.user.provider !== 'external' && (
                         <Button
                           onClick={e => _onSubmitBooking(e)}
                           isLoading={isLoadingOnCreateReservation}
@@ -1061,6 +1069,11 @@ const SpacePage = ({ match, location, history, ...props }) => {
                           fluid
                         >
                           {listing.listingData.bookingType === 'request' ? 'Booking Request' : 'Reserve'}
+                        </Button>
+                      )}
+                      {listing.user.provider === 'external' && (
+                        <Button onClick={() => history('#')} fluid>
+                          Reserve
                         </Button>
                       )}
                       <Box width="100%" textAlign="center">
@@ -1071,25 +1084,38 @@ const SpacePage = ({ match, location, history, ...props }) => {
                 </>
               }
               footerComponent={
-                <UserDetails
-                  hostname={`${listing.user.profile.firstName} ${listing.user.profile.lastName}`}
-                  imageProfile={listing.user.profile.picture}
-                  provider={listing.user.provider}
-                  onClaim={_onClaimListing}
-                />
+                <>
+                  {listing.user.provider !== 'external' && (
+                    <UserDetails
+                      hostname={`${listing.user.profile.firstName} ${listing.user.profile.lastName}`}
+                      imageProfile={listing.user.profile.picture}
+                      provider={listing.user.provider}
+                      onClaim={_onClaimListing}
+                    />
+                  )}
+                  {listing.user.provider === 'external' && (
+                    <Box display="grid" justifyContent="center">
+                      <Image src={listing.user.profile.picture} width="150px" />
+                    </Box>
+                  )}
+                </>
               }
               bottomComponent={
-                <Grid columns={24} columnGap="1px">
-                  <Cell width={7} />
-                  <Cell width={2}>
-                    <IconBoxStyled>
-                      <Icon name="flag" width="10px" height="100%" style={{ paddingBottom: '5px' }} />
-                    </IconBoxStyled>
-                  </Cell>
-                  <Cell width={15}>
-                    <ReportSpaceStyled onClick={_reportSpace}>Report this listing</ReportSpaceStyled>
-                  </Cell>
-                </Grid>
+                <>
+                  {listing.user.provider !== 'external' && (
+                    <Grid columns={24} columnGap="1px">
+                      <Cell width={7} />
+                      <Cell width={2}>
+                        <IconBoxStyled>
+                          <Icon name="flag" width="10px" height="100%" style={{ paddingBottom: '5px' }} />
+                        </IconBoxStyled>
+                      </Cell>
+                      <Cell width={15}>
+                        <ReportSpaceStyled onClick={_reportSpace}>Report this listing</ReportSpaceStyled>
+                      </Cell>
+                    </Grid>
+                  )}
+                </>
               }
             />
           </Cell>
