@@ -42,7 +42,8 @@ import {
   onGetAllSpecifications,
   onCleanAvailabilitiesByListingId,
   onGetAvailabilitiesByListingId,
-  onClaimListing
+  onClaimListing,
+  onGetVideoByListingId
 } from 'redux/ducks/listing'
 
 import { onSearch } from 'redux/ducks/search'
@@ -173,6 +174,31 @@ const CellGrid = styled(Cell)`
   align-items: center;
 `
 
+const VideoOverlay = styled.div`
+  position: absolute;
+  top: 0px;
+  text-align: center;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(221, 221, 221, 0.3);
+  padding: 110px 0;
+  z-index: 2147483647;
+  pointer-events: none;
+  cursor: pointer;
+  @media screen and (max-width: 1199px) {
+    padding: 80px 0;
+  }
+  @media screen and (max-width: 991px) {
+    padding: 100px 0;
+  }
+  @media screen and (max-width: 767px) {
+    padding: 70px 0;
+  }
+  @media screen and (max-width: 480px) {
+    padding: 30px 0;
+  }
+`
+
 const SpacePage = ({ match, location, history, ...props }) => {
   const reviewRef = createRef()
 
@@ -188,6 +214,7 @@ const SpacePage = ({ match, location, history, ...props }) => {
   const { object: pendingBooking } = useSelector(state => state.booking.pending)
   const { similar: similarResults } = useSelector(state => state.search)
   const { public: publicReviews, totalPages } = useSelector(state => state.reviews.get)
+  const { object: videoInput } = useSelector(state => state.listing.video)
 
   const [datesSelected, setDatesSelected] = useState([])
   const [date, setDate] = useState('')
@@ -199,9 +226,13 @@ const SpacePage = ({ match, location, history, ...props }) => {
   const [hourlyError, setHourlyError] = useState('')
   const [focusInput, setFocusInput] = useState(false)
   const [isValid, setIsValid] = useState(true)
+  const [showPlay, setShowPlay] = useState(true)
+
+  const videoTag = document.getElementsByTagName('video')[0]
 
   useEffect(() => {
     dispatch(onGetListingById(match.params.id, null, true))
+    dispatch(onGetVideoByListingId(parseInt(match.params.id)))
     dispatch(onCleanAvailabilitiesByListingId(match.params.id))
   }, [dispatch, match.params.id])
 
@@ -558,7 +589,7 @@ const SpacePage = ({ match, location, history, ...props }) => {
       isAbsorvedFee: listing.listingData.isAbsorvedFee,
       checkInHour: startTime,
       checkOutHour: endTime,
-      message: message
+      message
     }
     if (!isAuthenticated) {
       history.push(`/auth/signin`, {
@@ -725,6 +756,17 @@ const SpacePage = ({ match, location, history, ...props }) => {
     return <Text lineHeight={1}>{accessType}</Text>
   }
 
+  const _handlePlayVideo = () => {
+    if (videoTag && videoTag.paused && videoTag.currentTime !== videoTag.duration) {
+      videoTag.play()
+      setShowPlay(false)
+    } else {
+      videoTag.pause()
+      setShowPlay(true)
+    }
+    videoTag.currentTime === videoTag.duration && videoTag.load()
+  }
+
   return (
     <>
       {imageHeight == 325 ||
@@ -736,7 +778,11 @@ const SpacePage = ({ match, location, history, ...props }) => {
         </Box>
       ) : null}
       <Wrapper>
-        <Helmet title={`${listing.title} / ${_getSuburb(listing.location)}`} />
+        <Helmet
+          title={`Find the perfect space for ${listing.settingsParent.category.otherItemName} in ${_getSuburb(
+            listing.location
+          )}. ${listing.listingData.description ? listing.listingData.description.substring(0, 100) : ''}`}
+        />
         <GridStyled columns="auto 350px" columnGap="35px" rowGap="30px">
           <Cell>
             <Grid columns={1} rowGap="15px">
@@ -910,6 +956,33 @@ const SpacePage = ({ match, location, history, ...props }) => {
                   communicate outside of the Spacenow website or app.
                 </Text>
               </BoxDesktop>
+
+              {videoInput.name ? (
+                <>
+                  <Box zIndex="1">
+                    <Title type="h5" title="Video" />
+                    <Box position="relative">
+                      <video
+                        onClick={_handlePlayVideo}
+                        width="100%"
+                        height="auto"
+                        // controls
+                        style={{ borderBottom: '1px solid transparent', maxHeight: '380px', cursor: 'pointer' }}
+                        onEnded={_handlePlayVideo}
+                      >
+                        <source src={videoInput.name} type="video/mp4" />
+                      </video>
+                      {showPlay && (
+                        <VideoOverlay>
+                          <Icon width="70px" name="play" />
+                          <br />
+                          <Text color="#fff">Watch this video</Text>
+                        </VideoOverlay>
+                      )}
+                    </Box>
+                  </Box>
+                </>
+              ) : null}
 
               {listing.amenities.length > 0 && (
                 <Box>
@@ -1093,6 +1166,17 @@ const SpacePage = ({ match, location, history, ...props }) => {
           <Title type="h5" title="Location" />
           <Map position={{ lat: Number(listing.location.lat), lng: Number(listing.location.lng) }} />
         </Box>
+
+        {/* <Box mt="45px">
+          <Title type="h5" title="Cancellation Policy" />
+          <Text fontFamily="">Flexible</Text><br/>
+          <Text>
+            Guests may cancel their booking up until 7 days before the start time and will receive a full refund
+            (Including all Fees) of their booking price. Guests may cancel their booking between 7 days and 14 hours
+            before the start time and receive a 50% refund (excluding Fees) of their booking price. Bookings cancelled
+            less than 24 hours before the start time are not refundable.
+          </Text>
+        </Box> */}
 
         {similarResults.length == 3 && (
           <Box mt="45px">
