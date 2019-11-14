@@ -8,11 +8,7 @@
         "extensions": [".js", ".jsx"]
       }
     ],
-    // "react/prop-types": 0,
     "no-underscore-dangle": 0,
-    // "import/imports-first": ["error", "absolute-first"],
-    // "import/newline-after-import": "error",
-    // "comma-dangle": [2, "always-multiline"],
     "semi": ["error", "never"],
     "react/require-default-props": 0,
     "react-hooks/exhaustive-deps": 0,
