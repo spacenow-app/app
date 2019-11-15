@@ -9,11 +9,12 @@ import { config } from 'variables'
 
 import { getByName } from 'utils/cookies'
 
-const uploadLink = createUploadLink({ uri: config.graphQlHost })
-const httpLink = createHttpLink({ uri: config.graphQlHost })
+const uploadLink = createUploadLink({ uri: config.graphQlHost, headers: { 'Accept-Encoding': 'gzip' } })
+
+const httpLink = createHttpLink({ uri: config.graphQlHost, headers: { 'Accept-Encoding': 'gzip' } })
 
 let apolloClientWithAuth
-const authLink = dispatch =>
+const authLink = (dispatch) =>
   setContext((_, { headers }) => {
     const idToken = getByName(config.token_name)
     if (!idToken || idToken.length <= 0) {
@@ -28,7 +29,7 @@ const authLink = dispatch =>
     }
   })
 
-export const getClientWithAuth = dispatch => {
+export const getClientWithAuth = (dispatch) => {
   if (!apolloClientWithAuth) {
     console.info('Creating a new connection with Authentication to Apollo GraphQL.')
     apolloClientWithAuth = new ApolloClient({

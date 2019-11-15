@@ -48,7 +48,10 @@ export const Types = {
   LISTING_CLEAN_SPACE_AVAILABILITIES_FAILURE: 'LISTING_CLEAN_SPACE_AVAILABILITIES_FAILURE',
   LISTING_CLAIM_REQUEST: 'LISTING_CLAIM_REQUEST',
   LISTING_CLAIM_SUCCESS: 'LISTING_CLAIM_SUCCESS',
-  LISTING_CLAIM_FAILURE: 'LISTING_CLAIM_FAILURE'
+  LISTING_CLAIM_FAILURE: 'LISTING_CLAIM_FAILURE',
+  LISTING_GET_VIDEO_REQUEST: 'LISTING_GET_VIDEO_REQUEST',
+  LISTING_GET_VIDEO_SUCCESS: 'LISTING_GET_VIDEO_SUCCESS',
+  LISTING_GET_VIDEO_FAILURE: 'LISTING_GET_VIDEO_FAILURE'
 }
 
 // Initial State
@@ -97,6 +100,11 @@ const initialState = {
   },
   photos: {
     array: new Array(6),
+    isLoading: true,
+    error: null
+  },
+  video: {
+    object: {},
     isLoading: true,
     error: null
   },
@@ -153,6 +161,7 @@ const allListingFields = `
     listingExceptionDates
     listingRules
     status
+    link
   }
   location {
     id
@@ -392,6 +401,21 @@ const queryGetPhotosByListingId = gql`
   }
 `
 
+const queryGetVideoByListingId = gql`
+  query getVideoByListingId($listingId: Int!) {
+    getVideoByListingId(listingId: $listingId) {
+      id
+      listingId
+      name
+      isCover
+      bucket
+      region
+      key
+      type
+    }
+  }
+`
+
 const queryGetAvailabilities = gql`
   query getAvailabilitiesByListingId($listingId: Int!) {
     getAvailabilitiesByListingId(listingId: $listingId) {
@@ -436,7 +460,8 @@ const mutationUpdate = gql`
     $listingAmenities: [Int]
     $listingAccessDays: ListingAccessDaysInput
     $listingExceptionDates: [String]
-    $listingRules: [Int]
+    $listingRules: [Int],
+    $link: String
   ) {
     createOrUpdateListing(
       locationId: $locationId
@@ -464,7 +489,8 @@ const mutationUpdate = gql`
       listingAmenities: $listingAmenities
       listingAccessDays: $listingAccessDays
       listingExceptionDates: $listingExceptionDates
-      listingRules: $listingRules
+      listingRules: $listingRules,
+      link: $link
     ) {
       ${allListingFields}
     }
@@ -897,6 +923,36 @@ export default function reducer(state = initialState, action) {
         }
       }
     }
+    case Types.LISTING_GET_VIDEO_REQUEST: {
+      return {
+        ...state,
+        video: {
+          ...state.video,
+          isLoading: true,
+          error: null
+        }
+      }
+    }
+    case Types.LISTING_GET_VIDEO_SUCCESS: {
+      return {
+        ...state,
+        video: {
+          ...state.video,
+          isLoading: false,
+          object: action.payload
+        }
+      }
+    }
+    case Types.LISTING_GET_VIDEO_FAILURE: {
+      return {
+        ...state,
+        video: {
+          ...state.video,
+          isLoading: false,
+          error: action.payload
+        }
+      }
+    }
     default:
       return state
   }
@@ -992,6 +1048,20 @@ export const onGetPhotosByListingId = listingId => async dispatch => {
       fetchPolicy: 'network-only'
     })
     dispatch({ type: Types.LISTING_GET_PHOTOS_SUCCESS, payload: data.getPhotosByListingId })
+  } catch (err) {
+    dispatch({ type: Types.LISTING_GET_PHOTOS_FAILURE, payload: errToMsg(err) })
+  }
+}
+
+export const onGetVideoByListingId = listingId => async dispatch => {
+  dispatch({ type: Types.LISTING_GET_VIDEO_REQUEST })
+  try {
+    const { data } = await getClientWithAuth(dispatch).query({
+      query: queryGetVideoByListingId,
+      variables: { listingId },
+      fetchPolicy: 'network-only'
+    })
+    dispatch({ type: Types.LISTING_GET_VIDEO_SUCCESS, payload: data.getVideoByListingId })
   } catch (err) {
     dispatch({ type: Types.LISTING_GET_PHOTOS_FAILURE, payload: errToMsg(err) })
   }
@@ -1126,7 +1196,8 @@ const getValues = (_, values) => {
     listingAccessDays: values.listingAccessDays,
     listingExceptionDates: values.listingExceptionDates || undefined,
     listingRules:
-      values.rules !== undefined && values.rules.length > 0 ? values.rules.map(o => o.listSettingsId) : undefined
+      values.rules !== undefined && values.rules.length > 0 ? values.rules.map(o => o.listSettingsId) : undefined,
+    link: values.link || _.link
   }
 }
 
