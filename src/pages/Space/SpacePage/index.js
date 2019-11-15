@@ -1112,7 +1112,7 @@ const SpacePage = ({ match, location, history, ...props }) => {
                   )}
                   {listing.user.provider === 'external' && (
                     <Box display="grid" justifyContent="center">
-                      <Image src={listing.user.profile.picture} width="150px" />
+                      <Image src={listing.user.profile.picture} width="150px" height="auto" />
                     </Box>
                   )}
                 </>
