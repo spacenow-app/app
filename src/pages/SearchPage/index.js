@@ -81,7 +81,7 @@ const ContainerMap = styled.div`
 
 const ItemSwitchStyled = styled.div`
   height: 65px;
-  border-radius: 75px;
+  border-radius: 6px;
   border: 1px solid ${({ checked }) => (checked ? '#6adc91' : '#c4c4c4')};
   padding: 20px;
   display: grid;
@@ -96,7 +96,7 @@ const SwitchStyled = styled.div`
   display: grid;
   justify-self: end;
   height: 42px;
-  border-radius: 75px;
+  border-radius: 6px;
   border: 1px solid ${({ checked }) => (checked ? '#6adc91' : '#c4c4c4')};
   padding: 9px 25px;
   grid-template-columns: auto auto;
