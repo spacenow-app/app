@@ -3,7 +3,7 @@ import Helmet from 'react-helmet'
 import { withFormik } from 'formik'
 import * as Yup from 'yup'
 import numeral from 'numeral'
-import { Title, Select, Input, Caption, Radio, Cell, StepButtons, Box, Footer } from 'components'
+import { Title, Select, Input, Caption, Radio, Cell, StepButtons, Box, Footer, Grid } from 'components'
 import { capitalize, toPlural } from 'utils/strings'
 
 import GuestFeeIcon from './guest_fee_icon.svg'
@@ -155,19 +155,59 @@ const BookingTab = ({
           <Cell width={1}>
             <Radio
               name="minTerm"
-              value={values.bookingPeriod === 'hourly' || values.bookingPeriod === 'weekly' ? 4 : values.bookingPeriod === 'monthly' ? 6 : 5}
-              checked={values.minTerm === (values.bookingPeriod === 'hourly' || values.bookingPeriod === 'weekly' ? 4 : values.bookingPeriod === 'monthly' ? 6 : 5)}
+              value={
+                values.bookingPeriod === 'hourly' || values.bookingPeriod === 'weekly'
+                  ? 4
+                  : values.bookingPeriod === 'monthly'
+                  ? 6
+                  : 5
+              }
+              checked={
+                values.minTerm ===
+                (values.bookingPeriod === 'hourly' || values.bookingPeriod === 'weekly'
+                  ? 4
+                  : values.bookingPeriod === 'monthly'
+                  ? 6
+                  : 5)
+              }
               handleChange={_handleRadioChange}
-              label={_changeToPlural(values.bookingPeriod, values.bookingPeriod === 'hourly' || values.bookingPeriod === 'weekly' ? 4 : values.bookingPeriod === 'monthly' ? 6 : 5)}
+              label={_changeToPlural(
+                values.bookingPeriod,
+                values.bookingPeriod === 'hourly' || values.bookingPeriod === 'weekly'
+                  ? 4
+                  : values.bookingPeriod === 'monthly'
+                  ? 6
+                  : 5
+              )}
             />
           </Cell>
           <Cell width={1}>
             <Radio
               name="minTerm"
-              value={values.bookingPeriod === 'hourly' || values.bookingPeriod === 'weekly' ? 8 : values.bookingPeriod === 'monthly' ? 12 : 7}
-              checked={values.minTerm === (values.bookingPeriod === 'hourly' || values.bookingPeriod === 'weekly' ? 8 : values.bookingPeriod === 'monthly' ? 12 : 7)}
+              value={
+                values.bookingPeriod === 'hourly' || values.bookingPeriod === 'weekly'
+                  ? 8
+                  : values.bookingPeriod === 'monthly'
+                  ? 12
+                  : 7
+              }
+              checked={
+                values.minTerm ===
+                (values.bookingPeriod === 'hourly' || values.bookingPeriod === 'weekly'
+                  ? 8
+                  : values.bookingPeriod === 'monthly'
+                  ? 12
+                  : 7)
+              }
               handleChange={_handleRadioChange}
-              label={_changeToPlural(values.bookingPeriod, values.bookingPeriod === 'hourly' || values.bookingPeriod === 'weekly' ? 8 : values.bookingPeriod === 'monthly' ? 12 : 7)}
+              label={_changeToPlural(
+                values.bookingPeriod,
+                values.bookingPeriod === 'hourly' || values.bookingPeriod === 'weekly'
+                  ? 8
+                  : values.bookingPeriod === 'monthly'
+                  ? 12
+                  : 7
+              )}
             />
           </Cell>
         </Box>
@@ -252,6 +292,23 @@ const BookingTab = ({
               image={GuestFeeIcon}
             />
           </Cell>
+          {listing.user.provider === 'external' && (
+            <Cell>
+              <Title type="h3" title="External Link*" />
+              <Grid columns={1}>
+                <Cell width={1}>
+                  <Input
+                    placeholder="http://somedomain.com/some-id"
+                    name="link"
+                    error={errors.link}
+                    value={values.link} // prettier-ignore
+                    onChange={handleChange}
+                    onBlur={handleBlur}
+                  />
+                </Cell>
+              </Grid>
+            </Cell>
+          )}
         </Box>
       </Cell>
       <StepButtons
@@ -278,7 +335,8 @@ const formik = {
         basePrice: listing.listingData.basePrice || 0,
         minTerm: listing.listingData.minTerm || 1,
         bookingType: listing.listingData.bookingType || 'instant',
-        isAbsorvedFee: listing.listingData.isAbsorvedFee || false
+        isAbsorvedFee: listing.listingData.isAbsorvedFee || false,
+        link: listing.listingData.link || ''
       }
     }
     return {}

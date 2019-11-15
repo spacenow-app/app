@@ -161,6 +161,7 @@ const allListingFields = `
     listingExceptionDates
     listingRules
     status
+    link
   }
   location {
     id
@@ -459,7 +460,8 @@ const mutationUpdate = gql`
     $listingAmenities: [Int]
     $listingAccessDays: ListingAccessDaysInput
     $listingExceptionDates: [String]
-    $listingRules: [Int]
+    $listingRules: [Int],
+    $link: String
   ) {
     createOrUpdateListing(
       locationId: $locationId
@@ -487,7 +489,8 @@ const mutationUpdate = gql`
       listingAmenities: $listingAmenities
       listingAccessDays: $listingAccessDays
       listingExceptionDates: $listingExceptionDates
-      listingRules: $listingRules
+      listingRules: $listingRules,
+      link: $link
     ) {
       ${allListingFields}
     }
@@ -1193,7 +1196,8 @@ const getValues = (_, values) => {
     listingAccessDays: values.listingAccessDays,
     listingExceptionDates: values.listingExceptionDates || undefined,
     listingRules:
-      values.rules !== undefined && values.rules.length > 0 ? values.rules.map(o => o.listSettingsId) : undefined
+      values.rules !== undefined && values.rules.length > 0 ? values.rules.map(o => o.listSettingsId) : undefined,
+    link: values.link || _.link
   }
 }
 
