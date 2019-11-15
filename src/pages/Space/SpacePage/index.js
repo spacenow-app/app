@@ -297,6 +297,12 @@ const SpacePage = ({ match, location, history, ...props }) => {
 
   const _renderHighLights = obj => {
     let array = Object.keys(obj).map(i => obj[i])
+    if (listing.user.provider === 'external') {
+      array = array
+        .filter(el => el.field !== 'size')
+        .filter(el => el.field !== 'sizeOfVehicle')
+        .filter(el => el.field !== 'maxEntranceHeight')
+    }
     array = array.filter(el => el.value !== 0)
     const arrayLen = array.length
     let last = 2
@@ -738,7 +744,8 @@ const SpacePage = ({ match, location, history, ...props }) => {
       {imageHeight == 325 ||
       (listing.photos.length > 1 &&
         listing.settingsParent.category.otherItemName !== 'parking' &&
-        listing.settingsParent.category.otherItemName !== 'storage') ? (
+        listing.settingsParent.category.otherItemName !== 'storage' &&
+        listing.user.provider !== 'external') ? (
         <Box mb="30px">
           <CarouselListing photos={_convertedArrayPhotos(listing.photos)} />
         </Box>
@@ -749,17 +756,24 @@ const SpacePage = ({ match, location, history, ...props }) => {
             listing.location
           )}. ${listing.listingData.description ? listing.listingData.description.substring(0, 100) : ''}`}
         />
+        {listing.user.provider === 'external' && imageHeight !== 325 && (
+          <Box mb="20px">
+            <Carousel borderRadius="0" photos={_convertedArrayPhotos(listing.photos)} />
+          </Box>
+        )}
         <GridStyled columns="auto 350px" columnGap="35px" rowGap="30px">
           <Cell>
             <Grid columns={1} rowGap="15px">
               {listing.photos.length == 1 &&
                 listing.settingsParent.category.otherItemName !== 'parking' &&
                 listing.settingsParent.category.otherItemName !== 'storage' &&
+                listing.user.provider !== 'external' &&
                 imageHeight !== 325 && <CarouselListing photos={_convertedArrayPhotos(listing.photos)} />}
 
               {imageHeight !== 325 &&
               (listing.settingsParent.category.otherItemName === 'parking' ||
-                listing.settingsParent.category.otherItemName === 'storage') ? (
+                listing.settingsParent.category.otherItemName === 'storage') &&
+              listing.user.provider !== 'external' ? (
                 <Carousel photos={_convertedArrayPhotos(listing.photos)} />
               ) : null}
 
@@ -1072,7 +1086,10 @@ const SpacePage = ({ match, location, history, ...props }) => {
                         </Button>
                       )}
                       {listing.user.provider === 'external' && (
-                        <Button onClick={() => history('#')} fluid>
+                        <Button
+                          onClick={() => window.open(listing.listingData.link && listing.listingData.link, '_blank')}
+                          fluid
+                        >
                           Reserve
                         </Button>
                       )}
