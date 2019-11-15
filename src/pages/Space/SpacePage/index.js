@@ -1087,7 +1087,10 @@ const SpacePage = ({ match, location, history, ...props }) => {
                       )}
                       {listing.user.provider === 'external' && (
                         <Button
-                          onClick={() => window.open(listing.listingData.link && listing.listingData.link, '_blank')}
+                          onClick={() =>
+                            listing.listingData.link &&
+                            window.open(listing.listingData.link && listing.listingData.link, '_blank')
+                          }
                           fluid
                         >
                           Reserve
