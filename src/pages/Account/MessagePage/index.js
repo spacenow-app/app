@@ -14,9 +14,10 @@ const ContainerPagination = styled.div`
 
 const MessagePage = ({ match, location, history, ...props }) => {
   const dispatch = useDispatch()
-  const { user } = useSelector(state => state.account.get)
 
-  const { array: messages, isLoading: isMessageLoading } = useSelector(state => state.message.list)
+  const { user } = useSelector((state) => state.account.get)
+  const { array: messages, isLoading: isMessageLoading } = useSelector((state) => state.message.list)
+
   const [userType, setUserType] = useState('guest')
   const [pageIndex, setPageIndex] = useState(0)
 
@@ -26,29 +27,28 @@ const MessagePage = ({ match, location, history, ...props }) => {
     user && dispatch(onGetMessagesByUser({ id: user.id, type: userType, pageIndex: 0, pageSize }))
   }, [dispatch, user, userType])
 
-  const _handleChange = type => {
+  const _handleChange = (type) => {
     setUserType(type)
     setPageIndex(0)
     dispatch(onGetMessagesByUser({ id: user.id, type, pageIndex: 0, pageSize }))
   }
 
-  const _onPageChanged = page => {
+  const _onPageChanged = (page) => {
     setPageIndex(page - 1)
     dispatch(onGetMessagesByUser({ id: user.id, type: userType, pageIndex: page - 1, pageSize }))
   }
 
   return (
     <>
-      <Grid column="12">
+      <Grid column='12'>
         <Cell width={8}>
-          <Title type="h3" title="Messages" />
+          <Title type='h3' title='Messages' />
         </Cell>
-        <Cell width={4} middle justifySelf="end">
-          <Dropdown alignRight size="sm" style={{ margin: '30px 0' }}>
-            <Dropdown.Toggle variant="success" id="dropdown-basic">
+        <Cell width={4} middle justifySelf='end'>
+          <Dropdown alignRight size='sm' style={{ margin: '30px 0' }}>
+            <Dropdown.Toggle variant='success' id='dropdown-basic'>
               {userType}
             </Dropdown.Toggle>
-
             <Dropdown.Menu>
               <Dropdown.Item onClick={() => _handleChange('guest')}>Guest</Dropdown.Item>
               <Dropdown.Item onClick={() => _handleChange('host')}>Host</Dropdown.Item>
@@ -56,7 +56,6 @@ const MessagePage = ({ match, location, history, ...props }) => {
           </Dropdown>
         </Cell>
       </Grid>
-
       {!messages || messages.rows.length === 0 ? (
         <BackgroundImage text="We didn't find any messages :(" />
       ) : (
@@ -64,7 +63,7 @@ const MessagePage = ({ match, location, history, ...props }) => {
           {isMessageLoading ? (
             <Loader />
           ) : (
-            messages.rows.map(item => (
+            messages.rows.map((item) => (
               <MessageCard
                 key={item.id}
                 item={item}

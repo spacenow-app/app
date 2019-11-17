@@ -29,14 +29,14 @@ const MessageDetailCard = ({ item, user, ...props }) => {
         </CellStyled>
       )) || <Cell width={1} />}
       <Cell width={10}>
-        <CardContainer key={item.id} alignContent="center" column={12}>
+        <CardContainer key={item.id} alignContent='center' column={12}>
           <Box>
-            <Text fontSize="12px" fontFamily="bold">
+            <Text fontSize='12px' fontFamily='bold'>
               {format(new Date(item.createdAt), 'dd MMM yyyy hh:mm aaaa')}
             </Text>
           </Box>
           <Box>
-            <Text fontSize="12px">{item.content}</Text>
+            <Text fontSize='12px'>{item.content}</Text>
           </Box>
         </CardContainer>
       </Cell>

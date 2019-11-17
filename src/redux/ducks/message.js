@@ -52,6 +52,18 @@ const initialState = {
   }
 }
 
+const messageHostFields = `
+  __typename
+  id
+  messageId
+  flexibleTime
+  peopleQuantity
+  reason
+  reservations
+  startTime
+  endTime
+`
+
 const messageFields = `
   __typename
   id
@@ -106,6 +118,9 @@ const getMessagesByUser = gql`
       count
       rows {
         ${messageFields}
+        messageHost {
+          ${messageHostFields}
+        }
         messageItems {
           ${messageItemFields}
         }
@@ -321,7 +336,7 @@ export default function reducer(state = initialState, action) {
 // Action Creators
 
 // Side Effects
-export const onGetMessagesByUser = args => async dispatch => {
+export const onGetMessagesByUser = (args) => async (dispatch) => {
   dispatch({ type: Types.GET_MESSAGES_USER_REQUEST })
   try {
     const { data } = await getClientWithAuth(dispatch).query({
@@ -335,7 +350,7 @@ export const onGetMessagesByUser = args => async dispatch => {
   }
 }
 
-export const onGetMessage = id => async dispatch => {
+export const onGetMessage = (id) => async (dispatch) => {
   dispatch({ type: Types.GET_MESSAGE_REQUEST })
   try {
     const { data } = await getClientWithAuth(dispatch).query({ query: getMessage, variables: { id } })
@@ -345,7 +360,7 @@ export const onGetMessage = id => async dispatch => {
   }
 }
 
-export const onCreateMessage = values => async dispatch => {
+export const onCreateMessage = (values) => async (dispatch) => {
   dispatch({ type: Types.CREATE_MESSAGE_REQUEST })
   try {
     const { data } = await getClientWithAuth(dispatch).mutate({ mutation: createMessage, variables: values })
@@ -357,7 +372,7 @@ export const onCreateMessage = values => async dispatch => {
   }
 }
 
-export const onReadMessage = (id, userId) => async dispatch => {
+export const onReadMessage = (id, userId) => async (dispatch) => {
   dispatch({ type: Types.READ_MESSAGE_REQUEST })
   try {
     const { data } = await getClientWithAuth(dispatch).mutate({ mutation: readMessage, variables: { id, userId } })
@@ -367,7 +382,7 @@ export const onReadMessage = (id, userId) => async dispatch => {
   }
 }
 
-export const onCreateMessageItem = values => async dispatch => {
+export const onCreateMessageItem = (values) => async (dispatch) => {
   dispatch({ type: Types.CREATE_MESSAGE_ITEM_REQUEST })
   try {
     const { data } = await getClientWithAuth(dispatch).mutate({ mutation: createMessageItem, variables: values })
@@ -377,7 +392,7 @@ export const onCreateMessageItem = values => async dispatch => {
   }
 }
 
-export const onGetMessageItems = values => async dispatch => {
+export const onGetMessageItems = (values) => async (dispatch) => {
   dispatch({ type: Types.GET_MESSAGE_ITEMS_REQUEST })
   try {
     const { data } = await getClientWithAuth(dispatch).query({ query: getMessageItems, variables: values })
