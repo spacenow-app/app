@@ -99,16 +99,18 @@ const ModalContactHost = ({
   }
 
   const _handleRadioChange = value => {
-    setFieldValue('flexible', value)
+    setFieldValue('hasFlexibleTime', value)
   }
 
   const _handleChangePeriod = e => {
     setPeriod(Number(e.target.value))
+    setFieldValue('period', e.target.value)
   }
 
   const _removeDate = value => {
     const newArray = _.filter(datesSelected, dateFromArray => !isSameDay(new Date(dateFromArray), value))
     setDatesSelected(newArray)
+    setFieldValue('reservations', newArray)
   }
 
   const _onDateChangeArray = value => {
@@ -119,10 +121,12 @@ const ModalContactHost = ({
     }
     const arraySorted = _.sortBy([...datesSelected, value], item => item)
     setDatesSelected(arraySorted)
+    setFieldValue('reservations', arraySorted)
   }
 
   const _onDateChange = value => {
     setDate(value)
+    setFieldValue('reservations', [value])
   }
 
   const _onDayPickerHide = () => {
@@ -133,6 +137,7 @@ const ModalContactHost = ({
     if (date) {
       onGetHourlyAvailability(listing.id, date, startTime, endTime).then(o => {
         setPeriod(o.hours)
+        setFieldValue('period', o.hours)
         // setHourlyError('')
         // if (!o.isAvailable) {
         //   setHourlyError(`Not available in this period`)
@@ -142,8 +147,14 @@ const ModalContactHost = ({
     }
   }
 
-  const _onSetStartTime = value => setStartTime(value)
-  const _onSetEndTime = value => setEndTime(value)
+  const _onSetStartTime = value => {
+    setStartTime(value)
+    setFieldValue('checkInTime', value)
+  }
+  const _onSetEndTime = value => {
+    setEndTime(value)
+    setFieldValue('checkOutTime', value)
+  }
 
   const _renderDatesForm = (bookingPeriod, bookingType) => {
     if (bookingPeriod === 'hourly') {
@@ -248,11 +259,11 @@ const ModalContactHost = ({
 
               <Box>
                 <Radio
-                  name="flexible"
-                  value={values.flexible}
+                  name="hasFlexibleTime"
+                  value={values.hasFlexibleTime}
                   label="I am flexible with dates and times"
-                  checked={values.flexible}
-                  handleChange={() => _handleRadioChange(!values.flexible)}
+                  checked={values.hasFlexibleTime}
+                  handleChange={() => _handleRadioChange(!values.hasFlexibleTime)}
                 />
               </Box>
               <Box>
@@ -263,9 +274,10 @@ const ModalContactHost = ({
                 </Box>
                 <Input
                   placeholder={capacity ? `Max pax is ${capacity}` : 'Type something'}
-                  name="capacity"
-                  error={touched.capacity && errors.capacity}
-                  value={values.capacity}
+                  name="peopleQuantity"
+                  type="number"
+                  error={touched.peopleQuantity && errors.peopleQuantity}
+                  value={values.peopleQuantity}
                   onChange={handleChange}
                   onBlur={handleBlur}
                 />
@@ -293,9 +305,9 @@ const ModalContactHost = ({
                 </Box>
                 <TextArea
                   placeholder="Introduce yourself and in more detail describe what you will be using the space for."
-                  name="message"
-                  error={touched.message && errors.message}
-                  value={values.message}
+                  name="content"
+                  error={touched.content && errors.content}
+                  value={values.content}
                   onChange={handleChange}
                   onBlur={handleBlur}
                 />
@@ -323,19 +335,23 @@ const ModalContactHost = ({
 const formik = {
   displayName: 'Modal_contact_host',
   mapPropsToValues: props => ({
-    flexible: false,
-    capacity: '',
+    hasFlexibleTime: false,
+    peopleQuantity: '',
     reason: '',
-    message: ''
+    content: '',
+    period: 1,
+    reservations: [],
+    checkInTime: '08:00',
+    checkOutTime: '09:00'
   }),
   mapValuesToPayload: x => x,
   validationSchema: Yup.object().shape({
-    capacity: Yup.number()
+    peopleQuantity: Yup.number()
       .positive()
       .required('Required')
       .typeError('Must to be a number'),
     reason: Yup.string().required('Required'),
-    message: Yup.string().required('Required')
+    content: Yup.string().required('Required')
   }),
   enableReinitialize: true
 }

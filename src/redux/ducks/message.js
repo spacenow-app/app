@@ -50,6 +50,20 @@ const initialState = {
   }
 }
 
+const messageHostFields = `
+  __typename
+  id
+  messageId
+  bookingPeriod
+  period
+  flexibleTime
+  peopleQuantity
+  reason
+  reservations
+  startTime
+  endTime
+`
+
 const messageFields = `
   __typename
   id
@@ -104,6 +118,9 @@ const getMessagesByUser = gql`
       count
       rows {
         ${messageFields}
+        messageHost {
+          ${messageHostFields}
+        }
         messageItems {
           ${messageItemFields}
         }
@@ -121,8 +138,34 @@ const getMessage = gql`
 `
 
 const createMessage = gql`
-  mutation createMessage($listingId: Int!, $guestId: String!, $hostId: String!, $content: String!) {
-    postMessage(listingId: $listingId, guestId: $guestId, hostId: $hostId, content: $content) {
+  mutation postMessageToHost(
+    $listingId: Int!, 
+    $guestId: String!, 
+    $hostId: String!, 
+    $content: String!,
+    $bookingPeriod: String!,
+    $period: Int!,
+    $reservations: [String]!,
+    $checkInTime: String,
+    $checkOutTime: String,
+    $hasFlexibleTime: Boolean!,
+    $peopleQuantity: Int!,
+    $reason: String!
+    ) {
+    postMessageToHost(
+      listingId: $listingId, 
+      guestId: $guestId, 
+      hostId: $hostId, 
+      content: $content
+      bookingPeriod: $bookingPeriod,
+      period: $period,
+      reservations: $reservations,
+      checkInTime: $checkInTime,
+      checkOutTime: $checkOutTime,
+      hasFlexibleTime: $hasFlexibleTime,
+      peopleQuantity: $peopleQuantity,
+      reason: $reason
+      ) {
       ${messageFields}
     }
   }

@@ -49,7 +49,6 @@ const MessageCard = ({ item, userType, history, dispatch, ...props }) => {
             </Box>
           )}
         </Grid>
-
         {item.messageItems && item.messageItems[0] && (
           <Box mt="17px">
             <Box fontSize="12px" lineHeight="1.35" overflow="hidden" height="45px">

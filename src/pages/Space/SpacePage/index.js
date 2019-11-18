@@ -34,7 +34,8 @@ import {
   StarRatingComponent,
   Pagination,
   Text,
-  Avatar
+  Avatar,
+  Image
 } from 'components'
 
 import {
@@ -199,6 +200,19 @@ const VideoOverlay = styled.div`
   }
 `
 
+const CustomVideo = styled.video`
+  height: auto;
+  border-bottom: 1px solid transparent;
+  max-height: 380px;
+  cursor: pointer;
+  @media screen and (max-width: 767px) {
+    max-height: 280px;
+  }
+  @media screen and (max-width: 480px) {
+    max-height: 200px;
+  }
+`
+
 const SpacePage = ({ match, location, history, ...props }) => {
   const reviewRef = createRef()
 
@@ -311,6 +325,12 @@ const SpacePage = ({ match, location, history, ...props }) => {
 
   const _renderHighLights = obj => {
     let array = Object.keys(obj).map(i => obj[i])
+    if (listing.user.provider === 'external') {
+      array = array
+        .filter(el => el.field !== 'size')
+        .filter(el => el.field !== 'sizeOfVehicle')
+        .filter(el => el.field !== 'maxEntranceHeight')
+    }
     array = array.filter(el => el.value !== 0)
     const arrayLen = array.length
     let last = 2
@@ -670,7 +690,7 @@ const SpacePage = ({ match, location, history, ...props }) => {
     const options = {
       hostName: `${listing.user.profile.firstName} ${listing.user.profile.lastName}`,
       hostPhoto: listing.user.profile.picture,
-      capacity: objectSpecifications.capacity.value,
+      capacity: objectSpecifications.capacity ? objectSpecifications.capacity.value : 10,
       listing,
       availabilities,
       _returnArrayAvailability,
@@ -682,12 +702,13 @@ const SpacePage = ({ match, location, history, ...props }) => {
 
   const _sendMessage = content => {
     const values = {
-      content,
+      ...content,
       listingId: listing.id,
       guestId: user.id,
-      hostId: listing.userId
+      hostId: listing.userId,
+      bookingPeriod: listing.bookingPeriod
     }
-    // console.log('form vals', values)
+    console.log('form vals', values)
     dispatch(onCreateMessage(values))
   }
 
@@ -772,7 +793,8 @@ const SpacePage = ({ match, location, history, ...props }) => {
       {imageHeight == 325 ||
       (listing.photos.length > 1 &&
         listing.settingsParent.category.otherItemName !== 'parking' &&
-        listing.settingsParent.category.otherItemName !== 'storage') ? (
+        listing.settingsParent.category.otherItemName !== 'storage' &&
+        listing.user.provider !== 'external') ? (
         <Box mb="30px">
           <CarouselListing photos={_convertedArrayPhotos(listing.photos)} />
         </Box>
@@ -781,19 +803,33 @@ const SpacePage = ({ match, location, history, ...props }) => {
         <Helmet
           title={`Find the perfect space for ${listing.settingsParent.category.otherItemName} in ${_getSuburb(
             listing.location
-          )}. ${listing.listingData.description ? listing.listingData.description.substring(0, 100) : ''}`}
-        />
+          )}. ${listing.listingData.description.substring(0, 100)}`}
+        >
+          <meta
+            name="description"
+            content={`Find the perfect space for ${listing.settingsParent.category.otherItemName} in ${_getSuburb(
+              listing.location
+            )}. ${listing.listingData.description.substring(0, 100)}`}
+          />
+        </Helmet>
+        {listing.user.provider === 'external' && imageHeight !== 325 && (
+          <Box mb="20px">
+            <Carousel borderRadius="0" photos={_convertedArrayPhotos(listing.photos)} />
+          </Box>
+        )}
         <GridStyled columns="auto 350px" columnGap="35px" rowGap="30px">
           <Cell>
             <Grid columns={1} rowGap="15px">
               {listing.photos.length == 1 &&
                 listing.settingsParent.category.otherItemName !== 'parking' &&
                 listing.settingsParent.category.otherItemName !== 'storage' &&
+                listing.user.provider !== 'external' &&
                 imageHeight !== 325 && <CarouselListing photos={_convertedArrayPhotos(listing.photos)} />}
 
               {imageHeight !== 325 &&
               (listing.settingsParent.category.otherItemName === 'parking' ||
-                listing.settingsParent.category.otherItemName === 'storage') ? (
+                listing.settingsParent.category.otherItemName === 'storage') &&
+              listing.user.provider !== 'external' ? (
                 <Carousel photos={_convertedArrayPhotos(listing.photos)} />
               ) : null}
 
@@ -921,57 +957,59 @@ const SpacePage = ({ match, location, history, ...props }) => {
                 </Box>
               ) : null}
 
-              <Title type="h5" title="Contact Host" />
-              <Grid columns={12}>
-                <Cell width={1} style={{ marginRight: '30px' }}>
-                  <Avatar small image={listing.user.profile.picture} />
-                </Cell>
-                <CellGrid width={11}>
-                  <TextNameHost>{`${listing.user.profile.firstName} ${listing.user.profile.lastName}`}</TextNameHost>
-                </CellGrid>
-              </Grid>
+              {listing.user.provider !== 'external' && (
+                <>
+                  <Title type="h5" title="Contact Host" />
+                  <Grid columns={12}>
+                    <Cell width={1} style={{ marginRight: '30px' }}>
+                      <Avatar small image={listing.user.profile.picture} />
+                    </Cell>
+                    <CellGrid width={11}>
+                      <TextNameHost>{`${listing.user.profile.firstName} ${listing.user.profile.lastName}`}</TextNameHost>
+                    </CellGrid>
+                  </Grid>
 
-              <BoxDesktop my="20px">
-                <Grid columns={12}>
-                  <Cell width="3">
-                    <Box my="10px">Languages: </Box>
-                    <Box my="10px">Response rate: </Box>
-                    <Box my="10px">Response time: </Box>
-                  </Cell>
-                  <Cell width="3">
-                    <Box my="10px">Engilsh</Box>
-                    <Box my="10px">90%</Box>
-                    <Box my="10px">Within 2 hours</Box>
-                  </Cell>
-                </Grid>
-              </BoxDesktop>
+                  <BoxDesktop my="20px">
+                    <Grid columns={12}>
+                      <Cell width="3">
+                        <Box my="10px">Languages: </Box>
+                        <Box my="10px">Response rate: </Box>
+                        <Box my="10px">Response time: </Box>
+                      </Cell>
+                      <Cell width="3">
+                        <Box my="10px">Engilsh</Box>
+                        <Box my="10px">90%</Box>
+                        <Box my="10px">Within 2 hours</Box>
+                      </Cell>
+                    </Grid>
+                  </BoxDesktop>
 
-              <ButtonStyled onClick={_contactHost} outline size="sm">
-                Contact host
-              </ButtonStyled>
+                  <ButtonStyled onClick={_contactHost} outline size="sm">
+                    Contact host
+                  </ButtonStyled>
 
-              <BoxDesktop borderTop="1px solid #CBCBCB" borderBottom="1px solid #CBCBCB" my="20px" p="12px">
-                <Text>
-                  Always communicate through Spacenow to protect your payment. You should never transfer money or
-                  communicate outside of the Spacenow website or app.
-                </Text>
-              </BoxDesktop>
+                  <BoxDesktop borderTop="1px solid #CBCBCB" borderBottom="1px solid #CBCBCB" my="20px" p="12px">
+                    <Text>
+                      Always communicate through Spacenow to protect your payment. You should never transfer money or
+                      communicate outside of the Spacenow website or app.
+                    </Text>
+                  </BoxDesktop>
+                </>
+              )}
 
               {videoInput.name ? (
                 <>
                   <Box zIndex="1">
                     <Title type="h5" title="Video" />
                     <Box position="relative">
-                      <video
+                      <CustomVideo
                         onClick={_handlePlayVideo}
                         width="100%"
-                        height="auto"
                         // controls
-                        style={{ borderBottom: '1px solid transparent', maxHeight: '380px', cursor: 'pointer' }}
                         onEnded={_handlePlayVideo}
                       >
                         <source src={videoInput.name} type="video/mp4" />
-                      </video>
+                      </CustomVideo>
                       {showPlay && (
                         <VideoOverlay>
                           <Icon width="70px" name="play" />
@@ -984,7 +1022,7 @@ const SpacePage = ({ match, location, history, ...props }) => {
                 </>
               ) : null}
 
-              {listing.amenities.length > 0 && (
+              {listing.amenities.length > 0 && listing.user.provider !== 'external' && (
                 <Box>
                   <Title type="h5" title="Amenities" />
                   <Grid columns="repeat(auto-fit, minmax(200px, auto))" rowGap="20px">
@@ -1088,6 +1126,11 @@ const SpacePage = ({ match, location, history, ...props }) => {
               style={{ position: 'sticky', top: '1px' }}
               titleComponent={
                 <>
+                  {listing.user.provider === 'external' && (
+                    <Text fontSize="28px" style={{ float: 'left', marginRight: '10px' }}>
+                      From
+                    </Text>
+                  )}
                   <Price
                     price={listing.listingData.basePrice}
                     currencySymbol="$"
@@ -1117,10 +1160,11 @@ const SpacePage = ({ match, location, history, ...props }) => {
               }
               contentComponent={
                 <>
-                  {_renderContentCard(listing.bookingPeriod, listing.listingData.bookingType)}
+                  {listing.user.provider !== 'external' &&
+                    _renderContentCard(listing.bookingPeriod, listing.listingData.bookingType)}
                   {(pendingBooking ? pendingBooking && pendingBooking.count == 0 : true) && (
                     <>
-                      {listing.user.provider !== 'generic' && (
+                      {listing.user.provider !== 'generic' && listing.user.provider !== 'external' && (
                         <Button
                           onClick={e => _onSubmitBooking(e)}
                           isLoading={isLoadingOnCreateReservation}
@@ -1128,6 +1172,17 @@ const SpacePage = ({ match, location, history, ...props }) => {
                           fluid
                         >
                           {listing.listingData.bookingType === 'request' ? 'Booking Request' : 'Reserve'}
+                        </Button>
+                      )}
+                      {listing.user.provider === 'external' && (
+                        <Button
+                          onClick={() =>
+                            listing.listingData.link &&
+                            window.open(listing.listingData.link && listing.listingData.link, '_blank')
+                          }
+                          fluid
+                        >
+                          Reserve
                         </Button>
                       )}
                       <Box width="100%" textAlign="center">
@@ -1138,25 +1193,38 @@ const SpacePage = ({ match, location, history, ...props }) => {
                 </>
               }
               footerComponent={
-                <UserDetails
-                  hostname={`${listing.user.profile.firstName} ${listing.user.profile.lastName}`}
-                  imageProfile={listing.user.profile.picture}
-                  provider={listing.user.provider}
-                  onClaim={_onClaimListing}
-                />
+                <>
+                  {listing.user.provider !== 'external' && (
+                    <UserDetails
+                      hostname={`${listing.user.profile.firstName} ${listing.user.profile.lastName}`}
+                      imageProfile={listing.user.profile.picture}
+                      provider={listing.user.provider}
+                      onClaim={_onClaimListing}
+                    />
+                  )}
+                  {listing.user.provider === 'external' && (
+                    <Box display="grid" justifyContent="center">
+                      <Image src={listing.user.profile.picture} width="150px" height="auto" />
+                    </Box>
+                  )}
+                </>
               }
               bottomComponent={
-                <Grid columns={24} columnGap="1px">
-                  <Cell width={7} />
-                  <Cell width={2}>
-                    <IconBoxStyled>
-                      <Icon name="flag" width="10px" height="100%" style={{ paddingBottom: '5px' }} />
-                    </IconBoxStyled>
-                  </Cell>
-                  <Cell width={15}>
-                    <ReportSpaceStyled onClick={_reportSpace}>Report this listing</ReportSpaceStyled>
-                  </Cell>
-                </Grid>
+                <>
+                  {listing.user.provider !== 'external' && (
+                    <Grid columns={24} columnGap="1px">
+                      <Cell width={7} />
+                      <Cell width={2}>
+                        <IconBoxStyled>
+                          <Icon name="flag" width="10px" height="100%" style={{ paddingBottom: '5px' }} />
+                        </IconBoxStyled>
+                      </Cell>
+                      <Cell width={15}>
+                        <ReportSpaceStyled onClick={_reportSpace}>Report this listing</ReportSpaceStyled>
+                      </Cell>
+                    </Grid>
+                  )}
+                </>
               }
             />
           </Cell>

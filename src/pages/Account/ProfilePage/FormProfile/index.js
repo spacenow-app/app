@@ -5,7 +5,7 @@ import styled from 'styled-components'
 import { withFormik } from 'formik'
 import * as Yup from 'yup'
 import { format } from 'date-fns'
-import { Input, Select, TextArea, Button, Box, Link, Text, DatePicker } from 'components'
+import { Input, Select, TextArea, Button, Box, Link, Text, DatePicker, Phone } from 'components'
 
 import { onUpdateProfile, onResendLink } from 'redux/ducks/account'
 
@@ -33,6 +33,7 @@ const FormProfile = ({
   isValid,
   ...props
 }) => {
+
   const { user } = props
 
   const _handleSelectChange = e => {
@@ -40,10 +41,14 @@ const FormProfile = ({
     setFieldValue(name, value)
   }
 
+  const _handlePhoneChange = (name, value) => {
+    setFieldValue(name, value)
+  }
+
   const _handleSubmit = () => {
     const profilePayload = { ...values }
     if (values.dateOfBirth) profilePayload.dateOfBirth = format(values.dateOfBirth, 'yyyy-MM-dd')
-    dispatch(onUpdateProfile(user.id, profilePayload))
+      dispatch(onUpdateProfile(user.id, profilePayload))
   }
 
   const _handleResendLink = () => {
@@ -116,7 +121,17 @@ const FormProfile = ({
 
         <Box display="grid" gridTemplateColumns={{ _: '1fr', medium: 'auto auto auto' }} gridGap="30px">
           <SectionStyled>
-            <Input
+            <Phone
+              country="AU"
+              label="Phone Number"
+              placeholder="Phone Number"
+              name="phoneNumber"
+              error={errors.phoneNumber}
+              value={values.phoneNumber}
+              onChange={(e) => _handlePhoneChange('phoneNumber', e)}
+              // onBlur={handleBlur}
+            />
+            {/* <Input
               label="Phone Number"
               placeholder="Phone Number"
               name="phoneNumber"
@@ -124,7 +139,7 @@ const FormProfile = ({
               value={values.phoneNumber}
               onChange={handleChange}
               onBlur={handleBlur}
-            />
+            /> */}
           </SectionStyled>
 
           <SectionStyled>

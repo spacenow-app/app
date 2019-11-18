@@ -58,6 +58,7 @@ import MessageCard from './MessageCard'
 import MessageDetailCard from './MessageDetailCard'
 import Review from './Review'
 import StarRatingComponent from './Review/StarRatingComponent'
+import Phone from './Phone'
 import Video from './Video'
 
 export {
@@ -124,5 +125,6 @@ export {
   MessageDetailCard,
   Review,
   StarRatingComponent,
+  Phone,
   Video
 }
