@@ -56,6 +56,8 @@ const messageHostFields = `
   __typename
   id
   messageId
+  bookingPeriod
+  period
   flexibleTime
   peopleQuantity
   reason
