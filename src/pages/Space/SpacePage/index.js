@@ -751,8 +751,8 @@ const SpacePage = ({ match, location, history, ...props }) => {
         </Box>
       ) : null}
       <Wrapper>
-        <Helmet title={`Find the perfect space for ${listing.settingsParent.category.otherItemName} in ${_getSuburb(listing.location)}. ${listing.listingData.description.substring(0, 100)}`}>
-          <meta name="description" content={`Find the perfect space for ${listing.settingsParent.category.otherItemName} in ${_getSuburb(listing.location)}. ${listing.listingData.description.substring(0, 100)}`} />
+        <Helmet title={`${listing.settingsParent.category.otherItemName} ${_getSuburb(listing.location)} | Find the perfect event, coworking, office and meeting room spaces.`}>
+          <meta name="description" content={`${listing.settingsParent.category.otherItemName} ${_getSuburb(listing.location)} | Find the perfect event, coworking, office and meeting room spaces.`} />
         </Helmet>
         {listing.user.provider === 'external' && imageHeight !== 325 && (
           <Box mb="20px">
