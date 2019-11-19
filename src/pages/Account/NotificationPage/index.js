@@ -43,7 +43,7 @@ const NotificationPage = ({ ...props }) => {
         <Cell width={1}>
           <Title type="h4" title="Your Notifications" subtitle="Select the notifications alerts you would like to receive." noMargin subTitleMargin={10} />
         </Cell>
-      {isLoading || isLoadingNotification && <Loader text="Loading Notifications..." />}
+      {(isLoading || isLoadingNotification) && <Loader text="Loading Notifications..." />}
       {user && <FormNotification dispatch={dispatch} user={user} userNotifications={userNotifications} notifications={notifications} />}
       </Box>
     </Wrapper>

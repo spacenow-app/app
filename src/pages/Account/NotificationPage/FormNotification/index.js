@@ -1,7 +1,7 @@
 /* eslint-disable react/no-array-index-key */
 /* eslint-disable no-console */
-import React, { useEffect } from 'react'
-import { useSelector, useDispatch } from 'react-redux'
+import React from 'react'
+import { useDispatch } from 'react-redux'
 import styled from 'styled-components'
 import { Checkbox, Box, Text } from 'components'
 

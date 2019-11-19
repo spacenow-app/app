@@ -602,13 +602,12 @@ export const onDeleteListing = listingId => async dispatch => {
 export const onUpdateUserNotification = (userId, notificationId, input) => async dispatch => {
   dispatch({ type: Types.ACC_UPDATE_NOTIFICATION })
   try {
-    const { data } = await getClientWithAuth(dispatch).mutate({
+    await getClientWithAuth(dispatch).mutate({
       mutation: mutationUpdateUserNotification,
       variables: { userId, notificationId, input }
     })
     toast.success('Notification updated successfully')
     dispatch(onGetUserNotifications(userId))
-    // dispatch({ type: Types.ACC_UPDATE_NOTIFICATION_SUCCESS, payload: data.updateUserNotification })
   } catch (error) {
     toast.error(errToMsg(error.message))
     dispatch({ type: Types.ACC_UPDATE_NOTIFICATION_ERROR, payload: errToMsg(error.message) })
