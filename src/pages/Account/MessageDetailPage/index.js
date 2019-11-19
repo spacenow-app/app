@@ -38,19 +38,15 @@ const MessageDetailPage = ({ match, location, history, ...props }) => {
   const [content, setContent] = useState('')
   const [pageIndex, setPageIndex] = useState(0)
   const [scroller, setScroller] = useState(null)
-  console.log('isMessageLoading', isMessageLoading)
 
   const pageSize = 5
-  console.log(match.params)
-  console.log(user)
   useEffect(() => {
-    console.log(' match.params.id', match.params.id)
     match && match.params && user && dispatch(onReadMessage(match.params.id, user.id))
     match && match.params && dispatch(onGetMessage(match.params.id))
     match && match.params && dispatch(onGetMessageItems({ id: match.params.id, pageIndex: 0, pageSize }))
   }, [dispatch, match, user])
 
-  console.log('messageItems', messageItems)
+  // console.log('messageItems', messageItems)
 
   const _onSubmit = () => {
     const values = {
@@ -136,7 +132,17 @@ const MessageDetailPage = ({ match, location, history, ...props }) => {
           onScroll={_handleScroll}
           ref={e => setScroller(e)}
         >
-          {messageItems && messageItems.rows.map(item => <MessageDetailCard item={item} key={item.id} user={user} />)}
+          {messageItems &&
+            messageItems.rows.map((item, i) => (
+              <MessageDetailCard
+                item={item}
+                key={item.id}
+                user={user}
+                count={messageItems.count}
+                index={i}
+                messageParent={messageItems.messageParent}
+              />
+            ))}
         </Box>
       )}
     </>

@@ -102,6 +102,8 @@ const messageItemFields = `
     id
     profile {
       picture
+      firstName
+      lastName
     }
   }
   content
@@ -191,6 +193,13 @@ const getMessageItems = gql`
   query getMessageItems($id: String!, $pageIndex: Int!, $pageSize: Int!) {
     getMessageItems(id: $id, pageIndex: $pageIndex, pageSize: $pageSize) {
       count
+      messageParent {
+        id
+        guestId
+        messageHost {
+          ${messageHostFields}
+        }
+      }
       rows {
         ${messageItemFields}
       }
@@ -338,7 +347,6 @@ export default function reducer(state = initialState, action) {
       }
     }
     case Types.GET_MESSAGE_ITEMS_SUCCESS: {
-      console.log('action', action.payload)
       return {
         ...state,
         isLoading: false,
@@ -382,7 +390,11 @@ export const onGetMessagesByUser = args => async dispatch => {
 export const onGetMessage = id => async dispatch => {
   dispatch({ type: Types.GET_MESSAGE_REQUEST })
   try {
-    const { data } = await getClientWithAuth(dispatch).query({ query: getMessage, variables: { id } })
+    const { data } = await getClientWithAuth(dispatch).query({
+      query: getMessage,
+      variables: { id },
+      fetchPolicy: 'network-only'
+    })
     dispatch({ type: Types.GET_MESSAGE_SUCCESS, payload: data.getMessage })
   } catch (err) {
     dispatch({ type: Types.GET_MESSAGE_ERROR, payload: errToMsg(err) })
@@ -424,7 +436,11 @@ export const onCreateMessageItem = values => async dispatch => {
 export const onGetMessageItems = values => async dispatch => {
   dispatch({ type: Types.GET_MESSAGE_ITEMS_REQUEST })
   try {
-    const { data } = await getClientWithAuth(dispatch).query({ query: getMessageItems, variables: values })
+    const { data } = await getClientWithAuth(dispatch).query({
+      query: getMessageItems,
+      variables: values,
+      fetchPolicy: 'network-only'
+    })
     dispatch({ type: Types.GET_MESSAGE_ITEMS_SUCCESS, payload: data.getMessageItems })
   } catch (err) {
     dispatch({ type: Types.GET_MESSAGE_ITEMS_ERROR, payload: errToMsg(err) })

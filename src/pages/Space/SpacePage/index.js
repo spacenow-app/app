@@ -696,7 +696,6 @@ const SpacePage = ({ match, location, history, ...props }) => {
       _returnArrayAvailability,
       onConfirm: _sendMessage
     }
-    // console.log('options', options)
     dispatch(openModal(TypesModal.MODAL_TYPE_CONTACT_HOST, options))
   }
 
@@ -708,7 +707,6 @@ const SpacePage = ({ match, location, history, ...props }) => {
       hostId: listing.userId,
       bookingPeriod: listing.bookingPeriod
     }
-    console.log('form vals', values)
     dispatch(onCreateMessage(values))
   }
 
@@ -803,13 +801,13 @@ const SpacePage = ({ match, location, history, ...props }) => {
         <Helmet
           title={`Find the perfect space for ${listing.settingsParent.category.otherItemName} in ${_getSuburb(
             listing.location
-          )}. ${listing.listingData.description.substring(0, 100)}`}
+          )}. ${listing.listingData.description ? listing.listingData.description.substring(0, 100) : ''}`}
         >
           <meta
             name="description"
             content={`Find the perfect space for ${listing.settingsParent.category.otherItemName} in ${_getSuburb(
               listing.location
-            )}. ${listing.listingData.description.substring(0, 100)}`}
+            )}. ${listing.listingData.description ? listing.listingData.description.substring(0, 100) : ''}`}
           />
         </Helmet>
         {listing.user.provider === 'external' && imageHeight !== 325 && (
