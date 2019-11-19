@@ -33,6 +33,7 @@ const InnerMenu = ({ ...props }) => {
       <Link to="/account/payment">Payment Preferences</Link>
       <Link to="/account/listing">Your Listings</Link>
       <Link to="/account/booking">Your Bookings</Link>
+      <Link to="/account/notification">Notifications</Link>
     </Box>
   )
 }

@@ -16,6 +16,7 @@ import search from './ducks/search'
 import booking from './ducks/booking'
 import message from './ducks/message'
 import reviews from './ducks/reviews'
+import notifications from './ducks/notification'
 
 export default combineReducers({
   modal,
@@ -33,5 +34,6 @@ export default combineReducers({
   search,
   booking,
   message,
-  reviews
+  reviews,
+  notifications
 })
