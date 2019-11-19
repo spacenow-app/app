@@ -38,8 +38,6 @@ const _formatPeriod = (period, bookingType) => {
 }
 
 const MessageDetailCard = ({ item, user, count, index, messageParent, ...props }) => {
-  console.log(messageParent)
-  console.log(item)
   return (
     <Grid column={12}>
       {(user.id === item.sent.id && (
