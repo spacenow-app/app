@@ -40,11 +40,13 @@ const FormProfile = ({
   return (
     <WrapperStyled>
       {notifications.map((notification, index) => (
-        <Box key={index} display="grid" gridTemplateColumns={{ _: '1fr auto auto auto', medium: '1fr auto auto auto' }} gridGap="30px" width="100%">
+        <Box key={index} display="grid" gridTemplateColumns={{ _: '1fr', medium: '1fr auto' }} gridGap={{ _: '10px', medium: '30px' }} width="100%">
           <Text>{notification.name}</Text>
-          <Checkbox disabled={true} label={`Push Notification`} name={`${notification.id}`} value={`isPushNotification`} handleCheckboxChange={_handleChange} checked={_checkCheckBox(notification.id, 'isPushNotification')} />
-          <Checkbox label={`SMS`} name={`${notification.id}`} value={`isSMS`} handleCheckboxChange={_handleChange} checked={_checkCheckBox(notification.id, 'isSMS')} />
-          <Checkbox label={`E-mail`} name={`${notification.id}`} value={`isEmail`} handleCheckboxChange={_handleChange} checked={_checkCheckBox(notification.id, 'isEmail')} />
+          <Box key={index} display="grid" gridTemplateColumns={{ _: 'auto auto auto'}} gridGap={{ _: '10px', medium: '30px' }} width="100%">
+            <Checkbox disabled={true} label={`Push Notification`} name={`${notification.id}`} value={`isPushNotification`} handleCheckboxChange={_handleChange} checked={_checkCheckBox(notification.id, 'isPushNotification')} />
+            <Checkbox label={`SMS`} name={`${notification.id}`} value={`isSMS`} handleCheckboxChange={_handleChange} checked={_checkCheckBox(notification.id, 'isSMS')} />
+            <Checkbox label={`E-mail`} name={`${notification.id}`} value={`isEmail`} handleCheckboxChange={_handleChange} checked={_checkCheckBox(notification.id, 'isEmail')} />
+          </Box>
         </Box>
       ))}
     </WrapperStyled>
