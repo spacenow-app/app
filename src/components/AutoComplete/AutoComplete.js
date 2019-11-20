@@ -59,10 +59,12 @@ const AutoComplete = props => {
       onChange={props.onChangeAddress}
       onSelect={_handleOnSelect}
       onError={props.onHandleError}
-      shouldFetchSuggestions={props.address.length > 2}
+      shouldFetchSuggestions={props.address.length > 3}
       searchOptions={{
         location: new window.google.maps.LatLng(-34, 151),
-        radius: 10000
+        radius: 2000,
+        types: ['address'],
+        componentRestrictions: { country: ["AU"] }
       }}
     >
       {({ getInputProps, suggestions, getSuggestionItemProps, loading }) => (
