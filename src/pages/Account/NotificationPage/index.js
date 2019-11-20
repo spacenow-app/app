@@ -1,15 +1,16 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import Helmet from 'react-helmet'
-import { Wrapper, Box, Cell, Title, Loader } from 'components'
+import { Wrapper, Box, Switch, Title, Loader, Text } from 'components'
 
-import { onGetAllNotifications } from 'redux/ducks/notification'
+import { onGetAllNotificationsByType } from 'redux/ducks/notification'
 import { onGetUserNotifications } from 'redux/ducks/account'
 
 import FormNotification from './FormNotification'
 
 const NotificationPage = ({ ...props }) => {
   const dispatch = useDispatch()
+  const [notificationType, setNotificationType] = useState('guest')
 
   const {
     isLoading,
@@ -27,9 +28,12 @@ const NotificationPage = ({ ...props }) => {
   } = useSelector(state => state.notifications)
 
   useEffect(() => {
-    dispatch(onGetAllNotifications())
     dispatch(onGetUserNotifications(user.id))
   }, [dispatch, user.id])
+
+  useEffect(() => {
+    dispatch(onGetAllNotificationsByType(notificationType))
+  }, [dispatch, notificationType])
 
   return (
     <Wrapper>
@@ -40,9 +44,27 @@ const NotificationPage = ({ ...props }) => {
         gridTemplateColumns={{ _: '1fr' }}
         gridGap="20px"
       >
-        <Cell width={1}>
+        <Box
+          display="grid"
+          gridTemplateColumns={{ _: '1fr auto' }}
+          gridGap="20px"
+        >
           <Title type="h4" title="Your Notifications" subtitle="Select the notifications alerts you would like to receive." noMargin subTitleMargin={10} />
-        </Cell>
+          <Box
+            display="grid"
+            gridTemplateColumns={{ _: 'auto auto' }}
+            gridGap="10px"
+            alignSelf="end"
+          >
+            <Text>{notificationType.toUpperCase()}</Text>
+            <Switch
+              id="notificationType"
+              name="notificationType"
+              value={notificationType}
+              handleCheckboxChange={() => setNotificationType(notificationType === 'guest' ? 'host' : 'guest')}
+            />
+          </Box>
+        </Box>
       {(isLoading || isLoadingNotification) && <Loader text="Loading Notifications..." />}
       {user && <FormNotification dispatch={dispatch} user={user} userNotifications={userNotifications} notifications={notifications} />}
       </Box>

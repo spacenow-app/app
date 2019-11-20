@@ -5,9 +5,9 @@ import errToMsg from 'utils/errToMsg'
 
 // Actions
 export const Types = {
-  GET_ALL_NOTIFICATIONS_START: 'GET_ALL_NOTIFICATIONS_START',
-  GET_ALL_NOTIFICATIONS_SUCCESS: 'GET_ALL_NOTIFICATIONS_SUCCESS',
-  GET_ALL_NOTIFICATIONS_ERROR: 'GET_ALL_NOTIFICATIONS_ERROR'
+  GET_ALL_NOTIFICATIONS_BY_TYPE_START: 'GET_ALL_NOTIFICATIONS_BY_TYPE_START',
+  GET_ALL_NOTIFICATIONS_BY_TYPE_SUCCESS: 'GET_ALL_NOTIFICATIONS_BY_TYPE_SUCCESS',
+  GET_ALL_NOTIFICATIONS_BY_TYPE_ERROR: 'GET_ALL_NOTIFICATIONS_BY_TYPE_ERROR'
 }
 
 // Initial State
@@ -22,9 +22,9 @@ const initialState = {
 }
 
 // GraphQL
-const queryGetNotifications = gql`
-  query getNotifications {
-    getNotifications {
+const queryGetNotificationsByType = gql`
+  query getNotificationsByType($type: NotificationType) {
+    getNotificationsByType(type: $type) {
       id
       name
       slug
@@ -36,13 +36,13 @@ const queryGetNotifications = gql`
 // Reducer
 export default function reducer(state = initialState, action) {
   switch (action.type) {
-    case Types.GET_ALL_NOTIFICATIONS_START: {
+    case Types.GET_ALL_NOTIFICATIONS_BY_TYPE_START: {
       return {
         ...state,
         isLoading: true
       }
     }
-    case Types.GET_ALL_NOTIFICATIONS_SUCCESS: {
+    case Types.GET_ALL_NOTIFICATIONS_BY_TYPE_SUCCESS: {
       return {
         ...state,
         isLoading: false,
@@ -51,7 +51,7 @@ export default function reducer(state = initialState, action) {
         }
       }
     }
-    case Types.GET_ALL_NOTIFICATIONS_ERROR: {
+    case Types.GET_ALL_NOTIFICATIONS_BY_TYPE_ERROR: {
       return {
         ...state,
         isLoading: false,
@@ -69,15 +69,16 @@ export default function reducer(state = initialState, action) {
 }
 
 // Side Effects
-export const onGetAllNotifications = () => async dispatch => {
-  dispatch({ type: Types.GET_ALL_NOTIFICATIONS_START })
+export const onGetAllNotificationsByType = (type) => async dispatch => {
+  dispatch({ type: Types.GET_ALL_NOTIFICATIONS_BY_TYPE_START })
   try {
     const { data } = await getClientWithAuth(dispatch).query({
-      query: queryGetNotifications,
-      fetchPolicy: 'network-only'
+      query: queryGetNotificationsByType,
+      fetchPolicy: 'network-only',
+      variables: { type }
     })
-    dispatch({ type: Types.GET_ALL_NOTIFICATIONS_SUCCESS, payload: data.getNotifications})
+    dispatch({ type: Types.GET_ALL_NOTIFICATIONS_BY_TYPE_SUCCESS, payload: data.getNotificationsByType})
   } catch (error) {
-    dispatch({ type: Types.GET_ALL_NOTIFICATIONS_ERROR, payload: errToMsg(error.message) })
+    dispatch({ type: Types.GET_ALL_NOTIFICATIONS_BY_TYPE_ERROR, payload: errToMsg(error.message) })
   }
 }

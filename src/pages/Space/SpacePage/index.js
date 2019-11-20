@@ -804,7 +804,7 @@ const SpacePage = ({ match, location, history, ...props }) => {
                 </Cell>
                 {listing.listingData.bookingType && listing.listingData.bookingType !== 'poa' && (
                   <Cell width={4} style={{ justifySelf: 'end' }}>
-                    <Tag>{capitalize(listing.listingData.bookingType)} Booking</Tag>
+                    <Tag>{`${capitalize(listing.listingData.bookingType)} Booking`}</Tag>
                   </Cell>
                 )}
               </Grid>
@@ -893,8 +893,8 @@ const SpacePage = ({ match, location, history, ...props }) => {
               {listing.listingData.description ? (
                 <Box>
                   <Title type="h5" title="Description" />
-                  {listing.listingData.description.split('\n').map(o => (
-                    <p>{o}</p>
+                  {listing.listingData.description.split('\n').map((o, index) => (
+                    <p key={index}>{o}</p>
                   ))}
                 </Box>
               ) : null}
@@ -986,9 +986,10 @@ const SpacePage = ({ match, location, history, ...props }) => {
                       </Cell>
                     </Box>
                   </ContainerMobile>
-                  {publicReviews.map(o => {
+                  {publicReviews.map((o, index) => {
                     return (
                       <Review
+                        key={index}
                         id={o.id}
                         userName={o.author.profile && o.author.profile.firstName}
                         userPicture={o.author.profile && o.author.profile.picture}
@@ -1013,9 +1014,9 @@ const SpacePage = ({ match, location, history, ...props }) => {
                 <Box width="80%">
                   <Title type="h5" title="Space Rules" />
                   <Grid columns="repeat(auto-fit, minmax(200px, auto))" rowGap="20px">
-                    {listing.rules.map(item => {
+                    {listing.rules.map((item, index) => {
                       // return <Checkbox disabled key={item.id} label={item.settingsData.itemName} name="rules" checked />
-                      return <Text>{item.settingsData.itemName} </Text>
+                      return <Text key={index}>{item.settingsData.itemName} </Text>
                     })}
                   </Grid>
                 </Box>
