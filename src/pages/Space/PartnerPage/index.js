@@ -267,8 +267,8 @@ const PartnerPage = ({ match, location, ...props }) => {
         </Box>
       ) : null}
       <Wrapper>
-        <Helmet title={`${listing.settingsParent.category.otherItemName} ${_getSuburb(listing.location)} | Find the perfect event, coworking, office and meeting room spaces.`}>
-          <meta name="description" content={`${listing.settingsParent.category.otherItemName} ${_getSuburb(listing.location)} | Find the perfect event, coworking, office and meeting room spaces.`} />
+        <Helmet title={`${listing.title} | ${listing.settingsParent.category.itemName} | ${_getSuburb(listing.location)} | Find the perfect event, coworking, office and meeting room spaces.`}>
+          <meta name="description" content={`Find the perfect space for ${listing.settingsParent.category.itemName} in ${_getSuburb(listing.location)}. ${listing.listingData.description.substring(0, 160 - (listing.settingsParent.category.itemName.length + _getSuburb(listing.location).length + 30))}`} />
         </Helmet>
         <GridStyled columns="auto 350px" columnGap="35px" rowGap="30px">
           <Box display="grid" gridRowGap="15px">
