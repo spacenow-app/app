@@ -44,7 +44,8 @@ import {
   onCleanAvailabilitiesByListingId,
   onGetAvailabilitiesByListingId,
   onClaimListing,
-  onGetVideoByListingId
+  onGetVideoByListingId,
+  onSaveClicksByListing
 } from 'redux/ducks/listing'
 
 import { onSearch } from 'redux/ducks/search'
@@ -294,6 +295,8 @@ const SpacePage = ({ match, location, history, ...props }) => {
   }
 
   const _onClaimListing = () => dispatch(onClaimListing(match.params.id, listing.title))
+
+  const _handleClickByListing = () => dispatch(onSaveClicksByListing(match.params.id, listing.listingData.link)) 
 
   const _renderHighLights = obj => {
     let array = Object.keys(obj).map(i => obj[i])
@@ -1086,10 +1089,7 @@ const SpacePage = ({ match, location, history, ...props }) => {
                       )}
                       {listing.user.provider === 'external' && (
                         <Button
-                          onClick={() =>
-                            listing.listingData.link &&
-                            window.open(listing.listingData.link && listing.listingData.link, '_blank')
-                          }
+                          onClick={_handleClickByListing}
                           fluid
                         >
                           Reserve

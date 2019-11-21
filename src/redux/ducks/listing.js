@@ -51,7 +51,10 @@ export const Types = {
   LISTING_CLAIM_FAILURE: 'LISTING_CLAIM_FAILURE',
   LISTING_GET_VIDEO_REQUEST: 'LISTING_GET_VIDEO_REQUEST',
   LISTING_GET_VIDEO_SUCCESS: 'LISTING_GET_VIDEO_SUCCESS',
-  LISTING_GET_VIDEO_FAILURE: 'LISTING_GET_VIDEO_FAILURE'
+  LISTING_GET_VIDEO_FAILURE: 'LISTING_GET_VIDEO_FAILURE',
+  SAVE_LISTING_BY_CLICK_START: 'SAVE_LISTING_BY_CLICK_START',
+  SAVE_LISTING_BY_CLICK_SUCCESS: 'SAVE_LISTING_BY_CLICK_SUCCESS',
+  SAVE_LISTING_BY_CLICK_FAILURE: 'SAVE_LISTING_BY_CLICK_FAILURE'
 }
 
 // Initial State
@@ -121,6 +124,11 @@ const initialState = {
   claim: {
     isLoading: true,
     isClaimed: false,
+    error: null
+  },
+  listingClicks: {
+    isLoading: false,
+    clicks: 0,
     error: null
   }
 }
@@ -519,6 +527,14 @@ const mutationClaimListing = gql`
   mutation claimListing($listingId: Int!) {
     claimListing(listingId: $listingId) {
       status
+    }
+  }
+`
+
+const mutationSaveClicksByListing = gql`
+  mutation saveClicksByListing($listingId: Int!) {
+    saveClicksByListing(listingId: $listingId) {
+      totalClicks
     }
   }
 `
@@ -953,6 +969,33 @@ export default function reducer(state = initialState, action) {
         }
       }
     }
+    case Types.SAVE_LISTING_BY_CLICK_START: {
+      return {
+        ...state,
+        listingClicks: {
+          isLoading: true,
+          error: null
+        }
+      }
+    }
+    case Types.SAVE_LISTING_BY_CLICK_SUCCESS: {
+      return {
+        ...state,
+        listingClicks: {
+          isLoading: false,
+          clicks: action.payload
+        }
+      }
+    }
+    case Types.SAVE_LISTING_BY_CLICK_FAILURE: {
+      return {
+        ...state,
+        listingClicks: {
+          isLoading: false,
+          error: action.payload
+        }
+      }
+    }
     default:
       return state
   }
@@ -1242,5 +1285,19 @@ export const onClaimListing = (listingId, listingTitle) => async dispatch => {
     )}&listingTitle=${listingTitle}`
   } catch (err) {
     dispatch({ type: Types.LISTING_CLAIM_FAILURE, payload: errToMsg(err) })
+  }
+}
+
+export const onSaveClicksByListing = (listingId, link) => async dispatch => {
+  dispatch({ type: Types.SAVE_LISTING_BY_CLICK_START })
+  try {
+    const { data } = await getClient(dispatch).mutate({
+      mutation: mutationSaveClicksByListing,
+      variables: { listingId: parseInt(listingId, 10) }
+    })
+    dispatch({ type: Types.SAVE_LISTING_BY_CLICK_SUCCESS, payload: data.saveClicksByListing })
+    window.location.href = `${link}`
+  } catch (err) {
+    dispatch({ type: Types.SAVE_LISTING_BY_CLICK_FAILURE, payload: errToMsg(err) })
   }
 }
