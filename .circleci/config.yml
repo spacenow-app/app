@@ -106,7 +106,7 @@ jobs:
             GENERATE_SOURCEMAP=false INLINE_RUNTIME_CHUNK=false REACT_APP_LEGACY=${PROD_REACT_APP_LEGACY}
             REACT_APP_GRAPH_HOST=${PROD_REACT_APP_GRAPH_HOST} REACT_APP_STATIC_PAGES=https://spacenow.com
             REACT_APP_GOOGLE_APP_ID=${PROD_REACT_APP_GOOGLE_APP_ID} REACT_APP_FACEBOOK_APP_ID=${PROD_REACT_APP_FACEBOOK_APP_ID}
-            REACT_APP_DOMAIN=.spacenow.com REACT_APP_ASSETS_API_HOST=https://api-search.spacenow.com/search/images yarn build
+            REACT_APP_DOMAIN=.spacenow.com REACT_APP_ASSETS_API_HOST=https://api-search.sandpit.cloud.spacenow.com/search/images yarn build
       - persist_to_workspace:
           root: ~/repo
           paths:
