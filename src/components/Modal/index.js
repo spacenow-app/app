@@ -10,6 +10,7 @@ import ModalBookingDetails from 'components/Modal/ModalBookingDetails'
 import ModalReportListing from 'components/Modal/ModalReportListing'
 import ModalAddCreditCard from 'components/Modal/ModalAddCreditCard'
 import ModalSendMessage from 'components/Modal/ModalSendMessage'
+import ModalContactHost from 'components/Modal/ModalContactHost'
 
 const MODAL_COMPONENTS = {
   [TypesModal.MODAL_TYPE_CONFIRM]: ModalConfirm,
@@ -18,7 +19,8 @@ const MODAL_COMPONENTS = {
   [TypesModal.MODAL_TYPE_REPORT_LISTING]: ModalReportListing,
   [TypesModal.MODAL_TYPE_BOOKING_DETAILS]: ModalBookingDetails,
   [TypesModal.MODAL_TYPE_ADD_CREDIT_CARD]: ModalAddCreditCard,
-  [TypesModal.MODAL_TYPE_SEND_MESSAGE]: ModalSendMessage
+  [TypesModal.MODAL_TYPE_SEND_MESSAGE]: ModalSendMessage,
+  [TypesModal.MODAL_TYPE_CONTACT_HOST]: ModalContactHost
 }
 
 const Modal = () => {

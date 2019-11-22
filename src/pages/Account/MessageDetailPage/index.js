@@ -32,19 +32,21 @@ const MessageDetailPage = ({ match, location, history, ...props }) => {
   const dispatch = useDispatch()
 
   const { user } = useSelector(state => state.account.get)
-  const { object: message, isLoading: isMessageLoading } = useSelector(state => state.message.get)
+  const { object: message } = useSelector(state => state.message.get)
+  const { isLoading: isMessageLoading } = useSelector(state => state.message)
   const { object: messageItems, isLoading: isItemsLoading } = useSelector(state => state.message.getItems)
   const [content, setContent] = useState('')
   const [pageIndex, setPageIndex] = useState(0)
   const [scroller, setScroller] = useState(null)
 
   const pageSize = 5
-
   useEffect(() => {
     match && match.params && user && dispatch(onReadMessage(match.params.id, user.id))
     match && match.params && dispatch(onGetMessage(match.params.id))
     match && match.params && dispatch(onGetMessageItems({ id: match.params.id, pageIndex: 0, pageSize }))
   }, [dispatch, match, user])
+
+  // console.log('messageItems', messageItems)
 
   const _onSubmit = () => {
     const values = {
@@ -85,7 +87,7 @@ const MessageDetailPage = ({ match, location, history, ...props }) => {
           <Title type="h3" title="Conversation" />
         </Cell>
         <CellStyled width={6}>
-          {!isMessageLoading && (
+          {!isMessageLoading && message && (
             <>
               <TopStyled>
                 <UserContainer>
@@ -130,7 +132,17 @@ const MessageDetailPage = ({ match, location, history, ...props }) => {
           onScroll={_handleScroll}
           ref={e => setScroller(e)}
         >
-          {messageItems && messageItems.rows.map(item => <MessageDetailCard item={item} key={item.id} user={user} />)}
+          {messageItems &&
+            messageItems.rows.map((item, i) => (
+              <MessageDetailCard
+                item={item}
+                key={item.id}
+                user={user}
+                count={messageItems.count}
+                index={i}
+                messageParent={messageItems.messageParent}
+              />
+            ))}
         </Box>
       )}
     </>

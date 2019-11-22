@@ -55,12 +55,14 @@ const StyledCheckbox = styled.div`
 const LabelStyled = styled.span`
   font-family: 'Montserrat-Regular';
   color: #172439;
-  font-size: 16px;
+  font-size: ${props => (props.fontSize ? props.fontSize : '16px')};
   margin: 0 8px;
 
   @media only screen and (max-width: 600px) {
-    font-size: 14px;
+    font-size: ${props => (props.fontSize ? props.fontSize : '14px')};
   }
+
+  font-size: ${props => (props.fontSize ? props.fontSize : 'auto')};
 `
 
 const Checkbox = ({ className, name, checked, label, handleCheckboxChange, disabled, ...props }) => (
@@ -81,7 +83,7 @@ const Checkbox = ({ className, name, checked, label, handleCheckboxChange, disab
         </StyledCheckbox>
       </CheckboxContainer>
     </label>
-    {label && <LabelStyled>{label}</LabelStyled>}
+    {label && <LabelStyled {...props}>{label}</LabelStyled>}
   </CheckboxWraperStyled>
 )
 

@@ -30,11 +30,11 @@ import {
   Footer,
   CardSearch,
   Price,
-  // Link,
   Review,
   StarRatingComponent,
   Pagination,
   Text,
+  Avatar,
   Image
 } from 'components'
 
@@ -56,7 +56,7 @@ import { openModal, TypesModal } from 'redux/ducks/modal'
 
 import { sendMail } from 'redux/ducks/mail'
 
-// import { onCreateMessage } from 'redux/ducks/message'
+import { onCreateMessage } from 'redux/ducks/message'
 
 // import GraphCancelattionImage from 'pages/Listing/SpaceDetailsPage/CancellationTab/graph_cancellation.png'
 import { onGetPublicReviews } from 'redux/ducks/reviews'
@@ -146,6 +146,34 @@ const ContainerPagination = styled.div`
   margin-top: 25px;
   display: flex;
   justify-content: center;
+`
+
+const BoxDesktop = styled(Box)`
+  @media screen and (max-width: 600px) {
+    display: none;
+  }
+`
+
+const ButtonStyled = styled(Button)`
+  @media screen and (max-width: 600px) {
+    margin-top: 20px;
+    width: 100% !important;
+  }
+`
+
+const TextNameHost = styled.span`
+  font-family: Montserrat-Bold;
+  font-size: 18px;
+  line-height: 28px;
+  display: block;
+  color: #1c3942;
+  margin-left: 20px;
+  width: 200px;
+`
+
+const CellGrid = styled(Cell)`
+  display: grid;
+  align-items: center;
 `
 
 const VideoOverlay = styled.div`
@@ -649,22 +677,41 @@ const SpacePage = ({ match, location, history, ...props }) => {
     dispatch(openModal(TypesModal.MODAL_TYPE_REPORT_LISTING, options))
   }
 
-  // const _contactHost = () => {
-  //   const options = {
-  //     onConfirm: _sendMessage
-  //   }
-  //   dispatch(openModal(TypesModal.MODAL_TYPE_SEND_MESSAGE, options))
-  // }
+  const _contactHost = () => {
+    // const options = {
+    //   onConfirm: _sendMessage
+    // }
+    // dispatch(openModal(TypesModal.MODAL_TYPE_SEND_MESSAGE, options))
+    if (!isAuthenticated) {
+      history.push(`/auth/signin`, {
+        from: {
+          ...location
+        }
+      })
+      return
+    }
+    const options = {
+      hostName: `${listing.user.profile.firstName} ${listing.user.profile.lastName}`,
+      hostPhoto: listing.user.profile.picture,
+      capacity: objectSpecifications.capacity ? objectSpecifications.capacity.value : 10,
+      listing,
+      availabilities,
+      _returnArrayAvailability,
+      onConfirm: _sendMessage
+    }
+    dispatch(openModal(TypesModal.MODAL_TYPE_CONTACT_HOST, options))
+  }
 
-  // const _sendMessage = content => {
-  //   const values = {
-  //     content,
-  //     listingId: listing.id,
-  //     guestId: user.id,
-  //     hostId: listing.userId
-  //   }
-  //   dispatch(onCreateMessage(values))
-  // }
+  const _sendMessage = content => {
+    const values = {
+      ...content,
+      listingId: listing.id,
+      guestId: user.id,
+      hostId: listing.userId,
+      bookingPeriod: listing.bookingPeriod
+    }
+    dispatch(onCreateMessage(values))
+  }
 
   const _calcHourlyPeriod = () => {
     if (date) {
@@ -901,14 +948,47 @@ const SpacePage = ({ match, location, history, ...props }) => {
                   ))}
                 </Box>
               ) : null}
-              {/* DONT DISPLAY CONTACT HOST WHEN listing.user.provider === 'external' */}
-              {/* {isAuthenticated && (
-                <Box mt="20px" fontFamily="bold">
-                  <Link to="#" onClick={_contactHost} style={{ textDecoration: 'underline' }}>
+
+              {listing.user.provider !== 'external' && (
+                <>
+                  <Title type="h5" title="Contact Host" />
+                  <Grid columns={12}>
+                    <Cell width={1} style={{ marginRight: '30px' }}>
+                      <Avatar small image={listing.user.profile.picture} />
+                    </Cell>
+                    <CellGrid width={11}>
+                      <TextNameHost>{`${listing.user.profile.firstName} ${listing.user.profile.lastName}`}</TextNameHost>
+                    </CellGrid>
+                  </Grid>
+
+                  <BoxDesktop my="20px">
+                    <Grid columns={12}>
+                      <Cell width="3">
+                        <Box my="10px">Languages: </Box>
+                        <Box my="10px">Response rate: </Box>
+                        <Box my="10px">Response time: </Box>
+                      </Cell>
+                      <Cell width="3">
+                        <Box my="10px">Engilsh</Box>
+                        <Box my="10px">90%</Box>
+                        <Box my="10px">Within 2 hours</Box>
+                      </Cell>
+                    </Grid>
+                  </BoxDesktop>
+
+                  <ButtonStyled onClick={_contactHost} outline size="sm">
                     Contact host
-                  </Link>
-                </Box>
-              )} */}
+                  </ButtonStyled>
+
+                  <BoxDesktop borderTop="1px solid #CBCBCB" borderBottom="1px solid #CBCBCB" my="20px" p="12px">
+                    <Text>
+                      Always communicate through Spacenow to protect your payment. You should never transfer money or
+                      communicate outside of the Spacenow website or app.
+                    </Text>
+                  </BoxDesktop>
+                </>
+              )}
+
               {videoInput.name ? (
                 <>
                   <Box zIndex="1">

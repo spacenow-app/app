@@ -7,23 +7,23 @@ import { onUpdateProfilePicture } from 'redux/ducks/account'
 const InnerMenu = ({ ...props }) => {
   const dispatch = useDispatch()
 
-  const { user } = useSelector((state) => state.account.get)
+  const { user } = useSelector(state => state.account.get)
 
   const _handleOnDrop = useCallback(
-    (acceptedFiles) => acceptedFiles.map(async (file) => dispatch(onUpdateProfilePicture(file, user.id))),
+    acceptedFiles => acceptedFiles.map(async file => dispatch(onUpdateProfilePicture(file, user.id))),
     [dispatch, user.id]
   )
 
   return (
     <Box
-      display='grid'
-      gridRowGap='15px'
-      background='#ededed'
-      justifyItems='center'
-      alignContent='start'
-      p='30px'
-      borderRadius='15px'
-      height='fit-content'
+      display="grid"
+      gridRowGap="15px"
+      background="#ededed"
+      justifyItems="center"
+      alignContent="start"
+      p="30px"
+      borderRadius="15px"
+      height="fit-content"
     >
       <Avatar image={user.profile.picture || null} onDrop={_handleOnDrop} />
       <Title type='h5' title={`${user.profile.firstName} ${user.profile.lastName}`} />
