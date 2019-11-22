@@ -44,7 +44,8 @@ import {
   onCleanAvailabilitiesByListingId,
   onGetAvailabilitiesByListingId,
   onClaimListing,
-  onGetVideoByListingId
+  onGetVideoByListingId,
+  onSaveClicksByListing
 } from 'redux/ducks/listing'
 
 import { onSearch } from 'redux/ducks/search'
@@ -322,6 +323,8 @@ const SpacePage = ({ match, location, history, ...props }) => {
   }
 
   const _onClaimListing = () => dispatch(onClaimListing(match.params.id, listing.title))
+
+  const _handleClickByListing = () => dispatch(onSaveClicksByListing(match.params.id, listing.listingData.link)) 
 
   const _renderHighLights = obj => {
     let array = Object.keys(obj).map(i => obj[i])
@@ -798,17 +801,8 @@ const SpacePage = ({ match, location, history, ...props }) => {
         </Box>
       ) : null}
       <Wrapper>
-        <Helmet
-          title={`Find the perfect space for ${listing.settingsParent.category.otherItemName} in ${_getSuburb(
-            listing.location
-          )}. ${listing.listingData.description ? listing.listingData.description.substring(0, 100) : ''}`}
-        >
-          <meta
-            name="description"
-            content={`Find the perfect space for ${listing.settingsParent.category.otherItemName} in ${_getSuburb(
-              listing.location
-            )}. ${listing.listingData.description ? listing.listingData.description.substring(0, 100) : ''}`}
-          />
+        <Helmet title={`${listing.title} | ${listing.settingsParent.category.itemName} | ${_getSuburb(listing.location)} | Find the perfect event, coworking, office and meeting room spaces.`}>
+          <meta name="description" content={`Find the perfect space for ${listing.settingsParent.category.itemName} in ${_getSuburb(listing.location)}. ${listing.listingData.description.substring(0, 160 - (listing.settingsParent.category.itemName.length + _getSuburb(listing.location).length + 30))}`} />
         </Helmet>
         {listing.user.provider === 'external' && imageHeight !== 325 && (
           <Box mb="20px">
@@ -860,7 +854,7 @@ const SpacePage = ({ match, location, history, ...props }) => {
                 </Cell>
                 {listing.listingData.bookingType && listing.listingData.bookingType !== 'poa' && (
                   <Cell width={4} style={{ justifySelf: 'end' }}>
-                    <Tag>{capitalize(listing.listingData.bookingType)} Booking</Tag>
+                    <Tag>{`${capitalize(listing.listingData.bookingType)} Booking`}</Tag>
                   </Cell>
                 )}
               </Grid>
@@ -949,8 +943,8 @@ const SpacePage = ({ match, location, history, ...props }) => {
               {listing.listingData.description ? (
                 <Box>
                   <Title type="h5" title="Description" />
-                  {listing.listingData.description.split('\n').map(o => (
-                    <p>{o}</p>
+                  {listing.listingData.description.split('\n').map((o, index) => (
+                    <p key={index}>{o}</p>
                   ))}
                 </Box>
               ) : null}
@@ -1075,9 +1069,10 @@ const SpacePage = ({ match, location, history, ...props }) => {
                       </Cell>
                     </Box>
                   </ContainerMobile>
-                  {publicReviews.map(o => {
+                  {publicReviews.map((o, index) => {
                     return (
                       <Review
+                        key={index}
                         id={o.id}
                         userName={o.author.profile && o.author.profile.firstName}
                         userPicture={o.author.profile && o.author.profile.picture}
@@ -1102,9 +1097,9 @@ const SpacePage = ({ match, location, history, ...props }) => {
                 <Box width="80%">
                   <Title type="h5" title="Space Rules" />
                   <Grid columns="repeat(auto-fit, minmax(200px, auto))" rowGap="20px">
-                    {listing.rules.map(item => {
+                    {listing.rules.map((item, index) => {
                       // return <Checkbox disabled key={item.id} label={item.settingsData.itemName} name="rules" checked />
-                      return <Text>{item.settingsData.itemName} </Text>
+                      return <Text key={index}>{item.settingsData.itemName} </Text>
                     })}
                   </Grid>
                 </Box>
@@ -1174,10 +1169,7 @@ const SpacePage = ({ match, location, history, ...props }) => {
                       )}
                       {listing.user.provider === 'external' && (
                         <Button
-                          onClick={() =>
-                            listing.listingData.link &&
-                            window.open(listing.listingData.link && listing.listingData.link, '_blank')
-                          }
+                          onClick={_handleClickByListing}
                           fluid
                         >
                           Reserve

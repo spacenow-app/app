@@ -39,7 +39,13 @@ export const Types = {
   ACC_UPLOAD_DOCUMENT_ERROR: '[ACCOUNT] UPLOAD DOCUMENT ERROR',
   ACC_GET_RESEND_LINK: '[ACCOUNT] GET RESEND LINK',
   ACC_GET_RESEND_LINK_SUCCESS: '[ACCOUNT] GET RESEND LINK SUCCESS',
-  ACC_GET_RESEND_LINK_ERROR: '[ACCOUNT] GET RESEND LINK ERROR'
+  ACC_GET_RESEND_LINK_ERROR: '[ACCOUNT] GET RESEND LINK ERROR',
+  ACC_GET_NOTIFICATION: '[ACCOUNT] GET NOTIFICATION',
+  ACC_GET_NOTIFICATION_SUCCESS: '[ACCOUNT] GET NOTIFICATION SUCCESS',
+  ACC_GET_NOTIFICATION_ERROR: '[ACCOUNT] GET NOTIFICATION ERROR',
+  ACC_UPDATE_NOTIFICATION: '[ACCOUNT] UPDATE NOTIFICATION',
+  ACC_UPDATE_NOTIFICATION_SUCCESS: '[ACCOUNT] UPDATE NOTIFICATION SUCCESS',
+  ACC_UPDATE_NOTIFICATION_ERROR: '[ACCOUNT] UPDATE NOTIFICATION ERROR',
 }
 
 // Reducer
@@ -61,7 +67,8 @@ const initialState = {
     },
     documents: null,
     bookings: null,
-    listings: null
+    listings: null,
+    notifications: null
   },
   isLoading: false
 }
@@ -217,6 +224,32 @@ const queryGetUserDocuments = gql`
 `
 
 // GraphQL
+const queryGetUserNotifications = gql`
+  query getUserNotifications($userId: String!) {
+    getUserNotifications(userId: $userId) {
+      userId
+      notificationId
+      isSMS
+      isEmail
+      isPushNotification  
+    }
+  }
+`
+
+// GraphQL
+const mutationUpdateUserNotification = gql`
+  mutation updateUserNotification($userId: ID, $notificationId: ID, $input: UserNotificationInput) {
+    updateUserNotification(userId: $userId, notificationId: $notificationId, input: $input) {
+      userId
+      notificationId
+      isSMS
+      isEmail
+      isPushNotification        
+    }
+  }
+`
+
+// GraphQL
 const mutationUpdateListing = gql`
   mutation publish($listingId: Int!, $status: Boolean!) {
     publish(listingId: $listingId, status: $status) {
@@ -300,6 +333,8 @@ export default function reducer(state = initialState, action) {
     case Types.ACC_DELETE_LISTING:
     case Types.ACC_DELETE_DOCUMENT:
     case Types.ACC_UPLOAD_DOCUMENT:
+    case Types.ACC_GET_NOTIFICATION:
+    case Types.ACC_UPDATE_NOTIFICATION:
     case Types.ACC_GET_RESEND_LINK: {
       return {
         ...state
@@ -335,6 +370,21 @@ export default function reducer(state = initialState, action) {
         get: { user: { ...state.get.user, profile: { ...state.get.user.profile, ...action.payload } } },
         isLoading: false
       }
+    case Types.ACC_GET_NOTIFICATION_SUCCESS:
+        return {
+          ...state,
+          get: { ...state.get, notifications: action.payload },
+          isLoading: false
+        }
+    case Types.ACC_UPDATE_NOTIFICATION_SUCCESS:
+        return {
+          ...state,
+          get: { 
+            ...state.get,
+            notifications: { ...state.get.notifications, ...action.payload }
+          },
+          isLoading: false
+        }
     case Types.ACC_UPDATE_LISTING_SUCCESS:
       return {
         ...state,
@@ -431,6 +481,8 @@ export default function reducer(state = initialState, action) {
     case Types.ACC_DELETE_LISTING_ERROR:
     case Types.ACC_UPDATE_PROFILE_PICTURE_ERROR:
     case Types.ACC_UPLOAD_DOCUMENT_ERROR:
+    case Types.ACC_GET_NOTIFICATION_ERROR:
+    case Types.ACC_UPDATE_NOTIFICATION_ERROR:
     case Types.ACC_GET_RESEND_LINK_ERROR:
       return {
         ...state,
@@ -547,6 +599,21 @@ export const onDeleteListing = listingId => async dispatch => {
   }
 }
 
+export const onUpdateUserNotification = (userId, notificationId, input) => async dispatch => {
+  dispatch({ type: Types.ACC_UPDATE_NOTIFICATION })
+  try {
+    await getClientWithAuth(dispatch).mutate({
+      mutation: mutationUpdateUserNotification,
+      variables: { userId, notificationId, input }
+    })
+    toast.success('Notification updated successfully')
+    dispatch(onGetUserNotifications(userId))
+  } catch (error) {
+    toast.error(errToMsg(error.message))
+    dispatch({ type: Types.ACC_UPDATE_NOTIFICATION_ERROR, payload: errToMsg(error.message) })
+  }
+}
+
 export const onUpdateProfile = (userId, input) => async dispatch => {
   dispatch({ type: Types.ACC_UPDATE_PROFILE })
   try {
@@ -604,5 +671,19 @@ export const onResendLink = email => async dispatch => {
   } catch (error) {
     toast.error(errToMsg(error.message))
     dispatch({ type: Types.ACC_GET_RESEND_LINK_ERROR })
+  }
+}
+
+export const onGetUserNotifications = userId => async dispatch => {
+  dispatch({ type: Types.ACC_GET_NOTIFICATION })
+  try {
+    const { data } = await getClientWithAuth(dispatch).query({
+      query: queryGetUserNotifications,
+      variables: { userId },
+      fetchPolicy: 'network-only'
+    })
+    dispatch({ type: Types.ACC_GET_NOTIFICATION_SUCCESS, payload: data.getUserNotifications })
+  } catch (error) {
+    dispatch({ type: Types.ACC_GET_NOTIFICATION_ERROR, payload: error })
   }
 }
