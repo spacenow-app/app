@@ -11,13 +11,16 @@ const WrapperStyled = styled.div`
 
 const TopStyled = styled.div`
   display: grid;
-  grid-template-columns: auto 1fr;
+  grid-template-columns: ${props => (props.vertical ? '1fr' : 'auto 1fr')};
   column-gap: 15px;
   align-items: center;
+  text-align: ${props => (props.vertical ? 'center' : 'left')};
+  justify-items: ${props => (props.vertical ? 'center' : 'left')};
   @media (max-width: 680px) {
     grid-template-columns: 1fr;
     grid-template-rows: 1fr;
     text-align: center;
+    justify-items: center;
   }
 `
 
@@ -77,7 +80,7 @@ const TextTitleClaim = styled(TextDefaultStyled)`
 
 const UserDetails = props => (
   <WrapperStyled>
-    <TopStyled>
+    <TopStyled {...props}>
       <Avatar small image={props.imageProfile} />
       <UserContainer>
         {props.provider !== 'generic' && <TextName>{props.hostname}</TextName>}
@@ -112,7 +115,8 @@ UserDetails.propTypes = {
   text: PropTypes.string,
   provider: PropTypes.string,
   onClaim: PropTypes.func,
-  right: PropTypes.bool
+  right: PropTypes.bool,
+  vertical: PropTypes.bool
 }
 
 export default UserDetails

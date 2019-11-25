@@ -33,11 +33,9 @@ const initialState = {
     message: null
   },
   list: {
-    isLoading: true,
     array: null
   },
   get: {
-    isLoading: true,
     object: null
   },
   create: {
@@ -104,6 +102,8 @@ const messageItemFields = `
     id
     profile {
       picture
+      firstName
+      lastName
     }
   }
   content
@@ -140,8 +140,34 @@ const getMessage = gql`
 `
 
 const createMessage = gql`
-  mutation createMessage($listingId: Int!, $guestId: String!, $hostId: String!, $content: String!) {
-    postMessage(listingId: $listingId, guestId: $guestId, hostId: $hostId, content: $content) {
+  mutation postMessageToHost(
+    $listingId: Int!, 
+    $guestId: String!, 
+    $hostId: String!, 
+    $content: String!,
+    $bookingPeriod: String!,
+    $period: Int!,
+    $reservations: [String]!,
+    $checkInTime: String,
+    $checkOutTime: String,
+    $hasFlexibleTime: Boolean!,
+    $peopleQuantity: Int!,
+    $reason: String!
+    ) {
+    postMessageToHost(
+      listingId: $listingId, 
+      guestId: $guestId, 
+      hostId: $hostId, 
+      content: $content
+      bookingPeriod: $bookingPeriod,
+      period: $period,
+      reservations: $reservations,
+      checkInTime: $checkInTime,
+      checkOutTime: $checkOutTime,
+      hasFlexibleTime: $hasFlexibleTime,
+      peopleQuantity: $peopleQuantity,
+      reason: $reason
+      ) {
       ${messageFields}
     }
   }
@@ -167,6 +193,13 @@ const getMessageItems = gql`
   query getMessageItems($id: String!, $pageIndex: Int!, $pageSize: Int!) {
     getMessageItems(id: $id, pageIndex: $pageIndex, pageSize: $pageSize) {
       count
+      messageParent {
+        id
+        guestId
+        messageHost {
+          ${messageHostFields}
+        }
+      }
       rows {
         ${messageItemFields}
       }
@@ -188,7 +221,6 @@ export default function reducer(state = initialState, action) {
         ...state,
         isLoading: false,
         list: {
-          isLoading: false,
           array: action.payload
         },
         getItems: {
@@ -288,7 +320,6 @@ export default function reducer(state = initialState, action) {
         ...state,
         isLoading: false,
         getItems: {
-          isLoading: false,
           object: {
             ...state.getItems.object,
             rows: [action.payload, ...state.getItems.object.rows]
@@ -308,7 +339,11 @@ export default function reducer(state = initialState, action) {
     case Types.GET_MESSAGE_ITEMS_REQUEST: {
       return {
         ...state,
-        isLoading: true
+        isLoading: true,
+        getItems: {
+          isLoading: true,
+          ...state.getItems
+        }
       }
     }
     case Types.GET_MESSAGE_ITEMS_SUCCESS: {
@@ -338,7 +373,7 @@ export default function reducer(state = initialState, action) {
 // Action Creators
 
 // Side Effects
-export const onGetMessagesByUser = (args) => async (dispatch) => {
+export const onGetMessagesByUser = args => async dispatch => {
   dispatch({ type: Types.GET_MESSAGES_USER_REQUEST })
   try {
     const { data } = await getClientWithAuth(dispatch).query({
@@ -352,17 +387,21 @@ export const onGetMessagesByUser = (args) => async (dispatch) => {
   }
 }
 
-export const onGetMessage = (id) => async (dispatch) => {
+export const onGetMessage = id => async dispatch => {
   dispatch({ type: Types.GET_MESSAGE_REQUEST })
   try {
-    const { data } = await getClientWithAuth(dispatch).query({ query: getMessage, variables: { id } })
+    const { data } = await getClientWithAuth(dispatch).query({
+      query: getMessage,
+      variables: { id },
+      fetchPolicy: 'network-only'
+    })
     dispatch({ type: Types.GET_MESSAGE_SUCCESS, payload: data.getMessage })
   } catch (err) {
     dispatch({ type: Types.GET_MESSAGE_ERROR, payload: errToMsg(err) })
   }
 }
 
-export const onCreateMessage = (values) => async (dispatch) => {
+export const onCreateMessage = values => async dispatch => {
   dispatch({ type: Types.CREATE_MESSAGE_REQUEST })
   try {
     const { data } = await getClientWithAuth(dispatch).mutate({ mutation: createMessage, variables: values })
@@ -374,7 +413,7 @@ export const onCreateMessage = (values) => async (dispatch) => {
   }
 }
 
-export const onReadMessage = (id, userId) => async (dispatch) => {
+export const onReadMessage = (id, userId) => async dispatch => {
   dispatch({ type: Types.READ_MESSAGE_REQUEST })
   try {
     const { data } = await getClientWithAuth(dispatch).mutate({ mutation: readMessage, variables: { id, userId } })
@@ -384,7 +423,7 @@ export const onReadMessage = (id, userId) => async (dispatch) => {
   }
 }
 
-export const onCreateMessageItem = (values) => async (dispatch) => {
+export const onCreateMessageItem = values => async dispatch => {
   dispatch({ type: Types.CREATE_MESSAGE_ITEM_REQUEST })
   try {
     const { data } = await getClientWithAuth(dispatch).mutate({ mutation: createMessageItem, variables: values })
@@ -394,10 +433,14 @@ export const onCreateMessageItem = (values) => async (dispatch) => {
   }
 }
 
-export const onGetMessageItems = (values) => async (dispatch) => {
+export const onGetMessageItems = values => async dispatch => {
   dispatch({ type: Types.GET_MESSAGE_ITEMS_REQUEST })
   try {
-    const { data } = await getClientWithAuth(dispatch).query({ query: getMessageItems, variables: values })
+    const { data } = await getClientWithAuth(dispatch).query({
+      query: getMessageItems,
+      variables: values,
+      fetchPolicy: 'network-only'
+    })
     dispatch({ type: Types.GET_MESSAGE_ITEMS_SUCCESS, payload: data.getMessageItems })
   } catch (err) {
     dispatch({ type: Types.GET_MESSAGE_ITEMS_ERROR, payload: errToMsg(err) })

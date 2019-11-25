@@ -48,10 +48,10 @@ const ContactHost = ({
   onSetEndTime,
   onCalcHourlyPeriod,
   inputFocus,
+  hidePrice,
   handleMessageChange,
   message
 }) => {
-
   const [dayPicker, setDayPicker] = useState('')
   useEffect(() => {
     if (dayPicker.input && inputFocus) dayPicker.input.focus()
@@ -61,7 +61,7 @@ const ContactHost = ({
     <>
       <WrapperStyled>
         <DatePicker
-          label="Date"
+          label={hidePrice ? '' : 'Date'}
           ref={el => setDayPicker(el)}
           date={date}
           handleDateChange={o => onDateChange(o)}
@@ -83,30 +83,26 @@ const ContactHost = ({
             }
           }}
         />
-        <Grid columns={2}>
+        <Grid columns={2} style={{ marginBottom: '10px' }}>
           <Cell>
-            <LabelStyled>Start time</LabelStyled>
+            {!hidePrice && <LabelStyled>Start time</LabelStyled>}
             <TimePickerStyled>
               <TimePicker value={startTime} onChange={time => onSetStartTime(time)} onBlur={onCalcHourlyPeriod} />
             </TimePickerStyled>
           </Cell>
           <Cell>
-            <LabelStyled>End time</LabelStyled>
+            {!hidePrice && <LabelStyled>End time</LabelStyled>}
             <TimePickerStyled>
               <TimePicker value={endTime} onChange={time => onSetEndTime(time)} onBlur={onCalcHourlyPeriod} />
             </TimePickerStyled>
           </Cell>
         </Grid>
-        {
-          listingData.bookingType === 'request' && 
-          <TextArea
-            label="Additional notes"
-            name="message"
-            value={message}
-            onChange={handleMessageChange}
-          />
-        }
-        {date && hoursQuantity > 0 && (
+
+        {listingData.bookingType === 'request' && !hidePrice && (
+          <TextArea label="Additional notes" name="message" value={message} onChange={handleMessageChange} />
+        )}
+
+        {date && hoursQuantity > 0 && !hidePrice && (
           <PriceDetail
             periodLabel={spelling(hoursQuantity)}
             price={listingData.basePrice}

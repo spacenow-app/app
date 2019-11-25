@@ -1,7 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import styled from 'styled-components'
-import { Box, Text, Grid, Cell, Avatar } from 'components'
+import { Box, Text, Grid, Cell, Avatar, Checkbox } from 'components'
 import { format } from 'date-fns'
 
 const CardContainer = styled.div`
@@ -20,7 +20,24 @@ const CellStyled = styled(Cell)`
   align-items: center;
 `
 
-const MessageDetailCard = ({ item, user, ...props }) => {
+const _formatPeriod = (period, bookingType) => {
+  let bookingPeriod
+  switch (bookingType) {
+    case 'daily':
+      bookingPeriod = period > 1 ? 'Days' : 'Day'
+      return `${period} ${bookingPeriod}`
+    case 'weekly':
+      bookingPeriod = period > 1 ? 'Weeks' : 'Week'
+      return `${period} ${bookingPeriod}`
+    case 'monthly':
+      bookingPeriod = period > 1 ? 'Months' : 'Month'
+      return `${period} ${bookingPeriod}`
+    default:
+      return `${period} Days`
+  }
+}
+
+const MessageDetailCard = ({ item, user, count, index, messageParent, ...props }) => {
   return (
     <Grid column={12}>
       {(user.id === item.sent.id && (
@@ -29,15 +46,104 @@ const MessageDetailCard = ({ item, user, ...props }) => {
         </CellStyled>
       )) || <Cell width={1} />}
       <Cell width={10}>
-        <CardContainer key={item.id} alignContent='center' column={12}>
-          <Box>
-            <Text fontSize='12px' fontFamily='bold'>
-              {format(new Date(item.createdAt), 'dd MMM yyyy hh:mm aaaa')}
-            </Text>
-          </Box>
-          <Box>
-            <Text fontSize='12px'>{item.content}</Text>
-          </Box>
+        <CardContainer key={item.id} alignContent="center" column={12}>
+          {index !== count - 1 && (
+            <>
+              <Box>
+                <Text fontSize="12px" fontFamily="bold">
+                  {format(new Date(item.createdAt), 'dd MMM yyyy hh:mm aaaa')}
+                </Text>
+              </Box>
+              <Box>
+                <Text fontSize="12px">{item.content}</Text>
+              </Box>
+            </>
+          )}
+          {index === count - 1 && (
+            <>
+              <Box fontSize="12px">
+                <Box>
+                  <Text fontFamily="bold">
+                    {`Message from ${item.sent.profile.firstName} ${item.sent.profile.lastName}`}{' '}
+                  </Text>
+                </Box>
+                <Box>
+                  <Text>{format(new Date(item.createdAt), 'dd MMM yyyy hh:mm aaaa')}</Text>
+                </Box>
+              </Box>
+              {messageParent && messageParent.messageHost && (
+                <>
+                  <Box fontSize="12px" mt="20px">
+                    <Grid columns={12}>
+                      <Cell width={6}>
+                        <Box>
+                          <Text fontFamily="bold">Requested time and date</Text>
+                        </Box>
+                        {messageParent.messageHost.bookingPeriod === 'hourly' &&
+                          messageParent.messageHost.reservations.length > 0 && (
+                            <Text>
+                              {format(new Date(messageParent.messageHost.reservations[0]), 'dd MMM yyyy')}{' '}
+                              {messageParent.messageHost.startTime} {' to '} {messageParent.messageHost.endTime}{' '}
+                            </Text>
+                          )}
+
+                        {messageParent.messageHost.bookingPeriod !== 'hourly' &&
+                          messageParent.messageHost.reservations.length > 0 && (
+                            <>
+                              <Text>{format(new Date(messageParent.messageHost.reservations[0]), 'dd MMM yyyy')} </Text>
+                              <Text>
+                                for {''}{' '}
+                                {_formatPeriod(
+                                  messageParent.messageHost.period,
+                                  messageParent.messageHost.bookingPeriod
+                                )}
+                              </Text>
+                            </>
+                          )}
+                      </Cell>
+                      <Cell width={6}>
+                        <Box>
+                          <Text fontFamily="bold">Booking Flexibility</Text>
+                        </Box>
+                        <Checkbox
+                          fontSize="12px"
+                          checked={messageParent.messageHost.flexibleTime === 1}
+                          label="Flexible with time and dates"
+                          disabled
+                        />
+                      </Cell>
+                    </Grid>
+                  </Box>
+                  <Box fontSize="12px" mt="20px">
+                    <Grid columns={12}>
+                      <Cell width={6}>
+                        <Box>
+                          <Text fontFamily="bold">How many people?</Text>
+                        </Box>
+                        <Text>{messageParent.messageHost.peopleQuantity}</Text>
+                      </Cell>
+                      <Cell width={6}>
+                        <Box>
+                          <Text fontFamily="bold">What will you be using the space for?</Text>
+                        </Box>
+                        <Text>{messageParent.messageHost.reason}</Text>
+                      </Cell>
+                    </Grid>
+                  </Box>
+                  <Box fontSize="12px" mt="20px">
+                    <Grid columns={12}>
+                      <Cell width={12}>
+                        <Box>
+                          <Text fontFamily="bold">Message</Text>
+                        </Box>
+                        <Text>{item.content}</Text>
+                      </Cell>
+                    </Grid>
+                  </Box>
+                </>
+              )}
+            </>
+          )}
         </CardContainer>
       </Cell>
       {user.id !== item.sent.id && (
@@ -56,7 +162,8 @@ MessageDetailCard.propTypes = {
     sent: PropTypes.shape({
       id: PropTypes.string,
       profile: PropTypes.shape({
-        picture: PropTypes.string.isRequired
+        picture: PropTypes.string.isRequired,
+        firstName: PropTypes.string.isRequired
       })
     }),
     createdAt: PropTypes.any.isRequired
@@ -66,7 +173,10 @@ MessageDetailCard.propTypes = {
     profile: PropTypes.shape({
       picture: PropTypes.string.isRequired
     })
-  })
+  }),
+  count: PropTypes.number,
+  index: PropTypes.number,
+  messageParent: PropTypes.shape({})
 }
 
 export default MessageDetailCard

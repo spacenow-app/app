@@ -154,6 +154,7 @@ import { ReactComponent as AmenitieWifi } from './svg/amenities/amenities_wifi.s
 
 import { ReactComponent as Download } from './svg/download.svg'
 import { ReactComponent as ArrowLeft } from './svg/generic/arrow_left.svg'
+import { ReactComponent as FullLeftArrow } from './svg/generic/full-left-arrow.svg'
 import { ReactComponent as MovieCamera } from './svg/generic/movie-camera.svg'
 
 const Icons = {
@@ -304,6 +305,7 @@ const Icons = {
   'amenitie-wifi': <AmenitieWifi />,
   download: <Download />,
   'arrow-left': <ArrowLeft />,
+  'full-left-arrow': <FullLeftArrow />,
   'movie-camera': <MovieCamera />
 }
 

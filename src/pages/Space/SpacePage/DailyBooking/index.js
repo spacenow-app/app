@@ -27,6 +27,7 @@ const DailyBooking = ({
   removeDate,
   setDatesSelected,
   inputFocus,
+  hidePrice,
   handleMessageChange,
   message
 }) => {
@@ -97,7 +98,7 @@ const DailyBooking = ({
   return (
     <WrapperStyled>
       <DatePicker
-        label="Dates"
+        label={hidePrice ? '' : 'Dates'}
         ref={el => setDayPicker(el)}
         date={null}
         handleDateChange={date => _handleDayClick(date)}
@@ -120,16 +121,11 @@ const DailyBooking = ({
           modifiers: { modifiers }
         }}
       />
-      {
-        listingData.bookingType === 'request' && 
-        <TextArea
-          label="Additional notes"
-          name="message"
-          value={message}
-          onChange={handleMessageChange}
-        />
-      }
-      {listDates.length > 0 && (
+
+      {listingData.bookingType === 'request' && !hidePrice && (
+        <TextArea label="Additional notes" name="message" value={message} onChange={handleMessageChange} />
+      )}
+      {listDates.length > 0 && !hidePrice && (
         <WrapperStyled>
           <ListDates dates={listDates} hasMargin={false} />
           <PriceDetail

@@ -102,9 +102,9 @@ const ListResults = forwardRef(
       }
       const photoCover = object.photos.find(e => e.isCover)
       if (photoCover) {
-        return cropPicture(photoCover.name)
+        return cropPicture(photoCover.name, 350)
       }
-      return cropPicture(object.photos[0].name)
+      return cropPicture(object.photos[0].name, 350)
     }
 
     const _renderSpecifications = (spec, listingData) => {
