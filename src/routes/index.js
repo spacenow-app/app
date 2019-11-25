@@ -18,6 +18,7 @@ const Checkout = lazy(() => import('routes/Checkout'))
 const Itinerary = lazy(() => import('routes/Itinerary'))
 const Receipt = lazy(() => import('routes/Receipt'))
 const Review = lazy(() => import('routes/Review'))
+const ListingProcess = lazy(() => import('routes/ListingProcess'))
 
 const Routes = props => {
   const dispatch = useDispatch()
@@ -86,6 +87,12 @@ const Routes = props => {
                       path={`${otherProps.match.path}listing`}
                       isAuthenticated={isAuthenticated}
                       component={Listing}
+                    />
+                    <Route
+                      {...otherProps}
+                      path={`${otherProps.match.path}listing-process`}
+                      isAuthenticated={isAuthenticated}
+                      component={ListingProcess}
                     />
                     <Route
                       {...otherProps}

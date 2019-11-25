@@ -60,6 +60,8 @@ import Review from './Review'
 import StarRatingComponent from './Review/StarRatingComponent'
 import Phone from './Phone'
 import Video from './Video'
+import RadioCheckbox from './RadioCheckbox'
+import ProgressBar from './ProgressBar'
 
 export {
   Modal,
@@ -126,5 +128,7 @@ export {
   Review,
   StarRatingComponent,
   Phone,
-  Video
+  Video,
+  RadioCheckbox,
+  ProgressBar
 }
