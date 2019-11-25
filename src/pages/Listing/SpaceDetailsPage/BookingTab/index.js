@@ -243,7 +243,7 @@ const BookingTab = ({
                 this option."
             />
           </Cell>
-          {/* <Cell width={1}>
+          {listing.user.provider === 'poa' && ( <Cell width={1}>
             <Radio
               box
               value="poa"
@@ -254,7 +254,7 @@ const BookingTab = ({
               text="If you want to be contacted, select
                 this option."
             />
-          </Cell> */}
+          </Cell> )}
         </Box>
       </Cell>
       <Cell>
