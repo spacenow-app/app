@@ -54,11 +54,15 @@ const CardTitle = styled(Text)`
   white-space: nowrap;
   text-overflow: ellipsis;
   cursor: pointer;
+  width: 363px;
 
   @media (max-width: 768px) {
     margin-bottom: 5px;
     line-height: 1;
     white-space: pre-wrap;
+  }
+  @media (max-width: 425px) {
+    width: 275px;
   }
 `
 
@@ -202,7 +206,9 @@ const ListResults = forwardRef(
                       </Tag>
                     </Box>
                   </Box>
-                  <CardTitle onClick={() => window.open(`/space/${item.id}`)}>{item.title}</CardTitle>
+                  <Box>
+                    <CardTitle onClick={() => window.open(`/space/${item.id}`)}>{item.title}</CardTitle>
+                  </Box>
                   <Text display="block" fontFamily="regular" fontSize="14px" color="greyscale.1">
                     {`${item.location.address1}, ${item.location.city}`}
                   </Text>

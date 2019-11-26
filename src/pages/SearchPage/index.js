@@ -3,6 +3,7 @@ import { useDispatch, shallowEqual, useSelector } from 'react-redux'
 import styled from 'styled-components'
 import { isSameDay } from 'date-fns'
 import _ from 'lodash'
+import { capitalize } from 'utils/strings'
 
 import {
   NavBar,
@@ -294,6 +295,8 @@ const SearchPage = ({ history, location }) => {
     hide: { enabled: false }
   }
 
+  console.log('filterCategory', filterCategory)
+
   return (
     <>
       <Box>
@@ -309,7 +312,15 @@ const SearchPage = ({ history, location }) => {
             <Reference>
               {({ ref }) => {
                 return (
-                  <Button outline size="sm" ref={ref} onClick={() => setShouldShowFilter('dates')}>
+                  <Button
+                    outline
+                    size="sm"
+                    ref={ref}
+                    onClick={() => {
+                      if (shouldShowFilter === 'dates') setShouldShowFilter(false)
+                      else setShouldShowFilter('dates')
+                    }}
+                  >
                     Dates
                   </Button>
                 )
@@ -367,11 +378,11 @@ const SearchPage = ({ history, location }) => {
                           />
                         </div>
                         <Box display="flex" justifyContent="space-between">
-                          <Button size="sm" outline onClick={_onQueryFilter}>
-                            Update Search
-                          </Button>
                           <Button size="sm" outline onClick={() => setShouldShowFilter(false)}>
                             Close
+                          </Button>
+                          <Button size="sm" outline onClick={_onQueryFilter}>
+                            Update
                           </Button>
                         </Box>
                       </Box>
@@ -386,7 +397,15 @@ const SearchPage = ({ history, location }) => {
             <Reference>
               {({ ref }) => {
                 return (
-                  <Button outline size="sm" ref={ref} onClick={() => setShouldShowFilter('category')}>
+                  <Button
+                    outline
+                    size="sm"
+                    ref={ref}
+                    onClick={() => {
+                      if (shouldShowFilter === 'category') setShouldShowFilter(false)
+                      else setShouldShowFilter('category')
+                    }}
+                  >
                     Category
                   </Button>
                 )
@@ -474,11 +493,11 @@ const SearchPage = ({ history, location }) => {
                           </Text>
                         </div>
                         <Box display="flex" justifyContent="space-between">
-                          <Button size="sm" outline onClick={_onQueryFilter}>
-                            Update Search
-                          </Button>
                           <Button size="sm" outline onClick={() => setShouldShowFilter(false)}>
                             Close
+                          </Button>
+                          <Button size="sm" outline onClick={_onQueryFilter}>
+                            Update
                           </Button>
                         </Box>
                       </Box>
@@ -493,7 +512,15 @@ const SearchPage = ({ history, location }) => {
             <Reference>
               {({ ref }) => {
                 return (
-                  <Button outline size="sm" ref={ref} onClick={() => setShouldShowFilter('duration')}>
+                  <Button
+                    outline
+                    size="sm"
+                    ref={ref}
+                    onClick={() => {
+                      if (shouldShowFilter === 'duration') setShouldShowFilter(false)
+                      else setShouldShowFilter('duration')
+                    }}
+                  >
                     Frequency
                   </Button>
                 )
@@ -577,11 +604,11 @@ const SearchPage = ({ history, location }) => {
                           )}
                         </div>
                         <Box display="flex" justifyContent="space-between">
-                          <Button size="sm" outline onClick={_onQueryFilter}>
-                            Update Search
-                          </Button>
                           <Button size="sm" outline onClick={() => setShouldShowFilter(false)}>
                             Close
+                          </Button>
+                          <Button size="sm" outline onClick={_onQueryFilter}>
+                            Update
                           </Button>
                         </Box>
                       </Box>
@@ -596,7 +623,15 @@ const SearchPage = ({ history, location }) => {
             <Reference>
               {({ ref }) => {
                 return (
-                  <Button outline size="sm" ref={ref} onClick={() => setShouldShowFilter('price')}>
+                  <Button
+                    outline
+                    size="sm"
+                    ref={ref}
+                    onClick={() => {
+                      if (shouldShowFilter === 'price') setShouldShowFilter(false)
+                      else setShouldShowFilter('price')
+                    }}
+                  >
                     Price
                   </Button>
                 )
@@ -644,11 +679,11 @@ const SearchPage = ({ history, location }) => {
                           />
                         </Box>
                         <Box mt="30px" display="flex" justifyContent="space-between">
-                          <Button size="sm" outline onClick={_onQueryFilter}>
-                            Update Search
-                          </Button>
                           <Button size="sm" outline onClick={() => setShouldShowFilter(false)}>
                             Close
+                          </Button>
+                          <Button size="sm" outline onClick={_onQueryFilter}>
+                            Update
                           </Button>
                         </Box>
                       </Box>
@@ -663,7 +698,15 @@ const SearchPage = ({ history, location }) => {
             <Reference>
               {({ ref }) => {
                 return (
-                  <Button outline size="sm" ref={ref} onClick={() => setShouldShowFilter('instantBooking')}>
+                  <Button
+                    outline
+                    size="sm"
+                    ref={ref}
+                    onClick={() => {
+                      if (shouldShowFilter === 'instantBooking') setShouldShowFilter(false)
+                      else setShouldShowFilter('instantBooking')
+                    }}
+                  >
                     Instant Booking
                   </Button>
                 )
@@ -700,11 +743,11 @@ const SearchPage = ({ history, location }) => {
                           />
                         </ItemSwitchStyled>
                         <Box display="flex" justifyContent="space-between">
-                          <Button size="sm" outline onClick={_onQueryFilter}>
-                            Update Search
-                          </Button>
                           <Button size="sm" outline onClick={() => setShouldShowFilter(false)}>
                             Close
+                          </Button>
+                          <Button size="sm" outline onClick={_onQueryFilter}>
+                            Update
                           </Button>
                         </Box>
                       </Box>
@@ -734,7 +777,8 @@ const SearchPage = ({ history, location }) => {
             noMargin
             title={
               <Text>
-                Showing results around <Text color="primary">{queryLocation}</Text>
+                {(queryCategory && capitalize(queryCategory)) || 'Showing results '} around{' '}
+                <Text color="primary">{queryLocation.substr(0, queryLocation.indexOf(','))}</Text>
               </Text>
             }
           />
