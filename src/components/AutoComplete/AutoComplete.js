@@ -64,7 +64,7 @@ const AutoComplete = props => {
         location: new window.google.maps.LatLng(-34, 151),
         radius: 2000,
         types: ['address'],
-        componentRestrictions: { country: ["AU"] }
+        componentRestrictions: { country: ['AU'] }
       }}
     >
       {({ getInputProps, suggestions, getSuggestionItemProps, loading }) => (
@@ -101,7 +101,7 @@ const AutoComplete = props => {
 
 AutoComplete.defaultProps = {
   children: null,
-  label: 'Address or Business name',
+  label: 'Address',
   placeholder: 'Type address or business name.'
 }
 

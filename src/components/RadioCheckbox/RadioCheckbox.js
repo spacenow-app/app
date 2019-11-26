@@ -38,7 +38,7 @@ const StyledCheckbox = styled.div`
   height: 20px;
   background: ${props => (props.checked ? '#6ADC91' : '#fff')};
   border: 2px solid ${props => (props.checked ? '#6ADC91' : '#172439')};
-  border-radius: 5px;
+  border-radius: 20px;
   transition: all 150ms;
   cursor: ${props => (props.disabled ? 'none' : 'pointer')};
 
@@ -55,17 +55,15 @@ const StyledCheckbox = styled.div`
 const LabelStyled = styled.span`
   font-family: 'Montserrat-Regular';
   color: #172439;
-  font-size: ${props => (props.fontSize ? props.fontSize : '16px')};
+  font-size: 16px;
   margin: 0 8px;
 
   @media only screen and (max-width: 600px) {
-    font-size: ${props => (props.fontSize ? props.fontSize : '14px')};
+    font-size: 14px;
   }
-
-  font-size: ${props => (props.fontSize ? props.fontSize : 'auto')};
 `
 
-const Checkbox = ({ className, name, checked, label, handleCheckboxChange, disabled, subtitle, ...props }) => (
+const RadioCheckbox = ({ className, name, checked, label, disabled, ...props }) => (
   <CheckboxWraperStyled>
     <label>
       <CheckboxContainer {...props} className={className}>
@@ -74,7 +72,7 @@ const Checkbox = ({ className, name, checked, label, handleCheckboxChange, disab
           name={name}
           disabled={disabled}
           checked={checked}
-          onChange={e => handleCheckboxChange(e, { checked: !e.target.checked, name })}
+          // onChange={e => handleCheckboxChange(e, { checked: !e.target.checked, name })}
         />
         <StyledCheckbox checked={checked} disabled={disabled}>
           <Icon viewBox="0 0 24 24">
@@ -83,24 +81,18 @@ const Checkbox = ({ className, name, checked, label, handleCheckboxChange, disab
         </StyledCheckbox>
       </CheckboxContainer>
     </label>
-    {label && (
-      <LabelStyled>
-        {label} <br />
-        {subtitle && subtitle}
-      </LabelStyled>
-    )}
+    {label && <LabelStyled>{label}</LabelStyled>}
   </CheckboxWraperStyled>
 )
 
-Checkbox.defaultProps = {
+RadioCheckbox.defaultProps = {
   checked: false,
-  label: false,
-  handleCheckboxChange: () => {}
+  label: false
 }
 
-Checkbox.propTypes = {
+RadioCheckbox.propTypes = {
   checked: PropTypes.bool,
-  handleCheckboxChange: PropTypes.func.isRequired
+  label: PropTypes.string
 }
 
-export default Checkbox
+export default RadioCheckbox

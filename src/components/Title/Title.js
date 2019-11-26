@@ -4,8 +4,7 @@ import styled, { css } from 'styled-components'
 import { space } from 'styled-system'
 
 const baseStyle = css`
-  font-family: 'Montserrat-Bold';
-  font-weight: bold;
+  font-family: ${props => (props.mediumBold ? 'Montserrat-Medium' : 'Montserrat-Bold')};
   color: ${props => (props.color ? props.color : '#172439')};
   margin: 0;
   max-width: 100%;
@@ -206,7 +205,8 @@ Title.propTypes = {
   noMargin: PropTypes.bool,
   right: PropTypes.bool,
   center: PropTypes.bool,
-  color: PropTypes.string
+  color: PropTypes.string,
+  mediumBold: PropTypes.bool
 }
 
 export default Title
