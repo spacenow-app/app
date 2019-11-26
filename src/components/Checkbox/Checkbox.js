@@ -63,7 +63,7 @@ const LabelStyled = styled.span`
   }
 `
 
-const Checkbox = ({ className, name, checked, label, handleCheckboxChange, disabled, ...props }) => (
+const Checkbox = ({ className, name, checked, label, handleCheckboxChange, disabled, subtitle, ...props }) => (
   <CheckboxWraperStyled>
     <label>
       <CheckboxContainer {...props} className={className}>
@@ -81,7 +81,12 @@ const Checkbox = ({ className, name, checked, label, handleCheckboxChange, disab
         </StyledCheckbox>
       </CheckboxContainer>
     </label>
-    {label && <LabelStyled>{label}</LabelStyled>}
+    {label && (
+      <LabelStyled>
+        {label} <br />
+        {subtitle && subtitle}
+      </LabelStyled>
+    )}
   </CheckboxWraperStyled>
 )
 
