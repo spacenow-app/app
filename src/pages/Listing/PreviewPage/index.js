@@ -401,7 +401,7 @@ const PreviewPage = ({ match, location, ...props }) => {
 
         <Grid columns={12}>
           <CellStyled width={2}>
-            <Button fluid outline onClick={() => props.history.push(`/listing/space/${match.params.id}`)}>
+            <Button fluid outline onClick={() => props.history.push(`/listing/space/${match.params.id}/availability`)}>
               {`Previous Step`}
             </Button>
           </CellStyled>
