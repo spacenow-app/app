@@ -134,7 +134,7 @@ const CheckoutPage = ({ match, location, history, ...props }) => {
     return null
   }
 
-  if (reservation.bookingState === 'approved' || reservation.bookingState === 'requested') {
+  if (reservation.bookingState !== 'approved' || reservation.paymentState === 'completed') {
     toast.info('Reservation is already paid.')
     history.replace('/')
     return null
