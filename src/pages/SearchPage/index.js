@@ -295,8 +295,6 @@ const SearchPage = ({ history, location }) => {
     hide: { enabled: false }
   }
 
-  console.log('filterCategory', filterCategory)
-
   return (
     <>
       <Box>
