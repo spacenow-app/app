@@ -1,3 +1,4 @@
+/* eslint-disable react/prop-types */
 import React, { useEffect, useState } from 'react'
 import { addMinutes, format, addHours, isAfter } from 'date-fns'
 import { useSelector, useDispatch } from 'react-redux'
@@ -187,7 +188,7 @@ const BookingCard = (dispatch, item, index, userType) => {
   )
 }
 
-const BookingPage = ({ ...props }) => {
+const BookingPage = ({ location, ...props }) => {
   const dispatch = useDispatch()
 
   const [userType, setUserType] = useState('guest')
@@ -202,7 +203,7 @@ const BookingPage = ({ ...props }) => {
   } = useSelector(state => state.account)
 
   useEffect(() => {
-    const queryParams = new URLSearchParams(props.location.search)
+    const queryParams = new URLSearchParams(location.search)
     if (queryParams.get('b') && queryParams.get('a')) {
       dispatch(onAcceptDeclineByEmail(queryParams.get('b'), queryParams.get('a'), id)).then(() => {
         setUserType('host')
@@ -211,11 +212,11 @@ const BookingPage = ({ ...props }) => {
     } else {
       dispatch(onGetBookingsByUser(id))
     }
-  }, [dispatch, props.location.search, id])
+  }, [dispatch, location, id])
 
-  const _handleChange = userType => {
-    setUserType(userType)
-    dispatch(onGetBookingsByUser(id, userType))
+  const _handleChange = type => {
+    setUserType(type)
+    dispatch(onGetBookingsByUser(id, type))
   }
 
   if (isLoading) return <Loader text="Loading bookings process" />
@@ -239,7 +240,6 @@ const BookingPage = ({ ...props }) => {
           </Dropdown>
         </Cell>
       </Grid>
-
       {!bookings || bookings.count === 0 ? (
         <BackgroundImage text="We didn't find any bookings :(" />
       ) : (
