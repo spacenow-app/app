@@ -1,16 +1,6 @@
 import React from 'react'
-// import { useSelector, useDispatch } from 'react-redux'
 import styled from 'styled-components'
-import { Title, StepButtons, Grid, Cell, Select, Checkbox, Text, Box } from 'components'
-
-const CellStyled = styled(Cell)`
-  display: grid;
-  // align-items: center;
-`
-
-const Container = styled.div`
-  min-height: 100vh;
-`
+import { Title, StepButtons, Grid, Cell, Select, Checkbox } from 'components'
 
 const CheckboxGroup = styled.div`
   display: grid;
@@ -23,15 +13,8 @@ const CheckboxGroup = styled.div`
 `
 
 const CategoryTab = props => {
-  // const dispatch = useDispatch()
-
-  // if (!location) {
-  //   props.history.replace('/listing-process/address')
-  //   return false
-  // }
-
   return (
-    <Container>
+    <>
       <Title
         type="h3"
         title="Primary use for the space"
@@ -51,30 +34,56 @@ const CategoryTab = props => {
       <br />
       <Title type="h3" title="Activities" subtitle="What activities are welcome in your space" subTitleMargin="10px" />
       <CheckboxGroup>
-        <Box>
-          <Checkbox
-            key={1}
-            label="All events."
-            subtitle="You’ll be found for all event searches and requests to match."
-            name="amenities"
-            value=""
-            checked
-            // handleCheckboxChange={_handleCheckboxChange}
-          />
-          {/* <Text>You’ll be found for all event searches and requests to match.</Text> */}
-        </Box>
+        <Checkbox
+          key={1}
+          label="All events."
+          subtitle="You’ll be found for all event searches and requests to match."
+          name="amenities"
+          value=""
+          checked
+          mediumLabel
+          // handleCheckboxChange={_handleCheckboxChange}
+        />
+        <Checkbox
+          key={1}
+          label="All events."
+          subtitle="You’ll be found for all event searches and requests to match."
+          name="amenities"
+          value=""
+          checked
+          mediumLabel
+          // handleCheckboxChange={_handleCheckboxChange}
+        />
+        <Checkbox
+          key={1}
+          label="All events."
+          subtitle="You’ll be found for all event searches and requests to match."
+          name="amenities"
+          value=""
+          checked
+          mediumLabel
+          // handleCheckboxChange={_handleCheckboxChange}
+        />
+        <Checkbox
+          key={1}
+          label="All events."
+          subtitle="You’ll be found for all event searches and requests to match."
+          name="amenities"
+          value=""
+          checked
+          mediumLabel
+          // handleCheckboxChange={_handleCheckboxChange}
+        />
       </CheckboxGroup>
       <StepButtons
         prev={{ disabled: false, onClick: () => props.history.replace('/listing-process/space/357/type') }}
-        next={
-          {
-            // disabled: !location,
-            // onClick: _handlerCreateDraft,
-            // isLoading: isLoadingCreating
-          }
-        }
+        next={{
+          // disabled: !location,
+          onClick: () => props.history.replace('/listing-process/space/357/specification')
+          // isLoading: isLoadingCreating
+        }}
       />
-    </Container>
+    </>
   )
 }
 

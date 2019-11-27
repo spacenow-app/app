@@ -1,6 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import styled from 'styled-components'
+import { Box } from 'components'
 
 const CheckboxWraperStyled = styled.div`
   display: grid;
@@ -53,7 +54,7 @@ const StyledCheckbox = styled.div`
 `
 
 const LabelStyled = styled.span`
-  font-family: 'Montserrat-Regular';
+  font-family: ${props => (props.mediumLabel ? 'Montserrat-Medium' : 'Montserrat-Regular')};
   color: #172439;
   font-size: ${props => (props.fontSize ? props.fontSize : '16px')};
   margin: 0 8px;
@@ -65,7 +66,17 @@ const LabelStyled = styled.span`
   font-size: ${props => (props.fontSize ? props.fontSize : 'auto')};
 `
 
-const Checkbox = ({ className, name, checked, label, handleCheckboxChange, disabled, subtitle, ...props }) => (
+const Checkbox = ({
+  className,
+  name,
+  checked,
+  label,
+  handleCheckboxChange,
+  disabled,
+  subtitle,
+  mediumLabel,
+  ...props
+}) => (
   <CheckboxWraperStyled>
     <label>
       <CheckboxContainer {...props} className={className}>
@@ -84,9 +95,13 @@ const Checkbox = ({ className, name, checked, label, handleCheckboxChange, disab
       </CheckboxContainer>
     </label>
     {label && (
-      <LabelStyled>
-        {label} <br />
-        {subtitle && subtitle}
+      <LabelStyled mediumLabel={mediumLabel}>
+        {label}
+        {subtitle && (
+          <Box mt="5px" fontFamily="Montserrat-Regular">
+            {subtitle}
+          </Box>
+        )}
       </LabelStyled>
     )}
   </CheckboxWraperStyled>

@@ -77,7 +77,7 @@ const AddressPage = props => {
       {error.message && <div className="text-danger">{error.message}</div>}
       {latLng && latLng.lat && latLng.lng && <Map position={latLng} />}
       <StepButtons
-        prev={{ disabled: false, onClick: () => props.history.goBack() }}
+        prev={{ disabled: false, onClick: () => props.history.replace('/listing-process/step') }}
         next={{
           disabled: !(latLng && (latLng.lat || latLng.lng)) || isLoading,
           onClick: _onNext,

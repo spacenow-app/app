@@ -6,7 +6,7 @@ import { Button } from 'components'
 const Footer = styled.div`
   display: grid;
   grid-template-columns: auto auto;
-  margin: 50px 0;
+  margin: 100px 0;
 
   @media (max-width: 680px) {
     margin: 20px 0;

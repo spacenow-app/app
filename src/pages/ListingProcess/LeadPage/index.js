@@ -1,7 +1,7 @@
 import React from 'react'
 import styled from 'styled-components'
 import Helmet from 'react-helmet'
-import { Wrapper, Card, Title, Footer, Text } from 'components'
+import { Wrapper, Card, Title, Text } from 'components'
 import { config } from 'variables'
 
 const WrapperStyled = styled.div`
@@ -54,7 +54,6 @@ const LeadPage = props => {
           buttonHandleClick={() => _goTo('multiple')}
         />
       </WrapperStyled>
-      {/* <Footer /> */}
     </Wrapper>
   )
 }

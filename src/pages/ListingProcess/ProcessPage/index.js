@@ -9,7 +9,11 @@ import { openModal, TypesModal } from 'redux/ducks/modal'
 
 import SpaceTypeTab from './Basic/SpaceTypeTab'
 import CategoryTab from './Basic/CategoryTab'
-// import AvailabilityTab from './AvailabilityTab'
+import SpecTab from './Detail/SpecTab'
+import FeatureTab from './Detail/FeatureTab'
+import DetailTab from './Detail/DetailTab'
+import AmenitiesTab from './Detail/AmenitiesTab'
+import MediaTab from './Detail/MediaTab'
 
 const ScrollToTop = ({ children, location: { pathname } }) => {
   useEffect(() => {
@@ -88,25 +92,54 @@ const ProcessPage = ({ match, history, location, ...props }) => {
               />
             )}
           />
-          {/* <Route
-            path={`${match.path}/availability`}
+          <Route
+            path={`${match.path}/specification`}
             render={routeProps => (
-              <AvailabilityTab
+              <SpecTab
                 {...routeProps}
                 {...props}
                 listing={objectListing}
                 dispatch={dispatch}
                 setFatherValues={_setFatherValues}
-                match={match}
               />
             )}
-          /> */}
-          {/* <Route
-            path={`${match.path}/cancellation`}
+          />
+          <Route
+            path={`${match.path}/feature`}
             render={routeProps => (
-              <CancellationTab {...routeProps} {...props} listing={objectListing} match={match} dispatch={dispatch} />
+              <FeatureTab
+                {...routeProps}
+                {...props}
+                listing={objectListing}
+                dispatch={dispatch}
+                setFatherValues={_setFatherValues}
+              />
             )}
-          /> */}
+          />
+          <Route
+            path={`${match.path}/detail`}
+            render={routeProps => (
+              <DetailTab
+                {...routeProps}
+                {...props}
+                listing={objectListing}
+                dispatch={dispatch}
+                setFatherValues={_setFatherValues}
+              />
+            )}
+          />
+          <Route
+            path={`${match.path}/media`}
+            render={routeProps => (
+              <MediaTab
+                {...routeProps}
+                {...props}
+                listing={objectListing}
+                dispatch={dispatch}
+                setFatherValues={_setFatherValues}
+              />
+            )}
+          />
         </ScrollToTop>
         <Route component={() => <h1>not found</h1>} />
       </Switch>

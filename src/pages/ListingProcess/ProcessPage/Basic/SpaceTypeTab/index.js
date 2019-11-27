@@ -1,27 +1,14 @@
 import React from 'react'
-// import { useSelector, useDispatch } from 'react-redux'
 import styled from 'styled-components'
 import { Title, StepButtons, Grid, Cell, Radio, Box } from 'components'
 
 const CellStyled = styled(Cell)`
   display: grid;
-  // align-items: center;
-`
-
-const Container = styled.div`
-  min-height: 100vh;
 `
 
 const SpaceTypeTab = props => {
-  // const dispatch = useDispatch()
-
-  // if (!location) {
-  //   props.history.replace('/listing-process/address')
-  //   return false
-  // }
-
   return (
-    <Container>
+    <>
       <Title type="h3" title="Property type" subtitle="Which best describes your space?" subTitleMargin="10px" />
       <Grid column={12} rowGap="40px">
         <CellStyled width={1}>
@@ -71,14 +58,14 @@ const SpaceTypeTab = props => {
         </CellStyled>
       </Grid>
       <StepButtons
-        prev={{ disabled: false, onClick: () => props.history.replace('/listing-process/address') }}
+        prev={{ disabled: false, onClick: () => props.history.replace('/listing-process/space/357/step') }} // modal can't change location or create new
         next={{
           // disabled: !location,
           onClick: () => props.history.replace('/listing-process/space/357/category')
           // isLoading: isLoadingCreating
         }}
       />
-    </Container>
+    </>
   )
 }
 
