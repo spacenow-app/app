@@ -29,8 +29,12 @@ const _bookingDetails = dispatch => (booking, userType) => {
   )
 }
 
-const _handleRedirect = id => {
-  window.location.href = `/space/${id}`
+const _goToSpacePage = listingId => {
+  window.location.href = `/space/${listingId}`
+}
+
+const _goToCheckoutPage = bookingId => {
+  window.location.href = `/checkout/${bookingId}`
 }
 
 const _getTip = (status, userType) => {
@@ -90,7 +94,7 @@ const BookingCard = (dispatch, item, index, userType, userId) => {
 
   return (
     <Card.Horizontal key={index}>
-      <Card.Horizontal.Image src={_getCoverPhoto(item.listing)} handleClick={() => _handleRedirect(item.listingId)} />
+      <Card.Horizontal.Image src={_getCoverPhoto(item.listing)} handleClick={() => _goToSpacePage(item.listingId)} />
       <Card.Horizontal.Body>
         <Card.Horizontal.Title
           noMargin
@@ -132,8 +136,8 @@ const BookingCard = (dispatch, item, index, userType, userId) => {
           </Text>
         </Card.Horizontal.Dropdown.Toggle>
         <Card.Horizontal.Dropdown.Menu>
-          {item.bookingState === 'approved' && userType === 'guest' && isAfter(new Date(), expire) && (
-            <Card.Horizontal.Dropdown.Item onClick={() => _handleRedirect(item.listingId)}>
+          {item.bookingState === 'approved' && item.paymentState === 'pending' && userType === 'guest' && isAfter(new Date(), expire) && (
+            <Card.Horizontal.Dropdown.Item onClick={() => _goToCheckoutPage(item.bookingId)}>
               Continue Booking
             </Card.Horizontal.Dropdown.Item>
           )}
