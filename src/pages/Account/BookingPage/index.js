@@ -29,14 +29,6 @@ const _bookingDetails = dispatch => (booking, userType) => {
   )
 }
 
-const _declineBooking = dispatch => bookingId => {
-  dispatch(onDeclineBooking(bookingId))
-}
-
-const _acceptBooking = dispatch => bookingId => {
-  dispatch(onAcceptBooking(bookingId))
-}
-
 const _handleRedirect = id => {
   window.location.href = `/space/${id}`
 }
@@ -79,7 +71,7 @@ const _getCoverPhoto = object => {
   return cropPicture(object.photos[0].name)
 }
 
-const BookingCard = (dispatch, item, index, userType) => {
+const BookingCard = (dispatch, item, index, userType, userId) => {
   let expire = addHours(convertedDate(item.createdAt), 24)
 
   if (userType === 'guest') expire = addMinutes(convertedDate(item.createdAt), 30)
@@ -87,6 +79,14 @@ const BookingCard = (dispatch, item, index, userType) => {
   if (userType === 'guest') expire = addMinutes(convertedDate(item.createdAt), 15)
 
   const expiryDate = `${format(expire, 'dd/MM/yyyy')} at ${format(expire, 'HH:mm')}`
+
+  const _acceptBooking = bookingId => {
+    dispatch(onAcceptBooking(bookingId)).then(() => dispatch(onGetBookingsByUser(userId, userType)))
+  }
+  
+  const _declineBooking = bookingId => {
+    dispatch(onDeclineBooking(bookingId)).then(() => dispatch(onGetBookingsByUser(userId, userType)))
+  }
 
   return (
     <Card.Horizontal key={index}>
@@ -110,7 +110,6 @@ const BookingCard = (dispatch, item, index, userType) => {
               currency={item.currency}
               price={item.totalPrice}
               currencySymbol="$"
-              // bookingPeriod={item.priceType}
               bookingType={item.bookingType}
               size="18px"
             />
@@ -133,7 +132,7 @@ const BookingCard = (dispatch, item, index, userType) => {
           </Text>
         </Card.Horizontal.Dropdown.Toggle>
         <Card.Horizontal.Dropdown.Menu>
-          {item.bookingState === 'pending' && userType === 'guest' && isAfter(new Date(), expire) && (
+          {item.bookingState === 'approved' && userType === 'guest' && isAfter(new Date(), expire) && (
             <Card.Horizontal.Dropdown.Item onClick={() => _handleRedirect(item.listingId)}>
               Continue Booking
             </Card.Horizontal.Dropdown.Item>
@@ -141,13 +140,13 @@ const BookingCard = (dispatch, item, index, userType) => {
           <Card.Horizontal.Dropdown.Item onClick={() => _bookingDetails(dispatch)(item, userType)}>
             Booking Details
           </Card.Horizontal.Dropdown.Item>
-          {item.bookingState === 'pending' && userType === 'host' && (
+          {item.bookingState === 'requested' && userType === 'host' && (
             <>
-              <Card.Horizontal.Dropdown.Item onClick={() => _declineBooking(dispatch)(item.bookingId)}>
-                Decline Booking
-              </Card.Horizontal.Dropdown.Item>
-              <Card.Horizontal.Dropdown.Item onClick={() => _acceptBooking(dispatch)(item.bookingId)}>
+              <Card.Horizontal.Dropdown.Item onClick={() => _acceptBooking(item.bookingId)}>
                 Accept Booking
+              </Card.Horizontal.Dropdown.Item>
+              <Card.Horizontal.Dropdown.Item onClick={() => _declineBooking(item.bookingId)}>
+                Decline Booking
               </Card.Horizontal.Dropdown.Item>
             </>
           )}
@@ -244,7 +243,7 @@ const BookingPage = ({ location, ...props }) => {
         <BackgroundImage text="We didn't find any bookings :(" />
       ) : (
         <Grid columns={1} rowGap="30px">
-          {[].concat(bookings.items).map((item, index) => BookingCard(dispatch, item, index, userType))}
+          {[].concat(bookings.items).map((item, index) => BookingCard(dispatch, item, index, userType, id))}
         </Grid>
       )}
     </>
