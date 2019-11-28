@@ -14,6 +14,10 @@ import FeatureTab from './Detail/FeatureTab'
 import DetailTab from './Detail/DetailTab'
 import AmenitiesTab from './Detail/AmenitiesTab'
 import MediaTab from './Detail/MediaTab'
+import PriceTab from './Detail/PriceTab'
+import AccessTab from './Detail/AccessTab'
+import TimetableTab from './Detail/TimetableTab'
+import CancelTab from './Detail/CancelTab'
 
 const ScrollToTop = ({ children, location: { pathname } }) => {
   useEffect(() => {
@@ -129,9 +133,69 @@ const ProcessPage = ({ match, history, location, ...props }) => {
             )}
           />
           <Route
+            path={`${match.path}/amenities`}
+            render={routeProps => (
+              <AmenitiesTab
+                {...routeProps}
+                {...props}
+                listing={objectListing}
+                dispatch={dispatch}
+                setFatherValues={_setFatherValues}
+              />
+            )}
+          />
+          <Route
             path={`${match.path}/media`}
             render={routeProps => (
               <MediaTab
+                {...routeProps}
+                {...props}
+                listing={objectListing}
+                dispatch={dispatch}
+                setFatherValues={_setFatherValues}
+              />
+            )}
+          />
+          <Route
+            path={`${match.path}/price`}
+            render={routeProps => (
+              <PriceTab
+                {...routeProps}
+                {...props}
+                listing={objectListing}
+                dispatch={dispatch}
+                setFatherValues={_setFatherValues}
+              />
+            )}
+          />
+          <Route
+            path={`${match.path}/access`}
+            render={routeProps => (
+              <AccessTab
+                {...routeProps}
+                {...props}
+                listing={objectListing}
+                dispatch={dispatch}
+                setFatherValues={_setFatherValues}
+              />
+            )}
+          />
+          <Route
+            path={`${match.path}/timetable`}
+            render={routeProps => (
+              <TimetableTab
+                {...routeProps}
+                {...props}
+                listing={objectListing}
+                dispatch={dispatch}
+                setFatherValues={_setFatherValues}
+              />
+            )}
+          />
+          <Route
+            path={`${match.path}/cancellation`}
+            render={routeProps => (
+              <CancelTab
                 {...routeProps}
                 {...props}
                 listing={objectListing}

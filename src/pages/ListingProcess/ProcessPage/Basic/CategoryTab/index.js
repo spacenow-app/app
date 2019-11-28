@@ -2,6 +2,17 @@ import React from 'react'
 import styled from 'styled-components'
 import { Title, StepButtons, Grid, Cell, Select, Checkbox } from 'components'
 
+const WrapperStyled = styled.div`
+  display: grid;
+  grid-row-gap: 20px;
+
+  @media (max-width: 680px) {
+    grid-row-gap: 15px;
+  }
+`
+
+const SectionStyled = styled.div``
+
 const CheckboxGroup = styled.div`
   display: grid;
   grid-template-columns: 1fr 1fr 1fr;
@@ -14,67 +25,75 @@ const CheckboxGroup = styled.div`
 
 const CategoryTab = props => {
   return (
-    <>
-      <Title
-        type="h3"
-        title="Primary use for the space"
-        subtitle="Select the primary use for your pace."
-        subTitleMargin="10px"
-      />
-      <Grid columns={3}>
-        <Cell width={1}>
-          <Select name="category">
-            <option value="">Event Space</option>
-            <option value="">Meeting Room</option>
-            <option value="">Event Space</option>
-            <option value="">Meeting Room</option>
-          </Select>
-        </Cell>
-      </Grid>
-      <br />
-      <Title type="h3" title="Activities" subtitle="What activities are welcome in your space" subTitleMargin="10px" />
-      <CheckboxGroup>
-        <Checkbox
-          key={1}
-          label="All events."
-          subtitle="You’ll be found for all event searches and requests to match."
-          name="amenities"
-          value=""
-          checked
-          mediumLabel
-          // handleCheckboxChange={_handleCheckboxChange}
+    <WrapperStyled>
+      <SectionStyled>
+        <Title
+          type="h3"
+          title="Primary use for the space"
+          subtitle="Select the primary use for your pace."
+          subTitleMargin="10px"
         />
-        <Checkbox
-          key={1}
-          label="All events."
-          subtitle="You’ll be found for all event searches and requests to match."
-          name="amenities"
-          value=""
-          checked
-          mediumLabel
-          // handleCheckboxChange={_handleCheckboxChange}
+        <Grid columns={3}>
+          <Cell width={1}>
+            <Select name="category">
+              <option value="">Event Space</option>
+              <option value="">Meeting Room</option>
+              <option value="">Event Space</option>
+              <option value="">Meeting Room</option>
+            </Select>
+          </Cell>
+        </Grid>
+      </SectionStyled>
+      <SectionStyled>
+        <Title
+          type="h3"
+          title="Activities"
+          subtitle="What activities are welcome in your space"
+          subTitleMargin="10px"
         />
-        <Checkbox
-          key={1}
-          label="All events."
-          subtitle="You’ll be found for all event searches and requests to match."
-          name="amenities"
-          value=""
-          checked
-          mediumLabel
-          // handleCheckboxChange={_handleCheckboxChange}
-        />
-        <Checkbox
-          key={1}
-          label="All events."
-          subtitle="You’ll be found for all event searches and requests to match."
-          name="amenities"
-          value=""
-          checked
-          mediumLabel
-          // handleCheckboxChange={_handleCheckboxChange}
-        />
-      </CheckboxGroup>
+        <CheckboxGroup>
+          <Checkbox
+            key={1}
+            label="All events."
+            subtitle="You’ll be found for all event searches and requests to match."
+            name="amenities"
+            value=""
+            checked
+            mediumLabel
+            // handleCheckboxChange={_handleCheckboxChange}
+          />
+          <Checkbox
+            key={1}
+            label="All events."
+            subtitle="You’ll be found for all event searches and requests to match."
+            name="amenities"
+            value=""
+            checked
+            mediumLabel
+            // handleCheckboxChange={_handleCheckboxChange}
+          />
+          <Checkbox
+            key={1}
+            label="All events."
+            subtitle="You’ll be found for all event searches and requests to match."
+            name="amenities"
+            value=""
+            checked
+            mediumLabel
+            // handleCheckboxChange={_handleCheckboxChange}
+          />
+          <Checkbox
+            key={1}
+            label="All events."
+            subtitle="You’ll be found for all event searches and requests to match."
+            name="amenities"
+            value=""
+            checked
+            mediumLabel
+            // handleCheckboxChange={_handleCheckboxChange}
+          />
+        </CheckboxGroup>
+      </SectionStyled>
       <StepButtons
         prev={{ disabled: false, onClick: () => props.history.replace('/listing-process/space/357/type') }}
         next={{
@@ -83,7 +102,7 @@ const CategoryTab = props => {
           // isLoading: isLoadingCreating
         }}
       />
-    </>
+    </WrapperStyled>
   )
 }
 

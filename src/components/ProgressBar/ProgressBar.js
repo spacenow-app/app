@@ -2,17 +2,20 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import styled from 'styled-components'
 import { Line } from 'rc-progress'
-import { Text, Grid } from 'components'
+import { Text } from 'components'
 
-const ContainerStyled = styled.div``
+const ContainerStyled = styled.div`
+  margin-bottom: 35px;
+
+  @media (max-width: 680px) {
+    margin-bottom: 15px;
+  }
+`
 
 const ProgressBar = ({ percent, stepNumber, stepName, ...props }) => {
   return (
     <ContainerStyled {...props}>
-      {/* <Grid columns="1fr auto" alignItems="center" columnGap="30px"> */}
       <Line percent={percent} strokeColor="#6adc91" />
-      {/* {stepNumber && stepName && <Text float="right">{`Step ${stepNumber}. ${stepName} `}</Text>} */}
-      {/* </Grid> */}
       <Text>{`${percent}% completed`}</Text>
     </ContainerStyled>
   )

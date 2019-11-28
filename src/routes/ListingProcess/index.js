@@ -6,6 +6,7 @@ const LeadPage = lazy(() => import('pages/ListingProcess/LeadPage'))
 const StepPage = lazy(() => import('pages/ListingProcess/StepPage'))
 const AddressPage = lazy(() => import('pages/ListingProcess/AddressPage'))
 const ProcessPage = lazy(() => import('pages/ListingProcess/ProcessPage'))
+const ViewPage = lazy(() => import('pages/ListingProcess/ViewPage'))
 const NotFoundPage = lazy(() => import('pages/NotFoundPage'))
 
 const ListingProcess = ({ match, ...props }) => {
@@ -17,6 +18,7 @@ const ListingProcess = ({ match, ...props }) => {
         <Route exact component={StepPage} path={`${match.path}/step`} />
         <Route exact component={AddressPage} path={`${match.path}/address`} />
         <Route component={ProcessPage} path={`${match.path}/space/:id`} />
+        <Route component={ViewPage} path={`${match.path}/view/:id`} />
         <Route component={NotFoundPage} />
       </Switch>
     </Suspense>
