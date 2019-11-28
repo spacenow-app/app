@@ -297,7 +297,7 @@ const SpacePage = ({ match, location, history, ...props }) => {
     const { address1 = '', city = '', zipcode = '', state = '', country = '' } = address
     const convertedAddress = `${address1 ? `${address1}, ` : ''} ${city ? `${city}, ` : ''} ${
       zipcode ? `${zipcode}, ` : ''
-    } ${state ? `${state}, ` : ''} ${country ? `${country}` : ''}`
+      } ${state ? `${state}, ` : ''} ${country ? `${country}` : ''}`
     return convertedAddress.replace(/\0.*$/g, '')
   }
 
@@ -324,7 +324,7 @@ const SpacePage = ({ match, location, history, ...props }) => {
 
   const _onClaimListing = () => dispatch(onClaimListing(match.params.id, listing.title))
 
-  const _handleClickByListing = () => dispatch(onSaveClicksByListing(match.params.id, listing.listingData.link)) 
+  const _handleClickByListing = () => dispatch(onSaveClicksByListing(match.params.id, listing.listingData.link))
 
   const _renderHighLights = obj => {
     let array = Object.keys(obj).map(i => obj[i])
@@ -418,11 +418,11 @@ const SpacePage = ({ match, location, history, ...props }) => {
   const _convertedArrayPhotos = array => {
     return array.filter(el => el !== undefined).length > 0
       ? array
-          .filter(el => el !== undefined)
-          .map(el => ({
-            source: cropPicture(el.name, 800, 500),
-            isCover: el.isCover
-          }))
+        .filter(el => el !== undefined)
+        .map(el => ({
+          source: cropPicture(el.name, 800, 500),
+          isCover: el.isCover
+        }))
       : []
   }
 
@@ -792,17 +792,17 @@ const SpacePage = ({ match, location, history, ...props }) => {
   return (
     <>
       {imageHeight == 325 ||
-      (listing.photos.length > 1 &&
-        listing.settingsParent.category.otherItemName !== 'parking' &&
-        listing.settingsParent.category.otherItemName !== 'storage' &&
-        listing.user.provider !== 'external') ? (
-        <Box mb="30px">
-          <CarouselListing photos={_convertedArrayPhotos(listing.photos)} />
-        </Box>
-      ) : null}
+        (listing.photos.length > 1 &&
+          listing.settingsParent.category.otherItemName !== 'parking' &&
+          listing.settingsParent.category.otherItemName !== 'storage' &&
+          listing.user.provider !== 'external') ? (
+          <Box mb="30px">
+            <CarouselListing photos={_convertedArrayPhotos(listing.photos)} />
+          </Box>
+        ) : null}
       <Wrapper>
         <Helmet title={`${listing.title} | ${listing.settingsParent.category.itemName} | ${_getSuburb(listing.location)} | Find the perfect event, coworking, office and meeting room spaces.`}>
-          <meta name="description" content={`Find the perfect space for ${listing.settingsParent.category.itemName} in ${_getSuburb(listing.location)}. ${listing.listingData.description.substring(0, 160 - (listing.settingsParent.category.itemName.length + _getSuburb(listing.location).length + 30))}`} />
+          <meta name="description" content={`Find the perfect space for ${listing.settingsParent.category.itemName} in ${_getSuburb(listing.location)}. ${listing.listingData.description && listing.listingData.description.substring(0, 160 - (listing.settingsParent.category.itemName.length + _getSuburb(listing.location).length + 30))}`} />
         </Helmet>
         {listing.user.provider === 'external' && imageHeight !== 325 && (
           <Box mb="20px">
@@ -819,11 +819,11 @@ const SpacePage = ({ match, location, history, ...props }) => {
                 imageHeight !== 325 && <CarouselListing photos={_convertedArrayPhotos(listing.photos)} />}
 
               {imageHeight !== 325 &&
-              (listing.settingsParent.category.otherItemName === 'parking' ||
-                listing.settingsParent.category.otherItemName === 'storage') &&
-              listing.user.provider !== 'external' ? (
-                <Carousel photos={_convertedArrayPhotos(listing.photos)} />
-              ) : null}
+                (listing.settingsParent.category.otherItemName === 'parking' ||
+                  listing.settingsParent.category.otherItemName === 'storage') &&
+                listing.user.provider !== 'external' ? (
+                  <Carousel photos={_convertedArrayPhotos(listing.photos)} />
+                ) : null}
 
               <Grid columns={12}>
                 <Cell width={8} style={{ display: 'flex' }}>

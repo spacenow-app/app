@@ -106,7 +106,7 @@ const PartnerPage = ({ match, location, ...props }) => {
     const { address1 = '', city = '', zipcode = '', state = '', country = '' } = address
     const convertedAddress = `${address1 ? `${address1}, ` : ''} ${city ? `${city}, ` : ''} ${
       zipcode ? `${zipcode}, ` : ''
-    } ${state ? `${state}, ` : ''} ${country ? `${country}` : ''}`
+      } ${state ? `${state}, ` : ''} ${country ? `${country}` : ''}`
     return convertedAddress.replace(/\0.*$/g, '')
   }
 
@@ -259,16 +259,16 @@ const PartnerPage = ({ match, location, ...props }) => {
   return (
     <>
       {imageHeight === 325 ||
-      (listing.photos.length > 1 &&
-        listing.settingsParent.category.otherItemName !== 'parking' &&
-        listing.settingsParent.category.otherItemName !== 'storage') ? (
-        <Box mb="30px">
-          <CarouselListing photos={_convertedArrayPhotos(listing.photos)} />
-        </Box>
-      ) : null}
+        (listing.photos.length > 1 &&
+          listing.settingsParent.category.otherItemName !== 'parking' &&
+          listing.settingsParent.category.otherItemName !== 'storage') ? (
+          <Box mb="30px">
+            <CarouselListing photos={_convertedArrayPhotos(listing.photos)} />
+          </Box>
+        ) : null}
       <Wrapper>
         <Helmet title={`${listing.title} | ${listing.settingsParent.category.itemName} | ${_getSuburb(listing.location)} | Find the perfect event, coworking, office and meeting room spaces.`}>
-          <meta name="description" content={`Find the perfect space for ${listing.settingsParent.category.itemName} in ${_getSuburb(listing.location)}. ${listing.listingData.description.substring(0, 160 - (listing.settingsParent.category.itemName.length + _getSuburb(listing.location).length + 30))}`} />
+          <meta name="description" content={`Find the perfect space for ${listing.settingsParent.category.itemName} in ${_getSuburb(listing.location)}. ${listing.listingData.description && listing.listingData.description.substring(0, 160 - (listing.settingsParent.category.itemName.length + _getSuburb(listing.location).length + 30))}`} />
         </Helmet>
         <GridStyled columns="auto 350px" columnGap="35px" rowGap="30px">
           <Box display="grid" gridRowGap="15px">
@@ -278,10 +278,10 @@ const PartnerPage = ({ match, location, ...props }) => {
               imageHeight !== 325 && <CarouselListing photos={_convertedArrayPhotos(listing.photos)} />}
 
             {imageHeight !== 325 &&
-            (listing.settingsParent.category.otherItemName === 'parking' ||
-              listing.settingsParent.category.otherItemName === 'storage') ? (
-              <Carousel photos={_convertedArrayPhotos(listing.photos)} />
-            ) : null}
+              (listing.settingsParent.category.otherItemName === 'parking' ||
+                listing.settingsParent.category.otherItemName === 'storage') ? (
+                <Carousel photos={_convertedArrayPhotos(listing.photos)} />
+              ) : null}
 
             <Grid columns={12}>
               <CellStyled width={6}>
