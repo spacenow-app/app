@@ -68,7 +68,7 @@ const CardTitle = styled(Text)`
 
 const CardImage = styled.img`
   width: 100%;
-  height: ${({ showMap }) => (showMap ? '100%' : '280px')};
+  height: ${({ showMap }) => (showMap ? '248px' : '280px')};
   display: block;
   border-radius: 6px;
   cursor: pointer;
