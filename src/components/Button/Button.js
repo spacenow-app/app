@@ -13,7 +13,7 @@ const ButtonStyled = styled(ButtonExternal)`
       (props.fluid && '100%') ||
       (props.width && props.width) ||
       (props.size === 'xs' && '120px') ||
-      (props.size === 'sm' && '144px') ||
+      (props.size === 'sm' && '148px') ||
       '180px'};
     border-radius: 8px;
     font-family: 'Montserrat-Medium';
