@@ -44,11 +44,11 @@ const _renderContentCard = booking => {
   return (
     <Grid columns={1} rowGap="20px">
       <Cell>
-        {
-          booking.bookingType === "request" ?
-          <TitleStyled>Your reservation is waiting for hosting approval.</TitleStyled> :
+        {booking.bookingType === 'request' ? (
+          <TitleStyled>Your reservation is waiting for hosting approval.</TitleStyled>
+        ) : (
           <TitleStyled>You have an incomplete reservation for this listing. What would you like to do?</TitleStyled>
-        }
+        )}
         <SubTitleStyled>{`This reservation will expire on ${expiryDate}`}</SubTitleStyled>
       </Cell>
 
@@ -86,7 +86,7 @@ const _onContinueBooking = (booking, dispatch, history) => {
     }
     dispatch(openModal(TypesModal.MODAL_TYPE_CONFIRM, options))
   } else {
-    history.push(`/checkout/${booking.bookingId}`)
+    history.push(`/checkout/${booking.bookingId}/info`)
   }
 }
 
@@ -115,22 +115,19 @@ const PendingBooking = ({ booking, bookingType, listing, dispatch, history }) =>
       days={booking.period}
       quantity={1}
     />
-    <Grid columns={bookingType !== "request" ? 2 : 1}>
+    <Grid columns={bookingType !== 'request' ? 2 : 1}>
       <Cell md={6}>
         <Button fluid error onClick={() => _onCancelBooking(booking, dispatch)}>
           Cancel
         </Button>
       </Cell>
-      {
-        bookingType !== "request" && (
-          <Cell md={6}>
-            <Button fluid onClick={() => _onContinueBooking(booking, dispatch, history)}>
-              Continue
-            </Button>
-          </Cell>
-        )
-      }
-      
+      {bookingType !== 'request' && (
+        <Cell md={6}>
+          <Button fluid onClick={() => _onContinueBooking(booking, dispatch, history)}>
+            Continue
+          </Button>
+        </Cell>
+      )}
     </Grid>
   </Grid>
 )

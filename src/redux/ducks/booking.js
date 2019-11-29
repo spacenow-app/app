@@ -269,6 +269,19 @@ const queryGetBookingById = gql`
           state
           zipcode
         }
+        settingsParent {
+          id
+          category {
+            id
+            itemName
+            otherItemName
+          }
+          subcategory {
+            id
+            itemName
+            otherItemName
+          }
+        }
       }
     }
   }
@@ -608,10 +621,9 @@ export const onCreateBooking = (object, history) => async dispatch => {
       variables: object
     })
     dispatch({ type: Types.CREATE_BOOKING_SUCCESS, payload: data.createBooking })
-    if(object.bookingType !== "request")
-      history.push(`/checkout/${data.createBooking.bookingId}`)
+    if (object.bookingType !== 'request') history.push(`/checkout/${data.createBooking.bookingId}/info`)
     else {
-      toast.success("Booking Successfully Requested!!!")
+      toast.success('Booking Successfully Requested!!!')
       dispatch(onGetPendingBooking(object.listingId, object.guestId))
     }
   } catch (err) {

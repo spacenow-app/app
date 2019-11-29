@@ -60,6 +60,7 @@ import Review from './Review'
 import StarRatingComponent from './Review/StarRatingComponent'
 import Phone from './Phone'
 import Video from './Video'
+import CheckInOut from './CheckInOut'
 
 export {
   Modal,
@@ -126,5 +127,6 @@ export {
   Review,
   StarRatingComponent,
   Phone,
-  Video
+  Video,
+  CheckInOut
 }
