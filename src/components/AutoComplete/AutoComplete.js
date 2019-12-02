@@ -63,7 +63,7 @@ const AutoComplete = props => {
       searchOptions={{
         location: new window.google.maps.LatLng(-34, 151),
         radius: 2000,
-        types: ['address'],
+        // types: ['address'],
         componentRestrictions: { country: ["AU"] }
       }}
     >
