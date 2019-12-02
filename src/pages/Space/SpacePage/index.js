@@ -240,7 +240,6 @@ const SpacePage = ({ match, location, history, ...props }) => {
   const [message, setMessage] = useState('')
   const [hourlyError, setHourlyError] = useState('')
   const [focusInput, setFocusInput] = useState(false)
-  const [isValid, setIsValid] = useState(true)
   const [showPlay, setShowPlay] = useState(true)
 
   const videoTag = document.getElementsByTagName('video')[0]
@@ -589,10 +588,8 @@ const SpacePage = ({ match, location, history, ...props }) => {
   const _onSubmitBooking = async () => {
     if (_isPeriodValid(listing.bookingPeriod)) {
       setFocusInput(true)
-      setIsValid(false)
       return
     }
-    setIsValid(true)
 
     const object = {
       listingId: listing.id,
