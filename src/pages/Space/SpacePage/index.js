@@ -523,11 +523,6 @@ const SpacePage = ({ match, location, history, ...props }) => {
             message={message}
             handleMessageChange={_handleMessageChange}
           />
-          {!isValid && (
-            <Box color="error" ml="23px">
-              {`Minimum ${listing.listingData.minTerm} days is required`}
-            </Box>
-          )}
         </React.Fragment>
       )
     }
