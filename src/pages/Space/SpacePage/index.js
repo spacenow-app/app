@@ -288,6 +288,10 @@ const SpacePage = ({ match, location, history, ...props }) => {
     history.push(`/space/partner/${match.params.id}`)
   }
 
+  if (listing && listing.status === 'deleted') {
+    history.push(`/space`)
+  }
+
   if (isListingLoading) {
     return <Loader text="Loading listing view" />
   }
