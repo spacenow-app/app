@@ -59,7 +59,7 @@ import { sendMail } from 'redux/ducks/mail'
 import { onCreateMessage } from 'redux/ducks/message'
 
 // import GraphCancelattionImage from 'pages/Listing/SpaceDetailsPage/CancellationTab/graph_cancellation.png'
-import { onGetPublicReviews } from 'redux/ducks/reviews'
+import { onGetPublicReviews, onGetGoogleReviews } from 'redux/ducks/reviews'
 
 import config from 'variables/config'
 
@@ -228,7 +228,7 @@ const SpacePage = ({ match, location, history, ...props }) => {
   const { isLoading: isLoadingOnCreateReservation } = useSelector(state => state.booking.create)
   const { object: pendingBooking } = useSelector(state => state.booking.pending)
   const { similar: similarResults } = useSelector(state => state.search)
-  const { public: publicReviews, totalPages } = useSelector(state => state.reviews.get)
+  const { public: publicReviews, google: googleReviews, totalPages } = useSelector(state => state.reviews.get)
   const { object: videoInput } = useSelector(state => state.listing.video)
 
   const [datesSelected, setDatesSelected] = useState([])
@@ -282,6 +282,10 @@ const SpacePage = ({ match, location, history, ...props }) => {
 
   useEffect(() => {
     listing && dispatch(onGetPublicReviews(listing.id))
+  }, [dispatch, listing])
+
+  useEffect(() => {
+    listing && listing.location && listing.location.placeId && dispatch(onGetGoogleReviews(listing.location.placeId))
   }, [dispatch, listing])
 
   if (listing && listing.user.provider === 'wework') {
@@ -1088,6 +1092,29 @@ const SpacePage = ({ match, location, history, ...props }) => {
                   onPageChanged={_onPagionationChange}
                 />
               </ContainerPagination>
+
+              {googleReviews && googleReviews.reviews && googleReviews.reviews.length > 0 && (
+                <>
+                  <Box display="grid" gridTemplateColumns="200px auto" ref={reviewRef}>
+                    <Title type="h5" title={`Reviews (${googleReviews.reviews.length})`} />
+                    <TitleStarContainer>
+                      <StarRatingComponent name="ratingOverall" value={googleReviews.rating} editing={false} />
+                    </TitleStarContainer>
+                  </Box>
+                  {googleReviews.reviews.map((o, index) => {
+                    return (
+                      <Review
+                        key={index}
+                        userName={o.author_name}
+                        userPicture={o.profile_photo_url}
+                        date={new Date(o.time * 1000)}
+                        comment={o.text}
+                        rating={o.rating}
+                      />
+                    )
+                  })}
+                </>
+              )}
 
               {listing.rules.length > 0 && (
                 <Box width="80%">

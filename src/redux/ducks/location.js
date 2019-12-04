@@ -23,8 +23,8 @@ const initialState = {
 
 // GraphQL
 const mutationGetOrCreateLocation = gql`
-  mutation getOrCreateLocation($suggestAddress: String!, $unit: String) {
-    getOrCreateLocation(suggestAddress: $suggestAddress, unit: $unit) {
+  mutation getOrCreateLocation($suggestAddress: String!, $unit: String, $placeId: String) {
+    getOrCreateLocation(suggestAddress: $suggestAddress, unit: $unit, placeId: $placeId) {
       id
       userId
       country
@@ -36,6 +36,7 @@ const mutationGetOrCreateLocation = gql`
       zipcode
       lat
       lng
+      placeId
       createdAt
       updatedAt
     }
@@ -94,12 +95,12 @@ const getOrCreateError = error => {
 }
 
 // Side Effects
-export const onGetOrCreateLocation = (suggestAddress, unit, history) => async dispatch => {
+export const onGetOrCreateLocation = (suggestAddress, unit, history, placeId) => async dispatch => {
   dispatch(getOrCreateStart())
   try {
     const { data } = await getClientWithAuth(dispatch).mutate({
       mutation: mutationGetOrCreateLocation,
-      variables: { suggestAddress, unit }
+      variables: { suggestAddress, unit, placeId }
     })
     dispatch(getOrCreateSuccess(data.getOrCreateLocation))
     history.push('/listing/category')

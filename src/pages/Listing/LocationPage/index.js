@@ -25,9 +25,10 @@ const LocationPage = props => {
   const [address, setAddress] = useState('')
   const [unit, setUnit] = useState('')
   const [latLng, setLatLng] = useState({})
+  const [gPlaceId, setGPlaceId] = useState('')
 
   const _onSelectedAddess = obj => {
-    const { unit: objUnit, position, address: objAddress } = obj
+    const { unit: objUnit, position, address: objAddress, placeId } = obj
     if (objUnit || objUnit === '') {
       setUnit(objUnit)
     }
@@ -36,6 +37,9 @@ const LocationPage = props => {
     }
     if (objAddress) {
       setAddress(objAddress)
+    }
+    if (placeId) {
+      setGPlaceId(placeId)
     }
   }
 
@@ -47,10 +51,11 @@ const LocationPage = props => {
     setUnit('')
     setLatLng({})
     setAddress('')
+    setGPlaceId('')
   }
 
   const _onNext = () => {
-    dispatch(actions.onGetOrCreateLocation(address, unit, props.history))
+    dispatch(actions.onGetOrCreateLocation(address, unit, props.history, gPlaceId))
   }
 
   return (

@@ -183,6 +183,7 @@ const allListingFields = `
     zipcode
     lat
     lng
+    placeId
     createdAt
     updatedAt
   }
