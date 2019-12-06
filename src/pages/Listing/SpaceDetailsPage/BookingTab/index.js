@@ -3,7 +3,7 @@ import Helmet from 'react-helmet'
 import { withFormik } from 'formik'
 import * as Yup from 'yup'
 import numeral from 'numeral'
-import { Title, Select, Input, Caption, Radio, Cell, StepButtons, Box, Footer, Grid } from 'components'
+import { Title, Select, Input, Caption, Radio, Cell, StepButtons, Box, Grid } from 'components'
 import { capitalize, toPlural } from 'utils/strings'
 
 import GuestFeeIcon from './guest_fee_icon.svg'
@@ -243,18 +243,20 @@ const BookingTab = ({
                 this option."
             />
           </Cell>
-          {listing.user.provider === 'poa' && ( <Cell width={1}>
-            <Radio
-              box
-              value="poa"
-              name="bookingType"
-              checked={values.bookingType === 'poa'}
-              handleChange={_handleRadioChange}
-              label=" POA"
-              text="If you want to be contacted, select
+          {listing.user.provider === 'poa' && (
+            <Cell width={1}>
+              <Radio
+                box
+                value="poa"
+                name="bookingType"
+                checked={values.bookingType === 'poa'}
+                handleChange={_handleRadioChange}
+                label=" POA"
+                text="If you want to be contacted, select
                 this option."
-            />
-          </Cell> )}
+              />
+            </Cell>
+          )}
         </Box>
       </Cell>
       <Cell>
@@ -315,7 +317,6 @@ const BookingTab = ({
         prev={{ onClick: () => props.history.push('specification') }}
         next={{ onClick: () => props.history.push('availability') }}
       />
-      <Footer />
     </Box>
   )
 }
