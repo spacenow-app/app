@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import Helmet from 'react-helmet'
 import styled from 'styled-components'
 
-import { Wrapper, Title, StepButtons, Input, Map, AutoComplete, Footer } from 'components'
+import { Wrapper, Title, StepButtons, Input, Map, AutoComplete } from 'components'
 
 import * as actions from 'redux/ducks/location'
 
@@ -86,7 +86,6 @@ const LocationPage = props => {
           isLoading
         }}
       />
-      <Footer />
     </Wrapper>
   )
 }

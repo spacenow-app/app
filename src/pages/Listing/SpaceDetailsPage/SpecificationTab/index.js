@@ -21,7 +21,7 @@ import { onUploadPhoto, onSetCoverPhoto, onDeletePhoto } from 'redux/ducks/photo
 
 import { openModal, TypesModal } from 'redux/ducks/modal'
 
-import { Title, Input, Checkbox, Select, TextArea, StepButtons, Loader, Photo, Box, Footer, Video } from 'components'
+import { Title, Input, Checkbox, Select, TextArea, StepButtons, Loader, Photo, Box, Video } from 'components'
 
 import { cropPicture } from 'utils/images'
 
@@ -446,7 +446,6 @@ const SpecificationTab = ({
           </p> */}
         </SectionStyled>
         <StepButtons prev={{ onClick: _goBack }} next={{ onClick: () => props.history.push('booking') }} />
-        <Footer />
       </WrapperStyled>
     </form>
   )
