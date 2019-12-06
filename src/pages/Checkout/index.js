@@ -1,5 +1,7 @@
-import InfoPage from './InfoPage'
-import MessagePage from './MessagePage'
-import CheckoutPage from './CheckoutPage'
+import InfoTab from './InfoTab'
+import MessageTab from './MessageTab'
+import CheckoutTab from './CheckoutTab'
 
-export { InfoPage, MessagePage, CheckoutPage }
+export default InfoTab
+
+export { InfoTab, MessageTab, CheckoutTab }

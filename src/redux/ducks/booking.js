@@ -222,6 +222,18 @@ const queryGetBookingById = gql`
         createdAt
         updatedAt
         count
+        photos {
+          id
+          listingId
+          name
+          isCover
+          bucket
+          region
+          key
+          type
+          createdAt
+          updatedAt
+        }
         user {
           id
           profile {

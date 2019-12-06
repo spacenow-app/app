@@ -2,11 +2,16 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import { format } from 'date-fns'
 import styled from 'styled-components'
-import { Grid, Cell, Text } from 'components'
+import { Grid, Cell } from 'components'
 
 const CheckInOutWraper = styled.div`
   display: grid;
   grid-template-columns: repeat(2, 1fr);
+
+  @media only screen and (max-width: 991px) {
+    grid-template-columns: 1fr;
+    grid-row-gap: 20px;
+  }
 `
 
 const DateContainer = styled.div`

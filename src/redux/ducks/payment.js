@@ -47,7 +47,8 @@ const initialState = {
   pay: {
     isLoading: false,
     bookingState: null
-  }
+  },
+  newCard: {}
 }
 
 // GraphQL
@@ -183,6 +184,10 @@ const mutationCreateCard = gql`
           country
         }
       }
+      lastCardCreated {
+        id
+        name
+      }
     }
   }
 `
@@ -315,7 +320,8 @@ export default function reducer(state = initialState, action) {
           ...state.cards,
           isCreating: false,
           array: action.payload.sources.data
-        }
+        },
+        newCard: action.payload.lastCardCreated
       }
     }
     case Types.CREATE_CREDIT_CARD_FAILURE: {
@@ -372,7 +378,8 @@ export default function reducer(state = initialState, action) {
           ...state.pay,
           bookingState: action.payload.bookingState,
           isLoading: false
-        }
+        },
+        newCard: {}
       }
     }
     case Types.DOING_PAYMENT_FAILURE: {
@@ -481,6 +488,7 @@ export const createUserCard = card => async dispatch => {
   try {
     const { data } = await getClientWithAuth(dispatch).mutate({ mutation: mutationCreateCard, variables: newCard })
     dispatch({ type: Types.CREATE_CREDIT_CARD_SUCCESS, payload: data.createPaymentCard })
+    // return data.createPaymentCard.lastCardCreated
   } catch (err) {
     toast.error(`${errToMsg(err)}`)
     dispatch({ type: Types.CREATE_CREDIT_CARD_FAILURE, payload: errToMsg(err) })
@@ -509,6 +517,7 @@ export const pay = (cardId, bookingId, history) => async dispatch => {
       variables: { cardId, bookingId }
     })
     toast.success('Paid')
+
     dispatch({ type: Types.DOING_PAYMENT_SUCCESS, payload: data.createPayment })
     history.push(`/itinerary/${bookingId}`)
   } catch (err) {
