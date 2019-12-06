@@ -132,6 +132,7 @@ import { ReactComponent as AmenitiePool } from './svg/amenities/amenities_pool.s
 import { ReactComponent as AmenitiePoolTable } from './svg/amenities/amenities_pooltable.svg'
 import { ReactComponent as AmenitiePowerOutlets } from './svg/amenities/amenities_poweroutlets.svg'
 import { ReactComponent as AmenitiePrinter } from './svg/amenities/amenities_printer.svg'
+import { ReactComponent as AmenitieProjector } from './svg/amenities/amenities_projector.svg'
 import { ReactComponent as AmenitieProductionEquip } from './svg/amenities/amenities_production_equip.svg'
 import { ReactComponent as AmenitieElectronicEntry } from './svg/amenities/amenities_secure_electronic_entry.svg'
 import { ReactComponent as AmenitieSecurePremises } from './svg/amenities/amenities_secure_premises.svg'
@@ -285,6 +286,7 @@ const Icons = {
   'amenitie-powerOutlets': <AmenitiePowerOutlets />,
   'amenitie-printScanCopy': <AmenitiePrinter />,
   'amenitie-productionEquipment': <AmenitieProductionEquip />,
+  'amenitie-projector': <AmenitieProjector />,
   'amenitie-secureEletronicEntry': <AmenitieElectronicEntry />,
   'amenitie-securePremises': <AmenitieSecurePremises />,
   'amenitie-securityPatrols': <AmenitieSecurityPatrols />,

@@ -57,7 +57,7 @@ const Review = ({ id, userName, userPicture, date, comment, rating }) => {
 }
 
 Review.propTypes = {
-  id: PropTypes.number.isRequired,
+  id: PropTypes.number,
   userName: PropTypes.string.isRequired,
   userPicture: PropTypes.string.isRequired,
   date: PropTypes.instanceOf(Date).isRequired,
