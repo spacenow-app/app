@@ -34,7 +34,7 @@ const _goToSpacePage = listingId => {
 }
 
 const _goToCheckoutPage = bookingId => {
-  window.location.href = `/checkout/${bookingId}`
+  window.location.href = `/checkout/${bookingId}/info`
 }
 
 const _getTip = (status, userType) => {
@@ -87,7 +87,7 @@ const BookingCard = (dispatch, item, index, userType, userId) => {
   const _acceptBooking = bookingId => {
     dispatch(onAcceptBooking(bookingId)).then(() => dispatch(onGetBookingsByUser(userId, userType)))
   }
-  
+
   const _declineBooking = bookingId => {
     dispatch(onDeclineBooking(bookingId)).then(() => dispatch(onGetBookingsByUser(userId, userType)))
   }
@@ -136,11 +136,14 @@ const BookingCard = (dispatch, item, index, userType, userId) => {
           </Text>
         </Card.Horizontal.Dropdown.Toggle>
         <Card.Horizontal.Dropdown.Menu>
-          {item.bookingState === 'approved' && item.paymentState === 'pending' && userType === 'guest' && isAfter(new Date(), expire) && (
-            <Card.Horizontal.Dropdown.Item onClick={() => _goToCheckoutPage(item.bookingId)}>
-              Continue Booking
-            </Card.Horizontal.Dropdown.Item>
-          )}
+          {item.bookingState === 'approved' &&
+            item.paymentState === 'pending' &&
+            userType === 'guest' &&
+            isAfter(new Date(), expire) && (
+              <Card.Horizontal.Dropdown.Item onClick={() => _goToCheckoutPage(item.bookingId)}>
+                Continue Booking
+              </Card.Horizontal.Dropdown.Item>
+            )}
           <Card.Horizontal.Dropdown.Item onClick={() => _bookingDetails(dispatch)(item, userType)}>
             Booking Details
           </Card.Horizontal.Dropdown.Item>

@@ -60,6 +60,9 @@ import Review from './Review'
 import StarRatingComponent from './Review/StarRatingComponent'
 import Phone from './Phone'
 import Video from './Video'
+import CheckInOut from './CheckInOut'
+import CardCheckout from './CardCheckout'
+import CreditCard from './CreditCard'
 
 export {
   Modal,
@@ -126,5 +129,8 @@ export {
   Review,
   StarRatingComponent,
   Phone,
-  Video
+  Video,
+  CheckInOut,
+  CardCheckout,
+  CreditCard
 }

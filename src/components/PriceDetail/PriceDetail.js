@@ -3,6 +3,7 @@ import PropTypes from 'prop-types'
 import styled from 'styled-components'
 import _ from 'lodash'
 import { space } from 'styled-system'
+import { Box, Text } from 'components'
 
 const IS_ABSORVE = 0.035
 const NO_ABSORVE = 0.135
@@ -59,12 +60,12 @@ const PriceDetail = props => (
             .toFixed(2)
             .replace(/\d(?=(\d{3})+\.)/g, '$&,')}`}</RightStyled>
         </ContentStyled>
-        <ContentStyled>
+        {/* <ContentStyled>
           <LeftStyled>Quantity x{props.quantity}</LeftStyled>
           <RightStyled>{`${props.currency} ${props.currencySymbol}${(props.price * props.days * props.quantity)
             .toFixed(2)
             .replace(/\d(?=(\d{3})+\.)/g, '$&,')}`}</RightStyled>
-        </ContentStyled>
+        </ContentStyled> */}
         <ContentStyled>
           <LeftStyled>Service fee</LeftStyled>
           <RightStyled>
@@ -77,17 +78,24 @@ const PriceDetail = props => (
                   .replace(/\d(?=(\d{3})+\.)/g, '$&,')}`}
           </RightStyled>
         </ContentStyled>
+        {props.dividerTotal && <Box width="100%" borderBottom="1px solid #c4c4c4" mt="30px" />}
         <ContentStyled>
-          <LeftStyled>Total</LeftStyled>
+          <LeftStyled>
+            <Text fontFamily="Montserrat-Medium" fontSize="16px">
+              Total
+            </Text>
+          </LeftStyled>
           <RightStyled>
-            {`${props.currency} ${props.currencySymbol}${_.sum([
-              props.price * props.days * props.quantity,
-              props.isAbsorvedFee
-                ? props.price * props.days * props.quantity * IS_ABSORVE
-                : props.price * props.days * props.quantity * NO_ABSORVE
-            ])
-              .toFixed(2)
-              .replace(/\d(?=(\d{3})+\.)/g, '$&,')}`}
+            <Text fontFamily="Montserrat-Medium" fontSize="16px">
+              {`${props.currency} ${props.currencySymbol}${_.sum([
+                props.price * props.days * props.quantity,
+                props.isAbsorvedFee
+                  ? props.price * props.days * props.quantity * IS_ABSORVE
+                  : props.price * props.days * props.quantity * NO_ABSORVE
+              ])
+                .toFixed(2)
+                .replace(/\d(?=(\d{3})+\.)/g, '$&,')}`}
+            </Text>
           </RightStyled>
         </ContentStyled>
       </WrapperStyled>
@@ -102,7 +110,8 @@ PriceDetail.defaultProps = {
   days: 1,
   quantity: 2,
   isAbsorvedFee: false,
-  periodLabel: 'Day'
+  periodLabel: 'Day',
+  dividerTotal: false
 }
 
 PriceDetail.propTypes = {
@@ -112,7 +121,8 @@ PriceDetail.propTypes = {
   days: PropTypes.number,
   quantity: PropTypes.number,
   isAbsorvedFee: PropTypes.bool,
-  periodLabel: PropTypes.string
+  periodLabel: PropTypes.string,
+  dividerTotal: PropTypes.bool
 }
 
 export default PriceDetail
