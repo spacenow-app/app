@@ -6,6 +6,8 @@ import { useSelector, useDispatch } from 'react-redux'
 import styled from 'styled-components'
 import _ from 'lodash'
 import { isSameDay, format } from 'date-fns'
+import { toast } from 'react-toastify'
+import { Redirect } from 'react-router-dom'
 
 import { capitalize, toPlural } from 'utils/strings'
 import { cropPicture } from 'utils/images'
@@ -58,7 +60,6 @@ import { sendMail } from 'redux/ducks/mail'
 
 import { onCreateMessage } from 'redux/ducks/message'
 
-// import GraphCancelattionImage from 'pages/Listing/SpaceDetailsPage/CancellationTab/graph_cancellation.png'
 import { onGetPublicReviews, onGetGoogleReviews } from 'redux/ducks/reviews'
 
 import config from 'variables/config'
@@ -69,7 +70,6 @@ import MonthlyBooking from './MonthlyBooking'
 import PendingBooking from './PenidngBooking'
 import HourlyBooking from './HourlyBooking'
 import GenericForm from './GenericForm'
-// import RequestForm from './RequestForm'
 
 const GridStyled = styled(Grid)`
   @media only screen and (max-width: 991px) {
@@ -288,23 +288,11 @@ const SpacePage = ({ match, location, history, ...props }) => {
     listing && listing.location && listing.location.placeId && dispatch(onGetGoogleReviews(listing.location.placeId))
   }, [dispatch, listing])
 
-  if (listing && listing.user.provider === 'wework') {
-    history.push(`/space/partner/${match.params.id}`)
-  }
-
-  if (listing && listing.status === 'deleted') {
-    history.push(`/space`)
-  }
-
-  if (isListingLoading) {
-    return <Loader text="Loading listing view" />
-  }
-
   const _getAddress = address => {
     const { address1 = '', city = '', zipcode = '', state = '', country = '' } = address
     const convertedAddress = `${address1 ? `${address1}, ` : ''} ${city ? `${city}, ` : ''} ${
       zipcode ? `${zipcode}, ` : ''
-      } ${state ? `${state}, ` : ''} ${country ? `${country}` : ''}`
+    } ${state ? `${state}, ` : ''} ${country ? `${country}` : ''}`
     return convertedAddress.replace(/\0.*$/g, '')
   }
 
@@ -425,11 +413,11 @@ const SpacePage = ({ match, location, history, ...props }) => {
   const _convertedArrayPhotos = array => {
     return array.filter(el => el !== undefined).length > 0
       ? array
-        .filter(el => el !== undefined)
-        .map(el => ({
-          source: cropPicture(el.name, 800, 500),
-          isCover: el.isCover
-        }))
+          .filter(el => el !== undefined)
+          .map(el => ({
+            source: cropPicture(el.name, 800, 500),
+            isCover: el.isCover
+          }))
       : []
   }
 
@@ -678,10 +666,6 @@ const SpacePage = ({ match, location, history, ...props }) => {
   }
 
   const _contactHost = () => {
-    // const options = {
-    //   onConfirm: _sendMessage
-    // }
-    // dispatch(openModal(TypesModal.MODAL_TYPE_SEND_MESSAGE, options))
     if (!isAuthenticated) {
       history.push(`/auth/signin`, {
         from: {
@@ -789,20 +773,51 @@ const SpacePage = ({ match, location, history, ...props }) => {
     videoTag.currentTime === videoTag.duration && videoTag.load()
   }
 
+  if (listing && listing.user.provider === 'wework') {
+    return <Redirect to={{ pathname: `/space/partner/${match.params.id}` }} push={true} />
+  }
+
+  if (listing && listing.status === 'deleted') {
+    toast.warn(`The space ${listing.id} was deleted`)
+    return <Redirect to={{ pathname: `/search` }} push={true} />
+  }
+
+  if (listing && listing.user.userBanStatus == 1) {
+    toast.warn(`The host for space ${listing.id} was blocked by Spacenow`)
+    return <Redirect to={{ pathname: `/search` }} push={true} />
+  }
+
+  if (isListingLoading) {
+    return <Loader text="Loading listing view" />
+  }
+
   return (
     <>
       {imageHeight == 325 ||
-        (listing.photos.length > 1 &&
-          listing.settingsParent.category.otherItemName !== 'parking' &&
-          listing.settingsParent.category.otherItemName !== 'storage' &&
-          listing.user.provider !== 'external') ? (
-          <Box mb="30px">
-            <CarouselListing photos={_convertedArrayPhotos(listing.photos)} />
-          </Box>
-        ) : null}
+      (listing.photos.length > 1 &&
+        listing.settingsParent.category.otherItemName !== 'parking' &&
+        listing.settingsParent.category.otherItemName !== 'storage' &&
+        listing.user.provider !== 'external') ? (
+        <Box mb="30px">
+          <CarouselListing photos={_convertedArrayPhotos(listing.photos)} />
+        </Box>
+      ) : null}
       <Wrapper>
-        <Helmet title={`${listing.title} | ${listing.settingsParent.category.itemName} | ${_getSuburb(listing.location)} | Find the perfect event, coworking, office and meeting room spaces.`}>
-          <meta name="description" content={`Find the perfect space for ${listing.settingsParent.category.itemName} in ${_getSuburb(listing.location)}. ${listing.listingData.description && listing.listingData.description.substring(0, 160 - (listing.settingsParent.category.itemName.length + _getSuburb(listing.location).length + 30))}`} />
+        <Helmet
+          title={`${listing.title} | ${listing.settingsParent.category.itemName} | ${_getSuburb(
+            listing.location
+          )} | Find the perfect event, coworking, office and meeting room spaces.`}
+        >
+          <meta
+            name="description"
+            content={`Find the perfect space for ${listing.settingsParent.category.itemName} in ${_getSuburb(
+              listing.location
+            )}. ${listing.listingData.description &&
+              listing.listingData.description.substring(
+                0,
+                160 - (listing.settingsParent.category.itemName.length + _getSuburb(listing.location).length + 30)
+              )}`}
+          />
         </Helmet>
         {listing.user.provider === 'external' && imageHeight !== 325 && (
           <Box mb="20px">
@@ -819,11 +834,11 @@ const SpacePage = ({ match, location, history, ...props }) => {
                 imageHeight !== 325 && <CarouselListing photos={_convertedArrayPhotos(listing.photos)} />}
 
               {imageHeight !== 325 &&
-                (listing.settingsParent.category.otherItemName === 'parking' ||
-                  listing.settingsParent.category.otherItemName === 'storage') &&
-                listing.user.provider !== 'external' ? (
-                  <Carousel photos={_convertedArrayPhotos(listing.photos)} />
-                ) : null}
+              (listing.settingsParent.category.otherItemName === 'parking' ||
+                listing.settingsParent.category.otherItemName === 'storage') &&
+              listing.user.provider !== 'external' ? (
+                <Carousel photos={_convertedArrayPhotos(listing.photos)} />
+              ) : null}
 
               <Grid columns={12}>
                 <Cell width={8} style={{ display: 'flex' }}>
@@ -869,17 +884,6 @@ const SpacePage = ({ match, location, history, ...props }) => {
                     noMargin
                   />
                 </CellStyled>
-                {/* <CellStyled width={5} center>
-                  <Price
-                    currency={listing.listingData.currency}
-                    price={listing.listingData.basePrice}
-                    currencySymbol="$"
-                    bookingPeriod={listing.bookingPeriod}
-                    bookingType={listing.listingData.bookingType}
-                    size="28px"
-                    right
-                  />
-                </CellStyled> */}
               </Grid>
 
               <Box>
@@ -994,12 +998,7 @@ const SpacePage = ({ match, location, history, ...props }) => {
                   <Box zIndex="1">
                     <Title type="h5" title="Video" />
                     <Box position="relative">
-                      <CustomVideo
-                        onClick={_handlePlayVideo}
-                        width="100%"
-                        // controls
-                        onEnded={_handlePlayVideo}
-                      >
+                      <CustomVideo onClick={_handlePlayVideo} width="100%" onEnded={_handlePlayVideo}>
                         <source src={videoInput.name} type="video/mp4" />
                       </CustomVideo>
                       {showPlay && (
@@ -1121,7 +1120,6 @@ const SpacePage = ({ match, location, history, ...props }) => {
                   <Title type="h5" title="Space Rules" />
                   <Grid columns="repeat(auto-fit, minmax(200px, auto))" rowGap="20px">
                     {listing.rules.map((item, index) => {
-                      // return <Checkbox disabled key={item.id} label={item.settingsData.itemName} name="rules" checked />
                       return <Text key={index}>{item.settingsData.itemName} </Text>
                     })}
                   </Grid>
@@ -1181,20 +1179,12 @@ const SpacePage = ({ match, location, history, ...props }) => {
                   {(pendingBooking ? pendingBooking && pendingBooking.count == 0 : true) && (
                     <>
                       {listing.user.provider !== 'generic' && listing.user.provider !== 'external' && (
-                        <Button
-                          onClick={e => _onSubmitBooking(e)}
-                          isLoading={isLoadingOnCreateReservation}
-                          // disabled={_isPeriodValid(listing.bookingPeriod) || (user && user.id == listing.user.id)}
-                          fluid
-                        >
+                        <Button onClick={e => _onSubmitBooking(e)} isLoading={isLoadingOnCreateReservation} fluid>
                           {listing.listingData.bookingType === 'request' ? 'Booking Request' : 'Reserve'}
                         </Button>
                       )}
                       {listing.user.provider === 'external' && (
-                        <Button
-                          onClick={_handleClickByListing}
-                          fluid
-                        >
+                        <Button onClick={_handleClickByListing} fluid>
                           Reserve
                         </Button>
                       )}
@@ -1247,17 +1237,6 @@ const SpacePage = ({ match, location, history, ...props }) => {
           <Title type="h5" title="Location" />
           <Map position={{ lat: Number(listing.location.lat), lng: Number(listing.location.lng) }} />
         </Box>
-
-        {/* <Box mt="45px">
-          <Title type="h5" title="Cancellation Policy" />
-          <Text fontFamily="">Flexible</Text><br/>
-          <Text>
-            Guests may cancel their booking up until 7 days before the start time and will receive a full refund
-            (Including all Fees) of their booking price. Guests may cancel their booking between 7 days and 14 hours
-            before the start time and receive a 50% refund (excluding Fees) of their booking price. Bookings cancelled
-            less than 24 hours before the start time are not refundable.
-          </Text>
-        </Box> */}
 
         {similarResults.length == 3 && (
           <Box mt="45px">

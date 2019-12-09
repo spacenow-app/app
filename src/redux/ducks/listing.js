@@ -333,6 +333,7 @@ const allListingFields = `
     id
     email
     provider
+    userBanStatus
     profile {
       displayName
       picture
