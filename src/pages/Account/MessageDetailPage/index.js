@@ -38,7 +38,6 @@ const MessageDetailPage = ({ match, location, history, ...props }) => {
   const [content, setContent] = useState('')
   const [pageIndex, setPageIndex] = useState(0)
   const [scroller, setScroller] = useState(null)
-  const [countItems, setCountItems] = useState(0)
 
   const pageSize = 5
 
