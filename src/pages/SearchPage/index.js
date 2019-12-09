@@ -362,7 +362,7 @@ const SearchPage = ({ history, location }) => {
                               selectedDays={filterSelectedDates}
                               disabledDays={[]}
                               daysOfWeek={[]}
-                              colorSelected="#E05252"
+                              colorSelected="#6adc91"
                             />
                           </CalendarContainerDesktop>
                           <DatePickerMobile
@@ -370,7 +370,7 @@ const SearchPage = ({ history, location }) => {
                             handleDateChange={_onClickSelectDay}
                             hideOnDayClick={false}
                             placeholder="Choose Dates"
-                            colorSelected="#E05252"
+                            colorSelected="#6adc91"
                             dayPickerProps={{
                               selectedDays: filterSelectedDates,
                               modifiers: {
