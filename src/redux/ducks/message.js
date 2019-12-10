@@ -406,9 +406,11 @@ export const onCreateMessage = values => async dispatch => {
   try {
     const { data } = await getClientWithAuth(dispatch).mutate({ mutation: createMessage, variables: values })
     dispatch({ type: Types.CREATE_MESSAGE_SUCCESS, payload: data.postMessageToHost })
-    toast.success(`Your message was sent to the host.`)
+    console.log(values)
+    toast.success(`Your message has been sent: ${values.content}`)
   } catch (err) {
     dispatch({ type: Types.CREATE_MESSAGE_ERROR, payload: errToMsg(err) })
+    console.log(values)
     toast.error(`Problem sending the message, try again later.`)
   }
 }

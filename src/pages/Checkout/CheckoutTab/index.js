@@ -26,7 +26,7 @@ import {
 } from 'components'
 
 const GridStyled = styled(Grid)`
-  margin-top: 50px;
+  margin-top: 100px;
   grid-column-gap: 200px;
 
   @media only screen and (max-width: 1024px) {
@@ -170,7 +170,13 @@ const CheckoutPage = ({ match, location, history, ...props }) => {
       <Helmet title="Checkout - Spacenow" />
       <GridStyled columns="repeat(auto-fit,minmax(300px,1fr))" areas={['content card']}>
         <Cell area="content">
-          <TitleStyled marginTop={{ _: '30px', medium: '0px' }} className="testTitle" type="h5" title="Pay with" />
+          <TitleStyled
+            marginTop={{ _: '30px', medium: '0px' }}
+            className="testTitle"
+            type="h7"
+            title="Pay with"
+            weight="Montserrat-SemiBold"
+          />
           <GridMobile columns={8} style={{ marginBottom: '40px' }}>
             <CellMobile width={1}>
               <Image

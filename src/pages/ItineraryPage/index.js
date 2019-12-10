@@ -48,7 +48,7 @@ const CardContainer = styled.div`
   box-shadow: 0 0 5px 1px #eee;
   border-radius: 6px;
   opacity: 1;
-  margin-top: 20px;
+  margin-top: 100px;
 
   :hover {
     box-shadow: 0 0 5px 1px #ddd;
@@ -57,8 +57,8 @@ const CardContainer = styled.div`
 
 const CardTitle = styled(Text)`
   display: block;
-  font-family: 'MontSerrat-Bold';
-  font-size: 22px;
+  font-family: 'MontSerrat-Medium';
+  font-size: 18px;
   overflow: hidden;
   white-space: nowrap;
   text-overflow: ellipsis;
@@ -321,8 +321,8 @@ const ItineraryPage = ({ match, location, history, ...props }) => {
     render() {
       return (
         <Cell>
-          <Box mb="20px" mt={{ _: '20px', medium: '20px' }} borderBottom="1px solid #E2E2E2" pb="30px">
-            <TitleStyled title="Booking Receipt" noMargin type="h5" />
+          <Box mb="20px" mt={{ _: '20px', medium: '100px' }} borderBottom="1px solid #E2E2E2" pb="30px">
+            <TitleStyled title="Booking Receipt" noMargin type="h4" weight="Montserrat-SemiBold" />
           </Box>
           <Grid columns={12} rows="auto" columnGap="20px">
             {isListingLoading ? (
@@ -340,7 +340,8 @@ const ItineraryPage = ({ match, location, history, ...props }) => {
                     type="h5"
                     title={listing.title}
                     subtitle={`${listing.location.city}, ${listing.location.country}`}
-                    subTitleMargin={5}
+                    subTitleMargin={10}
+                    weight="Montserrat-SemiBold"
                   />
                 </Cell>
                 <Cell width={12}>
@@ -376,11 +377,12 @@ const ItineraryPage = ({ match, location, history, ...props }) => {
                 <Cell width={12}>
                   <BoxDesktop>
                     <Title
-                      type="h5"
+                      type="h7"
                       title={`${listing.settingsParent.subcategory.itemName} for ${booking.period} ${_spelling(
                         booking.bookingPeriod,
                         booking.period
                       ).toLowerCase()} in ${listing.location.address1}`}
+                      weight="Montserrat-SemiBold"
                     />
                   </BoxDesktop>
                   <BoxMobile mb="30px" mt="10px">
@@ -411,6 +413,9 @@ const ItineraryPage = ({ match, location, history, ...props }) => {
                     days={booking.period}
                     quantity={1}
                     dividerTotal
+                    noHeader
+                    totalSize="20px"
+                    fontSize="16px"
                   />
                 </Cell>
               </>

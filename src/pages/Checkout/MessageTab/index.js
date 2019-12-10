@@ -12,7 +12,7 @@ import { onCreateMessage } from 'redux/ducks/message'
 import { Wrapper, Title, Grid, Cell, Button, Box, Text, Loader, CheckInOut, TextArea, CardCheckout } from 'components'
 
 const GridStyled = styled(Grid)`
-  margin-top: 50px;
+  margin-top: 100px;
   grid-column-gap: 200px;
 
   @media only screen and (max-width: 1024px) {
@@ -23,7 +23,7 @@ const GridStyled = styled(Grid)`
     grid-template-areas:
       'content content'
       'card card';
-    margin-top: 20px;
+    margin-top: 40px;
   }
 `
 
@@ -171,13 +171,14 @@ const MessageTab = ({ match, location, history, ...props }) => {
             <Title
               marginTop={{ _: '30px', medium: '0px' }}
               className="testTitle"
-              type="h5"
+              type="h7"
               title={`${reservation.listing.settingsParent.subcategory.itemName} for ${reservation.period} ${_spelling(
                 reservation.bookingPeriod,
                 reservation.period
               ).toLowerCase()} in ${reservation.listing.location.address1}`}
               subtitle={`This reservation will expire after ${_getExpiry(reservation.createdAt)}`}
-              subTitleMargin="21px"
+              subTitleMargin="21"
+              weight="Montserrat-SemiBold"
             />
             <br />
             <CheckInOut
@@ -189,10 +190,11 @@ const MessageTab = ({ match, location, history, ...props }) => {
           </BoxDesktop>
           <Box marginTop={{ _: '20px', medium: '60px' }}>
             <Title
-              type="h5"
+              type="h7"
               title="Contact your host"
               subtitle={`Tell ${listing.user.profile.firstName} a little bit about your space requirements.`}
-              subTitleMargin="21px"
+              subTitleMargin="21"
+              weight="Montserrat-SemiBold"
             />
           </Box>
           <TextArea value={messageToHost} onChange={val => _onChangeMessageToHost(val)} />
@@ -201,6 +203,7 @@ const MessageTab = ({ match, location, history, ...props }) => {
             onClick={() => _onSendMessage()}
             style={{ float: 'right' }}
             disabled={!messageToHost}
+            mt="20px"
           >
             Send message
           </ButtonMessage>
