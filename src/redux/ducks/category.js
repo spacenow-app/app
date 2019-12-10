@@ -23,15 +23,17 @@ const initialState = {
 
 // GraphQL
 const queryGetAllCategories = gql`
-  query getCategoriesLegacy {
-    getCategoriesLegacy {
+  query getCategories {
+    getCategories {
       id
       itemName
-      otherItemName
+      otherItemName    
       subCategories {
-        id
-        itemName
-        otherItemName
+        subCategory {
+          id
+          itemName
+          otherItemName
+        }
         bookingPeriod {
           id
           listSettingsParentId
@@ -107,7 +109,7 @@ export const onGetAllCategories = () => async dispatch => {
       query: queryGetAllCategories,
       fetchPolicy: 'network-only'
     })
-    dispatch(getAllCategoriesSuccess(data.getCategoriesLegacy))
+    dispatch(getAllCategoriesSuccess(data.getCategories))
   } catch (err) {
     dispatch(getAllCategoriesFailed(errToMsg(err)))
   }

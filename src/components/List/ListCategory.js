@@ -100,7 +100,7 @@ const ListCategory = ({
   spaceBetween,
   ...props
 }) => {
-  useEffect(() => {}, [data, itemSelected])
+  useEffect(() => { }, [data, itemSelected])
 
   const _parseIconName = (isSub, name) => {
     let prefix = 'category-'
@@ -112,35 +112,44 @@ const ListCategory = ({
     return null
   }
 
-  return (
-    <List circular={circular} spaceBetween={spaceBetween}>
-      {data.map(item => (
-        <ListItem
-          key={item.id}
-          shadow={shadow}
-          bgItem={bgItem}
-          border={border}
-          circular={circular}
-          onClick={e => handleItemClick(e, item)}
-          active={itemSelected && item.id === itemSelected.id}
-        >
-          {circular ? (
-            <>
-              <IconContainer active={itemSelected && item.id === itemSelected.id}>
-                <IconStyled name={_parseIconName(circular, item.otherItemName)} fill="#172439" />
-              </IconContainer>
-              <TitleStyled circular>{item.itemName}</TitleStyled>
-            </>
-          ) : (
-            <>
-              <IconStyled name={_parseIconName(circular, item.otherItemName)} fill="#172439" />
-              <TitleStyled>{item.itemName}</TitleStyled>
-            </>
-          )}
-        </ListItem>
-      ))}
-    </List>
+  const _renderCategory = (item) => (
+    <ListItem
+      key={item.id}
+      shadow={shadow}
+      bgItem={bgItem}
+      border={border}
+      onClick={e => handleItemClick(e, item)}
+      active={itemSelected && item.id === itemSelected.id}
+    >
+      <IconStyled name={_parseIconName(null, item.otherItemName)} fill="#172439" />
+      <TitleStyled>{item.itemName}</TitleStyled>
+    </ListItem>
   )
+
+  const _renderSubCategory = (item, bookingPeriod) => (
+    <ListItem
+      key={item.id}
+      shadow={shadow}
+      bgItem={bgItem}
+      border={border}
+      circular
+      onClick={e => handleItemClick(e, { ...item, bookingPeriod })}
+      active={itemSelected && item.id === itemSelected.id}
+    >
+      <IconContainer active={itemSelected && item.id === itemSelected.id}>
+        <IconStyled name={_parseIconName(true, item.otherItemName)} fill="#172439" />
+      </IconContainer>
+      <TitleStyled circular>{item.itemName}</TitleStyled>
+    </ListItem>
+  )
+
+  return (
+    <List spaceBetween={spaceBetween} >
+      {!circular && data && [].concat(data).map(item => _renderCategory(item))}
+      {circular && data && [].concat(data).map(item => _renderSubCategory(item.subCategory, item.bookingPeriod))}
+    </List >
+  )
+
 }
 
 ListCategory.propsType = {}
@@ -148,7 +157,7 @@ ListCategory.propsType = {}
 ListCategory.defaultProps = {
   circular: false,
   itemSelected: false,
-  handleItemClick: () => {}
+  handleItemClick: () => { }
 }
 
 export default ListCategory
