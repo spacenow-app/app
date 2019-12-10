@@ -290,6 +290,17 @@ const SearchPage = ({ history, location }) => {
     setFilterSelectedDates(arraySorted)
   }
 
+  const _parseCategory = category => {
+    let response = category
+    for (let i = 0; i < category.length; i += 1) {
+      if (category[i] === category[i].toUpperCase()) {
+        response = category.replace(category[i], ` ${category[i]}`)
+        return capitalize(response)
+      }
+    }
+    return capitalize(response)
+  }
+
   const modifiers = {
     preventOverflow: { enabled: false },
     hide: { enabled: false }
@@ -775,7 +786,7 @@ const SearchPage = ({ history, location }) => {
             noMargin
             title={
               <Text>
-                {(queryCategory && capitalize(queryCategory)) || 'Showing results '} around{' '}
+                {(queryCategory && _parseCategory(queryCategory)) || 'Showing results '} around{' '}
                 <Text color="primary">{queryLocation.substr(0, queryLocation.indexOf(','))}</Text>
               </Text>
             }
