@@ -973,7 +973,7 @@ const SpacePage = ({ match, location, history, ...props }) => {
                         <Box my="10px">Response time: </Box>
                       </Cell>
                       <Cell width="3">
-                        <Box my="10px">Engilsh</Box>
+                        <Box my="10px">English</Box>
                         <Box my="10px">90%</Box>
                         <Box my="10px">Within 2 hours</Box>
                       </Cell>
