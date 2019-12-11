@@ -214,7 +214,7 @@ const CheckoutPage = ({ match, location, history, ...props }) => {
           {arrayCards.length > 0 && savedCards && (
             <Box mt="60px">
               {arrayCards.map((card, index) => (
-                <Grid columns={12} style={{ margin: '40px 0' }}>
+                <Grid columns={12} style={{ margin: '40px 0' }} key={index}>
                   <Cell width={1}>
                     <Checkbox
                       onClick={_handleChangeCardSelect(card)}
@@ -260,9 +260,11 @@ const CheckoutPage = ({ match, location, history, ...props }) => {
                   <Cell width={3}>
                     {/* TODO: Change for default one */}
                     {index === 0 && (
-                      <Tag small bg="#EBEBEB" ml="10px">
-                        DEFAULT
-                      </Tag>
+                      <Box ml={{ _: '10px', medium: '0px' }}>
+                        <Tag small bg="#EBEBEB">
+                          DEFAULT
+                        </Tag>
+                      </Box>
                     )}
                   </Cell>
                   {index !== 0 && (

@@ -25,7 +25,7 @@ const GridStyled = styled(Grid)`
     grid-template-areas:
       'content content'
       'card card';
-    margin-top: 40px;
+    margin-top: 0px;
   }
 `
 
