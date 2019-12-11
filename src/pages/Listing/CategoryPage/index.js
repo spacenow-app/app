@@ -43,8 +43,9 @@ const CategoryPage = props => {
     setSubCategorySelected(value)
   }
 
-  const _handlerCreateDraft = () =>
+  const _handlerCreateDraft = () => {
     dispatch(onCreate(location.id, subCategorySelected.bookingPeriod.listSettingsParentId, props.history))
+  }
 
   if (!location) {
     props.history.replace('/listing/location')
@@ -61,27 +62,27 @@ const CategoryPage = props => {
       {isLoadingCategories ? (
         <Loader text="Loading Categories..." />
       ) : (
-        <>
-          <List
-            data={categories.filter(res => res.otherItemName !== 'desk')}
-            handleItemClick={_handleCategoryClick}
-            itemSelected={categorySelected}
-          />
-          {categorySelected && categorySelected.subCategories && categorySelected.itemName !== 'Office' && (
-            <>
-              <Caption large centered margin="50px 0">
-                Select a sub-category
+          <>
+            <List
+              data={categories.filter(res => res.otherItemName !== 'desk')}
+              handleItemClick={_handleCategoryClick}
+              itemSelected={categorySelected}
+            />
+            {categorySelected && categorySelected.subCategories && categorySelected.itemName !== 'Office' && (
+              <>
+                <Caption large centered margin="50px 0">
+                  Select a sub-category
               </Caption>
-              <List
-                circular
-                data={categorySelected.subCategories}
-                handleItemClick={_handleSubCategoryClick}
-                itemSelected={subCategorySelected}
-              />
-            </>
-          )}
-        </>
-      )}
+                <List
+                  circular
+                  data={categorySelected.subCategories}
+                  handleItemClick={_handleSubCategoryClick}
+                  itemSelected={subCategorySelected}
+                />
+              </>
+            )}
+          </>
+        )}
       <StepButtons
         prev={{ disabled: false, onClick: () => props.history.replace('/listing/location') }}
         next={{
