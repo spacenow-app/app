@@ -1,5 +1,7 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect } from 'react'
 import PropTypes from 'prop-types'
+import { withFormik } from 'formik'
+import * as Yup from 'yup'
 import styled from 'styled-components'
 import Helmet from 'react-helmet'
 import { toast } from 'react-toastify'
@@ -12,7 +14,7 @@ import { onCreateMessage } from 'redux/ducks/message'
 import { Wrapper, Title, Grid, Cell, Button, Box, Text, Loader, CheckInOut, TextArea, CardCheckout } from 'components'
 
 const GridStyled = styled(Grid)`
-  margin-top: 50px;
+  margin-top: 100px;
   grid-column-gap: 200px;
 
   @media only screen and (max-width: 1024px) {
@@ -23,7 +25,7 @@ const GridStyled = styled(Grid)`
     grid-template-areas:
       'content content'
       'card card';
-    margin-top: 20px;
+    margin-top: 40px;
   }
 `
 
@@ -54,12 +56,26 @@ const BoxMobile = styled(Box)`
   }
 `
 
-const MessageTab = ({ match, location, history, ...props }) => {
+const MessageTab = ({
+  match,
+  location,
+  history,
+  touched,
+  errors,
+  values,
+  handleChange,
+  handleBlur,
+  setFieldValue,
+  resetForm,
+  isValid,
+  validateForm,
+  ...props
+}) => {
   const dispatch = useDispatch()
   const { object: reservation, isLoading: isLoadingGetBooking } = useSelector(state => state.booking.get)
   const { user } = useSelector(state => state.account.get)
   const { listing } = reservation || { listing: {} }
-  const [messageToHost, setMessageToHost] = useState('')
+  const { isLoading: isLoadingCreate } = useSelector(state => state.message)
 
   useEffect(() => {
     async function fetchData() {
@@ -139,12 +155,9 @@ const MessageTab = ({ match, location, history, ...props }) => {
       ? '24 hours'
       : format(new Date(checkOutObj.closeHour), 'h:mm a')
 
-  const _onChangeMessageToHost = e => {
-    setMessageToHost(e.target.value)
-  }
-
-  const _onSendMessage = () => {
-    const values = {
+  const _onSendMessage = async () => {
+    validateForm()
+    const sendValues = {
       hasFlexibleTime: false,
       period: reservation.period,
       reservations: reservation.reservations,
@@ -152,14 +165,14 @@ const MessageTab = ({ match, location, history, ...props }) => {
       checkOutTime,
       peopleQuantity: null,
       reason: '',
-      content: messageToHost,
+      content: values.message,
       listingId: reservation.listing.id,
       guestId: user.id,
       hostId: reservation.listing.userId,
       bookingPeriod: reservation.listing.bookingPeriod
     }
-    dispatch(onCreateMessage(values))
-    setMessageToHost('')
+    isValid && (await dispatch(onCreateMessage(sendValues)))
+    isValid && resetForm()
   }
 
   return (
@@ -171,13 +184,14 @@ const MessageTab = ({ match, location, history, ...props }) => {
             <Title
               marginTop={{ _: '30px', medium: '0px' }}
               className="testTitle"
-              type="h5"
+              type="h7"
               title={`${reservation.listing.settingsParent.subcategory.itemName} for ${reservation.period} ${_spelling(
                 reservation.bookingPeriod,
                 reservation.period
               ).toLowerCase()} in ${reservation.listing.location.address1}`}
               subtitle={`This reservation will expire after ${_getExpiry(reservation.createdAt)}`}
-              subTitleMargin="21px"
+              subTitleMargin={21}
+              weight="Montserrat-SemiBold"
             />
             <br />
             <CheckInOut
@@ -189,18 +203,26 @@ const MessageTab = ({ match, location, history, ...props }) => {
           </BoxDesktop>
           <Box marginTop={{ _: '20px', medium: '60px' }}>
             <Title
-              type="h5"
+              type="h7"
               title="Contact your host"
               subtitle={`Tell ${listing.user.profile.firstName} a little bit about your space requirements.`}
-              subTitleMargin="21px"
+              subTitleMargin={21}
+              weight="Montserrat-SemiBold"
             />
           </Box>
-          <TextArea value={messageToHost} onChange={val => _onChangeMessageToHost(val)} />
+          <TextArea
+            name="message"
+            error={errors.message}
+            value={values.message}
+            onChange={handleChange}
+            onBlur={handleBlur}
+          />
           <ButtonMessage
             size="sm"
             onClick={() => _onSendMessage()}
             style={{ float: 'right' }}
-            disabled={!messageToHost}
+            mt="20px"
+            isLoading={isLoadingCreate}
           >
             Send message
           </ButtonMessage>
@@ -227,7 +249,22 @@ const MessageTab = ({ match, location, history, ...props }) => {
 MessageTab.propTypes = {
   history: PropTypes.instanceOf(Object).isRequired,
   location: PropTypes.instanceOf(Object).isRequired,
-  match: PropTypes.instanceOf(Object).isRequired
+  match: PropTypes.instanceOf(Object).isRequired,
+  ...withFormik.propTypes
 }
 
-export default MessageTab
+const formik = {
+  displayName: 'Message_form',
+  mapPropsToValues: props => {
+    return {
+      message: ''
+    }
+  },
+  validationSchema: Yup.object().shape({
+    message: Yup.string().required('Message is required.')
+  }),
+  enableReinitialize: true,
+  isInitialValid: false
+}
+
+export default withFormik(formik)(MessageTab)

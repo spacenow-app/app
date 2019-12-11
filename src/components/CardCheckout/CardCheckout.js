@@ -84,12 +84,12 @@ const CardCheckout = ({ reservation, ...props }) => {
               {`${reservation.listing.location.city}, ${reservation.listing.location.country}.`}
             </Text>
           </Box>
-          <Grid columns={12}>
+          <Grid columns={11} style={{ margin: '20px 0' }}>
             <Cell width={1}>
               <Icon name="calendar" fill="#172439" width="15px" />
             </Cell>
             <Cell width={4}>
-              <Text fontSize={{ _: '14px', medium: '16px' }}>
+              <Text fontSize={{ _: '16px', medium: '16px' }}>
                 {format(new Date(reservation.checkIn), 'd LLL yyyy')}
               </Text>
             </Cell>
@@ -100,7 +100,7 @@ const CardCheckout = ({ reservation, ...props }) => {
               <Icon name="calendar" fill="#172439" width="15px" />
             </Cell>
             <Cell width={4}>
-              <Text fontSize={{ _: '14px', medium: '16px' }}>
+              <Text fontSize={{ _: '16px', medium: '16px' }}>
                 {format(new Date(reservation.checkOut), 'd LLL yyyy')}
               </Text>
             </Cell>
@@ -113,6 +113,9 @@ const CardCheckout = ({ reservation, ...props }) => {
             days={reservation.period}
             quantity={1}
             dividerTotal
+            totalSize="20px"
+            fontSize="16px"
+            noHeader
           />
         </CardContent>
       </CardContainer>

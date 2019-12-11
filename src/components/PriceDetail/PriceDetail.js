@@ -11,7 +11,7 @@ const NO_ABSORVE = 0.135
 const WrapperStyled = styled.div`
   display: grid;
   grid-row-gap: 8px;
-  font-size: 14px;
+  font-size: ${props => props.fontSize};
   margin: 0 0 35px 0;
   ${space}
 `
@@ -48,14 +48,19 @@ const PriceDetail = props => (
   <>
     {props.price && (
       <WrapperStyled {...props}>
+        {!props.noHeader && (
+          <ContentStyled>
+            <LeftTitleStyled>Description</LeftTitleStyled>
+            <RightTitleStyled>Value ({`${props.currency} ${props.currencySymbol}`})</RightTitleStyled>
+          </ContentStyled>
+        )}
         <ContentStyled>
-          <LeftTitleStyled>Description</LeftTitleStyled>
-          <RightTitleStyled>Value ({`${props.currency} ${props.currencySymbol}`})</RightTitleStyled>
-        </ContentStyled>
-        <ContentStyled>
-          <LeftStyled>{`${props.currency} ${props.currencySymbol} ${props.price
+          <LeftStyled>
+            {/* ${props.currency} ${props.currencySymbol} ${props.price
             .toFixed(2)
-            .replace(/\d(?=(\d{3})+\.)/g, '$&,')} x ${props.days} ${props.periodLabel}`}</LeftStyled>
+            .replace(/\d(?=(\d{3})+\.)/g, '$&,')}  */}
+            {`x ${props.days} ${props.periodLabel}`}
+          </LeftStyled>
           <RightStyled>{`${props.currency} ${props.currencySymbol}${(props.price * props.days)
             .toFixed(2)
             .replace(/\d(?=(\d{3})+\.)/g, '$&,')}`}</RightStyled>
@@ -78,15 +83,15 @@ const PriceDetail = props => (
                   .replace(/\d(?=(\d{3})+\.)/g, '$&,')}`}
           </RightStyled>
         </ContentStyled>
-        {props.dividerTotal && <Box width="100%" borderBottom="1px solid #c4c4c4" mt="30px" />}
+        {props.dividerTotal && <Box width="100%" borderBottom="1px solid #c4c4c4" mt="50px" mb="20px" />}
         <ContentStyled>
           <LeftStyled>
-            <Text fontFamily="Montserrat-Medium" fontSize="16px">
+            <Text fontFamily="Montserrat-Medium" fontSize={props.totalSize}>
               Total
             </Text>
           </LeftStyled>
           <RightStyled>
-            <Text fontFamily="Montserrat-Medium" fontSize="16px">
+            <Text fontFamily="Montserrat-Medium" fontSize={props.totalSize}>
               {`${props.currency} ${props.currencySymbol}${_.sum([
                 props.price * props.days * props.quantity,
                 props.isAbsorvedFee
@@ -111,7 +116,9 @@ PriceDetail.defaultProps = {
   quantity: 2,
   isAbsorvedFee: false,
   periodLabel: 'Day',
-  dividerTotal: false
+  dividerTotal: false,
+  totalSize: '16px',
+  fontSize: '14px'
 }
 
 PriceDetail.propTypes = {
@@ -122,7 +129,10 @@ PriceDetail.propTypes = {
   quantity: PropTypes.number,
   isAbsorvedFee: PropTypes.bool,
   periodLabel: PropTypes.string,
-  dividerTotal: PropTypes.bool
+  dividerTotal: PropTypes.bool,
+  noHeader: PropTypes.bool,
+  totalSize: PropTypes.string,
+  fontSize: PropTypes.string
 }
 
 export default PriceDetail

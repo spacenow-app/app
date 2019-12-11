@@ -11,8 +11,8 @@ import { onGetBooking } from 'redux/ducks/booking'
 import { Wrapper, Title, Grid, Cell, TimeTable, Button, Box, Text, Loader, CheckInOut, CardCheckout } from 'components'
 
 const GridStyled = styled(Grid)`
-  margin-top: 50px;
   grid-column-gap: 200px;
+  margin-top: 100px;
 
   @media only screen and (max-width: 1024px) {
     grid-column-gap: 35px;
@@ -22,8 +22,8 @@ const GridStyled = styled(Grid)`
     grid-template-areas:
       'card card'
       'content content';
+    margin-top: 40px;
   }
-  margin-top: 20px;
 `
 
 const ButtonStyled = styled(Button)`
@@ -122,13 +122,14 @@ const InfoTab = ({ match, location, history, ...props }) => {
           <Title
             marginTop={{ _: '30px', medium: '0px' }}
             className="testTitle"
-            type="h5"
+            type="h7"
             title={`${reservation.listing.settingsParent.subcategory.itemName} for ${reservation.period} ${_spelling(
               reservation.bookingPeriod,
               reservation.period
             ).toLowerCase()} in ${reservation.listing.location.address1}`}
             subtitle={`This reservation will expire after ${_getExpiry(reservation.createdAt)}`}
-            subTitleMargin="21px"
+            subTitleMargin="21"
+            weight="Montserrat-SemiBold"
           />
           <br />
           <CheckInOut
@@ -138,7 +139,7 @@ const InfoTab = ({ match, location, history, ...props }) => {
             checkOutTime={checkOutTime}
           />
 
-          <Title marginTop="60px" type="h5" title="Opening hours for this space" />
+          <Title m="60px 0" type="h7" title="Opening hours for this space" weight="Montserrat-SemiBold" />
 
           <TimeTable data={listing.accessDays.listingAccessHours} />
 

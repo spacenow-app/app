@@ -28,7 +28,7 @@ export const Types = {
 
 // Initial State
 const initialState = {
-  isLoading: true,
+  isLoading: false,
   error: {
     message: null
   },
@@ -406,7 +406,7 @@ export const onCreateMessage = values => async dispatch => {
   try {
     const { data } = await getClientWithAuth(dispatch).mutate({ mutation: createMessage, variables: values })
     dispatch({ type: Types.CREATE_MESSAGE_SUCCESS, payload: data.postMessageToHost })
-    toast.success(`Your message was sent to the host.`)
+    toast.success(`Your message has been sent: ${values.content}`)
   } catch (err) {
     dispatch({ type: Types.CREATE_MESSAGE_ERROR, payload: errToMsg(err) })
     toast.error(`Problem sending the message, try again later.`)

@@ -16,7 +16,9 @@ const LinkStyled = styled.a`
 `
 
 const ButtonStyled = styled(Button)`
-  width: 100% !important;
+  @media only screen and (max-width: 991px) {
+    width: 100% !important;
+  }
 `
 
 const CreditCard = ({
@@ -35,6 +37,7 @@ const CreditCard = ({
   dispatch,
   match,
   history,
+  setTouched,
   ...props
 }) => {
   const { isLoading: isPaying } = useSelector(state => state.payment.pay)
@@ -50,7 +53,9 @@ const CreditCard = ({
   }
 
   const _payNow = async () => {
-    await dispatch(createUserCard(values))
+    validateForm()
+    setTouched({ name: true, expiry: true, number: true, cvc: true })
+    isValid && (await dispatch(createUserCard(values)))
   }
 
   return (
@@ -114,7 +119,7 @@ const CreditCard = ({
         <Box mt="30px">
           <Text fontSize="16px">
             I agree to the house rules , cancellation policy and{' '}
-            <LinkStyled href="https://spacenow.com/terms-conditions/" target="_blank" style={{}}>
+            <LinkStyled href="https://spacenow.com/terms-conditions/" target="_blank">
               terms and conditions{' '}
             </LinkStyled>
             of spacenow.
@@ -168,7 +173,8 @@ const formik = {
 CreditCard.propTypes = {
   dispatch: PropTypes.any.isRequired,
   match: PropTypes.instanceOf(Object).isRequired,
-  history: PropTypes.instanceOf(Object).isRequired
+  history: PropTypes.instanceOf(Object).isRequired,
+  ...withFormik.propTypes
 }
 
 export default withFormik(formik)(CreditCard)
