@@ -147,9 +147,9 @@ const ItineraryPage = ({ match, location, history, ...props }) => {
     listing && dispatch(onGetAllSpecifications(listing.settingsParent.id, listing.listingData))
   }, [dispatch, listing])
 
-  useEffect(() => {
-    message && history.push(`/account/message/${message.id}`)
-  }, [history, message])
+  // useEffect(() => {
+  //   message && history.push(`/account/message/${message.id}`)
+  // }, [history, message])
 
   const componentRef = useRef()
 
@@ -215,6 +215,7 @@ const ItineraryPage = ({ match, location, history, ...props }) => {
       bookingPeriod: booking.listing.bookingPeriod
     }
     await dispatch(onCreateMessage(values))
+    message ? history.push(`/account/message/${message.id}`) : history.push(`/account/messages`)
   }
 
   const weekDay = format(new Date(booking.checkIn), 'i')
