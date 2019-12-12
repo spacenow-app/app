@@ -9,6 +9,9 @@ import { isSameDay, format } from 'date-fns'
 import { toast } from 'react-toastify'
 import { Redirect } from 'react-router-dom'
 
+import { stateToHTML } from 'draft-js-export-html';
+import { convertFromRaw } from 'draft-js';
+
 import { capitalize, toPlural } from 'utils/strings'
 import { cropPicture } from 'utils/images'
 
@@ -292,7 +295,7 @@ const SpacePage = ({ match, location, history, ...props }) => {
     const { address1 = '', city = '', zipcode = '', state = '', country = '' } = address
     const convertedAddress = `${address1 ? `${address1}, ` : ''} ${city ? `${city}, ` : ''} ${
       zipcode ? `${zipcode}, ` : ''
-    } ${state ? `${state}, ` : ''} ${country ? `${country}` : ''}`
+      } ${state ? `${state}, ` : ''} ${country ? `${country}` : ''}`
     return convertedAddress.replace(/\0.*$/g, '')
   }
 
@@ -413,11 +416,11 @@ const SpacePage = ({ match, location, history, ...props }) => {
   const _convertedArrayPhotos = array => {
     return array.filter(el => el !== undefined).length > 0
       ? array
-          .filter(el => el !== undefined)
-          .map(el => ({
-            source: cropPicture(el.name, 800, 500),
-            isCover: el.isCover
-          }))
+        .filter(el => el !== undefined)
+        .map(el => ({
+          source: cropPicture(el.name, 800, 500),
+          isCover: el.isCover
+        }))
       : []
   }
 
@@ -773,6 +776,14 @@ const SpacePage = ({ match, location, history, ...props }) => {
     videoTag.currentTime === videoTag.duration && videoTag.load()
   }
 
+  const _formatDescription = (description) => {
+    try {
+      return stateToHTML(convertFromRaw(JSON.parse(description)))
+    } catch {
+      return description
+    }
+  }
+
   if (listing && listing.user.provider === 'wework') {
     return <Redirect to={{ pathname: `/space/partner/${match.params.id}` }} push={true} />
   }
@@ -794,14 +805,14 @@ const SpacePage = ({ match, location, history, ...props }) => {
   return (
     <>
       {imageHeight == 325 ||
-      (listing.photos.length > 1 &&
-        listing.settingsParent.category.otherItemName !== 'parking' &&
-        listing.settingsParent.category.otherItemName !== 'storage' &&
-        listing.user.provider !== 'external') ? (
-        <Box mb="30px">
-          <CarouselListing photos={_convertedArrayPhotos(listing.photos)} />
-        </Box>
-      ) : null}
+        (listing.photos.length > 1 &&
+          listing.settingsParent.category.otherItemName !== 'parking' &&
+          listing.settingsParent.category.otherItemName !== 'storage' &&
+          listing.user.provider !== 'external') ? (
+          <Box mb="30px">
+            <CarouselListing photos={_convertedArrayPhotos(listing.photos)} />
+          </Box>
+        ) : null}
       <Wrapper>
         <Helmet
           title={`${listing.title} | ${listing.settingsParent.category.itemName} | ${_getSuburb(
@@ -813,10 +824,10 @@ const SpacePage = ({ match, location, history, ...props }) => {
             content={`Find the perfect space for ${listing.settingsParent.category.itemName} in ${_getSuburb(
               listing.location
             )}. ${listing.listingData.description &&
-              listing.listingData.description.substring(
-                0,
-                160 - (listing.settingsParent.category.itemName.length + _getSuburb(listing.location).length + 30)
-              )}`}
+            _formatDescription(listing.listingData.description).substring(
+              0,
+              160 - (listing.settingsParent.category.itemName.length + _getSuburb(listing.location).length + 30)
+            )}`}
           />
         </Helmet>
         {listing.user.provider === 'external' && imageHeight !== 325 && (
@@ -834,11 +845,11 @@ const SpacePage = ({ match, location, history, ...props }) => {
                 imageHeight !== 325 && <CarouselListing photos={_convertedArrayPhotos(listing.photos)} />}
 
               {imageHeight !== 325 &&
-              (listing.settingsParent.category.otherItemName === 'parking' ||
-                listing.settingsParent.category.otherItemName === 'storage') &&
-              listing.user.provider !== 'external' ? (
-                <Carousel photos={_convertedArrayPhotos(listing.photos)} />
-              ) : null}
+                (listing.settingsParent.category.otherItemName === 'parking' ||
+                  listing.settingsParent.category.otherItemName === 'storage') &&
+                listing.user.provider !== 'external' ? (
+                  <Carousel photos={_convertedArrayPhotos(listing.photos)} />
+                ) : null}
 
               <Grid columns={12}>
                 <Cell width={8} style={{ display: 'flex' }}>
@@ -947,9 +958,7 @@ const SpacePage = ({ match, location, history, ...props }) => {
               {listing.listingData.description ? (
                 <Box>
                   <Title type="h5" title="Description" />
-                  {listing.listingData.description.split('\n').map((o, index) => (
-                    <p key={index}>{o}</p>
-                  ))}
+                  <div dangerouslySetInnerHTML={{ __html: _formatDescription(listing.listingData.description) }} />
                 </Box>
               ) : null}
 

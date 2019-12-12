@@ -4,6 +4,9 @@ import Helmet from 'react-helmet'
 import { useSelector, useDispatch } from 'react-redux'
 import styled from 'styled-components'
 
+import { stateToHTML } from 'draft-js-export-html';
+import { convertFromRaw } from 'draft-js';
+
 import {
   Wrapper,
   Title,
@@ -89,7 +92,7 @@ const PreviewPage = ({ match, location, ...props }) => {
     const { address1 = '', city = '', zipcode = '', state = '', country = '' } = address
     const convertedAddress = `${address1 ? `${address1}, ` : ''} ${city ? `${city}, ` : ''} ${
       zipcode ? `${zipcode}, ` : ''
-    } ${state ? `${state}, ` : ''} ${country ? `${country}` : ''}`
+      } ${state ? `${state}, ` : ''} ${country ? `${country}` : ''}`
     return convertedAddress.replace(/\0.*$/g, '')
   }
 
@@ -216,6 +219,14 @@ const PreviewPage = ({ match, location, ...props }) => {
     )
   }
 
+  const _formatDescription = (description) => {
+    try {
+      return stateToHTML(convertFromRaw(JSON.parse(description)))
+    } catch {
+      return description
+    }
+  }
+
   return (
     <>
       <Wrapper>
@@ -272,7 +283,7 @@ const PreviewPage = ({ match, location, ...props }) => {
             right
             color={
               (listing.listingData.basePrice === 0 || listing.listingData.basePrice === null) &&
-              listing.listingData.bookingType !== 'poa'
+                listing.listingData.bookingType !== 'poa'
                 ? '#E05252'
                 : null
             }
@@ -334,7 +345,7 @@ const PreviewPage = ({ match, location, ...props }) => {
 
         <Box my="50px">
           <Title type="h4" title="Description" color={!listing.listingData.description ? '#E05252' : null} />
-          <p>{listing.listingData.description}</p>
+          <div dangerouslySetInnerHTML={{ __html: _formatDescription(listing.listingData.description) }} />
         </Box>
 
         {listing.amenities.length > 0 && (
@@ -367,17 +378,17 @@ const PreviewPage = ({ match, location, ...props }) => {
               {isLoadingRules ? (
                 <Loader />
               ) : (
-                arrayRules.map(item => (
-                  <Checkbox
-                    disabled
-                    key={item.id}
-                    label={item.itemName}
-                    name="rules"
-                    value={item.id}
-                    checked={listing.rules.some(rule => rule.listSettingsId === item.id)}
-                  />
-                ))
-              )}
+                  arrayRules.map(item => (
+                    <Checkbox
+                      disabled
+                      key={item.id}
+                      label={item.itemName}
+                      name="rules"
+                      value={item.id}
+                      checked={listing.rules.some(rule => rule.listSettingsId === item.id)}
+                    />
+                  ))
+                )}
             </Box>
           </Box>
         )}
