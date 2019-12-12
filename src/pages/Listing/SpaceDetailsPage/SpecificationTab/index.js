@@ -1,12 +1,14 @@
 /* eslint-disable react/no-array-index-key */
 /* eslint-disable no-console */
-import React, { useEffect, useCallback } from 'react'
+import React, { useEffect, useCallback, useState } from 'react'
 import styled from 'styled-components'
 import Helmet from 'react-helmet'
 import { withFormik } from 'formik'
 import * as Yup from 'yup'
 import _ from 'lodash'
 import { useSelector } from 'react-redux'
+
+import { EditorState, ContentState, convertToRaw, convertFromRaw } from 'draft-js';
 
 import {
   onGetAllRules,
@@ -21,7 +23,7 @@ import { onUploadPhoto, onSetCoverPhoto, onDeletePhoto } from 'redux/ducks/photo
 
 import { openModal, TypesModal } from 'redux/ducks/modal'
 
-import { Title, Input, Checkbox, Select, TextArea, StepButtons, Loader, Photo, Box, Video } from 'components'
+import { Title, Input, Checkbox, Select, WYSIWYGTextArea, StepButtons, Loader, Photo, Box, Video } from 'components'
 
 import { cropPicture } from 'utils/images'
 
@@ -93,6 +95,7 @@ const SpecificationTab = ({
   const { object: objectSpecifications, isLoading: isLoadingSpecifications } = useSelector(
     state => state.listing.specifications
   )
+  const [editorState, setEditorState] = useState(EditorState.createEmpty())
 
   useEffect(() => {
     dispatch(onGetAllSpecifications(listing.settingsParent.id, listing.listingData))
@@ -106,6 +109,14 @@ const SpecificationTab = ({
   useEffect(() => {
     setFatherValues({ ...values, isValid })
   }, [setFatherValues, values, isValid])
+
+  useEffect(() => {
+    try {
+      setEditorState(EditorState.createWithContent(convertFromRaw(JSON.parse(values.description))))
+    } catch {
+      setEditorState(EditorState.createWithContent(ContentState.createFromText(values.description)))
+    }
+  }, [values.description])
 
   const _handleSelectChange = e => {
     const { name, value } = e.target
@@ -231,6 +242,10 @@ const SpecificationTab = ({
     setFieldValue(name, value.substring(0, 100))
   }
 
+  const _handleChangeDescription = () => {
+    setFieldValue("description", JSON.stringify(convertToRaw(editorState.getCurrentContent())))
+  }
+
   const _handleOnDrop = useCallback(
     acceptedFiles => {
       acceptedFiles.map(async file => {
@@ -309,13 +324,13 @@ const SpecificationTab = ({
           {isLoadingSpecifications ? (
             <Loader />
           ) : (
-            <InputGroup>
-              {Object.keys(objectSpecifications).map(k => {
-                const o = objectSpecifications[k]
-                return <span key={o.field}>{_renderSpecifications(o)}</span>
-              })}
-            </InputGroup>
-          )}
+              <InputGroup>
+                {Object.keys(objectSpecifications).map(k => {
+                  const o = objectSpecifications[k]
+                  return <span key={o.field}>{_renderSpecifications(o)}</span>
+                })}
+              </InputGroup>
+            )}
         </SectionStyled>
         <SectionStyled>
           <Title
@@ -323,13 +338,15 @@ const SpecificationTab = ({
             title="About"
             subtitle="Sell ‘em the dream. Start broad, then get specific. Include features and details that make your space special. Don’t forget to mention the light, he ambience, the vibe plus any good transport options. Local food options or other local gems. Be honest, but be persuasive."
           />
-          <TextArea
+          <WYSIWYGTextArea
             placeholder="Describe your space"
-            name="description"
-            error={errors.description}
-            value={values.description}
-            onChange={handleChange}
-            onBlur={handleBlur}
+            // name="description"
+            // error={errors.description}
+            // value={values.description}
+            editorState={editorState}
+            onEditorStateChange={(editor) => { setEditorState(editor); _handleChangeDescription() }}
+          // onChange={handleChange}
+          // onBlur={handleBlur}
           />
         </SectionStyled>
         <SectionStyled>
@@ -338,19 +355,19 @@ const SpecificationTab = ({
             {isLoadingAmenities ? (
               <Loader />
             ) : (
-              arrayAmenities.map(item => {
-                return (
-                  <Checkbox
-                    key={item.id}
-                    label={item.itemName}
-                    name="amenities"
-                    value={item.id}
-                    checked={values.amenities.some(amenitie => amenitie.listSettingsId === item.id)}
-                    handleCheckboxChange={_handleCheckboxChange}
-                  />
-                )
-              })
-            )}
+                arrayAmenities.map(item => {
+                  return (
+                    <Checkbox
+                      key={item.id}
+                      label={item.itemName}
+                      name="amenities"
+                      value={item.id}
+                      checked={values.amenities.some(amenitie => amenitie.listSettingsId === item.id)}
+                      handleCheckboxChange={_handleCheckboxChange}
+                    />
+                  )
+                })
+              )}
           </CheckboxGroup>
         </SectionStyled>
         <SectionStyled>
@@ -359,17 +376,17 @@ const SpecificationTab = ({
             {isLoadingRules ? (
               <Loader />
             ) : (
-              arrayRules.map(item => (
-                <Checkbox
-                  key={item.id}
-                  label={item.itemName}
-                  name="rules"
-                  value={item.id}
-                  checked={values.rules.some(rule => rule.listSettingsId === item.id)}
-                  handleCheckboxChange={_handleCheckboxChange}
-                />
-              ))
-            )}
+                arrayRules.map(item => (
+                  <Checkbox
+                    key={item.id}
+                    label={item.itemName}
+                    name="rules"
+                    value={item.id}
+                    checked={values.rules.some(rule => rule.listSettingsId === item.id)}
+                    handleCheckboxChange={_handleCheckboxChange}
+                  />
+                ))
+              )}
           </CheckboxGroupRules>
         </SectionStyled>
         <SectionStyled>
@@ -378,18 +395,18 @@ const SpecificationTab = ({
             {isLoadingAccessTypes ? (
               <Loader />
             ) : (
-              <Select value={values.accessType} name="accessType" onChange={_handleSelectChange}>
-                {!values.accessType && <option>Select type of access</option>}
-                {arrayAccessTypes.map(
-                  item =>
-                    item.itemName !== 'Receptionist' && (
-                      <option key={item.id} value={item.itemName}>
-                        {item.itemName === 'Person' ? `${item.itemName} at reception` : item.itemName}
-                      </option>
-                    )
-                )}
-              </Select>
-            )}
+                <Select value={values.accessType} name="accessType" onChange={_handleSelectChange}>
+                  {!values.accessType && <option>Select type of access</option>}
+                  {arrayAccessTypes.map(
+                    item =>
+                      item.itemName !== 'Receptionist' && (
+                        <option key={item.id} value={item.itemName}>
+                          {item.itemName === 'Person' ? `${item.itemName} at reception` : item.itemName}
+                        </option>
+                      )
+                  )}
+                </Select>
+              )}
           </Box>
         </SectionStyled>
         <SectionStyled>
@@ -402,19 +419,19 @@ const SpecificationTab = ({
             {isLoadingPhotos ? (
               <Loader />
             ) : (
-              <>
-                {arrayPhotos.map((item, index) => (
-                  <Photo
-                    key={`photo-${index}`}
-                    onDrop={_handleOnDrop}
-                    url={item ? cropPicture(item.name) : null}
-                    isCover={item ? item.isCover : false}
-                    onCover={_handleSetCoverPhoto(item ? item.id : '')}
-                    onDelete={_handleDeletePhoto(item ? item.id : '')}
-                  />
-                ))}
-              </>
-            )}
+                <>
+                  {arrayPhotos.map((item, index) => (
+                    <Photo
+                      key={`photo-${index}`}
+                      onDrop={_handleOnDrop}
+                      url={item ? cropPicture(item.name) : null}
+                      isCover={item ? item.isCover : false}
+                      onCover={_handleSetCoverPhoto(item ? item.id : '')}
+                      onDelete={_handleDeletePhoto(item ? item.id : '')}
+                    />
+                  ))}
+                </>
+              )}
           </PhotosGroup>
           <p>
             TIP: Take photos in landscape mode to capture as much of your space as possible. Shoot from corners to add
@@ -431,14 +448,14 @@ const SpecificationTab = ({
             {isLoadingVideo ? (
               <Loader />
             ) : (
-              <>
-                <Video
-                  onDrop={_handleOnDropVideo}
-                  url={video ? video.name : null}
-                  onDelete={_handleDeleteVideo(video ? video.id : '')}
-                />
-              </>
-            )}
+                <>
+                  <Video
+                    onDrop={_handleOnDropVideo}
+                    url={video ? video.name : null}
+                    onDelete={_handleDeleteVideo(video ? video.id : '')}
+                  />
+                </>
+              )}
           </Box>
           {/* <p>
             TIP: Take photos in landscape mode to capture as much of your space as possible. Shoot from corners to add
@@ -446,6 +463,7 @@ const SpecificationTab = ({
           </p> */}
         </SectionStyled>
         <StepButtons prev={{ onClick: _goBack }} next={{ onClick: () => props.history.push('booking') }} />
+        {/* <StepButtons prev={{ onClick: _goBack }} next={{ onClick: () => console.log(convertToRaw(editorState.getCurrentContent())) }} /> */}
       </WrapperStyled>
     </form>
   )
