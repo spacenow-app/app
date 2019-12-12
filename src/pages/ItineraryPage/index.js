@@ -308,7 +308,9 @@ const ItineraryPage = ({ match, location, history, ...props }) => {
                 </Text>
               </Box>
               <Box>
-                <Text fontSize="14px">{`AUD $${booking.totalPrice}`}</Text>
+                <Text fontSize="14px">{`AUD $${booking.totalPrice
+                  .toFixed(2)
+                  .replace(/\d(?=(\d{3})+\.)/g, '$&,')}`}</Text>
               </Box>
             </Box>
           </CardContent>

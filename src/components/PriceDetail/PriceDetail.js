@@ -10,7 +10,7 @@ const NO_ABSORVE = 0.135
 
 const WrapperStyled = styled.div`
   display: grid;
-  grid-row-gap: 8px;
+  grid-row-gap: 4px;
   font-size: ${props => props.fontSize};
   margin: 0 0 35px 0;
   ${space}
@@ -71,6 +71,16 @@ const PriceDetail = props => (
             .toFixed(2)
             .replace(/\d(?=(\d{3})+\.)/g, '$&,')}`}</RightStyled>
         </ContentStyled> */}
+
+        {/* {props.promo && props.promoValue && (
+          <ContentStyled>
+            <LeftStyled>
+              Promo code <br /> {props.promo}% discount
+            </LeftStyled>
+            <RightStyled>(${props.promoValue.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,')})</RightStyled>
+          </ContentStyled>
+        )} */}
+
         <ContentStyled>
           <LeftStyled>Service fee</LeftStyled>
           <RightStyled>
