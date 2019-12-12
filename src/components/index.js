@@ -19,6 +19,7 @@ import { Tab, TabItem } from './Tab'
 import Checkbox from './Checkbox'
 import Select from './Select'
 import TextArea from './TextArea'
+import WYSIWYGTextArea from './WYSIWYGTextArea'
 import { Radio, RadioGroup } from './Radio'
 import { Grid, Cell } from './Grid'
 import TimeTable from './TimeTable'
@@ -132,5 +133,6 @@ export {
   Video,
   CheckInOut,
   CardCheckout,
-  CreditCard
+  CreditCard,
+  WYSIWYGTextArea
 }
