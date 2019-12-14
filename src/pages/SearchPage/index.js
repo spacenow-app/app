@@ -291,14 +291,7 @@ const SearchPage = ({ history, location }) => {
   }
 
   const _parseCategory = category => {
-    let response = category
-    for (let i = 0; i < category.length; i += 1) {
-      if (category[i] === category[i].toUpperCase()) {
-        response = category.replace(category[i], ` ${category[i]}`)
-        return capitalize(response)
-      }
-    }
-    return capitalize(response)
+    return capitalize(category.replace(/([A-Z])/g, ' $1').trim())
   }
 
   const modifiers = {
