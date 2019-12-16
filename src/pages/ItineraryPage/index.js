@@ -8,6 +8,7 @@ import { cropPicture } from 'utils/images'
 import { format } from 'date-fns'
 import { onCreateMessage } from 'redux/ducks/message'
 import ReactToPrint from 'react-to-print'
+import { openModal, TypesModal } from 'redux/ducks/modal'
 
 import { Wrapper, Title, Grid, Cell, Tag, Icon, Text, Box, Button, Loader, CheckInOut, PriceDetail } from 'components'
 
@@ -133,7 +134,6 @@ const ItineraryPage = ({ match, location, history, ...props }) => {
   const { object: booking, isLoading: isBookingLoading } = useSelector(state => state.booking.get)
   const { object: listing, isLoading: isListingLoading } = useSelector(state => state.booking.listing)
   const { bookingState } = useSelector(state => state.payment.pay)
-  const { object: message } = useSelector(state => state.message.create)
 
   useEffect(() => {
     dispatch(onGetBooking(match.params.id))
@@ -146,10 +146,6 @@ const ItineraryPage = ({ match, location, history, ...props }) => {
   useEffect(() => {
     listing && dispatch(onGetAllSpecifications(listing.settingsParent.id, listing.listingData))
   }, [dispatch, listing])
-
-  // useEffect(() => {
-  //   message && history.push(`/account/message/${message.id}`)
-  // }, [history, message])
 
   const componentRef = useRef()
 
@@ -208,14 +204,18 @@ const ItineraryPage = ({ match, location, history, ...props }) => {
       checkOutTime,
       peopleQuantity: null,
       reason: '',
-      content: '',
       listingId: booking.listing.id,
       guestId: booking.guestId,
       hostId: booking.listing.userId,
       bookingPeriod: booking.listing.bookingPeriod
     }
-    await dispatch(onCreateMessage(values))
-    message ? history.push(`/account/message/${message.id}`) : history.push(`/account/messages`)
+    const options = {
+      onConfirm: async content => {
+        await dispatch(onCreateMessage({ ...values, content }))
+      },
+      hostName: booking.listing.user.profile.firstName
+    }
+    dispatch(openModal(TypesModal.MODAL_TYPE_SEND_MESSAGE, options))
   }
 
   const weekDay = format(new Date(booking.checkIn), 'i')
