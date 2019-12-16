@@ -134,7 +134,6 @@ const ItineraryPage = ({ match, location, history, ...props }) => {
   const { object: booking, isLoading: isBookingLoading } = useSelector(state => state.booking.get)
   const { object: listing, isLoading: isListingLoading } = useSelector(state => state.booking.listing)
   const { bookingState } = useSelector(state => state.payment.pay)
-  const { object: message } = useSelector(state => state.message.create)
 
   useEffect(() => {
     dispatch(onGetBooking(match.params.id))
