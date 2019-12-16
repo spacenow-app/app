@@ -207,7 +207,7 @@ const CheckoutPage = ({ match, location, history, ...props }) => {
             value={savedCards ? 'saved' : 'card'}
           >
             <option value="card">Credit card</option>
-            <option value="saved">Saved card</option>
+            {arrayCards.length > 0 && <option value="saved">Saved card</option>}
           </Select>
           {!savedCards && <CreditCard match={match} dispatch={dispatch} history={history} />}
 
