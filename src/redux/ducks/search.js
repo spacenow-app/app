@@ -136,6 +136,8 @@ const querySearchByFilters = gql`
     $duration: String,
     $priceMin: Float,
     $priceMax: Float,
+    $capacityMin: Int,
+    $capacityMax: Int,
     $instant: String,
     $availability: [String],
     $page: Int
@@ -146,6 +148,8 @@ const querySearchByFilters = gql`
       duration: $duration,
       priceMin: $priceMin,
       priceMax: $priceMax,
+      capacityMin: $capacityMin,
+      capacityMax: $capacityMax,
       instant: $instant,
       availability: $availability,
       page: $page
@@ -269,6 +273,8 @@ export const onQuery = (searchKey, filters, page = null) => async dispatch => {
         .join() || '',
     priceMin: filters.filterPrice[0] || 0,
     priceMax: filters.filterPrice[1] || 0,
+    capacityMin: filters.filterCapacity[0] || 0,
+    capacityMax: filters.filterCapacity[1] || 0,
     instant: filters.filterInstantBooking ? filters.filterInstantBooking.toString() : '',
     availability: filters.filterSelectedDates ? filters.filterSelectedDates.map(o => o.toString()) : []
   }
@@ -282,6 +288,8 @@ export const onQuery = (searchKey, filters, page = null) => async dispatch => {
         duration: filter.duration,
         priceMin: filter.priceMin,
         priceMax: filter.priceMax,
+        capacityMin: filter.capacityMin,
+        capacityMax: filter.capacityMax,
         instant: filter.instant,
         availability: filter.availability,
         page

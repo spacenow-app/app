@@ -33,7 +33,7 @@ import ListResults from './ListResults'
 
 const FilterBar = styled.div`
   display: grid;
-  grid-template-columns: auto auto auto auto auto 1fr;
+  grid-template-columns: auto auto auto auto auto auto 1fr;
   grid-column-gap: 15px;
   padding: 0 20px;
 
@@ -165,7 +165,7 @@ const SearchPage = ({ history, location }) => {
   })
   const [showMap, setShowMap] = useState(true)
   const [filterSelectedDates, setFilterSelectedDates] = useState([])
-
+  const [filterCapacity, setFilterCapacity] = useState([0, 1000])
   const { searchKey, result: searchResults, pagination, frequencies } = useSelector(
     state => state.search.get,
     shallowEqual
@@ -251,12 +251,19 @@ const SearchPage = ({ history, location }) => {
     if (type === 'max') setFilterPrice([filterPrice[0], number.value()])
   }
 
+  const _onChangeInputCapacity = (e, type) => {
+    const number = numeral(e.target.value)
+    if (type === 'min') setFilterCapacity([number.value(), filterCapacity[1]])
+    if (type === 'max') setFilterCapacity([filterCapacity[0], number.value()])
+  }
+
   const _onQueryFilter = () => {
     const filters = {
       filterCategory,
       filterDuration,
       filterInstantBooking,
       filterPrice,
+      filterCapacity,
       filterSelectedDates
     }
     dispatch(onQuery(searchKey, filters))
@@ -269,6 +276,7 @@ const SearchPage = ({ history, location }) => {
       filterDuration,
       filterInstantBooking,
       filterPrice,
+      filterCapacity,
       filterSelectedDates
     }
     if (!searchKey) {
@@ -705,6 +713,81 @@ const SearchPage = ({ history, location }) => {
                     size="sm"
                     ref={ref}
                     onClick={() => {
+                      if (shouldShowFilter === 'capacity') setShouldShowFilter(false)
+                      else setShouldShowFilter('capacity')
+                    }}
+                  >
+                    Capacity
+                  </Button>
+                )
+              }}
+            </Reference>
+            {shouldShowFilter === 'capacity' && (
+              <Popper placement="bottom-start" modifiers={modifiers}>
+                {({ ref, style, placement, arrowProps }) => {
+                  return (
+                    <Box
+                      ref={ref}
+                      style={{ ...style, zIndex: 5000000 }}
+                      width={{ _: '90vw', small: 'auto' }}
+                      data-placement={placement}
+                    >
+                      <div ref={arrowProps.ref} style={arrowProps.style} />
+                      <Box
+                        borderRadius="6px"
+                        bg="white"
+                        border="1px solid #cbcbcb"
+                        padding="30px"
+                        marginTop="10px"
+                        zIndex="2000001"
+                      >
+                        <Text display="block" fontSize="14px">
+                          Lorem Ipsum Lorem Ipsum
+                        </Text>
+                        <Text display="block" fontSize="14px">
+                          Set the minimum and maximum capacity.
+                        </Text>
+                        <Box my="20px">
+                          <Slider max={1000} defaultValue={filterCapacity} value={filterCapacity} handleChange={setFilterCapacity} />
+                        </Box>
+                        <Box display="grid" gridTemplateColumns="1fr auto 1fr" gridColumnGap="15px" alignItems="center">
+                          <Input
+                            label="Min"
+                            value={numeral(filterCapacity[0]).format('0')}
+                            onChange={e => _onChangeInputCapacity(e, 'min')}
+                          />
+                          <Text mt="30px">To</Text>
+                          <Input
+                            label="Max"
+                            value={numeral(filterCapacity[1]).format('0')}
+                            onChange={e => _onChangeInputCapacity(e, 'max')}
+                          />
+                        </Box>
+                        <Box mt="30px" display="flex" justifyContent="space-between">
+                          <Button size="sm" outline onClick={() => setShouldShowFilter(false)}>
+                            Close
+                          </Button>
+                          <Button size="sm" outline onClick={_onQueryFilter}>
+                            Update
+                          </Button>
+                        </Box>
+                      </Box>
+                    </Box>
+                  )
+                }}
+              </Popper>
+            )}
+          </Manager>
+
+          <Manager>
+            <Reference>
+              {({ ref }) => {
+                return (
+                  <Button
+                    outline
+                    size="sm"
+                    ref={ref}
+                    onClick={() => {
                       if (shouldShowFilter === 'instantBooking') setShouldShowFilter(false)
                       else setShouldShowFilter('instantBooking')
                     }}
@@ -759,6 +842,7 @@ const SearchPage = ({ history, location }) => {
               </Popper>
             )}
           </Manager>
+
           <Manager>
             <SwitchStyled showMap={showMap}>
               <Text>Show map</Text>
