@@ -33,7 +33,7 @@ import {
 import { onGetListingById, onGetAllSpecifications } from 'redux/ducks/listing'
 import { capitalize, toPlural } from 'utils/strings'
 import { cropPicture } from 'utils/images'
-import { onSearch } from 'redux/ducks/search'
+import { onSimilarSpaces } from 'redux/ducks/search'
 
 import FormPartner from './FormPartner'
 
@@ -99,10 +99,7 @@ const PartnerPage = ({ match, location, ...props }) => {
   }, [])
 
   useEffect(() => {
-    listing &&
-      dispatch(
-        onSearch(listing.location.lat, listing.location.lng, false, listing.settingsParent.category.id.toString(), 3)
-      )
+    listing && dispatch(onSimilarSpaces(listing.id))
   }, [dispatch, listing])
 
   const _getAddress = address => {

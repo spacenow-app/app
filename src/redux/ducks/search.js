@@ -159,6 +159,17 @@ const querySearchByFilters = gql`
   }
 `
 
+const querySearchSimilarSpaces = gql`
+  query searchSimilarSpaces($listingId: Int!) {
+    searchSimilarSpaces(listingId: $listingId) {
+      __typename
+      result {
+        ${searchResultFields}
+      }
+    }
+  }
+`
+
 // Reducer
 export default function reducer(state = initialState, action) {
   switch (action.type) {
@@ -207,49 +218,34 @@ export default function reducer(state = initialState, action) {
   }
 }
 
-export const onSearch = (lat, lng, categoryKey = false, categories = false, limit = false) => async dispatch => {
+export const onSearch = (lat, lng, categoryKey) => async dispatch => {
   dispatch({ type: Types.ON_SEARCH_REQUEST })
   try {
     const queryVariables = { lat: `${lat}`, lng: `${lng}` }
     if (categoryKey) {
       queryVariables.categories = CATEGORIES[categoryKey].join()
     }
-    if (categories) {
-      queryVariables.categories = categories
-    }
-    if (limit) {
-      queryVariables.limit = limit
-      queryVariables.radius = -1
-    }
     const { data } = await getClient().query({
+      fetchPolicy: 'network-only',
       query: querySearchByAddress,
       variables: queryVariables
     })
-    if (limit === 3) {
-      dispatch({
-        type: Types.ON_SEARCH_SIMILAR_SUCCESS,
-        payload: {
-          result: data.searchByAddress.result
+    dispatch({
+      type: Types.ON_SEARCH_SUCCESS,
+      payload: {
+        searchKey: data.searchByAddress.searchKey,
+        result: data.searchByAddress.result,
+        frequencies: data.searchByAddress.frequencies,
+        pagination: {
+          page: data.searchByAddress.page,
+          perPage: data.searchByAddress.perPage,
+          prePage: data.searchByAddress.prePage,
+          nextPage: data.searchByAddress.nextPage,
+          total: data.searchByAddress.total,
+          totalPages: data.searchByAddress.totalPages
         }
-      })
-    } else {
-      dispatch({
-        type: Types.ON_SEARCH_SUCCESS,
-        payload: {
-          searchKey: data.searchByAddress.searchKey,
-          result: data.searchByAddress.result,
-          frequencies: data.searchByAddress.frequencies,
-          pagination: {
-            page: data.searchByAddress.page,
-            perPage: data.searchByAddress.perPage,
-            prePage: data.searchByAddress.prePage,
-            nextPage: data.searchByAddress.nextPage,
-            total: data.searchByAddress.total,
-            totalPages: data.searchByAddress.totalPages
-          }
-        }
-      })
-    }
+      }
+    })
   } catch (err) {
     dispatch({ type: Types.ON_SEARCH_FAILURE, payload: errToMsg(err) })
   }
@@ -278,6 +274,7 @@ export const onQuery = (searchKey, filters, page = null) => async dispatch => {
   }
   try {
     const { data } = await getClient().query({
+      fetchPolicy: 'network-only',
       query: querySearchByFilters,
       variables: {
         key: searchKey,
@@ -304,6 +301,24 @@ export const onQuery = (searchKey, filters, page = null) => async dispatch => {
           total: data.searchByFilters.total,
           totalPages: data.searchByFilters.totalPages
         }
+      }
+    })
+  } catch (err) {
+    dispatch({ type: Types.ON_SEARCH_FAILURE, payload: errToMsg(err) })
+  }
+}
+
+export const onSimilarSpaces = (listingId) => async (dispatch) => {
+  try {
+    const { data } = await getClient().query({
+      fetchPolicy: 'network-only',
+      query: querySearchSimilarSpaces,
+      variables: { listingId }
+    })
+    dispatch({
+      type: Types.ON_SEARCH_SIMILAR_SUCCESS,
+      payload: {
+        result: data.searchSimilarSpaces.result
       }
     })
   } catch (err) {

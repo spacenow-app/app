@@ -53,7 +53,7 @@ import {
   onSaveClicksByListing
 } from 'redux/ducks/listing'
 
-import { onSearch } from 'redux/ducks/search'
+import { onSimilarSpaces } from 'redux/ducks/search'
 
 import { onCreateBooking, onGetPendingBooking, onGetHourlyAvailability } from 'redux/ducks/booking'
 
@@ -277,10 +277,7 @@ const SpacePage = ({ match, location, history, ...props }) => {
   }, [])
 
   useEffect(() => {
-    listing &&
-      dispatch(
-        onSearch(listing.location.lat, listing.location.lng, false, listing.settingsParent.category.id.toString(), 3)
-      )
+    listing && dispatch(onSimilarSpaces(listing.id))
   }, [dispatch, listing])
 
   useEffect(() => {
