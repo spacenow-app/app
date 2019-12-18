@@ -146,7 +146,7 @@ const SearchPage = ({ history, location }) => {
   const [selectedSpace, setSelectedSpace] = useState(null)
   const [shouldShowFilter, setShouldShowFilter] = useState(false)
   const [markers, setMarkers] = useState([])
-  const [filterPrice, setFilterPrice] = useState([0, 0])
+  const [filterPrice, setFilterPrice] = useState([0, 10000])
   const [filterInstantBooking, setFilterInstantBooking] = useState(false)
   const [showFilterBar, setShowFilterBar] = useState(false)
   const [filterDuration, setFilterDuration] = useState({

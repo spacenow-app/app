@@ -225,7 +225,7 @@ export default function reducer(state = initialState, action) {
 export const onSearch = (lat, lng, categoryKey) => async dispatch => {
   dispatch({ type: Types.ON_SEARCH_REQUEST })
   try {
-    const queryVariables = { lat: `${lat}`, lng: `${lng}` }
+    const queryVariables = { lat: `${lat}`, lng: `${lng}`, priceMax: 10000 }
     if (categoryKey) {
       queryVariables.categories = CATEGORIES[categoryKey].join()
     }
