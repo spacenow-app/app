@@ -13,7 +13,7 @@ const SignupPage = ({ values, touched, errors, handleChange, handleBlur, isValid
   const responseFacebook = response => {
     const { state } = props.location
     console.log(values.userType)
-    dispatch(facebookSignin(response, (state && state.from) || false), values.userType)
+    dispatch(facebookSignin(response, (state && state.from) || false, values.userType))
   }
 
   const responseGoogle = response => {
