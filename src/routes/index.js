@@ -18,6 +18,7 @@ const Checkout = lazy(() => import('routes/Checkout'))
 const Itinerary = lazy(() => import('routes/Itinerary'))
 const Receipt = lazy(() => import('routes/Receipt'))
 const Review = lazy(() => import('routes/Review'))
+const Intro = lazy(() => import('routes/Intro'))
 
 const Routes = props => {
   const dispatch = useDispatch()
@@ -62,6 +63,7 @@ const Routes = props => {
           <PublicRoute {...props} path="/lp" handlerCheckAuthentication={() => {}} component={LandingPages} />
           <PublicRoute {...props} path="/space" handlerCheckAuthentication={() => {}} component={Space} />
           <PublicRoute {...props} path="/search" handlerCheckAuthentication={() => {}} component={SearchPage} />
+          <PublicRoute {...props} path="/intro" handlerCheckAuthentication={() => {}} component={Intro} />
           <Redirect from="/account/dashboard" to="/account/profile" />
           <PrivateRoute
             {...props}
