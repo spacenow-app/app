@@ -81,8 +81,8 @@ const mutationSignUp = gql`
 `
 
 const mutationGoogleLogin = gql`
-  mutation tokenGoogleValidate($token: String!) {
-    tokenGoogleValidate(token: $token) {
+  mutation tokenGoogleValidate($token: String!, $userType: String) {
+    tokenGoogleValidate(token: $token, userType: $userType) {
       ${loginBaseFields}
     }
   }
@@ -330,11 +330,11 @@ export const resetPassword = (token, password, history) => async dispatch => {
   }
 }
 
-export const googleSignin = (googleResponse, from) => async dispatch => {
+export const googleSignin = (googleResponse, from, userType) => async dispatch => {
   dispatch({ type: Types.AUTH_SIGNIN_REQUEST })
   try {
     const { data } = await getClient().mutate({
-      variables: { token: googleResponse.tokenId },
+      variables: { token: googleResponse.tokenId, userType },
       mutation: mutationGoogleLogin
     })
     const signinReturn = data.tokenGoogleValidate
