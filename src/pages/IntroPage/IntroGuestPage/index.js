@@ -11,9 +11,7 @@ const itemsCardTwp = [
 const itemsCardThree = [
   'Secure payments',
   'Only pay when your booking is confirmed',
-  'Funds aren’t released until after you leave your',
-  'booking - giving you piece of mind in the unlikely',
-  'event anything were to go wrong during your stay.'
+  'Funds aren’t released until after you leave your booking - giving you piece of mind in the unlikely event anything were to go wrong during your stay.'
 ]
 
 const itemsCardFour = [
