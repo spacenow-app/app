@@ -32,6 +32,8 @@ const IconStyled = styled(Icon)`
 `
 
 const ButtonStyled = styled(Button)`
+  width: auto !important;
+  padding: 0 30px !important;
   @media only screen and (max-width: 425px) {
     width: 100% !important;
   }
