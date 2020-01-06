@@ -15,6 +15,7 @@ const loginBaseFields = `
     id
     email
     emailConfirmed
+    userType
     profile {
       status
       profileId
@@ -42,6 +43,7 @@ const mutationTokenValidate = gql`
       user {
         id
         email
+        userType
         profile {
           status
           profileId
@@ -71,24 +73,24 @@ const mutationLogin = gql`
 `
 
 const mutationSignUp = gql`
-  mutation signup($firstName: String!, $lastName: String!, $email: String!, $password: String!) {
-    signup(firstName: $firstName, lastName: $lastName, email: $email, password: $password) {
+  mutation signup($firstName: String!, $lastName: String!, $email: String!, $password: String!, $userType: String) {
+    signup(firstName: $firstName, lastName: $lastName, email: $email, password: $password, userType: $userType) {
       ${loginBaseFields}
     }
   }
 `
 
 const mutationGoogleLogin = gql`
-  mutation tokenGoogleValidate($token: String!) {
-    tokenGoogleValidate(token: $token) {
+  mutation tokenGoogleValidate($token: String!, $userType: String) {
+    tokenGoogleValidate(token: $token, userType: $userType) {
       ${loginBaseFields}
     }
   }
 `
 
 const mutationFacebookLogin = gql`
-  mutation tokenFacebookValidate($token: String!) {
-    tokenFacebookValidate(token: $token) {
+  mutation tokenFacebookValidate($token: String!, $userType: String) {
+    tokenFacebookValidate(token: $token, userType: $userType) {
       ${loginBaseFields}
     }
   }
@@ -270,16 +272,16 @@ export const signin = (email, password, from) => async dispatch => {
   }
 }
 
-export const signup = (name, email, password, from) => async dispatch => {
+export const signup = (name, email, password, from, userType) => async dispatch => {
   dispatch({ type: Types.AUTH_SIGNUP_REQUEST })
   try {
     const { data } = await getClient().mutate({
-      variables: { firstName: name.first, lastName: name.last, email, password },
+      variables: { firstName: name.first, lastName: name.last, email, password, userType },
       mutation: mutationSignUp
     })
     const signupReturn = data.signup
     setToken(signupReturn.token, signupReturn.expiresIn)
-    dispatch({ type: Types.AUTH_SIGNIN_SUCCESS, from })
+    dispatch({ type: Types.AUTH_SIGNIN_SUCCESS, from: `/intro/${userType}` })
     dispatch({ type: AccountTypes.ACC_GET_PROFILE_SUCCESS, payload: signupReturn.user })
   } catch (err) {
     toast.error(errToMsg(err))
@@ -328,11 +330,11 @@ export const resetPassword = (token, password, history) => async dispatch => {
   }
 }
 
-export const googleSignin = (googleResponse, from) => async dispatch => {
+export const googleSignin = (googleResponse, from, userType) => async dispatch => {
   dispatch({ type: Types.AUTH_SIGNIN_REQUEST })
   try {
     const { data } = await getClient().mutate({
-      variables: { token: googleResponse.tokenId },
+      variables: { token: googleResponse.tokenId, userType },
       mutation: mutationGoogleLogin
     })
     const signinReturn = data.tokenGoogleValidate
@@ -348,16 +350,20 @@ export const googleSignin = (googleResponse, from) => async dispatch => {
   }
 }
 
-export const facebookSignin = (facebookResponse, from) => async dispatch => {
+export const facebookSignin = (facebookResponse, from, userType) => async dispatch => {
   dispatch({ type: Types.AUTH_SIGNIN_REQUEST })
   try {
     const { data } = await getClient().mutate({
-      variables: { token: facebookResponse.accessToken },
+      variables: { token: facebookResponse.accessToken, userType },
       mutation: mutationFacebookLogin
     })
     const signinReturn = data.tokenFacebookValidate
     setToken(signinReturn.token, signinReturn.expiresIn)
-    dispatch({ type: Types.AUTH_SIGNIN_SUCCESS, from })
+    if (userType) {
+      dispatch({ type: Types.AUTH_SIGNIN_SUCCESS, from: `/intro/${userType}` })
+    } else {
+      dispatch({ type: Types.AUTH_SIGNIN_SUCCESS, from })
+    }
     dispatch({ type: AccountTypes.ACC_GET_PROFILE_SUCCESS, payload: signinReturn.user })
   } catch (err) {
     toast.error(errToMsg(err))

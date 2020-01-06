@@ -15,7 +15,7 @@ const ButtonStyled = styled(ButtonExternal)`
       (props.size === 'xs' && '120px') ||
       (props.size === 'sm' && '148px') ||
       '180px'};
-    border-radius: 8px;
+    border-radius: 3px;
     font-family: 'Montserrat-Medium';
     font-size: ${props => (props.size === 'xs' && '12px') || (props.size === 'sm' && '14px') || '14px'};;
     font-weight: 600;

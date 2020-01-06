@@ -55,6 +55,7 @@ const initialState = {
     user: {
       id: null,
       email: null,
+      userType: null,
       profile: {
         profileId: null,
         firstName: null,
@@ -82,6 +83,7 @@ const queryGetProfile = gql`
       emailConfirmed
       provider
       type
+      userType
       profile {
         __typename
         status

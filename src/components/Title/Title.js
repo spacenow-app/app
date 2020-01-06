@@ -225,7 +225,8 @@ Title.propTypes = {
   noMargin: PropTypes.bool,
   right: PropTypes.bool,
   center: PropTypes.bool,
-  color: PropTypes.string
+  color: PropTypes.string,
+  weight: PropTypes.string
 }
 
 export default Title
