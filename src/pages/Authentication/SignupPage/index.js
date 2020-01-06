@@ -138,11 +138,14 @@ const formik = {
     fullName: Yup.string()
       .matches(/^[a-zA-Zà-úÀ-Ú][0-9a-zA-Z .,'-]*$/, 'Invalid name')
       .test('has-lastName', 'You forgot to fill in your last name', val => {
-        const arrayName = val.split(' ')
-        if (!arrayName[1]) {
-          return false
+        if (val) {
+          const arrayName = val.split(' ')
+          if (!arrayName[1]) {
+            return false
+          }
+          return true
         }
-        return true
+        return false
       })
       .required(),
     email: Yup.string()
@@ -157,7 +160,7 @@ const formik = {
     userType: Yup.string().required()
   }),
   enableReinitialize: true,
-  isInitialValid: true
+  isInitialValid: false
 }
 
 export default withFormik(formik)(SignupPage)
