@@ -743,9 +743,7 @@ const SearchPage = ({ history, location }) => {
                           marginTop="10px"
                           zIndex="2000001"
                         >
-                          <Text display="block" fontSize="14px">
-                            Lorem Ipsum Lorem Ipsum
-                        </Text>
+                          <Text display="block" fontSize="14px" />
                           <Text display="block" fontSize="14px">
                             Set the minimum and maximum capacity.
                         </Text>
