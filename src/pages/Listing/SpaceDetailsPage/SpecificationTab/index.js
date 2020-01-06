@@ -242,8 +242,9 @@ const SpecificationTab = ({
     setFieldValue(name, value.substring(0, 100))
   }
 
-  const _handleChangeDescription = () => {
-    setFieldValue("description", JSON.stringify(convertToRaw(editorState.getCurrentContent())))
+  const _handleWYSIWYGBlur = () => {
+    const description = convertToRaw(editorState.getCurrentContent())
+    setFieldValue("description", JSON.stringify(description))
   }
 
   const _handleOnDrop = useCallback(
@@ -344,9 +345,9 @@ const SpecificationTab = ({
             // error={errors.description}
             // value={values.description}
             editorState={editorState}
-            onEditorStateChange={(editor) => { setEditorState(editor); _handleChangeDescription() }}
-          // onChange={handleChange}
-          // onBlur={handleBlur}
+            onEditorStateChange={(editor) => { setEditorState(editor) }}
+            // onChange={handleChange}
+            onBlur={_handleWYSIWYGBlur}
           />
         </SectionStyled>
         <SectionStyled>
