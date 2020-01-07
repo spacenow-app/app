@@ -1,15 +1,17 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import styled from 'styled-components'
+import styled, { css } from 'styled-components'
 
-import { Box, Text, Avatar, Grid } from 'components'
+import { Box, Text, Avatar, Grid, Icon } from 'components'
 
 import { monthNames } from 'variables'
 
 import ReadMoreComponent from './ReadMoreComponent'
 
 const AvatarContainer = styled.div`
-  display: block;
+  display: flex;
+  justify-items: center;
+  align-items: center;
   font-family: 'MontSerrat-Bold';
   font-size: 22px;
   overflow: hidden;
@@ -31,11 +33,12 @@ const ReadMoreContainer = styled.div`
   }
 `
 
-const Review = ({ id, userName, userPicture, date, comment, rating }) => {
+const Review = ({ userName, userPicture, date, comment, isGoogle }) => {
   return (
     <>
       <Box display="flex" justifyContent="start" mb="15px">
         <AvatarContainer>
+          {isGoogle && <Icon width="24px" name="google-logo" style={{ marginRight: '5px', padding: '5px', border: '1px solid #eee' }} />}
           <Avatar width="42px" height="42px" image={userPicture} />
         </AvatarContainer>
         <Grid columns={1}>
@@ -57,12 +60,11 @@ const Review = ({ id, userName, userPicture, date, comment, rating }) => {
 }
 
 Review.propTypes = {
-  id: PropTypes.number,
   userName: PropTypes.string.isRequired,
   userPicture: PropTypes.string.isRequired,
   date: PropTypes.instanceOf(Date).isRequired,
   comment: PropTypes.string.isRequired,
-  rating: PropTypes.number.isRequired
+  isGoogle: PropTypes.bool
 }
 
 export default Review

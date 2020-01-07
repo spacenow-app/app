@@ -5,7 +5,7 @@ import { toast } from 'react-toastify'
 import { getClientWithAuth, getClient } from 'graphql/apolloClient'
 import errToMsg from 'utils/errToMsg'
 
-const DEFAULT_PAGE_SIZE = 7
+const DEFAULT_PAGE_SIZE = 5
 
 export const Types = {
   REVIEWS_PUBLIC_REQUEST: 'REVIEWS_PUBLIC_REQUEST',

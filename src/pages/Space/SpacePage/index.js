@@ -720,10 +720,10 @@ const SpacePage = ({ match, location, history, ...props }) => {
   }
 
   const _getRatingAvg = field => {
-    if (publicReviews) {
+    if (publicReviews && publicReviews.length > 0) {
       const countReviews = publicReviews.length
       const totalRatings = publicReviews.map(o => o[`rating${field}`]).reduce((a, b) => a + b)
-      return (totalRatings / countReviews).toFixed(2)
+      return (totalRatings / countReviews)
     }
     return 0
   }
@@ -779,6 +779,15 @@ const SpacePage = ({ match, location, history, ...props }) => {
     } catch {
       return description
     }
+  }
+
+  const _getCountReviews = () => {
+    let totalReviews = 0
+    if (publicReviews)
+      totalReviews += publicReviews.length
+    if (googleReviews && googleReviews.reviews)
+      totalReviews += googleReviews.reviews.length
+    return totalReviews
   }
 
   if (listing && listing.user.provider === 'wework') {
@@ -1042,10 +1051,10 @@ const SpacePage = ({ match, location, history, ...props }) => {
                 </Box>
               )}
 
-              {publicReviews && publicReviews.length > 0 && (
+              {((publicReviews && publicReviews.length > 0) || (googleReviews && googleReviews.reviews && googleReviews.reviews.length > 0)) && (
                 <>
                   <Box display="grid" gridTemplateColumns="200px auto" ref={reviewRef}>
-                    <Title type="h5" title={`Reviews (${publicReviews.length})`} />
+                    <Title type="h5" title={`Reviews (${_getCountReviews()})`} />
                     <TitleStarContainer>
                       <StarRatingComponent name="ratingOverall" value={_getRatingAvg('Overall')} editing={false} />
                     </TitleStarContainer>
@@ -1074,19 +1083,35 @@ const SpacePage = ({ match, location, history, ...props }) => {
                       </Cell>
                     </Box>
                   </ContainerMobile>
-                  {publicReviews.map((o, index) => {
-                    return (
-                      <Review
-                        key={index}
-                        id={o.id}
-                        userName={o.author.profile && o.author.profile.firstName}
-                        userPicture={o.author.profile && o.author.profile.picture}
-                        date={new Date(o.createdAt)}
-                        comment={o.reviewContent}
-                        rating={o.rating}
-                      />
+                  {
+                    [].concat(publicReviews, googleReviews.reviews).map(
+                      (o, index) => {
+                        if (o) {
+                          if (o['__typename'] !== "Review")
+                            return (<Review
+                              key={o.author_name}
+                              userName={o.author_name}
+                              userPicture={o.profile_photo_url}
+                              date={new Date(o.time * 1000)}
+                              comment={o.text}
+                              isGoogle={true}
+                            />)
+
+                          return (
+                            <Review
+                              key={o.id}
+                              userName={o.author.profile && o.author.profile.firstName}
+                              userPicture={o.author.profile && o.author.profile.picture}
+                              date={new Date(o.createdAt)}
+                              comment={o.reviewContent}
+
+                            />
+                          )
+                        }
+                        return (<></>)
+                      }
                     )
-                  })}
+                  }
                 </>
               )}
 
@@ -1098,7 +1123,7 @@ const SpacePage = ({ match, location, history, ...props }) => {
                 />
               </ContainerPagination>
 
-              {googleReviews && googleReviews.reviews && googleReviews.reviews.length > 0 && (
+              {/* {googleReviews && googleReviews.reviews && googleReviews.reviews.length > 0 && (
                 <>
                   <Box display="grid" gridTemplateColumns="200px auto" ref={reviewRef}>
                     <Title type="h5" title={`Reviews (${googleReviews.reviews.length})`} />
@@ -1114,12 +1139,11 @@ const SpacePage = ({ match, location, history, ...props }) => {
                         userPicture={o.profile_photo_url}
                         date={new Date(o.time * 1000)}
                         comment={o.text}
-                        rating={o.rating}
                       />
                     )
                   })}
                 </>
-              )}
+              )} */}
 
               {listing.rules.length > 0 && (
                 <Box width="80%">

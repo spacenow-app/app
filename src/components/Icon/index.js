@@ -51,6 +51,7 @@ import { ReactComponent as StarOutline } from './svg/generic/star-outline.svg'
 import { ReactComponent as Calendar } from './svg/generic/calendar.svg'
 import { ReactComponent as Play } from './svg/generic/play.svg'
 import { ReactComponent as Flag } from './svg/generic/flag.svg'
+import { ReactComponent as GoogleLogo } from './svg/generic/logo-google.svg'
 
 // Access Type
 import { ReactComponent as AccessTypeKeys } from './svg/access-type/access_type_keys.svg'
@@ -169,6 +170,7 @@ const Icons = {
   calendar: <Calendar />,
   play: <Play />,
   flag: <Flag />,
+  'google-logo': <GoogleLogo />,
   'category-coworking': <CategoryCoworking />,
   'category-desk': <CategoryDesk />,
   'category-events': <CategoryEvents />,
