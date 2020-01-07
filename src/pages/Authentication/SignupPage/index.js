@@ -6,7 +6,17 @@ import { NavBar, Wrapper, Box, Input, Button, Text, Title, Link, Line, ButtonSoc
 import { signup, googleSignin, facebookSignin } from 'redux/ducks/auth'
 import { config } from 'variables'
 
-const SignupPage = ({ values, touched, errors, handleChange, handleBlur, isValid, setFieldValue, ...props }) => {
+const SignupPage = ({
+  values,
+  touched,
+  errors,
+  handleChange,
+  handleBlur,
+  isValid,
+  setFieldValue,
+  validateForm,
+  ...props
+}) => {
   const dispatch = useDispatch()
   const { isLoading } = useSelector(state => state.auth)
 
@@ -61,8 +71,8 @@ const SignupPage = ({ values, touched, errors, handleChange, handleBlur, isValid
             </Select>
           </Box>
           <Box display="grid" gridTemplateColumns={{ _: 'none', medium: 'auto auto' }} gridGap="15px">
-            <ButtonSocial facebook onResponse={responseFacebook} />
-            <ButtonSocial google onResponse={responseGoogle} />
+            <ButtonSocial facebook onResponse={responseFacebook} isDisabled={!values.userType} />
+            <ButtonSocial google onResponse={responseGoogle} isDisabled={!values.userType} />
           </Box>
           <Text display="block" fontSize="14px" fontFamily="medium" my="15px">
             or sign up with
