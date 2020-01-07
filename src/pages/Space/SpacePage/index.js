@@ -476,6 +476,7 @@ const SpacePage = ({ match, location, history, ...props }) => {
       )
     }
     if (bookingPeriod === 'hourly' && bookingType !== 'poa') {
+      if (period < listing.listingData.minTerm) setPeriod(listing.listingData.minTerm)
       return (
         <>
           <HourlyBooking
@@ -556,7 +557,7 @@ const SpacePage = ({ match, location, history, ...props }) => {
     return null
   }
 
-  const _isPeriodValid = bookingPeriod => {
+  const _isPeriodInvalid = bookingPeriod => {
     if (user && user.userId === listing.userId) {
       return true
     }
@@ -582,11 +583,10 @@ const SpacePage = ({ match, location, history, ...props }) => {
   }
 
   const _onSubmitBooking = async () => {
-    if (_isPeriodValid(listing.bookingPeriod)) {
+    if (_isPeriodInvalid(listing.bookingPeriod)) {
       setFocusInput(true)
       return
     }
-
     const object = {
       listingId: listing.id,
       hostId: listing.userId,
@@ -704,7 +704,7 @@ const SpacePage = ({ match, location, history, ...props }) => {
           setPeriod(o.hours)
           setHourlyError('')
           if (!o.isAvailable) {
-            setHourlyError(`Not available in this period`)
+            setHourlyError(`Not available for this period`)
           }
         })
         .catch(err => setHourlyError(err))
