@@ -92,7 +92,7 @@ const AvailabilityTab = ({ match, listing, history, setFatherValues }) => {
     }
     setFatherValues(valuesToUpdate)
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [setFatherValues])
+  }, [listing, timetable, selectedDates])
 
   useEffect(() => {
     const { accessDays } = listing
@@ -201,7 +201,7 @@ const AvailabilityTab = ({ match, listing, history, setFatherValues }) => {
     setTimeTable(newArray)
   }
 
-  const _handleChangeDay = (_, options) => {
+  const _handleChangeDay = (o, options) => {
     const index = timetable.findIndex(el => el.day === options.name)
     const newArray = update(timetable, {
       [index]: { active: { $set: options.checked }, fulltime: { $set: false } }
@@ -209,7 +209,7 @@ const AvailabilityTab = ({ match, listing, history, setFatherValues }) => {
     setTimeTable(newArray)
   }
 
-  const _handleClick24hours = (_, options) => {
+  const _handleClick24hours = (o, options) => {
     const index = timetable.findIndex(el => `${el.day}-24h` === options.name)
     const newArray = update(timetable, {
       [index]: { fulltime: { $set: options.checked } }
@@ -217,7 +217,7 @@ const AvailabilityTab = ({ match, listing, history, setFatherValues }) => {
     setTimeTable(newArray)
   }
 
-  const _handleClickOpenFullTime = (_, options) => {
+  const _handleClickOpenFullTime = (o, options) => {
     const is = options.checked
     const newArray = timetable.map(el => ({
       ...el,
@@ -248,7 +248,7 @@ const AvailabilityTab = ({ match, listing, history, setFatherValues }) => {
       if (time) {
         const sTime = _timeToString(time).split(':')
         now.setHours(sTime[0], sTime[1], sTime[2])
-        return now.getTime().toString()
+        return Date.UTC(now.getFullYear(), now.getMonth(), now.getDate(), now.getUTCHours(), now.getUTCMinutes()).toString()
       }
       now.setHours(0, 0, 0, 0)
       now.setSeconds(time)
