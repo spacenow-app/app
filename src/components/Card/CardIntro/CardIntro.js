@@ -29,6 +29,7 @@ const IconStyled = styled(Icon)`
   text-align: right;
   fill: #6adc91;
   width: 100px;
+  padding: 10px;
 `
 
 const ButtonStyled = styled(Button)`
@@ -71,9 +72,9 @@ const CardIntro = ({ icon, title, text, checklist, secondText, buttonText, butto
           <Box mb="24px">
             {checklist.map(item => {
               return (
-                <Grid columns={12} style={{ display: 'grid', alignItems: 'baseline' }}>
+                <Grid columns={12} style={{ display: 'grid', alignItems: 'baseline' }} key={item}>
                   <Cell width={1}>
-                    <Icon name="camera" width="20px" height="32px" fill="#6adc91" />
+                    <Icon name="check-mark" width="15px" height="32px" fill="#6adc91" />
                   </Cell>
                   <Cell width={11}>
                     <Text fontSize="14px">{item}</Text>
