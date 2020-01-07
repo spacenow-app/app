@@ -52,6 +52,11 @@ import { ReactComponent as Calendar } from './svg/generic/calendar.svg'
 import { ReactComponent as Play } from './svg/generic/play.svg'
 import { ReactComponent as Flag } from './svg/generic/flag.svg'
 import { ReactComponent as GoogleLogo } from './svg/generic/logo-google.svg'
+import { ReactComponent as Pin } from './svg/generic/pin.svg'
+import { ReactComponent as ConfirmSchedule } from './svg/generic/confirm-schedule.svg'
+import { ReactComponent as Rating } from './svg/generic/rating.svg'
+import { ReactComponent as Resume } from './svg/generic/resume.svg'
+import { ReactComponent as CheckMark } from './svg/generic/check-mark.svg'
 
 // Access Type
 import { ReactComponent as AccessTypeKeys } from './svg/access-type/access_type_keys.svg'
@@ -310,7 +315,12 @@ const Icons = {
   download: <Download />,
   'arrow-left': <ArrowLeft />,
   'full-left-arrow': <FullLeftArrow />,
-  'movie-camera': <MovieCamera />
+  'movie-camera': <MovieCamera />,
+  pin: <Pin />,
+  'confirm-schedule': <ConfirmSchedule />,
+  rating: <Rating />,
+  resume: <Resume />,
+  'check-mark': <CheckMark />
 }
 
 const Icon = props => {

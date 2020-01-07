@@ -28,7 +28,7 @@ const IntroHostPage = props => {
           border
           rounded
           type="intro"
-          icon="amenitie-storeRoom"
+          icon="confirm-schedule"
           title="Complete your profile"
           text="We want to know a little bit more about you, and so does our community."
           secondText="The more complete your profile it is, the faster hosts will respond to your messages and accept your bookings (we’re talking from experience here!)"
@@ -41,7 +41,7 @@ const IntroHostPage = props => {
           border
           rounded
           type="intro"
-          icon="amenitie-storeRoom"
+          icon="rating"
           title="Search for the perfect space"
           text="Whatever you need, from event space to coworking, unique destinations to creative spaces for your next photoshoot - we got you."
           secondText="Once you’ve found the right location, we’ll help you take care of the rest."
