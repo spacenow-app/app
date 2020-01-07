@@ -1,7 +1,17 @@
 import React from 'react'
 import { NavBar, Wrapper, Box, Title, Card } from 'components'
 
-const checklist = ['Update your account details', 'Add a profile photo', 'Tell us a little bit about yourself']
+const itemsCardThree = [
+  'Secure payments',
+  'Only pay when your booking is confirmed',
+  'Funds aren’t released until after you leave your booking - giving you piece of mind in the unlikely event anything were to go wrong during your stay.'
+]
+
+const itemsCardFour = [
+  'Text, push and email notifications',
+  'Hassle-free check-in/check-out',
+  'Support whenever you need it'
+]
 
 const IntroHostPage = props => {
   return (
@@ -24,12 +34,12 @@ const IntroHostPage = props => {
           rounded
           type="intro"
           icon="amenitie-storeRoom"
-          title="Complete your profile"
-          text="We want to know a little bit more about you, and so does our community."
-          secondText="The more complete your profile it is, the faster hosts will respond to your messages and accept your bookings (we’re talking from experience here!)"
-          buttonText="Go to your profile"
-          checklist={checklist}
-          buttonHandleClick={() => props.history.push('/account/profile')}
+          title="Book and reserve your space"
+          text="Everything is handled through the app, from  communication with the host about your booking, to secure payments - it’s never been easier."
+          secondText="Spacenow is here to help at every step of the way!"
+          buttonText="Add a payment method"
+          checklist={itemsCardThree}
+          buttonHandleClick={() => props.history.push('/account/payment')}
         />
         <br />
         <Card
@@ -37,12 +47,12 @@ const IntroHostPage = props => {
           rounded
           type="intro"
           icon="amenitie-storeRoom"
-          title="Complete your profile"
-          text="We want to know a little bit more about you, and so does our community."
-          secondText="The more complete your profile it is, the faster hosts will respond to your messages and accept your bookings (we’re talking from experience here!)"
-          buttonText="Go to your profile"
-          checklist={checklist}
-          buttonHandleClick={() => props.history.push('/account/profile')}
+          title="Check in, check out and share your experience"
+          text="Once you’ve booked your perfect space, we’ll remind you about booking times and dates, help you find your way there and handle the check-in/out process - making sure the whole thing runs as smoothly as possible"
+          secondText="Once your booking is complete, leave a review for your host and share your experience with the spacenow community!"
+          buttonText="Get started"
+          checklist={itemsCardFour}
+          buttonHandleClick={() => props.history.push('/listing/intro')}
         />
         <br />
         <br />
