@@ -248,7 +248,7 @@ const AvailabilityTab = ({ match, listing, history, setFatherValues }) => {
       if (time) {
         const sTime = _timeToString(time).split(':')
         now.setHours(sTime[0], sTime[1], sTime[2])
-        return Date.UTC(now.getFullYear(), now.getMonth(), now.getDate(), now.getUTCHours(), now.getUTCMinutes()).toString()
+        return now.getTime().toString()
       }
       now.setHours(0, 0, 0, 0)
       now.setSeconds(time)
