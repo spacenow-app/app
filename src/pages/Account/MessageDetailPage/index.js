@@ -40,13 +40,12 @@ const MessageDetailPage = ({ match, location, history, ...props }) => {
   const [scroller, setScroller] = useState(null)
 
   const pageSize = 5
+
   useEffect(() => {
     match && match.params && user && dispatch(onReadMessage(match.params.id, user.id))
     match && match.params && dispatch(onGetMessage(match.params.id))
     match && match.params && dispatch(onGetMessageItems({ id: match.params.id, pageIndex: 0, pageSize }))
   }, [dispatch, match, user])
-
-  // console.log('messageItems', messageItems)
 
   const _onSubmit = () => {
     const values = {
@@ -138,7 +137,7 @@ const MessageDetailPage = ({ match, location, history, ...props }) => {
                 item={item}
                 key={item.id}
                 user={user}
-                count={messageItems.count}
+                count={messageItems.rows.length}
                 index={i}
                 messageParent={messageItems.messageParent}
               />

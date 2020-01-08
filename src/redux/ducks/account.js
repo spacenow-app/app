@@ -45,7 +45,7 @@ export const Types = {
   ACC_GET_NOTIFICATION_ERROR: '[ACCOUNT] GET NOTIFICATION ERROR',
   ACC_UPDATE_NOTIFICATION: '[ACCOUNT] UPDATE NOTIFICATION',
   ACC_UPDATE_NOTIFICATION_SUCCESS: '[ACCOUNT] UPDATE NOTIFICATION SUCCESS',
-  ACC_UPDATE_NOTIFICATION_ERROR: '[ACCOUNT] UPDATE NOTIFICATION ERROR',
+  ACC_UPDATE_NOTIFICATION_ERROR: '[ACCOUNT] UPDATE NOTIFICATION ERROR'
 }
 
 // Reducer
@@ -55,6 +55,7 @@ const initialState = {
     user: {
       id: null,
       email: null,
+      userType: null,
       profile: {
         profileId: null,
         firstName: null,
@@ -82,6 +83,7 @@ const queryGetProfile = gql`
       emailConfirmed
       provider
       type
+      userType
       profile {
         __typename
         status
@@ -231,7 +233,7 @@ const queryGetUserNotifications = gql`
       notificationId
       isSMS
       isEmail
-      isPushNotification  
+      isPushNotification
     }
   }
 `
@@ -244,7 +246,7 @@ const mutationUpdateUserNotification = gql`
       notificationId
       isSMS
       isEmail
-      isPushNotification        
+      isPushNotification
     }
   }
 `
@@ -371,20 +373,20 @@ export default function reducer(state = initialState, action) {
         isLoading: false
       }
     case Types.ACC_GET_NOTIFICATION_SUCCESS:
-        return {
-          ...state,
-          get: { ...state.get, notifications: action.payload },
-          isLoading: false
-        }
+      return {
+        ...state,
+        get: { ...state.get, notifications: action.payload },
+        isLoading: false
+      }
     case Types.ACC_UPDATE_NOTIFICATION_SUCCESS:
-        return {
-          ...state,
-          get: { 
-            ...state.get,
-            notifications: { ...state.get.notifications, ...action.payload }
-          },
-          isLoading: false
-        }
+      return {
+        ...state,
+        get: {
+          ...state.get,
+          notifications: { ...state.get.notifications, ...action.payload }
+        },
+        isLoading: false
+      }
     case Types.ACC_UPDATE_LISTING_SUCCESS:
       return {
         ...state,
@@ -504,7 +506,6 @@ export const onGetProfile = (id, token) => async dispatch => {
     })
     dispatch({ type: Types.ACC_GET_PROFILE_SUCCESS, payload: data.getUserLegacyById })
   } catch (error) {
-    console.error(error)
     dispatch({ type: Types.ACC_GET_PROFILE_ERROR, payload: error })
   }
 }
@@ -519,7 +520,6 @@ export const onGetBookingsByUser = (userId, userType, status, period) => async d
     })
     dispatch({ type: Types.ACC_GET_ALL_BOOKINGS_BY_USER_SUCCESS, payload: data.getAllBookingsByUser })
   } catch (error) {
-    console.error(error)
     dispatch({ type: Types.ACC_GET_ALL_BOOKINGS_BY_USER_ERROR, payload: error })
   }
 }
@@ -534,7 +534,6 @@ export const onGetListingsByUser = (userId, status) => async dispatch => {
     })
     dispatch({ type: Types.ACC_GET_ALL_LISTINGS_BY_USER_SUCCESS, payload: data.getAllListingsByUser })
   } catch (error) {
-    console.error(error)
     dispatch({ type: Types.ACC_GET_ALL_LISTINGS_BY_USER_ERROR, payload: error })
   }
 }
@@ -549,7 +548,6 @@ export const onGetUserDocuments = userId => async dispatch => {
     })
     dispatch({ type: Types.ACC_GET_DOCUMENTS_SUCCESS, payload: data.getUserDocuments })
   } catch (error) {
-    console.error(error)
     dispatch({ type: Types.ACC_GET_DOCUMENTS_ERROR, payload: error })
   }
 }
@@ -564,7 +562,6 @@ export const onDeleteDocument = (userId, id) => async dispatch => {
     toast.success('Document deleted successfully')
     dispatch({ type: Types.ACC_DELETE_DOCUMENT_SUCCESS, payload: { id } })
   } catch (error) {
-    console.error(error)
     dispatch({ type: Types.ACC_DELETE_DOCUMENT_ERROR, payload: error })
   }
 }

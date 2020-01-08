@@ -4,6 +4,9 @@ import Helmet from 'react-helmet'
 import { useSelector, useDispatch } from 'react-redux'
 import styled from 'styled-components'
 
+import { stateToHTML } from 'draft-js-export-html';
+import { convertFromRaw } from 'draft-js';
+
 import {
   Wrapper,
   Title,
@@ -30,7 +33,7 @@ import {
 import { onGetListingById, onGetAllSpecifications } from 'redux/ducks/listing'
 import { capitalize, toPlural } from 'utils/strings'
 import { cropPicture } from 'utils/images'
-import { onSearch } from 'redux/ducks/search'
+import { onSimilarSpaces } from 'redux/ducks/search'
 
 import FormPartner from './FormPartner'
 
@@ -96,17 +99,14 @@ const PartnerPage = ({ match, location, ...props }) => {
   }, [])
 
   useEffect(() => {
-    listing &&
-      dispatch(
-        onSearch(listing.location.lat, listing.location.lng, false, listing.settingsParent.category.id.toString(), 3)
-      )
+    listing && dispatch(onSimilarSpaces(listing.id))
   }, [dispatch, listing])
 
   const _getAddress = address => {
     const { address1 = '', city = '', zipcode = '', state = '', country = '' } = address
     const convertedAddress = `${address1 ? `${address1}, ` : ''} ${city ? `${city}, ` : ''} ${
       zipcode ? `${zipcode}, ` : ''
-    } ${state ? `${state}, ` : ''} ${country ? `${country}` : ''}`
+      } ${state ? `${state}, ` : ''} ${country ? `${country}` : ''}`
     return convertedAddress.replace(/\0.*$/g, '')
   }
 
@@ -246,6 +246,14 @@ const PartnerPage = ({ match, location, ...props }) => {
     return <Text lineHeight={1}>{accessType}</Text>
   }
 
+  const _formatDescription = (description) => {
+    try {
+      return stateToHTML(convertFromRaw(JSON.parse(description)))
+    } catch {
+      return description
+    }
+  }
+
   // Load the regular listing view
   if (listing && listing.user.provider !== 'wework') {
     props.history.push(`/space/${match.params.id}`)
@@ -259,16 +267,16 @@ const PartnerPage = ({ match, location, ...props }) => {
   return (
     <>
       {imageHeight === 325 ||
-      (listing.photos.length > 1 &&
-        listing.settingsParent.category.otherItemName !== 'parking' &&
-        listing.settingsParent.category.otherItemName !== 'storage') ? (
-        <Box mb="30px">
-          <CarouselListing photos={_convertedArrayPhotos(listing.photos)} />
-        </Box>
-      ) : null}
+        (listing.photos.length > 1 &&
+          listing.settingsParent.category.otherItemName !== 'parking' &&
+          listing.settingsParent.category.otherItemName !== 'storage') ? (
+          <Box mb="30px">
+            <CarouselListing photos={_convertedArrayPhotos(listing.photos)} />
+          </Box>
+        ) : null}
       <Wrapper>
         <Helmet title={`${listing.title} | ${listing.settingsParent.category.itemName} | ${_getSuburb(listing.location)} | Find the perfect event, coworking, office and meeting room spaces.`}>
-          <meta name="description" content={`Find the perfect space for ${listing.settingsParent.category.itemName} in ${_getSuburb(listing.location)}. ${listing.listingData.description.substring(0, 160 - (listing.settingsParent.category.itemName.length + _getSuburb(listing.location).length + 30))}`} />
+          <meta name="description" content={`Find the perfect space for ${listing.settingsParent.category.itemName} in ${_getSuburb(listing.location)}. ${listing.listingData.description && _formatDescription(listing.listingData.description).substring(0, 160 - (listing.settingsParent.category.itemName.length + _getSuburb(listing.location).length + 30))}`} />
         </Helmet>
         <GridStyled columns="auto 350px" columnGap="35px" rowGap="30px">
           <Box display="grid" gridRowGap="15px">
@@ -278,10 +286,10 @@ const PartnerPage = ({ match, location, ...props }) => {
               imageHeight !== 325 && <CarouselListing photos={_convertedArrayPhotos(listing.photos)} />}
 
             {imageHeight !== 325 &&
-            (listing.settingsParent.category.otherItemName === 'parking' ||
-              listing.settingsParent.category.otherItemName === 'storage') ? (
-              <Carousel photos={_convertedArrayPhotos(listing.photos)} />
-            ) : null}
+              (listing.settingsParent.category.otherItemName === 'parking' ||
+                listing.settingsParent.category.otherItemName === 'storage') ? (
+                <Carousel photos={_convertedArrayPhotos(listing.photos)} />
+              ) : null}
 
             <Grid columns={12}>
               <CellStyled width={6}>
@@ -413,7 +421,7 @@ const PartnerPage = ({ match, location, ...props }) => {
             {listing.listingData.description ? (
               <Box>
                 <Title type="h5" title="Description" />
-                <p>{listing.listingData.description}</p>
+                <div dangerouslySetInnerHTML={{ __html: _formatDescription(listing.listingData.description) }} />
               </Box>
             ) : null}
             {listing.amenities.length > 0 && (

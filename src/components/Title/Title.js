@@ -5,6 +5,8 @@ import { space } from 'styled-system'
 
 const baseStyle = css`
   font-family: ${props => (props.mediumBold ? 'Montserrat-Medium' : 'Montserrat-Bold')};
+  font-family: ${props => (props.weight ? props.weight : 'Montserrat-Bold')};
+  // font-weight: bold;
   color: ${props => (props.color ? props.color : '#172439')};
   margin: 0;
   max-width: 100%;
@@ -50,6 +52,11 @@ const H5Styled = styled.h5`
 `
 const H6Styled = styled.h6`
   font-size: 18px;
+  ${baseStyle}
+`
+
+const H7Styled = styled.h6`
+  font-size: 20px;
   ${baseStyle}
 `
 
@@ -157,6 +164,20 @@ const Title = ({
       </TitleStyled>
     )
   }
+  if (type === 'h7') {
+    return (
+      <TitleStyled className={props.className} noMargin={noMargin} {...props}>
+        <H7Styled right={right} center={center} {...props}>
+          {title}
+        </H7Styled>
+        {subtitle && (
+          <SubtitleStyled subTitleSize={subTitleSize} subTitleMargin={subTitleMargin} subTitleColor={subTitleColor}>
+            {subtitle}
+          </SubtitleStyled>
+        )}
+      </TitleStyled>
+    )
+  }
   return (
     <TitleStyled className={props.className} noMargin={noMargin} {...props}>
       <H1Styled right={right} center={center} {...props}>
@@ -185,7 +206,7 @@ Title.defaultProps = {
 }
 
 Title.propTypes = {
-  type: PropTypes.oneOf(['h1', 'h2', 'h3', 'h4', 'h5', 'h6']),
+  type: PropTypes.oneOf(['h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'h7']),
   title: PropTypes.PropTypes.oneOfType([
     PropTypes.string,
     PropTypes.number,
@@ -206,7 +227,8 @@ Title.propTypes = {
   right: PropTypes.bool,
   center: PropTypes.bool,
   color: PropTypes.string,
-  mediumBold: PropTypes.bool
+  mediumBold: PropTypes.bool,
+  weight: PropTypes.string
 }
 
 export default Title

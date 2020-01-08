@@ -29,7 +29,7 @@ const SigninPage = ({ values, touched, errors, handleChange, handleBlur, isValid
   const handleSignup = e => {
     e.preventDefault()
     const { state } = props.location
-    history.push(`/auth/signup`, { from: state.from })
+    history.push(`/auth/signup`, { from: state && state.from })
   }
 
   return (
@@ -71,7 +71,10 @@ const SigninPage = ({ values, touched, errors, handleChange, handleBlur, isValid
               <Link to="forgot_password">Forgot password?</Link>
               <Line margin="0" />
               <Text display="block">
-                Don't have an account? <Link to="signup" onClick={handleSignup}>Create one now</Link>
+                Don't have an account?{' '}
+                <Link to="signup" onClick={handleSignup}>
+                  Create one now
+                </Link>
               </Text>
             </Box>
           </form>

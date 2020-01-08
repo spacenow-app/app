@@ -68,7 +68,7 @@ const CardTitle = styled(Text)`
 
 const CardImage = styled.img`
   width: 100%;
-  height: ${({ showMap }) => (showMap ? '100%' : '280px')};
+  height: ${({ showMap }) => (showMap ? '248px' : '280px')};
   display: block;
   border-radius: 6px;
   cursor: pointer;
@@ -171,6 +171,12 @@ const ListResults = forwardRef(
       })
     }
 
+    const _getAddress = address => {
+      const { address1 = '', city = '' } = address
+      const convertedAddress = `${address1 ? `${address1}, ` : ''} ${city ? `${city}` : ''}`
+      return convertedAddress.replace(/\0.*$/g, '')
+    }
+
     return (
       <Wrapper ref={ref}>
         <ContainerList showMap={showMap}>
@@ -210,7 +216,7 @@ const ListResults = forwardRef(
                     <CardTitle onClick={() => window.open(`/space/${item.id}`)}>{item.title}</CardTitle>
                   </Box>
                   <Text display="block" fontFamily="regular" fontSize="14px" color="greyscale.1">
-                    {`${item.location.address1}, ${item.location.city}`}
+                    {_getAddress(item.location)}
                   </Text>
                   <Box
                     my="10px"

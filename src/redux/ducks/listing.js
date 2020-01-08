@@ -183,6 +183,7 @@ const allListingFields = `
     zipcode
     lat
     lng
+    placeId
     createdAt
     updatedAt
   }
@@ -332,6 +333,7 @@ const allListingFields = `
     id
     email
     provider
+    userBanStatus
     profile {
       displayName
       picture

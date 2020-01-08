@@ -222,6 +222,18 @@ const queryGetBookingById = gql`
         createdAt
         updatedAt
         count
+        photos {
+          id
+          listingId
+          name
+          isCover
+          bucket
+          region
+          key
+          type
+          createdAt
+          updatedAt
+        }
         user {
           id
           profile {
@@ -268,6 +280,19 @@ const queryGetBookingById = gql`
           city
           state
           zipcode
+        }
+        settingsParent {
+          id
+          category {
+            id
+            itemName
+            otherItemName
+          }
+          subcategory {
+            id
+            itemName
+            otherItemName
+          }
         }
       }
     }
@@ -608,10 +633,9 @@ export const onCreateBooking = (object, history) => async dispatch => {
       variables: object
     })
     dispatch({ type: Types.CREATE_BOOKING_SUCCESS, payload: data.createBooking })
-    if(object.bookingType !== "request")
-      history.push(`/checkout/${data.createBooking.bookingId}`)
+    if (object.bookingType !== 'request') history.push(`/checkout/${data.createBooking.bookingId}/info`)
     else {
-      toast.success("Booking Successfully Requested!!!")
+      toast.success('Booking Successfully Requested!!!')
       dispatch(onGetPendingBooking(object.listingId, object.guestId))
     }
   } catch (err) {
@@ -639,9 +663,9 @@ export const onAcceptBooking = bookingId => async dispatch => {
       mutation: mutationAcceptBooking,
       variables: { bookingId }
     })
-    dispatch({ type: Types.ACCEPT_BOOKING_SUCCESS, payload: data.acceptBooking })
+    return dispatch({ type: Types.ACCEPT_BOOKING_SUCCESS, payload: data.acceptBooking })
   } catch (err) {
-    dispatch({ type: Types.ACCEPT_BOOKING_FAILURE, payload: errToMsg(err) })
+    return dispatch({ type: Types.ACCEPT_BOOKING_FAILURE, payload: errToMsg(err) })
   }
 }
 
@@ -652,9 +676,9 @@ export const onDeclineBooking = bookingId => async dispatch => {
       mutation: mutationDeclineBooking,
       variables: { bookingId }
     })
-    dispatch({ type: Types.DECLINE_BOOKING_SUCCESS, payload: data.declineBooking })
+    return dispatch({ type: Types.DECLINE_BOOKING_SUCCESS, payload: data.declineBooking })
   } catch (err) {
-    dispatch({ type: Types.DECLINE_BOOKING_FAILURE, payload: errToMsg(err) })
+    return dispatch({ type: Types.DECLINE_BOOKING_FAILURE, payload: errToMsg(err) })
   }
 }
 

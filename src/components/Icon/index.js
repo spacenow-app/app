@@ -51,6 +51,12 @@ import { ReactComponent as StarOutline } from './svg/generic/star-outline.svg'
 import { ReactComponent as Calendar } from './svg/generic/calendar.svg'
 import { ReactComponent as Play } from './svg/generic/play.svg'
 import { ReactComponent as Flag } from './svg/generic/flag.svg'
+import { ReactComponent as GoogleLogo } from './svg/generic/logo-google.svg'
+import { ReactComponent as Pin } from './svg/generic/pin.svg'
+import { ReactComponent as ConfirmSchedule } from './svg/generic/confirm-schedule.svg'
+import { ReactComponent as Rating } from './svg/generic/rating.svg'
+import { ReactComponent as Resume } from './svg/generic/resume.svg'
+import { ReactComponent as CheckMark } from './svg/generic/check-mark.svg'
 
 // Access Type
 import { ReactComponent as AccessTypeKeys } from './svg/access-type/access_type_keys.svg'
@@ -132,6 +138,7 @@ import { ReactComponent as AmenitiePool } from './svg/amenities/amenities_pool.s
 import { ReactComponent as AmenitiePoolTable } from './svg/amenities/amenities_pooltable.svg'
 import { ReactComponent as AmenitiePowerOutlets } from './svg/amenities/amenities_poweroutlets.svg'
 import { ReactComponent as AmenitiePrinter } from './svg/amenities/amenities_printer.svg'
+import { ReactComponent as AmenitieProjector } from './svg/amenities/amenities_projector.svg'
 import { ReactComponent as AmenitieProductionEquip } from './svg/amenities/amenities_production_equip.svg'
 import { ReactComponent as AmenitieElectronicEntry } from './svg/amenities/amenities_secure_electronic_entry.svg'
 import { ReactComponent as AmenitieSecurePremises } from './svg/amenities/amenities_secure_premises.svg'
@@ -168,6 +175,7 @@ const Icons = {
   calendar: <Calendar />,
   play: <Play />,
   flag: <Flag />,
+  'google-logo': <GoogleLogo />,
   'category-coworking': <CategoryCoworking />,
   'category-desk': <CategoryDesk />,
   'category-events': <CategoryEvents />,
@@ -285,6 +293,7 @@ const Icons = {
   'amenitie-powerOutlets': <AmenitiePowerOutlets />,
   'amenitie-printScanCopy': <AmenitiePrinter />,
   'amenitie-productionEquipment': <AmenitieProductionEquip />,
+  'amenitie-projector': <AmenitieProjector />,
   'amenitie-secureEletronicEntry': <AmenitieElectronicEntry />,
   'amenitie-securePremises': <AmenitieSecurePremises />,
   'amenitie-securityPatrols': <AmenitieSecurityPatrols />,
@@ -306,7 +315,12 @@ const Icons = {
   download: <Download />,
   'arrow-left': <ArrowLeft />,
   'full-left-arrow': <FullLeftArrow />,
-  'movie-camera': <MovieCamera />
+  'movie-camera': <MovieCamera />,
+  pin: <Pin />,
+  'confirm-schedule': <ConfirmSchedule />,
+  rating: <Rating />,
+  resume: <Resume />,
+  'check-mark': <CheckMark />
 }
 
 const Icon = props => {

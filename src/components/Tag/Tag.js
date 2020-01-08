@@ -12,6 +12,7 @@ const SpanStyled = styled.div`
   /* min-width: 110px; */
   grid-column-gap: 10px;
   padding: ${props => (props.small ? '5px 10px' : '10px')};
+  background-color: ${props => props.bg && props.bg};
   width: fit-content;
   ${props =>
     props.icon &&
@@ -30,8 +31,8 @@ const TextStyled = styled.span`
   line-height: 1.2;
 `
 
-const Tag = ({ icon, small, children }) => (
-  <SpanStyled icon={icon} small={small}>
+const Tag = ({ icon, small, children, bg }) => (
+  <SpanStyled icon={icon} small={small} bg={bg}>
     {icon && icon}
     <TextStyled>{children}</TextStyled>
   </SpanStyled>

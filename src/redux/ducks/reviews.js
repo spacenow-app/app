@@ -5,12 +5,15 @@ import { toast } from 'react-toastify'
 import { getClientWithAuth, getClient } from 'graphql/apolloClient'
 import errToMsg from 'utils/errToMsg'
 
-const DEFAULT_PAGE_SIZE = 7
+const DEFAULT_PAGE_SIZE = 5
 
 export const Types = {
   REVIEWS_PUBLIC_REQUEST: 'REVIEWS_PUBLIC_REQUEST',
   REVIEWS_PUBLIC_SUCCESS: 'REVIEWS_PUBLIC_SUCCESS',
   REVIEWS_PUBLIC_FAILURE: 'REVIEWS_PUBLIC_FAILURE',
+  REVIEWS_GOOGLE_REQUEST: 'REVIEWS_GOOGLE_REQUEST',
+  REVIEWS_GOOGLE_SUCCESS: 'REVIEWS_GOOGLE_SUCCESS',
+  REVIEWS_GOOGLE_FAILURE: 'REVIEWS_GOOGLE_FAILURE',
   REVIEWS_PRIVATE_REQUEST: 'REVIEWS_PRIVATE_REQUEST',
   REVIEWS_PRIVATE_SUCCESS: 'REVIEWS_PRIVATE_SUCCESS',
   REVIEWS_PRIVATE_FAILURE: 'REVIEWS_PRIVATE_FAILURE',
@@ -24,6 +27,7 @@ const initialState = {
   isLoading: false,
   get: {
     public: [],
+    google: [],
     totalPages: 0,
     private: [],
     error: null
@@ -59,12 +63,33 @@ const reviewFields = `
   }
 `
 
+const googleReviewFields = `
+  __typename
+  author_name
+  profile_photo_url
+  rating
+  text
+  time
+  relative_time_description
+`
+
 const queryGetPublicReviews = gql`
   query getPublicReviews($listingId: Int!, $page: Int, $pageSize: Int) {
     getPublicReviews(listingId: $listingId, page: $page, pageSize: $pageSize) {
       totalPages
       result {
         ${reviewFields}
+      }
+    }
+  }
+`
+
+const queryGetGoogleReviews = gql`
+  query getGoogleReviews($placeId: String) {
+    getGoogleReviews(placeId: $placeId) {
+      rating
+      reviews {
+        ${googleReviewFields}
       }
     }
   }
@@ -185,6 +210,39 @@ export default function reducer(state = initialState, action) {
         }
       }
     }
+    case Types.REVIEWS_GOOGLE_REQUEST: {
+      return {
+        ...state,
+        isLoading: true,
+        get: {
+          ...state.get,
+          google: [],
+          error: null
+        }
+      }
+    }
+    case Types.REVIEWS_GOOGLE_SUCCESS: {
+      return {
+        ...state,
+        isLoading: false,
+        get: {
+          ...state.get,
+          google: action.payload,
+          error: null
+        }
+      }
+    }
+    case Types.REVIEWS_GOOGLE_FAILURE: {
+      return {
+        ...state,
+        isLoading: false,
+        get: {
+          ...state.get,
+          google: [],
+          error: action.payload
+        }
+      }
+    }
     case Types.REVIEWS_CREATE_RESET: {
       return {
         ...state,
@@ -259,6 +317,20 @@ export const onGetPrivateReviews = listingId => async dispatch => {
     dispatch({ type: Types.REVIEWS_PRIVATE_SUCCESS, payload: data.getPrivateReviews })
   } catch (err) {
     dispatch({ type: Types.REVIEWS_PRIVATE_FAILURE, payload: errToMsg(err) })
+  }
+}
+
+export const onGetGoogleReviews = placeId => async dispatch => {
+  dispatch({ type: Types.REVIEWS_GOOGLE_REQUEST })
+  try {
+    const { data } = await getClientWithAuth(dispatch).query({
+      query: queryGetGoogleReviews,
+      variables: { placeId },
+      fetchPolicy: 'network-only'
+    })
+    dispatch({ type: Types.REVIEWS_GOOGLE_SUCCESS, payload: data.getGoogleReviews })
+  } catch (err) {
+    dispatch({ type: Types.REVIEWS_GOOGLE_FAILURE, payload: errToMsg(err) })
   }
 }
 

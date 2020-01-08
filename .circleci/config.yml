@@ -51,11 +51,14 @@ jobs:
       - run:
           name: 'Build app'
           command:
-            NODE_ENV=production REACT_APP_ENV=production REACT_APP_GOOGLE_MAPS_KEY=${SANDPIT_REACT_APP_GOOGLE_MAPS_KEY}
-            GENERATE_SOURCEMAP=false INLINE_RUNTIME_CHUNK=false REACT_APP_LEGACY=${SANDPIT_REACT_APP_LEGACY}
-            REACT_APP_GRAPH_HOST=${SANDPIT_REACT_APP_GRAPH_HOST} REACT_APP_STATIC_PAGES=https://app.sandpit.cloud.spacenow.com/search
-            REACT_APP_GOOGLE_APP_ID=${SANDPIT_REACT_APP_GOOGLE_APP_ID} REACT_APP_FACEBOOK_APP_ID=${SANDPIT_REACT_APP_FACEBOOK_APP_ID}
-            REACT_APP_DOMAIN=.sandpit.cloud.spacenow.com REACT_APP_ASSETS_API_HOST=https://api-search.sandpit.cloud.spacenow.com/search/images yarn build
+            NODE_ENV=${SANDPIT_REACT_APP_ENV} REACT_APP_ENV=${SANDPIT_REACT_APP_ENV}
+            REACT_APP_GOOGLE_MAPS_KEY=${SANDPIT_REACT_APP_GOOGLE_MAPS_KEY} GENERATE_SOURCEMAP=false
+            INLINE_RUNTIME_CHUNK=false REACT_APP_LEGACY=${SANDPIT_REACT_APP_LEGACY}
+            REACT_APP_GRAPH_HOST=${SANDPIT_REACT_APP_GRAPH_HOST}
+            REACT_APP_STATIC_PAGES=https://app.sandpit.cloud.spacenow.com/search
+            REACT_APP_GOOGLE_APP_ID=${SANDPIT_REACT_APP_GOOGLE_APP_ID}
+            REACT_APP_FACEBOOK_APP_ID=${SANDPIT_REACT_APP_FACEBOOK_APP_ID} REACT_APP_DOMAIN=.sandpit.cloud.spacenow.com
+            REACT_APP_ASSETS_API_HOST=https://api-search.sandpit.cloud.spacenow.com/search/images yarn build
       - persist_to_workspace:
           root: ~/repo
           paths:
@@ -89,7 +92,7 @@ jobs:
           command: |
             aws s3 ls
             aws s3 sync build/ s3://$AWS_BUCKET --delete --region $AWS_REGION
-            aws cloudfront create-invalidation --distribution-id "EJBM66ARV7ZA9" --paths /index.html
+            aws cloudfront create-invalidation --distribution-id "EJBM66ARV7ZA9" --paths "/*"
   build-prod:
     <<: *defaults
     steps:
@@ -105,8 +108,9 @@ jobs:
             NODE_ENV=production REACT_APP_ENV=production REACT_APP_GOOGLE_MAPS_KEY=${PROD_REACT_APP_GOOGLE_MAPS_KEY}
             GENERATE_SOURCEMAP=false INLINE_RUNTIME_CHUNK=false REACT_APP_LEGACY=${PROD_REACT_APP_LEGACY}
             REACT_APP_GRAPH_HOST=${PROD_REACT_APP_GRAPH_HOST} REACT_APP_STATIC_PAGES=https://spacenow.com
-            REACT_APP_GOOGLE_APP_ID=${PROD_REACT_APP_GOOGLE_APP_ID} REACT_APP_FACEBOOK_APP_ID=${PROD_REACT_APP_FACEBOOK_APP_ID}
-            REACT_APP_DOMAIN=.spacenow.com REACT_APP_ASSETS_API_HOST=https://api-search.spacenow.com/search/images yarn build
+            REACT_APP_GOOGLE_APP_ID=${PROD_REACT_APP_GOOGLE_APP_ID}
+            REACT_APP_FACEBOOK_APP_ID=${PROD_REACT_APP_FACEBOOK_APP_ID} REACT_APP_DOMAIN=.spacenow.com
+            REACT_APP_ASSETS_API_HOST=https://api-search.spacenow.com/search/images yarn build
       - persist_to_workspace:
           root: ~/repo
           paths:
@@ -139,7 +143,7 @@ jobs:
           command: |
             aws s3 ls
             aws s3 sync build/ s3://${PROD_AWS_BUCKET} --delete --region $AWS_REGION
-            aws cloudfront create-invalidation --distribution-id "E2YJX6D1PVADY" --paths /index.html
+            aws cloudfront create-invalidation --distribution-id "E2YJX6D1PVADY" --paths "/*"
 
 workflows:
   version: 2

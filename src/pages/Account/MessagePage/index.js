@@ -15,9 +15,9 @@ const ContainerPagination = styled.div`
 const MessagePage = ({ match, location, history, ...props }) => {
   const dispatch = useDispatch()
 
-  // const { isLoading: isMessageLoading } = useSelector(state => state.message)
+  const { isLoading: isMessageLoading } = useSelector(state => state.message)
   const { user } = useSelector(state => state.account.get)
-  const { array: messages, isLoading: isMessageLoading } = useSelector(state => state.message.list)
+  const { array: messages } = useSelector(state => state.message.list)
 
   const [userType, setUserType] = useState('guest')
   const [pageIndex, setPageIndex] = useState(0)

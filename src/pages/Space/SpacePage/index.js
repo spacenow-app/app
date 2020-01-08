@@ -6,6 +6,11 @@ import { useSelector, useDispatch } from 'react-redux'
 import styled from 'styled-components'
 import _ from 'lodash'
 import { isSameDay, format } from 'date-fns'
+import { toast } from 'react-toastify'
+import { Redirect } from 'react-router-dom'
+
+import { stateToHTML } from 'draft-js-export-html';
+import { convertFromRaw } from 'draft-js';
 
 import { capitalize, toPlural } from 'utils/strings'
 import { cropPicture } from 'utils/images'
@@ -48,7 +53,7 @@ import {
   onSaveClicksByListing
 } from 'redux/ducks/listing'
 
-import { onSearch } from 'redux/ducks/search'
+import { onSimilarSpaces } from 'redux/ducks/search'
 
 import { onCreateBooking, onGetPendingBooking, onGetHourlyAvailability } from 'redux/ducks/booking'
 
@@ -58,8 +63,7 @@ import { sendMail } from 'redux/ducks/mail'
 
 import { onCreateMessage } from 'redux/ducks/message'
 
-// import GraphCancelattionImage from 'pages/Listing/SpaceDetailsPage/CancellationTab/graph_cancellation.png'
-import { onGetPublicReviews } from 'redux/ducks/reviews'
+import { onGetPublicReviews, onGetGoogleReviews } from 'redux/ducks/reviews'
 
 import config from 'variables/config'
 
@@ -69,7 +73,6 @@ import MonthlyBooking from './MonthlyBooking'
 import PendingBooking from './PenidngBooking'
 import HourlyBooking from './HourlyBooking'
 import GenericForm from './GenericForm'
-// import RequestForm from './RequestForm'
 
 const GridStyled = styled(Grid)`
   @media only screen and (max-width: 991px) {
@@ -228,7 +231,7 @@ const SpacePage = ({ match, location, history, ...props }) => {
   const { isLoading: isLoadingOnCreateReservation } = useSelector(state => state.booking.create)
   const { object: pendingBooking } = useSelector(state => state.booking.pending)
   const { similar: similarResults } = useSelector(state => state.search)
-  const { public: publicReviews, totalPages } = useSelector(state => state.reviews.get)
+  const { public: publicReviews, google: googleReviews, totalPages } = useSelector(state => state.reviews.get)
   const { object: videoInput } = useSelector(state => state.listing.video)
 
   const [datesSelected, setDatesSelected] = useState([])
@@ -240,7 +243,6 @@ const SpacePage = ({ match, location, history, ...props }) => {
   const [message, setMessage] = useState('')
   const [hourlyError, setHourlyError] = useState('')
   const [focusInput, setFocusInput] = useState(false)
-  const [isValid, setIsValid] = useState(true)
   const [showPlay, setShowPlay] = useState(true)
 
   const videoTag = document.getElementsByTagName('video')[0]
@@ -275,29 +277,22 @@ const SpacePage = ({ match, location, history, ...props }) => {
   }, [])
 
   useEffect(() => {
-    listing &&
-      dispatch(
-        onSearch(listing.location.lat, listing.location.lng, false, listing.settingsParent.category.id.toString(), 3)
-      )
+    listing && dispatch(onSimilarSpaces(listing.id))
   }, [dispatch, listing])
 
   useEffect(() => {
     listing && dispatch(onGetPublicReviews(listing.id))
   }, [dispatch, listing])
 
-  if (listing && listing.user.provider === 'wework') {
-    history.push(`/space/partner/${match.params.id}`)
-  }
-
-  if (isListingLoading) {
-    return <Loader text="Loading listing view" />
-  }
+  useEffect(() => {
+    listing && listing.location && listing.location.placeId && dispatch(onGetGoogleReviews(listing.location.placeId))
+  }, [dispatch, listing])
 
   const _getAddress = address => {
     const { address1 = '', city = '', zipcode = '', state = '', country = '' } = address
     const convertedAddress = `${address1 ? `${address1}, ` : ''} ${city ? `${city}, ` : ''} ${
       zipcode ? `${zipcode}, ` : ''
-    } ${state ? `${state}, ` : ''} ${country ? `${country}` : ''}`
+      } ${state ? `${state}, ` : ''} ${country ? `${country}` : ''}`
     return convertedAddress.replace(/\0.*$/g, '')
   }
 
@@ -324,7 +319,7 @@ const SpacePage = ({ match, location, history, ...props }) => {
 
   const _onClaimListing = () => dispatch(onClaimListing(match.params.id, listing.title))
 
-  const _handleClickByListing = () => dispatch(onSaveClicksByListing(match.params.id, listing.listingData.link)) 
+  const _handleClickByListing = () => dispatch(onSaveClicksByListing(match.params.id, listing.listingData.link))
 
   const _renderHighLights = obj => {
     let array = Object.keys(obj).map(i => obj[i])
@@ -418,11 +413,11 @@ const SpacePage = ({ match, location, history, ...props }) => {
   const _convertedArrayPhotos = array => {
     return array.filter(el => el !== undefined).length > 0
       ? array
-          .filter(el => el !== undefined)
-          .map(el => ({
-            source: cropPicture(el.name, 800, 500),
-            isCover: el.isCover
-          }))
+        .filter(el => el !== undefined)
+        .map(el => ({
+          source: cropPicture(el.name, 800, 500),
+          isCover: el.isCover
+        }))
       : []
   }
 
@@ -481,6 +476,7 @@ const SpacePage = ({ match, location, history, ...props }) => {
       )
     }
     if (bookingPeriod === 'hourly' && bookingType !== 'poa') {
+      if (period < listing.listingData.minTerm) setPeriod(listing.listingData.minTerm)
       return (
         <>
           <HourlyBooking
@@ -523,11 +519,6 @@ const SpacePage = ({ match, location, history, ...props }) => {
             message={message}
             handleMessageChange={_handleMessageChange}
           />
-          {!isValid && (
-            <Box color="error" ml="23px">
-              {`Minimum ${listing.listingData.minTerm} days is required`}
-            </Box>
-          )}
         </React.Fragment>
       )
     }
@@ -566,7 +557,7 @@ const SpacePage = ({ match, location, history, ...props }) => {
     return null
   }
 
-  const _isPeriodValid = bookingPeriod => {
+  const _isPeriodInvalid = bookingPeriod => {
     if (user && user.userId === listing.userId) {
       return true
     }
@@ -592,13 +583,10 @@ const SpacePage = ({ match, location, history, ...props }) => {
   }
 
   const _onSubmitBooking = async () => {
-    if (_isPeriodValid(listing.bookingPeriod)) {
+    if (_isPeriodInvalid(listing.bookingPeriod)) {
       setFocusInput(true)
-      setIsValid(false)
       return
     }
-    setIsValid(true)
-
     const object = {
       listingId: listing.id,
       hostId: listing.userId,
@@ -678,10 +666,6 @@ const SpacePage = ({ match, location, history, ...props }) => {
   }
 
   const _contactHost = () => {
-    // const options = {
-    //   onConfirm: _sendMessage
-    // }
-    // dispatch(openModal(TypesModal.MODAL_TYPE_SEND_MESSAGE, options))
     if (!isAuthenticated) {
       history.push(`/auth/signin`, {
         from: {
@@ -720,7 +704,7 @@ const SpacePage = ({ match, location, history, ...props }) => {
           setPeriod(o.hours)
           setHourlyError('')
           if (!o.isAvailable) {
-            setHourlyError(`Not available in this period`)
+            setHourlyError(`Not available for this period`)
           }
         })
         .catch(err => setHourlyError(err))
@@ -736,10 +720,10 @@ const SpacePage = ({ match, location, history, ...props }) => {
   }
 
   const _getRatingAvg = field => {
-    if (publicReviews) {
+    if (publicReviews && publicReviews.length > 0) {
       const countReviews = publicReviews.length
       const totalRatings = publicReviews.map(o => o[`rating${field}`]).reduce((a, b) => a + b)
-      return (totalRatings / countReviews).toFixed(2)
+      return (totalRatings / countReviews)
     }
     return 0
   }
@@ -789,20 +773,68 @@ const SpacePage = ({ match, location, history, ...props }) => {
     videoTag.currentTime === videoTag.duration && videoTag.load()
   }
 
+  const _formatDescription = (description) => {
+    try {
+      return stateToHTML(convertFromRaw(JSON.parse(description)))
+    } catch {
+      return description
+    }
+  }
+
+  const _getCountReviews = () => {
+    let totalReviews = 0
+    if (publicReviews)
+      totalReviews += publicReviews.length
+    if (googleReviews && googleReviews.reviews)
+      totalReviews += googleReviews.reviews.length
+    return totalReviews
+  }
+
+  if (listing && listing.user.provider === 'wework') {
+    return <Redirect to={{ pathname: `/space/partner/${match.params.id}` }} push={true} />
+  }
+
+  if (listing && listing.status === 'deleted') {
+    toast.warn(`The space ${listing.id} was deleted`)
+    return <Redirect to={{ pathname: `/search` }} push={true} />
+  }
+
+  if (listing && listing.user.userBanStatus == 1) {
+    toast.warn(`The host for space ${listing.id} was blocked by Spacenow`)
+    return <Redirect to={{ pathname: `/search` }} push={true} />
+  }
+
+  if (isListingLoading) {
+    return <Loader text="Loading listing view" />
+  }
+
   return (
     <>
       {imageHeight == 325 ||
-      (listing.photos.length > 1 &&
-        listing.settingsParent.category.otherItemName !== 'parking' &&
-        listing.settingsParent.category.otherItemName !== 'storage' &&
-        listing.user.provider !== 'external') ? (
-        <Box mb="30px">
-          <CarouselListing photos={_convertedArrayPhotos(listing.photos)} />
-        </Box>
-      ) : null}
+        (listing.photos.length > 1 &&
+          listing.settingsParent.category.otherItemName !== 'parking' &&
+          listing.settingsParent.category.otherItemName !== 'storage' &&
+          listing.user.provider !== 'external') ? (
+          <Box mb="30px">
+            <CarouselListing photos={_convertedArrayPhotos(listing.photos)} />
+          </Box>
+        ) : null}
       <Wrapper>
-        <Helmet title={`${listing.title} | ${listing.settingsParent.category.itemName} | ${_getSuburb(listing.location)} | Find the perfect event, coworking, office and meeting room spaces.`}>
-          <meta name="description" content={`Find the perfect space for ${listing.settingsParent.category.itemName} in ${_getSuburb(listing.location)}. ${listing.listingData.description.substring(0, 160 - (listing.settingsParent.category.itemName.length + _getSuburb(listing.location).length + 30))}`} />
+        <Helmet
+          title={`${listing.title} | ${listing.settingsParent.category.itemName} | ${_getSuburb(
+            listing.location
+          )} | Find the perfect event, coworking, office and meeting room spaces.`}
+        >
+          <meta
+            name="description"
+            content={`Find the perfect space for ${listing.settingsParent.category.itemName} in ${_getSuburb(
+              listing.location
+            )}. ${listing.listingData.description &&
+            _formatDescription(listing.listingData.description).substring(
+              0,
+              160 - (listing.settingsParent.category.itemName.length + _getSuburb(listing.location).length + 30)
+            )}`}
+          />
         </Helmet>
         {listing.user.provider === 'external' && imageHeight !== 325 && (
           <Box mb="20px">
@@ -819,11 +851,11 @@ const SpacePage = ({ match, location, history, ...props }) => {
                 imageHeight !== 325 && <CarouselListing photos={_convertedArrayPhotos(listing.photos)} />}
 
               {imageHeight !== 325 &&
-              (listing.settingsParent.category.otherItemName === 'parking' ||
-                listing.settingsParent.category.otherItemName === 'storage') &&
-              listing.user.provider !== 'external' ? (
-                <Carousel photos={_convertedArrayPhotos(listing.photos)} />
-              ) : null}
+                (listing.settingsParent.category.otherItemName === 'parking' ||
+                  listing.settingsParent.category.otherItemName === 'storage') &&
+                listing.user.provider !== 'external' ? (
+                  <Carousel photos={_convertedArrayPhotos(listing.photos)} />
+                ) : null}
 
               <Grid columns={12}>
                 <Cell width={8} style={{ display: 'flex' }}>
@@ -869,17 +901,6 @@ const SpacePage = ({ match, location, history, ...props }) => {
                     noMargin
                   />
                 </CellStyled>
-                {/* <CellStyled width={5} center>
-                  <Price
-                    currency={listing.listingData.currency}
-                    price={listing.listingData.basePrice}
-                    currencySymbol="$"
-                    bookingPeriod={listing.bookingPeriod}
-                    bookingType={listing.listingData.bookingType}
-                    size="28px"
-                    right
-                  />
-                </CellStyled> */}
               </Grid>
 
               <Box>
@@ -943,9 +964,7 @@ const SpacePage = ({ match, location, history, ...props }) => {
               {listing.listingData.description ? (
                 <Box>
                   <Title type="h5" title="Description" />
-                  {listing.listingData.description.split('\n').map((o, index) => (
-                    <p key={index}>{o}</p>
-                  ))}
+                  <div dangerouslySetInnerHTML={{ __html: _formatDescription(listing.listingData.description) }} />
                 </Box>
               ) : null}
 
@@ -969,7 +988,7 @@ const SpacePage = ({ match, location, history, ...props }) => {
                         <Box my="10px">Response time: </Box>
                       </Cell>
                       <Cell width="3">
-                        <Box my="10px">Engilsh</Box>
+                        <Box my="10px">English</Box>
                         <Box my="10px">90%</Box>
                         <Box my="10px">Within 2 hours</Box>
                       </Cell>
@@ -994,12 +1013,7 @@ const SpacePage = ({ match, location, history, ...props }) => {
                   <Box zIndex="1">
                     <Title type="h5" title="Video" />
                     <Box position="relative">
-                      <CustomVideo
-                        onClick={_handlePlayVideo}
-                        width="100%"
-                        // controls
-                        onEnded={_handlePlayVideo}
-                      >
+                      <CustomVideo onClick={_handlePlayVideo} width="100%" onEnded={_handlePlayVideo}>
                         <source src={videoInput.name} type="video/mp4" />
                       </CustomVideo>
                       {showPlay && (
@@ -1037,10 +1051,10 @@ const SpacePage = ({ match, location, history, ...props }) => {
                 </Box>
               )}
 
-              {publicReviews && publicReviews.length > 0 && (
+              {((publicReviews && publicReviews.length > 0) || (googleReviews && googleReviews.reviews && googleReviews.reviews.length > 0)) && (
                 <>
                   <Box display="grid" gridTemplateColumns="200px auto" ref={reviewRef}>
-                    <Title type="h5" title={`Reviews (${publicReviews.length})`} />
+                    <Title type="h5" title={`Reviews (${_getCountReviews()})`} />
                     <TitleStarContainer>
                       <StarRatingComponent name="ratingOverall" value={_getRatingAvg('Overall')} editing={false} />
                     </TitleStarContainer>
@@ -1069,19 +1083,35 @@ const SpacePage = ({ match, location, history, ...props }) => {
                       </Cell>
                     </Box>
                   </ContainerMobile>
-                  {publicReviews.map((o, index) => {
-                    return (
-                      <Review
-                        key={index}
-                        id={o.id}
-                        userName={o.author.profile && o.author.profile.firstName}
-                        userPicture={o.author.profile && o.author.profile.picture}
-                        date={new Date(o.createdAt)}
-                        comment={o.reviewContent}
-                        rating={o.rating}
-                      />
+                  {
+                    [].concat(publicReviews, googleReviews.reviews).map(
+                      (o, index) => {
+                        if (o) {
+                          if (o['__typename'] !== "Review")
+                            return (<Review
+                              key={o.author_name}
+                              userName={o.author_name}
+                              userPicture={o.profile_photo_url}
+                              date={new Date(o.time * 1000)}
+                              comment={o.text}
+                              isGoogle={true}
+                            />)
+
+                          return (
+                            <Review
+                              key={o.id}
+                              userName={o.author.profile && o.author.profile.firstName}
+                              userPicture={o.author.profile && o.author.profile.picture}
+                              date={new Date(o.createdAt)}
+                              comment={o.reviewContent}
+
+                            />
+                          )
+                        }
+                        return (<></>)
+                      }
                     )
-                  })}
+                  }
                 </>
               )}
 
@@ -1093,12 +1123,33 @@ const SpacePage = ({ match, location, history, ...props }) => {
                 />
               </ContainerPagination>
 
+              {/* {googleReviews && googleReviews.reviews && googleReviews.reviews.length > 0 && (
+                <>
+                  <Box display="grid" gridTemplateColumns="200px auto" ref={reviewRef}>
+                    <Title type="h5" title={`Reviews (${googleReviews.reviews.length})`} />
+                    <TitleStarContainer>
+                      <StarRatingComponent name="ratingOverall" value={googleReviews.rating} editing={false} />
+                    </TitleStarContainer>
+                  </Box>
+                  {googleReviews.reviews.map((o, index) => {
+                    return (
+                      <Review
+                        key={index}
+                        userName={o.author_name}
+                        userPicture={o.profile_photo_url}
+                        date={new Date(o.time * 1000)}
+                        comment={o.text}
+                      />
+                    )
+                  })}
+                </>
+              )} */}
+
               {listing.rules.length > 0 && (
                 <Box width="80%">
                   <Title type="h5" title="Space Rules" />
                   <Grid columns="repeat(auto-fit, minmax(200px, auto))" rowGap="20px">
                     {listing.rules.map((item, index) => {
-                      // return <Checkbox disabled key={item.id} label={item.settingsData.itemName} name="rules" checked />
                       return <Text key={index}>{item.settingsData.itemName} </Text>
                     })}
                   </Grid>
@@ -1158,20 +1209,12 @@ const SpacePage = ({ match, location, history, ...props }) => {
                   {(pendingBooking ? pendingBooking && pendingBooking.count == 0 : true) && (
                     <>
                       {listing.user.provider !== 'generic' && listing.user.provider !== 'external' && (
-                        <Button
-                          onClick={e => _onSubmitBooking(e)}
-                          isLoading={isLoadingOnCreateReservation}
-                          // disabled={_isPeriodValid(listing.bookingPeriod) || (user && user.id == listing.user.id)}
-                          fluid
-                        >
+                        <Button onClick={e => _onSubmitBooking(e)} isLoading={isLoadingOnCreateReservation} fluid>
                           {listing.listingData.bookingType === 'request' ? 'Booking Request' : 'Reserve'}
                         </Button>
                       )}
                       {listing.user.provider === 'external' && (
-                        <Button
-                          onClick={_handleClickByListing}
-                          fluid
-                        >
+                        <Button onClick={_handleClickByListing} fluid>
                           Reserve
                         </Button>
                       )}
@@ -1224,17 +1267,6 @@ const SpacePage = ({ match, location, history, ...props }) => {
           <Title type="h5" title="Location" />
           <Map position={{ lat: Number(listing.location.lat), lng: Number(listing.location.lng) }} />
         </Box>
-
-        {/* <Box mt="45px">
-          <Title type="h5" title="Cancellation Policy" />
-          <Text fontFamily="">Flexible</Text><br/>
-          <Text>
-            Guests may cancel their booking up until 7 days before the start time and will receive a full refund
-            (Including all Fees) of their booking price. Guests may cancel their booking between 7 days and 14 hours
-            before the start time and receive a 50% refund (excluding Fees) of their booking price. Bookings cancelled
-            less than 24 hours before the start time are not refundable.
-          </Text>
-        </Box> */}
 
         {similarResults.length == 3 && (
           <Box mt="45px">
