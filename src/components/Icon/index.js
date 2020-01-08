@@ -57,6 +57,7 @@ import { ReactComponent as ConfirmSchedule } from './svg/generic/confirm-schedul
 import { ReactComponent as Rating } from './svg/generic/rating.svg'
 import { ReactComponent as Resume } from './svg/generic/resume.svg'
 import { ReactComponent as CheckMark } from './svg/generic/check-mark.svg'
+import { ReactComponent as Search } from './svg/generic/search.svg'
 
 // Access Type
 import { ReactComponent as AccessTypeKeys } from './svg/access-type/access_type_keys.svg'
@@ -320,7 +321,8 @@ const Icons = {
   'confirm-schedule': <ConfirmSchedule />,
   rating: <Rating />,
   resume: <Resume />,
-  'check-mark': <CheckMark />
+  'check-mark': <CheckMark />,
+  search: <Search />
 }
 
 const Icon = props => {
