@@ -1,5 +1,5 @@
 import React from 'react'
-import { NavBar, Wrapper, Box, Title, Card } from 'components'
+import { NavBar, Wrapper, Box, Title, Card, Text, Link } from 'components'
 
 const itemsCardOne = ['Update your account details', 'Add a profile photo', 'Tell us a little bit about yourself']
 const itemsCardTwo = [
@@ -24,15 +24,16 @@ const IntroHostPage = props => {
       <NavBar />
       <Wrapper>
         <Box margin="0 auto" width={{ _: '100%', medium: '500px' }} p="20px" textAlign="center">
-          <Title
-            center
-            type="h2"
-            title="Let's get started"
-            weight="Montserrat-Medium"
-            subtitle="How to get the most out of spacenow."
-            subTitleMargin={10}
-            subTitleSize={14}
-          />
+          <Title center type="h2" title="Let's get started" weight="Montserrat-Medium" noMargin />
+          <Box my="10px" mb="20px">
+            <Text textSize="14px">
+              How to get the most out of spacenow (you can list your space too -{' '}
+              <Link color="#172439" style={{ textDecoration: 'underline' }} to="/intro/host">
+                click here
+              </Link>{' '}
+              for more information)
+            </Text>
+          </Box>
         </Box>
         <Card
           border
@@ -42,9 +43,9 @@ const IntroHostPage = props => {
           title="Complete your profile"
           text="We want to know a little bit more about you, and so does our community."
           secondText="The more complete your profile it is, the faster hosts will respond to your messages and accept your bookings (we’re talking from experience here!)"
-          buttonText="Go to your profile"
+          // buttonText="Go to your profile"
           checklist={itemsCardOne}
-          buttonHandleClick={() => props.history.push('/account/profile')}
+          // buttonHandleClick={() => props.history.push('/account/profile')}
         />
         <br />
         <Card
@@ -55,9 +56,9 @@ const IntroHostPage = props => {
           title="Search for the perfect space"
           text="Whatever you need, from event space to coworking, unique destinations to creative spaces for your next photoshoot - we got you."
           secondText="Once you’ve found the right location, we’ll help you take care of the rest."
-          buttonText="Search now"
+          // buttonText="Search now"
           checklist={itemsCardTwo}
-          buttonHandleClick={() => props.history.push('/search')}
+          // buttonHandleClick={() => props.history.push('/search')}
         />
         <br />
         <Card
@@ -68,9 +69,9 @@ const IntroHostPage = props => {
           title="Book and reserve your space"
           text="Everything is handled through the app, from  communication with the host about your booking, to secure payments - it’s never been easier."
           secondText="Spacenow is here to help at every step of the way!"
-          buttonText="Add a payment method"
+          // buttonText="Add a payment method"
           checklist={itemsCardThree}
-          buttonHandleClick={() => props.history.push('/account/payment')}
+          // buttonHandleClick={() => props.history.push('/account/payment')}
         />
         <br />
         <Card
