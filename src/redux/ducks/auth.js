@@ -281,7 +281,7 @@ export const signup = (name, email, password, from, userType) => async dispatch 
     })
     const signupReturn = data.signup
     setToken(signupReturn.token, signupReturn.expiresIn)
-    dispatch({ type: Types.AUTH_SIGNIN_SUCCESS, from: `/intro/${userType}` })
+    dispatch({ type: Types.AUTH_SIGNIN_SUCCESS, from })
     dispatch({ type: AccountTypes.ACC_GET_PROFILE_SUCCESS, payload: signupReturn.user })
   } catch (err) {
     toast.error(errToMsg(err))
