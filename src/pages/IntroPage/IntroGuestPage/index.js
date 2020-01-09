@@ -42,9 +42,9 @@ const IntroHostPage = props => {
           title="Complete your profile"
           text="We want to know a little bit more about you, and so does our community."
           secondText="The more complete your profile it is, the faster hosts will respond to your messages and accept your bookings (we’re talking from experience here!)"
-          buttonText="Go to your profile"
+          // buttonText="Go to your profile"
           checklist={itemsCardOne}
-          buttonHandleClick={() => props.history.push('/account/profile')}
+          // buttonHandleClick={() => props.history.push('/account/profile')}
         />
         <br />
         <Card
@@ -55,9 +55,9 @@ const IntroHostPage = props => {
           title="Search for the perfect space"
           text="Whatever you need, from event space to coworking, unique destinations to creative spaces for your next photoshoot - we got you."
           secondText="Once you’ve found the right location, we’ll help you take care of the rest."
-          buttonText="Search now"
+          // buttonText="Search now"
           checklist={itemsCardTwo}
-          buttonHandleClick={() => props.history.push('/search')}
+          // buttonHandleClick={() => props.history.push('/search')}
         />
         <br />
         <Card
@@ -68,9 +68,9 @@ const IntroHostPage = props => {
           title="Book and reserve your space"
           text="Everything is handled through the app, from  communication with the host about your booking, to secure payments - it’s never been easier."
           secondText="Spacenow is here to help at every step of the way!"
-          buttonText="Add a payment method"
+          // buttonText="Add a payment method"
           checklist={itemsCardThree}
-          buttonHandleClick={() => props.history.push('/account/payment')}
+          // buttonHandleClick={() => props.history.push('/account/payment')}
         />
         <br />
         <Card
