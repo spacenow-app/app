@@ -2,7 +2,7 @@ import React from 'react'
 import { withFormik } from 'formik'
 import { useSelector, useDispatch } from 'react-redux'
 import * as Yup from 'yup'
-import { NavBar, Wrapper, Box, Input, Button, Text, Title, Link, Line, ButtonSocial, Select } from 'components'
+import { NavBar, Wrapper, Box, Input, Button, Text, Title, Link, Line, ButtonSocial } from 'components'
 import { signup, googleSignin, facebookSignin } from 'redux/ducks/auth'
 import { config } from 'variables'
 
