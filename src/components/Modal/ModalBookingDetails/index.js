@@ -3,7 +3,7 @@ import { useDispatch } from 'react-redux'
 import PropTypes from 'prop-types'
 import { Modal } from 'react-bootstrap'
 
-import { Box, Carousel, Tag, Icon, Title, Label, ListDates, PriceDetail } from 'components'
+import { Box, Carousel, Tag, Icon, Title, Label, ListDates, BookingPriceDetail } from 'components'
 
 import { closeModal } from 'redux/ducks/modal'
 
@@ -89,12 +89,14 @@ const ModalBookingDetails = ({ options, booking }) => {
         </Box>
         <ListDates dates={booking.reservations} />
         {booking.reservations.length > 0 && (
-          <PriceDetail
+          <BookingPriceDetail
             periodLabel={_spelling(booking.priceType, booking.period)}
-            price={booking.basePrice}
-            isAbsorvedFee={booking.hostServiceFee !== 0}
+            valuePerQuantity={booking.priceDetails.valuePerQuantity}
+            valueFee={booking.priceDetails.valueFee}
+            valueDiscount={booking.priceDetails.valueDiscount}
+            valueVoucher={booking.priceDetails.valueVoucher}
+            total={booking.priceDetails.total}
             days={booking.period}
-            quantity={1}
           />
         )}
       </Modal.Body>

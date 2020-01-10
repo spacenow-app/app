@@ -363,7 +363,7 @@ const SearchPage = ({ history, location }) => {
                               selectedDays={filterSelectedDates}
                               disabledDays={[]}
                               daysOfWeek={[]}
-                              colorSelected="#E05252"
+                              colorSelected="#6adc91"
                             />
                           </CalendarContainerDesktop>
                           <DatePickerMobile
@@ -371,7 +371,7 @@ const SearchPage = ({ history, location }) => {
                             handleDateChange={_onClickSelectDay}
                             hideOnDayClick={false}
                             placeholder="Choose Dates"
-                            colorSelected="#E05252"
+                            colorSelected="#6adc91"
                             dayPickerProps={{
                               selectedDays: filterSelectedDates,
                               modifiers: {
@@ -704,8 +704,7 @@ const SearchPage = ({ history, location }) => {
             )}
           </Manager>
 
-          {
-            filterCategory.parking !== true && filterCategory.storage !== true &&
+          {filterCategory.parking !== true && filterCategory.storage !== true && (
             <Manager>
               <Reference>
                 {({ ref }) => {
@@ -720,7 +719,7 @@ const SearchPage = ({ history, location }) => {
                       }}
                     >
                       Capacity
-                  </Button>
+                    </Button>
                   )
                 }}
               </Reference>
@@ -746,11 +745,21 @@ const SearchPage = ({ history, location }) => {
                           <Text display="block" fontSize="14px" />
                           <Text display="block" fontSize="14px">
                             Set the minimum and maximum capacity.
-                        </Text>
+                          </Text>
                           <Box my="20px">
-                            <Slider max={1000} defaultValue={filterCapacity} value={filterCapacity} handleChange={setFilterCapacity} />
+                            <Slider
+                              max={1000}
+                              defaultValue={filterCapacity}
+                              value={filterCapacity}
+                              handleChange={setFilterCapacity}
+                            />
                           </Box>
-                          <Box display="grid" gridTemplateColumns="1fr auto 1fr" gridColumnGap="15px" alignItems="center">
+                          <Box
+                            display="grid"
+                            gridTemplateColumns="1fr auto 1fr"
+                            gridColumnGap="15px"
+                            alignItems="center"
+                          >
                             <Input
                               label="Min"
                               value={numeral(filterCapacity[0]).format('0')}
@@ -766,10 +775,10 @@ const SearchPage = ({ history, location }) => {
                           <Box mt="30px" display="flex" justifyContent="space-between">
                             <Button size="sm" outline onClick={() => setShouldShowFilter(false)}>
                               Close
-                          </Button>
+                            </Button>
                             <Button size="sm" outline onClick={_onQueryFilter}>
                               Update
-                          </Button>
+                            </Button>
                           </Box>
                         </Box>
                       </Box>
@@ -778,7 +787,7 @@ const SearchPage = ({ history, location }) => {
                 </Popper>
               )}
             </Manager>
-          }
+          )}
 
           <Manager>
             <Reference>
