@@ -52,10 +52,10 @@ const SignupPage = ({
     window.location.href = `${config.static}/${page || ''}`
   }
 
-  const _handleSelectChange = e => {
-    const { name, value } = e.target
-    setFieldValue(name, value)
-  }
+  // const _handleSelectChange = e => {
+  //   const { name, value } = e.target
+  //   setFieldValue(name, value)
+  // }
 
   return (
     <>
@@ -63,16 +63,24 @@ const SignupPage = ({
       <Wrapper>
         <Box margin="0 auto" width={{ _: '100%', medium: '500px' }} p="40px" textAlign="center">
           <Title center type="h3" title="Create your account" />
-          <Box my="25px">
+          {/* <Box my="25px">
             <Select value={values.userType} name="userType" onChange={_handleSelectChange}>
               <option value="">I would like to...</option>
               <option value="host">List my space and take bookings (host)</option>
               <option value="guest">Find and book spaces</option>
             </Select>
-          </Box>
+          </Box> */}
           <Box display="grid" gridTemplateColumns={{ _: 'none', medium: 'auto auto' }} gridGap="15px">
-            <ButtonSocial facebook onResponse={responseFacebook} isDisabled={!values.userType} />
-            <ButtonSocial google onResponse={responseGoogle} isDisabled={!values.userType} />
+            <ButtonSocial
+              facebook
+              onResponse={responseFacebook}
+              // isDisabled={!values.userType}
+            />
+            <ButtonSocial
+              google
+              onResponse={responseGoogle}
+              // isDisabled={!values.userType}
+            />
           </Box>
           <Text display="block" fontSize="14px" fontFamily="medium" my="15px">
             or sign up with
@@ -166,8 +174,8 @@ const formik = {
       .matches(/[a-z]/, 'at least one lowercase char')
       .matches(/[A-Z]/, 'at least one uppercase char')
       .matches(/[a-zA-Z]+[^a-zA-Z\s]+/, 'at least 1 number or special char (@,!,#, etc).')
-      .required(),
-    userType: Yup.string().required()
+      .required()
+    // userType: Yup.string().required()
   }),
   enableReinitialize: true,
   isInitialValid: false
