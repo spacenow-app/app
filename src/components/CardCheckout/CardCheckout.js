@@ -25,6 +25,7 @@ const CardTitle = styled(Text)`
   overflow: hidden;
   white-space: nowrap;
   text-overflow: ellipsis;
+  width: 300px;
 `
 
 const CardImage = styled.img`
