@@ -23,9 +23,7 @@ const CardTitle = styled(Text)`
   font-family: 'MontSerrat-Medium';
   font-size: 18px;
   overflow: hidden;
-  white-space: nowrap;
   text-overflow: ellipsis;
-  width: 300px;
 `
 
 const CardImage = styled.img`
