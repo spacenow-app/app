@@ -52,7 +52,6 @@ const SignupPage = ({
     window.location.href = `${config.static}/${page || ''}`
   }
 
-  //  For user type implementation
   // const _handleSelectChange = e => {
   //   const { name, value } = e.target
   //   setFieldValue(name, value)
@@ -64,7 +63,6 @@ const SignupPage = ({
       <Wrapper>
         <Box margin="0 auto" width={{ _: '100%', medium: '500px' }} p="40px" textAlign="center">
           <Title center type="h3" title="Create your account" />
-          {/* For user type implementation */}
           {/* <Box my="25px">
             <Select value={values.userType} name="userType" onChange={_handleSelectChange}>
               <option value="">I would like to...</option>
@@ -76,12 +74,12 @@ const SignupPage = ({
             <ButtonSocial
               facebook
               onResponse={responseFacebook}
-              // isDisabled={!values.userType} // for user Type implementation
+              // isDisabled={!values.userType}
             />
             <ButtonSocial
               google
               onResponse={responseGoogle}
-              // isDisabled={!values.userType} // for user Type implementation
+              // isDisabled={!values.userType}
             />
           </Box>
           <Text display="block" fontSize="14px" fontFamily="medium" my="15px">

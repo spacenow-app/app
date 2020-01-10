@@ -283,6 +283,11 @@ export const signup = (name, email, password, from, userType) => async dispatch 
     setToken(signupReturn.token, signupReturn.expiresIn)
     dispatch({ type: Types.AUTH_SIGNIN_SUCCESS, from })
     dispatch({ type: AccountTypes.ACC_GET_PROFILE_SUCCESS, payload: signupReturn.user })
+    // if (userType) {
+    //   dispatch({ type: Types.AUTH_SIGNIN_SUCCESS, from: `/intro/${userType}` })
+    // } else {
+    //   dispatch({ type: Types.AUTH_SIGNIN_SUCCESS, from })
+    // }
   } catch (err) {
     toast.error(errToMsg(err))
     dispatch({
@@ -338,9 +343,8 @@ export const googleSignin = (googleResponse, from, userType) => async dispatch =
       mutation: mutationGoogleLogin
     })
     const signinReturn = data.tokenGoogleValidate
-    setToken(signinReturn.token, signinReturn.expiresIn)
     dispatch({ type: Types.AUTH_SIGNIN_SUCCESS, from })
-    // For userType implementation
+    setToken(signinReturn.token, signinReturn.expiresIn)
     // if (userType) {
     //   dispatch({ type: Types.AUTH_SIGNIN_SUCCESS, from: `/intro/${userType}` })
     // } else {
@@ -366,7 +370,6 @@ export const facebookSignin = (facebookResponse, from, userType) => async dispat
     const signinReturn = data.tokenFacebookValidate
     setToken(signinReturn.token, signinReturn.expiresIn)
     dispatch({ type: Types.AUTH_SIGNIN_SUCCESS, from })
-    // For userType implementation
     // if (userType) {
     //   dispatch({ type: Types.AUTH_SIGNIN_SUCCESS, from: `/intro/${userType}` })
     // } else {

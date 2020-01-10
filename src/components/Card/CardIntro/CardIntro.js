@@ -84,9 +84,11 @@ const CardIntro = ({ icon, title, text, checklist, secondText, buttonText, butto
             })}
           </Box>
           <Description>{addLineBreaks(secondText)}</Description>
-          <ButtonStyled size="sm" onClick={buttonHandleClick}>
-            {buttonText}
-          </ButtonStyled>
+          {buttonText && (
+            <ButtonStyled size="sm" onClick={buttonHandleClick}>
+              {buttonText}
+            </ButtonStyled>
+          )}
         </CellStyled>
       </Grid>
     </Wrapper>
