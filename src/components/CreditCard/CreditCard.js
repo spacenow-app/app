@@ -1,5 +1,5 @@
 /* eslint-disable eqeqeq */
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import { withFormik } from 'formik'
 import { useSelector } from 'react-redux'
 import * as Yup from 'yup'
@@ -7,9 +7,10 @@ import valid from 'card-validator'
 import PropTypes from 'prop-types'
 import styled from 'styled-components'
 // import Cards from 'react-credit-cards'
-import { Box, Input, Button, Text } from 'components'
+import { Box, Input, Button, Text, Grid } from 'components'
 import 'react-credit-cards/es/styles-compiled.css'
 import { createUserCard, pay } from 'redux/ducks/payment'
+import { onInsertVoucher } from 'redux/ducks/booking'
 
 const LinkStyled = styled.a`
   color: #6adc91;
@@ -38,11 +39,15 @@ const CreditCard = ({
   match,
   history,
   setTouched,
+  reservation,
   ...props
 }) => {
   const { isLoading: isPaying } = useSelector(state => state.payment.pay)
   const { newCard } = useSelector(state => state.payment)
   const { isCreating } = useSelector(state => state.payment.cards)
+  const { error: voucherError } = useSelector(state => state.booking.get)
+  const [boolPromo, setBoolPromo] = useState(false)
+  const [voucherCode, setVoucherCode] = useState('')
 
   useEffect(() => {
     newCard && newCard.id && dispatch(pay(newCard.id, match.params.id, history))
@@ -56,6 +61,14 @@ const CreditCard = ({
     validateForm()
     setTouched({ name: true, expiry: true, number: true, cvc: true })
     isValid && (await dispatch(createUserCard(values)))
+  }
+
+  const _setVoucherCode = e => {
+    setVoucherCode(e.target.value)
+  }
+
+  const _handleApplyPromo = () => {
+    dispatch(onInsertVoucher(match.params.id, voucherCode))
   }
 
   return (
@@ -116,6 +129,40 @@ const CreditCard = ({
             onFocus={_handleInputFocus}
           />
         </Box>
+        <br />
+        {!boolPromo && reservation.priceDetails.valueDiscount === 0 && (
+          <Text onClick={() => setBoolPromo(true)} style={{ cursor: 'pointer' }}>
+            Enter a promo code
+          </Text>
+        )}
+        {boolPromo && (
+          <Grid columns={1} rowGap="10px">
+            {reservation.priceDetails.valueDiscount === 0 && (
+              <Input
+                size="sm"
+                label="Enter promo code"
+                placeholder="Promo code"
+                value={voucherCode}
+                onChange={e => _setVoucherCode(e)}
+              />
+            )}
+            {voucherError && (
+              <Text fontSiz="19px" style={{ color: '#E05252' }}>
+                x The promo code you entered is invalid or out of date
+              </Text>
+            )}
+            {!voucherError && reservation.priceDetails.valueDiscount > 0 && (
+              <Text fontSiz="19px" style={{ color: '#2DA577' }}>
+                &#10004; The code you entered was successful
+              </Text>
+            )}
+            {reservation.priceDetails.valueDiscount === 0 && (
+              <Button size="sm" onClick={() => _handleApplyPromo()}>
+                Apply promo code
+              </Button>
+            )}
+          </Grid>
+        )}
         <Box mt="30px">
           <Text fontSize="16px">
             I agree to the house rules , cancellation policy and{' '}

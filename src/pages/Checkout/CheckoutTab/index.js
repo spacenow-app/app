@@ -175,7 +175,6 @@ const CheckoutPage = ({ match, location, history, ...props }) => {
   }
 
   const _handleApplyPromo = () => {
-    console.log('reservation', reservation.id)
     dispatch(onInsertVoucher(reservation.bookingId, voucherCode))
   }
 
@@ -223,7 +222,7 @@ const CheckoutPage = ({ match, location, history, ...props }) => {
             <option value="card">Credit card</option>
             {arrayCards.length > 0 && <option value="saved">Saved card</option>}
           </Select>
-          {!savedCards && <CreditCard match={match} dispatch={dispatch} history={history} />}
+          {!savedCards && <CreditCard match={match} dispatch={dispatch} history={history} reservation={reservation} />}
 
           {arrayCards.length > 0 && savedCards && (
             <Box mt="60px">
