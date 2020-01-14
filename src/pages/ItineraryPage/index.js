@@ -243,15 +243,18 @@ const ItineraryPage = ({ match, location, history, ...props }) => {
       ? '24 hours'
       : format(new Date(checkInObj.openHour), 'h:mm a')
 
+  const weekDayOut = format(new Date(booking.checkOut), 'i')
   const checkOutObj = booking.listing.accessDays.listingAccessHours.find(
-    res => res.weekday.toString() === weekDay.toString()
+    res => res.weekday.toString() === weekDayOut.toString()
   )
   const checkOutTime =
     booking.priceType === 'hourly'
       ? booking.checkOutHour
-      : checkOutObj.allday
-      ? '24 hours'
-      : format(new Date(checkOutObj.closeHour), 'h:mm a')
+      : checkOutObj
+      ? checkOutObj.allday
+        ? '24 hours'
+        : format(new Date(checkOutObj.closeHour), 'h:mm a')
+      : 'Closed'
 
   const _renderSpaceCard = () => {
     return (

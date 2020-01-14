@@ -104,15 +104,18 @@ const InfoTab = ({ match, location, history, ...props }) => {
       ? '24 hours'
       : format(new Date(checkInObj.openHour), 'h:mm a')
 
+  const weekDayOut = format(new Date(reservation.checkOut), 'i')
   const checkOutObj = reservation.listing.accessDays.listingAccessHours.find(
-    res => res.weekday.toString() === weekDay.toString()
+    res => res.weekday.toString() === weekDayOut.toString()
   )
   const checkOutTime =
     reservation.priceType === 'hourly'
       ? reservation.checkOutHour
-      : checkOutObj.allday
-      ? '24 hours'
-      : format(new Date(checkOutObj.closeHour), 'h:mm a')
+      : checkOutObj
+      ? checkOutObj.allday
+        ? '24 hours'
+        : format(new Date(checkOutObj.closeHour), 'h:mm a')
+      : 'Closed'
 
   return (
     <Wrapper>
