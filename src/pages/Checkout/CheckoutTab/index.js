@@ -294,7 +294,7 @@ const CheckoutPage = ({ match, location, history, ...props }) => {
                 </Grid>
               ))}
               {!boolPromo && reservation.priceDetails.valueDiscount === 0 && (
-                <Text onClick={() => setBoolPromo(true)} style={{ cursor: 'pointer' }}>
+                <Text onClick={() => setBoolPromo(true)} style={{ cursor: 'pointer', textDecoration: 'underline' }}>
                   Enter a promo code
                 </Text>
               )}
@@ -320,9 +320,9 @@ const CheckoutPage = ({ match, location, history, ...props }) => {
                     </Text>
                   )}
                   {reservation.priceDetails.valueDiscount === 0 && (
-                    <Button size="sm" onClick={() => _handleApplyPromo()}>
+                    <ButtonStyled size="sm" onClick={() => _handleApplyPromo()}>
                       Apply promo code
-                    </Button>
+                    </ButtonStyled>
                   )}
                 </Grid>
               )}

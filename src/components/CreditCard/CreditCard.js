@@ -131,7 +131,7 @@ const CreditCard = ({
         </Box>
         <br />
         {!boolPromo && reservation.priceDetails.valueDiscount === 0 && (
-          <Text onClick={() => setBoolPromo(true)} style={{ cursor: 'pointer' }}>
+          <Text onClick={() => setBoolPromo(true)} style={{ cursor: 'pointer', textDecoration: 'underline' }}>
             Enter a promo code
           </Text>
         )}
@@ -157,9 +157,9 @@ const CreditCard = ({
               </Text>
             )}
             {reservation.priceDetails.valueDiscount === 0 && (
-              <Button size="sm" onClick={() => _handleApplyPromo()}>
+              <ButtonStyled size="sm" onClick={() => _handleApplyPromo()}>
                 Apply promo code
-              </Button>
+              </ButtonStyled>
             )}
           </Grid>
         )}
