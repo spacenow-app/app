@@ -6,8 +6,8 @@ import numeral from 'numeral'
 import { Title, Select, Input, Caption, Radio, Cell, StepButtons, Box, Grid } from 'components'
 import { capitalize, toPlural } from 'utils/strings'
 
-import GuestFeeIcon from './guest_fee_icon.svg'
-import HostFeeIcon from './host_fee_icon.svg'
+// import GuestFeeIcon from './guest_fee_icon.svg'
+// import HostFeeIcon from './host_fee_icon.svg'
 
 const BookingTab = ({
   values,
