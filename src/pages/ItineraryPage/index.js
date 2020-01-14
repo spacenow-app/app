@@ -10,7 +10,20 @@ import { onCreateMessage } from 'redux/ducks/message'
 import ReactToPrint from 'react-to-print'
 import { openModal, TypesModal } from 'redux/ducks/modal'
 
-import { Wrapper, Title, Grid, Cell, Tag, Icon, Text, Box, Button, Loader, CheckInOut, PriceDetail } from 'components'
+import {
+  Wrapper,
+  Title,
+  Grid,
+  Cell,
+  Tag,
+  Icon,
+  Text,
+  Box,
+  Button,
+  Loader,
+  CheckInOut,
+  BookingPriceDetail
+} from 'components'
 
 import { onGetBooking, onGetListingInfo } from 'redux/ducks/booking'
 
@@ -309,7 +322,7 @@ const ItineraryPage = ({ match, location, history, ...props }) => {
                 </Text>
               </Box>
               <Box>
-                <Text fontSize="14px">{`AUD $${booking.totalPrice
+                <Text fontSize="14px">{`AUD $${booking.priceDetails.total
                   .toFixed(2)
                   .replace(/\d(?=(\d{3})+\.)/g, '$&,')}`}</Text>
               </Box>
@@ -408,17 +421,19 @@ const ItineraryPage = ({ match, location, history, ...props }) => {
                   />
                 </Cell>
                 <Cell width={10}>
-                  <PriceDetail
+                  <BookingPriceDetail
                     margin="50px 0"
                     periodLabel={_spelling(booking.listing.bookingPeriod, booking.period)}
-                    price={booking.listing.listingData.basePrice}
-                    isAbsorvedFee={booking.listing.listingData.isAbsorvedFee}
+                    valuePerQuantity={booking.priceDetails.valuePerQuantity}
+                    valueFee={booking.priceDetails.valueFee}
+                    valueDiscount={booking.priceDetails.valueDiscount}
+                    valueVoucher={booking.priceDetails.valueVoucher}
+                    total={booking.priceDetails.total}
                     days={booking.period}
-                    quantity={1}
                     dividerTotal
-                    noHeader
                     totalSize="20px"
                     fontSize="16px"
+                    noHeader
                   />
                 </Cell>
               </>

@@ -30,7 +30,10 @@ export const Types = {
   DECLINE_BOOKING_START: 'DECLINE_BOOKING_START',
   DECLINE_BOOKING_SUCCESS: 'DECLINE_BOOKING_SUCCESS',
   DECLINE_BOOKING_FAILURE: 'DECLINE_BOOKING_FAILURE',
-  DECLINED_BOOKING_BY_EMAIL: 'DECLINED_BOOKING_BY_EMAIL'
+  DECLINED_BOOKING_BY_EMAIL: 'DECLINED_BOOKING_BY_EMAIL',
+  INSERT_VOUCHER_REQUEST: 'INSERT_VOUCHER_REQUEST',
+  INSERT_VOUCHER_SUCCESS: 'INSERT_VOUCHER_SUCCESS',
+  INSERT_VOUCHER_FAILURE: 'INSERT_VOUCHER_FAILURE'
 }
 
 // Initial State
@@ -72,6 +75,142 @@ const initialState = {
     error: null
   }
 }
+
+const bookingObj = `
+  listingId
+  quantity
+  currency
+  totalPrice
+  bookingType
+  basePrice
+  createdAt
+  period
+  sourceId
+  bookingState
+  chargeId
+  hostServiceFee
+  confirmationCode
+  bookingId
+  guestServiceFee
+  hostId
+  host {
+    id
+    profile {
+      profileId
+      firstName
+    }
+  }
+  paymentState
+  updatedAt
+  priceType
+  guestId
+  guest {
+    id
+    profile {
+      profileId
+      firstName
+    }
+  }
+  checkIn
+  checkOut
+  checkInHour
+  checkOutHour
+  reservations
+  listing {
+    id
+    userId
+    title
+    coverPhotoId
+    bookingPeriod
+    isPublished
+    isReady
+    quantity
+    status
+    createdAt
+    updatedAt
+    count
+    photos {
+      id
+      listingId
+      name
+      isCover
+      bucket
+      region
+      key
+      type
+      createdAt
+      updatedAt
+    }
+    user {
+      id
+      profile {
+        firstName
+        lastName
+        createdAt
+        picture
+      }
+    }
+    accessDays {
+      id
+      listingId
+      mon
+      tue
+      wed
+      thu
+      fri
+      sat
+      sun
+      all247
+      createdAt
+      updatedAt
+      listingAccessHours {
+        id
+        listingAccessDaysId
+        weekday
+        openHour
+        closeHour
+        allday
+        createdAt
+        updatedAt
+      }
+    }
+    listingData {
+      listingId
+      isAbsorvedFee
+      basePrice
+    }
+    location {
+      id
+      country
+      address1
+      buildingName
+      city
+      state
+      zipcode
+    }
+    settingsParent {
+      id
+      category {
+        id
+        itemName
+        otherItemName
+      }
+      subcategory {
+        id
+        itemName
+        otherItemName
+      }
+    }
+  }
+  priceDetails {
+    valueUnit
+    valuePerQuantity
+    valueFee
+    valueVoucher
+    valueDiscount
+    total
+  }
+`
 
 // GraphQL
 const mutationCreateBooking = gql`
@@ -170,131 +309,7 @@ const queryGetPendingBooking = gql`
 const queryGetBookingById = gql`
   query getBookingById($id: String!) {
     getBookingById(id: $id) {
-      listingId
-      quantity
-      currency
-      totalPrice
-      bookingType
-      basePrice
-      createdAt
-      period
-      sourceId
-      bookingState
-      chargeId
-      hostServiceFee
-      confirmationCode
-      bookingId
-      guestServiceFee
-      hostId
-      host {
-        id
-        profile {
-          profileId
-          firstName
-        }
-      }
-      paymentState
-      updatedAt
-      priceType
-      guestId
-      guest {
-        id
-        profile {
-          profileId
-          firstName
-        }
-      }
-      checkIn
-      checkOut
-      checkInHour
-      checkOutHour
-      reservations
-      listing {
-        id
-        userId
-        title
-        coverPhotoId
-        bookingPeriod
-        isPublished
-        isReady
-        quantity
-        status
-        createdAt
-        updatedAt
-        count
-        photos {
-          id
-          listingId
-          name
-          isCover
-          bucket
-          region
-          key
-          type
-          createdAt
-          updatedAt
-        }
-        user {
-          id
-          profile {
-            firstName
-            lastName
-            createdAt
-            picture
-          }
-        }
-        accessDays {
-          id
-          listingId
-          mon
-          tue
-          wed
-          thu
-          fri
-          sat
-          sun
-          all247
-          createdAt
-          updatedAt
-          listingAccessHours {
-            id
-            listingAccessDaysId
-            weekday
-            openHour
-            closeHour
-            allday
-            createdAt
-            updatedAt
-          }
-        }
-        listingData {
-          listingId
-          isAbsorvedFee
-          basePrice
-        }
-        location {
-          id
-          country
-          address1
-          buildingName
-          city
-          state
-          zipcode
-        }
-        settingsParent {
-          id
-          category {
-            id
-            itemName
-            otherItemName
-          }
-          subcategory {
-            id
-            itemName
-            otherItemName
-          }
-        }
-      }
+      ${bookingObj}
     }
   }
 `
@@ -407,6 +422,14 @@ const queryGetHourlyAvailability = gql`
       __typename
       hours
       isAvailable
+    }
+  }
+`
+
+const mutationInsertVoucher = gql`
+  mutation insertVoucher($voucherCode: String!, $bookingId: String!) {
+    insertVoucher(voucherCode: $voucherCode, bookingId: $bookingId){
+      ${bookingObj}
     }
   }
 `
@@ -611,6 +634,36 @@ export default function reducer(state = initialState, action) {
         }
       }
     }
+    case Types.INSERT_VOUCHER_REQUEST: {
+      return {
+        ...state,
+        get: {
+          ...state.get,
+          error: null
+        }
+      }
+    }
+    case Types.INSERT_VOUCHER_SUCCESS: {
+      return {
+        ...state,
+        get: {
+          ...state.get,
+          isLoading: false,
+          object: action.payload,
+          error: null
+        }
+      }
+    }
+    case Types.INSERT_VOUCHER_FAILURE: {
+      return {
+        ...state,
+        get: {
+          ...state.get,
+          isLoading: false,
+          error: action.payload
+        }
+      }
+    }
     default:
       return state
   }
@@ -769,4 +822,17 @@ export const onGetHourlyAvailability = (listingId, date, startTime, endTime) => 
       reject(errToMsg(err))
     }
   })
+}
+
+export const onInsertVoucher = (bookingId, voucherCode) => async dispatch => {
+  dispatch({ type: Types.INSERT_VOUCHER_REQUEST })
+  try {
+    const { data } = await getClientWithAuth(dispatch).mutate({
+      mutation: mutationInsertVoucher,
+      variables: { bookingId, voucherCode }
+    })
+    return dispatch({ type: Types.INSERT_VOUCHER_SUCCESS, payload: data.insertVoucher })
+  } catch (err) {
+    return dispatch({ type: Types.INSERT_VOUCHER_FAILURE, payload: errToMsg(err) })
+  }
 }

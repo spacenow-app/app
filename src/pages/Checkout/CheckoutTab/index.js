@@ -5,7 +5,7 @@ import Helmet from 'react-helmet'
 import { toast } from 'react-toastify'
 import { useSelector, useDispatch } from 'react-redux'
 import { getUserCards, deleteUserCard, pay } from 'redux/ducks/payment'
-import { onGetBooking } from 'redux/ducks/booking'
+import { onGetBooking, onInsertVoucher } from 'redux/ducks/booking'
 import _ from 'lodash'
 import {
   Wrapper,
@@ -22,7 +22,8 @@ import {
   CardCheckout,
   CreditCard,
   Tag,
-  Image
+  Image,
+  Input
 } from 'components'
 
 const GridStyled = styled(Grid)`
@@ -104,8 +105,12 @@ const CheckoutPage = ({ match, location, history, ...props }) => {
   const [savedCards, setSavedCards] = useState(false)
   const { isLoading: isLoadingGetCards, array: arrayCards } = useSelector(state => state.payment.cards)
   const { object: reservation, isLoading: isLoadingGetBooking } = useSelector(state => state.booking.get)
+  const { error: voucherError } = useSelector(state => state.booking.get)
   const { isLoading: isPaying } = useSelector(state => state.payment.pay)
   const { newCard } = useSelector(state => state.payment)
+
+  const [boolPromo, setBoolPromo] = useState(false)
+  const [voucherCode, setVoucherCode] = useState('')
 
   useEffect(() => {
     async function fetchData() {
@@ -143,7 +148,7 @@ const CheckoutPage = ({ match, location, history, ...props }) => {
   }
 
   if (!reservation) {
-    // toast.error('Booking not found.')
+    toast.error('Booking not found.') // remove
     history.replace('/')
     return null
   }
@@ -163,6 +168,14 @@ const CheckoutPage = ({ match, location, history, ...props }) => {
   const _handleChangeDropdown = e => {
     if (e.target.value === 'saved') setSavedCards(true)
     else setSavedCards(false)
+  }
+
+  const _setVoucherCode = e => {
+    setVoucherCode(e.target.value)
+  }
+
+  const _handleApplyPromo = () => {
+    dispatch(onInsertVoucher(reservation.bookingId, voucherCode))
   }
 
   return (
@@ -209,7 +222,7 @@ const CheckoutPage = ({ match, location, history, ...props }) => {
             <option value="card">Credit card</option>
             {arrayCards.length > 0 && <option value="saved">Saved card</option>}
           </Select>
-          {!savedCards && <CreditCard match={match} dispatch={dispatch} history={history} />}
+          {!savedCards && <CreditCard match={match} dispatch={dispatch} history={history} reservation={reservation} />}
 
           {arrayCards.length > 0 && savedCards && (
             <Box mt="60px">
@@ -280,6 +293,39 @@ const CheckoutPage = ({ match, location, history, ...props }) => {
                   )}
                 </Grid>
               ))}
+              {!boolPromo && reservation.priceDetails.valueDiscount === 0 && (
+                <Text onClick={() => setBoolPromo(true)} style={{ cursor: 'pointer', textDecoration: 'underline' }}>
+                  Enter a promo code
+                </Text>
+              )}
+              {boolPromo && (
+                <Grid columns={1} rowGap="10px">
+                  {reservation.priceDetails.valueDiscount === 0 && (
+                    <Input
+                      size="sm"
+                      label="Enter promo code"
+                      placeholder="Promo code"
+                      value={voucherCode}
+                      onChange={e => _setVoucherCode(e)}
+                    />
+                  )}
+                  {voucherError && (
+                    <Text fontSiz="19px" style={{ color: '#E05252' }}>
+                      x The promo code you entered is invalid or out of date
+                    </Text>
+                  )}
+                  {!voucherError && reservation.priceDetails.valueDiscount > 0 && (
+                    <Text fontSiz="19px" style={{ color: '#2DA577' }}>
+                      &#10004; The code you entered was successful
+                    </Text>
+                  )}
+                  {reservation.priceDetails.valueDiscount === 0 && (
+                    <ButtonStyled size="sm" onClick={() => _handleApplyPromo()}>
+                      Apply promo code
+                    </ButtonStyled>
+                  )}
+                </Grid>
+              )}
 
               <Box mt="80px">
                 <Text fontSize="14px">

@@ -150,6 +150,14 @@ const queryGetAllBookingsByUser = gql`
         checkIn
         checkOut
         reservations
+        priceDetails {
+          valueUnit
+          valuePerQuantity
+          valueFee
+          valueVoucher
+          valueDiscount
+          total
+        }
       }
     }
   }

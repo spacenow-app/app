@@ -64,6 +64,7 @@ import Video from './Video'
 import CheckInOut from './CheckInOut'
 import CardCheckout from './CardCheckout'
 import CreditCard from './CreditCard'
+import BookingPriceDetail from './BookingPriceDetail'
 
 export {
   Modal,
@@ -134,5 +135,6 @@ export {
   CheckInOut,
   CardCheckout,
   CreditCard,
-  WYSIWYGTextArea
+  WYSIWYGTextArea,
+  BookingPriceDetail
 }
