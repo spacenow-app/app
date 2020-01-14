@@ -799,6 +799,11 @@ const SpacePage = ({ match, location, history, ...props }) => {
     return <Redirect to={{ pathname: `/search` }} push={true} />
   }
 
+  if (listing && !listing.isPublished) {
+    toast.warn(`The space ${listing.id} has not been published yet`)
+    return <Redirect to={{ pathname: `/search` }} push={true} />
+  }
+
   if (listing && listing.user.userBanStatus == 1) {
     toast.warn(`The host for space ${listing.id} was blocked by Spacenow`)
     return <Redirect to={{ pathname: `/search` }} push={true} />
