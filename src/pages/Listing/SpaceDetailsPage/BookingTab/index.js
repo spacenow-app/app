@@ -259,13 +259,13 @@ const BookingTab = ({
           )}
         </Box>
       </Cell>
-      <Cell>
+      {/* <Cell>
         <Title
           type="h3"
           title="Booking Fee"
           subtitle="Incorporate Spacenow’s 10% commision into the price or push it onto the guest. Tip: Being competitive means more bookings."
-        />
-        <Box display="grid" gridTemplateColumns={{ _: '1fr', medium: '1fr 1fr' }} gridGap="20px">
+        /> 
+          <Box display="grid" gridTemplateColumns={{ _: '1fr', medium: '1fr 1fr' }} gridGap="20px">
           <Cell width={1}>
             <Radio
               box
@@ -293,26 +293,26 @@ const BookingTab = ({
                 $100. The guest will pay $110."
               image={GuestFeeIcon}
             />
-          </Cell>
-          {listing.user.provider === 'external' && (
-            <Cell>
-              <Title type="h3" title="External Link*" />
-              <Grid columns={1}>
-                <Cell width={1}>
-                  <Input
-                    placeholder="http://somedomain.com/some-id"
-                    name="link"
-                    error={errors.link}
-                    value={values.link} // prettier-ignore
-                    onChange={handleChange}
-                    onBlur={handleBlur}
-                  />
-                </Cell>
-              </Grid>
+          </Cell> */}
+      {listing.user.provider === 'external' && (
+        <Cell>
+          <Title type="h3" title="External Link*" />
+          <Grid columns={1}>
+            <Cell width={1}>
+              <Input
+                placeholder="http://somedomain.com/some-id"
+                name="link"
+                error={errors.link}
+                value={values.link} // prettier-ignore
+                onChange={handleChange}
+                onBlur={handleBlur}
+              />
             </Cell>
-          )}
-        </Box>
-      </Cell>
+          </Grid>
+        </Cell>
+      )}
+      {/* </Box> */}
+      {/* </Cell> */}
       <StepButtons
         prev={{ onClick: () => props.history.push('specification') }}
         next={{ onClick: () => props.history.push('availability') }}
