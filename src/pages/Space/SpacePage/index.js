@@ -9,8 +9,8 @@ import { isSameDay, format } from 'date-fns'
 import { toast } from 'react-toastify'
 import { Redirect } from 'react-router-dom'
 
-import { stateToHTML } from 'draft-js-export-html';
-import { convertFromRaw } from 'draft-js';
+import { stateToHTML } from 'draft-js-export-html'
+import { convertFromRaw } from 'draft-js'
 
 import { capitalize, toPlural } from 'utils/strings'
 import { cropPicture } from 'utils/images'
@@ -438,6 +438,16 @@ const SpacePage = ({ match, location, history, ...props }) => {
 
   const _onDateChange = value => {
     setDate(value)
+    setStartTime(null)
+    setEndTime(null)
+  }
+
+  const _onStartTimeChange = value => {
+    setStartTime(value)
+  }
+
+  const _onEndTimeChange = value => {
+    setEndTime(value)
   }
 
   const _removeDate = value => {
@@ -483,11 +493,15 @@ const SpacePage = ({ match, location, history, ...props }) => {
           <HourlyBooking
             inputFocus={focusInput}
             date={date}
+            startTime={startTime}
+            endTime={endTime}
             hoursQuantity={period}
             listingExceptionDates={availabilities}
             listingData={listing.listingData}
             hourlySuggestion={hourlySuggestion}
             onDateChange={_onDateChange}
+            onStartTimeChange={_onStartTimeChange}
+            onEndTimeChange={_onEndTimeChange}
             onDayPickerHide={_onDayPickerHide}
             closingDays={_returnArrayAvailability(listing.accessDays)}
             onCalcHourlyPeriod={_calcHourlyPeriod}
@@ -695,18 +709,23 @@ const SpacePage = ({ match, location, history, ...props }) => {
     dispatch(onCreateMessage(values))
   }
 
-  const _calcHourlyPeriod = (openTime, closeTime) => {
+  const _calcHourlyPeriod = () => {
     if (date) {
+      let openTime = '08:00'
+      let closeTime = '10:00'
+      if (startTime && endTime) {
+        openTime = startTime
+        closeTime = endTime
+      }
       onGetHourlyAvailability(listing.id, date, openTime, closeTime)
         .then(o => {
           setPeriod(o.hours)
-          setStartTime(openTime)
-          setEndTime(closeTime)
           setHourlySuggestion(o.suggestion)
           setHourlyError('')
-          if (!o.isAvailable) {
-            setHourlyError(`Not available for this period`)
-          }
+          if (!o.isAvailable) setHourlyError(`Not available for this period`)
+          if (o.error) setHourlyError(o.error)
+          if (!startTime) setStartTime(o.suggestion.openSuggestion)
+          if (!endTime) setEndTime(o.suggestion.closeSuggestion)
         })
         .catch(err => setHourlyError(err))
     }

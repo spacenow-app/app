@@ -17,8 +17,12 @@ function spelling(reference) {
 
 const HourlyBooking = ({
   onDateChange,
+  onStartTimeChange,
+  onEndTimeChange,
   onDayPickerHide,
   date,
+  startTime,
+  endTime,
   listingExceptionDates,
   closingDays,
   listingData,
@@ -32,8 +36,6 @@ const HourlyBooking = ({
 }) => {
 
   const [dayPicker, setDayPicker] = useState('')
-  const [startTime, setStartTime] = useState('08:00')
-  const [endTime, setEndTime] = useState('10:00')
 
   useEffect(() => {
     if (dayPicker.input && inputFocus)
@@ -41,8 +43,8 @@ const HourlyBooking = ({
   }, [dayPicker.input, inputFocus])
 
   useEffect(() => {
-    onCalcHourlyPeriod(startTime, endTime)
-  }, [onCalcHourlyPeriod, date, startTime, endTime])
+    onCalcHourlyPeriod()
+  }, [date, startTime, endTime]) // eslint-disable-line react-hooks/exhaustive-deps
 
   const _getOptions = (range) => {
     if (!range) return []
@@ -83,7 +85,7 @@ const HourlyBooking = ({
           <Cell>
             <Select label={hidePrice ? '' : 'Start time'}
               options={_getOptions(hourlySuggestion && hourlySuggestion.openRange)}
-              handleChange={e => setStartTime(String(e.target.value))}
+              handleChange={e => onStartTimeChange(String(e.target.value))}
               value={startTime}
               disabled={!hourlySuggestion}
             />
@@ -91,7 +93,7 @@ const HourlyBooking = ({
           <Cell>
             <Select label={hidePrice ? '' : 'End time'}
               options={_getOptions(hourlySuggestion && hourlySuggestion.closeRange)}
-              handleChange={e => setEndTime(String(e.target.value))}
+              handleChange={e => onEndTimeChange(String(e.target.value))}
               value={endTime}
               disabled={!hourlySuggestion}
             />

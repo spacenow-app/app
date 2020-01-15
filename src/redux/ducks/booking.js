@@ -422,6 +422,7 @@ const queryGetHourlyAvailability = gql`
       __typename
       hours
       isAvailable
+      error
       suggestion {
         __typename
         firstHour
