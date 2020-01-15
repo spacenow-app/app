@@ -101,8 +101,8 @@ const InfoTab = ({ match, location, history, ...props }) => {
     reservation.priceType === 'hourly'
       ? reservation.checkInHour
       : checkInObj.allday
-      ? '24 hours'
-      : format(new Date(checkInObj.openHour), 'h:mm a')
+        ? '24 hours'
+        : format(new Date(checkInObj.openHour), 'h:mm a')
 
   const weekDayOut = format(new Date(reservation.checkOut), 'i')
   const checkOutObj = reservation.listing.accessDays.listingAccessHours.find(
@@ -112,10 +112,10 @@ const InfoTab = ({ match, location, history, ...props }) => {
     reservation.priceType === 'hourly'
       ? reservation.checkOutHour
       : checkOutObj
-      ? checkOutObj.allday
-        ? '24 hours'
-        : format(new Date(checkOutObj.closeHour), 'h:mm a')
-      : 'Closed'
+        ? checkOutObj.allday
+          ? '24 hours'
+          : format(new Date(checkOutObj.closeHour), 'h:mm a')
+        : 'Closed'
 
   return (
     <Wrapper>
@@ -127,7 +127,7 @@ const InfoTab = ({ match, location, history, ...props }) => {
             className="testTitle"
             type="h7"
             title={`${reservation.listing.settingsParent.subcategory.itemName} for ${reservation.period} ${_spelling(
-              reservation.bookingPeriod,
+              reservation.priceType,
               reservation.period
             ).toLowerCase()} in ${reservation.listing.location.address1}`}
             subtitle={`This reservation will expire after ${_getExpiry(reservation.createdAt)}`}
