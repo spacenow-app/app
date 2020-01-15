@@ -238,8 +238,9 @@ const SpacePage = ({ match, location, history, ...props }) => {
   const [date, setDate] = useState('')
   const [period, setPeriod] = useState(1)
   const [imageHeight, setImageHeight] = useState(500)
-  const [startTime, setStartTime] = useState('08:00')
-  const [endTime, setEndTime] = useState('09:00')
+  const [startTime, setStartTime] = useState(null)
+  const [endTime, setEndTime] = useState(null)
+  const [hourlySuggestion, setHourlySuggestion] = useState(null)
   const [message, setMessage] = useState('')
   const [hourlyError, setHourlyError] = useState('')
   const [focusInput, setFocusInput] = useState(false)
@@ -249,7 +250,7 @@ const SpacePage = ({ match, location, history, ...props }) => {
 
   useEffect(() => {
     dispatch(onGetListingById(match.params.id, null, true))
-    dispatch(onGetVideoByListingId(parseInt(match.params.id)))
+    dispatch(onGetVideoByListingId(parseInt(match.params.id, 10)))
     dispatch(onCleanAvailabilitiesByListingId(match.params.id))
   }, [dispatch, match.params.id])
 
@@ -482,16 +483,13 @@ const SpacePage = ({ match, location, history, ...props }) => {
           <HourlyBooking
             inputFocus={focusInput}
             date={date}
-            startTime={startTime}
-            endTime={endTime}
             hoursQuantity={period}
             listingExceptionDates={availabilities}
             listingData={listing.listingData}
+            hourlySuggestion={hourlySuggestion}
             onDateChange={_onDateChange}
             onDayPickerHide={_onDayPickerHide}
             closingDays={_returnArrayAvailability(listing.accessDays)}
-            onSetStartTime={_onSetStartTime}
-            onSetEndTime={_onSetEndTime}
             onCalcHourlyPeriod={_calcHourlyPeriod}
           />
           {hourlyError && (
@@ -697,11 +695,14 @@ const SpacePage = ({ match, location, history, ...props }) => {
     dispatch(onCreateMessage(values))
   }
 
-  const _calcHourlyPeriod = () => {
+  const _calcHourlyPeriod = (openTime, closeTime) => {
     if (date) {
-      onGetHourlyAvailability(listing.id, date, startTime, endTime)
+      onGetHourlyAvailability(listing.id, date, openTime, closeTime)
         .then(o => {
           setPeriod(o.hours)
+          setStartTime(openTime)
+          setEndTime(closeTime)
+          setHourlySuggestion(o.suggestion)
           setHourlyError('')
           if (!o.isAvailable) {
             setHourlyError(`Not available for this period`)
@@ -710,10 +711,6 @@ const SpacePage = ({ match, location, history, ...props }) => {
         .catch(err => setHourlyError(err))
     }
   }
-
-  const _onSetStartTime = value => setStartTime(value)
-
-  const _onSetEndTime = value => setEndTime(value)
 
   const _handleMessageChange = e => {
     setMessage(e.target.value)
@@ -1127,28 +1124,6 @@ const SpacePage = ({ match, location, history, ...props }) => {
                   onPageChanged={_onPagionationChange}
                 />
               </ContainerPagination>
-
-              {/* {googleReviews && googleReviews.reviews && googleReviews.reviews.length > 0 && (
-                <>
-                  <Box display="grid" gridTemplateColumns="200px auto" ref={reviewRef}>
-                    <Title type="h5" title={`Reviews (${googleReviews.reviews.length})`} />
-                    <TitleStarContainer>
-                      <StarRatingComponent name="ratingOverall" value={googleReviews.rating} editing={false} />
-                    </TitleStarContainer>
-                  </Box>
-                  {googleReviews.reviews.map((o, index) => {
-                    return (
-                      <Review
-                        key={index}
-                        userName={o.author_name}
-                        userPicture={o.profile_photo_url}
-                        date={new Date(o.time * 1000)}
-                        comment={o.text}
-                      />
-                    )
-                  })}
-                </>
-              )} */}
 
               {listing.rules.length > 0 && (
                 <Box width="80%">

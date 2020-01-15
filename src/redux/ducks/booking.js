@@ -422,6 +422,15 @@ const queryGetHourlyAvailability = gql`
       __typename
       hours
       isAvailable
+      suggestion {
+        __typename
+        firstHour
+        lastHour
+        openSuggestion
+        closeSuggestion
+        openRange
+        closeRange
+      }
     }
   }
 `
@@ -814,10 +823,7 @@ export const onGetHourlyAvailability = (listingId, date, startTime, endTime) => 
         variables: { listingId, date, checkInHour: startTime, checkOutHour: endTime },
         fetchPolicy: 'network-only'
       })
-      resolve({
-        hours: data.getHourlyAvailability.hours,
-        isAvailable: data.getHourlyAvailability.isAvailable
-      })
+      resolve(data.getHourlyAvailability)
     } catch (err) {
       reject(errToMsg(err))
     }
