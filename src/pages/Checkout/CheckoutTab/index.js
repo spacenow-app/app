@@ -283,21 +283,21 @@ const CheckoutPage = ({ match, location, history, ...props }) => {
                       {card.brand.toLowerCase() === 'visa' && (
                         <Image
                           src="https://prod-spacenow-images.s3-ap-southeast-2.amazonaws.com/cards/visa.png"
-                          width="50px"
+                          width="60px"
                           height="30px"
                         />
                       )}
                       {card.brand.toLowerCase() === 'mastercard' && (
                         <Image
                           src="https://prod-spacenow-images.s3-ap-southeast-2.amazonaws.com/cards/mastercard.png"
-                          width="50px"
+                          width="60px"
                           height="30px"
                         />
                       )}
                       {card.brand.toLowerCase().replace(' ', '') === 'americanexpress' && (
                         <Image
                           src="https://prod-spacenow-images.s3-ap-southeast-2.amazonaws.com/cards/american.png"
-                          width="50px"
+                          width="60px"
                           height="30px"
                         />
                       )}
