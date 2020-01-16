@@ -102,6 +102,36 @@ const CellMobile = styled(Cell)`
   }
 `
 
+const GridCards = styled(Grid)`
+  padding-bottom: 20px;
+  border-bottom: 1px solid #c0c0c0c0;
+
+  @media only screen and (max-width: 425px) {
+    padding: 20px;
+    border-radius: 10px;
+    border: ${props => (props.selected ? '1px solid #6adc91' : '1px solid #c0c0c0')};
+  }
+`
+
+const CellCardLogo = styled(Cell)`
+  @media only screen and (max-width: 425px) {
+    grid-column-end: span 7;
+  }
+`
+
+const CellHideMobile = styled(Cell)`
+  @media only screen and (max-width: 425px) {
+    display: none;
+  }
+`
+
+const CellHideDesktop = styled(Cell)`
+  display: none;
+  @media only screen and (max-width: 425px) {
+    display: block;
+  }
+`
+
 const CheckoutPage = ({ match, location, history, ...props }) => {
   const dispatch = useDispatch()
   const [selectedCard, setSelectedCard] = useState({})
@@ -234,19 +264,21 @@ const CheckoutPage = ({ match, location, history, ...props }) => {
               </Box>
               <Box mt="50px">
                 {arrayCards.map((card, index) => (
-                  <Grid
+                  <GridCards
                     columns={12}
-                    style={{ margin: '20px 0', paddingBottom: '20px', borderBottom: '1px solid #c0c0c0c0' }}
+                    style={{ margin: '20px 0', cursor: 'pointer' }}
                     key={index}
+                    selected={selectedCard.id === card.id}
+                    onClick={_handleChangeCardSelect(card)}
                   >
-                    <Cell width={1}>
+                    <CellHideMobile width={1}>
                       <Checkbox
                         onClick={_handleChangeCardSelect(card)}
                         checked={selectedCard.id === card.id}
                         style={{ marginTop: '5px' }}
                       />
-                    </Cell>
-                    <Cell width={2}>
+                    </CellHideMobile>
+                    <CellCardLogo width={2}>
                       {card.brand.toLowerCase() === 'visa' && (
                         <Image
                           src="https://prod-spacenow-images.s3-ap-southeast-2.amazonaws.com/cards/visa.png"
@@ -268,8 +300,8 @@ const CheckoutPage = ({ match, location, history, ...props }) => {
                           height="30px"
                         />
                       )}
-                    </Cell>
-                    <Cell width={4}>
+                    </CellCardLogo>
+                    <CellHideMobile width={4}>
                       <Text fontSize="14px" color="#646464" style={{ whiteSpace: 'nowrap' }}>
                         {/* {card.brand}{' '} */}
                         <Text
@@ -280,11 +312,11 @@ const CheckoutPage = ({ match, location, history, ...props }) => {
                       </Text>
                       <br />
                       <Text fontSize="14px" color="#646464">{`Expiry: ${card.exp_month}/${card.exp_year}`}</Text>
-                    </Cell>
+                    </CellHideMobile>
                     <Cell width={3}>
                       {/* TODO: Change for default one */}
                       {index === 0 && (
-                        <Box ml={{ _: '10px', medium: '0px' }}>
+                        <Box ml={{ _: '20px', medium: '0px' }}>
                           <Tag small bg="#EBEBEB">
                             DEFAULT
                           </Tag>
@@ -302,7 +334,19 @@ const CheckoutPage = ({ match, location, history, ...props }) => {
                         )}
                       </Cell>
                     )}
-                  </Grid>
+                    <CellHideDesktop width={12}>
+                      <Text fontSize="14px" color="#646464" style={{ whiteSpace: 'nowrap' }}>
+                        {/* {card.brand}{' '} */}
+                        <Text
+                          fontSize="14px"
+                          color="#646464"
+                          style={{ whiteSpace: 'nowrap' }}
+                        >{`**** **** **** ${card.last4}`}</Text>
+                      </Text>
+                      <br />
+                      <Text fontSize="14px" color="#646464">{`Expiry: ${card.exp_month}/${card.exp_year}`}</Text>
+                    </CellHideDesktop>
+                  </GridCards>
                 ))}
                 <br />
                 {!boolPromo && reservation.priceDetails.valueDiscount === 0 && (

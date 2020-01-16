@@ -84,7 +84,7 @@ const CardCheckout = ({ reservation, ...props }) => {
       <CardContainer>
         <CardImage src={_getCoverPhoto(reservation.listing)} />
         <CardContent>
-          <Box>
+          <Box lineHeight="1.5">
             <CardTitle>{reservation.listing.title}</CardTitle>
             <Text display="block" fontFamily="regular" fontSize="18px">
               {`${reservation.listing.location.city}, ${reservation.listing.location.country}.`}
