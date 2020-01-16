@@ -318,7 +318,7 @@ const CheckoutPage = ({ match, location, history, ...props }) => {
                       {/* TODO: Change for default one */}
                       {index === 0 && (
                         <Box ml={{ _: '20px', medium: '0px' }}>
-                          <Tag small bg="#EBEBEB">
+                          <Tag small bg="#EBEBEB" noBorder borderRadius="3px">
                             DEFAULT
                           </Tag>
                         </Box>
