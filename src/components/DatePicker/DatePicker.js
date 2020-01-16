@@ -158,7 +158,7 @@ const WrapperStyled = styled.div`
 const Label = styled.label`
   font-size: 12px;
   font-family: 'Montserrat-Medium';
-  margin-left: 20px;
+  margin-left: 2px;
 `
 
 const DatePicker = forwardRef(

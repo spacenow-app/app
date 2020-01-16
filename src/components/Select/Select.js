@@ -45,7 +45,7 @@ const SelectStyled = styled.select`
   ${props => props.size && sizeStyle[props.size]};
 
   background-color: ${props => (props.bgColor ? props.bgColor : '#fff')};
-  background-position: 94% 50%;
+  background-position: 97% 50%;
   background-image: url(${arrowSVG}) !important;
   background-repeat: no-repeat;
   background-size: 20px 20px !important;
@@ -64,7 +64,7 @@ const SelectStyled = styled.select`
   border-radius: 50px;
   height: 50px;
   margin: 15px 0;
-  background-position: 94% 50%;
+  background-position: 97% 50%;
   background-image: url(${arrowSVG}) !important;
   background-repeat: no-repeat;
   background-size: 20px 20px !important;
@@ -83,7 +83,7 @@ const SelectStyled = styled.select`
 const Label = styled.label`
   font-size: 12px;
   font-family: 'Montserrat-Medium';
-  margin-left: 20px;
+  margin-left: 2px;
 `
 
 const Select = ({ label, options, children, value, size, handleChange, ...props }) => {

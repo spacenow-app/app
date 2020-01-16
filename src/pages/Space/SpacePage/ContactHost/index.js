@@ -34,7 +34,7 @@ const TimePickerStyled = styled.div`
 const LabelStyled = styled.label`
   font-size: 12px;
   font-family: 'Montserrat-Medium';
-  margin-left: 20px;
+  margin-left: 2px;
 `
 
 const _getCoverPhoto = object => {
