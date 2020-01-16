@@ -90,7 +90,7 @@ const CardCheckout = ({ reservation, ...props }) => {
               {`${reservation.listing.location.city}, ${reservation.listing.location.country}.`}
             </Text>
           </Box>
-          <Grid columns={11} style={{ margin: '20px 0' }}>
+          <Grid columns={11} style={{ margin: '10px 0' }}>
             <Cell width={1}>
               <Icon name="calendar" fill="#172439" width="15px" />
             </Cell>

@@ -80,7 +80,7 @@ const BookingPriceDetail = props => (
           </RightStyled>
         </ContentStyled>
 
-        {props.dividerTotal && <Box width="100%" borderBottom="1px solid #c4c4c4" mt="50px" mb="20px" />}
+        {props.dividerTotal && <Box width="100%" borderBottom="1px solid #c4c4c4" mt="40px" mb="15px" />}
         <ContentStyled>
           <LeftStyled>
             <Text fontFamily="Montserrat-Medium" fontSize={props.totalSize}>
