@@ -116,6 +116,7 @@ const GridCards = styled(Grid)`
 const CellCardLogo = styled(Cell)`
   @media only screen and (max-width: 425px) {
     grid-column-end: span 7;
+    margin-bottom: 15px;
   }
 `
 
