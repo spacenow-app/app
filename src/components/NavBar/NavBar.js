@@ -126,7 +126,7 @@ const NavBar = ({ history, shownSearch }) => {
   const _onSearch = (lat, lng, addr) => {
     history.push({
       pathname: '/search',
-      search: `?lat=${lat}&lng=${lng}&location=${addr}`
+      search: `?lat=${lat}&lng=${lng}&location=${addr}&page=1`
     })
   }
 
