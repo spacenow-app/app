@@ -129,6 +129,22 @@ const getParamOrDefault = (location, param, defaultValue) => {
   return value
 }
 
+const navigate = (history, location, page) => {
+  const queryParams = new URLSearchParams(location)
+  const queryLat = queryParams.get('lat')
+  const queryLng = queryParams.get('lng')
+  const queryLocation = queryParams.get('location')
+  const queryCategory = queryParams.get('category')
+  let url = `?lat=${queryLat}&lng=${queryLng}&location=${queryLocation}&page=${page}`
+  if (queryCategory)
+    url += `& category=${queryCategory}`
+  history.push({
+    pathname: '/search',
+    search: url
+  })
+
+}
+
 const cleaningLocation = value => {
   if (!value) return 'Sydney, AU'
   return value.replace('+', ' ')
@@ -142,6 +158,7 @@ const SearchPage = ({ history, location }) => {
   const queryLng = getParamOrDefault(location.search, 'lng', '151.2092955')
   const queryCategory = getParamOrDefault(location.search, 'category', null)
   const queryLocation = cleaningLocation(getParamOrDefault(location.search, 'location', 'Sydney, AU'))
+  const queryPage = parseInt(getParamOrDefault(location.search, 'page', 1), 10)
 
   const [selectedSpace, setSelectedSpace] = useState(null)
   const [shouldShowFilter, setShouldShowFilter] = useState(false)
@@ -185,10 +202,10 @@ const SearchPage = ({ history, location }) => {
 
   useEffect(() => {
     async function fetchData() {
-      await dispatch(onSearch(queryLat, queryLng, queryCategory))
+      await dispatch(onSearch(queryLat, queryLng, queryCategory, queryPage))
     }
     fetchData()
-  }, [dispatch, queryLat, queryLng, queryCategory, queryLocation])
+  }, [dispatch, queryLat, queryLng, queryCategory, queryLocation, queryPage])
 
   useEffect(() => {
     setMarkers(
@@ -283,6 +300,7 @@ const SearchPage = ({ history, location }) => {
       return
     }
     refResults.current.scrollTop = 0
+    navigate(history, location.search, page)
     dispatch(onQuery(searchKey, filters, page))
   }
 

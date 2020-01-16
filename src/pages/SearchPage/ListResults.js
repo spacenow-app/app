@@ -166,8 +166,8 @@ const ListResults = forwardRef(
             </Text>
           </Box>
         ) : (
-          <></>
-        )
+            <></>
+          )
       })
     }
 
@@ -255,6 +255,7 @@ const ListResults = forwardRef(
           <Pagination
             totalPages={pagination.totalPages}
             totalRecords={pagination.total}
+            pageIndex={pagination.page - 1}
             onPageChanged={onPageChanged}
           />
         </ContainerPagination>

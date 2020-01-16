@@ -118,8 +118,8 @@ const searchResultFields = `
 `
 
 const querySearchByAddress = gql`
-  query searchByAddress($lat: String!, $lng: String!, $categories: String, $limit: Int, $radius: Int) {
-    searchByAddress(lat: $lat, lng: $lng, categories: $categories, limit: $limit, radius: $radius) {
+  query searchByAddress($lat: String!, $lng: String!, $categories: String, $limit: Int, $radius: Int, $page: Int) {
+    searchByAddress(lat: $lat, lng: $lng, categories: $categories, limit: $limit, radius: $radius, page: $page) {
       __typename
       ${searchBaseFields}
       result {
@@ -222,10 +222,10 @@ export default function reducer(state = initialState, action) {
   }
 }
 
-export const onSearch = (lat, lng, categoryKey) => async dispatch => {
+export const onSearch = (lat, lng, categoryKey, page) => async dispatch => {
   dispatch({ type: Types.ON_SEARCH_REQUEST })
   try {
-    const queryVariables = { lat: `${lat}`, lng: `${lng}`, priceMax: 10000 }
+    const queryVariables = { lat: `${lat}`, lng: `${lng}`, priceMax: 10000, page }
     if (categoryKey) {
       queryVariables.categories = CATEGORIES[categoryKey].join()
     }
