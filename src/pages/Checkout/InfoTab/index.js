@@ -13,12 +13,15 @@ import { Wrapper, Title, Grid, Cell, TimeTable, Button, Box, Text, Loader, Check
 const GridStyled = styled(Grid)`
   grid-column-gap: 200px;
   margin-top: 100px;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
 
   @media only screen and (max-width: 1024px) {
     grid-column-gap: 35px;
   }
 
   @media only screen and (max-width: 991px) {
+    grid-template-columns: 1fr;
+    grid-row-gap: 35px;
     grid-template-areas:
       'card card'
       'content content';
@@ -92,7 +95,7 @@ const InfoTab = ({ match, location, history, ...props }) => {
     return null
   }
 
-  const weekDay = format(new Date(reservation.checkIn), 'i')
+  const weekDay = format(new Date(reservation.checkIn), 'i') - 1
 
   const checkInObj = reservation.listing.accessDays.listingAccessHours.find(
     res => res.weekday.toString() === weekDay.toString()
@@ -100,11 +103,13 @@ const InfoTab = ({ match, location, history, ...props }) => {
   const checkInTime =
     reservation.priceType === 'hourly'
       ? reservation.checkInHour
-      : checkInObj.allday
+      : checkInObj
+      ? checkInObj.allday
         ? '24 hours'
         : format(new Date(checkInObj.openHour), 'h:mm a')
+      : 'Closed'
 
-  const weekDayOut = format(new Date(reservation.checkOut), 'i')
+  const weekDayOut = format(new Date(reservation.checkOut), 'i') - 1
   const checkOutObj = reservation.listing.accessDays.listingAccessHours.find(
     res => res.weekday.toString() === weekDayOut.toString()
   )
@@ -112,15 +117,15 @@ const InfoTab = ({ match, location, history, ...props }) => {
     reservation.priceType === 'hourly'
       ? reservation.checkOutHour
       : checkOutObj
-        ? checkOutObj.allday
-          ? '24 hours'
-          : format(new Date(checkOutObj.closeHour), 'h:mm a')
-        : 'Closed'
+      ? checkOutObj.allday
+        ? '24 hours'
+        : format(new Date(checkOutObj.closeHour), 'h:mm a')
+      : 'Closed'
 
   return (
     <Wrapper>
       <Helmet title="Checkout - Spacenow" />
-      <GridStyled columns="repeat(auto-fit,minmax(300px,1fr))" areas={['content card']}>
+      <GridStyled areas={['content card']}>
         <Cell area="content">
           <Title
             marginTop={{ _: '30px', medium: '0px' }}

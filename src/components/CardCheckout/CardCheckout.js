@@ -14,7 +14,14 @@ const CardContainer = styled.div`
 
   @media only screen and (max-width: 991px) {
     width: 100%;
+  }
+
+  @media only screen and (max-width: 425px) {
     max-width: 377px;
+  }
+
+  @media only screen and (max-width: 320px) {
+    max-width: 280px;
   }
 `
 
@@ -77,7 +84,7 @@ const CardCheckout = ({ reservation, ...props }) => {
       <CardContainer>
         <CardImage src={_getCoverPhoto(reservation.listing)} />
         <CardContent>
-          <Box>
+          <Box lineHeight="1.5">
             <CardTitle>{reservation.listing.title}</CardTitle>
             <Text display="block" fontFamily="regular" fontSize="18px">
               {`${reservation.listing.location.city}, ${reservation.listing.location.country}.`}

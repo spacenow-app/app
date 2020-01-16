@@ -10,6 +10,7 @@ const WrapperStyled = styled.div`
   font-size: ${props => props.fontSize};
   margin: 0 0 35px 0;
   ${space}
+  line-height: 1.5;
 `
 
 const ContentStyled = styled.div`

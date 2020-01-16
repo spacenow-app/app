@@ -6,7 +6,7 @@ import { SubTitle, Caption, Box, Text } from 'components'
 
 const Grid = styled.div`
   display: grid;
-  grid-template-columns: 40% 60%;
+  grid-template-columns: 37% 63%;
 `
 
 const Column = styled.div``

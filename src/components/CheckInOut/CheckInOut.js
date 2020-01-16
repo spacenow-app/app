@@ -2,7 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import { format } from 'date-fns'
 import styled from 'styled-components'
-import { Grid, Cell } from 'components'
+import { Grid, Cell, Text, Box } from 'components'
 
 const CheckInOutWraper = styled.div`
   display: grid;
@@ -20,7 +20,7 @@ const DateContainer = styled.div`
   background-color: #f8f8f8;
   border-radius: 8px;
   font-size: 14px;
-  font-family: Montserrat-Bold;
+  font-family: Montserrat-SemiBold;
 `
 
 const TimeContainer = styled.div`
@@ -48,8 +48,11 @@ const CheckInOut = ({ checkIn, checkOut, checkInTime, checkOutTime, ...props }) 
         <Cell width={1}>
           <DateContainer {...props}>
             {checkInMonth}
-            <br />
-            {checkInDay}
+            <Box>
+              <Text fontSize="20px" lineHeight="0.5">
+                {checkInDay}
+              </Text>
+            </Box>
           </DateContainer>
         </Cell>
         <Cell width={3}>
@@ -64,8 +67,12 @@ const CheckInOut = ({ checkIn, checkOut, checkInTime, checkOutTime, ...props }) 
         <Cell width={1}>
           <DateContainer {...props}>
             {checkOutMonth}
-            <br />
-            {checkOutDay}
+            {/* <br /> */}
+            <Box>
+              <Text fontSize="20px" lineHeight="0.5">
+                {checkOutDay}
+              </Text>
+            </Box>
           </DateContainer>
         </Cell>
         <Cell width={3}>

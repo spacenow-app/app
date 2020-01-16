@@ -4,8 +4,8 @@ import styled, { css } from 'styled-components'
 import { color, size } from 'styled-system'
 
 const SpanStyled = styled.div`
-  border: 1px solid #cbcbcb;
-  border-radius: 8px;
+  // border: 1px solid #c0c0c0;
+  border-radius: 3px;
   justify-items: center;
   align-items: center;
   display: grid;

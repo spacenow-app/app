@@ -231,7 +231,7 @@ const ItineraryPage = ({ match, location, history, ...props }) => {
     dispatch(openModal(TypesModal.MODAL_TYPE_SEND_MESSAGE, options))
   }
 
-  const weekDay = format(new Date(booking.checkIn), 'i')
+  const weekDay = format(new Date(booking.checkIn), 'i') - 1
 
   const checkInObj = booking.listing.accessDays.listingAccessHours.find(
     res => res.weekday.toString() === weekDay.toString()
@@ -239,11 +239,13 @@ const ItineraryPage = ({ match, location, history, ...props }) => {
   const checkInTime =
     booking.priceType === 'hourly'
       ? booking.checkInHour
-      : checkInObj.allday
-      ? '24 hours'
-      : format(new Date(checkInObj.openHour), 'h:mm a')
+      : checkInObj
+      ? checkInObj.allday
+        ? '24 hours'
+        : format(new Date(checkInObj.openHour), 'h:mm a')
+      : 'Closed'
 
-  const weekDayOut = format(new Date(booking.checkOut), 'i')
+  const weekDayOut = format(new Date(booking.checkOut), 'i') - 1
   const checkOutObj = booking.listing.accessDays.listingAccessHours.find(
     res => res.weekday.toString() === weekDayOut.toString()
   )
