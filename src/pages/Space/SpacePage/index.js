@@ -266,7 +266,6 @@ const SpacePage = ({ match, location, history, ...props }) => {
   useEffect(() => {
     const { state } = location
     if (state) {
-      console.log('State: ', state)
       setDatesSelected(state.reservations)
       setDate(state.reservations[0])
       state.checkInHour && setStartTime(state.checkInHour)
