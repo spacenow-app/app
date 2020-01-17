@@ -29,7 +29,7 @@ import {
   Loader,
   CarouselListing,
   Carousel,
-  UserDetails,
+  // UserDetails,
   BookingCard,
   Button,
   Footer,
@@ -40,7 +40,7 @@ import {
   Pagination,
   Text,
   Avatar,
-  Image
+  // Image
 } from 'components'
 
 import {
@@ -1012,12 +1012,12 @@ const SpacePage = ({ match, location, history, ...props }) => {
                       <Cell width="3">
                         <Box my="10px">Languages: </Box>
                         <Box my="10px">Response rate: </Box>
-                        <Box my="10px">Response time: </Box>
+                        {/* <Box my="10px">Response time: </Box> */}
                       </Cell>
                       <Cell width="3">
                         <Box my="10px">English</Box>
                         <Box my="10px">90%</Box>
-                        <Box my="10px">Within 2 hours</Box>
+                        {/* <Box my="10px">Within 2 hours</Box> */}
                       </Cell>
                     </Grid>
                   </BoxDesktop>
@@ -1260,6 +1260,11 @@ const SpacePage = ({ match, location, history, ...props }) => {
                       <Cell width={15}>
                         <ReportSpaceStyled onClick={_reportSpace}>Report this listing</ReportSpaceStyled>
                       </Cell>
+                      {(listing.user.provider === 'generic') &&
+                        <Cell width={15}>
+                          <ReportSpaceStyled onClick={_onClaimListing}>Claim this listing</ReportSpaceStyled>
+                        </Cell>
+                      }
                     </Grid>
                   )}
                 </>

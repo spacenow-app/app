@@ -19,7 +19,7 @@ import {
   Icon,
   Highlights,
   Loader,
-  UserDetails,
+  // UserDetails,
   BookingCard,
   Button,
   CarouselListing,
