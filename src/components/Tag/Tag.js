@@ -4,8 +4,8 @@ import styled, { css } from 'styled-components'
 import { color, size } from 'styled-system'
 
 const SpanStyled = styled.div`
-  border: 1px solid #cbcbcb;
-  border-radius: 8px;
+  border: ${props => (props.noBorder ? 'none' : '1px solid #c0c0c0')};
+  border-radius: ${props => props.borderRadius && props.borderRadius};
   justify-items: center;
   align-items: center;
   display: grid;
@@ -31,8 +31,8 @@ const TextStyled = styled.span`
   line-height: 1.2;
 `
 
-const Tag = ({ icon, small, children, bg }) => (
-  <SpanStyled icon={icon} small={small} bg={bg}>
+const Tag = ({ icon, small, children, bg, noBorder, borderRadius }) => (
+  <SpanStyled icon={icon} small={small} bg={bg} noBorder={noBorder} borderRadius={borderRadius}>
     {icon && icon}
     <TextStyled>{children}</TextStyled>
   </SpanStyled>
@@ -42,7 +42,9 @@ Tag.defaultProps = {
   icon: null,
   color: 'quartenary',
   bg: 'white',
-  small: false
+  small: false,
+  noBorder: false,
+  borderRadius: '8px'
 }
 
 Tag.propTypes = {
@@ -50,7 +52,9 @@ Tag.propTypes = {
   icon: PropTypes.element,
   small: PropTypes.bool,
   color: PropTypes.string,
-  bg: PropTypes.string
+  bg: PropTypes.string,
+  noBorder: PropTypes.bool,
+  borderRadius: PropTypes.string
 }
 
 export default Tag

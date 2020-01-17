@@ -42,7 +42,7 @@ const WrapperInput = styled.div`
 const Label = styled.label`
   font-size: 12px;
   font-family: 'Montserrat-Medium';
-  margin-left: 20px;
+  margin-left: 2px;
 `
 
 const ErrorMessage = styled.small`
@@ -50,13 +50,12 @@ const ErrorMessage = styled.small`
   margin-left: 20px;
 `
 
-const Phone = ({...props }) => (
+const Phone = ({ ...props }) => (
   <WrapperInput>
     {props.label && <Label>{props.label}</Label>}
     <PhoneI {...props} />
     {props.error && <ErrorMessage>{props.error}</ErrorMessage>}
   </WrapperInput>
 )
-
 
 export default Phone
