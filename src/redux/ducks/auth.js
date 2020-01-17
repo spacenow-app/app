@@ -16,6 +16,7 @@ const loginBaseFields = `
     email
     emailConfirmed
     userType
+    role
     profile {
       status
       profileId
@@ -44,6 +45,7 @@ const mutationTokenValidate = gql`
         id
         email
         userType
+        role
         profile {
           status
           profileId

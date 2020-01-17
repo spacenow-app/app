@@ -44,7 +44,7 @@ const SpaceDetailsPage = ({ match, history, location, ...props }) => {
     return <Loader text="Loading listing process" />
   }
 
-  if (isNotOwner) {
+  if (isNotOwner && user.role !== "admin") {
     history.replace('/')
     dispatch(
       openModal(TypesModal.MODAL_TYPE_WARN, {

@@ -84,6 +84,7 @@ const queryGetProfile = gql`
       provider
       type
       userType
+      role
       profile {
         __typename
         status
