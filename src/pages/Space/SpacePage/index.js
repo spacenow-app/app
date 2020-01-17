@@ -1006,12 +1006,12 @@ const SpacePage = ({ match, location, history, ...props }) => {
                       <Cell width="3">
                         <Box my="10px">Languages: </Box>
                         <Box my="10px">Response rate: </Box>
-                        <Box my="10px">Response time: </Box>
+                        {/* <Box my="10px">Response time: </Box> */}
                       </Cell>
                       <Cell width="3">
                         <Box my="10px">English</Box>
                         <Box my="10px">90%</Box>
-                        <Box my="10px">Within 2 hours</Box>
+                        {/* <Box my="10px">Within 2 hours</Box> */}
                       </Cell>
                     </Grid>
                   </BoxDesktop>
