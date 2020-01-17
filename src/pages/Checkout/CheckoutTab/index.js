@@ -88,17 +88,31 @@ const TitleStyled = styled(Title)`
 `
 
 const GridMobile = styled(Grid)`
+  grid-template-columns: repeat(8, 1fr);
   @media only screen and (max-width: 991px) {
-    margin-left: 190px;
+    grid-template-columns: repeat(3, 1fr);
+    // margin-left: 190px;
   }
   @media only screen and (max-width: 425px) {
-    margin-left: 60px;
+    // margin-left: 60px;
   }
 `
 
-const CellMobile = styled(Cell)`
+const CellLogoStart = styled(Cell)`
   @media only screen and (max-width: 991px) {
-    grid-column-end: span 2;
+    justify-self: end;
+  }
+`
+
+const CellLogoCenter = styled(Cell)`
+  @media only screen and (max-width: 991px) {
+    justify-self: center;
+  }
+`
+
+const CellLogoEnd = styled(Cell)`
+  @media only screen and (max-width: 991px) {
+    justify-self: start;
   }
 `
 
@@ -224,28 +238,28 @@ const CheckoutPage = ({ match, location, history, ...props }) => {
             title="Pay with"
             weight="Montserrat-SemiBold"
           />
-          <GridMobile columns={8} style={{ marginBottom: '40px' }}>
-            <CellMobile width={1}>
+          <GridMobile style={{ marginBottom: '40px' }}>
+            <CellLogoStart width={1}>
               <Image
                 src="https://prod-spacenow-images.s3-ap-southeast-2.amazonaws.com/cards/visa.png"
                 width="50px"
                 height="30px"
               />
-            </CellMobile>
-            <CellMobile width={1}>
+            </CellLogoStart>
+            <CellLogoCenter width={1}>
               <Image
                 src="https://prod-spacenow-images.s3-ap-southeast-2.amazonaws.com/cards/mastercard.png"
                 width="50px"
                 height="30px"
               />
-            </CellMobile>
-            <CellMobile width={1}>
+            </CellLogoCenter>
+            <CellLogoEnd width={1}>
               <Image
                 src="https://prod-spacenow-images.s3-ap-southeast-2.amazonaws.com/cards/american.png"
                 width="50px"
                 height="30px"
               />
-            </CellMobile>
+            </CellLogoEnd>
           </GridMobile>
           <Select
             size="sm"
