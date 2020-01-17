@@ -29,7 +29,7 @@ import {
   Loader,
   CarouselListing,
   Carousel,
-  UserDetails,
+  // UserDetails,
   BookingCard,
   Button,
   Footer,
@@ -40,7 +40,7 @@ import {
   Pagination,
   Text,
   Avatar,
-  Image
+  // Image
 } from 'components'
 
 import {
@@ -264,10 +264,13 @@ const SpacePage = ({ match, location, history, ...props }) => {
   }, [dispatch, listing, pendingBooking, isCleanedAvailabilities])
 
   useEffect(() => {
-    if (location.state) {
-      setDatesSelected(location.state.reservations)
-      setDate(location.state.reservations[0])
-      location.state.period && setPeriod(location.state.period)
+    const { state } = location
+    if (state) {
+      setDatesSelected(state.reservations)
+      setDate(state.reservations[0])
+      state.checkInHour && setStartTime(state.checkInHour)
+      state.checkOutHour && setEndTime(state.checkOutHour)
+      state.period && setPeriod(state.period)
     }
   }, [location])
 
@@ -620,7 +623,9 @@ const SpacePage = ({ match, location, history, ...props }) => {
           ...location,
           state: {
             period: object.period,
-            reservations: object.reservations
+            reservations: object.reservations,
+            checkInHour: object.checkInHour,
+            checkOutHour: object.checkOutHour
           }
         }
       })
@@ -1006,12 +1011,12 @@ const SpacePage = ({ match, location, history, ...props }) => {
                       <Cell width="3">
                         <Box my="10px">Languages: </Box>
                         <Box my="10px">Response rate: </Box>
-                        <Box my="10px">Response time: </Box>
+                        {/* <Box my="10px">Response time: </Box> */}
                       </Cell>
                       <Cell width="3">
                         <Box my="10px">English</Box>
                         <Box my="10px">90%</Box>
-                        <Box my="10px">Within 2 hours</Box>
+                        {/* <Box my="10px">Within 2 hours</Box> */}
                       </Cell>
                     </Grid>
                   </BoxDesktop>
@@ -1224,23 +1229,23 @@ const SpacePage = ({ match, location, history, ...props }) => {
                   )}
                 </>
               }
-              footerComponent={
-                <>
-                  {listing.user.provider !== 'external' && (
-                    <UserDetails
-                      hostname={`${listing.user.profile.firstName} ${listing.user.profile.lastName}`}
-                      imageProfile={listing.user.profile.picture}
-                      provider={listing.user.provider}
-                      onClaim={_onClaimListing}
-                    />
-                  )}
-                  {listing.user.provider === 'external' && (
-                    <Box display="grid" justifyContent="center">
-                      <Image src={listing.user.profile.picture} width="150px" height="auto" />
-                    </Box>
-                  )}
-                </>
-              }
+              // footerComponent={
+              //   <>
+              //     {listing.user.provider !== 'external' && (
+              //       <UserDetails
+              //         hostname={`${listing.user.profile.firstName} ${listing.user.profile.lastName}`}
+              //         imageProfile={listing.user.profile.picture}
+              //         provider={listing.user.provider}
+              //         onClaim={_onClaimListing}
+              //       />
+              //     )}
+              //     {listing.user.provider === 'external' && (
+              //       <Box display="grid" justifyContent="center">
+              //         <Image src={listing.user.profile.picture} width="150px" height="auto" />
+              //       </Box>
+              //     )}
+              //   </>
+              // }
               bottomComponent={
                 <>
                   {listing.user.provider !== 'external' && (
@@ -1254,6 +1259,11 @@ const SpacePage = ({ match, location, history, ...props }) => {
                       <Cell width={15}>
                         <ReportSpaceStyled onClick={_reportSpace}>Report this listing</ReportSpaceStyled>
                       </Cell>
+                      {(listing.user.provider === 'generic') &&
+                        <Cell width={15}>
+                          <ReportSpaceStyled onClick={_onClaimListing}>Claim this listing</ReportSpaceStyled>
+                        </Cell>
+                      }
                     </Grid>
                   )}
                 </>

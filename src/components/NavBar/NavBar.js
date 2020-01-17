@@ -91,7 +91,7 @@ const SearchBar = styled.div`
   }
 `
 
-const NavBar = ({ history, shownSearch }) => {
+const NavBar = ({ history, shownSearch, ...props }) => {
   const dispatch = useDispatch()
   const { user } = useSelector(state => state.account.get)
   const { isAuthenticated } = useSelector(state => state.auth)
@@ -131,7 +131,7 @@ const NavBar = ({ history, shownSearch }) => {
   }
 
   return (
-    <Navbar expand="lg">
+    <Navbar {...props}>
       <Link to="#" onClick={() => _handlerGoToLegancy()}>
         <Navbar.Brand>
           <img alt="" src={logo} width={200} className="d-inline-block align-top" />

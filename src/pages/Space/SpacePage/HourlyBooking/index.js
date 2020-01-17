@@ -61,7 +61,7 @@ const HourlyBooking = ({
         <DatePicker
           label={hidePrice ? '' : 'Date'}
           ref={el => setDayPicker(el)}
-          date={date}
+          value={date}
           handleDateChange={o => onDateChange(o)}
           handleDayPickerHide={onDayPickerHide}
           placeholder="Choose a date"
