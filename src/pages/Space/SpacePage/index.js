@@ -264,10 +264,13 @@ const SpacePage = ({ match, location, history, ...props }) => {
   }, [dispatch, listing, pendingBooking, isCleanedAvailabilities])
 
   useEffect(() => {
-    if (location.state) {
-      setDatesSelected(location.state.reservations)
-      setDate(location.state.reservations[0])
-      location.state.period && setPeriod(location.state.period)
+    const { state } = location
+    if (state) {
+      setDatesSelected(state.reservations)
+      setDate(state.reservations[0])
+      state.checkInHour && setStartTime(state.checkInHour)
+      state.checkOutHour && setEndTime(state.checkOutHour)
+      state.period && setPeriod(state.period)
     }
   }, [location])
 
@@ -620,7 +623,9 @@ const SpacePage = ({ match, location, history, ...props }) => {
           ...location,
           state: {
             period: object.period,
-            reservations: object.reservations
+            reservations: object.reservations,
+            checkInHour: object.checkInHour,
+            checkOutHour: object.checkOutHour
           }
         }
       })
