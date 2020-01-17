@@ -472,14 +472,14 @@ const PartnerPage = ({ match, location, ...props }) => {
                 </>
               }
               contentComponent={<FormPartner {...props} listing={listing} dispatch={dispatch} />}
-              footerComponent={
-                <UserDetails
-                  hostname={listing.user.profile.displayName}
-                  imageProfile={listing.user.profile.picture}
-                  joined="2019"
-                  text="We do what we love and are connected to something greater than ourselves."
-                />
-              }
+            // footerComponent={
+            //   <UserDetails
+            //     hostname={listing.user.profile.displayName}
+            //     imageProfile={listing.user.profile.picture}
+            //     joined="2019"
+            //     text="We do what we love and are connected to something greater than ourselves."
+            //   />
+            // }
             />
           </Box>
         </GridStyled>

@@ -1230,23 +1230,23 @@ const SpacePage = ({ match, location, history, ...props }) => {
                   )}
                 </>
               }
-              footerComponent={
-                <>
-                  {listing.user.provider !== 'external' && (
-                    <UserDetails
-                      hostname={`${listing.user.profile.firstName} ${listing.user.profile.lastName}`}
-                      imageProfile={listing.user.profile.picture}
-                      provider={listing.user.provider}
-                      onClaim={_onClaimListing}
-                    />
-                  )}
-                  {listing.user.provider === 'external' && (
-                    <Box display="grid" justifyContent="center">
-                      <Image src={listing.user.profile.picture} width="150px" height="auto" />
-                    </Box>
-                  )}
-                </>
-              }
+              // footerComponent={
+              //   <>
+              //     {listing.user.provider !== 'external' && (
+              //       <UserDetails
+              //         hostname={`${listing.user.profile.firstName} ${listing.user.profile.lastName}`}
+              //         imageProfile={listing.user.profile.picture}
+              //         provider={listing.user.provider}
+              //         onClaim={_onClaimListing}
+              //       />
+              //     )}
+              //     {listing.user.provider === 'external' && (
+              //       <Box display="grid" justifyContent="center">
+              //         <Image src={listing.user.profile.picture} width="150px" height="auto" />
+              //       </Box>
+              //     )}
+              //   </>
+              // }
               bottomComponent={
                 <>
                   {listing.user.provider !== 'external' && (
