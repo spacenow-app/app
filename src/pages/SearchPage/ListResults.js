@@ -79,11 +79,11 @@ const CardImage = styled.img`
   }
 `
 const CardContent = styled.div`
-  padding: ${({ showMap }) => (showMap ? '18px 30px 10px 30px' : '25px')};
+  padding: ${({ showMap }) => (showMap ? '18px 30px 10px 30px' : '20px 20px 10px 20px')};
   line-height: 2;
 
   @media (max-width: 768px) {
-    padding: 25px;
+    padding: 20px 20px 10px 20px;
   }
 `
 
