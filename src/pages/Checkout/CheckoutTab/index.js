@@ -4,7 +4,7 @@ import styled from 'styled-components'
 import Helmet from 'react-helmet'
 import { toast } from 'react-toastify'
 import { useSelector, useDispatch } from 'react-redux'
-import { getUserCards, deleteUserCard, pay } from 'redux/ducks/payment'
+import { getUserCards, deleteUserCard, pay, onUpdateDefaultCard } from 'redux/ducks/payment'
 import { onGetBooking, onInsertVoucher } from 'redux/ducks/booking'
 import _ from 'lodash'
 import {
@@ -129,7 +129,7 @@ const GridCards = styled(Grid)`
 
 const CellCardLogo = styled(Cell)`
   @media only screen and (max-width: 425px) {
-    grid-column-end: span 7;
+    grid-column-end: span 5;
     margin-bottom: 15px;
   }
 `
@@ -152,6 +152,7 @@ const CheckoutPage = ({ match, location, history, ...props }) => {
   const [selectedCard, setSelectedCard] = useState({})
   const [savedCards, setSavedCards] = useState(false)
   const { isLoading: isLoadingGetCards, array: arrayCards } = useSelector(state => state.payment.cards)
+  const { defaultCard } = useSelector(state => state.payment)
   const { object: reservation, isLoading: isLoadingGetBooking } = useSelector(state => state.booking.get)
   const { error: voucherError } = useSelector(state => state.booking.get)
   const { isLoading: isPaying } = useSelector(state => state.payment.pay)
@@ -225,6 +226,12 @@ const CheckoutPage = ({ match, location, history, ...props }) => {
   const _handleApplyPromo = () => {
     dispatch(onInsertVoucher(reservation.bookingId, voucherCode))
   }
+
+  const updateDefaultCard = cardId => {
+    dispatch(onUpdateDefaultCard(cardId))
+  }
+
+  console.log(arrayCards)
 
   return (
     <Wrapper>
@@ -316,7 +323,7 @@ const CheckoutPage = ({ match, location, history, ...props }) => {
                         />
                       )}
                     </CellCardLogo>
-                    <CellHideMobile width={4}>
+                    <CellHideMobile width={5}>
                       <Text fontSize="14px" color="#646464" style={{ whiteSpace: 'nowrap' }}>
                         {/* {card.brand}{' '} */}
                         <Text
@@ -328,18 +335,41 @@ const CheckoutPage = ({ match, location, history, ...props }) => {
                       <br />
                       <Text fontSize="14px" color="#646464">{`Expiry: ${card.exp_month}/${card.exp_year}`}</Text>
                     </CellHideMobile>
-                    <Cell width={3}>
-                      {/* TODO: Change for default one */}
-                      {index === 0 && (
+
+                    <CellHideMobile width={3}>
+                      {card.id === defaultCard && (
                         <Box ml={{ _: '20px', medium: '0px' }}>
                           <Tag small bg="#EBEBEB" noBorder borderRadius="3px">
                             DEFAULT
                           </Tag>
                         </Box>
                       )}
-                    </Cell>
-                    {index !== 0 && (
-                      <Cell width={2}>
+                      {card.id !== defaultCard && (
+                        <Box ml={{ _: '20px', medium: '0px' }} onClick={() => updateDefaultCard(card.id)}>
+                          <Tag small bg="#EBEBEB" noBorder borderRadius="3px" hover="#6ADC91">
+                            MAKE DEFAULT
+                          </Tag>
+                        </Box>
+                      )}
+                    </CellHideMobile>
+                    <CellHideDesktop width={6}>
+                      {card.id === defaultCard && (
+                        <Box ml={{ _: '20px', medium: '0px' }}>
+                          <Tag small bg="#EBEBEB" noBorder borderRadius="3px" right>
+                            DEFAULT
+                          </Tag>
+                        </Box>
+                      )}
+                      {card.id !== defaultCard && (
+                        <Box ml={{ _: '20px', medium: '0px' }} onClick={() => updateDefaultCard(card.id)}>
+                          <Tag small bg="#EBEBEB" noBorder borderRadius="3px" hover="#6ADC91" right>
+                            MAKE DEFAULT
+                          </Tag>
+                        </Box>
+                      )}
+                    </CellHideDesktop>
+                    {card.id !== defaultCard && (
+                      <Cell width={1}>
                         {card.isLoading ? (
                           <Loader icon width="20px" height="20px" />
                         ) : (
@@ -349,7 +379,9 @@ const CheckoutPage = ({ match, location, history, ...props }) => {
                         )}
                       </Cell>
                     )}
-                    <CellHideDesktop width={12}>
+
+                    {/* MOBILE IMPLEMENTATION  */}
+                    <CellHideDesktop width={6}>
                       <Text fontSize="14px" color="#646464" style={{ whiteSpace: 'nowrap' }}>
                         {/* {card.brand}{' '} */}
                         <Text
