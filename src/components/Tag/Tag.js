@@ -21,6 +21,11 @@ const SpanStyled = styled.div`
     `}
   ${color};
   ${size};
+  float: ${props => (props.right && 'right') || 'auto'};
+
+  :hover {
+    background-color: ${props => props.hover && props.hover};
+  }
 `
 
 const TextStyled = styled.span`
@@ -31,8 +36,16 @@ const TextStyled = styled.span`
   line-height: 1.2;
 `
 
-const Tag = ({ icon, small, children, bg, noBorder, borderRadius }) => (
-  <SpanStyled icon={icon} small={small} bg={bg} noBorder={noBorder} borderRadius={borderRadius}>
+const Tag = ({ icon, small, children, bg, noBorder, borderRadius, hover, right }) => (
+  <SpanStyled
+    icon={icon}
+    small={small}
+    bg={bg}
+    noBorder={noBorder}
+    borderRadius={borderRadius}
+    hover={hover}
+    right={right}
+  >
     {icon && icon}
     <TextStyled>{children}</TextStyled>
   </SpanStyled>
@@ -44,7 +57,9 @@ Tag.defaultProps = {
   bg: 'white',
   small: false,
   noBorder: false,
-  borderRadius: '8px'
+  borderRadius: '8px',
+  hover: 'auto',
+  right: false
 }
 
 Tag.propTypes = {
@@ -54,7 +69,9 @@ Tag.propTypes = {
   color: PropTypes.string,
   bg: PropTypes.string,
   noBorder: PropTypes.bool,
-  borderRadius: PropTypes.string
+  borderRadius: PropTypes.string,
+  hover: PropTypes.string,
+  right: PropTypes.bool
 }
 
 export default Tag
