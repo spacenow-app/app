@@ -26,13 +26,15 @@ const WeeklyBooking = ({
 }) => {
   const dates = [{ key: 0, value: 0, name: 'Choose a Period' }]
 
-  for (let i = listingData.minTerm; i < 13; i++) {
+  for (let i = listingData.minTerm; i < 13; i += 1) {
     dates.push({ key: i, value: i, name: `${i} ${spelling(i)}` })
   }
 
   const [dayPicker, setDayPicker] = useState('')
+
   useEffect(() => {
-    if (dayPicker.input && inputFocus) dayPicker.input.focus()
+    if (dayPicker.input && inputFocus)
+      dayPicker.input.focus()
   }, [dayPicker.input, inputFocus])
 
   return (
@@ -59,6 +61,7 @@ const WeeklyBooking = ({
               }
             }}
           />
+
           <Select label={hidePrice ? '' : 'Period'} options={dates} handleChange={handleChangePeriod} value={period} />
 
           {listingData.bookingType === 'request' && !hidePrice && (

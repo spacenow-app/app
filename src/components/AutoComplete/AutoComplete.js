@@ -76,7 +76,8 @@ const AutoComplete = props => {
               label: props.label,
               placeholder: props.placeholder,
               loading,
-              disabled: props.disabled,
+              // disabled: props.disabled,
+              // onFocus: props.onClickCloseButton
               closeButton: props.closeButton,
               onClickCloseButton: props.onClickCloseButton
             })}

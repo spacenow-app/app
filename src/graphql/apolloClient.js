@@ -3,15 +3,12 @@ import { from } from 'apollo-link'
 import { InMemoryCache, ApolloClient } from 'apollo-client-preset'
 import { createUploadLink } from 'apollo-upload-client'
 import { setContext } from 'apollo-link-context'
-import { createHttpLink } from 'apollo-link-http'
 
 import { config } from 'variables'
 
 import { getByName } from 'utils/cookies'
 
 const uploadLink = createUploadLink({ uri: config.graphQlHost, headers: { 'Accept-Encoding': 'gzip' } })
-
-const httpLink = createHttpLink({ uri: config.graphQlHost, headers: { 'Accept-Encoding': 'gzip' } })
 
 let apolloClientWithAuth
 const authLink = dispatch =>
@@ -36,7 +33,7 @@ export const getClientWithAuth = dispatch => {
     }
     apolloClientWithAuth = new ApolloClient({
       cache: new InMemoryCache(),
-      link: from([authLink(dispatch), uploadLink, httpLink])
+      link: from([authLink(dispatch), uploadLink])
     })
   }
   return apolloClientWithAuth
@@ -48,7 +45,7 @@ export const getClient = () => {
     if (process.env.NODE_ENV !== 'production') {
       console.info('Creating a new connection to Apollo GraphQL.')
     }
-    apolloClient = new ApolloClient({ cache: new InMemoryCache(), link: httpLink })
+    apolloClient = new ApolloClient({ cache: new InMemoryCache(), link: uploadLink })
   }
   return apolloClient
 }

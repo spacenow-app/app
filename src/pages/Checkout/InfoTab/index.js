@@ -13,12 +13,15 @@ import { Wrapper, Title, Grid, Cell, TimeTable, Button, Box, Text, Loader, Check
 const GridStyled = styled(Grid)`
   grid-column-gap: 200px;
   margin-top: 100px;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
 
   @media only screen and (max-width: 1024px) {
     grid-column-gap: 35px;
   }
 
   @media only screen and (max-width: 991px) {
+    grid-template-columns: 1fr;
+    grid-row-gap: 35px;
     grid-template-areas:
       'card card'
       'content content';
@@ -92,7 +95,7 @@ const InfoTab = ({ match, location, history, ...props }) => {
     return null
   }
 
-  const weekDay = format(new Date(reservation.checkIn), 'i')
+  const weekDay = format(new Date(reservation.checkIn), 'i') - 1
 
   const checkInObj = reservation.listing.accessDays.listingAccessHours.find(
     res => res.weekday.toString() === weekDay.toString()
@@ -100,31 +103,36 @@ const InfoTab = ({ match, location, history, ...props }) => {
   const checkInTime =
     reservation.priceType === 'hourly'
       ? reservation.checkInHour
-      : checkInObj.allday
-      ? '24 hours'
-      : format(new Date(checkInObj.openHour), 'h:mm a')
+      : checkInObj
+      ? checkInObj.allday
+        ? '24 hours'
+        : format(new Date(checkInObj.openHour), 'h:mm a')
+      : 'Closed'
 
+  const weekDayOut = format(new Date(reservation.checkOut), 'i') - 1
   const checkOutObj = reservation.listing.accessDays.listingAccessHours.find(
-    res => res.weekday.toString() === weekDay.toString()
+    res => res.weekday.toString() === weekDayOut.toString()
   )
   const checkOutTime =
     reservation.priceType === 'hourly'
       ? reservation.checkOutHour
-      : checkOutObj.allday
-      ? '24 hours'
-      : format(new Date(checkOutObj.closeHour), 'h:mm a')
+      : checkOutObj
+      ? checkOutObj.allday
+        ? '24 hours'
+        : format(new Date(checkOutObj.closeHour), 'h:mm a')
+      : 'Closed'
 
   return (
     <Wrapper>
       <Helmet title="Checkout - Spacenow" />
-      <GridStyled columns="repeat(auto-fit,minmax(300px,1fr))" areas={['content card']}>
+      <GridStyled areas={['content card']}>
         <Cell area="content">
           <Title
             marginTop={{ _: '30px', medium: '0px' }}
             className="testTitle"
             type="h7"
             title={`${reservation.listing.settingsParent.subcategory.itemName} for ${reservation.period} ${_spelling(
-              reservation.bookingPeriod,
+              reservation.priceType,
               reservation.period
             ).toLowerCase()} in ${reservation.listing.location.address1}`}
             subtitle={`This reservation will expire after ${_getExpiry(reservation.createdAt)}`}

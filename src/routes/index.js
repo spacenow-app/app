@@ -3,6 +3,7 @@ import { BrowserRouter, Switch, Route, Redirect } from 'react-router-dom'
 import { useSelector, useDispatch } from 'react-redux'
 import { NavBar, Modal, Loader } from 'components'
 import { ToastContainer } from 'react-toastify'
+import { Container } from 'react-bootstrap'
 
 import { onTokenValidation, onIsTokenExists } from 'redux/ducks/auth'
 import { HomePage, SearchPage, NotFoundPage } from 'pages'
@@ -56,15 +57,15 @@ const Routes = props => {
           <PublicRoute
             {...props}
             path="/auth"
-            handlerCheckAuthentication={() => {}}
+            handlerCheckAuthentication={() => { }}
             isAuthenticated={isAuthenticated}
             component={Authentication}
             redirectToReferrer={redirectToReferrer}
           />
-          <PublicRoute {...props} path="/lp" handlerCheckAuthentication={() => {}} component={LandingPages} />
-          <PublicRoute {...props} path="/space" handlerCheckAuthentication={() => {}} component={Space} />
-          <PublicRoute {...props} path="/search" handlerCheckAuthentication={() => {}} component={SearchPage} />
-          <PublicRoute {...props} path="/intro" handlerCheckAuthentication={() => {}} component={Intro} />
+          <PublicRoute {...props} path="/lp" handlerCheckAuthentication={() => { }} component={LandingPages} />
+          <PublicRoute {...props} path="/space" handlerCheckAuthentication={() => { }} component={Space} />
+          <PublicRoute {...props} path="/search" handlerCheckAuthentication={() => { }} component={SearchPage} />
+          <PublicRoute {...props} path="/intro" handlerCheckAuthentication={() => { }} component={Intro} />
           <Redirect from="/account/dashboard" to="/account/profile" />
           <PrivateRoute
             {...props}
@@ -75,7 +76,7 @@ const Routes = props => {
               return (
                 <>
                   {redirectToReferrer && <Redirect to={redirectToReferrer} />}
-                  <NavBar />
+                  <Container><NavBar expand="lg" /></Container>
                   <Switch>
                     <Route
                       {...otherProps}

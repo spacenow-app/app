@@ -2,30 +2,11 @@ import React, { useEffect, useState } from 'react'
 import styled from 'styled-components'
 import { withFormik } from 'formik'
 
-import { DatePicker, TimePicker, Grid, Cell, PriceDetail, TextArea } from 'components'
+import { DatePicker, Grid, Cell, PriceDetail, TextArea, Select } from 'components'
 
 const WrapperStyled = styled.div`
   display: grid;
   grid-row-gap: 10px;
-`
-
-const TimePickerStyled = styled.div`
-  display: inline-block;
-  width: 100%;
-  background-color: #ffffff;
-  border: 1px solid #ebebeb;
-  padding-right: 17px;
-  padding: 10px 20px;
-  border-radius: 8px;
-  height: 54px;
-  text-align: center;
-  font-size: 14px;
-`
-
-const LabelStyled = styled.label`
-  font-size: 12px;
-  font-family: 'Montserrat-Medium';
-  margin-left: 20px;
 `
 
 function spelling(reference) {
@@ -34,8 +15,10 @@ function spelling(reference) {
   return label
 }
 
-const ContactHost = ({
+const HourlyBooking = ({
   onDateChange,
+  onStartTimeChange,
+  onEndTimeChange,
   onDayPickerHide,
   date,
   startTime,
@@ -44,18 +27,33 @@ const ContactHost = ({
   closingDays,
   listingData,
   hoursQuantity,
-  onSetStartTime,
-  onSetEndTime,
   onCalcHourlyPeriod,
   inputFocus,
   hidePrice,
   handleMessageChange,
-  message
+  message,
+  hourlySuggestion
 }) => {
+
   const [dayPicker, setDayPicker] = useState('')
+
   useEffect(() => {
-    if (dayPicker.input && inputFocus) dayPicker.input.focus()
+    if (dayPicker.input && inputFocus)
+      dayPicker.input.focus()
   }, [dayPicker.input, inputFocus])
+
+  useEffect(() => {
+    onCalcHourlyPeriod()
+  }, [date, startTime, endTime]) // eslint-disable-line react-hooks/exhaustive-deps
+
+  const _getOptions = (range) => {
+    if (!range) return []
+    const options = []
+    for (let i = 0; i < range.length; i += 1) {
+      options.push({ key: i, value: range[i], name: range[i] })
+    }
+    return options
+  }
 
   return (
     <>
@@ -63,10 +61,9 @@ const ContactHost = ({
         <DatePicker
           label={hidePrice ? '' : 'Date'}
           ref={el => setDayPicker(el)}
-          date={date}
+          value={date}
           handleDateChange={o => onDateChange(o)}
           handleDayPickerHide={onDayPickerHide}
-          onBlur={onCalcHourlyPeriod}
           placeholder="Choose a date"
           dayPickerProps={{
             selectedDays: [date],
@@ -83,18 +80,23 @@ const ContactHost = ({
             }
           }}
         />
+
         <Grid columns={2} style={{ marginBottom: '10px' }}>
           <Cell>
-            {!hidePrice && <LabelStyled>Start time</LabelStyled>}
-            <TimePickerStyled>
-              <TimePicker value={startTime} onChange={time => onSetStartTime(time)} onBlur={onCalcHourlyPeriod} />
-            </TimePickerStyled>
+            <Select label={hidePrice ? '' : 'Start time'}
+              options={_getOptions(hourlySuggestion && hourlySuggestion.openRange)}
+              handleChange={e => onStartTimeChange(String(e.target.value))}
+              value={startTime}
+              disabled={!hourlySuggestion}
+            />
           </Cell>
           <Cell>
-            {!hidePrice && <LabelStyled>End time</LabelStyled>}
-            <TimePickerStyled>
-              <TimePicker value={endTime} onChange={time => onSetEndTime(time)} onBlur={onCalcHourlyPeriod} />
-            </TimePickerStyled>
+            <Select label={hidePrice ? '' : 'End time'}
+              options={_getOptions(hourlySuggestion && hourlySuggestion.closeRange)}
+              handleChange={e => onEndTimeChange(String(e.target.value))}
+              value={endTime}
+              disabled={!hourlySuggestion}
+            />
           </Cell>
         </Grid>
 
@@ -122,8 +124,8 @@ const formik = {
   isInitialValid: false
 }
 
-ContactHost.propTypes = {
+HourlyBooking.propTypes = {
   ...withFormik.propTypes
 }
 
-export default withFormik(formik)(ContactHost)
+export default withFormik(formik)(HourlyBooking)

@@ -2,7 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import styled from 'styled-components'
 import { format } from 'date-fns'
-import { Box, Text, Icon, Grid, Cell, PriceDetail } from 'components'
+import { Box, Text, Icon, Grid, Cell, BookingPriceDetail } from 'components'
 import { cropPicture } from 'utils/images'
 
 const CardContainer = styled.div`
@@ -14,7 +14,14 @@ const CardContainer = styled.div`
 
   @media only screen and (max-width: 991px) {
     width: 100%;
+  }
+
+  @media only screen and (max-width: 425px) {
     max-width: 377px;
+  }
+
+  @media only screen and (max-width: 320px) {
+    max-width: 280px;
   }
 `
 
@@ -23,7 +30,6 @@ const CardTitle = styled(Text)`
   font-family: 'MontSerrat-Medium';
   font-size: 18px;
   overflow: hidden;
-  white-space: nowrap;
   text-overflow: ellipsis;
 `
 
@@ -78,13 +84,13 @@ const CardCheckout = ({ reservation, ...props }) => {
       <CardContainer>
         <CardImage src={_getCoverPhoto(reservation.listing)} />
         <CardContent>
-          <Box>
+          <Box lineHeight="1.5">
             <CardTitle>{reservation.listing.title}</CardTitle>
             <Text display="block" fontFamily="regular" fontSize="18px">
               {`${reservation.listing.location.city}, ${reservation.listing.location.country}.`}
             </Text>
           </Box>
-          <Grid columns={11} style={{ margin: '20px 0' }}>
+          <Grid columns={11} style={{ margin: '10px 0' }}>
             <Cell width={1}>
               <Icon name="calendar" fill="#172439" width="15px" />
             </Cell>
@@ -105,13 +111,15 @@ const CardCheckout = ({ reservation, ...props }) => {
               </Text>
             </Cell>
           </Grid>
-          <PriceDetail
+          <BookingPriceDetail
             margin="0"
             periodLabel={_spelling(reservation.listing.bookingPeriod, reservation.period)}
-            price={reservation.listing.listingData.basePrice}
-            isAbsorvedFee={reservation.listing.listingData.isAbsorvedFee}
+            valuePerQuantity={reservation.priceDetails.valuePerQuantity}
+            valueFee={reservation.priceDetails.valueFee}
+            valueDiscount={reservation.priceDetails.valueDiscount}
+            valueVoucher={reservation.priceDetails.valueVoucher}
+            total={reservation.priceDetails.total}
             days={reservation.period}
-            quantity={1}
             dividerTotal
             totalSize="20px"
             fontSize="16px"

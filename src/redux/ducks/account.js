@@ -84,6 +84,7 @@ const queryGetProfile = gql`
       provider
       type
       userType
+      role
       profile {
         __typename
         status
@@ -150,6 +151,14 @@ const queryGetAllBookingsByUser = gql`
         checkIn
         checkOut
         reservations
+        priceDetails {
+          valueUnit
+          valuePerQuantity
+          valueFee
+          valueVoucher
+          valueDiscount
+          total
+        }
       }
     }
   }

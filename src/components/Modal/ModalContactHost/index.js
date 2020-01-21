@@ -87,9 +87,11 @@ const ModalContactHost = ({
   const [datesSelected, setDatesSelected] = useState([])
   const [date, setDate] = useState('')
   const [period, setPeriod] = useState(1)
-  const [startTime, setStartTime] = useState('08:00')
-  const [endTime, setEndTime] = useState('09:00')
+  const [startTime, setStartTime] = useState(null)
+  const [endTime, setEndTime] = useState(null)
   const [focusInput, setFocusInput] = useState(false)
+  const [hourlySuggestion, setHourlySuggestion] = useState(null)
+  const [hourlyError, setHourlyError] = useState('')
 
   const handleConfirm = isConfirmed => {
     dispatch(closeModal())
@@ -126,6 +128,8 @@ const ModalContactHost = ({
 
   const _onDateChange = value => {
     setDate(value)
+    setStartTime(null)
+    setEndTime(null)
     setFieldValue('reservations', [value])
   }
 
@@ -135,9 +139,27 @@ const ModalContactHost = ({
 
   const _calcHourlyPeriod = () => {
     if (date) {
-      onGetHourlyAvailability(listing.id, date, startTime, endTime).then(o => {
+      let openTime = '08:00'
+      let closeTime = '10:00'
+      if (startTime && endTime) {
+        openTime = startTime
+        closeTime = endTime
+      }
+      onGetHourlyAvailability(listing.id, date, openTime, closeTime).then(o => {
         setPeriod(o.hours)
         setFieldValue('period', o.hours)
+        setHourlySuggestion(o.suggestion)
+        setHourlyError('')
+        if (!startTime) {
+          setStartTime(o.suggestion.openSuggestion)
+          setFieldValue('checkInTime', o.suggestion.openSuggestion)
+        }
+        if (!endTime) {
+          setEndTime(o.suggestion.closeSuggestion)
+          setFieldValue('checkOutTime', o.suggestion.closeSuggestion)
+        }
+        if (!o.isAvailable) setHourlyError(`Not available for this period`)
+
         // setHourlyError('')
         // if (!o.isAvailable) {
         //   setHourlyError(`Not available in this period`)
@@ -147,11 +169,11 @@ const ModalContactHost = ({
     }
   }
 
-  const _onSetStartTime = value => {
+  const _onStartTimeChange = value => {
     setStartTime(value)
     setFieldValue('checkInTime', value)
   }
-  const _onSetEndTime = value => {
+  const _onEndTimeChange = value => {
     setEndTime(value)
     setFieldValue('checkOutTime', value)
   }
@@ -168,14 +190,20 @@ const ModalContactHost = ({
             hoursQuantity={period}
             listingExceptionDates={availabilities}
             listingData={listing.listingData}
+            hourlySuggestion={hourlySuggestion}
             onDateChange={_onDateChange}
+            onStartTimeChange={_onStartTimeChange}
+            onEndTimeChange={_onEndTimeChange}
             onDayPickerHide={_onDayPickerHide}
             closingDays={_returnArrayAvailability(listing.accessDays)}
-            onSetStartTime={_onSetStartTime}
-            onSetEndTime={_onSetEndTime}
             onCalcHourlyPeriod={_calcHourlyPeriod}
             hidePrice
           />
+          {hourlyError && (
+            <Box color="error" ml="23px">
+              {hourlyError}
+            </Box>
+          )}
         </>
       )
     }
