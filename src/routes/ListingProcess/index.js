@@ -15,7 +15,7 @@ const ListingProcess = ({ match, ...props }) => {
       <Switch>
         <Redirect exact from={match.path} to={`${match.path}/lead`} />
         <Route exact component={LeadPage} path={`${match.path}/lead`} />
-        <Route exact component={StepPage} path={`${match.path}/step`} />
+        <Route exact component={StepPage} path={`${match.path}/step/:id?`} />
         <Route exact component={AddressPage} path={`${match.path}/address`} />
         <Route component={ProcessPage} path={`${match.path}/space/:id`} />
         <Route component={ViewPage} path={`${match.path}/view/:id`} />
