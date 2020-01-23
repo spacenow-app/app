@@ -32,9 +32,9 @@ const initialState = {
 const CATEGORIES = {
   workspace: [566, 567, 572],
   meetingSpace: [568],
+  eventSpace: [569],
   parking: [570],
   storage: [571],
-  eventSpace: [569],
   retailAndHospitality: [573]
 }
 

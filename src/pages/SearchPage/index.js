@@ -489,36 +489,6 @@ const SearchPage = ({ history, location }) => {
                           <Text display="block" ml="28px" mb="20px">
                             I’m looking for a space to hold an event
                           </Text>
-                          <Checkbox
-                            label={<Text fontFamily="bold">Parking</Text>}
-                            checked={filterCategory.parking}
-                            handleCheckboxChange={(e, { checked }) =>
-                              setFilterCategory({ ...filterCategory, parking: !checked })
-                            }
-                          />
-                          <Text display="block" ml="28px" mb="20px">
-                            I’m looking for a place to park my vehicle
-                          </Text>
-                          <Checkbox
-                            label={<Text fontFamily="bold">Storage</Text>}
-                            checked={filterCategory.storage}
-                            handleCheckboxChange={(e, { checked }) =>
-                              setFilterCategory({ ...filterCategory, storage: !checked })
-                            }
-                          />
-                          <Text display="block" ml="28px" mb="20px">
-                            I’m looking for a place to store items or goods
-                          </Text>
-                          <Checkbox
-                            label={<Text fontFamily="bold">Retail & Hospitality</Text>}
-                            checked={filterCategory.retailAndHospitality}
-                            handleCheckboxChange={(e, { checked }) =>
-                              setFilterCategory({ ...filterCategory, retailAndHospitality: !checked })
-                            }
-                          />
-                          <Text display="block" ml="28px" mb="20px">
-                            I’m looking to rent a place for business
-                          </Text>
                         </div>
                         <Box display="flex" justifyContent="space-between">
                           <Button size="sm" outline onClick={() => setShouldShowFilter(false)}>
