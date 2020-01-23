@@ -129,25 +129,16 @@ const getParamOrDefault = (location, param, defaultValue) => {
   return value
 }
 
-const navigate = (history, location, page) => {
-  const queryParams = new URLSearchParams(location)
-  const queryLat = queryParams.get('lat')
-  const queryLng = queryParams.get('lng')
-  const queryLocation = queryParams.get('location')
-  const queryCategory = queryParams.get('category')
-  let url = `?lat=${queryLat}&lng=${queryLng}&location=${queryLocation}&page=${page}`
-  if (queryCategory)
-    url += `& category=${queryCategory}`
-  history.push({
-    pathname: '/search',
-    search: url
-  })
-
+const cleaningLocation = value => {
+  if (!value)
+    return 'Sydney, AU'
+  return value.replace('+', ' ')
 }
 
-const cleaningLocation = value => {
-  if (!value) return 'Sydney, AU'
-  return value.replace('+', ' ')
+const cleaningCategories = value => {
+  if (!value)
+    return []
+  return value.split(' ')
 }
 
 const SearchPage = ({ history, location }) => {
@@ -156,7 +147,7 @@ const SearchPage = ({ history, location }) => {
 
   const queryLat = getParamOrDefault(location.search, 'lat', '-33.8688197')
   const queryLng = getParamOrDefault(location.search, 'lng', '151.2092955')
-  const queryCategory = getParamOrDefault(location.search, 'category', null)
+  const queryCategory = cleaningCategories(getParamOrDefault(location.search, 'category', null))
   const queryLocation = cleaningLocation(getParamOrDefault(location.search, 'location', 'Sydney, AU'))
   const queryPage = parseInt(getParamOrDefault(location.search, 'page', 1), 10)
 
@@ -173,12 +164,12 @@ const SearchPage = ({ history, location }) => {
     monthly: false
   })
   const [filterCategory, setFilterCategory] = useState({
-    workspace: /workspace/i.test(queryCategory),
-    meetingSpace: /meetingSpace/i.test(queryCategory),
-    eventSpace: /eventSpace/i.test(queryCategory),
-    parking: /parking/i.test(queryCategory),
-    storage: /storage/i.test(queryCategory),
-    retailAndHospitality: /retailAndHospitality/i.test(queryCategory)
+    workspace: queryCategory.includes('workspace'),
+    meetingSpace: queryCategory.includes('meetingSpace'),
+    eventSpace: queryCategory.includes('eventSpace'),
+    parking: queryCategory.includes('parking'),
+    storage: queryCategory.includes('storage'),
+    retailAndHospitality: queryCategory.includes('retailAndHospitality')
   })
   const [showMap, setShowMap] = useState(true)
   const [filterSelectedDates, setFilterSelectedDates] = useState([])
@@ -205,7 +196,7 @@ const SearchPage = ({ history, location }) => {
       await dispatch(onSearch(queryLat, queryLng, queryCategory, queryPage))
     }
     fetchData()
-  }, [dispatch, queryLat, queryLng, queryCategory, queryLocation, queryPage])
+  }, [dispatch, queryLat, queryLng]) // eslint-disable-line react-hooks/exhaustive-deps
 
   useEffect(() => {
     setMarkers(
@@ -283,8 +274,27 @@ const SearchPage = ({ history, location }) => {
       filterCapacity,
       filterSelectedDates
     }
+    _navigate(1)
     dispatch(onQuery(searchKey, filters))
     setShouldShowFilter(null)
+  }
+
+  const _concatCategories = value => {
+    const categories = []
+    const keys = Object.keys(value)
+    for (let i = 0; i <= keys.length; i += 1) {
+      if (/true/i.test(value[keys[i]])) {
+        categories.push(keys[i])
+      }
+    }
+    return categories.join('+')
+  }
+
+  const _navigate = (page) => {
+    const urlCategories = _concatCategories(filterCategory)
+    const urlLocation = encodeURI(queryLocation)
+    const url = `?lat=${queryLat}&lng=${queryLng}&category=${urlCategories}&location=${urlLocation}&page=${page}`
+    history.push({ pathname: '/search', search: url })
   }
 
   const _onPagionationChange = page => {
@@ -300,7 +310,7 @@ const SearchPage = ({ history, location }) => {
       return
     }
     refResults.current.scrollTop = 0
-    navigate(history, location.search, page)
+    _navigate(page)
     dispatch(onQuery(searchKey, filters, page))
   }
 
@@ -317,7 +327,11 @@ const SearchPage = ({ history, location }) => {
   }
 
   const _parseCategory = category => {
-    return capitalize(category.replace(/([A-Z])/g, ' $1').trim())
+    if (!category || category.length <= 0)
+      return 'Showing results '
+    // Getting only first category until decide to use RadioButton for Category filter...
+    const firstCategory = category[0]
+    return capitalize(firstCategory.replace(/([A-Z])/g, ' $1').trim())
   }
 
   const modifiers = {
@@ -861,7 +875,7 @@ const SearchPage = ({ history, location }) => {
             noMargin
             title={
               <Text>
-                {(queryCategory && _parseCategory(queryCategory)) || 'Showing results '} around{' '}
+                {_parseCategory(queryCategory)} around{' '}
                 <Text color="primary">{queryLocation.substr(0, queryLocation.indexOf(','))}</Text>
               </Text>
             }

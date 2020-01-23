@@ -227,7 +227,7 @@ export const onSearch = (lat, lng, categoryKey, page) => async dispatch => {
   try {
     const queryVariables = { lat: `${lat}`, lng: `${lng}`, priceMax: 10000, page }
     if (categoryKey) {
-      queryVariables.categories = CATEGORIES[categoryKey].join()
+      queryVariables.categories = categoryKey.map((o) => CATEGORIES[o]).join()
     }
     const { data } = await getClient().query({
       fetchPolicy: 'network-only',
