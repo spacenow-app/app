@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import styled from 'styled-components'
 import { withFormik } from 'formik'
 
-import { DatePicker, Grid, Cell, PriceDetail, TextArea, Select } from 'components'
+import { DatePicker, Grid, Cell, PriceDetail, TextArea, Select, Box, Text } from 'components'
 
 const WrapperStyled = styled.div`
   display: grid;
@@ -97,6 +97,13 @@ const HourlyBooking = ({
               value={endTime}
               disabled={!hourlySuggestion}
             />
+            {date &&
+              <Box display="grid" justifyItems="end">
+                <Text fontFamily="regular" fontSize="12px" color="greyscale.1">
+                  {`${hoursQuantity} ${spelling(hoursQuantity)}`}
+                </Text>
+              </Box>
+            }
           </Cell>
         </Grid>
 

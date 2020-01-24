@@ -376,10 +376,10 @@ const CheckoutPage = ({ match, location, history, ...props }) => {
                         {card.isLoading ? (
                           <Loader icon width="20px" height="20px" />
                         ) : (
-                          <IconButton onClick={_handleRemoveCard(card)}>
-                            <Icon name="bin" style={{ fill: '#51C482' }} />
-                          </IconButton>
-                        )}
+                            <IconButton onClick={_handleRemoveCard(card)}>
+                              <Icon name="bin" style={{ fill: '#51C482' }} />
+                            </IconButton>
+                          )}
                       </Cell>
                     )}
 

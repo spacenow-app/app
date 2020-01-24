@@ -32,9 +32,9 @@ const initialState = {
 const CATEGORIES = {
   workspace: [566, 567, 572],
   meetingSpace: [568],
+  eventSpace: [569],
   parking: [570],
   storage: [571],
-  eventSpace: [569],
   retailAndHospitality: [573]
 }
 
@@ -227,7 +227,7 @@ export const onSearch = (lat, lng, categoryKey, page) => async dispatch => {
   try {
     const queryVariables = { lat: `${lat}`, lng: `${lng}`, priceMax: 10000, page }
     if (categoryKey) {
-      queryVariables.categories = CATEGORIES[categoryKey].join()
+      queryVariables.categories = categoryKey.map((o) => CATEGORIES[o]).join()
     }
     const { data } = await getClient().query({
       fetchPolicy: 'network-only',
