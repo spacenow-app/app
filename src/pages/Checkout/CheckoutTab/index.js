@@ -189,6 +189,11 @@ const CheckoutPage = ({ match, location, history, ...props }) => {
   }
 
   const _payNow = async () => {
+    if (reservation.bookingState === 'timeout') {
+      toast.info('Reservation is timed-out.')
+      history.replace('/')
+      return null
+    }
     await dispatch(pay(selectedCard.id, match.params.id, history))
   }
 
@@ -209,7 +214,7 @@ const CheckoutPage = ({ match, location, history, ...props }) => {
   }
 
   if (reservation.bookingState === 'timeout') {
-    toast.info('Reservation is cancelled.')
+    toast.info('Reservation is timed-out.')
     history.replace('/')
     return null
   }
