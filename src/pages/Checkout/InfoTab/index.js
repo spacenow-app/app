@@ -83,14 +83,14 @@ const InfoTab = ({ match, location, history, ...props }) => {
     return null
   }
 
-  if (reservation.bookingState !== 'approved' || reservation.paymentState === 'completed') {
-    toast.info('Reservation is already paid.')
+  if (reservation.bookingState === 'timeout') {
+    toast.info('Reservation is timed-out.')
     history.replace('/')
     return null
   }
 
-  if (reservation.bookingState === 'timeout') {
-    toast.info('Reservation is timed-out.')
+  if (reservation.bookingState !== 'approved' || reservation.paymentState === 'completed') {
+    toast.info('Reservation is already paid.')
     history.replace('/')
     return null
   }
@@ -152,7 +152,7 @@ const InfoTab = ({ match, location, history, ...props }) => {
           <TimeTable data={listing.accessDays.listingAccessHours} />
 
           <Box mt="100px" mb="25px" display="flex">
-            <ButtonStyled onClick={() => _goToNext()}>Agree and continue</ButtonStyled>
+            <ButtonStyled onClick={() => history.replace(`pay`)}>Agree and continue</ButtonStyled>
           </Box>
         </Cell>
         <Cell area="card">
