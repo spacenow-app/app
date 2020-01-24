@@ -90,7 +90,7 @@ const InfoTab = ({ match, location, history, ...props }) => {
   }
 
   if (reservation.bookingState === 'timeout') {
-    toast.info('Reservation is cancelled.')
+    toast.info('Reservation is timed-out.')
     history.replace('/')
     return null
   }
@@ -152,7 +152,7 @@ const InfoTab = ({ match, location, history, ...props }) => {
           <TimeTable data={listing.accessDays.listingAccessHours} />
 
           <Box mt="100px" mb="25px" display="flex">
-            <ButtonStyled onClick={() => history.replace(`pay`)}>Agree and continue</ButtonStyled>
+            <ButtonStyled onClick={() => _goToNext()}>Agree and continue</ButtonStyled>
           </Box>
         </Cell>
         <Cell area="card">
