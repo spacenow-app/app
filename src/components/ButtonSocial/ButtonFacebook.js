@@ -24,7 +24,6 @@ const ButtonStyled = styled.button`
 `
 
 const ButtonSocial = ({ onResponse, isDisabled, ...props }) => {
-  console.log('Facebook ID: ', config.facebook_app_id)
   return (
     <FacebookLogin
       appId={config.facebook_app_id}
