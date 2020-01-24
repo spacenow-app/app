@@ -83,14 +83,14 @@ const InfoTab = ({ match, location, history, ...props }) => {
     return null
   }
 
-  if (reservation.bookingState !== 'approved' || reservation.paymentState === 'completed') {
-    toast.info('Reservation is already paid.')
+  if (reservation.bookingState === 'timeout') {
+    toast.info('Reservation is timed-out.')
     history.replace('/')
     return null
   }
 
-  if (reservation.bookingState === 'timeout') {
-    toast.info('Reservation is timed-out.')
+  if (reservation.bookingState !== 'approved' || reservation.paymentState === 'completed') {
+    toast.info('Reservation is already paid.')
     history.replace('/')
     return null
   }

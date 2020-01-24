@@ -207,14 +207,14 @@ const CheckoutPage = ({ match, location, history, ...props }) => {
     return null
   }
 
-  if (reservation.bookingState !== 'approved' || reservation.paymentState === 'completed') {
-    toast.info('Reservation is already paid.')
+  if (reservation.bookingState === 'timeout') {
+    toast.info('Reservation is timed-out.')
     history.replace('/')
     return null
   }
 
-  if (reservation.bookingState === 'timeout') {
-    toast.info('Reservation is timed-out.')
+  if (reservation.bookingState !== 'approved' || reservation.paymentState === 'completed') {
+    toast.info('Reservation is already paid.')
     history.replace('/')
     return null
   }
@@ -376,10 +376,10 @@ const CheckoutPage = ({ match, location, history, ...props }) => {
                         {card.isLoading ? (
                           <Loader icon width="20px" height="20px" />
                         ) : (
-                            <IconButton onClick={_handleRemoveCard(card)}>
-                              <Icon name="bin" style={{ fill: '#51C482' }} />
-                            </IconButton>
-                          )}
+                          <IconButton onClick={_handleRemoveCard(card)}>
+                            <Icon name="bin" style={{ fill: '#51C482' }} />
+                          </IconButton>
+                        )}
                       </Cell>
                     )}
 
