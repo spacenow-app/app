@@ -43,8 +43,6 @@ const ModalBookingDetails = ({ options, booking, userType }) => {
     return label
   }
 
-  console.log("BOOKING", booking)
-
   return (
     <Modal show onHide={() => dispatch(closeModal())} centered size="lg">
       {options.title && (
