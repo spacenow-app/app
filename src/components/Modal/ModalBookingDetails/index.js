@@ -9,7 +9,7 @@ import { closeModal } from 'redux/ducks/modal'
 
 import { cropPicture } from 'utils/images'
 
-const ModalBookingDetails = ({ options, booking }) => {
+const ModalBookingDetails = ({ options, booking, userType }) => {
   const dispatch = useDispatch()
 
   const _convertedArrayPhotos = array => {
@@ -42,6 +42,8 @@ const ModalBookingDetails = ({ options, booking }) => {
     if (reference > 1) label = `${label}s`
     return label
   }
+
+  console.log("BOOKING", booking)
 
   return (
     <Modal show onHide={() => dispatch(closeModal())} centered size="lg">
@@ -92,10 +94,10 @@ const ModalBookingDetails = ({ options, booking }) => {
           <BookingPriceDetail
             periodLabel={_spelling(booking.priceType, booking.period)}
             valuePerQuantity={booking.priceDetails.valuePerQuantity}
-            valueFee={booking.priceDetails.valueFee}
+            valueFee={userType !== "host" ? booking.priceDetails.valueFee : (booking.basePrice * booking.period) * booking.hostServiceFee * -1}
             valueDiscount={booking.priceDetails.valueDiscount}
             valueVoucher={booking.priceDetails.valueVoucher}
-            total={booking.priceDetails.total}
+            total={userType !== "host" ? booking.priceDetails.total : (booking.basePrice * booking.period) * .89}
             days={booking.period}
           />
         )}
@@ -109,7 +111,8 @@ ModalBookingDetails.propTypes = {
     title: PropTypes.string,
     text: PropTypes.string.isRequired
   }).isRequired,
-  booking: PropTypes.instanceOf(Object).isRequired
+  booking: PropTypes.instanceOf(Object).isRequired,
+  userType: PropTypes.string
 }
 
 export default ModalBookingDetails

@@ -112,7 +112,7 @@ const BookingCard = (dispatch, item, index, userType, userId) => {
           title={
             <Price
               currency={item.currency}
-              price={item.totalPrice}
+              price={userType !== 'host' ? item.totalPrice : (item.basePrice * item.period) * .89}
               currencySymbol="$"
               bookingType={item.bookingType}
               size="18px"
@@ -249,10 +249,10 @@ const BookingPage = ({ location, ...props }) => {
       {!bookings || bookings.count === 0 ? (
         <BackgroundImage text="We didn't find any bookings :(" />
       ) : (
-        <Grid columns={1} rowGap="30px">
-          {[].concat(bookings.items).map((item, index) => BookingCard(dispatch, item, index, userType, id))}
-        </Grid>
-      )}
+          <Grid columns={1} rowGap="30px">
+            {[].concat(bookings.items).map((item, index) => BookingCard(dispatch, item, index, userType, id))}
+          </Grid>
+        )}
     </>
   )
 }
