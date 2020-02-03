@@ -49,6 +49,7 @@ const InspectionForm = ({
   onDayPickerHide,
   closingDays,
   handleMessageChange,
+  onStartTimeChange,
   message,
   publicReviews,
   bookingPeriod,
