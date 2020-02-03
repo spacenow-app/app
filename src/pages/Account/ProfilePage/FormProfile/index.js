@@ -48,7 +48,7 @@ const FormProfile = ({
   const _handleSubmit = () => {
     const profilePayload = { ...values }
     if (values.dateOfBirth) profilePayload.dateOfBirth = format(values.dateOfBirth, 'yyyy-MM-dd')
-      dispatch(onUpdateProfile(user.id, profilePayload))
+    dispatch(onUpdateProfile(user.id, profilePayload))
   }
 
   const _handleResendLink = () => {
@@ -72,18 +72,18 @@ const FormProfile = ({
               onBlur={handleBlur}
             />
           ) : (
-            <Input
-              label="Email"
-              placeholder="Email"
-              name="email"
-              disabled
-              value={user.email}
-              borderColor={!user.emailConfirmed ? 'warning.0' : 'primary'}
-              backgroundColor={!user.emailConfirmed ? 'warning.1' : 'greyscale.4'}
-              color={user.emailConfirmed ? 'greyscale.1' : ''}
-              error={!user.emailConfirmed}
-            />
-          )}
+              <Input
+                label="Email"
+                placeholder="Email"
+                name="email"
+                disabled
+                value={user.email}
+                borderColor={!user.emailConfirmed ? 'warning.0' : 'primary'}
+                backgroundColor={!user.emailConfirmed ? 'warning.1' : 'greyscale.4'}
+                color={user.emailConfirmed ? 'greyscale.1' : ''}
+                error={!user.emailConfirmed}
+              />
+            )}
           {!user.emailConfirmed && (
             <Text fontSize={12} marginLeft="18px">
               Email not verified{' '}
@@ -129,7 +129,7 @@ const FormProfile = ({
               error={errors.phoneNumber}
               value={values.phoneNumber}
               onChange={(e) => _handlePhoneChange('phoneNumber', e)}
-              // onBlur={handleBlur}
+            // onBlur={handleBlur}
             />
             {/* <Input
               label="Phone Number"
@@ -154,7 +154,7 @@ const FormProfile = ({
           <SectionStyled>
             <DatePicker
               label="Date of Birth"
-              value={values.dateOfBirth}
+              value={values.dateOfBirth || new Date()}
               handleDateChange={date => setFieldValue('dateOfBirth', date)}
               captionMargin="0 0 .5rem 25px"
             />

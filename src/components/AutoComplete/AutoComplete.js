@@ -30,7 +30,7 @@ const BoxItem = styled.div`
 `
 
 const AutoComplete = props => {
-  const _handleOnSelect = async address => {
+  const _handleOnSelect = async (address, placeId) => {
     try {
       const decode = await geocodeByAddress(address)
       const formattedAddress = decode[0].formatted_address
@@ -45,7 +45,8 @@ const AutoComplete = props => {
         formattedAddress,
         unit: unit ? unit.long_name : '',
         position,
-        address: addressSeparate.length <= 1 ? addressSeparate[0] : addressSeparate[1]
+        address: addressSeparate.length <= 1 ? addressSeparate[0] : addressSeparate[1],
+        placeId
       })
     } catch (error) {
       props.onHandleError(error)
@@ -63,8 +64,8 @@ const AutoComplete = props => {
       searchOptions={{
         location: new window.google.maps.LatLng(-34, 151),
         radius: 2000,
-        types: ['address'],
-        componentRestrictions: { country: ['AU'] }
+        // types: ['address'],
+        componentRestrictions: { country: ['AU', 'AE'] }
       }}
     >
       {({ getInputProps, suggestions, getSuggestionItemProps, loading }) => (
@@ -75,7 +76,8 @@ const AutoComplete = props => {
               label: props.label,
               placeholder: props.placeholder,
               loading,
-              disabled: props.disabled,
+              // disabled: props.disabled,
+              // onFocus: props.onClickCloseButton
               closeButton: props.closeButton,
               onClickCloseButton: props.onClickCloseButton
             })}

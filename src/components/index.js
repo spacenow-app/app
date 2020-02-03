@@ -19,6 +19,7 @@ import { Tab, TabItem } from './Tab'
 import Checkbox from './Checkbox'
 import Select from './Select'
 import TextArea from './TextArea'
+import WYSIWYGTextArea from './WYSIWYGTextArea'
 import { Radio, RadioGroup } from './Radio'
 import { Grid, Cell } from './Grid'
 import TimeTable from './TimeTable'
@@ -62,6 +63,10 @@ import Phone from './Phone'
 import Video from './Video'
 import RadioCheckbox from './RadioCheckbox'
 import ProgressBar from './ProgressBar'
+import CheckInOut from './CheckInOut'
+import CardCheckout from './CardCheckout'
+import CreditCard from './CreditCard'
+import BookingPriceDetail from './BookingPriceDetail'
 
 export {
   Modal,
@@ -130,5 +135,10 @@ export {
   Phone,
   Video,
   RadioCheckbox,
-  ProgressBar
+  ProgressBar,
+  CheckInOut,
+  CardCheckout,
+  CreditCard,
+  WYSIWYGTextArea,
+  BookingPriceDetail
 }

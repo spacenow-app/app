@@ -1,15 +1,15 @@
 import React from 'react'
+import { useDispatch } from 'react-redux'
 import PropTypes from 'prop-types'
 import { Modal } from 'react-bootstrap'
-import { Box, Carousel, Tag, Icon, Title, Label, ListDates, PriceDetail, Button } from 'components'
 
-import { useDispatch } from 'react-redux'
+import { Box, Carousel, Tag, Icon, Title, Label, ListDates, BookingPriceDetail } from 'components'
+
 import { closeModal } from 'redux/ducks/modal'
-import { onDeclineBooking, onAcceptBooking } from 'redux/ducks/booking'
 
 import { cropPicture } from 'utils/images'
 
-const ModalBookingDetails = ({ onConfirm, options, booking, userType, ...props }) => {
+const ModalBookingDetails = ({ options, booking }) => {
   const dispatch = useDispatch()
 
   const _convertedArrayPhotos = array => {
@@ -43,20 +43,12 @@ const ModalBookingDetails = ({ onConfirm, options, booking, userType, ...props }
     return label
   }
 
-  const _declineBooking = bookingId => {
-    dispatch(onDeclineBooking(bookingId))
-  }
-
-  const _acceptBooking = bookingId => {
-    dispatch(onAcceptBooking(bookingId))
-  }
-
   return (
     <Modal show onHide={() => dispatch(closeModal())} centered size="lg">
       {options.title && (
         <Modal.Header closeButton>
           <Modal.Title>
-            <Title noMargin type={'h5'} title={options.title} />
+            <Title noMargin type="h5" title={options.title} />
           </Modal.Title>
         </Modal.Header>
       )}
@@ -83,7 +75,7 @@ const ModalBookingDetails = ({ onConfirm, options, booking, userType, ...props }
           >
             {booking.listing.settingsParent.subcategory.itemName}
           </Tag>
-          <Label justify={`end`} bg={booking.bookingState} color={'white'}>
+          <Label justify="end" bg={booking.bookingState} color="white">
             {booking.bookingState}
           </Label>
         </Box>
@@ -97,25 +89,17 @@ const ModalBookingDetails = ({ onConfirm, options, booking, userType, ...props }
         </Box>
         <ListDates dates={booking.reservations} />
         {booking.reservations.length > 0 && (
-          <PriceDetail
+          <BookingPriceDetail
             periodLabel={_spelling(booking.priceType, booking.period)}
-            price={booking.basePrice}
-            isAbsorvedFee={booking.hostServiceFee !== 0}
+            valuePerQuantity={booking.priceDetails.valuePerQuantity}
+            valueFee={booking.priceDetails.valueFee}
+            valueDiscount={booking.priceDetails.valueDiscount}
+            valueVoucher={booking.priceDetails.valueVoucher}
+            total={booking.priceDetails.total}
             days={booking.period}
-            quantity={1}
           />
         )}
       </Modal.Body>
-      {booking.bookingState === 'requested' && userType === 'host' && (
-        <Modal.Footer>
-          <Button size={`sm`} color={`red`} onClick={() => _declineBooking(booking.bookingId)}>
-            {options.buttonDeclineBookingText || 'Decline Booking'}
-          </Button>
-          <Button size={`sm`} onClick={() => _acceptBooking(booking.bookingId)}>
-            {options.buttonAcceptBookingText || 'Accept Booking'}
-          </Button>
-        </Modal.Footer>
-      )}
     </Modal>
   )
 }
@@ -125,8 +109,7 @@ ModalBookingDetails.propTypes = {
     title: PropTypes.string,
     text: PropTypes.string.isRequired
   }).isRequired,
-  booking: PropTypes.object.isRequired,
-  userType: PropTypes.string
+  booking: PropTypes.instanceOf(Object).isRequired
 }
 
 export default ModalBookingDetails

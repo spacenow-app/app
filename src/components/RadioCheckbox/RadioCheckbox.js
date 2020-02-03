@@ -72,7 +72,7 @@ const RadioCheckbox = ({ className, name, checked, label, disabled, ...props }) 
           name={name}
           disabled={disabled}
           checked={checked}
-          // onChange={e => handleCheckboxChange(e, { checked: !e.target.checked, name })}
+        // onChange={e => handleCheckboxChange(e, { checked: !e.target.checked, name })}
         />
         <StyledCheckbox checked={checked} disabled={disabled}>
           <Icon viewBox="0 0 24 24">
@@ -87,7 +87,6 @@ const RadioCheckbox = ({ className, name, checked, label, disabled, ...props }) 
 
 RadioCheckbox.defaultProps = {
   checked: false,
-  label: false
 }
 
 RadioCheckbox.propTypes = {

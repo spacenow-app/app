@@ -1,3 +1,4 @@
+/* eslint-disable react/prop-types */
 import React, { useEffect, useState } from 'react'
 import { addMinutes, format, addHours, isAfter } from 'date-fns'
 import { useSelector, useDispatch } from 'react-redux'
@@ -28,16 +29,12 @@ const _bookingDetails = dispatch => (booking, userType) => {
   )
 }
 
-const _declineBooking = dispatch => bookingId => {
-  dispatch(onDeclineBooking(bookingId))
+const _goToSpacePage = listingId => {
+  window.location.href = `/space/${listingId}`
 }
 
-const _acceptBooking = dispatch => bookingId => {
-  dispatch(onAcceptBooking(bookingId))
-}
-
-const _handleRedirect = id => {
-  window.location.href = `/space/${id}`
+const _goToCheckoutPage = bookingId => {
+  window.location.href = `/checkout/${bookingId}/info`
 }
 
 const _getTip = (status, userType) => {
@@ -78,7 +75,7 @@ const _getCoverPhoto = object => {
   return cropPicture(object.photos[0].name)
 }
 
-const BookingCard = (dispatch, item, index, userType) => {
+const BookingCard = (dispatch, item, index, userType, userId) => {
   let expire = addHours(convertedDate(item.createdAt), 24)
 
   if (userType === 'guest') expire = addMinutes(convertedDate(item.createdAt), 30)
@@ -87,9 +84,17 @@ const BookingCard = (dispatch, item, index, userType) => {
 
   const expiryDate = `${format(expire, 'dd/MM/yyyy')} at ${format(expire, 'HH:mm')}`
 
+  const _acceptBooking = bookingId => {
+    dispatch(onAcceptBooking(bookingId)).then(() => dispatch(onGetBookingsByUser(userId, userType)))
+  }
+
+  const _declineBooking = bookingId => {
+    dispatch(onDeclineBooking(bookingId)).then(() => dispatch(onGetBookingsByUser(userId, userType)))
+  }
+
   return (
     <Card.Horizontal key={index}>
-      <Card.Horizontal.Image src={_getCoverPhoto(item.listing)} handleClick={() => _handleRedirect(item.listingId)} />
+      <Card.Horizontal.Image src={_getCoverPhoto(item.listing)} handleClick={() => _goToSpacePage(item.listingId)} />
       <Card.Horizontal.Body>
         <Card.Horizontal.Title
           noMargin
@@ -109,7 +114,6 @@ const BookingCard = (dispatch, item, index, userType) => {
               currency={item.currency}
               price={item.totalPrice}
               currencySymbol="$"
-              // bookingPeriod={item.priceType}
               bookingType={item.bookingType}
               size="18px"
             />
@@ -132,21 +136,24 @@ const BookingCard = (dispatch, item, index, userType) => {
           </Text>
         </Card.Horizontal.Dropdown.Toggle>
         <Card.Horizontal.Dropdown.Menu>
-          {item.bookingState === 'pending' && userType === 'guest' && isAfter(new Date(), expire) && (
-            <Card.Horizontal.Dropdown.Item onClick={() => _handleRedirect(item.listingId)}>
-              Continue Booking
-            </Card.Horizontal.Dropdown.Item>
-          )}
+          {item.bookingState === 'approved' &&
+            item.paymentState === 'pending' &&
+            userType === 'guest' &&
+            isAfter(new Date(), expire) && (
+              <Card.Horizontal.Dropdown.Item onClick={() => _goToCheckoutPage(item.bookingId)}>
+                Continue Booking
+              </Card.Horizontal.Dropdown.Item>
+            )}
           <Card.Horizontal.Dropdown.Item onClick={() => _bookingDetails(dispatch)(item, userType)}>
             Booking Details
           </Card.Horizontal.Dropdown.Item>
-          {item.bookingState === 'pending' && userType === 'host' && (
+          {item.bookingState === 'requested' && userType === 'host' && (
             <>
-              <Card.Horizontal.Dropdown.Item onClick={() => _declineBooking(dispatch)(item.bookingId)}>
-                Decline Booking
-              </Card.Horizontal.Dropdown.Item>
-              <Card.Horizontal.Dropdown.Item onClick={() => _acceptBooking(dispatch)(item.bookingId)}>
+              <Card.Horizontal.Dropdown.Item onClick={() => _acceptBooking(item.bookingId)}>
                 Accept Booking
+              </Card.Horizontal.Dropdown.Item>
+              <Card.Horizontal.Dropdown.Item onClick={() => _declineBooking(item.bookingId)}>
+                Decline Booking
               </Card.Horizontal.Dropdown.Item>
             </>
           )}
@@ -187,7 +194,7 @@ const BookingCard = (dispatch, item, index, userType) => {
   )
 }
 
-const BookingPage = ({ ...props }) => {
+const BookingPage = ({ location, ...props }) => {
   const dispatch = useDispatch()
 
   const [userType, setUserType] = useState('guest')
@@ -202,7 +209,7 @@ const BookingPage = ({ ...props }) => {
   } = useSelector(state => state.account)
 
   useEffect(() => {
-    const queryParams = new URLSearchParams(props.location.search)
+    const queryParams = new URLSearchParams(location.search)
     if (queryParams.get('b') && queryParams.get('a')) {
       dispatch(onAcceptDeclineByEmail(queryParams.get('b'), queryParams.get('a'), id)).then(() => {
         setUserType('host')
@@ -211,11 +218,11 @@ const BookingPage = ({ ...props }) => {
     } else {
       dispatch(onGetBookingsByUser(id))
     }
-  }, [dispatch, props.location.search, id])
+  }, [dispatch, location, id])
 
-  const _handleChange = userType => {
-    setUserType(userType)
-    dispatch(onGetBookingsByUser(id, userType))
+  const _handleChange = type => {
+    setUserType(type)
+    dispatch(onGetBookingsByUser(id, type))
   }
 
   if (isLoading) return <Loader text="Loading bookings process" />
@@ -239,12 +246,11 @@ const BookingPage = ({ ...props }) => {
           </Dropdown>
         </Cell>
       </Grid>
-
       {!bookings || bookings.count === 0 ? (
         <BackgroundImage text="We didn't find any bookings :(" />
       ) : (
         <Grid columns={1} rowGap="30px">
-          {[].concat(bookings.items).map((item, index) => BookingCard(dispatch, item, index, userType))}
+          {[].concat(bookings.items).map((item, index) => BookingCard(dispatch, item, index, userType, id))}
         </Grid>
       )}
     </>

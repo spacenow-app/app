@@ -6,18 +6,28 @@ import { NavBar, Wrapper, Box, Input, Button, Text, Title, Link, Line, ButtonSoc
 import { signup, googleSignin, facebookSignin } from 'redux/ducks/auth'
 import { config } from 'variables'
 
-const SignupPage = ({ values, touched, errors, handleChange, handleBlur, isValid, ...props }) => {
+const SignupPage = ({
+  values,
+  touched,
+  errors,
+  handleChange,
+  handleBlur,
+  isValid,
+  setFieldValue,
+  validateForm,
+  ...props
+}) => {
   const dispatch = useDispatch()
   const { isLoading } = useSelector(state => state.auth)
 
   const responseFacebook = response => {
     const { state } = props.location
-    dispatch(facebookSignin(response, (state && state.from) || false))
+    dispatch(facebookSignin(response, (state && state.from) || false, values.userType))
   }
 
   const responseGoogle = response => {
     const { state } = props.location
-    dispatch(googleSignin(response, (state && state.from) || false))
+    dispatch(googleSignin(response, (state && state.from) || false, values.userType))
   }
 
   const handleSubmit = e => {
@@ -31,8 +41,9 @@ const SignupPage = ({ values, touched, errors, handleChange, handleBlur, isValid
           last: name.substring(name.indexOf(' '), name.length).trim()
         },
         values.email,
-        values.password, 
-        (state && state.from) || false
+        values.password,
+        (state && state.from) || false,
+        values.userType
       )
     )
   }
@@ -41,15 +52,35 @@ const SignupPage = ({ values, touched, errors, handleChange, handleBlur, isValid
     window.location.href = `${config.static}/${page || ''}`
   }
 
+  // const _handleSelectChange = e => {
+  //   const { name, value } = e.target
+  //   setFieldValue(name, value)
+  // }
+
   return (
     <>
       <NavBar />
       <Wrapper>
         <Box margin="0 auto" width={{ _: '100%', medium: '500px' }} p="40px" textAlign="center">
           <Title center type="h3" title="Create your account" />
+          {/* <Box my="25px">
+            <Select value={values.userType} name="userType" onChange={_handleSelectChange}>
+              <option value="">I would like to...</option>
+              <option value="host">List my space and take bookings (host)</option>
+              <option value="guest">Find and book spaces</option>
+            </Select>
+          </Box> */}
           <Box display="grid" gridTemplateColumns={{ _: 'none', medium: 'auto auto' }} gridGap="15px">
-            <ButtonSocial facebook onResponse={responseFacebook} />
-            <ButtonSocial google onResponse={responseGoogle} />
+            <ButtonSocial
+              facebook
+              onResponse={responseFacebook}
+              // isDisabled={!values.userType}
+            />
+            <ButtonSocial
+              google
+              onResponse={responseGoogle}
+              // isDisabled={!values.userType}
+            />
           </Box>
           <Text display="block" fontSize="14px" fontFamily="medium" my="15px">
             or sign up with
@@ -116,7 +147,8 @@ const formik = {
     return {
       fullName: '',
       email: '',
-      password: ''
+      password: '',
+      userType: ''
     }
   },
   mapValuesToPayload: x => x,
@@ -124,11 +156,14 @@ const formik = {
     fullName: Yup.string()
       .matches(/^[a-zA-Zà-úÀ-Ú][0-9a-zA-Z .,'-]*$/, 'Invalid name')
       .test('has-lastName', 'You forgot to fill in your last name', val => {
-        const arrayName = val.split(' ')
-        if (!arrayName[1]) {
-          return false
+        if (val) {
+          const arrayName = val.split(' ')
+          if (!arrayName[1]) {
+            return false
+          }
+          return true
         }
-        return true
+        return false
       })
       .required(),
     email: Yup.string()
@@ -140,9 +175,10 @@ const formik = {
       .matches(/[A-Z]/, 'at least one uppercase char')
       .matches(/[a-zA-Z]+[^a-zA-Z\s]+/, 'at least 1 number or special char (@,!,#, etc).')
       .required()
+    // userType: Yup.string().required()
   }),
   enableReinitialize: true,
-  isInitialValid: true
+  isInitialValid: false
 }
 
 export default withFormik(formik)(SignupPage)

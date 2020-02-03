@@ -1,6 +1,7 @@
-import React from 'react'
+import React, { Fragment, useEffect } from 'react'
 import styled from 'styled-components'
 import Helmet from 'react-helmet'
+import { useSelector, useDispatch } from 'react-redux'
 import { Wrapper, Title, RadioCheckbox, Grid, Cell, Button, Link, Box, ProgressBar } from 'components'
 
 const CellStyled = styled(Cell)`
@@ -8,7 +9,15 @@ const CellStyled = styled(Cell)`
   align-items: center;
 `
 
-const StepPage = props => {
+const StepPage = ({ match, ...props }) => {
+
+  const dispatch = useDispatch()
+
+  useEffect(() => {
+    const listingId = match.params.id
+    dispatch(onGetSteps(listingId))
+  }, [])
+
   return (
     <Wrapper my="40px">
       <Helmet title="Listing Intro - Spacenow" />
@@ -17,14 +26,14 @@ const StepPage = props => {
         type="h3"
         title="Barrett, tell us about your space"
         subtitle="The more details you list, the faster the bookings."
-        subTitleMargin="10px"
+        subTitleMargin={10}
       />
       <Grid columns={12}>
         {list.map((item, index) => {
           return (
-            <>
+            <Fragment key={index}>
               <CellStyled width={1}>
-                <RadioCheckbox checked={item.checked} />
+                <RadioCheckbox checked={item.checked} onChange={() => { }} />
               </CellStyled>
               <CellStyled width={8}>
                 <Box my="10px" ml="-20px">
@@ -50,7 +59,7 @@ const StepPage = props => {
                   </Link>
                 )}
               </CellStyled>
-            </>
+            </Fragment>
           )
         })}
       </Grid>

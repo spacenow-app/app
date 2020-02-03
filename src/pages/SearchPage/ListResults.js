@@ -68,7 +68,7 @@ const CardTitle = styled(Text)`
 
 const CardImage = styled.img`
   width: 100%;
-  height: ${({ showMap }) => (showMap ? '100%' : '280px')};
+  height: ${({ showMap }) => (showMap ? '248px' : '280px')};
   display: block;
   border-radius: 6px;
   cursor: pointer;
@@ -79,11 +79,11 @@ const CardImage = styled.img`
   }
 `
 const CardContent = styled.div`
-  padding: ${({ showMap }) => (showMap ? '15px 40px' : '25px')};
+  padding: ${({ showMap }) => (showMap ? '18px 30px 10px 30px' : '20px 20px 10px 20px')};
   line-height: 2;
 
   @media (max-width: 768px) {
-    padding: 25px;
+    padding: 20px 20px 10px 20px;
   }
 `
 
@@ -171,6 +171,12 @@ const ListResults = forwardRef(
       })
     }
 
+    const _getAddress = address => {
+      const { address1 = '', city = '' } = address
+      const convertedAddress = `${address1 ? `${address1}, ` : ''} ${city ? `${city}` : ''}`
+      return convertedAddress.replace(/\0.*$/g, '')
+    }
+
     return (
       <Wrapper ref={ref}>
         <ContainerList showMap={showMap}>
@@ -188,7 +194,7 @@ const ListResults = forwardRef(
                   onClick={() => window.open(`/space/${item.id}`)}
                 />
                 <CardContent showMap={showMap}>
-                  <Box display="flex" justifyContent="start" mb="15px">
+                  <Box display="flex" justifyContent="start" mb="10px">
                     <Box>
                       <Tag
                         small
@@ -209,16 +215,17 @@ const ListResults = forwardRef(
                   <Box>
                     <CardTitle onClick={() => window.open(`/space/${item.id}`)}>{item.title}</CardTitle>
                   </Box>
-                  <Text display="block" fontFamily="regular" fontSize="14px" color="greyscale.1">
-                    {`${item.location.address1}, ${item.location.city}`}
+                  <Text display="block" fontFamily="regular" fontSize="14px" color="greyscale.1" margin="3px 0px">
+                    {_getAddress(item.location)}
                   </Text>
                   <Box
-                    my="10px"
+                    mt="8px"
+                    mb="13px"
                     display="grid"
                     gridTemplateColumns={item.specifications.length >= 3 ? 'auto auto auto' : 'auto auto'}
                     justifyContent="space-between"
                     borderBottom="1px solid #eee"
-                    paddingBottom="10px"
+                    pb="13px"
                   >
                     {_renderSpecifications(item.specifications, item.listingData)}
                   </Box>
@@ -249,6 +256,7 @@ const ListResults = forwardRef(
           <Pagination
             totalPages={pagination.totalPages}
             totalRecords={pagination.total}
+            pageIndex={pagination.page - 1}
             onPageChanged={onPageChanged}
           />
         </ContainerPagination>

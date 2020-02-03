@@ -23,8 +23,7 @@ import {
   ToolTip,
   Box,
   DatePicker,
-  ListDates,
-  Footer
+  ListDates
 } from 'components'
 
 const SwitchStyled = styled.div`
@@ -93,7 +92,7 @@ const AvailabilityTab = ({ match, listing, history, setFatherValues }) => {
     }
     setFatherValues(valuesToUpdate)
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [setFatherValues])
+  }, [listing, timetable, selectedDates])
 
   useEffect(() => {
     const { accessDays } = listing
@@ -202,7 +201,7 @@ const AvailabilityTab = ({ match, listing, history, setFatherValues }) => {
     setTimeTable(newArray)
   }
 
-  const _handleChangeDay = (_, options) => {
+  const _handleChangeDay = (o, options) => {
     const index = timetable.findIndex(el => el.day === options.name)
     const newArray = update(timetable, {
       [index]: { active: { $set: options.checked }, fulltime: { $set: false } }
@@ -210,7 +209,7 @@ const AvailabilityTab = ({ match, listing, history, setFatherValues }) => {
     setTimeTable(newArray)
   }
 
-  const _handleClick24hours = (_, options) => {
+  const _handleClick24hours = (o, options) => {
     const index = timetable.findIndex(el => `${el.day}-24h` === options.name)
     const newArray = update(timetable, {
       [index]: { fulltime: { $set: options.checked } }
@@ -218,7 +217,7 @@ const AvailabilityTab = ({ match, listing, history, setFatherValues }) => {
     setTimeTable(newArray)
   }
 
-  const _handleClickOpenFullTime = (_, options) => {
+  const _handleClickOpenFullTime = (o, options) => {
     const is = options.checked
     const newArray = timetable.map(el => ({
       ...el,
@@ -476,7 +475,6 @@ const AvailabilityTab = ({ match, listing, history, setFatherValues }) => {
           // next={{ onClick: () => history.push('cancellation') }}
           next={{ onClick: () => _onUpdateListing() }}
         />
-        <Footer />
       </Grid>
     </>
   )

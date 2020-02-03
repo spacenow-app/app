@@ -38,6 +38,8 @@ const _formatPeriod = (period, bookingType) => {
 }
 
 const MessageDetailCard = ({ item, user, count, index, messageParent, ...props }) => {
+  console.log(messageParent.messageHost)
+  console.log('item', item)
   return (
     <Grid column={12}>
       {(user.id === item.sent.id && (
@@ -114,32 +116,44 @@ const MessageDetailCard = ({ item, user, count, index, messageParent, ...props }
                       </Cell>
                     </Grid>
                   </Box>
-                  <Box fontSize="12px" mt="20px">
-                    <Grid columns={12}>
-                      <Cell width={6}>
-                        <Box>
-                          <Text fontFamily="bold">How many people?</Text>
-                        </Box>
-                        <Text>{messageParent.messageHost.peopleQuantity}</Text>
-                      </Cell>
-                      <Cell width={6}>
-                        <Box>
-                          <Text fontFamily="bold">What will you be using the space for?</Text>
-                        </Box>
-                        <Text>{messageParent.messageHost.reason}</Text>
-                      </Cell>
-                    </Grid>
-                  </Box>
-                  <Box fontSize="12px" mt="20px">
-                    <Grid columns={12}>
-                      <Cell width={12}>
-                        <Box>
-                          <Text fontFamily="bold">Message</Text>
-                        </Box>
-                        <Text>{item.content}</Text>
-                      </Cell>
-                    </Grid>
-                  </Box>
+                  {(messageParent.messageHost.reason || messageParent.messageHost.peopleQuantity) && (
+                    <Box fontSize="12px" mt="20px">
+                      <Grid columns={12}>
+                        <Cell width={6}>
+                          {messageParent.messageHost.peopleQuantity && (
+                            <>
+                              <Box>
+                                <Text fontFamily="bold">How many people?</Text>
+                              </Box>
+                              <Text>{messageParent.messageHost.peopleQuantity}</Text>
+                            </>
+                          )}
+                        </Cell>
+                        <Cell width={6}>
+                          {messageParent.messageHost.reason && (
+                            <>
+                              <Box>
+                                <Text fontFamily="bold">What will you be using the space for?</Text>
+                              </Box>
+                              <Text>{messageParent.messageHost.reason}</Text>
+                            </>
+                          )}
+                        </Cell>
+                      </Grid>
+                    </Box>
+                  )}
+                  {item.content && (
+                    <Box fontSize="12px" mt="20px">
+                      <Grid columns={12}>
+                        <Cell width={12}>
+                          <Box>
+                            <Text fontFamily="bold">Message</Text>
+                          </Box>
+                          <Text>{item.content}</Text>
+                        </Cell>
+                      </Grid>
+                    </Box>
+                  )}
                 </>
               )}
             </>

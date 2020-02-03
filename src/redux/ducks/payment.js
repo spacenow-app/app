@@ -26,7 +26,10 @@ export const Types = {
   DELETE_CREDIT_CARD_FAILURE: 'DELETE_CREDIT_CARD_FAILURE',
   DOING_PAYMENT_REQUEST: 'DOING_PAYMENT_REQUEST',
   DOING_PAYMENT_SUCCESS: 'DOING_PAYMENT_SUCCESS',
-  DOING_PAYMENT_FAILURE: 'DOING_PAYMENT_FAILURE'
+  DOING_PAYMENT_FAILURE: 'DOING_PAYMENT_FAILURE',
+  UPDATE_DEFAULT_CARD_REQUEST: 'UPDATE_DEFAULT_CARD_REQUEST',
+  UPDATE_DEFAULT_CARD_SUCCESS: 'UPDATE_DEFAULT_CARD_SUCCESS',
+  UPDATE_DEFAULT_CARD_ERROR: 'UPDATE_DEFAULT_CARD_ERROR'
 }
 
 // Initial State
@@ -44,10 +47,12 @@ const initialState = {
     isLoading: false,
     isCreating: false
   },
+  defaultCard: null,
   pay: {
     isLoading: false,
     bookingState: null
-  }
+  },
+  newCard: {}
 }
 
 // GraphQL
@@ -153,6 +158,7 @@ const queryGetCards = gql`
   query getCards {
     getPaymentCards {
       id
+      default_source
       sources {
         data {
           id
@@ -183,6 +189,10 @@ const mutationCreateCard = gql`
           country
         }
       }
+      lastCardCreated {
+        id
+        name
+      }
     }
   }
 `
@@ -212,6 +222,26 @@ const mutationDoPayment = gql`
       status
       bookingId
       bookingState
+    }
+  }
+`
+
+const mutationDefaultCard = gql`
+  mutation updateDefaultCard($cardId: String!) {
+    updateDefaultCard(cardId: $cardId) {
+      id
+      default_source
+      sources {
+        data {
+          id
+          name
+          last4
+          exp_month
+          exp_year
+          brand
+          country
+        }
+      }
     }
   }
 `
@@ -296,7 +326,8 @@ export default function reducer(state = initialState, action) {
           array: action.payload.sources.data,
           id: action.payload.id,
           isLoading: false
-        }
+        },
+        defaultCard: action.payload.default_source
       }
     }
     case Types.CREATE_CREDIT_CARD_REQUEST: {
@@ -315,7 +346,8 @@ export default function reducer(state = initialState, action) {
           ...state.cards,
           isCreating: false,
           array: action.payload.sources.data
-        }
+        },
+        newCard: action.payload.lastCardCreated
       }
     }
     case Types.CREATE_CREDIT_CARD_FAILURE: {
@@ -372,7 +404,8 @@ export default function reducer(state = initialState, action) {
           ...state.pay,
           bookingState: action.payload.bookingState,
           isLoading: false
-        }
+        },
+        newCard: {}
       }
     }
     case Types.DOING_PAYMENT_FAILURE: {
@@ -382,6 +415,38 @@ export default function reducer(state = initialState, action) {
           ...state.pay,
           isLoading: false
         }
+      }
+    }
+    case Types.UPDATE_DEFAULT_CARD_REQUEST: {
+      return {
+        ...state,
+        cards: {
+          ...state.cards
+          // isLoading: true
+        },
+        defaultCard: state.defaultCard
+      }
+    }
+    case Types.UPDATE_DEFAULT_CARD_SUCCESS: {
+      return {
+        ...state,
+        cards: {
+          ...state.cards,
+          array: action.payload.sources.data,
+          id: action.payload.id
+          // isLoading: false
+        },
+        defaultCard: action.payload.default_source
+      }
+    }
+    case Types.UPDATE_DEFAULT_CARD_ERROR: {
+      return {
+        ...state,
+        cards: {
+          ...state.cards
+          // isLoading: true
+        },
+        defaultCard: state.defaultCard
       }
     }
     default:
@@ -481,6 +546,7 @@ export const createUserCard = card => async dispatch => {
   try {
     const { data } = await getClientWithAuth(dispatch).mutate({ mutation: mutationCreateCard, variables: newCard })
     dispatch({ type: Types.CREATE_CREDIT_CARD_SUCCESS, payload: data.createPaymentCard })
+    // return data.createPaymentCard.lastCardCreated
   } catch (err) {
     toast.error(`${errToMsg(err)}`)
     dispatch({ type: Types.CREATE_CREDIT_CARD_FAILURE, payload: errToMsg(err) })
@@ -509,10 +575,25 @@ export const pay = (cardId, bookingId, history) => async dispatch => {
       variables: { cardId, bookingId }
     })
     toast.success('Paid')
+
     dispatch({ type: Types.DOING_PAYMENT_SUCCESS, payload: data.createPayment })
     history.push(`/itinerary/${bookingId}`)
   } catch (err) {
     toast.error(`${errToMsg(err)}`)
     dispatch({ type: Types.DOING_PAYMENT_FAILURE, payload: errToMsg(err) })
+  }
+}
+
+export const onUpdateDefaultCard = cardId => async dispatch => {
+  dispatch({ type: Types.UPDATE_DEFAULT_CARD_REQUEST })
+  try {
+    const { data } = await getClientWithAuth(dispatch).mutate({
+      mutation: mutationDefaultCard,
+      variables: { cardId }
+    })
+    dispatch({ type: Types.UPDATE_DEFAULT_CARD_SUCCESS, payload: data.updateDefaultCard })
+  } catch (err) {
+    toast.error(`${errToMsg(err)}`)
+    dispatch({ type: Types.UPDATE_DEFAULT_CARD_ERROR, payload: errToMsg(err) })
   }
 }

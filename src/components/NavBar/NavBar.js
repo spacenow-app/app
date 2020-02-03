@@ -5,7 +5,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import { Link, NavLink } from 'react-router-dom'
 import styled from 'styled-components'
 import { Navbar, Nav, NavDropdown } from 'react-bootstrap'
-import { Avatar, Box, AutoComplete, Button, Text } from 'components'
+import { Avatar, Box, AutoComplete, Text } from 'components'
 import { logout } from 'redux/ducks/auth'
 
 import { config } from 'variables'
@@ -91,12 +91,12 @@ const SearchBar = styled.div`
   }
 `
 
-const NavBar = ({ history, shownSearch }) => {
+const NavBar = ({ history, shownSearch, ...props }) => {
   const dispatch = useDispatch()
   const { user } = useSelector(state => state.account.get)
   const { isAuthenticated } = useSelector(state => state.auth)
   const [address, setAddress] = useState('')
-  const [latLng, setLatLng] = useState({})
+  const [, setLatLng] = useState({})
 
   const _handlerGoToLegancy = (page = false) => {
     window.location.href = `${config.static}/${page || ''}`
@@ -109,12 +109,13 @@ const NavBar = ({ history, shownSearch }) => {
 
   const _onSelectedAddess = obj => {
     const { position, address: objAddress } = obj
-    if (position) {
+
+    if (position)
       setLatLng(position)
-    }
-    if (objAddress) {
+    if (objAddress)
       setAddress(objAddress)
-    }
+
+    _onSearch(position.lat, position.lng, objAddress)
   }
 
   const _reset = () => {
@@ -122,15 +123,15 @@ const NavBar = ({ history, shownSearch }) => {
     setAddress('')
   }
 
-  const _onSearch = () => {
+  const _onSearch = (lat, lng, addr) => {
     history.push({
       pathname: '/search',
-      search: `?lat=${latLng.lat}&lng=${latLng.lng}&location=${address}`
+      search: `?lat=${lat}&lng=${lng}&location=${addr}&page=1`
     })
   }
 
   return (
-    <Navbar expand="lg">
+    <Navbar {...props}>
       <Link to="#" onClick={() => _handlerGoToLegancy()}>
         <Navbar.Brand>
           <img alt="" src={logo} width={200} className="d-inline-block align-top" />
@@ -147,16 +148,16 @@ const NavBar = ({ history, shownSearch }) => {
             onChangeAddress={setAddress}
             onHandleError={_onHandleError}
             onSelectedAddess={_onSelectedAddess}
-            disabled={latLng && (latLng.lat || latLng.lng)}
-            closeButton={latLng && (latLng.lat || latLng.lng)}
+            // disabled={latLng && (latLng.lat || latLng.lng)}
+            // closeButton={latLng && (latLng.lat || latLng.lng)}
             onClickCloseButton={_reset}
             size="sm"
             placeholder="Ie. Sydney, AU"
             label={null}
           />
-          <Button size="sm" onClick={_onSearch}>
+          {/* <Button size="sm" onClick={_onSearch}>
             Search
-          </Button>
+          </Button> */}
         </SearchBar>
       )}
       <Navbar.Collapse className="justify-content-end" id="top-navbar-nav">
@@ -183,34 +184,34 @@ const NavBar = ({ history, shownSearch }) => {
               <NavLinkStyled to="/auth/signup">Sign Up</NavLinkStyled>
             </>
           ) : (
-            <>
-              <Box display={{ _: 'block', small: 'none' }}>
-                <NavLinkStyled to="/account/profile">Profile</NavLinkStyled>
-                <NavLinkStyled to="/account/listing">Dashboard</NavLinkStyled>
-                <NavLinkStyled to="#" onClick={_handlerLogout}>
-                  Logout
+              <>
+                <Box display={{ _: 'block', small: 'none' }}>
+                  <NavLinkStyled to="/account/profile">Profile</NavLinkStyled>
+                  <NavLinkStyled to="/account/listing">Dashboard</NavLinkStyled>
+                  <NavLinkStyled to="#" onClick={_handlerLogout}>
+                    Logout
                 </NavLinkStyled>
-              </Box>
-              <NavDropdownStyled
-                alignRight
-                title={
-                  <Box display="grid" gridTemplateColumns="auto auto" gridColumnGap="10px" color="quartenary">
-                    <span style={{ alignSelf: 'center' }}>{user.profile.firstName || 'User Profile'}</span>
-                    <Avatar style={{ width: '30px', height: '30px' }} image={user.profile.picture} />
-                  </Box>
-                }
-                id="basic-nav-dropdown"
-              >
-                <DropdownItemStyled to="/account/profile">Profile</DropdownItemStyled>
-                <NavDropdown.Divider />
-                <DropdownItemStyled to="/account/listing">Dashboard</DropdownItemStyled>
-                <NavDropdown.Divider />
-                <DropdownItemStyled to="#" onClick={_handlerLogout}>
-                  Logout
+                </Box>
+                <NavDropdownStyled
+                  alignRight
+                  title={
+                    <Box display="grid" gridTemplateColumns="auto auto" gridColumnGap="10px" color="quartenary">
+                      <span style={{ alignSelf: 'center' }}>{user.profile.firstName || 'User Profile'}</span>
+                      <Avatar style={{ width: '30px', height: '30px' }} image={user.profile.picture} />
+                    </Box>
+                  }
+                  id="basic-nav-dropdown"
+                >
+                  <DropdownItemStyled to="/account/profile">Profile</DropdownItemStyled>
+                  <NavDropdown.Divider />
+                  <DropdownItemStyled to="/account/listing">Dashboard</DropdownItemStyled>
+                  <NavDropdown.Divider />
+                  <DropdownItemStyled to="#" onClick={_handlerLogout}>
+                    Logout
                 </DropdownItemStyled>
-              </NavDropdownStyled>
-            </>
-          )}
+                </NavDropdownStyled>
+              </>
+            )}
         </NavStyled>
       </Navbar.Collapse>
     </Navbar>

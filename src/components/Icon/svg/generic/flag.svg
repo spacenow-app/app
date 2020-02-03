@@ -1,6 +1,6 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="8.293" height="10.466" viewBox="0 0 8.293 10.466">
-<defs>
-<style>
+  <defs>
+    <style>
 .flag-akjad,.flag-baud{
 fill:none;stroke:#172439;stroke-linecap:round;
 }
@@ -10,6 +10,12 @@ stroke-miterlimit:10;
 .flag-baud{
 stroke-linejoin:round;
 }
-</style>
-</defs
-><g><g transform="translate(0 0)"><line class="flag-akjad" y1="8.028" transform="translate(0 0)"/><path class="flag-baud" d="M0,.294c1.847,1.015,3.693-1.017,5.54,0V4.529C3.7,3.518,1.869,5.517.034,4.546" transform="translate(0.404 0.09)"/></g></g></svg>
+    </style>
+  </defs>
+  <g>
+    <g transform="translate(0 0)">
+      <line class="flag-akjad" y1="8.028" transform="translate(0 0)"/>
+      <path class="flag-baud" d="M0,.294c1.847,1.015,3.693-1.017,5.54,0V4.529C3.7,3.518,1.869,5.517.034,4.546" transform="translate(0.404 0.09)"/>
+    </g>
+  </g>
+</svg>
