@@ -58,6 +58,8 @@ import { ReactComponent as Rating } from './svg/generic/rating.svg'
 import { ReactComponent as Resume } from './svg/generic/resume.svg'
 import { ReactComponent as CheckMark } from './svg/generic/check-mark.svg'
 import { ReactComponent as Search } from './svg/generic/search.svg'
+import { ReactComponent as Clock } from './svg/generic/clock.svg'
+import { ReactComponent as PinBGWhite } from './svg/generic/pin-bgwhite.svg'
 
 // Access Type
 import { ReactComponent as AccessTypeKeys } from './svg/access-type/access_type_keys.svg'
@@ -322,7 +324,9 @@ const Icons = {
   rating: <Rating />,
   resume: <Resume />,
   'check-mark': <CheckMark />,
-  search: <Search />
+  search: <Search />,
+  'clock-bgwhite': <Clock />,
+  'pin-bgwhite': <PinBGWhite />
 }
 
 const Icon = props => {
