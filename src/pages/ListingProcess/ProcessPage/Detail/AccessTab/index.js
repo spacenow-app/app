@@ -1,6 +1,6 @@
 import React from 'react'
 import styled from 'styled-components'
-import { Title, StepButtons, Select, Box, Input, Icon, Text, Grid, Cell, Checkbox } from 'components'
+import { Title, StepButtons, Select, Grid, Cell } from 'components'
 
 const WrapperStyled = styled.div`
   display: grid;

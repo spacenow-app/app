@@ -12,7 +12,7 @@ const StepPage = props => {
   return (
     <Wrapper my="40px">
       <Helmet title="Listing Intro - Spacenow" />
-      <ProgressBar percent="5" />
+      <ProgressBar percent="0" />
       <Title
         type="h3"
         title="Barrett, tell us about your space"
@@ -74,13 +74,13 @@ const list = [
   {
     title: '2. The basics',
     subtitle: 'Kind of property and intended us',
-    checked: true,
+    checked: false,
     path: '/listing-process/details'
   },
   {
     title: '3. The details',
     subtitle: 'Capacity, features, title, description etc.',
-    checked: true,
+    checked: false,
     path: '/listing-process/details'
   },
   { title: '4. Set the scene', subtitle: 'Upload photos and any media', checked: false, path: 'address' },

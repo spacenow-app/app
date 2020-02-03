@@ -7,6 +7,7 @@ import system from './ducks/system'
 import location from './ducks/location'
 import category from './ducks/category'
 import listing from './ducks/listing'
+import listing_process from './ducks/listing-process'
 import photo from './ducks/photo'
 import integration from './ducks/integration'
 import payment from './ducks/payment'
@@ -25,6 +26,7 @@ export default combineReducers({
   location,
   category,
   listing,
+  listing_process,
   photo,
   integration,
   payment,

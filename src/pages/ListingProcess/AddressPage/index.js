@@ -1,11 +1,9 @@
 import React, { useState } from 'react'
-import { useDispatch, useSelector } from 'react-redux'
+import { useSelector } from 'react-redux'
 import Helmet from 'react-helmet'
 import styled from 'styled-components'
 
 import { Wrapper, Title, StepButtons, Input, Map, AutoComplete, ProgressBar } from 'components'
-
-import * as actions from 'redux/ducks/location'
 
 const GroupInput = styled.div`
   display: grid;
@@ -20,7 +18,6 @@ const GroupInput = styled.div`
 `
 
 const AddressPage = props => {
-  const dispatch = useDispatch()
   const { isLoading, error } = useSelector(state => state.location)
   const [address, setAddress] = useState('')
   const [unit, setUnit] = useState('')

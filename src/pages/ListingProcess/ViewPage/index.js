@@ -1,7 +1,6 @@
 /* eslint-disable eqeqeq */
 import React, { useEffect, useState, createRef } from 'react'
 import PropTypes from 'prop-types'
-import Helmet from 'react-helmet'
 import { useSelector, useDispatch } from 'react-redux'
 import styled from 'styled-components'
 import _ from 'lodash'
@@ -34,7 +33,6 @@ import {
   StarRatingComponent,
   Pagination,
   Text,
-  Avatar,
   Image
 } from 'components'
 
@@ -50,26 +48,17 @@ import {
 
 import { onSearch } from 'redux/ducks/search'
 
-import { onCreateBooking, onGetPendingBooking, onGetHourlyAvailability } from 'redux/ducks/booking'
+import { onCreateBooking, onGetPendingBooking } from 'redux/ducks/booking'
 
 import { openModal, TypesModal } from 'redux/ducks/modal'
 
 import { sendMail } from 'redux/ducks/mail'
 
-import { onCreateMessage } from 'redux/ducks/message'
-
-// import GraphCancelattionImage from 'pages/Listing/SpaceDetailsPage/CancellationTab/graph_cancellation.png'
 import { onGetPublicReviews } from 'redux/ducks/reviews'
 
 import config from 'variables/config'
 
-// import WeeklyBooking from './WeeklyBooking'
 import DailyBooking from './DailyBooking'
-// import MonthlyBooking from './MonthlyBooking'
-// import PendingBooking from './PenidngBooking'
-// import HourlyBooking from './HourlyBooking'
-// import GenericForm from './GenericForm'
-// import RequestForm from './RequestForm'
 
 const GridStyled = styled(Grid)`
   @media only screen and (max-width: 991px) {
@@ -148,34 +137,6 @@ const ContainerPagination = styled.div`
   justify-content: center;
 `
 
-const BoxDesktop = styled(Box)`
-  @media screen and (max-width: 600px) {
-    display: none;
-  }
-`
-
-const ButtonStyled = styled(Button)`
-  @media screen and (max-width: 600px) {
-    margin-top: 20px;
-    width: 100% !important;
-  }
-`
-
-const TextNameHost = styled.span`
-  font-family: Montserrat-Bold;
-  font-size: 18px;
-  line-height: 28px;
-  display: block;
-  color: #1c3942;
-  margin-left: 20px;
-  width: 200px;
-`
-
-const CellGrid = styled(Cell)`
-  display: grid;
-  align-items: center;
-`
-
 const VideoOverlay = styled.div`
   position: absolute;
   top: 0px;
@@ -235,10 +196,10 @@ const ViewPage = ({ match, location, history, ...props }) => {
   const [date, setDate] = useState('')
   const [period, setPeriod] = useState(1)
   const [imageHeight, setImageHeight] = useState(500)
-  const [startTime, setStartTime] = useState('08:00')
-  const [endTime, setEndTime] = useState('09:00')
+  const [startTime] = useState('08:00')
+  const [endTime] = useState('09:00')
   const [message, setMessage] = useState('')
-  const [hourlyError, setHourlyError] = useState('')
+  const [hourlyError] = useState('')
   const [focusInput, setFocusInput] = useState(false)
   const [isValid, setIsValid] = useState(true)
   const [showPlay, setShowPlay] = useState(true)
@@ -298,12 +259,6 @@ const ViewPage = ({ match, location, history, ...props }) => {
     const convertedAddress = `${address1 ? `${address1}, ` : ''} ${city ? `${city}, ` : ''} ${
       zipcode ? `${zipcode}, ` : ''
     } ${state ? `${state}, ` : ''} ${country ? `${country}` : ''}`
-    return convertedAddress.replace(/\0.*$/g, '')
-  }
-
-  const _getSuburb = address => {
-    const { city = '' } = address
-    const convertedAddress = `${city ? `${city}` : ''}`
     return convertedAddress.replace(/\0.*$/g, '')
   }
 
@@ -440,17 +395,9 @@ const ViewPage = ({ match, location, history, ...props }) => {
     setFocusInput(false)
   }
 
-  const _onDateChange = value => {
-    setDate(value)
-  }
-
   const _removeDate = value => {
     const newArray = _.filter(datesSelected, dateFromArray => !isSameDay(new Date(dateFromArray), value))
     setDatesSelected(newArray)
-  }
-
-  const _handleChangePeriod = e => {
-    setPeriod(Number(e.target.value))
   }
 
   const _returnArrayAvailability = accessDays => {
@@ -466,46 +413,6 @@ const ViewPage = ({ match, location, history, ...props }) => {
   }
 
   const _renderContentCard = (bookingPeriod, bookingType) => {
-    // if (listing.user.provider === 'generic') {
-    //   return <GenericForm {...props} listing={listing} dispatch={dispatch} />
-    // }
-    // if (pendingBooking && pendingBooking.items && pendingBooking.items.length > 0 && bookingType !== 'poa') {
-    //   return (
-    //     <PendingBooking
-    //       booking={pendingBooking.items[0]}
-    //       bookingType={bookingType}
-    //       listing={listing.listingData}
-    //       dispatch={dispatch}
-    //       history={history}
-    //     />
-    //   )
-    // }
-    // if (bookingPeriod === 'hourly' && bookingType !== 'poa') {
-    //   return (
-    //     <>
-    //       <HourlyBooking
-    //         inputFocus={focusInput}
-    //         date={date}
-    //         startTime={startTime}
-    //         endTime={endTime}
-    //         hoursQuantity={period}
-    //         listingExceptionDates={availabilities}
-    //         listingData={listing.listingData}
-    //         onDateChange={_onDateChange}
-    //         onDayPickerHide={_onDayPickerHide}
-    //         closingDays={_returnArrayAvailability(listing.accessDays)}
-    //         onSetStartTime={_onSetStartTime}
-    //         onSetEndTime={_onSetEndTime}
-    //         onCalcHourlyPeriod={_calcHourlyPeriod}
-    //       />
-    //       {hourlyError && (
-    //         <Box color="error" ml="23px">
-    //           {hourlyError}
-    //         </Box>
-    //       )}
-    //     </>
-    //   )
-    // }
     if (bookingPeriod === 'daily' && bookingType !== 'poa') {
       return (
         <React.Fragment>
@@ -531,38 +438,7 @@ const ViewPage = ({ match, location, history, ...props }) => {
         </React.Fragment>
       )
     }
-    // if (bookingPeriod === 'weekly' && bookingType !== 'poa') {
-    //   if (period < listing.listingData.minTerm) setPeriod(listing.listingData.minTerm)
-    //   return (
-    //     <WeeklyBooking
-    //       inputFocus={focusInput}
-    //       period={period}
-    //       handleChangePeriod={_handleChangePeriod}
-    //       date={date}
-    //       onDateChange={_onDateChange}
-    //       onDayPickerHide={_onDayPickerHide}
-    //       listingExceptionDates={availabilities}
-    //       closingDays={_returnArrayAvailability(listing.accessDays)}
-    //       listingData={listing.listingData}
-    //     />
-    //   )
-    // }
-    // if (bookingPeriod === 'monthly' && bookingType !== 'poa') {
-    //   if (period < listing.listingData.minTerm) setPeriod(listing.listingData.minTerm)
-    //   return (
-    //     <MonthlyBooking
-    //       inputFocus={focusInput}
-    //       period={period}
-    //       handleChangePeriod={_handleChangePeriod}
-    //       date={date}
-    //       onDateChange={_onDateChange}
-    //       onDayPickerHide={_onDayPickerHide}
-    //       listingExceptionDates={availabilities}
-    //       closingDays={_returnArrayAvailability(listing.accessDays)}
-    //       listingData={listing.listingData}
-    //     />
-    //   )
-    // }
+
     return null
   }
 
@@ -676,60 +552,6 @@ const ViewPage = ({ match, location, history, ...props }) => {
     }
     dispatch(openModal(TypesModal.MODAL_TYPE_REPORT_LISTING, options))
   }
-
-  const _contactHost = () => {
-    // const options = {
-    //   onConfirm: _sendMessage
-    // }
-    // dispatch(openModal(TypesModal.MODAL_TYPE_SEND_MESSAGE, options))
-    if (!isAuthenticated) {
-      history.push(`/auth/signin`, {
-        from: {
-          ...location
-        }
-      })
-      return
-    }
-    const options = {
-      hostName: `${listing.user.profile.firstName} ${listing.user.profile.lastName}`,
-      hostPhoto: listing.user.profile.picture,
-      capacity: objectSpecifications.capacity ? objectSpecifications.capacity.value : 10,
-      listing,
-      availabilities,
-      _returnArrayAvailability,
-      onConfirm: _sendMessage
-    }
-    dispatch(openModal(TypesModal.MODAL_TYPE_CONTACT_HOST, options))
-  }
-
-  const _sendMessage = content => {
-    const values = {
-      ...content,
-      listingId: listing.id,
-      guestId: user.id,
-      hostId: listing.userId,
-      bookingPeriod: listing.bookingPeriod
-    }
-    dispatch(onCreateMessage(values))
-  }
-
-  const _calcHourlyPeriod = () => {
-    if (date) {
-      onGetHourlyAvailability(listing.id, date, startTime, endTime)
-        .then(o => {
-          setPeriod(o.hours)
-          setHourlyError('')
-          if (!o.isAvailable) {
-            setHourlyError(`Not available in this period`)
-          }
-        })
-        .catch(err => setHourlyError(err))
-    }
-  }
-
-  const _onSetStartTime = value => setStartTime(value)
-
-  const _onSetEndTime = value => setEndTime(value)
 
   const _handleMessageChange = e => {
     setMessage(e.target.value)
@@ -950,46 +772,6 @@ const ViewPage = ({ match, location, history, ...props }) => {
                 <Button outline>View floor plan</Button>
               </Box>
 
-              {/* {listing.user.provider !== 'external' && (
-                <>
-                  <Title type="h5" title="Contact Host" />
-                  <Grid columns={12}>
-                    <Cell width={1} style={{ marginRight: '30px' }}>
-                      <Avatar small image={listing.user.profile.picture} />
-                    </Cell>
-                    <CellGrid width={11}>
-                      <TextNameHost>{`${listing.user.profile.firstName} ${listing.user.profile.lastName}`}</TextNameHost>
-                    </CellGrid>
-                  </Grid>
-
-                  <BoxDesktop my="20px">
-                    <Grid columns={12}>
-                      <Cell width="3">
-                        <Box my="10px">Languages: </Box>
-                        <Box my="10px">Response rate: </Box>
-                        <Box my="10px">Response time: </Box>
-                      </Cell>
-                      <Cell width="3">
-                        <Box my="10px">Engilsh</Box>
-                        <Box my="10px">90%</Box>
-                        <Box my="10px">Within 2 hours</Box>
-                      </Cell>
-                    </Grid>
-                  </BoxDesktop>
-
-                  <ButtonStyled onClick={_contactHost} outline size="sm">
-                    Contact host
-                  </ButtonStyled>
-
-                  <BoxDesktop borderTop="1px solid #CBCBCB" borderBottom="1px solid #CBCBCB" my="20px" p="12px">
-                    <Text>
-                      Always communicate through Spacenow to protect your payment. You should never transfer money or
-                      communicate outside of the Spacenow website or app.
-                    </Text>
-                  </BoxDesktop>
-                </>
-              )} */}
-
               {videoInput.name ? (
                 <>
                   <Box zIndex="1">
@@ -1099,7 +881,6 @@ const ViewPage = ({ match, location, history, ...props }) => {
                   <Title type="h5" title="Space Rules" />
                   <Grid columns="repeat(auto-fit, minmax(200px, auto))" rowGap="20px">
                     {listing.rules.map((item, index) => {
-                      // return <Checkbox disabled key={item.id} label={item.settingsData.itemName} name="rules" checked />
                       return <Text key={index}>{item.settingsData.itemName} </Text>
                     })}
                   </Grid>
@@ -1159,12 +940,7 @@ const ViewPage = ({ match, location, history, ...props }) => {
                   {(pendingBooking ? pendingBooking && pendingBooking.count == 0 : true) && (
                     <>
                       {listing.user.provider !== 'generic' && listing.user.provider !== 'external' && (
-                        <Button
-                          onClick={e => _onSubmitBooking(e)}
-                          isLoading={isLoadingOnCreateReservation}
-                          // disabled={_isPeriodValid(listing.bookingPeriod) || (user && user.id == listing.user.id)}
-                          fluid
-                        >
+                        <Button onClick={e => _onSubmitBooking(e)} isLoading={isLoadingOnCreateReservation} fluid>
                           {listing.listingData.bookingType === 'request' ? 'Booking Request' : 'Reserve'}
                         </Button>
                       )}
@@ -1222,17 +998,6 @@ const ViewPage = ({ match, location, history, ...props }) => {
           <Title type="h5" title="Location" />
           <Map position={{ lat: Number(listing.location.lat), lng: Number(listing.location.lng) }} />
         </Box>
-
-        {/* <Box mt="45px">
-          <Title type="h5" title="Cancellation Policy" />
-          <Text fontFamily="">Flexible</Text><br/>
-          <Text>
-            Guests may cancel their booking up until 7 days before the start time and will receive a full refund
-            (Including all Fees) of their booking price. Guests may cancel their booking between 7 days and 14 hours
-            before the start time and receive a 50% refund (excluding Fees) of their booking price. Bookings cancelled
-            less than 24 hours before the start time are not refundable.
-          </Text>
-        </Box> */}
 
         {similarResults.length == 3 && (
           <Box mt="45px">
