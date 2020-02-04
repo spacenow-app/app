@@ -105,9 +105,11 @@ const IntroHostPage = props => {
         <BottomButton>
           <Grid columns={1} style={{ alignItems: 'center' }}>
             <Cell>
-              <Button fluid onClick={() => props.history.push('/listing/intro')} style={{ maxWidth: '360px' }}>
-                Skip the tour and get started
-              </Button>
+              <Link to="/listing/intro">
+                <Button fluid style={{ maxWidth: '360px' }}>
+                  Skip the tour and get started
+                </Button>
+              </Link>
             </Cell>
           </Grid>
         </BottomButton>
