@@ -76,7 +76,7 @@ const Routes = props => {
                 <>
                   {redirectToReferrer && <Redirect to={redirectToReferrer} />}
                   <Container>
-                    <NavBar />
+                    <NavBar expand="lg" />
                   </Container>
                   <Switch>
                     <Route

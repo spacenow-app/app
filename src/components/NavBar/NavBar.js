@@ -85,9 +85,12 @@ const SearchBar = styled.div`
   width: 714px;
   padding: 0 5px;
 
-  @media only screen and (max-width: 600px) {
+  @media only screen and (max-width: 991px) {
+    grid-template-columns: 1fr;
     width: 100%;
     margin-bottom: 10px;
+    padding: 0;
+    margin: 15px 0px;
   }
 `
 

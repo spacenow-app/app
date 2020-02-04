@@ -130,14 +130,12 @@ const getParamOrDefault = (location, param, defaultValue) => {
 }
 
 const cleaningLocation = value => {
-  if (!value)
-    return 'Sydney, AU'
+  if (!value) return 'Sydney, AU'
   return value.replace('+', ' ')
 }
 
 const cleaningCategories = value => {
-  if (!value)
-    return []
+  if (!value) return []
   return value.split(' ')
 }
 
@@ -290,7 +288,7 @@ const SearchPage = ({ history, location }) => {
     return categories.join('+')
   }
 
-  const _navigate = (page) => {
+  const _navigate = page => {
     const urlCategories = _concatCategories(filterCategory)
     const urlLocation = encodeURI(queryLocation)
     const url = `?lat=${queryLat}&lng=${queryLng}&category=${urlCategories}&location=${urlLocation}&page=${page}`
@@ -327,8 +325,7 @@ const SearchPage = ({ history, location }) => {
   }
 
   const _parseCategory = category => {
-    if (!category || category.length <= 0)
-      return 'Showing results '
+    if (!category || category.length <= 0) return 'Showing results '
     // Getting only first category until decide to use RadioButton for Category filter...
     const firstCategory = category[0]
     return capitalize(firstCategory.replace(/([A-Z])/g, ' $1').trim())
@@ -344,11 +341,13 @@ const SearchPage = ({ history, location }) => {
       <Box>
         <NavBar shownSearch history={history} />
         <Line marginTop={0} />
-        <Box display={{ _: 'block', small: 'none' }} mx="20px" mb="20px">
+
+        <Box display={{ _: 'block', small: 'none' }} mb="20px" px="17px">
           <Button fluid size="sm" onClick={() => setShowFilterBar(!showFilterBar)}>
             {showFilterBar ? 'Hide Filters' : 'Show Filters'}
           </Button>
         </Box>
+
         <FilterBar show={showFilterBar}>
           <Manager>
             <Reference>
