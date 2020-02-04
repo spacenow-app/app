@@ -5,6 +5,8 @@ import styled from 'styled-components'
 import { useSelector, useDispatch } from 'react-redux'
 import { Wrapper, Title, StepButtons, Input, Map, AutoComplete, ProgressBar } from 'components'
 
+import { onPutListing } from 'redux/ducks/listing-process'
+
 const GroupInput = styled.div`
   display: grid;
   grid-template-columns: auto 200px;
@@ -22,6 +24,7 @@ const AddressPage = ({ match, ...props }) => {
   const listingId = match.params.id
 
   const { isLoading, error } = useSelector(state => state.location)
+  const { object: steps } = useSelector(state => state.listing_process.steps)
   const [address, setAddress] = useState('')
   const [unit, setUnit] = useState('')
   const [latLng, setLatLng] = useState({})
@@ -50,14 +53,18 @@ const AddressPage = ({ match, ...props }) => {
   }
 
   const _onNext = async () => {
-    // await dispatch(actions.onGetOrCreateLocation(address, unit, props.history))
-    props.history.push(`/listing-process/space/${listingId}/type`)
+    const location = {
+      address,
+      unit
+    }
+    await dispatch(onPutListing({ input: location }))
+    // props.history.push(`/listing-process/space/${listingId}/type`)
   }
 
   return (
     <Wrapper>
       <Helmet title="Listing Location - Spacenow" />
-      <ProgressBar percent="5" />
+      <ProgressBar percent={steps && steps.completed} />
       <Title type="h3" title="Location" />
       <GroupInput>
         <AutoComplete

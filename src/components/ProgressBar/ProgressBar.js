@@ -22,11 +22,11 @@ const ProgressBar = ({ percent, stepNumber, stepName, ...props }) => {
 }
 
 ProgressBar.defaultProps = {
-  percent: '5'
+  percent: 0
 }
 
 ProgressBar.propTypes = {
-  percent: PropTypes.string,
+  percent: PropTypes.number,
   stepNumber: PropTypes.string,
   stepName: PropTypes.string
 }

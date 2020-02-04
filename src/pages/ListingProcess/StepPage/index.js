@@ -21,8 +21,8 @@ const StepPage = ({ match, ...props }) => {
   const dispatch = useDispatch()
   const listingId = match.params.id
 
-  const { object: listing, isLoading: isListingLoading } = useSelector(state => state.listing_process.get)
-  const { object: steps, isLoading: isStepsLoading } = useSelector(state => state.listing_process.steps)
+  const { object: listing } = useSelector(state => state.listing_process.get)
+  const { object: steps } = useSelector(state => state.listing_process.steps)
 
   useEffect(() => {
     if (listingId) {
@@ -48,7 +48,7 @@ const StepPage = ({ match, ...props }) => {
           return (
             <Fragment key={item.id}>
               <CellStyled width={1}>
-                <RadioCheckbox checked={steps && steps[item.id] === "completed" || false} onChange={() => { }} />
+                <RadioCheckbox checked={(steps && steps[item.id] === "completed") || false} onChange={() => { }} />
               </CellStyled>
               <CellStyled width={8}>
                 <Box my="10px" ml="-20px">
@@ -63,13 +63,13 @@ const StepPage = ({ match, ...props }) => {
                 </Box>
               </CellStyled>
               <CellStyled width={3}>
-                {!listingId && (
-                  <Button onClick={() => props.history.push(`/listing-process/address/${listingId}`)} style={{ justifySelf: 'end' }}>
+                {!listingId && listing && (
+                  <Button onClick={() => props.history.push(`/listing-process/address/${listing.id}`)} style={{ justifySelf: 'end' }}>
                     Get started
                   </Button>
                 )}
-                {listingId && (
-                  <Link to={`${item.path}/${listingId}`} style={{ justifySelf: 'end' }}>
+                {listingId && listing && (
+                  <Link to={`${item.path}/${listing.id}`} style={{ justifySelf: 'end' }}>
                     Edit
                   </Link>
                 )}

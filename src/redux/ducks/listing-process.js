@@ -16,7 +16,10 @@ export const Types = {
   GET_LISTING_FAILURE: 'GET_LISTING_FAILURE',
   POST_LISTING_REQUEST: 'POST_LISTING_REQUEST',
   POST_LISTING_SUCCESS: 'POST_LISTING_SUCCESS',
-  POST_LISTING_FAILURE: 'POST_LISTING_FAILURE'
+  POST_LISTING_FAILURE: 'POST_LISTING_FAILURE',
+  PUT_LISTING_REQUEST: 'PUT_LISTING_REQUEST',
+  PUT_LISTING_SUCCESS: 'PUT_LISTING_SUCCESS',
+  PUT_LISTING_FAILURE: 'PUT_LISTING_FAILURE'
 }
 
 const initialState = {
@@ -84,6 +87,13 @@ const mutationPostV2Listing = gql`
     }
   }
 `
+const mutationPutV2Listing = gql`
+  mutation putV2Listing($input: InputV2Listing) {
+    putV2Listing(input: $input) {
+      ${listingFields}
+    }
+  }
+`
 
 export default function reducer(state = initialState, action) {
   switch (action.type) {
@@ -147,7 +157,8 @@ export default function reducer(state = initialState, action) {
         }
       }
     }
-    case Types.POST_LISTING_REQUEST: {
+    case Types.POST_LISTING_REQUEST:
+    case Types.PUT_LISTING_REQUEST: {
       return {
         ...state,
         get: {
@@ -157,7 +168,8 @@ export default function reducer(state = initialState, action) {
         }
       }
     }
-    case Types.POST_LISTING_SUCCESS: {
+    case Types.POST_LISTING_SUCCESS:
+    case Types.PUT_LISTING_SUCCESS: {
       return {
         ...state,
         get: {
@@ -167,7 +179,8 @@ export default function reducer(state = initialState, action) {
         }
       }
     }
-    case Types.POST_LISTING_FAILURE: {
+    case Types.POST_LISTING_FAILURE:
+    case Types.PUT_LISTING_FAILURE: {
       return {
         ...state,
         get: {
@@ -219,5 +232,18 @@ export const onPostListing = () => async dispatch => {
     dispatch({ type: Types.POST_LISTING_SUCCESS, payload: data.postV2Listing })
   } catch (err) {
     dispatch({ type: Types.POST_LISTING_FAILURE, payload: errToMsg(err) })
+  }
+}
+
+export const onPutListing = (input) => async dispatch => {
+  dispatch({ type: Types.PUT_LISTING_REQUEST })
+  try {
+    const { data } = await getClientWithAuth(dispatch).mutate({
+      mutation: mutationPutV2Listing,
+      variables: input
+    })
+    dispatch({ type: Types.PUT_LISTING_SUCCESS, payload: data.puV2Listing })
+  } catch (err) {
+    dispatch({ type: Types.PUT_LISTING_FAILURE, payload: errToMsg(err) })
   }
 }
