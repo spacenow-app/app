@@ -56,15 +56,15 @@ const Routes = props => {
           <PublicRoute
             {...props}
             path="/auth"
-            handlerCheckAuthentication={() => { }}
+            handlerCheckAuthentication={() => {}}
             isAuthenticated={isAuthenticated}
             component={Authentication}
             redirectToReferrer={redirectToReferrer}
           />
-          <PublicRoute {...props} path="/lp" handlerCheckAuthentication={() => { }} component={LandingPages} />
-          <PublicRoute {...props} path="/space" handlerCheckAuthentication={() => { }} component={Space} />
-          <PublicRoute {...props} path="/search" handlerCheckAuthentication={() => { }} component={SearchPage} />
-          <PublicRoute {...props} path="/intro" handlerCheckAuthentication={() => { }} component={Intro} />
+          <PublicRoute {...props} path="/lp" handlerCheckAuthentication={() => {}} component={LandingPages} />
+          <PublicRoute {...props} path="/space" handlerCheckAuthentication={() => {}} component={Space} />
+          <PublicRoute {...props} path="/search" handlerCheckAuthentication={() => {}} component={SearchPage} />
+          <PublicRoute {...props} path="/intro" handlerCheckAuthentication={() => {}} component={Intro} />
           <Redirect from="/account/dashboard" to="/account/profile" />
           <PrivateRoute
             {...props}
@@ -75,7 +75,9 @@ const Routes = props => {
               return (
                 <>
                   {redirectToReferrer && <Redirect to={redirectToReferrer} />}
-                  <Container><NavBar expand="lg" /></Container>
+                  <Container>
+                    <NavBar />
+                  </Container>
                   <Switch>
                     <Route
                       {...otherProps}
