@@ -103,7 +103,7 @@ const InspectionForm = ({
         listingId: listing.id,
         guestId: user.id,
         hostId: listing.userId,
-        bookingPeriod: listing.bookingPeriod
+        bookingPeriod: 'hourly' // send hourly to store the start time.
       }
       console.log('values', valuesCreate)
       await dispatch(onCreateMessage(valuesCreate))

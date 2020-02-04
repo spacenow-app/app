@@ -38,6 +38,7 @@ const _formatPeriod = (period, bookingType) => {
 }
 
 const MessageDetailCard = ({ item, user, count, index, messageParent, ...props }) => {
+  console.log('item', item)
   return (
     <Grid column={12}>
       {(user.id === item.sent.id && (
@@ -59,7 +60,7 @@ const MessageDetailCard = ({ item, user, count, index, messageParent, ...props }
               </Box>
             </>
           )}
-          {index === count - 1 && (
+          {index === count - 1 && messageParent.messageHost.reason !== 'inspection' && (
             <>
               <Box fontSize="12px">
                 <Box>
@@ -152,6 +153,41 @@ const MessageDetailCard = ({ item, user, count, index, messageParent, ...props }
                       </Grid>
                     </Box>
                   )}
+                </>
+              )}
+            </>
+          )}
+
+          {index === count - 1 && messageParent.messageHost.reason === 'inspection' && (
+            <>
+              <Box fontSize="12px">
+                <Box>
+                  <Text fontFamily="bold">
+                    {`Message from ${item.sent.profile.firstName} ${item.sent.profile.lastName}`}{' '}
+                  </Text>
+                </Box>
+                <Box>
+                  <Text>{format(new Date(item.createdAt), 'dd MMM yyyy hh:mm aaaa')}</Text>
+                </Box>
+              </Box>
+              {messageParent && messageParent.messageHost && (
+                <>
+                  <Box fontSize="12px" mt="20px">
+                    <Grid columns={12}>
+                      <Cell width={6}>
+                        <Box>
+                          <Text fontFamily="bold">Requested time and date</Text>
+                        </Box>
+                        {messageParent.messageHost.bookingPeriod === 'hourly' &&
+                          messageParent.messageHost.reservations.length > 0 && (
+                            <Text>
+                              {format(new Date(messageParent.messageHost.reservations[0]), 'dd MMM yyyy')}{' '}
+                              {messageParent.messageHost.startTime} {' to '} {messageParent.messageHost.endTime}{' '}
+                            </Text>
+                          )}
+                      </Cell>
+                    </Grid>
+                  </Box>
                 </>
               )}
             </>
