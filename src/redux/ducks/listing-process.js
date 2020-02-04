@@ -88,7 +88,7 @@ const mutationPostV2Listing = gql`
   }
 `
 const mutationPutV2Listing = gql`
-  mutation putV2Listing($input: InputV2Listing) {
+  mutation putV2Listing($input: V2InputListing) {
     putV2Listing(input: $input) {
       ${listingFields}
     }
