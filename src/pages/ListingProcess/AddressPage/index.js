@@ -1,15 +1,14 @@
 import React, { useState } from 'react'
-import { useSelector } from 'react-redux'
+import PropTypes from 'prop-types'
 import Helmet from 'react-helmet'
 import styled from 'styled-components'
-
+import { useSelector, useDispatch } from 'react-redux'
 import { Wrapper, Title, StepButtons, Input, Map, AutoComplete, ProgressBar } from 'components'
 
 const GroupInput = styled.div`
   display: grid;
   grid-template-columns: auto 200px;
   grid-gap: 20px;
-  // width: 80%;
 
   @media (max-width: 680px) {
     grid-template-columns: 1fr;
@@ -17,7 +16,11 @@ const GroupInput = styled.div`
   }
 `
 
-const AddressPage = props => {
+const AddressPage = ({ match, ...props }) => {
+
+  const dispatch = useDispatch()
+  const listingId = match.params.id
+
   const { isLoading, error } = useSelector(state => state.location)
   const [address, setAddress] = useState('')
   const [unit, setUnit] = useState('')
@@ -48,8 +51,7 @@ const AddressPage = props => {
 
   const _onNext = async () => {
     // await dispatch(actions.onGetOrCreateLocation(address, unit, props.history))
-    // await dispatch Create listing width location id
-    props.history.push(`/listing-process/space/357/type`)
+    props.history.push(`/listing-process/space/${listingId}/type`)
   }
 
   return (
@@ -74,7 +76,7 @@ const AddressPage = props => {
       {error.message && <div className="text-danger">{error.message}</div>}
       {latLng && latLng.lat && latLng.lng && <Map position={latLng} />}
       <StepButtons
-        prev={{ disabled: false, onClick: () => props.history.replace('/listing-process/step') }}
+        prev={{ disabled: false, onClick: () => props.history.replace(`/listing-process/step/${listingId}`) }}
         next={{
           disabled: !(latLng && (latLng.lat || latLng.lng)) || isLoading,
           onClick: _onNext,
@@ -83,6 +85,11 @@ const AddressPage = props => {
       />
     </Wrapper>
   )
+}
+
+AddressPage.propTypes = {
+  match: PropTypes.instanceOf(Object).isRequired,
+  history: PropTypes.instanceOf(Object).isRequired,
 }
 
 export default AddressPage
