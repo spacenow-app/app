@@ -15,8 +15,11 @@ import {
   Title
 } from 'components'
 import { withFormik } from 'formik'
+import * as Yup from 'yup'
 import { capitalize, toPlural } from 'utils/strings'
 import { format } from 'date-fns'
+
+import { onCreateMessage } from 'redux/ducks/message'
 
 const StepOne = styled(Box)``
 
@@ -48,9 +51,7 @@ const InspectionForm = ({
   onDateChange,
   onDayPickerHide,
   closingDays,
-  handleMessageChange,
   onStartTimeChange,
-  message,
   publicReviews,
   bookingPeriod,
   minTerm,
@@ -58,7 +59,12 @@ const InspectionForm = ({
   startTime,
   hourlySuggestion,
   onCalcHourlyPeriod,
-  location
+  location,
+  listing,
+  user,
+  values,
+  handleChange,
+  dispatch
 }) => {
   const [dayPicker, setDayPicker] = useState('')
   const [stepOne, setStepOne] = useState(true)
@@ -85,9 +91,26 @@ const InspectionForm = ({
     return options
   }
 
-  const _handleSendRequest = () => {
-    if (date) setStepOne(false)
-    else dayPicker.input.focus()
+  const _handleSendRequest = async () => {
+    if (date) {
+      const valuesCreate = {
+        reservations: [date],
+        checkInTime: startTime,
+        content: values.message,
+        reason: 'inspection',
+        hasFlexibleTime: false,
+        period: 0,
+        listingId: listing.id,
+        guestId: user.id,
+        hostId: listing.userId,
+        bookingPeriod: listing.bookingPeriod
+      }
+      console.log('values', valuesCreate)
+      await dispatch(onCreateMessage(valuesCreate))
+      setStepOne(false)
+    } else {
+      dayPicker.input.focus()
+    }
   }
 
   return (
@@ -120,57 +143,54 @@ const InspectionForm = ({
           </Grid>
 
           <Box mt="20px"></Box>
-          <DatePicker
-            ref={el => setDayPicker(el)}
-            value={date}
-            handleDateChange={o => onDateChange(o)}
-            handleDayPickerHide={onDayPickerHide}
-            placeholder="Choose a date"
-            dayPickerProps={{
-              selectedDays: [date],
-              modifiers: {
-                disabled: [
-                  // ...listingExceptionDates.map(o => new Date(o)),
-                  {
-                    daysOfWeek: closingDays
-                  },
-                  {
-                    before: new Date()
-                  }
-                ]
-              }
-            }}
-          />
+          <Grid columns={1} rowGap={'10px'}>
+            <DatePicker
+              ref={el => setDayPicker(el)}
+              value={date}
+              handleDateChange={o => onDateChange(o)}
+              handleDayPickerHide={onDayPickerHide}
+              placeholder="Choose a date"
+              dayPickerProps={{
+                selectedDays: [date],
+                modifiers: {
+                  disabled: [
+                    // ...listingExceptionDates.map(o => new Date(o)),
+                    {
+                      daysOfWeek: closingDays
+                    },
+                    {
+                      before: new Date()
+                    }
+                  ]
+                }
+              }}
+            />
 
-          <Grid columns={1} style={{ marginBottom: '10px' }}>
             <Cell>
               <Select
-                label=" "
                 options={_getOptions(hourlySuggestion && hourlySuggestion.openRange)}
                 handleChange={e => onStartTimeChange(String(e.target.value))}
-                value={startTime}
+                value={startTime || ''}
                 disabled={!hourlySuggestion}
               >
                 {!hourlySuggestion && <option style={{ color: '#777777' }}>select a time</option>}
               </Select>
             </Cell>
+            <TextArea
+              placeholder="Additional questions or requests..."
+              name="message"
+              value={values.message}
+              onChange={handleChange}
+            />
+            <Button fluid onClick={() => _handleSendRequest()}>
+              Request site visit
+            </Button>
+            <Box textAlign="center" lineHeight="1.3">
+              <Text fontSize="11px" color="#172439">
+                The Spacenow team will contact you as soon as the visit has been confirmed with the host.
+              </Text>
+            </Box>
           </Grid>
-
-          <TextArea
-            label=" "
-            placeholder="Additional questions or requests..."
-            name="message"
-            value={message}
-            onChange={handleMessageChange}
-          />
-          <Button fluid onClick={() => _handleSendRequest()}>
-            Request site visit
-          </Button>
-          <Box mt="10px" textAlign="center" lineHeight="1.3">
-            <Text fontSize="11px" color="#172439">
-              The Spacenow team will contact you as soon as the visit has been confirmed with the host.
-            </Text>
-          </Box>
         </StepOne>
       )}
       {!stepOne && (
@@ -201,6 +221,13 @@ const InspectionForm = ({
 
 const formik = {
   displayName: 'Inspection_Form',
+  mapPropsToValues: props => ({
+    message: ''
+  }),
+  mapValuesToPayload: x => x,
+  validationSchema: Yup.object().shape({
+    message: Yup.string()
+  }),
   enableReinitialize: true,
   isInitialValid: false
 }
