@@ -2,7 +2,7 @@ import React, { Component } from 'react'
 import styled from 'styled-components'
 import Helmet from 'react-helmet'
 import { Wrapper, Card, Title, Text } from 'components'
-import { config } from 'variables'
+// import { config } from 'variables'
 // import FormContactUs from './FormContactUs'
 
 const WrapperStyled = styled.div`
