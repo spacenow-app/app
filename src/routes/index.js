@@ -64,7 +64,7 @@ const Routes = props => {
           <PublicRoute {...props} path="/lp" handlerCheckAuthentication={() => {}} component={LandingPages} />
           <PublicRoute {...props} path="/space" handlerCheckAuthentication={() => {}} component={Space} />
           <PublicRoute {...props} path="/search" handlerCheckAuthentication={() => {}} component={SearchPage} />
-          <PublicRoute {...props} path="/intro" handlerCheckAuthentication={() => {}} component={Intro} />
+          <PublicRoute {...props} path="/welcome" handlerCheckAuthentication={() => {}} component={Intro} />
           <Redirect from="/account/dashboard" to="/account/profile" />
           <PrivateRoute
             {...props}
