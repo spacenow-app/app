@@ -129,7 +129,9 @@ class ComponentToPrint extends React.Component {
                   type="h6"
                   title="Address"
                   noMargin
-                  subtitle={`${listing.location.address1}, ${listing.location.city}, ${listing.location.zipcode}, ${listing.location.state}, ${listing.location.country}`}
+                  subtitle={`${listing.location.address1 ? `${listing.location.address1},` : ''} ${
+                    listing.location.city
+                  }, ${listing.location.zipcode}, ${listing.location.state}, ${listing.location.country}`}
                   subTitleMargin={5}
                   subTitleSize={18}
                 />
