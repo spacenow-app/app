@@ -1,41 +1,17 @@
 import React from 'react'
-import styled from 'styled-components'
-import { Title, StepButtons, Select, Box, Checkbox, Input } from 'components'
+import { Wrapper, Box, Title, StepButtons, Select, Checkbox, Input } from 'components'
 
-const WrapperStyled = styled.div`
-  display: grid;
-  grid-row-gap: 20px;
-
-  @media (max-width: 680px) {
-    grid-row-gap: 15px;
-  }
-`
-
-const SectionStyled = styled.div``
-
-const CheckboxGroup = styled.div`
-  display: grid;
-  grid-template-columns: 1fr 1fr 1fr;
-  grid-gap: 40px;
-  @media (max-width: 680px) {
-    grid-template-columns: 1fr 1fr;
-    grid-gap: 20px;
-  }
-`
-
-const SpecTab = props => {
+const SpecificationPage = ({ listing, ...props }) => {
   return (
-    <WrapperStyled>
-      <SectionStyled>
-        <Title type="h3" title="Capacity and seating" />
-        <CheckboxGroup>
-          <Box mb="40px">
+    <Wrapper>
+      <Box display="grid" gridGap="30px">
+        <Box>
+          <Title type="h3" title="Capacity and seating" />
+          <Box>
             <Input label="Maximum number of guests." placeholder="Ie. 200" />
           </Box>
-        </CheckboxGroup>
-      </SectionStyled>
-      <SectionStyled>
-        <CheckboxGroup>
+        </Box>
+        <Box display="grid" gridTemplateColumns={{ _: 'auto', medium: 'auto auto auto' }} gridGap="30px">
           <Box>
             <Checkbox
               key={1}
@@ -115,29 +91,30 @@ const SpecTab = props => {
               <Input placeholder="Ie. 180" />
             </Box>
           </Box>
-        </CheckboxGroup>
-      </SectionStyled>
-      <SectionStyled>
-        <Title type="h3" title="Alcohol licence" />
-        <CheckboxGroup>
+        </Box>
+        <Box>
+          <Title type="h3" title="Alcohol licence" />
           <Select name="alcohol">
             <option value="">Please select</option>
             <option value="">Licenced</option>
             <option value="">No licenced</option>
             <option value="">BYO</option>
           </Select>
-        </CheckboxGroup>
-      </SectionStyled>
-      <StepButtons
-        prev={{ disabled: false, onClick: () => props.history.replace('/listing-process/space/357/category') }}
-        next={{
-          // disabled: !location,
-          onClick: () => props.history.replace('/listing-process/space/357/feature')
-          // isLoading: isLoadingCreating
-        }}
-      />
-    </WrapperStyled>
+        </Box>
+        <StepButtons
+          prev={{
+            disabled: false,
+            onClick: () => props.history.replace(`/listing-process/setup-process/${listing.id}/basics`)
+          }}
+          next={{
+            // disabled: !location,
+            onClick: () => props.history.replace('feature')
+            // isLoading: isLoadingCreating
+          }}
+        />
+      </Box>
+    </Wrapper>
   )
 }
 
-export default SpecTab
+export default SpecificationPage

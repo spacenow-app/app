@@ -195,7 +195,7 @@ export default function reducer(state = initialState, action) {
   }
 }
 
-export const onGetListingSteps = (id) => async dispatch => {
+export const onGetListingSteps = id => async dispatch => {
   dispatch({ type: Types.GET_LISTING_STEPS_REQUEST })
   try {
     const { data } = await getClientWithAuth(dispatch).query({
@@ -209,7 +209,7 @@ export const onGetListingSteps = (id) => async dispatch => {
   }
 }
 
-export const onGetListing = (id) => async dispatch => {
+export const onGetListing = id => async dispatch => {
   dispatch({ type: Types.GET_LISTING_REQUEST })
   try {
     const { data } = await getClientWithAuth(dispatch).query({
@@ -235,12 +235,12 @@ export const onPostListing = () => async dispatch => {
   }
 }
 
-export const onPutListing = (input) => async dispatch => {
+export const onPutListing = input => async dispatch => {
   dispatch({ type: Types.PUT_LISTING_REQUEST })
   try {
     const { data } = await getClientWithAuth(dispatch).mutate({
       mutation: mutationPutV2Listing,
-      variables: input
+      variables: { input }
     })
     dispatch({ type: Types.PUT_LISTING_SUCCESS, payload: data.puV2Listing })
   } catch (err) {

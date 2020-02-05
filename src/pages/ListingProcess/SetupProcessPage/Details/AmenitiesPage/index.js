@@ -1,49 +1,17 @@
 import React from 'react'
-import styled from 'styled-components'
-import { Title, StepButtons, Checkbox } from 'components'
+import { Box, Wrapper, Title, StepButtons, Checkbox } from 'components'
 
-const WrapperStyled = styled.div`
-  display: grid;
-  grid-row-gap: 20px;
-
-  @media (max-width: 680px) {
-    grid-row-gap: 15px;
-  }
-`
-
-const SectionStyled = styled.div``
-
-const CheckboxGroupAmenities = styled.div`
-  display: grid;
-  grid-template-columns: 1fr 1fr 1fr 1fr;
-  grid-gap: 20px;
-
-  @media (max-width: 680px) {
-    grid-template-columns: 1fr 1fr;
-  }
-`
-
-const CheckboxGroupRules = styled.div`
-  display: grid;
-  grid-template-columns: 1fr 1fr 1fr;
-  grid-gap: 20px;
-
-  @media (max-width: 680px) {
-    grid-template-columns: 1fr 1fr;
-  }
-`
-
-const AmenitiesTab = props => {
+const AmenitiesPage = ({ listing, ...props }) => {
   return (
-    <WrapperStyled>
-      <SectionStyled>
+    <Wrapper>
+      <Box>
         <Title
           type="h3"
           title="Amenities"
           subtitle="What amenities does your space offer guests?"
           subTitleMargin="10px"
         />
-        <CheckboxGroupAmenities>
+        <Box display="grid" gridTemplateColumns={{ _: 'auto auto ', medium: 'auto auto auto auto' }} gridGap="30px">
           <Checkbox
             key={1}
             label="24 hour access"
@@ -80,16 +48,16 @@ const AmenitiesTab = props => {
             mediumLabel
             // handleCheckboxChange={_handleCheckboxChange}
           />
-        </CheckboxGroupAmenities>
-      </SectionStyled>
-      <SectionStyled>
+        </Box>
+      </Box>
+      <Box>
         <Title
           type="h3"
           title="Rules"
           subtitle="Tick any rules you’d like to highlight for your guests."
           subTitleMargin="10px"
         />
-        <CheckboxGroupRules>
+        <Box display="grid" gridTemplateColumns={{ _: 'auto auto ', medium: 'auto auto auto auto' }} gridGap="30px">
           <Checkbox
             key={1}
             label="Cleaning fees apply"
@@ -126,18 +94,18 @@ const AmenitiesTab = props => {
             mediumLabel
             // handleCheckboxChange={_handleCheckboxChange}
           />
-        </CheckboxGroupRules>
-      </SectionStyled>
+        </Box>
+      </Box>
       <StepButtons
-        prev={{ disabled: false, onClick: () => props.history.replace('/listing-process/space/357/detail') }}
+        prev={{ disabled: false, onClick: () => props.history.replace('detail') }}
         next={{
           // disabled: !location,
-          onClick: () => props.history.replace('/listing-process/space/357/media')
+          onClick: () => props.history.replace(`/listing-process/setup-process/${listing.id}/scene`)
           // isLoading: isLoadingCreating
         }}
       />
-    </WrapperStyled>
+    </Wrapper>
   )
 }
 
-export default AmenitiesTab
+export default AmenitiesPage

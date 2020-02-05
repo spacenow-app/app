@@ -1,26 +1,15 @@
 import React from 'react'
 import styled from 'styled-components'
-import { Title, StepButtons, Grid, Cell, Radio, Box } from 'components'
-
-const WrapperStyled = styled.div`
-  display: grid;
-  grid-row-gap: 20px;
-
-  @media (max-width: 680px) {
-    grid-row-gap: 15px;
-  }
-`
-
-const SectionStyled = styled.div``
+import { Wrapper, Title, StepButtons, Grid, Cell, Radio, Box } from 'components'
 
 const CellStyled = styled(Cell)`
   display: grid;
 `
 
-const SpaceTypeTab = props => {
+const SpaceTypePage = ({ listing, ...props }) => {
   return (
-    <WrapperStyled>
-      <SectionStyled>
+    <Wrapper>
+      <Box>
         <Title type="h3" title="Property type" subtitle="Which best describes your space?" subTitleMargin="10px" />
         <Grid column={12} rowGap="40px">
           <CellStyled width={1}>
@@ -69,17 +58,20 @@ const SpaceTypeTab = props => {
             </Box>
           </CellStyled>
         </Grid>
-      </SectionStyled>
+      </Box>
       <StepButtons
-        prev={{ disabled: false, onClick: () => props.history.replace('/listing-process/address') }} // modal can't change location or create new
+        prev={{
+          disabled: false,
+          onClick: () => props.history.replace(`/listing-process/setup-process/${listing.id}/location`)
+        }} // modal can't change location or create new
         next={{
           // disabled: !location,
-          onClick: () => props.history.replace('/listing-process/space/357/category')
+          onClick: () => props.history.replace('category')
           // isLoading: isLoadingCreating
         }}
       />
-    </WrapperStyled>
+    </Wrapper>
   )
 }
 
-export default SpaceTypeTab
+export default SpaceTypePage

@@ -3,21 +3,29 @@ import PropTypes from 'prop-types'
 import { Switch, Route, Redirect } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
 import { Wrapper, Loader, ProgressBar } from 'components'
-
-import { onGetListingById, onUpdate } from 'redux/ducks/listing'
+import { onGetListingSteps, onGetListing, onPostListing } from 'redux/ducks/listing-process'
 import { openModal, TypesModal } from 'redux/ducks/modal'
 
-import SpaceTypeTab from './Basic/SpaceTypeTab'
-import CategoryTab from './Basic/CategoryTab'
-import SpecTab from './Detail/SpecTab'
-import FeatureTab from './Detail/FeatureTab'
-import DetailTab from './Detail/DetailTab'
-import AmenitiesTab from './Detail/AmenitiesTab'
-import MediaTab from './Detail/MediaTab'
-import PriceTab from './Detail/PriceTab'
-import AccessTab from './Detail/AccessTab'
-import TimetableTab from './Detail/TimetableTab'
-import CancelTab from './Detail/CancelTab'
+import LocationPage from './Location'
+import StepPage from './Steps'
+// import Scene from './Scene'
+// import Pricing from './Pricing'
+// import Access from './Access'
+// import OpeningHours from './OpeningHours'
+// import Cancellation from './Cancellation'
+
+// import SpaceTypeTab from './Basic/SpaceTypeTab'
+import BasicsPage from './Basics'
+import DetailsPage from './Details'
+// import SpecTab from './Detail/SpecTab'
+// import FeatureTab from './Detail/FeatureTab'
+// import DetailTab from './Detail/DetailTab'
+// import AmenitiesTab from './Detail/AmenitiesTab'
+// import MediaTab from './Detail/MediaTab'
+// import PriceTab from './Detail/PriceTab'
+// import AccessTab from './Detail/AccessTab'
+// import TimetableTab from './Detail/TimetableTab'
+// import CancelTab from './Detail/CancelTab'
 
 const ScrollToTop = ({ children, location: { pathname } }) => {
   useEffect(() => {
@@ -26,26 +34,25 @@ const ScrollToTop = ({ children, location: { pathname } }) => {
   return children
 }
 
-const ProcessPage = ({ match, history, location, ...props }) => {
+const SetupProcessPage = ({ match, history, location, ...props }) => {
   const dispatch = useDispatch()
-
-  const { object: objectListing, isLoading, isNotOwner } = useSelector(state => state.listing.get)
-  const { user } = useSelector(state => state.account.get)
-
+  const listingId = match.params.id
+  const { object: listing, isLoading, isNotOwner } = useSelector(state => state.listing_process.get)
+  const { object: steps } = useSelector(state => state.listing_process.steps)
   const [values, setValues] = useState({})
-
-  useEffect(() => {
-    dispatch(onGetListingById(match.params.id, user.id))
-  }, [dispatch, match.params.id, user])
-
-  useEffect(() => {
-    if (history.action === 'PUSH' && values.isValid) dispatch(onUpdate(objectListing, values))
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [history.location.key])
 
   const _setFatherValues = obj => {
     setValues(obj)
   }
+
+  useEffect(() => {
+    if (listingId) {
+      dispatch(onGetListingSteps(listingId))
+      dispatch(onGetListing(listingId))
+    } else {
+      dispatch(onPostListing())
+    }
+  }, [dispatch, listingId])
 
   if (isLoading) {
     return <Loader text="Loading listing process" />
@@ -68,11 +75,63 @@ const ProcessPage = ({ match, history, location, ...props }) => {
 
   return (
     <Wrapper>
-      <ProgressBar percent="5" />
+      <Wrapper>
+        <ProgressBar percent={steps && steps.completed} />
+      </Wrapper>
       <Switch>
-        <Redirect exact from={match.path} to={`${match.path}/type`} />
+        <Redirect exact from={match.path} to={`${match.path}/steps`} />
         <ScrollToTop>
           <Route
+            exact
+            path={`${match.path}/steps`}
+            render={routeProps => (
+              <StepPage
+                {...routeProps}
+                {...props}
+                steps={steps}
+                listing={listing}
+                dispatch={dispatch}
+                setFatherValues={_setFatherValues}
+              />
+            )}
+          />
+          <Route
+            path={`${match.path}/location`}
+            render={routeProps => (
+              <LocationPage
+                {...routeProps}
+                {...props}
+                listing={listing}
+                dispatch={dispatch}
+                setFatherValues={_setFatherValues}
+              />
+            )}
+          />
+          <Route
+            path={`${match.path}/basics`}
+            render={routeProps => (
+              <BasicsPage
+                {...routeProps}
+                {...props}
+                listing={listing}
+                dispatch={dispatch}
+                setFatherValues={_setFatherValues}
+              />
+            )}
+          />
+          <Route
+            path={`${match.path}/details`}
+            render={routeProps => (
+              <DetailsPage
+                {...routeProps}
+                {...props}
+                listing={listing}
+                dispatch={dispatch}
+                setFatherValues={_setFatherValues}
+              />
+            )}
+          />
+          {/* <Route
             path={`${match.path}/type`}
             render={routeProps => (
               <SpaceTypeTab
@@ -121,7 +180,7 @@ const ProcessPage = ({ match, history, location, ...props }) => {
             )}
           />
           <Route
-            path={`${match.path}/detail`}
+            path={`${match.path}/details`}
             render={routeProps => (
               <DetailTab
                 {...routeProps}
@@ -203,7 +262,7 @@ const ProcessPage = ({ match, history, location, ...props }) => {
                 setFatherValues={_setFatherValues}
               />
             )}
-          />
+          /> */}
         </ScrollToTop>
         <Route component={() => <h1>not found</h1>} />
       </Switch>
@@ -211,10 +270,10 @@ const ProcessPage = ({ match, history, location, ...props }) => {
   )
 }
 
-ProcessPage.propTypes = {
+SetupProcessPage.propTypes = {
   match: PropTypes.instanceOf(Object).isRequired,
   location: PropTypes.instanceOf(Object).isRequired,
   history: PropTypes.instanceOf(Object).isRequired
 }
 
-export default ProcessPage
+export default SetupProcessPage

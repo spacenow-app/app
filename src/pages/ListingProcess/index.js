@@ -1,7 +1,5 @@
 import LeadPage from './LeadPage'
-import ProcessPage from './ProcessPage'
-import AddressPage from './AddressPage'
-import StepPage from './StepPage'
 import ViewPage from './ViewPage'
+import SetupProcessPage from './SetupProcessPage'
 
-export { ProcessPage, LeadPage, AddressPage, StepPage, ViewPage }
+export { LeadPage, ViewPage, SetupProcessPage }

@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 import Helmet from 'react-helmet'
 import styled from 'styled-components'
 import { useSelector, useDispatch } from 'react-redux'
-import { Wrapper, Title, StepButtons, Input, Map, AutoComplete, ProgressBar } from 'components'
+import { Wrapper, Title, StepButtons, Input, Map, AutoComplete } from 'components'
 
 import { onPutListing } from 'redux/ducks/listing-process'
 
@@ -18,13 +18,10 @@ const GroupInput = styled.div`
   }
 `
 
-const AddressPage = ({ match, ...props }) => {
-
+const LocationPage = ({ match, listing, ...props }) => {
   const dispatch = useDispatch()
-  const listingId = match.params.id
 
   const { isLoading, error } = useSelector(state => state.location)
-  const { object: steps } = useSelector(state => state.listing_process.steps)
   const [address, setAddress] = useState('')
   const [unit, setUnit] = useState('')
   const [latLng, setLatLng] = useState({})
@@ -64,7 +61,6 @@ const AddressPage = ({ match, ...props }) => {
   return (
     <Wrapper>
       <Helmet title="Listing Location - Spacenow" />
-      <ProgressBar percent={steps && steps.completed} />
       <Title type="h3" title="Location" />
       <GroupInput>
         <AutoComplete
@@ -83,7 +79,7 @@ const AddressPage = ({ match, ...props }) => {
       {error.message && <div className="text-danger">{error.message}</div>}
       {latLng && latLng.lat && latLng.lng && <Map position={latLng} />}
       <StepButtons
-        prev={{ disabled: false, onClick: () => props.history.replace(`/listing-process/step/${listingId}`) }}
+        prev={{ disabled: false, onClick: () => props.history.replace(`steps`) }}
         next={{
           disabled: !(latLng && (latLng.lat || latLng.lng)) || isLoading,
           onClick: _onNext,
@@ -94,9 +90,10 @@ const AddressPage = ({ match, ...props }) => {
   )
 }
 
-AddressPage.propTypes = {
+LocationPage.propTypes = {
   match: PropTypes.instanceOf(Object).isRequired,
-  history: PropTypes.instanceOf(Object).isRequired,
+  listing: PropTypes.instanceOf(Object).isRequired,
+  history: PropTypes.instanceOf(Object).isRequired
 }
 
-export default AddressPage
+export default LocationPage

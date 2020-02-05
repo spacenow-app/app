@@ -22,7 +22,7 @@ const LeadPage = props => {
       window.location.href = `${config.static}/contact-us`
       return
     }
-    props.history.push('/listing-process/step')
+    props.history.push('/listing-process/setup-process')
   }
 
   return (

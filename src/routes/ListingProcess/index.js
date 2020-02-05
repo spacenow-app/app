@@ -3,10 +3,8 @@ import PropTypes from 'prop-types'
 import { Switch, Route, Redirect } from 'react-router-dom'
 
 const LeadPage = lazy(() => import('pages/ListingProcess/LeadPage'))
-const StepPage = lazy(() => import('pages/ListingProcess/StepPage'))
-const AddressPage = lazy(() => import('pages/ListingProcess/AddressPage'))
-const ProcessPage = lazy(() => import('pages/ListingProcess/ProcessPage'))
 const ViewPage = lazy(() => import('pages/ListingProcess/ViewPage'))
+const SetupProcessPage = lazy(() => import('pages/ListingProcess/SetupProcessPage'))
 const NotFoundPage = lazy(() => import('pages/NotFoundPage'))
 
 const ListingProcess = ({ match, ...props }) => {
@@ -15,9 +13,7 @@ const ListingProcess = ({ match, ...props }) => {
       <Switch>
         <Redirect exact from={match.path} to={`${match.path}/lead`} />
         <Route exact component={LeadPage} path={`${match.path}/lead`} />
-        <Route exact component={StepPage} path={`${match.path}/step/:id?`} />
-        <Route exact component={AddressPage} path={`${match.path}/address/:id`} />
-        <Route component={ProcessPage} path={`${match.path}/space/:id`} />
+        <Route component={SetupProcessPage} path={`${match.path}/setup-process/:id?`} />
         <Route component={ViewPage} path={`${match.path}/view/:id`} />
         <Route component={NotFoundPage} />
       </Switch>

@@ -1,50 +1,25 @@
 import React from 'react'
-import styled from 'styled-components'
-import { Title, StepButtons, Input, TextArea, Checkbox, Grid, Cell, Select } from 'components'
+import { Wrapper, Box, Title, StepButtons, Input, TextArea, Checkbox, Select } from 'components'
 
-const WrapperStyled = styled.div`
-  display: grid;
-  grid-row-gap: 20px;
-
-  @media (max-width: 680px) {
-    grid-row-gap: 15px;
-  }
-`
-
-const SectionStyled = styled.div``
-
-const CheckboxGroup = styled.div`
-  display: grid;
-  grid-template-columns: 1fr 1fr 1fr 1fr;
-  grid-gap: 40px;
-
-  @media (max-width: 680px) {
-    grid-template-columns: 1fr 1fr;
-    grid-gap: 20px;
-  }
-`
-
-const DetailTab = props => {
+const DetailPage = ({ listing, ...props }) => {
   return (
-    <WrapperStyled>
-      <SectionStyled>
+    <Wrapper>
+      <Box>
         <Title
           type="h3"
           title="Title"
           subtitle="Your title sets the scene. Make it short, powerful and identify someone’s need for it."
           subTitleMargin="10px"
         />
-        <Grid columns={12}>
-          <Cell width={8}>
-            <Input placeholder="e.g. Car park 100m walk to Central Station" />
-          </Cell>
-        </Grid>
-      </SectionStyled>
-      <SectionStyled>
+        <Box display="grid" gridTemplateColumns={{ _: 'auto', medium: 'auto auto' }} gridGap="30px">
+          <Input placeholder="e.g. Car park 100m walk to Central Station" />
+        </Box>
+      </Box>
+      <Box>
         <Title type="h3" title="Description" subtitle="Sell 'em the dream." subTitleMargin="10px" />
         <TextArea placeholder="Description" />
-      </SectionStyled>
-      <SectionStyled>
+      </Box>
+      <Box>
         <Title
           type="h3"
           title="Directions"
@@ -52,10 +27,10 @@ const DetailTab = props => {
           subTitleMargin="10px"
         />
         <TextArea placeholder="This helps guest find spaces that aren’t easy to find" />
-      </SectionStyled>
-      <SectionStyled>
+      </Box>
+      <Box>
         <Title type="h3" title="Transport" subtitle="Tick options within a 10 minute walk." subTitleMargin="10px" />
-        <CheckboxGroup>
+        <Box display="grid" gridTemplateColumns={{ _: 'auto auto ', medium: 'auto auto auto auto' }} gridGap="30px">
           <Checkbox
             key={1}
             label="Bus"
@@ -92,40 +67,34 @@ const DetailTab = props => {
             mediumLabel
             // handleCheckboxChange={_handleCheckboxChange}
           />
-        </CheckboxGroup>
-      </SectionStyled>
-      <SectionStyled>
+        </Box>
+      </Box>
+      <Box>
         <Title
           type="h3"
           title="Wifi"
           subtitle="Wifi username and password only sent to guest after the booking is successful"
           subTitleMargin="10px"
         />
-        <Grid columns={12}>
-          <Cell width={3}>
-            <Select>
-              <option>Select wifi speed</option>
-              <option>hola</option>
-            </Select>
-          </Cell>
-          <Cell width={3}>
-            <Input placeholder="Wifi user name" />
-          </Cell>
-          <Cell width={3}>
-            <Input placeholder="Wifi password" />
-          </Cell>
-        </Grid>
-      </SectionStyled>
+        <Box display="grid" gridTemplateColumns={{ _: 'auto', medium: 'auto auto auto' }} gridGap="30px">
+          <Select>
+            <option>Select wifi speed</option>
+            <option>hola</option>
+          </Select>
+          <Input placeholder="Wifi user name" />
+          <Input placeholder="Wifi password" />
+        </Box>
+      </Box>
       <StepButtons
-        prev={{ disabled: false, onClick: () => props.history.replace('/listing-process/space/357/feature') }}
+        prev={{ disabled: false, onClick: () => props.history.replace('feature') }}
         next={{
           // disabled: !location,
-          onClick: () => props.history.replace('/listing-process/space/357/amenities')
+          onClick: () => props.history.replace('amenities')
           // isLoading: isLoadingCreating
         }}
       />
-    </WrapperStyled>
+    </Wrapper>
   )
 }
 
-export default DetailTab
+export default DetailPage
