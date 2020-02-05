@@ -3,7 +3,7 @@ import { useDispatch } from 'react-redux'
 import PropTypes from 'prop-types'
 import { Modal } from 'react-bootstrap'
 
-import { Box, Carousel, Tag, Icon, Title, Label, ListDates, BookingPriceDetail } from 'components'
+import { Box, Carousel, Tag, Icon, Title, Label, ListDates, BookingPriceDetail, Text } from 'components'
 
 import { closeModal } from 'redux/ducks/modal'
 
@@ -83,7 +83,9 @@ const ModalBookingDetails = ({ options, booking, userType }) => {
           <Title
             type="h4"
             title={booking.listing.title}
-            subtitle={`${booking.listing.location.address1}, ${booking.listing.location.city} ${booking.listing.location.state}`}
+            subtitle={`${booking.listing.location.address1 ? booking.listing.location.address1 + `, ` : ''}  ${
+              booking.listing.location.city
+            }, ${booking.listing.location.state}`}
             subTitleMargin={0}
           />
         </Box>
@@ -92,10 +94,14 @@ const ModalBookingDetails = ({ options, booking, userType }) => {
           <BookingPriceDetail
             periodLabel={_spelling(booking.priceType, booking.period)}
             valuePerQuantity={booking.priceDetails.valuePerQuantity}
-            valueFee={userType !== "host" ? booking.priceDetails.valueFee : (booking.basePrice * booking.period) * booking.hostServiceFee * -1}
+            valueFee={
+              userType !== 'host'
+                ? booking.priceDetails.valueFee
+                : booking.basePrice * booking.period * booking.hostServiceFee * -1
+            }
             valueDiscount={booking.priceDetails.valueDiscount}
             valueVoucher={booking.priceDetails.valueVoucher}
-            total={userType !== "host" ? booking.priceDetails.total : (booking.basePrice * booking.period) * .89}
+            total={userType !== 'host' ? booking.priceDetails.total : booking.basePrice * booking.period * 0.89}
             days={booking.period}
           />
         )}

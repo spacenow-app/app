@@ -143,7 +143,8 @@ const CardSearch = ({ item, ...props }) => {
         </Box>
         <CardTitle onClick={() => window.open(`/space/${item.id}`)}>{item.title}</CardTitle>
         <Text display="block" fontFamily="regular" fontSize="14px" color="greyscale.1">
-          {`${item.location.address1}, ${item.location.city}`}
+          {item.location.address1 && <span>{item.location.address1}, </span>}
+          {item.location.city && <span>{item.location.city}</span>}
         </Text>
         <Box
           my="10px"

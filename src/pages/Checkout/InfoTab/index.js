@@ -134,7 +134,11 @@ const InfoTab = ({ match, location, history, ...props }) => {
             title={`${reservation.listing.settingsParent.subcategory.itemName} for ${reservation.period} ${_spelling(
               reservation.priceType,
               reservation.period
-            ).toLowerCase()} in ${reservation.listing.location.address1}`}
+            ).toLowerCase()} in ${
+              reservation.listing.location.address1
+                ? reservation.listing.location.address1
+                : reservation.listing.location.city
+            }`}
             subtitle={`This reservation will expire after ${_getExpiry(reservation.createdAt)}`}
             subTitleMargin="21"
             weight="Montserrat-SemiBold"

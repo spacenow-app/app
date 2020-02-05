@@ -52,7 +52,8 @@ const ListingCard = (dispatch, item, index) => {
           type="h6"
           title={<Text width={{ _: '220px', medium: '250px', large: '270px' }}>{item.title || ''}</Text>}
           subtitle={
-            <Text width="300px">{`${item.location.address1}, ${item.location.city} ${item.location.state}`}</Text>
+            <Text width="300px">{`${item.location.address1 ? `${item.location.address1  },` : ''} 
+            ${item.location.city}, ${item.location.state}`}</Text>
           }
         />
         <Card.Horizontal.Price
