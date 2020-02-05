@@ -106,7 +106,7 @@ const IntroHostPage = props => {
         <BottomButton>
           <Grid columns={1} style={{ alignItems: 'center' }}>
             <Cell>
-              <Link to="/listing/intro">
+              <Link to="/listing">
                 <Button fluid style={{ maxWidth: '360px' }}>
                   Skip the tour and get started
                 </Button>
