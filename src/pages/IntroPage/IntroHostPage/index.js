@@ -1,7 +1,7 @@
 import React from 'react'
 import { NavBar, Wrapper, Box, Title, Card, Text, Link, Grid, Cell, Button } from 'components'
 import styled from 'styled-components'
-import { config } from 'variables'
+// import { config } from 'variables'
 
 const itemsCardOne = ['Update your account details', 'Add a profile photo', 'Tell us a little bit about yourself']
 const itemsCardTwo = [
