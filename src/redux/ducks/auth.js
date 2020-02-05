@@ -283,6 +283,7 @@ export const signup = (name, email, password, from, userType) => async dispatch 
       mutation: mutationSignUp
     })
     const signupReturn = data.signup
+    console.log('signupReturn', signupReturn)
     setToken(signupReturn.token, signupReturn.expiresIn)
     dispatch({ type: AccountTypes.ACC_GET_PROFILE_SUCCESS, payload: signupReturn.user })
     if (userType) {
