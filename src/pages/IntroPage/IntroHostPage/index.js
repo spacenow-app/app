@@ -1,6 +1,7 @@
 import React from 'react'
 import { NavBar, Wrapper, Box, Title, Card, Text, Link, Grid, Cell, Button } from 'components'
 import styled from 'styled-components'
+import { config } from 'variables'
 
 const itemsCardOne = ['Update your account details', 'Add a profile photo', 'Tell us a little bit about yourself']
 const itemsCardTwo = [
@@ -43,7 +44,7 @@ const IntroHostPage = props => {
           <Box my="10px" mb="20px">
             <Text textSize="14px">
               How to get the most out of spacenow (you'll be able to book spaces too -{' '}
-              <Link color="#172439" style={{ textDecoration: 'underline' }} to="/intro/guest">
+              <Link color="#172439" style={{ textDecoration: 'underline' }} to="/welcome/guest">
                 click here
               </Link>{' '}
               for more information)
@@ -105,11 +106,15 @@ const IntroHostPage = props => {
         <BottomButton>
           <Grid columns={1} style={{ alignItems: 'center' }}>
             <Cell>
-              <Link to="/listing/intro">
-                <Button fluid style={{ maxWidth: '360px' }}>
-                  Skip the tour and get started
-                </Button>
-              </Link>
+              {/* <Link to="/listing/intro"> */}
+              <Button
+                fluid
+                style={{ maxWidth: '360px' }}
+                onClick={() => (window.location.href = `${config.domain}/listing/intro`)}
+              >
+                Skip the tour and get started
+              </Button>
+              {/* </Link> */}
             </Cell>
           </Grid>
         </BottomButton>

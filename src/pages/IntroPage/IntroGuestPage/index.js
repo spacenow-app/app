@@ -41,7 +41,7 @@ const IntroHostPage = props => {
           <Box my="10px" mb="20px">
             <Text textSize="14px">
               How to get the most out of spacenow (you can list your space too -{' '}
-              <Link color="#172439" style={{ textDecoration: 'underline' }} to="/intro/host">
+              <Link color="#172439" style={{ textDecoration: 'underline' }} to="/welcome/host">
                 click here
               </Link>{' '}
               for more information)

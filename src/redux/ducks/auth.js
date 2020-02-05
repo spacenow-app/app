@@ -275,6 +275,7 @@ export const signin = (email, password, from) => async dispatch => {
 }
 
 export const signup = (name, email, password, from, userType) => async dispatch => {
+  console.log('from', from)
   dispatch({ type: Types.AUTH_SIGNUP_REQUEST })
   try {
     const { data } = await getClient().mutate({
@@ -285,7 +286,7 @@ export const signup = (name, email, password, from, userType) => async dispatch 
     setToken(signupReturn.token, signupReturn.expiresIn)
     dispatch({ type: AccountTypes.ACC_GET_PROFILE_SUCCESS, payload: signupReturn.user })
     if (userType) {
-      dispatch({ type: Types.AUTH_SIGNIN_SUCCESS, from: `/intro/${userType}` })
+      dispatch({ type: Types.AUTH_SIGNIN_SUCCESS, from: { pathname: `/welcome/${userType}` } })
     } else {
       dispatch({ type: Types.AUTH_SIGNIN_SUCCESS, from })
     }
@@ -346,7 +347,7 @@ export const googleSignin = (googleResponse, from, userType) => async dispatch =
     const signinReturn = data.tokenGoogleValidate
     setToken(signinReturn.token, signinReturn.expiresIn)
     if (userType) {
-      dispatch({ type: Types.AUTH_SIGNIN_SUCCESS, from: `/intro/${userType}` })
+      dispatch({ type: Types.AUTH_SIGNIN_SUCCESS, from: { pathname: `/welcome/${userType}` } })
     } else {
       dispatch({ type: Types.AUTH_SIGNIN_SUCCESS, from })
     }
@@ -370,7 +371,7 @@ export const facebookSignin = (facebookResponse, from, userType) => async dispat
     const signinReturn = data.tokenFacebookValidate
     setToken(signinReturn.token, signinReturn.expiresIn)
     if (userType) {
-      dispatch({ type: Types.AUTH_SIGNIN_SUCCESS, from: `/intro/${userType}` })
+      dispatch({ type: Types.AUTH_SIGNIN_SUCCESS, from: { pathname: `/welcome/${userType}` } })
     } else {
       dispatch({ type: Types.AUTH_SIGNIN_SUCCESS, from })
     }
