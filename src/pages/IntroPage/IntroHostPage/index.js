@@ -106,15 +106,11 @@ const IntroHostPage = props => {
         <BottomButton>
           <Grid columns={1} style={{ alignItems: 'center' }}>
             <Cell>
-              {/* <Link to="/listing/intro"> */}
-              <Button
-                fluid
-                style={{ maxWidth: '360px' }}
-                onClick={() => (window.location.href = `${config.domain}/listing/intro`)}
-              >
-                Skip the tour and get started
-              </Button>
-              {/* </Link> */}
+              <Link to="/listing/intro">
+                <Button fluid style={{ maxWidth: '360px' }}>
+                  Skip the tour and get started
+                </Button>
+              </Link>
             </Cell>
           </Grid>
         </BottomButton>
