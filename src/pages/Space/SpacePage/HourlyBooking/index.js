@@ -34,19 +34,17 @@ const HourlyBooking = ({
   message,
   hourlySuggestion
 }) => {
-
   const [dayPicker, setDayPicker] = useState('')
 
   useEffect(() => {
-    if (dayPicker.input && inputFocus)
-      dayPicker.input.focus()
+    if (dayPicker.input && inputFocus) dayPicker.input.focus()
   }, [dayPicker.input, inputFocus])
 
   useEffect(() => {
     onCalcHourlyPeriod()
   }, [date, startTime, endTime]) // eslint-disable-line react-hooks/exhaustive-deps
 
-  const _getOptions = (range) => {
+  const _getOptions = range => {
     if (!range) return []
     const options = []
     for (let i = 0; i < range.length; i += 1) {
@@ -83,27 +81,31 @@ const HourlyBooking = ({
 
         <Grid columns={2} style={{ marginBottom: '10px' }}>
           <Cell>
-            <Select label={hidePrice ? '' : 'Start time'}
+            <Select
+              label={hidePrice ? '' : 'Start time'}
               options={_getOptions(hourlySuggestion && hourlySuggestion.openRange)}
               handleChange={e => onStartTimeChange(String(e.target.value))}
               value={startTime}
               disabled={!hourlySuggestion}
+              bgPosition="87% 50%"
             />
           </Cell>
           <Cell>
-            <Select label={hidePrice ? '' : 'End time'}
+            <Select
+              label={hidePrice ? '' : 'End time'}
               options={_getOptions(hourlySuggestion && hourlySuggestion.closeRange)}
               handleChange={e => onEndTimeChange(String(e.target.value))}
               value={endTime}
               disabled={!hourlySuggestion}
+              bgPosition="87% 50%"
             />
-            {date &&
+            {date && (
               <Box display="grid" justifyItems="end">
                 <Text fontFamily="regular" fontSize="12px" color="greyscale.1">
                   {`${hoursQuantity} ${spelling(hoursQuantity)}`}
                 </Text>
               </Box>
-            }
+            )}
           </Cell>
         </Grid>
 

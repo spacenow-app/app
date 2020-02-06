@@ -102,7 +102,7 @@ const BookingCard = (dispatch, item, index, userType, userId) => {
           type="h6"
           title={<Text width={{ _: '220px', medium: '250px', large: '270px' }}>{item.listing.title || ''}</Text>}
           subtitle={
-            <Text width="300px">{`${item.listing.location.address1 ? `${item.listing.location.address1  }, ` : ''} 
+            <Text width="300px">{`${item.listing.location.address1 ? `${item.listing.location.address1}, ` : ''} 
             ${item.listing.location.city}, ${item.listing.location.state}`}</Text>
           }
         />
@@ -161,7 +161,7 @@ const BookingCard = (dispatch, item, index, userType, userId) => {
         </Card.Horizontal.Dropdown.Menu>
       </Card.Horizontal.Dropdown>
       <Card.Horizontal.Footer>
-        <Card.Horizontal.Tag
+        {/* <Card.Horizontal.Tag
           small
           icon={
             <Icon
@@ -171,7 +171,7 @@ const BookingCard = (dispatch, item, index, userType, userId) => {
           }
         >
           {item.listing.settingsParent.category.itemName}
-        </Card.Horizontal.Tag>
+        </Card.Horizontal.Tag> */}
         <Card.Horizontal.Tag
           small
           icon={

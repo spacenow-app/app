@@ -54,8 +54,8 @@ const ModalBookingDetails = ({ options, booking, userType }) => {
       )}
       <Modal.Body>
         <Carousel photos={_convertedArrayPhotos(booking.listing.photos)} height={300} />
-        <Box my="40px" display="grid" gridTemplateColumns="auto auto 1fr" gridColumnGap="10px">
-          <Tag
+        <Box my="40px" display="grid" gridTemplateColumns="auto 1fr" gridColumnGap="10px">
+          {/* <Tag
             icon={
               <Icon
                 width="24px"
@@ -64,7 +64,7 @@ const ModalBookingDetails = ({ options, booking, userType }) => {
             }
           >
             {booking.listing.settingsParent.category.itemName}
-          </Tag>
+          </Tag> */}
           <Tag
             icon={
               <Icon
@@ -83,7 +83,7 @@ const ModalBookingDetails = ({ options, booking, userType }) => {
           <Title
             type="h4"
             title={booking.listing.title}
-            subtitle={`${booking.listing.location.address1 ? `${booking.listing.location.address1  }, ` : ''}  ${
+            subtitle={`${booking.listing.location.address1 ? `${booking.listing.location.address1}, ` : ''}  ${
               booking.listing.location.city
             }, ${booking.listing.location.state}`}
             subTitleMargin={0}
