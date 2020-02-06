@@ -200,7 +200,7 @@ const ListResults = forwardRef(
                       />
                       <CardContent showMap={showMap}>
                         <Box display="flex" justifyContent="start" mb="10px">
-                          <Box>
+                          {/* <Box>
                             <Tag
                               small
                               icon={
@@ -209,8 +209,8 @@ const ListResults = forwardRef(
                             >
                               {item.category.itemName}
                             </Tag>
-                          </Box>
-                          <Box margin="0 10px">
+                          </Box> */}
+                          <Box>
                             <Tag
                               small
                               icon={
@@ -281,7 +281,7 @@ const ListResults = forwardRef(
                     />
                     <CardContent showMap={showMap}>
                       <Box display="flex" justifyContent="start" mb="10px">
-                        <Box>
+                        {/* <Box>
                           <Tag
                             small
                             icon={
@@ -290,8 +290,8 @@ const ListResults = forwardRef(
                           >
                             {item.category.itemName}
                           </Tag>
-                        </Box>
-                        <Box margin="0 10px">
+                        </Box> */}
+                        <Box>
                           <Tag
                             small
                             icon={
