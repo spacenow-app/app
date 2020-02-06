@@ -905,6 +905,7 @@ const SearchPage = ({ history, location }) => {
           pagination={pagination}
           onPageChanged={_onPagionationChange}
           showMap={showMap}
+          eventSpace={filterCategory.eventSpace} // TODO: Remove when include again health and creative spaces in event search
         />
         {showMap && (
           <ContainerMap>
