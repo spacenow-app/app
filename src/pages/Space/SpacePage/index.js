@@ -495,6 +495,7 @@ const SpacePage = ({ match, location, history, ...props }) => {
         <>
           <HourlyBooking
             inputFocus={focusInput}
+            setFocusInput={setFocusInput}
             date={date}
             startTime={startTime}
             endTime={endTime}
