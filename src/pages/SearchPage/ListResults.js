@@ -1,4 +1,4 @@
-import React, { memo, forwardRef, useEffect } from 'react'
+import React, { memo, forwardRef } from 'react'
 import PropTypes from 'prop-types'
 import styled from 'styled-components'
 import { Box, Text, Icon, Tag, Avatar, Pagination, Price, Grid } from 'components'
