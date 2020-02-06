@@ -3,7 +3,7 @@ import { useDispatch } from 'react-redux'
 import PropTypes from 'prop-types'
 import { Modal } from 'react-bootstrap'
 
-import { Box, Carousel, Tag, Icon, Title, Label, ListDates, BookingPriceDetail, Text } from 'components'
+import { Box, Carousel, Tag, Icon, Title, Label, ListDates, BookingPriceDetail } from 'components'
 
 import { closeModal } from 'redux/ducks/modal'
 
@@ -83,7 +83,7 @@ const ModalBookingDetails = ({ options, booking, userType }) => {
           <Title
             type="h4"
             title={booking.listing.title}
-            subtitle={`${booking.listing.location.address1 ? booking.listing.location.address1 + `, ` : ''}  ${
+            subtitle={`${booking.listing.location.address1 ? `${booking.listing.location.address1  }, ` : ''}  ${
               booking.listing.location.city
             }, ${booking.listing.location.state}`}
             subTitleMargin={0}
