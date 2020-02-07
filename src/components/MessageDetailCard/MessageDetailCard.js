@@ -176,13 +176,12 @@ const MessageDetailCard = ({ item, user, count, index, messageParent, ...props }
                     <Grid columns={12}>
                       <Cell width={6}>
                         <Box>
-                          <Text fontFamily="bold">Requested time and date</Text>
+                          <Text fontFamily="bold">Requested inspection time and date</Text>
                         </Box>
-                        {messageParent.messageHost.bookingPeriod === 'hourly' &&
-                          messageParent.messageHost.reservations.length > 0 && (
+                        {messageParent.messageHost.reservations.length > 0 && (
                             <Text>
                               {format(new Date(messageParent.messageHost.reservations[0]), 'dd MMM yyyy')}{' '}
-                              {messageParent.messageHost.startTime} {' to '} {messageParent.messageHost.endTime}{' '}
+                              {messageParent.messageHost.startTime}
                             </Text>
                           )}
                       </Cell>

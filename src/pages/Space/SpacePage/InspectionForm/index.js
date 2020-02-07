@@ -107,6 +107,7 @@ const InspectionForm = ({
       }
       console.log('values', valuesCreate)
       await dispatch(onCreateMessage(valuesCreate))
+      console.log()
       setStepOne(false)
     } else {
       dayPicker.input.focus()
