@@ -2,10 +2,8 @@ import React, { useState } from 'react'
 import PropTypes from 'prop-types'
 import Helmet from 'react-helmet'
 import styled from 'styled-components'
-import { useSelector, useDispatch } from 'react-redux'
+import { useSelector } from 'react-redux'
 import { Wrapper, Title, StepButtons, Input, Map, AutoComplete } from 'components'
-
-import { onPutListing } from 'redux/ducks/listing-process'
 
 const GroupInput = styled.div`
   display: grid;
@@ -19,15 +17,14 @@ const GroupInput = styled.div`
 `
 
 const LocationPage = ({ match, listing, ...props }) => {
-  const dispatch = useDispatch()
-
   const { isLoading, error } = useSelector(state => state.location)
   const [address, setAddress] = useState('')
   const [unit, setUnit] = useState('')
   const [latLng, setLatLng] = useState({})
+  const [, setGPlaceId] = useState('')
 
   const _onSelectedAddess = obj => {
-    const { unit: objUnit, position, address: objAddress } = obj
+    const { unit: objUnit, position, address: objAddress, placeId } = obj
     if (objUnit || objUnit === '') {
       setUnit(objUnit)
     }
@@ -37,6 +34,10 @@ const LocationPage = ({ match, listing, ...props }) => {
     if (objAddress) {
       setAddress(objAddress)
     }
+    if (placeId) {
+      setGPlaceId(placeId)
+    }
+    props.setFatherValues({ ...listing, location: { address: objAddress, unit: objUnit, placeId } })
   }
 
   const _onHandleError = () => {
@@ -47,15 +48,7 @@ const LocationPage = ({ match, listing, ...props }) => {
     setUnit('')
     setLatLng({})
     setAddress('')
-  }
-
-  const _onNext = async () => {
-    const location = {
-      address,
-      unit
-    }
-    await dispatch(onPutListing({ input: location }))
-    // props.history.push(`/listing-process/space/${listingId}/type`)
+    setGPlaceId('')
   }
 
   return (
@@ -79,10 +72,10 @@ const LocationPage = ({ match, listing, ...props }) => {
       {error.message && <div className="text-danger">{error.message}</div>}
       {latLng && latLng.lat && latLng.lng && <Map position={latLng} />}
       <StepButtons
-        prev={{ disabled: false, onClick: () => props.history.replace(`steps`) }}
+        prev={{ disabled: false, onClick: () => props.history.push(`steps`) }}
         next={{
           disabled: !(latLng && (latLng.lat || latLng.lng)) || isLoading,
-          onClick: _onNext,
+          onClick: () => props.history.push(`/listing-process/setup-process/${listing.id}/basics`),
           isLoading
         }}
       />

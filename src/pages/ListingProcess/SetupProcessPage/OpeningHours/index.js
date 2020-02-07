@@ -8,9 +8,9 @@ import update from 'immutability-helper'
 
 import { nanDate, weekTimeTable } from 'variables'
 
-import { onGetAvailabilitiesByListingId, onGetAllHolidays } from 'redux/ducks/listing'
+import { onGetAllHolidays } from 'redux/ducks/listing'
 
-import { Title, Grid, Cell, TimeTable, StepButtons } from 'components'
+import { Wrapper, Title, Box, TimeTable, StepButtons } from 'components'
 
 const TIME_TABLE_INIT_STATE = {
   mon: true,
@@ -24,7 +24,7 @@ const TIME_TABLE_INIT_STATE = {
   listingAccessHours: []
 }
 
-const TimetableTab = ({ listing, history, setFatherValues }) => {
+const OpeningHoursPage = ({ listing, ...props }) => {
   const dispatch = useDispatch()
 
   const [timetable, setTimeTable] = useState([])
@@ -43,9 +43,9 @@ const TimetableTab = ({ listing, history, setFatherValues }) => {
       listingExceptionDates: selectedDates,
       isValid: true
     }
-    setFatherValues(valuesToUpdate)
+    props.setFatherValues(valuesToUpdate)
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [setFatherValues])
+  }, [props.setFatherValues])
 
   useEffect(() => {
     const { accessDays } = listing
@@ -62,7 +62,7 @@ const TimetableTab = ({ listing, history, setFatherValues }) => {
         error: {}
       }
       if (/true/i.test(accessDays[o.short])) {
-        const hoursElem = accessDays.listingAccessHours.find(h => h.weekday === o.index)
+        const hoursElem = accessDays.accessHours.find(h => h.weekday === o.index)
         if (hoursElem) {
           const openHour = nanDate(hoursElem.openHour)
           const closeHour = nanDate(hoursElem.closeHour)
@@ -83,7 +83,6 @@ const TimetableTab = ({ listing, history, setFatherValues }) => {
   }, [listing])
 
   useEffect(() => {
-    dispatch(onGetAvailabilitiesByListingId(listing.id))
     dispatch(onGetAllHolidays())
   }, [dispatch, listing])
 
@@ -224,36 +223,35 @@ const TimetableTab = ({ listing, history, setFatherValues }) => {
   }
 
   return (
-    <>
+    <Wrapper>
       <Helmet title="Listing Space Availability - Spacenow" />
-      <Grid columns={1} rowGap="40px">
-        <Cell>
-          <Title type="h3" title="Timetable*" subtitle="Let guests know the times your space is open." />
-          <TimeTable
-            editable
-            data={timetable}
-            fullTime={fullTime}
-            handleChangeTime={_handleChangeTime}
-            handleClickDay={_handleChangeDay}
-            handleClick24hours={_handleClick24hours}
-            handleClickOpenFullTime={_handleClickOpenFullTime}
-          />
-        </Cell>
-        <StepButtons
-          prev={{ disabled: false, onClick: () => history.replace('/listing-process/space/357/access') }}
-          next={{
-            onClick: () => history.replace('/listing-process/space/357/cancellation')
-          }}
+      <Box>
+        <Title type="h3" title="Timetable*" subtitle="Let guests know the times your space is open." />
+        <TimeTable
+          editable
+          data={timetable}
+          fullTime={fullTime}
+          handleChangeTime={_handleChangeTime}
+          handleClickDay={_handleChangeDay}
+          handleClick24hours={_handleClick24hours}
+          handleClickOpenFullTime={_handleClickOpenFullTime}
         />
-      </Grid>
-    </>
+      </Box>
+      <StepButtons
+        prev={{
+          disabled: false,
+          onClick: () => props.history.push(`/listing-process/setup-process/${listing.id}/access`)
+        }}
+        next={{
+          onClick: () => props.history.push(`/listing-process/setup-process/${listing.id}/cancellation`)
+        }}
+      />
+    </Wrapper>
   )
 }
 
-TimetableTab.propTypes = {
-  listing: PropTypes.instanceOf(Object).isRequired,
-  history: PropTypes.instanceOf(Object).isRequired,
-  setFatherValues: PropTypes.instanceOf(Function).isRequired
+OpeningHoursPage.propTypes = {
+  listing: PropTypes.instanceOf(Object).isRequired
 }
 
-export default TimetableTab
+export default OpeningHoursPage

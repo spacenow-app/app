@@ -9,7 +9,7 @@ const CellStyled = styled(Cell)`
   align-items: center;
 `
 
-const StepPage = ({ match, history, location, listing, steps, ...props }) => {
+const StepPage = ({ listing, steps, ...props }) => {
   return (
     <Wrapper my="40px">
       <Helmet title="Listing Intro - Spacenow" />
@@ -52,7 +52,7 @@ const StepPage = ({ match, history, location, listing, steps, ...props }) => {
       <Box display="grid" justifyItems="end">
         <Button
           disabled={steps && steps.completed !== 100}
-          onClick={() => history.push(`/setup-process/preview/${listing.id}`)}
+          onClick={() => props.history.push(`/setup-process/preview/${listing.id}`)}
         >
           Preview
         </Button>
@@ -62,9 +62,6 @@ const StepPage = ({ match, history, location, listing, steps, ...props }) => {
 }
 
 StepPage.propTypes = {
-  match: PropTypes.instanceOf(Object).isRequired,
-  location: PropTypes.instanceOf(Object).isRequired,
-  history: PropTypes.instanceOf(Object).isRequired,
   listing: PropTypes.instanceOf(Object).isRequired,
   steps: PropTypes.instanceOf(Object).isRequired
 }

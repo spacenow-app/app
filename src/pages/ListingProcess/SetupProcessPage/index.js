@@ -3,29 +3,18 @@ import PropTypes from 'prop-types'
 import { Switch, Route, Redirect } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
 import { Wrapper, Loader, ProgressBar } from 'components'
-import { onGetListingSteps, onGetListing, onPostListing } from 'redux/ducks/listing-process'
+import { onGetListingSteps, onGetListing, onPostListing, onPutListing } from 'redux/ducks/listing-process'
 import { openModal, TypesModal } from 'redux/ducks/modal'
 
 import LocationPage from './Location'
 import StepPage from './Steps'
-// import Scene from './Scene'
-// import Pricing from './Pricing'
-// import Access from './Access'
-// import OpeningHours from './OpeningHours'
-// import Cancellation from './Cancellation'
-
-// import SpaceTypeTab from './Basic/SpaceTypeTab'
+import ScenePage from './Scene'
+import PricingPage from './Pricing'
+import AccessPage from './Access'
+import OpeningHoursPage from './OpeningHours'
+import CancellationPage from './Cancellation'
 import BasicsPage from './Basics'
 import DetailsPage from './Details'
-// import SpecTab from './Detail/SpecTab'
-// import FeatureTab from './Detail/FeatureTab'
-// import DetailTab from './Detail/DetailTab'
-// import AmenitiesTab from './Detail/AmenitiesTab'
-// import MediaTab from './Detail/MediaTab'
-// import PriceTab from './Detail/PriceTab'
-// import AccessTab from './Detail/AccessTab'
-// import TimetableTab from './Detail/TimetableTab'
-// import CancelTab from './Detail/CancelTab'
 
 const ScrollToTop = ({ children, location: { pathname } }) => {
   useEffect(() => {
@@ -53,6 +42,13 @@ const SetupProcessPage = ({ match, history, location, ...props }) => {
       dispatch(onPostListing())
     }
   }, [dispatch, listingId])
+
+  useEffect(() => {
+    if (history.action === 'PUSH' || history.action === 'REPLACE') {
+      dispatch(onPutListing({ ...listing, ...values }))
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [history.location.key, dispatch])
 
   if (isLoading) {
     return <Loader text="Loading listing process" />
@@ -131,97 +127,25 @@ const SetupProcessPage = ({ match, history, location, ...props }) => {
               />
             )}
           />
-          {/* <Route
-            path={`${match.path}/type`}
+          <Route
+            path={`${match.path}/scene`}
             render={routeProps => (
-              <SpaceTypeTab
+              <ScenePage
                 {...routeProps}
                 {...props}
-                listing={objectListing}
+                listing={listing}
                 dispatch={dispatch}
                 setFatherValues={_setFatherValues}
               />
             )}
           />
           <Route
-            path={`${match.path}/category`}
+            path={`${match.path}/pricing`}
             render={routeProps => (
-              <CategoryTab
+              <PricingPage
                 {...routeProps}
                 {...props}
-                listing={objectListing}
-                dispatch={dispatch}
-                setFatherValues={_setFatherValues}
-              />
-            )}
-          />
-          <Route
-            path={`${match.path}/specification`}
-            render={routeProps => (
-              <SpecTab
-                {...routeProps}
-                {...props}
-                listing={objectListing}
-                dispatch={dispatch}
-                setFatherValues={_setFatherValues}
-              />
-            )}
-          />
-          <Route
-            path={`${match.path}/feature`}
-            render={routeProps => (
-              <FeatureTab
-                {...routeProps}
-                {...props}
-                listing={objectListing}
-                dispatch={dispatch}
-                setFatherValues={_setFatherValues}
-              />
-            )}
-          />
-          <Route
-            path={`${match.path}/details`}
-            render={routeProps => (
-              <DetailTab
-                {...routeProps}
-                {...props}
-                listing={objectListing}
-                dispatch={dispatch}
-                setFatherValues={_setFatherValues}
-              />
-            )}
-          />
-          <Route
-            path={`${match.path}/amenities`}
-            render={routeProps => (
-              <AmenitiesTab
-                {...routeProps}
-                {...props}
-                listing={objectListing}
-                dispatch={dispatch}
-                setFatherValues={_setFatherValues}
-              />
-            )}
-          />
-          <Route
-            path={`${match.path}/media`}
-            render={routeProps => (
-              <MediaTab
-                {...routeProps}
-                {...props}
-                listing={objectListing}
-                dispatch={dispatch}
-                setFatherValues={_setFatherValues}
-              />
-            )}
-          />
-          <Route
-            path={`${match.path}/price`}
-            render={routeProps => (
-              <PriceTab
-                {...routeProps}
-                {...props}
-                listing={objectListing}
+                listing={listing}
                 dispatch={dispatch}
                 setFatherValues={_setFatherValues}
               />
@@ -230,22 +154,22 @@ const SetupProcessPage = ({ match, history, location, ...props }) => {
           <Route
             path={`${match.path}/access`}
             render={routeProps => (
-              <AccessTab
+              <AccessPage
                 {...routeProps}
                 {...props}
-                listing={objectListing}
+                listing={listing}
                 dispatch={dispatch}
                 setFatherValues={_setFatherValues}
               />
             )}
           />
           <Route
-            path={`${match.path}/timetable`}
+            path={`${match.path}/opening-hours`}
             render={routeProps => (
-              <TimetableTab
+              <OpeningHoursPage
                 {...routeProps}
                 {...props}
-                listing={objectListing}
+                listing={listing}
                 dispatch={dispatch}
                 setFatherValues={_setFatherValues}
               />
@@ -254,15 +178,15 @@ const SetupProcessPage = ({ match, history, location, ...props }) => {
           <Route
             path={`${match.path}/cancellation`}
             render={routeProps => (
-              <CancelTab
+              <CancellationPage
                 {...routeProps}
                 {...props}
-                listing={objectListing}
+                listing={listing}
                 dispatch={dispatch}
                 setFatherValues={_setFatherValues}
               />
             )}
-          /> */}
+          />
         </ScrollToTop>
         <Route component={() => <h1>not found</h1>} />
       </Switch>
