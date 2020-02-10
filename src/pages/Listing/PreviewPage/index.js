@@ -203,7 +203,7 @@ const PreviewPage = ({ match, location, ...props }) => {
     return null
   }
 
-  if (isNotOwner) {
+  if (isNotOwner && user.role !== "admin") {
     dispatch(
       openModal(TypesModal.MODAL_TYPE_WARN, {
         options: {
