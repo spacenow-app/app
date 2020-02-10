@@ -1,70 +1,54 @@
-import React from 'react'
-import { Wrapper, Box, Title, StepButtons, Radio } from 'components'
+import React, { useEffect } from 'react'
+import { useDispatch, useSelector } from 'react-redux'
+import { withFormik } from 'formik'
+import { Wrapper, Box, Title, StepButtons, Radio, Loader } from 'components'
 
-const CancellationPage = ({ listing, ...props }) => {
+import { onGetCancellations } from 'redux/ducks/listing-process'
+
+const CancellationPage = ({ listing, values, setFieldValue, handleChange, handleBlur, ...props }) => {
+
+  const dispatch = useDispatch()
+  const { object: cancellations, isLoading: loadingCancellations } = useSelector(state => state.listing_process.cancellations)
+
+  useEffect(() => {
+    dispatch(onGetCancellations())
+  }, [dispatch])
+
   return (
+    <form>
     <Wrapper>
       <Box display="grid" gridGap="30px">
-        <Box>
-          <Title
-            type="h3"
-            title="Cancellation policies"
-            subtitle="Select the best policy for your space."
-            subTitleMargin="10px"
-          />
-        </Box>
-        <Box display="grid" gridTemplateColumns={{ _: 'auto 1fr' }} gridGap="10px">
-          <Radio />
+        {loadingCancellations && <Loader text="Loading cancellations" />}
+        {!loadingCancellations && (
           <Box>
             <Title
-              type="h6"
-              title="Very flexible"
-              subtitle="Guests may cancel their booking up until 24 hours before the event start time and will receive a full refund (including all Fees) of their booking price. Bookings cancelled less than 24 hours before the start time are not refundable."
-              subTitleMargin={12}
-              mediumBold
-              noMargin
+              type="h3"
+              title="Cancellation policies"
+              subtitle="Select the best policy for your space."
+              subTitleMargin={10}
             />
+            <Box display="grid" gridTemplateColumns={{ _: '1fr', medium: 'auto auto auto' }} gridGap="30px">
+              {[].concat(cancellations).map((item, index) => (
+                <Box key={index} display="grid" gridTemplateColumns={{ _: 'auto 1fr'}} gridGap="10px">
+                  <Radio
+                    name="listingData.cancellationPolicy"
+                    value={item.id}
+                    checked={item.id === values.listingData.cancellationPolicy}
+                    handleChange={handleChange}
+                  />
+                  <Title
+                    type="h6"
+                    title={item.policyName}
+                    subtitle={item.policyContent}
+                    subTitleMargin={12}
+                    mediumBold
+                    noMargin
+                  />
+                </Box>
+              ))}
+            </Box>
           </Box>
-        </Box>
-        <Box display="grid" gridTemplateColumns={{ _: 'auto 1fr' }} gridGap="10px">
-          <Radio />
-          <Box>
-            <Title
-              type="h6"
-              title="Flexible"
-              subtitle="Guests may cancel their booking up until 7 days before the start time and will receive a full refund (including all Fees) of their booking price. Guests may cancel their booking between 7 days and 24 hours before the start time and receive a 50% refund (excluding Fees) of their booking price. Bookings cancelled less than 24 hours before the start time are not refundable."
-              subTitleMargin={12}
-              mediumBold
-              noMargin
-            />
-          </Box>
-        </Box>
-        <Box display="grid" gridTemplateColumns={{ _: 'auto 1fr' }} gridGap="10px">
-          <Radio />
-          <Box>
-            <Title
-              type="h6"
-              title="Standard 30"
-              subtitle="Guests may cancel their Booking between 7 days and 24 hours before the event start time and receive a 50% refund (excluding Fees) of their Booking Price. Booking cancellations submitted less than 24 hours before the Event start time are not refundable."
-              subTitleMargin={12}
-              mediumBold
-              noMargin
-            />
-          </Box>
-        </Box>
-        <Box display="grid" gridTemplateColumns={{ _: 'auto 1fr' }} gridGap="10px">
-          <Radio />
-          <Box>
-            <Title
-              type="h6"
-              title="No cancellations"
-              subtitle="Guest cannot cancel their booking. Note: This may affect the number of bookings received."
-              subTitleMargin={12}
-              mediumBold
-              noMargin
-            />
-          </Box>
-        </Box>
+        )}
       </Box>
       <StepButtons
         prev={{
@@ -78,7 +62,26 @@ const CancellationPage = ({ listing, ...props }) => {
         }}
       />
     </Wrapper>
+    </form>
   )
 }
 
-export default CancellationPage
+const formik = {
+  displayName: 'SetupProcess_CancellationForm',
+  mapPropsToValues: ({ listing }) => {
+    return {
+      listingData: {
+        ...listing.listingData,
+        cancellationPolicy: listing.listingData.cancellationPolicy || 1,
+      }
+    }
+  },
+  enableReinitialize: true,
+  isInitialValid: true
+}
+
+CancellationPage.propTypes = {
+  ...withFormik.propTypes
+}
+
+export default withFormik(formik)(CancellationPage)

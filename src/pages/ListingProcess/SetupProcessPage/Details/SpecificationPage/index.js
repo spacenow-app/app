@@ -5,7 +5,7 @@ import { Wrapper, Box, Title, StepButtons, Select, Checkbox, Input } from 'compo
 const SpecificationPage = ({ listing, values, handleChange, handleBlur, ...props }) => {
   useEffect(() => {
     props.setFatherValues({ ...values })
-  }, [props, listing, values])
+  }, [props, values])
 
   return (
     <form>
@@ -108,11 +108,11 @@ const SpecificationPage = ({ listing, values, handleChange, handleBlur, ...props
           </Box>
           <Box>
             <Title type="h3" title="Alcohol licence" />
-            <Select name="alcohol">
+            <Select value={values.listingData.alcoholLicence} onChange={handleChange} onBlur={handleBlur} name="listingData.alcoholLicence" >
               <option value="">Please select</option>
-              <option value="">Licenced</option>
-              <option value="">No licenced</option>
-              <option value="">BYO</option>
+              <option value="Licenced">Licenced</option>
+              <option value="No Licenced">No licenced</option>
+              <option value="BYO">BYO</option>
             </Select>
           </Box>
           <StepButtons
@@ -138,7 +138,8 @@ const formik = {
     return {
       listingData: {
         ...listing.listingData,
-        capacity: listing.listingData.capacity || 0
+        capacity: listing.listingData.capacity || 0,
+        alcoholLicence: listing.listingData.alcoholLicence || ''
       }
     }
   },

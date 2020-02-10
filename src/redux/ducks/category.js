@@ -18,6 +18,11 @@ const initialState = {
   },
   get: {
     categories: []
+  },
+  categories: {
+    object: [],
+    isLoading: true,
+    error: null
   }
 }
 

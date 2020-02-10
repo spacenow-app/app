@@ -1,8 +1,13 @@
-import React from 'react'
+import React, { useEffect } from 'react'
+import { withFormik } from 'formik'
 import { Wrapper, Box, Title, StepButtons, Select, Text } from 'components'
 
-const AccessPage = ({ listing, ...props }) => {
+const AccessPage = ({ listing, values, handleChange, handleBlur, ...props }) => {
+  useEffect(() => {
+    props.setFatherValues({ ...values })
+  }, [props, values])
   return (
+    <form>
     <Wrapper>
       <Box display="grid" gridGap="30px">
         <Box>
@@ -16,8 +21,15 @@ const AccessPage = ({ listing, ...props }) => {
           </Box>
           <Box display="grid" gridGap="10px">
             <Box display="grid" gridTemplateColumns={{ _: '1fr', medium: '1fr 1fr 1fr' }} gridGap="30px">
-              <Select>
+              <Select 
+              name='bookingType'
+              label='Select guest booking'
+              value={values.bookingType}
+              onChange={handleChange}
+              onBlur={handleBlur}>
                 <option>Select guest booking</option>
+                <option value={`instant`}>Instantly</option>
+                <option value={`request`}>Request</option>
               </Select>
             </Box>
             <Box display="grid">
@@ -83,7 +95,29 @@ const AccessPage = ({ listing, ...props }) => {
         }}
       />
     </Wrapper>
+    </form>
   )
 }
 
-export default AccessPage
+const formik = {
+  displayName: 'SetupProcess_AccessForm',
+  mapPropsToValues: ({ listing }) => {
+    return {
+      ...listing,
+      bookingType: listing.bookingType,
+      listingData: {
+        ...listing.listingData,
+        checkInStart: listing.listingData.checkInStart,
+        checkInEnd: listing.listingData.checkInEnd
+      }
+    }
+  },
+  enableReinitialize: true,
+  isInitialValid: true
+}
+
+AccessPage.propTypes = {
+  ...withFormik.propTypes
+}
+
+export default withFormik(formik)(AccessPage)

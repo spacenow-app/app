@@ -21,7 +21,7 @@ const TIME_TABLE_INIT_STATE = {
   sat: false,
   sun: false,
   all247: false,
-  listingAccessHours: []
+  accessHours: []
 }
 
 const OpeningHoursPage = ({ listing, ...props }) => {
@@ -29,7 +29,6 @@ const OpeningHoursPage = ({ listing, ...props }) => {
 
   const [timetable, setTimeTable] = useState([])
   const [fullTime, setFullTime] = useState(false)
-  const [selectedDates, setSelectedDates] = useState([])
   const [, setHolidays] = useState([])
   const [, setTimeTableWeek] = useState([])
 
@@ -38,10 +37,7 @@ const OpeningHoursPage = ({ listing, ...props }) => {
 
   useEffect(() => {
     const valuesToUpdate = {
-      ...listing,
-      listingAccessDays: _mapToAccessHourType(timetable),
-      listingExceptionDates: selectedDates,
-      isValid: true
+      accessDays: _mapToAccessHourType(timetable),
     }
     props.setFatherValues(valuesToUpdate)
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -83,16 +79,8 @@ const OpeningHoursPage = ({ listing, ...props }) => {
   }, [listing])
 
   useEffect(() => {
-    dispatch(onGetAllHolidays())
-  }, [dispatch, listing])
-
-  useEffect(() => {
     _checkFullTime(timetable)
   }, [timetable])
-
-  useEffect(() => {
-    setSelectedDates(availabilitiesArray.map(o => new Date(o)))
-  }, [availabilitiesArray])
 
   useEffect(() => {
     const newTimeTableWeek = timetable.map(item => {
@@ -103,21 +91,6 @@ const OpeningHoursPage = ({ listing, ...props }) => {
     })
     setTimeTableWeek(newTimeTableWeek.filter(el => el !== undefined))
   }, [timetable])
-
-  useEffect(() => {
-    const newarray = holidaysArray.filter(el => {
-      if (isAfter(new Date(), new Date(el.date))) {
-        return false
-      }
-      return true
-    })
-    setHolidays(
-      newarray
-        .map(o => selectedDates.filter(selectedDay => isSameDay(selectedDay, o.originalDate)))
-        .filter(res => res.length > 0)
-        .flatMap(res => res)
-    )
-  }, [holidaysArray, selectedDates])
 
   const _newDateTime = (hour, min) => {
     const h = new Date()
@@ -211,7 +184,7 @@ const OpeningHoursPage = ({ listing, ...props }) => {
       outputObj[elem.day] = elem.active
       if (elem.active) {
         const weekDay = weekTimeTable.find(o => o.short === elem.day)
-        outputObj.listingAccessHours.push({
+        outputObj.accessHours.push({
           weekday: weekDay.index,
           allday: elem.fulltime,
           openHour: _getHours(elem, elem.open),
@@ -248,10 +221,6 @@ const OpeningHoursPage = ({ listing, ...props }) => {
       />
     </Wrapper>
   )
-}
-
-OpeningHoursPage.propTypes = {
-  listing: PropTypes.instanceOf(Object).isRequired
 }
 
 export default OpeningHoursPage

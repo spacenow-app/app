@@ -28,7 +28,16 @@ export const Types = {
   GET_AMENITIES_FAILURE: 'GET_AMENITIES_FAILURE',
   GET_FEATURES_REQUEST: 'GET_FEATURES_REQUEST',
   GET_FEATURES_SUCCESS: 'GET_FEATURES_SUCCESS',
-  GET_FEATURES_FAILURE: 'GET_FEATURES_FAILURE'
+  GET_FEATURES_FAILURE: 'GET_FEATURES_FAILURE',
+  GET_ROOT_CATEGORIES_REQUEST: 'GET_ROOT_CATEGORIES_REQUEST',
+  GET_ROOT_CATEGORIES_SUCCESS: 'GET_ROOT_CATEGORIES_SUCCESS',
+  GET_ROOT_CATEGORIES_FAILURE: 'GET_ROOT_CATEGORIES_FAILURE',
+  GET_SUBCATEGORIES_REQUEST: 'GET_SUBCATEGORIES_REQUEST',
+  GET_SUBCATEGORIES_SUCCESS: 'GET_SUBCATEGORIES_SUCCESS',
+  GET_SUBCATEGORIES_FAILURE: 'GET_SUBCATEGORIES_FAILURE',
+  GET_CANCELLATIONS_REQUEST: 'GET_CANCELLATIONS_REQUEST',
+  GET_CANCELLATIONS_SUCCESS: 'GET_CANCELLATIONS_SUCCESS',
+  GET_CANCELLATIONS_FAILURE: 'GET_CANCELLATIONS_FAILURE'
 }
 
 const initialState = {
@@ -55,6 +64,21 @@ const initialState = {
     error: null
   },
   features: {
+    object: null,
+    isLoading: true,
+    error: null
+  },
+  categories: {
+    object: [],
+    isLoading: true,
+    error: null
+  },
+  subcategories: {
+    object: [],
+    isLoading: true,
+    error: null
+  },
+  cancellations: {
     object: null,
     isLoading: true,
     error: null
@@ -113,6 +137,20 @@ const featureFields = `
   id
   name
 `
+const categoryFields = `
+  id
+  name
+  slug
+  parentId
+  order
+  isActive
+`
+const cancellationFields = `
+  id
+  policyName
+  policyContent
+  priorDays
+`
 const dataFields = `
   id
   listingId
@@ -137,6 +175,10 @@ const dataFields = `
   link
   listingType
   direction
+  alcoholLicence
+  wifiNetwork
+  wifiUsername
+  wifiPassword
 `
 const listingFields = `
   id
@@ -202,6 +244,27 @@ const queryGetV2Features = gql`
   query getV2Features {
     getV2Features {
       ${featureFields}
+    }
+  }
+`
+const queryGetV2RootCategories = gql`
+  query getV2RootCategories {
+    getV2RootCategories {
+      ${categoryFields}
+    }
+  }
+`
+const queryGetV2Category = gql`
+  query getV2Category($id: String!) {
+    getV2Category(id: $id) {
+      ${categoryFields}
+    }
+  }
+`
+const queryGetV2Cancellations = gql`
+  query getV2Cancellations {
+    getV2Cancellations {
+      ${cancellationFields}
     }
   }
 `
@@ -388,6 +451,93 @@ export default function reducer(state = initialState, action) {
         }
       }
     }
+    case Types.GET_ROOT_CATEGORIES_REQUEST: {
+      return {
+        ...state,
+        categories: {
+          ...state.categories,
+          isLoading: true
+        }
+      }
+    }
+    case Types.GET_ROOT_CATEGORIES_SUCCESS: {
+      return {
+        ...state,
+        categories: {
+          ...state.categories,
+          object: action.payload,
+          isLoading: false
+        }
+      }
+    }
+    case Types.GET_ROOT_CATEGORIES_FAILURE: {
+      return {
+        ...state,
+        categories: {
+          ...state.categories,
+          isLoading: false,
+          error: action.payload
+        }
+      }
+    }
+    case Types.GET_SUBCATEGORIES_REQUEST: {
+      return {
+        ...state,
+        subcategories: {
+          ...state.subcategories,
+          isLoading: true
+        }
+      }
+    }
+    case Types.GET_SUBCATEGORIES_SUCCESS: {
+      return {
+        ...state,
+        subcategories: {
+          ...state.subcategories,
+          object: action.payload,
+          isLoading: false
+        }
+      }
+    }
+    case Types.GET_SUBCATEGORIES_FAILURE: {
+      return {
+        ...state,
+        subcategories: {
+          ...state.subcategories,
+          isLoading: false,
+          error: action.payload
+        }
+      }
+    }
+    case Types.GET_CANCELLATIONS_REQUEST: {
+      return {
+        ...state,
+        cancellations: {
+          ...state.cancellations,
+          isLoading: true
+        }
+      }
+    }
+    case Types.GET_CANCELLATIONS_SUCCESS: {
+      return {
+        ...state,
+        cancellations: {
+          ...state.cancellations,
+          object: action.payload,
+          isLoading: false
+        }
+      }
+    }
+    case Types.GET_CANCELLATIONS_FAILURE: {
+      return {
+        ...state,
+        cancellations: {
+          ...state.cancellations,
+          isLoading: false,
+          error: action.payload
+        }
+      }
+    }
     default:
       return state
   }
@@ -483,5 +633,45 @@ export const onGetFeatures = () => async dispatch => {
     dispatch({ type: Types.GET_FEATURES_SUCCESS, payload: data.getV2Features })
   } catch (err) {
     dispatch({ type: Types.GET_FEATURES_FAILURE, payload: errToMsg(err) })
+  }
+}
+
+export const onGetRootCategories = () => async dispatch => {
+  dispatch({ type: Types.GET_ROOT_CATEGORIES_REQUEST })
+  try {
+    const { data } = await getClient(dispatch).query({
+      query: queryGetV2RootCategories,
+      fetchPolicy: 'network-only'
+    })
+    dispatch({ type: Types.GET_ROOT_CATEGORIES_SUCCESS, payload: data.getV2RootCategories })
+  } catch (err) {
+    dispatch({ type: Types.GET_ROOT_CATEGORIES_FAILURE, payload: errToMsg(err) })
+  }
+}
+
+export const onGetSubCategories = id => async dispatch => {
+  dispatch({ type: Types.GET_SUBCATEGORIES_REQUEST })
+  try {
+    const { data } = await getClient(dispatch).query({
+      query: queryGetV2Category,
+      fetchPolicy: 'network-only',
+      variables: { id }
+    })
+    dispatch({ type: Types.GET_SUBCATEGORIES_SUCCESS, payload: data.getV2Category })
+  } catch (err) {
+    dispatch({ type: Types.GET_SUBCATEGORIES_FAILURE, payload: errToMsg(err) })
+  }
+}
+
+export const onGetCancellations = () => async dispatch => {
+  dispatch({ type: Types.GET_CANCELLATIONS_REQUEST })
+  try {
+    const { data } = await getClient(dispatch).query({
+      query: queryGetV2Cancellations,
+      fetchPolicy: 'network-only'
+    })
+    dispatch({ type: Types.GET_CANCELLATIONS_SUCCESS, payload: data.getV2Cancellations })
+  } catch (err) {
+    dispatch({ type: Types.GET_CANCELLATIONS_FAILURE, payload: errToMsg(err) })
   }
 }
