@@ -29,30 +29,36 @@ const HourlyBooking = ({
   hoursQuantity,
   onCalcHourlyPeriod,
   inputFocus,
+  setFocusInput,
   hidePrice,
   handleMessageChange,
   message,
   hourlySuggestion
 }) => {
-
   const [dayPicker, setDayPicker] = useState('')
 
   useEffect(() => {
-    if (dayPicker.input && inputFocus)
-      dayPicker.input.focus()
+    if (dayPicker.input && inputFocus) dayPicker.input.focus()
   }, [dayPicker.input, inputFocus])
 
   useEffect(() => {
     onCalcHourlyPeriod()
   }, [date, startTime, endTime]) // eslint-disable-line react-hooks/exhaustive-deps
 
-  const _getOptions = (range) => {
+  const _getOptions = range => {
     if (!range) return []
     const options = []
     for (let i = 0; i < range.length; i += 1) {
       options.push({ key: i, value: range[i], name: range[i] })
     }
     return options
+  }
+
+  const _hanldeTimeClick = () => {
+    if (!hourlySuggestion) {
+      setFocusInput(true)
+      return
+    }
   }
 
   return (
@@ -83,27 +89,33 @@ const HourlyBooking = ({
 
         <Grid columns={2} style={{ marginBottom: '10px' }}>
           <Cell>
-            <Select label={hidePrice ? '' : 'Start time'}
+            <Select
+              label={hidePrice ? '' : 'Start time'}
               options={_getOptions(hourlySuggestion && hourlySuggestion.openRange)}
               handleChange={e => onStartTimeChange(String(e.target.value))}
               value={startTime}
-              disabled={!hourlySuggestion}
+              // disabled={!hourlySuggestion}
+              bgPosition="87% 50%"
+              onClick={() => _hanldeTimeClick()}
             />
           </Cell>
           <Cell>
-            <Select label={hidePrice ? '' : 'End time'}
+            <Select
+              label={hidePrice ? '' : 'End time'}
               options={_getOptions(hourlySuggestion && hourlySuggestion.closeRange)}
               handleChange={e => onEndTimeChange(String(e.target.value))}
               value={endTime}
-              disabled={!hourlySuggestion}
+              // disabled={!hourlySuggestion}
+              bgPosition="87% 50%"
+              onClick={() => _hanldeTimeClick()}
             />
-            {date &&
+            {date && (
               <Box display="grid" justifyItems="end">
                 <Text fontFamily="regular" fontSize="12px" color="greyscale.1">
                   {`${hoursQuantity} ${spelling(hoursQuantity)}`}
                 </Text>
               </Box>
-            }
+            )}
           </Cell>
         </Grid>
 

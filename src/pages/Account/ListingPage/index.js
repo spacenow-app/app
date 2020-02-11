@@ -52,7 +52,8 @@ const ListingCard = (dispatch, item, index) => {
           type="h6"
           title={<Text width={{ _: '220px', medium: '250px', large: '270px' }}>{item.title || ''}</Text>}
           subtitle={
-            <Text width="300px">{`${item.location.address1}, ${item.location.city} ${item.location.state}`}</Text>
+            <Text width="300px">{`${item.location.address1 ? `${item.location.address1},` : ''} 
+            ${item.location.city}, ${item.location.state}`}</Text>
           }
         />
         <Card.Horizontal.Price
@@ -95,12 +96,12 @@ const ListingCard = (dispatch, item, index) => {
         </Card.Horizontal.Dropdown.Menu>
       </Card.Horizontal.Dropdown>
       <Card.Horizontal.Footer>
-        <Card.Horizontal.Tag
+        {/* <Card.Horizontal.Tag
           small
           icon={<Icon width="24px" name={_parseCategoryIconName(item.settingsParent.category.otherItemName, false)} />}
         >
           {item.settingsParent.category.itemName}
-        </Card.Horizontal.Tag>
+        </Card.Horizontal.Tag> */}
         <Card.Horizontal.Tag
           small
           icon={

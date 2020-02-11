@@ -275,7 +275,6 @@ export const signin = (email, password, from) => async dispatch => {
 }
 
 export const signup = (name, email, password, from, userType) => async dispatch => {
-  console.log('from', from)
   dispatch({ type: Types.AUTH_SIGNUP_REQUEST })
   try {
     const { data } = await getClient().mutate({
@@ -283,7 +282,6 @@ export const signup = (name, email, password, from, userType) => async dispatch 
       mutation: mutationSignUp
     })
     const signupReturn = data.signup
-    console.log('signupReturn', signupReturn)
     setToken(signupReturn.token, signupReturn.expiresIn)
     dispatch({ type: AccountTypes.ACC_GET_PROFILE_SUCCESS, payload: signupReturn.user })
     if (userType) {

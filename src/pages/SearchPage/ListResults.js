@@ -94,7 +94,7 @@ const ContainerPagination = styled.div`
 `
 
 const ListResults = forwardRef(
-  ({ history, markers, onHoverItem, pagination, onPageChanged, showMap, ...props }, ref) => {
+  ({ history, markers, onHoverItem, pagination, onPageChanged, showMap, eventSpace, ...props }, ref) => {
     const _parseCategoryIconName = (name, isSub) => {
       const prefix = isSub ? 'sub-category-' : 'category-'
       return prefix + name.replace(/([A-Z])/g, g => `-${g[0].toLowerCase()}`)
@@ -182,73 +182,168 @@ const ListResults = forwardRef(
         <ContainerList showMap={showMap}>
           {markers.map(item => {
             return (
-              <CardContainer
-                key={item.id}
-                onMouseEnter={() => onHoverItem(item)}
-                onMouseLeave={() => onHoverItem(null)}
-                showMap={showMap}
-              >
-                <CardImage
-                  showMap={showMap}
-                  src={_getCoverPhoto(item)}
-                  onClick={() => window.open(`/space/${item.id}`)}
-                />
-                <CardContent showMap={showMap}>
-                  <Box display="flex" justifyContent="start" mb="10px">
-                    <Box>
-                      <Tag
-                        small
-                        icon={<Icon width="24px" name={_parseCategoryIconName(item.category.otherItemName, false)} />}
-                      >
-                        {item.category.itemName}
-                      </Tag>
-                    </Box>
-                    <Box margin="0 10px">
-                      <Tag
-                        small
-                        icon={<Icon width="24px" name={_parseCategoryIconName(item.subcategory.otherItemName, true)} />}
-                      >
-                        {item.subcategory.itemName}
-                      </Tag>
-                    </Box>
-                  </Box>
-                  <Box>
-                    <CardTitle onClick={() => window.open(`/space/${item.id}`)}>{item.title}</CardTitle>
-                  </Box>
-                  <Text display="block" fontFamily="regular" fontSize="14px" color="greyscale.1" margin="3px 0px">
-                    {_getAddress(item.location)}
-                  </Text>
-                  <Box
-                    mt="8px"
-                    mb="13px"
-                    display="grid"
-                    gridTemplateColumns={item.specifications.length >= 3 ? 'auto auto auto' : 'auto auto'}
-                    justifyContent="space-between"
-                    borderBottom="1px solid #eee"
-                    pb="13px"
+              <>
+                {eventSpace &&
+                  item.subcategory.otherItemName !== 'healthFitness' &&
+                  item.subcategory.otherItemName !== 'creative' && (
+                    // TODO: Remove above condition when include again health and creative spaces in event search
+                    <CardContainer
+                      key={item.id}
+                      onMouseEnter={() => onHoverItem(item)}
+                      onMouseLeave={() => onHoverItem(null)}
+                      showMap={showMap}
+                    >
+                      <CardImage
+                        showMap={showMap}
+                        src={_getCoverPhoto(item)}
+                        onClick={() => window.open(`/space/${item.id}`)}
+                      />
+                      <CardContent showMap={showMap}>
+                        <Box display="flex" justifyContent="start" mb="10px">
+                          {/* <Box>
+                            <Tag
+                              small
+                              icon={
+                                <Icon width="24px" name={_parseCategoryIconName(item.category.otherItemName, false)} />
+                              }
+                            >
+                              {item.category.itemName}
+                            </Tag>
+                          </Box> */}
+                          <Box>
+                            <Tag
+                              small
+                              icon={
+                                <Icon
+                                  width="24px"
+                                  name={_parseCategoryIconName(item.subcategory.otherItemName, true)}
+                                />
+                              }
+                            >
+                              {item.subcategory.itemName}
+                            </Tag>
+                          </Box>
+                        </Box>
+                        <Box>
+                          <CardTitle onClick={() => window.open(`/space/${item.id}`)}>{item.title}</CardTitle>
+                        </Box>
+                        <Text display="block" fontFamily="regular" fontSize="14px" color="greyscale.1" margin="3px 0px">
+                          {_getAddress(item.location)}
+                        </Text>
+                        <Box
+                          mt="8px"
+                          mb="13px"
+                          display="grid"
+                          gridTemplateColumns={item.specifications.length >= 3 ? 'auto auto auto' : 'auto auto'}
+                          justifyContent="space-between"
+                          borderBottom="1px solid #eee"
+                          pb="13px"
+                        >
+                          {_renderSpecifications(item.specifications, item.listingData)}
+                        </Box>
+                        <Grid
+                          columns={item.listingData.bookingType !== 'poa' ? '50px auto auto' : 'auto auto'}
+                          columnGap="0"
+                        >
+                          {item.listingData.bookingType !== 'poa' && <Text fontSize="14px">From: &nbsp; </Text>}
+                          <Price
+                            // currency={item.listingData.currency}
+                            price={item.listingData.basePrice}
+                            currencySymbol="$"
+                            bookingPeriod={item.bookingPeriod}
+                            bookingType={item.listingData.bookingType}
+                            size="16px"
+                            lightPeriod
+                          />
+                          <Box justifySelf="end" display="flex" alignItems="center">
+                            <Avatar width="30px" height="30px" image={item.host.profile && item.host.profile.picture} />
+                            <Text fontSize="12px" ml="10px" fontFamily="medium">
+                              {`${item.host.profile && item.host.profile.firstName}`}
+                            </Text>
+                          </Box>
+                        </Grid>
+                      </CardContent>
+                    </CardContainer>
+                  )}
+
+                {/* TODO: Remove code underneath code when include again health and creative spaces in event search */}
+                {!eventSpace && (
+                  <CardContainer
+                    key={item.id}
+                    onMouseEnter={() => onHoverItem(item)}
+                    onMouseLeave={() => onHoverItem(null)}
+                    showMap={showMap}
                   >
-                    {_renderSpecifications(item.specifications, item.listingData)}
-                  </Box>
-                  <Grid columns={item.listingData.bookingType !== 'poa' ? '50px auto auto' : 'auto auto'} columnGap="0">
-                    {item.listingData.bookingType !== 'poa' && <Text fontSize="14px">From: &nbsp; </Text>}
-                    <Price
-                      // currency={item.listingData.currency}
-                      price={item.listingData.basePrice}
-                      currencySymbol="$"
-                      bookingPeriod={item.bookingPeriod}
-                      bookingType={item.listingData.bookingType}
-                      size="16px"
-                      lightPeriod
+                    <CardImage
+                      showMap={showMap}
+                      src={_getCoverPhoto(item)}
+                      onClick={() => window.open(`/space/${item.id}`)}
                     />
-                    <Box justifySelf="end" display="flex" alignItems="center">
-                      <Avatar width="30px" height="30px" image={item.host.profile && item.host.profile.picture} />
-                      <Text fontSize="12px" ml="10px" fontFamily="medium">
-                        {`${item.host.profile && item.host.profile.firstName}`}
+                    <CardContent showMap={showMap}>
+                      <Box display="flex" justifyContent="start" mb="10px">
+                        {/* <Box>
+                          <Tag
+                            small
+                            icon={
+                              <Icon width="24px" name={_parseCategoryIconName(item.category.otherItemName, false)} />
+                            }
+                          >
+                            {item.category.itemName}
+                          </Tag>
+                        </Box> */}
+                        <Box>
+                          <Tag
+                            small
+                            icon={
+                              <Icon width="24px" name={_parseCategoryIconName(item.subcategory.otherItemName, true)} />
+                            }
+                          >
+                            {item.subcategory.itemName}
+                          </Tag>
+                        </Box>
+                      </Box>
+                      <Box>
+                        <CardTitle onClick={() => window.open(`/space/${item.id}`)}>{item.title}</CardTitle>
+                      </Box>
+                      <Text display="block" fontFamily="regular" fontSize="14px" color="greyscale.1" margin="3px 0px">
+                        {_getAddress(item.location)}
                       </Text>
-                    </Box>
-                  </Grid>
-                </CardContent>
-              </CardContainer>
+                      <Box
+                        mt="8px"
+                        mb="13px"
+                        display="grid"
+                        gridTemplateColumns={item.specifications.length >= 3 ? 'auto auto auto' : 'auto auto'}
+                        justifyContent="space-between"
+                        borderBottom="1px solid #eee"
+                        pb="13px"
+                      >
+                        {_renderSpecifications(item.specifications, item.listingData)}
+                      </Box>
+                      <Grid
+                        columns={item.listingData.bookingType !== 'poa' ? '50px auto auto' : 'auto auto'}
+                        columnGap="0"
+                      >
+                        {item.listingData.bookingType !== 'poa' && <Text fontSize="14px">From: &nbsp; </Text>}
+                        <Price
+                          // currency={item.listingData.currency}
+                          price={item.listingData.basePrice}
+                          currencySymbol="$"
+                          bookingPeriod={item.bookingPeriod}
+                          bookingType={item.listingData.bookingType}
+                          size="16px"
+                          lightPeriod
+                        />
+                        <Box justifySelf="end" display="flex" alignItems="center">
+                          <Avatar width="30px" height="30px" image={item.host.profile && item.host.profile.picture} />
+                          <Text fontSize="12px" ml="10px" fontFamily="medium">
+                            {`${item.host.profile && item.host.profile.firstName}`}
+                          </Text>
+                        </Box>
+                      </Grid>
+                    </CardContent>
+                  </CardContainer>
+                )}
+              </>
             )
           })}
         </ContainerList>
@@ -275,7 +370,8 @@ ListResults.propTypes = {
   history: PropTypes.instanceOf(Object).isRequired,
   onHoverItem: PropTypes.instanceOf(Object).isRequired,
   onPageChanged: PropTypes.instanceOf(Object).isRequired,
-  showMap: PropTypes.bool.isRequired
+  showMap: PropTypes.bool.isRequired,
+  eventSpace: PropTypes.bool // TODO: Remove when include again health and creative spaces in event search
 }
 
 export default memo(ListResults, comparisonFn)

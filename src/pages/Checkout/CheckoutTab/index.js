@@ -276,6 +276,7 @@ const CheckoutPage = ({ match, location, history, ...props }) => {
             label="Payment options"
             onChange={val => _handleChangeDropdown(val)}
             value={savedCards ? 'saved' : 'card'}
+            bgPosition="97% 50%"
           >
             <option value="card">Credit card</option>
             {arrayCards.length > 0 && <option value="saved">Saved card</option>}
