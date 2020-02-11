@@ -348,6 +348,7 @@ export const googleSignin = (googleResponse, from, userType) => async dispatch =
     setToken(signinReturn.token, signinReturn.expiresIn)
     if (userType) {
       dispatch({ type: Types.AUTH_SIGNIN_SUCCESS, from: { pathname: `/welcome/${userType}` } })
+      window.location.reload()
     } else {
       dispatch({ type: Types.AUTH_SIGNIN_SUCCESS, from })
     }
@@ -372,6 +373,7 @@ export const facebookSignin = (facebookResponse, from, userType) => async dispat
     setToken(signinReturn.token, signinReturn.expiresIn)
     if (userType) {
       dispatch({ type: Types.AUTH_SIGNIN_SUCCESS, from: { pathname: `/welcome/${userType}` } })
+      window.location.reload()
     } else {
       dispatch({ type: Types.AUTH_SIGNIN_SUCCESS, from })
     }
