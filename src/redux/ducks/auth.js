@@ -286,6 +286,7 @@ export const signup = (name, email, password, from, userType) => async dispatch 
     dispatch({ type: AccountTypes.ACC_GET_PROFILE_SUCCESS, payload: signupReturn.user })
     if (userType) {
       dispatch({ type: Types.AUTH_SIGNIN_SUCCESS, from: { pathname: `/welcome/${userType}` } })
+      window.location.reload()
     } else {
       dispatch({ type: Types.AUTH_SIGNIN_SUCCESS, from })
     }

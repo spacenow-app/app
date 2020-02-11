@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { NavBar, Wrapper, Box, Title, Card, Text, Link, Grid, Cell, Button } from 'components'
 import styled from 'styled-components'
 // import { config } from 'variables'
@@ -35,14 +35,6 @@ const BottomButton = styled.div`
 `
 
 const IntroHostPage = props => {
-  const _handleClick = () => {
-    props.history.push('/listing')
-
-    setTimeout(() => {
-      props.history.push('/listing')
-    }, 500)
-  }
-
   return (
     <>
       <NavBar />
@@ -114,7 +106,7 @@ const IntroHostPage = props => {
         <BottomButton>
           <Grid columns={1} style={{ alignItems: 'center' }}>
             <Cell>
-              <Button fluid style={{ maxWidth: '360px' }} onClick={() => _handleClick()}>
+              <Button fluid style={{ maxWidth: '360px' }} onClick={() => props.history.push('/listing')}>
                 Skip the tour and get started
               </Button>
             </Cell>
