@@ -102,7 +102,8 @@ const BookingCard = (dispatch, item, index, userType, userId) => {
           type="h6"
           title={<Text width={{ _: '220px', medium: '250px', large: '270px' }}>{item.listing.title || ''}</Text>}
           subtitle={
-            <Text width="300px">{`${item.listing.location.address1}, ${item.listing.location.city} ${item.listing.location.state}`}</Text>
+            <Text width="300px">{`${item.listing.location.address1 ? `${item.listing.location.address1}, ` : ''} 
+            ${item.listing.location.city}, ${item.listing.location.state}`}</Text>
           }
         />
         <Card.Horizontal.Price
@@ -112,7 +113,7 @@ const BookingCard = (dispatch, item, index, userType, userId) => {
           title={
             <Price
               currency={item.currency}
-              price={userType !== 'host' ? item.totalPrice : (item.basePrice * item.period) * .89}
+              price={userType !== 'host' ? item.totalPrice : item.basePrice * item.period * 0.89}
               currencySymbol="$"
               bookingType={item.bookingType}
               size="18px"
@@ -160,7 +161,7 @@ const BookingCard = (dispatch, item, index, userType, userId) => {
         </Card.Horizontal.Dropdown.Menu>
       </Card.Horizontal.Dropdown>
       <Card.Horizontal.Footer>
-        <Card.Horizontal.Tag
+        {/* <Card.Horizontal.Tag
           small
           icon={
             <Icon
@@ -170,7 +171,7 @@ const BookingCard = (dispatch, item, index, userType, userId) => {
           }
         >
           {item.listing.settingsParent.category.itemName}
-        </Card.Horizontal.Tag>
+        </Card.Horizontal.Tag> */}
         <Card.Horizontal.Tag
           small
           icon={
@@ -249,10 +250,10 @@ const BookingPage = ({ location, ...props }) => {
       {!bookings || bookings.count === 0 ? (
         <BackgroundImage text="We didn't find any bookings :(" />
       ) : (
-          <Grid columns={1} rowGap="30px">
-            {[].concat(bookings.items).map((item, index) => BookingCard(dispatch, item, index, userType, id))}
-          </Grid>
-        )}
+        <Grid columns={1} rowGap="30px">
+          {[].concat(bookings.items).map((item, index) => BookingCard(dispatch, item, index, userType, id))}
+        </Grid>
+      )}
     </>
   )
 }

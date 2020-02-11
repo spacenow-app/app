@@ -130,12 +130,12 @@ const CardSearch = ({ item, ...props }) => {
       <CardImage src={_getCoverPhoto(item)} onClick={() => window.open(`/space/${item.id}`)} />
       <CardContent>
         <Box display="flex" justifyContent="start" mb="15px">
-          <Box>
+          {/* <Box>
             <Tag small icon={<Icon width="24px" name={_parseCategoryIconName(item.category.otherItemName, false)} />}>
               {item.category.itemName}
             </Tag>
-          </Box>
-          <Box margin="0 10px">
+          </Box> */}
+          <Box>
             <Tag small icon={<Icon width="24px" name={_parseCategoryIconName(item.subcategory.otherItemName, true)} />}>
               {item.subcategory.itemName}
             </Tag>
@@ -143,7 +143,8 @@ const CardSearch = ({ item, ...props }) => {
         </Box>
         <CardTitle onClick={() => window.open(`/space/${item.id}`)}>{item.title}</CardTitle>
         <Text display="block" fontFamily="regular" fontSize="14px" color="greyscale.1">
-          {`${item.location.address1}, ${item.location.city}`}
+          {item.location.address1 && <span>{item.location.address1}, </span>}
+          {item.location.city && <span>{item.location.city}</span>}
         </Text>
         <Box
           my="10px"

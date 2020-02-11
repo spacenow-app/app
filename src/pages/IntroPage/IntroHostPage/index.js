@@ -1,5 +1,7 @@
 import React from 'react'
-import { NavBar, Wrapper, Box, Title, Card, Text, Link } from 'components'
+import { NavBar, Wrapper, Box, Title, Card, Text, Link, Grid, Cell, Button } from 'components'
+import styled from 'styled-components'
+// import { config } from 'variables'
 
 const itemsCardOne = ['Update your account details', 'Add a profile photo', 'Tell us a little bit about yourself']
 const itemsCardTwo = [
@@ -20,6 +22,18 @@ const itemsCardFour = [
   'Support whenever you need it'
 ]
 
+const BottomButton = styled.div`
+  position: sticky;
+  bottom: 0;
+  background-color: white;
+  width: 100%;
+  padding: 15px 0;
+  text-align: center;
+  -webkit-box-shadow: 0px -10px 5px -10px rgba(0, 0, 0, 0.25);
+  -moz-box-shadow: 0px -10px 5px -10px rgba(0, 0, 0, 0.25);
+  box-shadow: 0px -10px 5px -10px rgba(0, 0, 0, 0.25);
+`
+
 const IntroHostPage = props => {
   return (
     <>
@@ -30,7 +44,7 @@ const IntroHostPage = props => {
           <Box my="10px" mb="20px">
             <Text textSize="14px">
               How to get the most out of spacenow (you'll be able to book spaces too -{' '}
-              <Link color="#172439" style={{ textDecoration: 'underline' }} to="/intro/guest">
+              <Link color="#172439" style={{ textDecoration: 'underline' }} to="/welcome/guest">
                 click here
               </Link>{' '}
               for more information)
@@ -84,12 +98,20 @@ const IntroHostPage = props => {
           title="Share your experience"
           text="Once you've accepted your first booking, we'll remind you about booking times and dates, help you coordinate with the guest and handle the check-in/out process - making sure the whole thing runs as smoothly as possible"
           secondText="Once your booking is complete, leave a review for your host and share your experience with the spacenow community!"
-          buttonText="Get started"
+          // buttonText="Get started"
           checklist={itemsCardFour}
-          buttonHandleClick={() => props.history.push('/listing/intro')}
+          // buttonHandleClick={() => props.history.push('/listing/intro')}
         />
         <br />
-        <br />
+        <BottomButton>
+          <Grid columns={1} style={{ alignItems: 'center' }}>
+            <Cell>
+              <Button fluid style={{ maxWidth: '360px' }} onClick={() => props.history.push('/listing')}>
+                Skip the tour and get started
+              </Button>
+            </Cell>
+          </Grid>
+        </BottomButton>
       </Wrapper>
     </>
   )

@@ -317,7 +317,10 @@ const ItineraryPage = ({ match, location, history, ...props }) => {
                 </Text>
               </Box>
               <Box>
-                <Text fontSize="14px">{`${listing.location.address1}, ${listing.location.city}, ${listing.location.zipcode}, ${listing.location.state}, ${listing.location.country}`}</Text>
+                <Text fontSize="14px">
+                  {listing.location.address1 && <Text>{listing.location.address1}, </Text>}
+                  {`${listing.location.city}, ${listing.location.zipcode}, ${listing.location.state}, ${listing.location.country}`}
+                </Text>
               </Box>
             </Box>
             <Box>
@@ -402,7 +405,9 @@ const ItineraryPage = ({ match, location, history, ...props }) => {
                       title={`${listing.settingsParent.subcategory.itemName} for ${booking.period} ${_spelling(
                         booking.bookingPeriod,
                         booking.period
-                      ).toLowerCase()} in ${listing.location.address1}`}
+                      ).toLowerCase()} in ${
+                        listing.location.address1 ? listing.location.address1 : listing.location.city
+                      }`}
                       weight="Montserrat-SemiBold"
                     />
                   </BoxDesktop>

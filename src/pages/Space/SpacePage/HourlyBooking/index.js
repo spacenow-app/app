@@ -29,6 +29,7 @@ const HourlyBooking = ({
   hoursQuantity,
   onCalcHourlyPeriod,
   inputFocus,
+  setFocusInput,
   hidePrice,
   handleMessageChange,
   message,
@@ -51,6 +52,13 @@ const HourlyBooking = ({
       options.push({ key: i, value: range[i], name: range[i] })
     }
     return options
+  }
+
+  const _hanldeTimeClick = () => {
+    if (!hourlySuggestion) {
+      setFocusInput(true)
+      return
+    }
   }
 
   return (
@@ -86,7 +94,9 @@ const HourlyBooking = ({
               options={_getOptions(hourlySuggestion && hourlySuggestion.openRange)}
               handleChange={e => onStartTimeChange(String(e.target.value))}
               value={startTime}
-              disabled={!hourlySuggestion}
+              // disabled={!hourlySuggestion}
+              bgPosition="87% 50%"
+              onClick={() => _hanldeTimeClick()}
             />
           </Cell>
           <Cell>
@@ -95,7 +105,9 @@ const HourlyBooking = ({
               options={_getOptions(hourlySuggestion && hourlySuggestion.closeRange)}
               handleChange={e => onEndTimeChange(String(e.target.value))}
               value={endTime}
-              disabled={!hourlySuggestion}
+              // disabled={!hourlySuggestion}
+              bgPosition="87% 50%"
+              onClick={() => _hanldeTimeClick()}
             />
             {date && (
               <Box display="grid" justifyItems="end">
