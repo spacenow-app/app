@@ -39,37 +39,45 @@ const FeaturePage = ({ listing, values, setFieldValue, handleChange, handleBlur,
 
   useEffect(() => {
     props.setFatherValues({ ...values })
-  }, [props, listing, values])
+  }, [props, values])
 
   return (
     <Wrapper>
       <form>
         <Box>
           <Title type="h3" title="Style of space" subtitle="What style best describes the space?" subTitleMargin={10} />
-          <Box display="grid" gridTemplateColumns={{ _: 'auto', medium: 'auto auto auto' }} gridGap="30px">
+          <Box display="grid" gridTemplateColumns={{ _: 'auto', medium: 'auto auto' }} gridGap="30px">
             <Radio
-              value=""
-              name="style"
-              checked
-              // handleChange={_handleRadioChange}
-              label="Luxurious"
-              mediumLabel
+              value="classic"
+              name="listingData.listingStyle"
+              checked={values.listingData.listingStyle === "classic"}
+              handleChange={handleChange}
+              handleBlur={handleBlur}
+              label="Classic"
             />
             <Radio
-              value=""
-              name="style"
-              checked
-              // handleChange={_handleRadioChange}
-              label="Luxurious"
-              mediumLabel
+              value="minimalist"
+              name="listingData.listingStyle"
+              checked={values.listingData.listingStyle === "minimalist"}
+              handleChange={handleChange}
+              handleBlur={handleBlur}
+              label="Minimalist"
             />
             <Radio
-              value=""
-              name="style"
-              checked
-              // handleChange={_handleRadioChange}
+              value="modern"
+              name="listingData.listingStyle"
+              checked={values.listingData.listingStyle === "modern"}
+              handleChange={handleChange}
+              handleBlur={handleBlur}
+              label="Modern"
+            />
+            <Radio
+              value="luxurious"
+              name="listingData.listingStyle"
+              checked={values.listingData.listingStyle === "luxurious"}
+              handleChange={handleChange}
+              handleBlur={handleBlur}
               label="Luxurious"
-              mediumLabel
             />
           </Box>
         </Box>
@@ -111,7 +119,11 @@ const formik = {
   mapPropsToValues: ({ listing }) => {
     return {
       ...listing,
-      features: listing.features || []
+      features: listing.features || [],
+      listingData: {
+        ...listing.listingData,
+        listingStyle: listing.listingData.listingStyle || ''
+      }
     }
   },
   enableReinitialize: true,

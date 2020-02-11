@@ -1,15 +1,9 @@
 /* eslint-disable no-console */
 import React, { useEffect, useState } from 'react'
-import PropTypes from 'prop-types'
 import Helmet from 'react-helmet'
-import { useDispatch, useSelector } from 'react-redux'
-import { isAfter, isBefore, isSameDay } from 'date-fns'
+import { isAfter, isBefore } from 'date-fns'
 import update from 'immutability-helper'
-
 import { nanDate, weekTimeTable } from 'variables'
-
-import { onGetAllHolidays } from 'redux/ducks/listing'
-
 import { Wrapper, Title, Box, TimeTable, StepButtons } from 'components'
 
 const TIME_TABLE_INIT_STATE = {
@@ -25,15 +19,10 @@ const TIME_TABLE_INIT_STATE = {
 }
 
 const OpeningHoursPage = ({ listing, ...props }) => {
-  const dispatch = useDispatch()
 
   const [timetable, setTimeTable] = useState([])
   const [fullTime, setFullTime] = useState(false)
-  const [, setHolidays] = useState([])
   const [, setTimeTableWeek] = useState([])
-
-  const { array: availabilitiesArray } = useSelector(state => state.listing.availabilities)
-  const { array: holidaysArray } = useSelector(state => state.listing.holidays)
 
   useEffect(() => {
     const valuesToUpdate = {
@@ -53,6 +42,7 @@ const OpeningHoursPage = ({ listing, ...props }) => {
         description: o.name,
         active: false,
         fulltime: false,
+        peaktime: false,
         open: `${_newDateTime('08', '00')}`,
         close: `${_newDateTime('17', '00')}`,
         error: {}
@@ -63,10 +53,12 @@ const OpeningHoursPage = ({ listing, ...props }) => {
           const openHour = nanDate(hoursElem.openHour)
           const closeHour = nanDate(hoursElem.closeHour)
           elem = {
+            id: hoursElem.id,
             day: o.short,
             description: o.name,
             active: true,
             fulltime: hoursElem.allday,
+            peaktime: hoursElem.peaktime,
             open: hoursElem.allday ? `${_newDateTime('08', '00')}` : openHour,
             close: hoursElem.allday ? `${_newDateTime('17', '00')}` : closeHour,
             error: {}
@@ -124,7 +116,7 @@ const OpeningHoursPage = ({ listing, ...props }) => {
   const _handleChangeDay = (_, options) => {
     const index = timetable.findIndex(el => el.day === options.name)
     const newArray = update(timetable, {
-      [index]: { active: { $set: options.checked }, fulltime: { $set: false } }
+      [index]: { active: { $set: options.checked }, fulltime: { $set: false }, peaktime: { $set: false } }
     })
     setTimeTable(newArray)
   }
@@ -132,7 +124,15 @@ const OpeningHoursPage = ({ listing, ...props }) => {
   const _handleClick24hours = (_, options) => {
     const index = timetable.findIndex(el => `${el.day}-24h` === options.name)
     const newArray = update(timetable, {
-      [index]: { fulltime: { $set: options.checked } }
+      [index]: { fulltime: { $set: options.checked }, peaktime: { $set: false } }
+    })
+    setTimeTable(newArray)
+  }
+
+  const _handleClickPeakTime = (_, options) => {
+    const index = timetable.findIndex(el => `${el.day}-peak` === options.name)
+    const newArray = update(timetable, {
+      [index]: { peaktime: { $set: options.checked } }
     })
     setTimeTable(newArray)
   }
@@ -142,39 +142,10 @@ const OpeningHoursPage = ({ listing, ...props }) => {
     const newArray = timetable.map(el => ({
       ...el,
       active: is,
-      fulltime: is
+      fulltime: is,
+      peaktime: is
     }))
     setTimeTable(newArray)
-  }
-
-  const _zero = reference => {
-    let i = reference
-    if (i < 10) {
-      i = `0${i}`
-    }
-    return i
-  }
-
-  const _timeToString = time => {
-    const h = _zero(new Date(time).getHours())
-    const m = _zero(new Date(time).getMinutes())
-    const s = _zero(new Date(time).getSeconds())
-    return `${h}:${m}:${s}`
-  }
-
-  const _getHours = (day, time) => {
-    if (!day.fulltime) {
-      const now = new Date()
-      if (time) {
-        const sTime = _timeToString(time).split(':')
-        now.setHours(sTime[0], sTime[1], sTime[2])
-        return now.getTime().toString()
-      }
-      now.setHours(0, 0, 0, 0)
-      now.setSeconds(time)
-      return now.getTime().toString()
-    }
-    return Date.now().toString()
   }
 
   const _mapToAccessHourType = payload => {
@@ -185,10 +156,12 @@ const OpeningHoursPage = ({ listing, ...props }) => {
       if (elem.active) {
         const weekDay = weekTimeTable.find(o => o.short === elem.day)
         outputObj.accessHours.push({
+          id: elem.id,
           weekday: weekDay.index,
           allday: elem.fulltime,
-          openHour: _getHours(elem, elem.open),
-          closeHour: _getHours(elem, elem.close)
+          peaktime: elem.peaktime,
+          openHour: new Date(elem.open).toISOString(),
+          closeHour: new Date(elem.close).toISOString()
         })
       }
     }
@@ -208,6 +181,7 @@ const OpeningHoursPage = ({ listing, ...props }) => {
           handleClickDay={_handleChangeDay}
           handleClick24hours={_handleClick24hours}
           handleClickOpenFullTime={_handleClickOpenFullTime}
+          handleClickPeakTime={_handleClickPeakTime}
         />
       </Box>
       <StepButtons

@@ -5,7 +5,7 @@ import { Wrapper, Box, Title, StepButtons, Radio, Loader } from 'components'
 
 import { onGetCancellations } from 'redux/ducks/listing-process'
 
-const CancellationPage = ({ listing, values, setFieldValue, handleChange, handleBlur, ...props }) => {
+const CancellationPage = ({ listing, values, setFieldValue, handleBlur, ...props }) => {
 
   const dispatch = useDispatch()
   const { object: cancellations, isLoading: loadingCancellations } = useSelector(state => state.listing_process.cancellations)
@@ -13,6 +13,14 @@ const CancellationPage = ({ listing, values, setFieldValue, handleChange, handle
   useEffect(() => {
     dispatch(onGetCancellations())
   }, [dispatch])
+
+  const _handleRadioChange = (e, { value, name }) => {
+    setFieldValue(name, parseInt(value))
+  }
+
+  useEffect(() => {
+    props.setFatherValues({ ...values })
+  }, [props, values])
 
   return (
     <form>
@@ -27,14 +35,15 @@ const CancellationPage = ({ listing, values, setFieldValue, handleChange, handle
               subtitle="Select the best policy for your space."
               subTitleMargin={10}
             />
-            <Box display="grid" gridTemplateColumns={{ _: '1fr', medium: 'auto auto auto' }} gridGap="30px">
+            <Box display="grid" gridTemplateColumns={{ _: '1fr'}} gridGap="30px">
               {[].concat(cancellations).map((item, index) => (
                 <Box key={index} display="grid" gridTemplateColumns={{ _: 'auto 1fr'}} gridGap="10px">
                   <Radio
                     name="listingData.cancellationPolicy"
                     value={item.id}
-                    checked={item.id === values.listingData.cancellationPolicy}
-                    handleChange={handleChange}
+                    checked={Number(item.id) === values.listingData.cancellationPolicy}
+                    handleChange={_handleRadioChange}
+                    handleBlur={handleBlur}
                   />
                   <Title
                     type="h6"
@@ -56,9 +65,7 @@ const CancellationPage = ({ listing, values, setFieldValue, handleChange, handle
           onClick: () => props.history.push(`/listing-process/setup-process/${listing.id}/opening-hours`)
         }}
         next={{
-          // disabled: !location,
-          onClick: () => props.history.push('/listing-process/view/357')
-          // isLoading: isLoadingCreating
+          onClick: () => props.history.push(`/listing-process/view/${listing.id}`)
         }}
       />
     </Wrapper>

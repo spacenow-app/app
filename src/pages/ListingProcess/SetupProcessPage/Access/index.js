@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react'
 import { withFormik } from 'formik'
 import { Wrapper, Box, Title, StepButtons, Select, Text } from 'components'
+import { get24HSelect } from "../../../../utils/24HSelect"
 
 const AccessPage = ({ listing, values, handleChange, handleBlur, ...props }) => {
   useEffect(() => {
@@ -44,11 +45,21 @@ const AccessPage = ({ listing, values, handleChange, handleBlur, ...props }) => 
           </Box>
           <Box display="grid">
             <Box display="grid" gridTemplateColumns={{ _: '1fr', medium: '1fr 1fr 1fr' }} gridGap="30px">
-              <Select label="From">
+              <Select name='listingData.checkInStart'
+              label='From'
+              value={values.listingData.checkInStart}
+              onChange={handleChange}
+              onBlur={handleBlur}>
                 <option>Start:</option>
+                { get24HSelect().map(item => (<option key={item} value={item}>{item}</option>)) }
               </Select>
-              <Select label="To">
+              <Select name='listingData.checkInEnd'
+              label='To'
+              value={values.listingData.checkInEnd}
+              onChange={handleChange}
+              onBlur={handleBlur}>
                 <option>To:</option>
+                { get24HSelect().map(item => (<option key={item} value={item}>{item}</option>)) }
               </Select>
             </Box>
           </Box>
@@ -60,8 +71,13 @@ const AccessPage = ({ listing, values, handleChange, handleBlur, ...props }) => 
           </Box>
           <Box display="grid">
             <Box display="grid" gridTemplateColumns={{ _: '1fr', medium: '1fr 1fr 1fr' }} gridGap="30px">
-              <Select label="Check-out:">
+            <Select name='listingData.checkOut'
+              label='Check-out'
+              value={values.listingData.checkOut}
+              onChange={handleChange}
+              onBlur={handleBlur}>
                 <option>Check-out:</option>
+                { get24HSelect().map(item => (<option key={item} value={item}>{item}</option>)) }
               </Select>
             </Box>
           </Box>
@@ -78,8 +94,13 @@ const AccessPage = ({ listing, values, handleChange, handleBlur, ...props }) => 
           </Box>
           <Box display="grid">
             <Box display="grid" gridTemplateColumns={{ _: '1fr', medium: '1fr 1fr 1fr' }} gridGap="30px">
-              <Select>
-                <option>Select category type</option>
+            <Select name='listingData.accessType'
+              label='Access Type'
+              value={values.listingData.accessType}
+              onChange={handleChange}
+              onBlur={handleBlur}>
+                <option>Access Type:</option>
+                { get24HSelect().map(item => (<option key={item} value={item}>{item}</option>)) }
               </Select>
             </Box>
           </Box>
@@ -107,8 +128,10 @@ const formik = {
       bookingType: listing.bookingType,
       listingData: {
         ...listing.listingData,
-        checkInStart: listing.listingData.checkInStart,
-        checkInEnd: listing.listingData.checkInEnd
+        checkInStart: listing.listingData.checkInStart || '',
+        checkInEnd: listing.listingData.checkInEnd || '',
+        checkOut: listing.listingData.checkOut || '',
+        accessType: listing.listingData.accessType || ''
       }
     }
   },

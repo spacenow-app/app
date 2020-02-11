@@ -15,7 +15,18 @@ const TitleStyled = styled.span`
   font-family: 'Montserrat-SemiBold';
   padding: 0 0 0 20px;
   margin-bottom: 15px;
+  justify-content: center;
 `
+const TitleCenteredStyled = styled.span`
+  display: grid;
+  color: #1f252a;
+  font-size: 14px;
+  font-family: 'Montserrat-SemiBold';
+  padding: 0;
+  margin-bottom: 15px;
+  justify-content: center;
+`
+
 TitleStyled.displayName = 'Title'
 
 const ItemStyled = styled.div`
@@ -41,6 +52,16 @@ const ItemSwitchStyled = styled.div`
   grid-template-columns: auto auto;
 `
 
+const ItemSwitchNoBorderStyled = styled.div`
+  height: 65px;
+  border-radius: 8px;
+  border: none;
+  padding: 20px;
+  display: grid;
+  grid-template-columns: auto;
+  justify-content: center;
+`
+
 const SwitchStyled = styled.div`
   justify-self: end;
 `
@@ -51,7 +72,8 @@ const TimeTableEditable = ({
   handleClickDay,
   handleChangeTime,
   handleClickOpenFullTime,
-  handleClick24hours
+  handleClick24hours,
+  handleClickPeakTime
 }) => {
   const onHandleClickDay = (e, obj) => {
     handleClickDay(e, obj)
@@ -69,6 +91,10 @@ const TimeTableEditable = ({
     handleClickOpenFullTime(e, obj)
   }
 
+  const onHandleClickPeakTime = (e, obj) => {
+    handleClickPeakTime(e, obj)
+  }
+
   return (
     <WrapperStyled>
       <Box display="grid" gridTemplateColumns={{ _: '1fr', medium: '2fr 1fr 1fr 2fr' }} gridGap="20px">
@@ -81,7 +107,7 @@ const TimeTableEditable = ({
           </ItemSwitchStyled>
         </Cell>
       </Box>
-      <Box display="grid" gridTemplateColumns={{ _: '1fr', medium: '2fr 1fr 1fr 2fr' }} gridGap="20px">
+      <Box display="grid" gridTemplateColumns={{ _: '1fr', medium: '2fr 1fr 1fr 1fr 1fr' }} gridGap="20px">
         <Cell width={{ _: 2, medium: 1 }} middle>
           <TitleStyled>Days</TitleStyled>
         </Cell>
@@ -91,8 +117,11 @@ const TimeTableEditable = ({
         <Cell width={1} middle>
           <TitleStyled>Close</TitleStyled>
         </Cell>
-        <Cell width={{ _: 2, medium: 1 }} middle>
-          <TitleStyled>Working hours</TitleStyled>
+        <Cell width={1} middle>
+          <TitleCenteredStyled>Open 24 hours</TitleCenteredStyled>
+        </Cell>
+        <Cell width={1} middle>
+          <TitleCenteredStyled>Peak</TitleCenteredStyled>
         </Cell>
       </Box>
       <Box display="grid" gridTemplateColumns="1fr" gridRowGap={{ _: '50px', medium: '20px' }}>
@@ -101,7 +130,7 @@ const TimeTableEditable = ({
             <Box
               key={item.day}
               display="grid"
-              gridTemplateColumns={{ _: '1fr', medium: '2fr 1fr 1fr 2fr' }}
+              gridTemplateColumns={{ _: '1fr', medium: '2fr 1fr 1fr 1fr 1fr' }}
               gridGap={{ _: '10px', medium: '20px' }}
             >
               <Cell width={{ _: 2, medium: 1 }}>
@@ -130,9 +159,8 @@ const TimeTableEditable = ({
                   />
                 </ItemStyled>
               </Cell>
-              <Cell width={{ _: 2, medium: 1 }}>
-                <ItemSwitchStyled>
-                  <span>Open 24 hours</span>
+              <Cell width={1}>
+                <ItemSwitchNoBorderStyled>
                   <SwitchStyled>
                     <Switch
                       name={`${item.day}-24h`}
@@ -141,7 +169,19 @@ const TimeTableEditable = ({
                       checked={item.fulltime}
                     />
                   </SwitchStyled>
-                </ItemSwitchStyled>
+                </ItemSwitchNoBorderStyled>
+              </Cell>
+              <Cell width={1}>
+                <ItemSwitchNoBorderStyled>
+                  <SwitchStyled>
+                    <Switch
+                      name={`${item.day}-peak`}
+                      disabled={item.fulltime || !item.active}
+                      handleCheckboxChange={onHandleClickPeakTime}
+                      checked={item.peaktime}
+                    />
+                  </SwitchStyled>
+                </ItemSwitchNoBorderStyled>
               </Cell>
             </Box>
           )
@@ -160,6 +200,7 @@ TimeTableEditable.propTypes = {
       description: PropTypes.string,
       active: PropTypes.bool,
       fulltime: PropTypes.bool,
+      peaktime: PropTypes.bool,
       open: PropTypes.oneOfType([PropTypes.string, PropTypes.number, PropTypes.instanceOf(Date)]),
       close: PropTypes.oneOfType([PropTypes.string, PropTypes.number, PropTypes.instanceOf(Date)])
     })
@@ -168,7 +209,8 @@ TimeTableEditable.propTypes = {
   handleClickDay: PropTypes.func,
   handleChangeTime: PropTypes.func,
   handleClickOpenFullTime: PropTypes.func,
-  handleClick24hours: PropTypes.func
+  handleClick24hours: PropTypes.func,
+  handleClickPeakTime: PropTypes.func
 }
 
 export default TimeTableEditable

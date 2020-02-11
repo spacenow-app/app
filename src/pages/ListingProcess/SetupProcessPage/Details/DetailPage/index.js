@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react'
 import { withFormik } from 'formik'
-import { Wrapper, Box, Title, StepButtons, Input, TextArea, Checkbox, Select } from 'components'
+import { Wrapper, Box, Title, StepButtons, Input, TextArea } from 'components'
 
 const DetailPage = ({ listing, values, handleChange, handleBlur, ...props }) => {
   useEffect(() => {
@@ -90,7 +90,7 @@ const formik = {
         direction: listing.listingData.direction || '',
         wifiNetwork: listing.listingData.wifiNetwork || '',
         wifiUsername: listing.listingData.wifiUsername || '',
-        wifiPassword: listing.listingData.wifiPassword || ''
+        wifiPassword: listing.listingData.wifiPasswordDecrypt || ''
       }
     }
   },

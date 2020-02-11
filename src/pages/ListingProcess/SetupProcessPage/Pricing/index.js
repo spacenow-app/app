@@ -1,8 +1,15 @@
-import React from 'react'
+import React, { useEffect } from 'react'
+import { withFormik } from 'formik'
 import { Wrapper, Box, Title, StepButtons, Select, Input, Icon, Text, Checkbox } from 'components'
 
-const PricingPage = ({ listing, ...props }) => {
+const PricingPage = ({ listing, values, handleChange, handleBlur, ...props }) => {
+
+  useEffect(() => {
+    props.setFatherValues({ ...values })
+  }, [props, listing, values])
+
   return (
+    <form>
     <Wrapper>
       <Box display="grid" gridGap="30px">
         <Box>
@@ -10,7 +17,7 @@ const PricingPage = ({ listing, ...props }) => {
             type="h3"
             title="Let your guests book right away"
             subtitle="Allow your guests to book instantly or ask them to send a request first."
-            subTitleMargin="10px"
+            subTitleMargin={10}
           />
         </Box>
         <Box display="grid" gridGap="30px">
@@ -21,12 +28,27 @@ const PricingPage = ({ listing, ...props }) => {
             </Box>
           </Box>
           <Box display="grid" gridTemplateColumns={{ _: '1fr', medium: 'auto auto auto auto' }} gridGap="30px">
-            <Input placeholder="$" label="Hourly rate" />
-            <Select label="Minimum hours">
-              <option>Select</option>
+            <Input placeholder="$" label="Hourly rate"
+              type="number"
+              name="listingData.basePrice"
+              value={values.listingData.basePrice}
+              onChange={handleChange}
+              onBlur={handleBlur}/>
+            <Select label="Minimum hours" name='listingData.minTerm' value={values.listingData.minTerm} onChange={handleChange} onBlur={handleBlur}>
+              <option value="">Select</option>
+              <option value="1">1 hour</option>
+              <option value="2">2 hours</option>
+              <option value="3">3 hours</option>
+              <option value="4">4 hours</option>
             </Select>
-            <Input placeholder="$" label="Full day rate" />
-            <Input placeholder="$" label="Peak day rate" />
+            <Input placeholder="$" label="Full day rate" type="number" name="listingData.maxPrice"
+              value={values.listingData.maxPrice}
+              onChange={handleChange}
+              onBlur={handleBlur}/>
+            <Input placeholder="$" label="Peak day rate" type="number" name="listingData.peakPrice"
+              value={values.listingData.peakPrice}
+              onChange={handleChange}
+              onBlur={handleBlur}/>
           </Box>
           <Box display="grid" gridTemplateColumns={{ _: '1fr', medium: 'auto auto auto' }} gridGap="30px">
             <Checkbox label="Price includes GST" />
@@ -44,7 +66,30 @@ const PricingPage = ({ listing, ...props }) => {
         />
       </Box>
     </Wrapper>
+    </form>
   )
 }
 
-export default PricingPage
+const formik = {
+  displayName: 'SetupProcess_PricingForm',
+  mapPropsToValues: ({ listing }) => {
+    return {
+      ...listing,
+      listingData: {
+        ...listing.listingData,
+        minTerm: listing.listingData.minTerm || 1,
+        basePrice: listing.listingData.basePrice || 0,
+        maxPrice: listing.listingData.maxPrice || 0,
+        peakPrice: listing.listingData.peakPrice || 0
+      }
+    }
+  },
+  enableReinitialize: true,
+  isInitialValid: true
+}
+
+PricingPage.propTypes = {
+  ...withFormik.propTypes
+}
+
+export default withFormik(formik)(PricingPage)

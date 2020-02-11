@@ -37,7 +37,10 @@ export const Types = {
   GET_SUBCATEGORIES_FAILURE: 'GET_SUBCATEGORIES_FAILURE',
   GET_CANCELLATIONS_REQUEST: 'GET_CANCELLATIONS_REQUEST',
   GET_CANCELLATIONS_SUCCESS: 'GET_CANCELLATIONS_SUCCESS',
-  GET_CANCELLATIONS_FAILURE: 'GET_CANCELLATIONS_FAILURE'
+  GET_CANCELLATIONS_FAILURE: 'GET_CANCELLATIONS_FAILURE',
+  POST_LOCATION_REQUEST: 'POST_LOCATION_REQUEST',
+  POST_LOCATION_SUCCESS: 'POST_LOCATION_SUCCESS',
+  POST_LOCATION_FAILURE: 'POST_LOCATION_FAILURE',
 }
 
 const initialState = {
@@ -82,6 +85,11 @@ const initialState = {
     object: null,
     isLoading: true,
     error: null
+  },
+  location: {
+    object: null,
+    isLoading: false,
+    error: null
   }
 }
 
@@ -105,6 +113,7 @@ const accessHoursFields = `
   openHour
   closeHour
   allday
+  peaktime
 `
 const accessDaysFields = `
   id
@@ -149,7 +158,6 @@ const cancellationFields = `
   id
   policyName
   policyContent
-  priorDays
 `
 const dataFields = `
   id
@@ -160,9 +168,15 @@ const dataFields = `
   maxTerm
   description
   basePrice
+  maxPrice
+  peakPrice
   currency
+  checkInStart
+  checkInEnd
+  checkOut
   isAbsorvedFee
   capacity
+  cancellationPolicy
   size
   meetingRooms
   isFurnished
@@ -174,6 +188,7 @@ const dataFields = `
   status
   link
   listingType
+  listingStyle
   direction
   alcoholLicence
   wifiNetwork
@@ -198,6 +213,21 @@ const listingFields = `
   rules { id }
   features { id }
 `
+const locationFields = `
+  id
+  userId
+  country
+  address1
+  address2
+  buildingName
+  city
+  state
+  zipcode
+  lat
+  lng
+  placeId
+`
+
 const queryGetV2Steps = gql`
   query getV2Steps($id: Int!) {
     getV2Steps(id: $id) {
@@ -265,6 +295,13 @@ const queryGetV2Cancellations = gql`
   query getV2Cancellations {
     getV2Cancellations {
       ${cancellationFields}
+    }
+  }
+`
+const mutationPostV2Location = gql`
+  mutation postV2Location($input: V2InputLocation) {
+    postV2Location(input: $input) {
+      ${locationFields}
     }
   }
 `
@@ -538,6 +575,35 @@ export default function reducer(state = initialState, action) {
         }
       }
     }
+    case Types.POST_LOCATION_REQUEST: {
+      return {
+        ...state,
+        location: {
+          ...state.location,
+          isLoading: true
+        }
+      }
+    }
+    case Types.POST_LOCATION_SUCCESS: {
+      return {
+        ...state,
+        location: {
+          ...state.location,
+          object: action.payload,
+          isLoading: false
+        }
+      }
+    }
+    case Types.POST_LOCATION_FAILURE: {
+      return {
+        ...state,
+        location: {
+          ...state.location,
+          isLoading: false,
+          error: action.payload
+        }
+      }
+    }
     default:
       return state
   }
@@ -673,5 +739,19 @@ export const onGetCancellations = () => async dispatch => {
     dispatch({ type: Types.GET_CANCELLATIONS_SUCCESS, payload: data.getV2Cancellations })
   } catch (err) {
     dispatch({ type: Types.GET_CANCELLATIONS_FAILURE, payload: errToMsg(err) })
+  }
+}
+
+export const onPostLocation = input => async dispatch => {
+  console.log('INPUT ===>>>', input)
+  dispatch({ type: Types.POST_LOCATION_REQUEST })
+  try {
+    const { data } = await getClientWithAuth(dispatch).mutate({
+      mutation: mutationPostV2Location,
+      variables: { input }
+    })
+    dispatch({ type: Types.POST_LOCATION_SUCCESS, payload: data.postV2Location })
+  } catch (err) {
+    dispatch({ type: Types.POST_LOCATION_FAILURE, payload: errToMsg(err) })
   }
 }

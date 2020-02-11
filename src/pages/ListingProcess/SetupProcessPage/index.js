@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 import { Switch, Route, Redirect } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
 import { Wrapper, Loader, ProgressBar } from 'components'
-import { onGetListingSteps, onGetListing, onPostListing, onPutListing } from 'redux/ducks/listing-process'
+import { onGetListingSteps, onGetListing, onPutListing } from 'redux/ducks/listing-process'
 import { openModal, TypesModal } from 'redux/ducks/modal'
 
 import LocationPage from './Location'
@@ -38,8 +38,6 @@ const SetupProcessPage = ({ match, history, location, ...props }) => {
     if (listingId) {
       dispatch(onGetListingSteps(listingId))
       dispatch(onGetListing(listingId))
-    } else {
-      dispatch(onPostListing())
     }
   }, [dispatch, listingId])
 

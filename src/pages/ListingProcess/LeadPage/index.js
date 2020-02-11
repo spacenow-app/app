@@ -1,8 +1,11 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import styled from 'styled-components'
+import { useDispatch, useSelector } from 'react-redux'
 import Helmet from 'react-helmet'
 import { Wrapper, Card, Title, Text } from 'components'
 import { config } from 'variables'
+
+import { onPostListing } from 'redux/ducks/listing-process'
 
 const WrapperStyled = styled.div`
   display: grid;
@@ -17,13 +20,22 @@ const WrapperStyled = styled.div`
 `
 
 const LeadPage = props => {
+  
+  const dispatch = useDispatch()
+  const { object: listing, isLoading } = useSelector(state => state.listing_process.get)
+
   const _goTo = type => {
     if (type === 'multiple') {
       window.location.href = `${config.static}/contact-us`
       return
     }
-    props.history.push('/listing-process/setup-process')
+    dispatch(onPostListing())
   }
+
+  useEffect(() => {
+    !isLoading && listing &&
+    props.history.push(`/listing-process/setup-process/${listing.id}`)
+  }, [listing, isLoading, props.history])
 
   return (
     <Wrapper>
