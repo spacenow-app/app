@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { NavBar, Wrapper, Box, Title, Card, Text, Link, Grid, Cell, Button } from 'components'
 import styled from 'styled-components'
 // import { config } from 'variables'
@@ -106,11 +106,9 @@ const IntroHostPage = props => {
         <BottomButton>
           <Grid columns={1} style={{ alignItems: 'center' }}>
             <Cell>
-              <Link to="/listing">
-                <Button fluid style={{ maxWidth: '360px' }}>
-                  Skip the tour and get started
-                </Button>
-              </Link>
+              <Button fluid style={{ maxWidth: '360px' }} onClick={() => props.history.push('/listing')}>
+                Skip the tour and get started
+              </Button>
             </Cell>
           </Grid>
         </BottomButton>
