@@ -35,6 +35,14 @@ const BottomButton = styled.div`
 `
 
 const IntroHostPage = props => {
+  const _handleClick = () => {
+    props.history.push('/listing')
+
+    setTimeout(() => {
+      props.history.push('/listing')
+    }, 500)
+  }
+
   return (
     <>
       <NavBar />
@@ -106,11 +114,9 @@ const IntroHostPage = props => {
         <BottomButton>
           <Grid columns={1} style={{ alignItems: 'center' }}>
             <Cell>
-              <Link to="/listing">
-                <Button fluid style={{ maxWidth: '360px' }}>
-                  Skip the tour and get started
-                </Button>
-              </Link>
+              <Button fluid style={{ maxWidth: '360px' }} onClick={() => _handleClick()}>
+                Skip the tour and get started
+              </Button>
             </Cell>
           </Grid>
         </BottomButton>
