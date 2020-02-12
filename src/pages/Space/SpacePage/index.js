@@ -40,6 +40,7 @@ import {
   Pagination,
   Text,
   Avatar,
+  Line
   // Image
 } from 'components'
 
@@ -73,6 +74,7 @@ import MonthlyBooking from './MonthlyBooking'
 import PendingBooking from './PenidngBooking'
 import HourlyBooking from './HourlyBooking'
 import GenericForm from './GenericForm'
+import InspectionForm from './InspectionForm'
 
 const GridStyled = styled(Grid)`
   @media only screen and (max-width: 991px) {
@@ -217,6 +219,21 @@ const CustomVideo = styled.video`
   }
 `
 
+const CellMobile = styled(Cell)`
+  @media screen and (max-width: 375px) {
+    grid-column-end: span 12;
+  }
+`
+
+const CellStarsMobile = styled(Cell)`
+  justify-content: start;
+  @media screen and (max-width: 375px) {
+    grid-column-end: span 4;
+    margin-top: 4px;
+    grid-gap: 0px;
+  }
+`
+
 const SpacePage = ({ match, location, history, ...props }) => {
   const reviewRef = createRef()
 
@@ -245,6 +262,7 @@ const SpacePage = ({ match, location, history, ...props }) => {
   const [hourlyError, setHourlyError] = useState('')
   const [focusInput, setFocusInput] = useState(false)
   const [showPlay, setShowPlay] = useState(true)
+  const [visitRequest, setVisitRequest] = useState(false)
 
   const videoTag = document.getElementsByTagName('video')[0]
 
@@ -296,7 +314,7 @@ const SpacePage = ({ match, location, history, ...props }) => {
     const { address1 = '', city = '', zipcode = '', state = '', country = '' } = address
     const convertedAddress = `${address1 ? `${address1}, ` : ''} ${city ? `${city}, ` : ''} ${
       zipcode ? `${zipcode}, ` : ''
-      } ${state ? `${state}, ` : ''} ${country ? `${country}` : ''}`
+    } ${state ? `${state}, ` : ''} ${country ? `${country}` : ''}`
     return convertedAddress.replace(/\0.*$/g, '')
   }
 
@@ -417,11 +435,11 @@ const SpacePage = ({ match, location, history, ...props }) => {
   const _convertedArrayPhotos = array => {
     return array.filter(el => el !== undefined).length > 0
       ? array
-        .filter(el => el !== undefined)
-        .map(el => ({
-          source: cropPicture(el.name, 800, 500),
-          isCover: el.isCover
-        }))
+          .filter(el => el !== undefined)
+          .map(el => ({
+            source: cropPicture(el.name, 800, 500),
+            isCover: el.isCover
+          }))
       : []
   }
 
@@ -745,7 +763,7 @@ const SpacePage = ({ match, location, history, ...props }) => {
     if (publicReviews && publicReviews.length > 0) {
       const countReviews = publicReviews.length
       const totalRatings = publicReviews.map(o => o[`rating${field}`]).reduce((a, b) => a + b)
-      return (totalRatings / countReviews)
+      return totalRatings / countReviews
     }
     return 0
   }
@@ -795,7 +813,7 @@ const SpacePage = ({ match, location, history, ...props }) => {
     videoTag.currentTime === videoTag.duration && videoTag.load()
   }
 
-  const _formatDescription = (description) => {
+  const _formatDescription = description => {
     try {
       return stateToHTML(convertFromRaw(JSON.parse(description)))
     } catch {
@@ -805,30 +823,28 @@ const SpacePage = ({ match, location, history, ...props }) => {
 
   const _getCountReviews = () => {
     let totalReviews = 0
-    if (publicReviews)
-      totalReviews += publicReviews.length
-    if (googleReviews && googleReviews.reviews)
-      totalReviews += googleReviews.reviews.length
+    if (publicReviews) totalReviews += publicReviews.length
+    if (googleReviews && googleReviews.reviews) totalReviews += googleReviews.reviews.length
     return totalReviews
   }
 
   if (listing && listing.user.provider === 'wework') {
-    return <Redirect to={{ pathname: `/space/partner/${match.params.id}` }} push={true} />
+    return <Redirect to={{ pathname: `/space/partner/${match.params.id}` }} push />
   }
 
   if (listing && listing.status === 'deleted') {
     toast.warn(`The space ${listing.id} was deleted`)
-    return <Redirect to={{ pathname: `/search` }} push={true} />
+    return <Redirect to={{ pathname: `/search` }} push />
   }
 
   if (listing && !listing.isPublished) {
     toast.warn(`The space ${listing.id} has not been published yet`)
-    return <Redirect to={{ pathname: `/search` }} push={true} />
+    return <Redirect to={{ pathname: `/search` }} push />
   }
 
   if (listing && listing.user.userBanStatus == 1) {
     toast.warn(`The host for space ${listing.id} was blocked by Spacenow`)
-    return <Redirect to={{ pathname: `/search` }} push={true} />
+    return <Redirect to={{ pathname: `/search` }} push />
   }
 
   if (isListingLoading) {
@@ -838,14 +854,14 @@ const SpacePage = ({ match, location, history, ...props }) => {
   return (
     <>
       {imageHeight == 325 ||
-        (listing.photos.length > 1 &&
-          listing.settingsParent.category.otherItemName !== 'parking' &&
-          listing.settingsParent.category.otherItemName !== 'storage' &&
-          listing.user.provider !== 'external') ? (
-          <Box mb="30px">
-            <CarouselListing photos={_convertedArrayPhotos(listing.photos)} />
-          </Box>
-        ) : null}
+      (listing.photos.length > 1 &&
+        listing.settingsParent.category.otherItemName !== 'parking' &&
+        listing.settingsParent.category.otherItemName !== 'storage' &&
+        listing.user.provider !== 'external') ? (
+        <Box mb="30px">
+          <CarouselListing photos={_convertedArrayPhotos(listing.photos)} />
+        </Box>
+      ) : null}
       <Wrapper>
         <Helmet
           title={`${listing.title} | ${listing.settingsParent.category.itemName} | ${_getSuburb(
@@ -857,10 +873,10 @@ const SpacePage = ({ match, location, history, ...props }) => {
             content={`Find the perfect space for ${listing.settingsParent.category.itemName} in ${_getSuburb(
               listing.location
             )}. ${listing.listingData.description &&
-            _formatDescription(listing.listingData.description).substring(
-              0,
-              160 - (listing.settingsParent.category.itemName.length + _getSuburb(listing.location).length + 30)
-            )}`}
+              _formatDescription(listing.listingData.description).substring(
+                0,
+                160 - (listing.settingsParent.category.itemName.length + _getSuburb(listing.location).length + 30)
+              )}`}
           />
         </Helmet>
         {listing.user.provider === 'external' && imageHeight !== 325 && (
@@ -878,11 +894,11 @@ const SpacePage = ({ match, location, history, ...props }) => {
                 imageHeight !== 325 && <CarouselListing photos={_convertedArrayPhotos(listing.photos)} />}
 
               {imageHeight !== 325 &&
-                (listing.settingsParent.category.otherItemName === 'parking' ||
-                  listing.settingsParent.category.otherItemName === 'storage') &&
-                listing.user.provider !== 'external' ? (
-                  <Carousel photos={_convertedArrayPhotos(listing.photos)} />
-                ) : null}
+              (listing.settingsParent.category.otherItemName === 'parking' ||
+                listing.settingsParent.category.otherItemName === 'storage') &&
+              listing.user.provider !== 'external' ? (
+                <Carousel photos={_convertedArrayPhotos(listing.photos)} />
+              ) : null}
 
               <Grid columns={12}>
                 <Cell width={8} style={{ display: 'flex' }}>
@@ -1078,7 +1094,8 @@ const SpacePage = ({ match, location, history, ...props }) => {
                 </Box>
               )}
 
-              {((publicReviews && publicReviews.length > 0) || (googleReviews && googleReviews.reviews && googleReviews.reviews.length > 0)) && (
+              {((publicReviews && publicReviews.length > 0) ||
+                (googleReviews && googleReviews.reviews && googleReviews.reviews.length > 0)) && (
                 <>
                   <Box display="grid" gridTemplateColumns="200px auto" ref={reviewRef}>
                     <Title type="h5" title={`Reviews (${_getCountReviews()})`} />
@@ -1110,35 +1127,32 @@ const SpacePage = ({ match, location, history, ...props }) => {
                       </Cell>
                     </Box>
                   </ContainerMobile>
-                  {
-                    [].concat(publicReviews, googleReviews.reviews).map(
-                      (o, index) => {
-                        if (o) {
-                          if (o['__typename'] !== "Review")
-                            return (<Review
-                              key={o.author_name}
-                              userName={o.author_name}
-                              userPicture={o.profile_photo_url}
-                              date={new Date(o.time * 1000)}
-                              comment={o.text}
-                              isGoogle={true}
-                            />)
+                  {[].concat(publicReviews, googleReviews.reviews).map((o, index) => {
+                    if (o) {
+                      if (o.__typename !== 'Review')
+                        return (
+                          <Review
+                            key={o.author_name}
+                            userName={o.author_name}
+                            userPicture={o.profile_photo_url}
+                            date={new Date(o.time * 1000)}
+                            comment={o.text}
+                            isGoogle
+                          />
+                        )
 
-                          return (
-                            <Review
-                              key={o.id}
-                              userName={o.author.profile && o.author.profile.firstName}
-                              userPicture={o.author.profile && o.author.profile.picture}
-                              date={new Date(o.createdAt)}
-                              comment={o.reviewContent}
-
-                            />
-                          )
-                        }
-                        return (<></>)
-                      }
-                    )
-                  }
+                      return (
+                        <Review
+                          key={o.id}
+                          userName={o.author.profile && o.author.profile.firstName}
+                          userPicture={o.author.profile && o.author.profile.picture}
+                          date={new Date(o.createdAt)}
+                          comment={o.reviewContent}
+                        />
+                      )
+                    }
+                    return <></>
+                  })}
                 </>
               )}
 
@@ -1174,79 +1188,139 @@ const SpacePage = ({ match, location, history, ...props }) => {
             <BookingCard
               style={{ position: 'sticky', top: '1px' }}
               titleComponent={
-                <>
-                  {listing.user.provider === 'external' && (
-                    <Text fontSize="28px" style={{ float: 'left', marginRight: '10px' }}>
-                      From
-                    </Text>
-                  )}
-                  <Price
-                    price={listing.listingData.basePrice}
-                    currencySymbol="$"
-                    bookingPeriod={listing.bookingPeriod}
-                    bookingType={listing.listingData.bookingType}
-                    size="28px"
-                    periodSize="11px"
-                    left
-                    lightPeriod
-                    lightPrice
-                  />
-                  {publicReviews && publicReviews.length > 0 && (
-                    <Box mb="-20px">
-                      <Grid columns={12} alignContent="center">
-                        <Cell width={4}>
+                !visitRequest && (
+                  <>
+                    {listing.user.provider === 'external' && (
+                      <Text fontSize="28px" style={{ float: 'left', marginRight: '10px' }}>
+                        From
+                      </Text>
+                    )}
+                    <Price
+                      price={listing.listingData.basePrice}
+                      currencySymbol="$"
+                      bookingPeriod={listing.bookingPeriod}
+                      bookingType={listing.listingData.bookingType}
+                      size="28px"
+                      periodSize="11px"
+                      left
+                      lightPeriod
+                      lightPrice
+                    />
+                    <Grid columns={12}>
+                      {publicReviews && publicReviews.length > 0 && (
+                        <CellStarsMobile width={3} style={{ fontSize: '12px', display: 'grid', alignItems: 'end' }}>
                           <StarRatingComponent name="ratingOverall" value={_getRatingAvg('Overall')} editing={false} />
-                        </Cell>
-                        <Cell width={6}>
+                        </CellStarsMobile>
+                      )}
+                      {publicReviews && publicReviews.length > 0 && (
+                        <CellStarsMobile width={3}>
                           <Text fontSize="9px">
                             ({publicReviews.length} Review{(publicReviews.length > 1 && 's') || ''})
                           </Text>
-                        </Cell>
-                      </Grid>
-                    </Box>
-                  )}
-                </>
+                        </CellStarsMobile>
+                      )}{' '}
+                      {listing.listingData.minTerm && (
+                        <CellMobile width={6}>
+                          <Text fontSize="9px">
+                            <Icon
+                              name="specification-minimum-term"
+                              width="20px"
+                              fill="#2DA577"
+                              style={{ marginRight: '5px' }}
+                            />
+                            Minimum{' '}
+                            {_changeToPlural(
+                              listing.bookingPeriod,
+                              listing.listingData.minTerm ? listing.listingData.minTerm : 1
+                            )}
+                          </Text>
+                        </CellMobile>
+                      )}
+                    </Grid>
+                  </>
+                )
               }
               contentComponent={
                 <>
-                  {listing.user.provider !== 'external' &&
-                    _renderContentCard(listing.bookingPeriod, listing.listingData.bookingType)}
-                  {(pendingBooking ? pendingBooking && pendingBooking.count == 0 : true) && (
+                  {!visitRequest && (
                     <>
-                      {listing.user.provider !== 'generic' && listing.user.provider !== 'external' && (
-                        <Button onClick={e => _onSubmitBooking(e)} isLoading={isLoadingOnCreateReservation} fluid>
-                          {listing.listingData.bookingType === 'request' ? 'Booking Request' : 'Reserve'}
-                        </Button>
+                      {listing.user.provider !== 'external' &&
+                        _renderContentCard(listing.bookingPeriod, listing.listingData.bookingType)}
+                      {(pendingBooking ? pendingBooking && pendingBooking.count == 0 : true) && (
+                        <>
+                          {listing.user.provider !== 'generic' && listing.user.provider !== 'external' && (
+                            <Button onClick={e => _onSubmitBooking(e)} isLoading={isLoadingOnCreateReservation} fluid>
+                              {listing.listingData.bookingType === 'request' ? 'Booking Request' : 'Reserve'}
+                            </Button>
+                          )}
+                          {listing.user.provider === 'external' && (
+                            <Button onClick={_handleClickByListing} fluid>
+                              Reserve
+                            </Button>
+                          )}
+                          <Box width="100%" textAlign="center">
+                            <Text fontSize="11px">You won't be charged at this point</Text>
+                          </Box>
+                        </>
                       )}
-                      {listing.user.provider === 'external' && (
-                        <Button onClick={_handleClickByListing} fluid>
-                          Reserve
-                        </Button>
-                      )}
-                      <Box width="100%" textAlign="center">
-                        <Text fontSize="11px">You won't be charged at this point</Text>
-                      </Box>
                     </>
+                  )}
+                  {visitRequest && (
+                    <InspectionForm
+                      publicReviews={publicReviews}
+                      minTerm={listing.listingData.minTerm}
+                      bookingPeriod={listing.bookingPeriod}
+                      date={date}
+                      startTime={startTime}
+                      onDateChange={_onDateChange}
+                      onStartTimeChange={_onStartTimeChange}
+                      onDayPickerHide={_onDayPickerHide}
+                      hourlySuggestion={hourlySuggestion}
+                      onCalcHourlyPeriod={_calcHourlyPeriod}
+                      location={`${listing.location.city}, ${listing.location.state}`}
+                      closingDays={_returnArrayAvailability(listing.accessDays)}
+                      listing={listing}
+                      user={user}
+                      handleMessageChange={_handleMessageChange}
+                      dispatch={dispatch}
+                    />
                   )}
                 </>
               }
-              // footerComponent={
-              //   <>
-              //     {listing.user.provider !== 'external' && (
-              //       <UserDetails
-              //         hostname={`${listing.user.profile.firstName} ${listing.user.profile.lastName}`}
-              //         imageProfile={listing.user.profile.picture}
-              //         provider={listing.user.provider}
-              //         onClaim={_onClaimListing}
-              //       />
-              //     )}
-              //     {listing.user.provider === 'external' && (
-              //       <Box display="grid" justifyContent="center">
-              //         <Image src={listing.user.profile.picture} width="150px" height="auto" />
-              //       </Box>
-              //     )}
-              //   </>
-              // }
+              footerComponent={
+                <>
+                  {' '}
+                  {!visitRequest &&
+                    (listing.settingsParent.category.otherItemName === 'office' ||
+                      listing.settingsParent.category.otherItemName === 'coworking' ||
+                      listing.settingsParent.category.otherItemName === 'venue') && (
+                      <>
+                        <Line />
+                        <Grid columns={12}>
+                          <Cell width={10}>
+                            <Text fontSize="12px" fontFamily="Montserrat-Bold">
+                              See the space before you book?
+                            </Text>
+                            <br />
+                            <Text
+                              fontSize="12px"
+                              style={{ textDecoration: 'underline', cursor: 'pointer' }}
+                              onClick={() => setVisitRequest(true)}
+                            >
+                              Contact us
+                            </Text>
+                            <Text fontSize="12px"> to arrange a site visit</Text>
+                          </Cell>
+                          <Cell width={2} style={{ display: 'grid', alignItems: 'center', justifyContent: 'center' }}>
+                            <Box background="white" borderRadius="5px" padding="6px 8px" boxShadow="2px 2px #e0e0e0">
+                              <Icon name="search" fill="#6adc91" width="20px" />
+                            </Box>
+                          </Cell>
+                        </Grid>
+                      </>
+                    )}
+                </>
+              }
               bottomComponent={
                 <>
                   {listing.user.provider !== 'external' && (
@@ -1260,11 +1334,11 @@ const SpacePage = ({ match, location, history, ...props }) => {
                       <Cell width={15}>
                         <ReportSpaceStyled onClick={_reportSpace}>Report this listing</ReportSpaceStyled>
                       </Cell>
-                      {(listing.user.provider === 'generic') &&
+                      {listing.user.provider === 'generic' && (
                         <Cell width={15}>
                           <ReportSpaceStyled onClick={_onClaimListing}>Claim this listing</ReportSpaceStyled>
                         </Cell>
-                      }
+                      )}
                     </Grid>
                   )}
                 </>

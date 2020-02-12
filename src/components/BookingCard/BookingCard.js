@@ -7,7 +7,7 @@ const WrapperStyled = styled.div`
   display: grid;
   min-height: 200px;
   background-color: #ededed;
-  grid-row-gap: 32px;
+  grid-row-gap: 15px;
   border-radius: 15px;
   width: 350px;
   padding: ${props => (props.noPadding && '0px') || '42px'};
@@ -78,7 +78,7 @@ BookingCard.defaultProps = {
 }
 
 BookingCard.propTypes = {
-  titleComponent: PropTypes.element,
+  titleComponent: PropTypes.any,
   contentComponent: PropTypes.element,
   footerComponent: PropTypes.element,
   bottomComponent: PropTypes.element,
