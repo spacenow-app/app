@@ -50,7 +50,8 @@
     "redux-thunk": "~2.3.0",
     "styled-components": "~4.3.2",
     "styled-system": "~5.0.15",
-    "yup": "~0.27.0"
+    "yup": "~0.27.0",
+    "query-string": "^6.10.1"
   },
   "scripts": {
     "start": "react-scripts start",

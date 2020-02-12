@@ -1,8 +1,12 @@
+/* eslint-disable react/prop-types */
+/* eslint-disable no-console */
 import React, { useEffect, useState } from 'react'
 import PropTypes from 'prop-types'
 import { useSelector, useDispatch } from 'react-redux'
 import styled from 'styled-components'
 import { Title, Grid, Cell, Loader, MessageDetailCard, TextArea, Button, Box, Avatar } from 'components'
+import queryString from 'query-string'
+import { toast } from 'react-toastify'
 
 import { onGetMessage, onCreateMessageItem, onReadMessage, onGetMessageItems } from 'redux/ducks/message'
 
@@ -39,6 +43,7 @@ const MessageDetailPage = ({ match, location, history, ...props }) => {
   const [pageIndex, setPageIndex] = useState(0)
   const [scroller, setScroller] = useState(null)
 
+  const queryParams = queryString.parse(location.search)
   const pageSize = 5
 
   useEffect(() => {
@@ -46,6 +51,19 @@ const MessageDetailPage = ({ match, location, history, ...props }) => {
     match && match.params && dispatch(onGetMessage(match.params.id))
     match && match.params && dispatch(onGetMessageItems({ id: match.params.id, pageIndex: 0, pageSize }))
   }, [dispatch, match, user])
+
+  useEffect(() => {
+    if (queryParams && queryParams.a && queryParams.a === 'cancel-inspection') {
+      toast.error('Your inspection request has been cancelled')
+      // Todo: call from backend when new inspections table implemented
+      fetch(`https://api-emails.sandpit.cloud.spacenow.com/email/message/${match.params.id}/inspection/cancel`)
+        .then(res => console.log(res))
+        .catch(err => console.log(err))
+      queryParams.a = 'cancelled'
+      match && match.params && dispatch(onGetMessageItems({ id: match.params.id, pageIndex: 0, pageSize }))
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [match])
 
   const _onSubmit = () => {
     const values = {
