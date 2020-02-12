@@ -179,15 +179,27 @@ const MessageDetailCard = ({ item, user, count, index, messageParent, ...props }
                           <Text fontFamily="bold">Requested inspection time and date</Text>
                         </Box>
                         {messageParent.messageHost.reservations.length > 0 && (
-                            <Text>
-                              {format(new Date(messageParent.messageHost.reservations[0]), 'dd MMM yyyy')}{' '}
-                              {messageParent.messageHost.startTime}
-                            </Text>
-                          )}
+                          <Text>
+                            {format(new Date(messageParent.messageHost.reservations[0]), 'dd MMM yyyy')}{' '}
+                            {messageParent.messageHost.startTime}
+                          </Text>
+                        )}
                       </Cell>
                     </Grid>
                   </Box>
                 </>
+              )}
+              {item.content && (
+                <Box fontSize="12px" mt="20px">
+                  <Grid columns={12}>
+                    <Cell width={12}>
+                      <Box>
+                        <Text fontFamily="bold">Message</Text>
+                      </Box>
+                      <Text>{item.content}</Text>
+                    </Cell>
+                  </Grid>
+                </Box>
               )}
             </>
           )}
