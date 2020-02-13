@@ -723,7 +723,6 @@ export const onPostListing = () => async dispatch => {
 }
 
 export const onPutListing = input => async dispatch => {
-  console.log('INPUT ===>>>', input)
   dispatch({ type: Types.PUT_LISTING_REQUEST })
   try {
     const { data } = await getClientWithAuth(dispatch).mutate({
