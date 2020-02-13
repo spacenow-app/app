@@ -42,9 +42,7 @@ const SetupProcessPage = ({ match, history, location, ...props }) => {
   }, [dispatch, listingId])
 
   useEffect(() => {
-    if (history.action === 'PUSH' || history.action === 'REPLACE') {
-      dispatch(onPutListing({ ...listing, ...values }))
-    }
+    if (history.action === 'PUSH') dispatch(onPutListing({ ...listing, ...values }))
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [history.location.key, dispatch])
 
@@ -179,6 +177,7 @@ const SetupProcessPage = ({ match, history, location, ...props }) => {
               <CancellationPage
                 {...routeProps}
                 {...props}
+                steps={steps}
                 listing={listing}
                 dispatch={dispatch}
                 setFatherValues={_setFatherValues}

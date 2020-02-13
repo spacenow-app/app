@@ -1,8 +1,14 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import { withFormik } from 'formik'
 import { Wrapper, Box, Title, StepButtons, Select, Checkbox, Input } from 'components'
 
 const SpecificationPage = ({ listing, values, handleChange, handleBlur, ...props }) => {
+  const [checkCocktail, setCheckCocktail] = useState(values.listingData.capacityCocktail !== 0)
+  const [checkBanquet, setCheckBanquet] = useState(values.listingData.capacityBanquet !== 0)
+  const [checkTheatre, setCheckTheatre] = useState(values.listingData.capacityTheatre !== 0)
+  const [checkClassroom, setCheckClassroom] = useState(values.listingData.capacityClassroom !== 0)
+  const [checkBoardroom, setCheckBoardroom] = useState(values.listingData.capacityBoardroom !== 0)
+
   useEffect(() => {
     props.setFatherValues({ ...values })
   }, [props, values])
@@ -28,87 +34,118 @@ const SpecificationPage = ({ listing, values, handleChange, handleBlur, ...props
           <Box display="grid" gridTemplateColumns={{ _: 'auto', medium: 'auto auto auto' }} gridGap="30px">
             <Box>
               <Checkbox
-                key={1}
-                label="Cocktail"
-                name="amenities"
-                value=""
-                checked
                 mediumLabel
-                // handleCheckboxChange={_handleCheckboxChange}
+                label={`Cocktail`}
+                value={checkCocktail}
+                checked={checkCocktail}
+                handleCheckboxChange={() => setCheckCocktail(!checkCocktail)}
               />
-              {/* <Image src=""/> */}
               <Box ml="25px">
                 <Box bg="#F7F7F7" width="100%" height="93px" my="10px" borderRadius="10px" />
-                <Input placeholder="Ie. 200" />
+                <Input
+                  type="number"
+                  placeholder="Ie. 200"
+                  name="listingData.capacityCocktail"
+                  disabled={!checkCocktail}
+                  value={values.listingData.capacityCocktail}
+                  onChange={handleChange}
+                  onBlur={handleBlur}
+                />
               </Box>
             </Box>
             <Box>
               <Checkbox
-                key={1}
-                label="Banquet"
-                name="amenities"
-                value=""
-                checked
                 mediumLabel
-                // handleCheckboxChange={_handleCheckboxChange}
+                label={`Banquet`}
+                value={checkBanquet}
+                checked={checkBanquet}
+                handleCheckboxChange={() => setCheckBanquet(!checkBanquet)}
               />
-              {/* <Image src=""/> */}
               <Box ml="25px">
                 <Box bg="#F7F7F7" width="100%" height="93px" my="10px" borderRadius="10px" />
-                <Input placeholder="Ie. 180" />
+                <Input
+                  type="number"
+                  placeholder="Ie. 200"
+                  name="listingData.capacityBanquet"
+                  disabled={!checkBanquet}
+                  value={values.listingData.capacityBanquet}
+                  onChange={handleChange}
+                  onBlur={handleBlur}
+                />
               </Box>
             </Box>
             <Box>
               <Checkbox
-                key={1}
-                label="Theatre"
-                name="amenities"
-                value=""
-                checked
                 mediumLabel
-                // handleCheckboxChange={_handleCheckboxChange}
+                label={`Theatre`}
+                value={checkTheatre}
+                checked={checkTheatre}
+                handleCheckboxChange={() => setCheckTheatre(!checkTheatre)}
               />
-              {/* <Image src=""/> */}
               <Box ml="25px">
                 <Box bg="#F7F7F7" width="100%" height="93px" my="10px" borderRadius="10px" />
-                <Input placeholder="Ie. 180" />
+                <Input
+                  type="number"
+                  placeholder="Ie. 200"
+                  name="listingData.capacityTheatre"
+                  disabled={!checkTheatre}
+                  value={values.listingData.capacityTheatre}
+                  onChange={handleChange}
+                  onBlur={handleBlur}
+                />
               </Box>
             </Box>
             <Box>
               <Checkbox
-                key={1}
-                label="Classroom"
-                name="amenities"
-                value=""
-                checked
                 mediumLabel
-                // handleCheckboxChange={_handleCheckboxChange}
+                label={`Classroom`}
+                value={checkClassroom}
+                checked={checkClassroom}
+                handleCheckboxChange={() => setCheckClassroom(!checkClassroom)}
               />
-              {/* <Image src=""/> */}
               <Box ml="25px">
                 <Box bg="#F7F7F7" width="100%" height="93px" my="10px" borderRadius="10px" />
-                <Input placeholder="Ie. 180" />
+                <Input
+                  type="number"
+                  placeholder="Ie. 200"
+                  name="listingData.capacityClassroom"
+                  disabled={!checkClassroom}
+                  value={values.listingData.capacityClassroom}
+                  onChange={handleChange}
+                  onBlur={handleBlur}
+                />
               </Box>
             </Box>
             <Box>
               <Checkbox
-                key={1}
-                label="Boardroom"
-                name="amenities"
-                value=""
-                checked
                 mediumLabel
-                // handleCheckboxChange={_handleCheckboxChange}
+                label={`Boardroom`}
+                value={checkBoardroom}
+                checked={checkBoardroom}
+                handleCheckboxChange={() => setCheckBoardroom(!checkBoardroom)}
               />
               <Box ml="25px">
                 <Box bg="#F7F7F7" width="100%" height="93px" my="10px" borderRadius="10px" />
-                <Input placeholder="Ie. 180" />
+                <Input
+                  type="number"
+                  placeholder="Ie. 200"
+                  name="listingData.capacityBoardroom"
+                  disabled={!checkBoardroom}
+                  value={values.listingData.capacityBoardroom}
+                  onChange={handleChange}
+                  onBlur={handleBlur}
+                />
               </Box>
             </Box>
           </Box>
           <Box>
             <Title type="h3" title="Alcohol licence" />
-            <Select value={values.listingData.alcoholLicence} onChange={handleChange} onBlur={handleBlur} name="listingData.alcoholLicence" >
+            <Select
+              value={values.listingData.alcoholLicence}
+              onChange={handleChange}
+              onBlur={handleBlur}
+              name="listingData.alcoholLicence"
+            >
               <option value="">Please select</option>
               <option value="Licenced">Licenced</option>
               <option value="No Licenced">No licenced</option>
@@ -138,7 +175,12 @@ const formik = {
     return {
       listingData: {
         ...listing.listingData,
-        capacity: listing.listingData.capacity || 0,
+        capacity: listing.listingData.capacity,
+        capacityCocktail: listing.listingData.capacityCocktail,
+        capacityBanquet: listing.listingData.capacityBanquet,
+        capacityTheatre: listing.listingData.capacityTheatre,
+        capacityClassroom: listing.listingData.capacityClassroom,
+        capacityBoardroom: listing.listingData.capacityBoardroom,
         alcoholLicence: listing.listingData.alcoholLicence || ''
       }
     }

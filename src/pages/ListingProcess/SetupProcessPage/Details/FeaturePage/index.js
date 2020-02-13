@@ -50,7 +50,7 @@ const FeaturePage = ({ listing, values, setFieldValue, handleChange, handleBlur,
             <Radio
               value="classic"
               name="listingData.listingStyle"
-              checked={values.listingData.listingStyle === "classic"}
+              checked={values.listingData.listingStyle === 'classic'}
               handleChange={handleChange}
               handleBlur={handleBlur}
               label="Classic"
@@ -58,7 +58,7 @@ const FeaturePage = ({ listing, values, setFieldValue, handleChange, handleBlur,
             <Radio
               value="minimalist"
               name="listingData.listingStyle"
-              checked={values.listingData.listingStyle === "minimalist"}
+              checked={values.listingData.listingStyle === 'minimalist'}
               handleChange={handleChange}
               handleBlur={handleBlur}
               label="Minimalist"
@@ -66,7 +66,7 @@ const FeaturePage = ({ listing, values, setFieldValue, handleChange, handleBlur,
             <Radio
               value="modern"
               name="listingData.listingStyle"
-              checked={values.listingData.listingStyle === "modern"}
+              checked={values.listingData.listingStyle === 'modern'}
               handleChange={handleChange}
               handleBlur={handleBlur}
               label="Modern"
@@ -74,7 +74,7 @@ const FeaturePage = ({ listing, values, setFieldValue, handleChange, handleBlur,
             <Radio
               value="luxurious"
               name="listingData.listingStyle"
-              checked={values.listingData.listingStyle === "luxurious"}
+              checked={values.listingData.listingStyle === 'luxurious'}
               handleChange={handleChange}
               handleBlur={handleBlur}
               label="Luxurious"
@@ -83,7 +83,7 @@ const FeaturePage = ({ listing, values, setFieldValue, handleChange, handleBlur,
         </Box>
         <Box>
           {loadingFeatures && <Loader text="Loading listing process" />}
-          {!loadingFeatures && (
+          {!loadingFeatures && features.length > 0 && (
             <Box>
               <Title
                 type="h3"

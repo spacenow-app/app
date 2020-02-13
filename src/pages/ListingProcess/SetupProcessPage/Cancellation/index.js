@@ -5,10 +5,11 @@ import { Wrapper, Box, Title, StepButtons, Radio, Loader } from 'components'
 
 import { onGetCancellations } from 'redux/ducks/listing-process'
 
-const CancellationPage = ({ listing, values, setFieldValue, handleBlur, ...props }) => {
-
+const CancellationPage = ({ listing, steps, values, setFieldValue, handleBlur, ...props }) => {
   const dispatch = useDispatch()
-  const { object: cancellations, isLoading: loadingCancellations } = useSelector(state => state.listing_process.cancellations)
+  const { object: cancellations, isLoading: loadingCancellations } = useSelector(
+    state => state.listing_process.cancellations
+  )
 
   useEffect(() => {
     dispatch(onGetCancellations())
@@ -24,51 +25,52 @@ const CancellationPage = ({ listing, values, setFieldValue, handleBlur, ...props
 
   return (
     <form>
-    <Wrapper>
-      <Box display="grid" gridGap="30px">
-        {loadingCancellations && <Loader text="Loading cancellations" />}
-        {!loadingCancellations && (
-          <Box>
-            <Title
-              type="h3"
-              title="Cancellation policies"
-              subtitle="Select the best policy for your space."
-              subTitleMargin={10}
-            />
-            <Box display="grid" gridTemplateColumns={{ _: '1fr'}} gridGap="30px">
-              {[].concat(cancellations).map((item, index) => (
-                <Box key={index} display="grid" gridTemplateColumns={{ _: 'auto 1fr'}} gridGap="10px">
-                  <Radio
-                    name="listingData.cancellationPolicy"
-                    value={item.id}
-                    checked={Number(item.id) === values.listingData.cancellationPolicy}
-                    handleChange={_handleRadioChange}
-                    handleBlur={handleBlur}
-                  />
-                  <Title
-                    type="h6"
-                    title={item.policyName}
-                    subtitle={item.policyContent}
-                    subTitleMargin={12}
-                    mediumBold
-                    noMargin
-                  />
-                </Box>
-              ))}
+      <Wrapper>
+        <Box display="grid" gridGap="30px">
+          {loadingCancellations && <Loader text="Loading cancellations" />}
+          {!loadingCancellations && (
+            <Box>
+              <Title
+                type="h3"
+                title="Cancellation policies"
+                subtitle="Select the best policy for your space."
+                subTitleMargin={10}
+              />
+              <Box display="grid" gridTemplateColumns={{ _: '1fr' }} gridGap="30px">
+                {[].concat(cancellations).map((item, index) => (
+                  <Box key={index} display="grid" gridTemplateColumns={{ _: 'auto 1fr' }} gridGap="10px">
+                    <Radio
+                      name="listingData.cancellationPolicy"
+                      value={item.id}
+                      checked={Number(item.id) === values.listingData.cancellationPolicy}
+                      handleChange={_handleRadioChange}
+                      handleBlur={handleBlur}
+                    />
+                    <Title
+                      type="h6"
+                      title={item.policyName}
+                      subtitle={item.policyContent}
+                      subTitleMargin={12}
+                      mediumBold
+                      noMargin
+                    />
+                  </Box>
+                ))}
+              </Box>
             </Box>
-          </Box>
-        )}
-      </Box>
-      <StepButtons
-        prev={{
-          disabled: false,
-          onClick: () => props.history.push(`/listing-process/setup-process/${listing.id}/opening-hours`)
-        }}
-        next={{
-          onClick: () => props.history.push(`/listing-process/view/${listing.id}`)
-        }}
-      />
-    </Wrapper>
+          )}
+        </Box>
+        <StepButtons
+          prev={{
+            disabled: false,
+            onClick: () => props.history.push(`/listing-process/setup-process/${listing.id}/opening-hours`)
+          }}
+          next={{
+            disabled: steps && steps.completed !== 100,
+            onClick: () => props.history.push(`/listing-process/view/${listing.id}`)
+          }}
+        />
+      </Wrapper>
     </form>
   )
 }
@@ -79,7 +81,7 @@ const formik = {
     return {
       listingData: {
         ...listing.listingData,
-        cancellationPolicy: listing.listingData.cancellationPolicy || 1,
+        cancellationPolicy: listing.listingData.cancellationPolicy || 1
       }
     }
   },

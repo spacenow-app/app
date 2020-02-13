@@ -4,7 +4,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import { withFormik } from 'formik'
 import { Wrapper, Box, Title, StepButtons, Select, Checkbox, Loader } from 'components'
 
-import { onGetRootCategories, onGetSubCategories } from 'redux/ducks/listing-process'
+import { onGetRootCategories, onGetCategoryTags } from 'redux/ducks/listing-process'
 
 const loadCheckboxs = (name, item, index, values, setFieldValue) => (
   <Checkbox
@@ -30,66 +30,71 @@ const _handleCheckboxChange = (e, values, setFieldValue) => {
 }
 
 const CategoryPage = ({ listing, values, setFieldValue, handleChange, handleBlur, ...props }) => {
-
   const dispatch = useDispatch()
   const { object: categories, isLoading: loadingCategories } = useSelector(state => state.listing_process.categories)
-  const { object: subcategories, isLoading: loadingSubCategories } = useSelector(state => state.listing_process.subcategories)
+  const { object: tags, isLoading: loadingCategoryTags } = useSelector(state => state.listing_process.tags)
 
   useEffect(() => {
     dispatch(onGetRootCategories())
   }, [dispatch])
 
+  useEffect(() => {
+    props.setFatherValues({ ...values })
+  }, [props, values])
+
   const _handleSelectChange = e => {
     const { name, value } = e.target
     setFieldValue(name, value)
-    dispatch(onGetSubCategories(value))
+    dispatch(onGetCategoryTags(value))
   }
 
   return (
-    <Wrapper>
-      <form>
-      <Box display="grid" gridGap="30px">
-        {loadingCategories && <Loader text="Loading root categories" />}
-        {!loadingCategories && (
-          <Box>
-            <Title
-              type="h3"
-              title="Primary use for the space"
-              subtitle="Select the primary use for your pace."
-              subTitleMargin={10}
-            />
-            <Box display="grid" gridTemplateColumns={{ _: '1fr', medium: 'auto auto auto' }} gridGap="30px">
-              <Select value={values.category} onChange={_handleSelectChange} name="category" >
-                {[].concat(categories).map((item, index) => (<option key={index} value={item.id}>
-                  {item.name}
-                </option>))}
-              </Select>
+    <form>
+      <Wrapper>
+        <Box display="grid" gridGap="30px">
+          {loadingCategories && <Loader text="Loading root categories" />}
+          {!loadingCategories && (
+            <Box>
+              <Title
+                type="h3"
+                title="Primary use for the space"
+                subtitle="Select the primary use for your pace."
+                subTitleMargin={10}
+              />
+              <Box display="grid" gridTemplateColumns={{ _: '1fr', medium: 'auto auto auto' }} gridGap="30px">
+                <Select value={values.listSettingsParentId} onChange={_handleSelectChange} name="listSettingsParentId">
+                  {[].concat(categories).map((item, index) => (
+                    <option key={index} value={item.id}>
+                      {item.name}
+                    </option>
+                  ))}
+                </Select>
+              </Box>
             </Box>
-          </Box>
-        )}
-        {loadingSubCategories && <Loader text="Loading category" />}
-        {!loadingSubCategories && (
-          <Box>
-            <Title
-              type="h3"
-              title="Activities"
-              subtitle="What activities are welcome in your space"
-              subTitleMargin={10}
-            />
-            <Box display="grid" gridTemplateColumns={{ _: '1fr', medium: 'auto auto auto' }} gridGap="30px">
-            {[].concat(subcategories).map((item, index) => loadCheckboxs('subcategories', item, index, values, setFieldValue))}
+          )}
+          {loadingCategoryTags && <Loader text="Loading category" />}
+          {!loadingCategoryTags && tags.length > 0 && (
+            <Box>
+              <Title
+                type="h3"
+                title="Activities"
+                subtitle="What activities are welcome in your space"
+                subTitleMargin={10}
+              />
+              <Box display="grid" gridTemplateColumns={{ _: '1fr', medium: 'auto auto auto' }} gridGap="30px">
+                {[].concat(tags).map((item, index) => loadCheckboxs('tags', item, index, values, setFieldValue))}
+              </Box>
             </Box>
-          </Box>
-        )}
-      </Box>
-      <StepButtons
-        prev={{ disabled: false, onClick: () => props.history.push('space-type') }}
-        next={{
-          onClick: () => props.history.push(`/listing-process/setup-process/${listing.id}/details`)
-        }}
-      />
-      </form>
-    </Wrapper>
+          )}
+        </Box>
+        <StepButtons
+          prev={{ disabled: false, onClick: () => props.history.push('space-type') }}
+          next={{
+            onClick: () => props.history.push(`/listing-process/setup-process/${listing.id}/details/specification`)
+          }}
+        />
+      </Wrapper>
+    </form>
   )
 }
 
@@ -98,8 +103,8 @@ const formik = {
   mapPropsToValues: ({ listing }) => {
     return {
       ...listing,
-      category: listing.category || '',
-      subcategories: listing.subcategories || []
+      listSettingsParentId: listing.listSettingsParentId,
+      tags: listing.tags || []
     }
   },
   enableReinitialize: true,

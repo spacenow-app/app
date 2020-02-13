@@ -9,8 +9,8 @@ const BasicsPage = ({ match, listing, dispatch, setFatherValues, ...props }) => 
   return (
     <Suspense fallback={<div>Loading...</div>}>
       <Switch>
-        <Redirect exact from={match.path} to={`${match.path}/space-type`} />
         <Route
+          exact
           path={`${match.path}/space-type`}
           render={routeProps => (
             <SpaceTypePage
@@ -23,6 +23,7 @@ const BasicsPage = ({ match, listing, dispatch, setFatherValues, ...props }) => 
           )}
         />
         <Route
+          exact
           path={`${match.path}/category`}
           render={routeProps => (
             <CategoryPage
@@ -34,6 +35,7 @@ const BasicsPage = ({ match, listing, dispatch, setFatherValues, ...props }) => 
             />
           )}
         />
+        <Redirect exact from={match.path} to={`${match.path}/space-type`} />
         <Route component={() => <h1>not found</h1>} />
       </Switch>
     </Suspense>

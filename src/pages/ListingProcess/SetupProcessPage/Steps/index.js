@@ -1,5 +1,4 @@
 import React, { Fragment } from 'react'
-import PropTypes from 'prop-types'
 import Helmet from 'react-helmet'
 import styled from 'styled-components'
 import { Wrapper, Title, RadioCheckbox, Grid, Cell, Button, Link, Box } from 'components'
@@ -59,11 +58,6 @@ const StepPage = ({ listing, steps, ...props }) => {
       </Box>
     </Wrapper>
   )
-}
-
-StepPage.propTypes = {
-  listing: PropTypes.instanceOf(Object).isRequired,
-  steps: PropTypes.instanceOf(Object).isRequired
 }
 
 export default StepPage

@@ -5,7 +5,7 @@ import { Wrapper, Box, Title, StepButtons, Input, TextArea } from 'components'
 const DetailPage = ({ listing, values, handleChange, handleBlur, ...props }) => {
   useEffect(() => {
     props.setFatherValues({ ...values })
-  }, [props, listing, values])
+  }, [props, values])
 
   return (
     <form>
@@ -60,9 +60,27 @@ const DetailPage = ({ listing, values, handleChange, handleBlur, ...props }) => 
             subTitleMargin={10}
           />
           <Box display="grid" gridTemplateColumns={{ _: 'auto', medium: 'auto auto auto' }} gridGap="30px">
-            <Input name="listingData.wifiNetwork" placeholder="Wifi network" value={values.listingData.wifiNetwork} onChange={handleChange} onBlur={handleBlur}/>
-            <Input name="listingData.wifiUsername" placeholder="Wifi username" value={values.listingData.wifiUsername} onChange={handleChange} onBlur={handleBlur}/>
-            <Input name="listingData.wifiPassword" placeholder="Wifi password" value={values.listingData.wifiPassword} onChange={handleChange} onBlur={handleBlur}/>
+            <Input
+              name="listingData.wifiNetwork"
+              placeholder="Wifi network"
+              value={values.listingData.wifiNetwork}
+              onChange={handleChange}
+              onBlur={handleBlur}
+            />
+            <Input
+              name="listingData.wifiUsername"
+              placeholder="Wifi username"
+              value={values.listingData.wifiUsername}
+              onChange={handleChange}
+              onBlur={handleBlur}
+            />
+            <Input
+              name="listingData.wifiPassword"
+              placeholder="Wifi password"
+              value={values.listingData.wifiPassword}
+              onChange={handleChange}
+              onBlur={handleBlur}
+            />
           </Box>
         </Box>
         <StepButtons
@@ -90,7 +108,7 @@ const formik = {
         direction: listing.listingData.direction || '',
         wifiNetwork: listing.listingData.wifiNetwork || '',
         wifiUsername: listing.listingData.wifiUsername || '',
-        wifiPassword: listing.listingData.wifiPasswordDecrypt || ''
+        wifiPassword: listing.listingData.wifiPassword || ''
       }
     }
   },

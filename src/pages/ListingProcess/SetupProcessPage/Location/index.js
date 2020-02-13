@@ -1,15 +1,16 @@
 import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
+import { withFormik } from 'formik'
 import Helmet from 'react-helmet'
 import { Box, Wrapper, Title, StepButtons, Input, Map, AutoComplete } from 'components'
 
 import { onPostLocation } from 'redux/ducks/listing-process'
 
-const LocationPage = ({ listing, values, handleChange, handleBlur, ...props }) => {
+const LocationPage = ({ listing, values, handleChange, handleBlur, setFieldValue, ...props }) => {
   const [address, setAddress] = useState('')
   const [unit, setUnit] = useState('')
   const [latLng, setLatLng] = useState({})
-  const [gPlaceId, setGPlaceId] = useState('')
+  const [, setGPlaceId] = useState('')
 
   const dispatch = useDispatch()
   const { object: location, isLoading, error } = useSelector(state => state.listing_process.location)
@@ -17,6 +18,10 @@ const LocationPage = ({ listing, values, handleChange, handleBlur, ...props }) =
   useEffect(() => {
     props.setFatherValues({ ...values })
   }, [props, values])
+
+  useEffect(() => {
+    if (location) setFieldValue('locationId', location.id)
+  }, [location, setFieldValue])
 
   const _onSelectedAddess = obj => {
     const { unit: objUnit, position, address: objAddress, placeId } = obj
@@ -47,35 +52,53 @@ const LocationPage = ({ listing, values, handleChange, handleBlur, ...props }) =
   }
 
   return (
-    <Wrapper>
-      <Helmet title="Listing Location - Spacenow" />
-      <Title type="h3" title="Location" />
-      <Box display="grid" gridTemplateColumns={{ _: '1fr', medium: 'auto 280px' }} gridGap="30px">
-        <AutoComplete
-          address={address}
-          onChangeAddress={setAddress}
-          onHandleError={_onHandleError}
-          onSelectedAddess={_onSelectedAddess}
-          disabled={latLng && (latLng.lat || latLng.lng)}
-          closeButton={latLng && (latLng.lat || latLng.lng)}
-          onClickCloseButton={_reset}
+    <form>
+      <Wrapper>
+        <Helmet title="Listing Location - Spacenow" />
+        <Title type="h3" title="Location" />
+        <Box display="grid" gridTemplateColumns={{ _: '1fr', medium: 'auto 280px' }} gridGap="30px">
+          <AutoComplete
+            address={address}
+            onChangeAddress={setAddress}
+            onHandleError={_onHandleError}
+            onSelectedAddess={_onSelectedAddess}
+            disabled={latLng && (latLng.lat || latLng.lng)}
+            closeButton={latLng && (latLng.lat || latLng.lng)}
+            onClickCloseButton={_reset}
+          />
+          {latLng && (latLng.lat || latLng.lng) && (
+            <Input label="Unit" placeholder="E.g 128" value={unit} onChange={e => setUnit(e.target.value)} />
+          )}
+        </Box>
+        {error && error.message && <div className="text-danger">{error.message}</div>}
+        {latLng && latLng.lat && latLng.lng && <Map position={latLng} />}
+        <StepButtons
+          prev={{ disabled: false, onClick: () => props.history.push(`steps`) }}
+          next={{
+            disabled: !(latLng && (latLng.lat || latLng.lng)) || isLoading,
+            onClick: () => props.history.push(`/listing-process/setup-process/${listing.id}/basics/space-type`),
+            isLoading
+          }}
         />
-        {latLng && (latLng.lat || latLng.lng) && (
-          <Input label="Unit" placeholder="E.g 128" value={unit} onChange={e => setUnit(e.target.value)} />
-        )}
-      </Box>
-      {error && error.message && <div className="text-danger">{error.message}</div>}
-      {latLng && latLng.lat && latLng.lng && <Map position={latLng} />}
-      <StepButtons
-        prev={{ disabled: false, onClick: () => props.history.push(`steps`) }}
-        next={{
-          disabled: !(latLng && (latLng.lat || latLng.lng)) || isLoading,
-          onClick: () => props.history.push(`/listing-process/setup-process/${listing.id}/basics`),
-          isLoading
-        }}
-      />
-    </Wrapper>
+      </Wrapper>
+    </form>
   )
 }
 
-export default LocationPage
+const formik = {
+  displayName: 'SetupProcess_LocationForm',
+  mapPropsToValues: ({ listing }) => {
+    return {
+      ...listing,
+      locationId: listing.locationId || null
+    }
+  },
+  enableReinitialize: true,
+  isInitialValid: true
+}
+
+LocationPage.propTypes = {
+  ...withFormik.propTypes
+}
+
+export default withFormik(formik)(LocationPage)

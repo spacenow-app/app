@@ -32,22 +32,26 @@ export const Types = {
   GET_ROOT_CATEGORIES_REQUEST: 'GET_ROOT_CATEGORIES_REQUEST',
   GET_ROOT_CATEGORIES_SUCCESS: 'GET_ROOT_CATEGORIES_SUCCESS',
   GET_ROOT_CATEGORIES_FAILURE: 'GET_ROOT_CATEGORIES_FAILURE',
-  GET_SUBCATEGORIES_REQUEST: 'GET_SUBCATEGORIES_REQUEST',
-  GET_SUBCATEGORIES_SUCCESS: 'GET_SUBCATEGORIES_SUCCESS',
-  GET_SUBCATEGORIES_FAILURE: 'GET_SUBCATEGORIES_FAILURE',
+  GET_TAGS_REQUEST: 'GET_TAGS_REQUEST',
+  GET_TAGS_SUCCESS: 'GET_TAGS_SUCCESS',
+  GET_TAGS_FAILURE: 'GET_TAGS_FAILURE',
   GET_CANCELLATIONS_REQUEST: 'GET_CANCELLATIONS_REQUEST',
   GET_CANCELLATIONS_SUCCESS: 'GET_CANCELLATIONS_SUCCESS',
   GET_CANCELLATIONS_FAILURE: 'GET_CANCELLATIONS_FAILURE',
   POST_LOCATION_REQUEST: 'POST_LOCATION_REQUEST',
   POST_LOCATION_SUCCESS: 'POST_LOCATION_SUCCESS',
   POST_LOCATION_FAILURE: 'POST_LOCATION_FAILURE',
+  POST_MEDIA_REQUEST: 'POST_MEDIA_REQUEST',
+  POST_MEDIA_SUCCESS: 'POST_MEDIA_SUCCESS',
+  POST_MEDIA_FAILURE: 'POST_MEDIA_FAILURE',
+  POST_MEDIA_CLEAN: 'POST_MEDIA_CLEAN'
 }
 
 const initialState = {
   isLoading: false,
   steps: {
     object: null,
-    isLoading: true,
+    isLoading: false,
     error: null
   },
   get: {
@@ -57,36 +61,41 @@ const initialState = {
     error: null
   },
   rules: {
-    object: null,
-    isLoading: true,
+    object: [],
+    isLoading: false,
     error: null
   },
   amenities: {
-    object: null,
-    isLoading: true,
+    object: [],
+    isLoading: false,
     error: null
   },
   features: {
-    object: null,
-    isLoading: true,
+    object: [],
+    isLoading: false,
     error: null
   },
   categories: {
     object: [],
-    isLoading: true,
+    isLoading: false,
     error: null
   },
-  subcategories: {
+  tags: {
     object: [],
-    isLoading: true,
+    isLoading: false,
     error: null
   },
   cancellations: {
-    object: null,
-    isLoading: true,
+    object: [],
+    isLoading: false,
     error: null
   },
   location: {
+    object: null,
+    isLoading: false,
+    error: null
+  },
+  media: {
     object: null,
     isLoading: false,
     error: null
@@ -128,10 +137,14 @@ const accessDaysFields = `
   all247
   accessHours { ${accessHoursFields} }
 `
-const photoFields = `
-  id
-  listingId
+const mediaFields = `
   name
+  type
+  isCover
+`
+const uploadMediaFields = `
+  name
+  type
   isCover
 `
 const ruleFields = `
@@ -151,6 +164,14 @@ const categoryFields = `
   name
   slug
   parentId
+  order
+  isActive
+`
+const tagFields = `
+  id
+  name
+  slug
+  categoryId
   order
   isActive
 `
@@ -194,6 +215,11 @@ const dataFields = `
   wifiNetwork
   wifiUsername
   wifiPassword
+  capacityCocktail
+  capacityBanquet
+  capacityTheatre
+  capacityClassroom
+  capacityBoardroom
 `
 const listingFields = `
   id
@@ -207,11 +233,12 @@ const listingFields = `
   isReady
   status
   listingData { ${dataFields} }
-  photos { ${photoFields} } 
+  photos { ${mediaFields} } 
   accessDays { ${accessDaysFields} }
   amenities { id }
   rules { id }
   features { id }
+  tags { id }
 `
 const locationFields = `
   id
@@ -284,10 +311,10 @@ const queryGetV2RootCategories = gql`
     }
   }
 `
-const queryGetV2Category = gql`
-  query getV2Category($id: String!) {
-    getV2Category(id: $id) {
-      ${categoryFields}
+const queryGetV2CategoryTags = gql`
+  query getV2CategoryTags($id: String!) {
+    getV2CategoryTags(id: $id) {
+      ${tagFields}
     }
   }
 `
@@ -302,6 +329,13 @@ const mutationPostV2Location = gql`
   mutation postV2Location($input: V2InputLocation) {
     postV2Location(input: $input) {
       ${locationFields}
+    }
+  }
+`
+const mutationPostV2Media = gql`
+  mutation postV2Media($input: V2InputUpload) {
+    postV2Media(input: $input) {
+      ${uploadMediaFields}
     }
   }
 `
@@ -517,30 +551,30 @@ export default function reducer(state = initialState, action) {
         }
       }
     }
-    case Types.GET_SUBCATEGORIES_REQUEST: {
+    case Types.GET_TAGS_REQUEST: {
       return {
         ...state,
-        subcategories: {
-          ...state.subcategories,
+        tags: {
+          ...state.tags,
           isLoading: true
         }
       }
     }
-    case Types.GET_SUBCATEGORIES_SUCCESS: {
+    case Types.GET_TAGS_SUCCESS: {
       return {
         ...state,
-        subcategories: {
-          ...state.subcategories,
+        tags: {
+          ...state.tags,
           object: action.payload,
           isLoading: false
         }
       }
     }
-    case Types.GET_SUBCATEGORIES_FAILURE: {
+    case Types.GET_TAGS_FAILURE: {
       return {
         ...state,
-        subcategories: {
-          ...state.subcategories,
+        tags: {
+          ...state.tags,
           isLoading: false,
           error: action.payload
         }
@@ -601,6 +635,45 @@ export default function reducer(state = initialState, action) {
           ...state.location,
           isLoading: false,
           error: action.payload
+        }
+      }
+    }
+    case Types.POST_MEDIA_REQUEST: {
+      return {
+        ...state,
+        media: {
+          ...state.media,
+          isLoading: true
+        }
+      }
+    }
+    case Types.POST_MEDIA_SUCCESS: {
+      return {
+        ...state,
+        media: {
+          ...state.media,
+          object: action.payload,
+          isLoading: false
+        }
+      }
+    }
+    case Types.POST_MEDIA_FAILURE: {
+      return {
+        ...state,
+        media: {
+          ...state.media,
+          isLoading: false,
+          error: action.payload
+        }
+      }
+    }
+    case Types.POST_MEDIA_CLEAN: {
+      return {
+        ...state,
+        media: {
+          object: null,
+          isLoading: false,
+          error: null
         }
       }
     }
@@ -715,17 +788,17 @@ export const onGetRootCategories = () => async dispatch => {
   }
 }
 
-export const onGetSubCategories = id => async dispatch => {
-  dispatch({ type: Types.GET_SUBCATEGORIES_REQUEST })
+export const onGetCategoryTags = id => async dispatch => {
+  dispatch({ type: Types.GET_TAGS_REQUEST })
   try {
     const { data } = await getClient(dispatch).query({
-      query: queryGetV2Category,
+      query: queryGetV2CategoryTags,
       fetchPolicy: 'network-only',
       variables: { id }
     })
-    dispatch({ type: Types.GET_SUBCATEGORIES_SUCCESS, payload: data.getV2Category })
+    dispatch({ type: Types.GET_TAGS_SUCCESS, payload: data.getV2CategoryTags })
   } catch (err) {
-    dispatch({ type: Types.GET_SUBCATEGORIES_FAILURE, payload: errToMsg(err) })
+    dispatch({ type: Types.GET_TAGS_FAILURE, payload: errToMsg(err) })
   }
 }
 
@@ -743,7 +816,6 @@ export const onGetCancellations = () => async dispatch => {
 }
 
 export const onPostLocation = input => async dispatch => {
-  console.log('INPUT ===>>>', input)
   dispatch({ type: Types.POST_LOCATION_REQUEST })
   try {
     const { data } = await getClientWithAuth(dispatch).mutate({
@@ -754,4 +826,21 @@ export const onPostLocation = input => async dispatch => {
   } catch (err) {
     dispatch({ type: Types.POST_LOCATION_FAILURE, payload: errToMsg(err) })
   }
+}
+
+export const onPostMedia = input => async dispatch => {
+  dispatch({ type: Types.POST_MEDIA_REQUEST })
+  try {
+    const { data } = await getClientWithAuth(dispatch).mutate({
+      mutation: mutationPostV2Media,
+      variables: { input }
+    })
+    dispatch({ type: Types.POST_MEDIA_SUCCESS, payload: data.postV2Media })
+  } catch (err) {
+    dispatch({ type: Types.POST_MEDIA_FAILURE, payload: errToMsg(err) })
+  }
+}
+
+export const onCleanMedia = () => async dispatch => {
+  dispatch({ type: Types.POST_MEDIA_CLEAN })
 }

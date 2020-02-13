@@ -41,7 +41,7 @@ const AmenitiesPage = ({ listing, values, setFieldValue, handleChange, handleBlu
 
   useEffect(() => {
     props.setFatherValues({ ...values })
-  }, [props, listing, values])
+  }, [props, values])
 
   return (
     <Wrapper>
