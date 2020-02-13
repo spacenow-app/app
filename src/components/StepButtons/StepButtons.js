@@ -6,7 +6,7 @@ import { Button } from 'components'
 const Footer = styled.div`
   display: grid;
   grid-template-columns: auto auto;
-  margin: 50px 0;
+  margin: 100px 0;
 
   @media (max-width: 680px) {
     margin: 20px 0;
@@ -26,14 +26,14 @@ const StepButtons = ({ prev, next }) => {
       <Left>
         {prev && (
           <Button outline disabled={prev.disabled} onClick={prev.onClick} isLoading={prev.isLoading}>
-            {prev.title ? prev.title : 'Previous Step'}
+            {prev.title ? prev.title : 'Previous'}
           </Button>
         )}
       </Left>
       <Right>
         {next && (
           <Button disabled={next.disabled} onClick={next.onClick} isLoading={next.isLoading}>
-            {next.title ? next.title : 'Next Step'}
+            {next.title ? next.title : 'Next'}
           </Button>
         )}
       </Right>

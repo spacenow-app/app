@@ -101,7 +101,11 @@ const ImageStyled = styled.img`
   border-radius: 100%;
 `
 
-const Radio = ({ handleChange, box, value, name, checked, label, text, image, disabled, fontSize }) => {
+const RadioLabel = styled.div`
+  font-family: ${props => (props.mediumLabel ? 'Montserrat-Medium' : 'Montserrat-Regular')};
+`
+
+const Radio = ({ handleChange, box, value, name, checked, label, text, image, disabled, fontSize, mediumLabel }) => {
   const handleRadioChange = (e, obj) => {
     if (handleChange) {
       handleChange(e, { value: obj.value, name: obj.name, disabled })
@@ -120,7 +124,7 @@ const Radio = ({ handleChange, box, value, name, checked, label, text, image, di
           onChange={e => handleRadioChange(e, { value, name })}
         />
         <RadioButtonLabel />
-        <div>{label}</div>
+        <RadioLabel mediumLabel={mediumLabel}>{label}</RadioLabel>
       </RadioStyled>
 
       {box && (

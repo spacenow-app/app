@@ -57,7 +57,7 @@ const Photo = ({ onDrop, onCover, onDelete, url, isCover, ...props }) => {
               />
               <FooterButton>
                 <Button
-                  outline="true"
+                  outline={true}
                   icon={
                     !isCover ? (
                       <Icon
@@ -82,7 +82,7 @@ const Photo = ({ onDrop, onCover, onDelete, url, isCover, ...props }) => {
                   Cover
                 </Button>
                 <Button
-                  outline="true"
+                  outline={true}
                   icon={<Icon width="15px" fill="#6ADD92" name="bin" />}
                   style={{ width: '40px', height: '40px', margin: '5px' }}
                   onClick={onDelete}

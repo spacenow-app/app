@@ -61,6 +61,8 @@ import Review from './Review'
 import StarRatingComponent from './Review/StarRatingComponent'
 import Phone from './Phone'
 import Video from './Video'
+import RadioCheckbox from './RadioCheckbox'
+import ProgressBar from './ProgressBar'
 import CheckInOut from './CheckInOut'
 import CardCheckout from './CardCheckout'
 import CreditCard from './CreditCard'
@@ -132,6 +134,8 @@ export {
   StarRatingComponent,
   Phone,
   Video,
+  RadioCheckbox,
+  ProgressBar,
   CheckInOut,
   CardCheckout,
   CreditCard,

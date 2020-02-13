@@ -25,6 +25,7 @@ const Grid = styled.div`
   ${({ areas }) => areas && `grid-template-areas: ${formatAreas(areas)}`};
   ${({ justifyContent }) => justifyContent && `justify-content: ${justifyContent}`};
   ${({ alignContent }) => alignContent && `align-content: ${alignContent}`};
+  ${({ alignItems }) => alignItems && `align-items: ${alignItems}`};
 `
 
 Grid.defaultProps = {
@@ -44,7 +45,8 @@ Grid.propTypes = {
   areas: PropTypes.arrayOf(PropTypes.string),
   justifyContent: PropTypes.string,
   alignContent: PropTypes.string,
-  alignSelf: PropTypes.string
+  alignSelf: PropTypes.string,
+  alignItems: PropTypes.string
 }
 
 export default Grid

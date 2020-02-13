@@ -108,3 +108,16 @@ export const onGetOrCreateLocation = (suggestAddress, unit, history, placeId) =>
     dispatch(getOrCreateError(errToMsg(err)))
   }
 }
+
+// export const onGetOrCreateAddress = (suggestAddress, unit) => async dispatch => {
+//   dispatch(getOrCreateStart())
+//   try {
+//     const { data } = await getClientWithAuth(dispatch).mutate({
+//       mutation: mutationGetOrCreateLocation,
+//       variables: { suggestAddress, unit }
+//     })
+//     dispatch(getOrCreateSuccess(data.getOrCreateLocation))
+//   } catch (err) {
+//     dispatch(getOrCreateError(errToMsg(err)))
+//   }
+// }

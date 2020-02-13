@@ -32,7 +32,9 @@ export const getClientWithAuth = dispatch => {
       console.info('Creating a new connection with Authentication to Apollo GraphQL.')
     }
     apolloClientWithAuth = new ApolloClient({
-      cache: new InMemoryCache(),
+      cache: new InMemoryCache({
+        addTypename: false
+      }),
       link: from([authLink(dispatch), uploadLink])
     })
   }
@@ -45,7 +47,12 @@ export const getClient = () => {
     if (process.env.NODE_ENV !== 'production') {
       console.info('Creating a new connection to Apollo GraphQL.')
     }
-    apolloClient = new ApolloClient({ cache: new InMemoryCache(), link: uploadLink })
+    apolloClient = new ApolloClient({
+      cache: new InMemoryCache({
+        addTypename: false
+      }),
+      link: uploadLink
+    })
   }
   return apolloClient
 }
