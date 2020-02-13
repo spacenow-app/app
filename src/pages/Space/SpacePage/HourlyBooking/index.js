@@ -97,7 +97,7 @@ const HourlyBooking = ({
     }
     if (em < 10) em = `0${em}`
     if (eh < 10) eh = `0${eh}`
-
+    console.log(hourlySuggestion.closeRange[hourlySuggestion.closeRange.length - 1])
     onEndTimeChange(String(`${eh}:${em}`))
     console.log('endTime', endTime)
   }
