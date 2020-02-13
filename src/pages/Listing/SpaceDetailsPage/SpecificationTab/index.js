@@ -134,6 +134,8 @@ const SpecificationTab = ({
     setFieldValue(name, [...values[name], { listSettingsId: Number(value) }])
   }
 
+  console.log('sub', listing.settingsParent.subcategory.otherItemName)
+
   const _renderSpecifications = o => {
     let component
     if (o.type) {
@@ -359,15 +361,31 @@ const SpecificationTab = ({
               <Loader />
             ) : (
               arrayAmenities.map(item => {
+                console.log(item)
                 return (
-                  <Checkbox
-                    key={item.id}
-                    label={item.itemName}
-                    name="amenities"
-                    value={item.id}
-                    checked={values.amenities.some(amenitie => amenitie.listSettingsId === item.id)}
-                    handleCheckboxChange={_handleCheckboxChange}
-                  />
+                  <>
+                    {listing.settingsParent.subcategory.otherItemName === 'popup' ? 
+                    <> {item.otherItemName !== 'mailbox' && 
+                      <Checkbox
+                        key={item.id}
+                        label={item.itemName}
+                        name="amenities"
+                        value={item.id}
+                        checked={values.amenities.some(amenitie => amenitie.listSettingsId === item.id)}
+                        handleCheckboxChange={_handleCheckboxChange}
+                      />
+                    }
+                    </> : 
+                    <Checkbox
+                        key={item.id}
+                        label={item.itemName}
+                        name="amenities"
+                        value={item.id}
+                        checked={values.amenities.some(amenitie => amenitie.listSettingsId === item.id)}
+                        handleCheckboxChange={_handleCheckboxChange}
+                      />
+                    } 
+                  </>
                 )
               })
             )}

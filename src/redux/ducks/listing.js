@@ -374,6 +374,7 @@ const queryGetAllAmenities = gql`
     getAllAmenitiesBySubCategoryId(subCategoryId: $subCategoryId) {
       id
       itemName
+      otherItemName
     }
   }
 `
