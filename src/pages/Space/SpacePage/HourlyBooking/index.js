@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import styled from 'styled-components'
 import { withFormik } from 'formik'
+import { setMinutes, setHours } from 'date-fns'
 
 import { DatePicker, Grid, Cell, PriceDetail, TextArea, Select, Box, Text } from 'components'
 
@@ -45,6 +46,13 @@ const HourlyBooking = ({
     onCalcHourlyPeriod()
   }, [date, startTime, endTime]) // eslint-disable-line react-hooks/exhaustive-deps
 
+  // useEffect(() => {
+  //   if (hourlySuggestion) {
+  //     // console.log(startTime, endTime)
+  //     _hanldeRoundTime()
+  //   }
+  // }, [endTime, startTime])
+
   const _getOptions = range => {
     if (!range) return []
     const options = []
@@ -57,9 +65,54 @@ const HourlyBooking = ({
   const _hanldeTimeClick = () => {
     if (!hourlySuggestion) {
       setFocusInput(true)
-      return
     }
   }
+
+  // Force endTime to the next full hour
+  let sm
+  let em
+  let sh
+  let eh
+  let sum
+
+  // const _hanldeRoundTime = () => {
+  //   setTimeout(() => {
+  //     if (startTime && endTime) {
+  //       ;[sh, sm] = startTime.split(':')
+  //       ;[eh, em] = endTime.split(':')
+  //       console.log(sh, sm)
+  //       console.log(eh, em)
+  //       if (sh === eh) {
+  //         eh = parseInt(eh, 10) + 1
+  //         em = sm
+  //       } else {
+  //         sum = parseInt(sm, 10) + parseInt(em, 10)
+  //         if (sum < 60) {
+  //           eh = parseInt(eh, 10) + 1
+  //           em = parseInt(sm, 10) + 60 - sum
+  //         }
+  //         if (sum > 60) {
+  //           em = parseInt(sm, 10) + 60 - sum
+  //           em = sm
+  //         }
+  //       }
+  //       onEndTimeChange(`${eh}:${em}`)
+  //     }
+  //   }, 1000)
+  // }
+  let start
+  let end
+  // const _hanldeRoundTime = () => {
+  //   ;[sh, sm] = startTime.split(':')
+  //   ;[eh, em] = endTime.split(':')
+  //   start = setHours(start, parseInt(sh, 10))
+  //   start = setMinutes(new Date(2014, 8, 1, 0, 0, 0), parseInt(sm, 10))
+  //   end = setHours(end, parseInt(eh, 10))
+  //   end = setMinutes(new Date(2014, 8, 1, 0, 0, 0), parseInt(em, 10))
+
+  //   console.log(start)
+  //   console.log(end)
+  // }
 
   return (
     <>
@@ -92,7 +145,10 @@ const HourlyBooking = ({
             <Select
               label={hidePrice ? '' : 'Start time'}
               options={_getOptions(hourlySuggestion && hourlySuggestion.openRange)}
-              handleChange={e => onStartTimeChange(String(e.target.value))}
+              handleChange={e => {
+                onStartTimeChange(String(e.target.value))
+                // _hanldeRoundTime()
+              }}
               value={startTime}
               // disabled={!hourlySuggestion}
               bgPosition="87% 50%"
@@ -103,7 +159,10 @@ const HourlyBooking = ({
             <Select
               label={hidePrice ? '' : 'End time'}
               options={_getOptions(hourlySuggestion && hourlySuggestion.closeRange)}
-              handleChange={e => onEndTimeChange(String(e.target.value))}
+              handleChange={e => {
+                onEndTimeChange(String(e.target.value))
+                // _hanldeRoundTime()
+              }}
               value={endTime}
               // disabled={!hourlySuggestion}
               bgPosition="87% 50%"
