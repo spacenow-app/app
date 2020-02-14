@@ -72,6 +72,8 @@ const HourlyBooking = ({
   let em
   let sh
   let eh
+  let om
+  let oh
 
   const _hanldeRoundTime = () => {
     console.log(hourlySuggestion)
@@ -95,9 +97,14 @@ const HourlyBooking = ({
         em = sm
       }
     }
+    ;[oh, om] = hourlySuggestion.closeRange[hourlySuggestion.closeRange.length - 1].split(':')
+    oh = parseInt(oh, 10)
+    om = parseInt(om, 10)
+    if (oh === eh && em > om) {
+      eh -= 1
+    }
     if (em < 10) em = `0${em}`
     if (eh < 10) eh = `0${eh}`
-    console.log(hourlySuggestion.closeRange[hourlySuggestion.closeRange.length - 1])
     onEndTimeChange(String(`${eh}:${em}`))
     console.log('endTime', endTime)
   }
