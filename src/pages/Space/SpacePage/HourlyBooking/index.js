@@ -47,7 +47,6 @@ const HourlyBooking = ({
 
   useEffect(() => {
     if (hourlySuggestion && endTime && startTime) {
-      // console.log(startTime, endTime)
       _hanldeRoundTime()
     }
   }, [endTime, startTime]) // eslint-disable-line react-hooks/exhaustive-deps
@@ -76,7 +75,6 @@ const HourlyBooking = ({
   let oh
 
   const _hanldeRoundTime = () => {
-    console.log(hourlySuggestion)
     ;[sh, sm] = startTime.split(':')
     ;[eh, em] = endTime.split(':')
     sh = parseInt(sh, 10)
@@ -106,7 +104,6 @@ const HourlyBooking = ({
     if (em < 10) em = `0${em}`
     if (eh < 10) eh = `0${eh}`
     onEndTimeChange(String(`${eh}:${em}`))
-    console.log('endTime', endTime)
   }
 
   return (
