@@ -133,9 +133,7 @@ const SpecificationTab = ({
     }
     setFieldValue(name, [...values[name], { listSettingsId: Number(value) }])
   }
-
-  console.log('sub', listing.settingsParent.subcategory.otherItemName)
-
+  
   const _renderSpecifications = o => {
     let component
     if (o.type) {
@@ -361,7 +359,6 @@ const SpecificationTab = ({
               <Loader />
             ) : (
               arrayAmenities.map(item => {
-                console.log(item)
                 return (
                   <>
                     {listing.settingsParent.subcategory.otherItemName === 'popup' ? 
