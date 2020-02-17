@@ -113,10 +113,10 @@ const SpecificationTab = ({
   useEffect(() => {
     try {
       setEditorState(EditorState.createWithContent(convertFromRaw(JSON.parse(values.description))))
-    } catch {
+    } catch (err) {
       setEditorState(EditorState.createWithContent(ContentState.createFromText(values.description)))
     }
-  }, [values.description])
+  }, [values])
 
   const _handleSelectChange = e => {
     const { name, value } = e.target
@@ -133,8 +133,6 @@ const SpecificationTab = ({
     }
     setFieldValue(name, [...values[name], { listSettingsId: Number(value) }])
   }
-
-  console.log('sub', listing.settingsParent.subcategory.otherItemName)
 
   const _renderSpecifications = o => {
     let component
@@ -343,14 +341,10 @@ const SpecificationTab = ({
           />
           <WYSIWYGTextArea
             placeholder="Describe your space"
-            // name="description"
-            // error={errors.description}
-            // value={values.description}
             editorState={editorState}
             onEditorStateChange={editor => {
               setEditorState(editor)
             }}
-            // onChange={handleChange}
             onBlur={_handleWYSIWYGBlur}
           />
         </SectionStyled>
@@ -361,11 +355,23 @@ const SpecificationTab = ({
               <Loader />
             ) : (
               arrayAmenities.map(item => {
-                console.log(item)
                 return (
                   <>
-                    {listing.settingsParent.subcategory.otherItemName === 'popup' ? 
-                    <> {item.otherItemName !== 'mailbox' && 
+                    {listing.settingsParent.subcategory.otherItemName === 'popup' ? (
+                      <>
+                        {' '}
+                        {item.otherItemName !== 'mailbox' && (
+                          <Checkbox
+                            key={item.id}
+                            label={item.itemName}
+                            name="amenities"
+                            value={item.id}
+                            checked={values.amenities.some(amenitie => amenitie.listSettingsId === item.id)}
+                            handleCheckboxChange={_handleCheckboxChange}
+                          />
+                        )}
+                      </>
+                    ) : (
                       <Checkbox
                         key={item.id}
                         label={item.itemName}
@@ -374,17 +380,7 @@ const SpecificationTab = ({
                         checked={values.amenities.some(amenitie => amenitie.listSettingsId === item.id)}
                         handleCheckboxChange={_handleCheckboxChange}
                       />
-                    }
-                    </> : 
-                    <Checkbox
-                        key={item.id}
-                        label={item.itemName}
-                        name="amenities"
-                        value={item.id}
-                        checked={values.amenities.some(amenitie => amenitie.listSettingsId === item.id)}
-                        handleCheckboxChange={_handleCheckboxChange}
-                      />
-                    } 
+                    )}
                   </>
                 )
               })

@@ -368,6 +368,7 @@ const AvailabilityTab = ({ match, listing, history, setFatherValues }) => {
             handleClickDay={_handleChangeDay}
             handleClick24hours={_handleClick24hours}
             handleClickOpenFullTime={_handleClickOpenFullTime}
+            handleClickPeakTime={() => {}}
           />
         </Cell>
         <Cell>
