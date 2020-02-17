@@ -33,7 +33,6 @@ const WYSIWYGTextArea = ({ size, label, error, loading, ...props }) => {
   return (
     <WrapperTextArea>
       {label && <Label>{label}</Label>}
-      {/* <TextAreaStyled {...props} /> */}
       <Editor toolbar={toolbar} {...props} editorClassName="editor-content" />
       {error && <ErrorMessage>{error}</ErrorMessage>}
     </WrapperTextArea>
