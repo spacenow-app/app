@@ -103,8 +103,8 @@ const PartnerPage = ({ match, location, ...props }) => {
   }, [dispatch, listing])
 
   const _getAddress = address => {
-    const { address1 = '', city = '', zipcode = '', state = '', country = '' } = address
-    const convertedAddress = `${address1 ? `${address1}, ` : ''} ${city ? `${city}, ` : ''} ${
+    const { city = '', zipcode = '', state = '', country = '' } = address
+    const convertedAddress = `${city ? `${city}, ` : ''} ${
       zipcode ? `${zipcode}, ` : ''
       } ${state ? `${state}, ` : ''} ${country ? `${country}` : ''}`
     return convertedAddress.replace(/\0.*$/g, '')

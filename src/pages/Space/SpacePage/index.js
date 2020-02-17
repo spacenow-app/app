@@ -311,8 +311,8 @@ const SpacePage = ({ match, location, history, ...props }) => {
   }, [dispatch, listing])
 
   const _getAddress = address => {
-    const { address1 = '', city = '', zipcode = '', state = '', country = '' } = address
-    const convertedAddress = `${address1 ? `${address1}, ` : ''} ${city ? `${city}, ` : ''} ${
+    const { city = '', zipcode = '', state = '', country = '' } = address
+    const convertedAddress = `${city ? `${city}, ` : ''} ${
       zipcode ? `${zipcode}, ` : ''
     } ${state ? `${state}, ` : ''} ${country ? `${country}` : ''}`
     return convertedAddress.replace(/\0.*$/g, '')
@@ -403,6 +403,7 @@ const SpacePage = ({ match, location, history, ...props }) => {
         const value = el.value == 0 ? 'None available' : `${el.value}`
         return (
           <Highlights
+            key={index}
             title={el.label}
             name={value}
             icon={value === 'Covered' ? 'specification-covered' : 'specification-uncovered'}
@@ -1025,12 +1026,12 @@ const SpacePage = ({ match, location, history, ...props }) => {
 
                   <BoxDesktop my="20px">
                     <Grid columns={12}>
-                      <Cell width="3">
+                      <Cell width={3}>
                         <Box my="10px">Languages: </Box>
                         <Box my="10px">Response rate: </Box>
                         {/* <Box my="10px">Response time: </Box> */}
                       </Cell>
-                      <Cell width="3">
+                      <Cell width={3}>
                         <Box my="10px">English</Box>
                         <Box my="10px">90%</Box>
                         {/* <Box my="10px">Within 2 hours</Box> */}
@@ -1352,7 +1353,7 @@ const SpacePage = ({ match, location, history, ...props }) => {
           <Map position={{ lat: Number(listing.location.lat), lng: Number(listing.location.lng) }} />
         </Box>
 
-        {similarResults.length == 3 && (
+        {similarResults.length > 0 && (
           <Box mt="45px">
             <Title type="h5" title="See more similar spaces" />
             <SimilarSpacesContainer>

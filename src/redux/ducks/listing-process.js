@@ -44,7 +44,8 @@ export const Types = {
   POST_MEDIA_REQUEST: 'POST_MEDIA_REQUEST',
   POST_MEDIA_SUCCESS: 'POST_MEDIA_SUCCESS',
   POST_MEDIA_FAILURE: 'POST_MEDIA_FAILURE',
-  POST_MEDIA_CLEAN: 'POST_MEDIA_CLEAN'
+  POST_MEDIA_CLEAN: 'POST_MEDIA_CLEAN',
+  POST_LOCATION_CLEAN: 'POST_LOCATION_CLEAN'
 }
 
 const initialState = {
@@ -677,6 +678,16 @@ export default function reducer(state = initialState, action) {
         }
       }
     }
+    case Types.POST_LOCATION_CLEAN: {
+      return {
+        ...state,
+        location: {
+          object: null,
+          isLoading: false,
+          error: null
+        }
+      }
+    }
     default:
       return state
   }
@@ -723,6 +734,7 @@ export const onPostListing = () => async dispatch => {
 }
 
 export const onPutListing = input => async dispatch => {
+  console.log("INPUT ===>>> ", input)
   dispatch({ type: Types.PUT_LISTING_REQUEST })
   try {
     const { data } = await getClientWithAuth(dispatch).mutate({
@@ -842,4 +854,8 @@ export const onPostMedia = input => async dispatch => {
 
 export const onCleanMedia = () => async dispatch => {
   dispatch({ type: Types.POST_MEDIA_CLEAN })
+}
+
+export const onCleanLocation = () => async dispatch => {
+  dispatch({ type: Types.POST_LOCATION_CLEAN })
 }

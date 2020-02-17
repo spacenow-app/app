@@ -4,13 +4,13 @@ import { withFormik } from 'formik'
 import Helmet from 'react-helmet'
 import { Box, Wrapper, Title, StepButtons, Input, Map, AutoComplete } from 'components'
 
-import { onPostLocation } from 'redux/ducks/listing-process'
+import { onPostLocation, onCleanLocation } from 'redux/ducks/listing-process'
 
 const LocationPage = ({ listing, values, handleChange, handleBlur, setFieldValue, ...props }) => {
   const [address, setAddress] = useState('')
   const [unit, setUnit] = useState('')
   const [latLng, setLatLng] = useState({})
-  const [, setGPlaceId] = useState('')
+  const [placeId, setGPlaceId] = useState('')
 
   const dispatch = useDispatch()
   const { object: location, isLoading, error } = useSelector(state => state.listing_process.location)
@@ -20,8 +20,17 @@ const LocationPage = ({ listing, values, handleChange, handleBlur, setFieldValue
   }, [props, values])
 
   useEffect(() => {
-    if (location) setFieldValue('locationId', location.id)
+    if (location) {
+      setFieldValue('locationId', location.id);
+      dispatch(onCleanLocation());
+      props.history.push(`/listing-process/setup-process/${listing.id}/basics/space-type`) 
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [location, setFieldValue])
+
+  const _handleNext = () => {
+    dispatch(onPostLocation({ address, unit, placeId }))
+  }
 
   const _onSelectedAddess = obj => {
     const { unit: objUnit, position, address: objAddress, placeId } = obj
@@ -37,7 +46,6 @@ const LocationPage = ({ listing, values, handleChange, handleBlur, setFieldValue
     if (placeId) {
       setGPlaceId(placeId)
     }
-    dispatch(onPostLocation({ address: objAddress, unit: objUnit, placeId }))
   }
 
   const _onHandleError = () => {
@@ -76,7 +84,7 @@ const LocationPage = ({ listing, values, handleChange, handleBlur, setFieldValue
           prev={{ disabled: false, onClick: () => props.history.push(`steps`) }}
           next={{
             disabled: !(latLng && (latLng.lat || latLng.lng)) || isLoading,
-            onClick: () => props.history.push(`/listing-process/setup-process/${listing.id}/basics/space-type`),
+            onClick: () => _handleNext(),
             isLoading
           }}
         />
