@@ -71,7 +71,6 @@ const messageFields = `
     __typename
     id
     profile {
-      __typename
       displayName
       picture
     }
@@ -80,7 +79,6 @@ const messageFields = `
     __typename
     id
     profile {
-      __typename
       displayName
       picture
     }
