@@ -1,6 +1,6 @@
 /* eslint-disable react/no-array-index-key */
 /* eslint-disable no-console */
-import React, { useEffect, useCallback, useState } from 'react'
+import React, { useEffect, useCallback, useState, Fragment } from 'react'
 import styled from 'styled-components'
 import Helmet from 'react-helmet'
 import { withFormik } from 'formik'
@@ -104,7 +104,7 @@ const SpecificationTab = ({
     dispatch(onGetAllAccessTypes())
     dispatch(onGetPhotosByListingId(listing.id))
     dispatch(onGetVideoByListingId(listing.id))
-  }, [dispatch, listing.id, listing.listingData, listing.settingsParent.id, listing.settingsParent.subcategory.id])
+  }, [dispatch, listing])
 
   useEffect(() => {
     setFatherValues({ ...values, isValid })
@@ -116,7 +116,7 @@ const SpecificationTab = ({
     } catch (err) {
       setEditorState(EditorState.createWithContent(ContentState.createFromText(values.description)))
     }
-  }, [values])
+  }, [values.description])
 
   const _handleSelectChange = e => {
     const { name, value } = e.target
@@ -183,8 +183,8 @@ const SpecificationTab = ({
                 onChange={handleChange}
                 onBlur={handleBlur}
               >
-                {o.values.map(e => (
-                  <option key={`elem-${e}`} value={e}>
+                {o.values.map((e, index) => (
+                  <option key={index} value={e}>
                     {e}
                   </option>
                 ))}
@@ -243,6 +243,7 @@ const SpecificationTab = ({
   }
 
   const _handleWYSIWYGBlur = () => {
+    console.log("CURRENT CONTENT ===>>>", editorState.getCurrentContent())
     const description = convertToRaw(editorState.getCurrentContent())
     setFieldValue('description', JSON.stringify(description))
   }
@@ -326,9 +327,9 @@ const SpecificationTab = ({
             <Loader />
           ) : (
             <InputGroup>
-              {Object.keys(objectSpecifications).map(k => {
+              {Object.keys(objectSpecifications).map((k, index) => {
                 const o = objectSpecifications[k]
-                return <span key={o.field}>{_renderSpecifications(o)}</span>
+                return <span key={index}>{_renderSpecifications(o)}</span>
               })}
             </InputGroup>
           )}
@@ -342,27 +343,21 @@ const SpecificationTab = ({
           <WYSIWYGTextArea
             placeholder="Describe your space"
             editorState={editorState}
-            onEditorStateChange={editor => {
-              setEditorState(editor)
-            }}
+            onEditorStateChange={(editor) => { setEditorState(editor) }}
             onBlur={_handleWYSIWYGBlur}
           />
         </SectionStyled>
         <SectionStyled>
           <Title type="h3" title="Amenities" subtitle="What features does your space offer guests?" />
           <CheckboxGroup>
-            {isLoadingAmenities ? (
-              <Loader />
-            ) : (
-              arrayAmenities.map(item => {
-                return (
-                  <>
-                    {listing.settingsParent.subcategory.otherItemName === 'popup' ? (
-                      <>
+          {isLoadingAmenities && <Loader /> } 
+          {!isLoadingAmenities &&
+              arrayAmenities.map((item, index) =>
+                    listing.settingsParent.subcategory.otherItemName === 'popup' ? (
+                      <Fragment key={index}>
                         {' '}
                         {item.otherItemName !== 'mailbox' && (
                           <Checkbox
-                            key={item.id}
                             label={item.itemName}
                             name="amenities"
                             value={item.id}
@@ -370,21 +365,20 @@ const SpecificationTab = ({
                             handleCheckboxChange={_handleCheckboxChange}
                           />
                         )}
-                      </>
+                      </Fragment>
                     ) : (
                       <Checkbox
-                        key={item.id}
+                        key={index}
                         label={item.itemName}
                         name="amenities"
                         value={item.id}
                         checked={values.amenities.some(amenitie => amenitie.listSettingsId === item.id)}
                         handleCheckboxChange={_handleCheckboxChange}
                       />
-                    )}
-                  </>
+                    )
                 )
-              })
-            )}
+              
+          }
           </CheckboxGroup>
         </SectionStyled>
         <SectionStyled>
@@ -393,9 +387,9 @@ const SpecificationTab = ({
             {isLoadingRules ? (
               <Loader />
             ) : (
-              arrayRules.map(item => (
+              arrayRules.map((item, index) => (
                 <Checkbox
-                  key={item.id}
+                  key={index}
                   label={item.itemName}
                   name="rules"
                   value={item.id}
@@ -415,9 +409,9 @@ const SpecificationTab = ({
               <Select value={values.accessType} name="accessType" onChange={_handleSelectChange}>
                 {!values.accessType && <option>Select type of access</option>}
                 {arrayAccessTypes.map(
-                  item =>
+                  (item, index) =>
                     item.itemName !== 'Receptionist' && (
-                      <option key={item.id} value={item.itemName}>
+                      <option key={index} value={item.itemName}>
                         {item.itemName === 'Person' ? `${item.itemName} at reception` : item.itemName}
                       </option>
                     )
@@ -439,7 +433,7 @@ const SpecificationTab = ({
               <>
                 {arrayPhotos.map((item, index) => (
                   <Photo
-                    key={`photo-${index}`}
+                    key={index}
                     onDrop={_handleOnDrop}
                     url={item ? cropPicture(item.name) : null}
                     isCover={item ? item.isCover : false}
@@ -488,8 +482,7 @@ const SpecificationTab = ({
 
 const formik = {
   displayName: 'ListingProcess_SpecificationForm',
-  mapPropsToValues: props => {
-    const { listing } = props
+  mapPropsToValues: ({ listing }) => {
     if (listing && listing.id) {
       return {
         title: listing.title || '',
