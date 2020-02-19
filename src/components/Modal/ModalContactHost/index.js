@@ -106,7 +106,7 @@ const ModalContactHost = ({
 
   const _handleChangePeriod = e => {
     setPeriod(Number(e.target.value))
-    setFieldValue('period', e.target.value)
+    setFieldValue('period', parseInt(e.target.value, 10))
   }
 
   const _removeDate = value => {

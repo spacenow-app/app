@@ -732,6 +732,49 @@ const SpacePage = ({ match, location, history, ...props }) => {
       bookingPeriod: listing.bookingPeriod
     }
     dispatch(onCreateMessage(values))
+    // Send enquiry email
+    let time
+    if (listing.bookingPeriod === 'hourly') {
+      time = `${content.checkInTime} to ${content.checkoutTime}`
+    } else {
+      time = `${_changeToPlural(listing.bookingPeriod, parseInt(content.period))}`
+    }
+    let term = 'day'
+    if (listing.bookingPeriod !== 'daily') term = listing.bookingPeriod.replace('ly', '')
+
+    const emailValues = {
+      date: content.reservations.length > 0 ? format(new Date(content.reservations) , 'EEEE d MMMM, yyyy')
+        .toString() : 'Flexible',
+      time: content.reservations.length > 0 ? time : '',
+      message: content.content,
+      reason: content.reason,
+      peopleQuantity: content.peopleQuantity,
+      currentDate: format(new Date(), 'EEEE d MMMM, yyyy'),
+      hostName: listing.user.profile.firstName,
+      guestName: `${user.profile.firstName} ${user.profile.lastName}`,
+      guestEmail: user.email,
+      guestPhone: user.profile.phoneNumber,
+      listingId: listing.id,
+      hostPhoto: listing.user.profile.picture || '',
+      listImage: _convertedArrayPhotos(listing.photos)[0].source,
+      listTitle: listing.title,
+      fullAddress: `${listing.location.address1}, ${listing.location.city}`,
+      basePrice: listing.listingData.basePrice.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,'),
+      priceType: listing.bookingPeriod,
+      category: listing.settingsParent.category.itemName,
+      capacity: listing.listingData.capacity ? listing.listingData.capacity : 1,
+      minimumTerm: listing.listingData.minTerm ? listing.listingData.minTerm : 1,
+      term,
+      appLink: config.domain
+    }
+    console.log(listing.user.email , emailValues)
+    const emailHost = {
+      template: 'enquiry-contact-host',
+      data: JSON.stringify(Object.assign(emailValues, { email: listing.user.email }))
+    }
+
+    dispatch(sendMail(emailHost))
+  
   }
 
   const _calcHourlyPeriod = () => {
