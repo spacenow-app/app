@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import PropTypes from 'prop-types'
 import { Modal } from 'react-bootstrap'
 import { withFormik } from 'formik'
@@ -93,10 +93,20 @@ const ModalContactHost = ({
   const [hourlySuggestion, setHourlySuggestion] = useState(null)
   const [hourlyError, setHourlyError] = useState('')
 
+  useEffect(() => {
+    setFieldValue('reservations', datesSelected)
+    setFieldValue('period', datesSelected.length)
+  }, [datesSelected])
+
   const handleConfirm = isConfirmed => {
-    dispatch(closeModal())
-    if (isConfirmed) {
-      onConfirm(values)
+    if( (listing.bookingPeriod !== 'daily' && date) 
+        ||  (listing.bookingPeriod === 'daily' && datesSelected.length > 0)) {
+      dispatch(closeModal())
+      if (isConfirmed) {
+        onConfirm(values)
+      }
+    } else {
+      setFocusInput(true)
     }
   }
 
@@ -177,6 +187,8 @@ const ModalContactHost = ({
     setEndTime(value)
     setFieldValue('checkOutTime', value)
   }
+  console.log('datesSelected', datesSelected)
+  console.log('values.reservations', values.reservations)
 
   const _renderDatesForm = (bookingPeriod, bookingType) => {
     if (bookingPeriod === 'hourly') {
@@ -213,7 +225,7 @@ const ModalContactHost = ({
           <DailyBooking
             focus={!(datesSelected && datesSelected.length > 0)}
             inputFocus={focusInput}
-            onDateChange={_onDateChangeArray}
+            onDateChange={_onDateChangeArray} // not being used
             onDayPickerHide={_onDayPickerHide}
             setDatesSelected={setDatesSelected}
             datesSelected={datesSelected}

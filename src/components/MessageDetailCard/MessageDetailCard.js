@@ -37,8 +37,10 @@ const _formatPeriod = (period, bookingType) => {
   }
 }
 
+
 const MessageDetailCard = ({ item, user, count, index, messageParent, ...props }) => {
   console.log('item', item)
+  console.log(messageParent.messageHost.reservations)
   return (
     <Grid column={12}>
       {(user.id === item.sent.id && (
@@ -81,7 +83,7 @@ const MessageDetailCard = ({ item, user, count, index, messageParent, ...props }
                           <Text fontFamily="bold">Requested time and date</Text>
                         </Box>
                         {messageParent.messageHost.bookingPeriod === 'hourly' &&
-                          messageParent.messageHost.reservations.length > 0 && (
+                          messageParent.messageHost.reservations[0] && (
                             <Text>
                               {format(new Date(messageParent.messageHost.reservations[0]), 'dd MMM yyyy')}{' '}
                               {messageParent.messageHost.startTime} {' to '} {messageParent.messageHost.endTime}{' '}
@@ -89,7 +91,7 @@ const MessageDetailCard = ({ item, user, count, index, messageParent, ...props }
                           )}
 
                         {messageParent.messageHost.bookingPeriod !== 'hourly' &&
-                          messageParent.messageHost.reservations.length > 0 && (
+                          messageParent.messageHost.reservations[0] && (
                             <>
                               <Text>{format(new Date(messageParent.messageHost.reservations[0]), 'dd MMM yyyy')} </Text>
                               <Text>
@@ -178,7 +180,7 @@ const MessageDetailCard = ({ item, user, count, index, messageParent, ...props }
                         <Box>
                           <Text fontFamily="bold">Requested inspection time and date</Text>
                         </Box>
-                        {messageParent.messageHost.reservations.length > 0 && (
+                        {messageParent.messageHost.reservations[0] && (
                           <Text>
                             {format(new Date(messageParent.messageHost.reservations[0]), 'dd MMM yyyy')}{' '}
                             {messageParent.messageHost.startTime}
