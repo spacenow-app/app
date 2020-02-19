@@ -735,17 +735,25 @@ const SpacePage = ({ match, location, history, ...props }) => {
     // Send enquiry email
     let time
     if (listing.bookingPeriod === 'hourly') {
-      time = `${content.checkInTime} to ${content.checkoutTime}`
+      time = `${content.checkInTime} to ${content.checkOutTime}`
     } else {
       time = `${_changeToPlural(listing.bookingPeriod, parseInt(content.period))}`
     }
     let term = 'day'
     if (listing.bookingPeriod !== 'daily') term = listing.bookingPeriod.replace('ly', '')
 
+    let date = ''
+    console.log(content.reservations)
+    if (content.reservations && content.reservations[0]) {
+      date = format(new Date(content.reservations[0]) , 'EEEE d MMMM, yyyy') + ','
+    } else if (content.reservations) {
+      date = format(new Date(content.reservations) , 'EEEE d MMMM, yyyy') + ','
+    }
+
     const emailValues = {
-      date: content.reservations.length > 0 ? format(new Date(content.reservations) , 'EEEE d MMMM, yyyy')
-        .toString() : 'Flexible',
-      time: content.reservations.length > 0 ? time : '',
+      date: date,
+      time: date !== '' ? time : '',
+      hasFlexibleTime: content.hasFlexibleTime ? 'Yes' : 'No',
       message: content.content,
       reason: content.reason,
       peopleQuantity: content.peopleQuantity,
