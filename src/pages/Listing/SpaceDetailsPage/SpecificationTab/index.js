@@ -108,7 +108,8 @@ const SpecificationTab = ({
 
   useEffect(() => {
     setFatherValues({ ...values, isValid })
-  }, [setFatherValues, values, isValid])
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [values, isValid])
 
   useEffect(() => {
     try {
@@ -243,7 +244,6 @@ const SpecificationTab = ({
   }
 
   const _handleWYSIWYGBlur = () => {
-    console.log("CURRENT CONTENT ===>>>", editorState.getCurrentContent())
     const description = convertToRaw(editorState.getCurrentContent())
     setFieldValue('description', JSON.stringify(description))
   }
@@ -343,42 +343,42 @@ const SpecificationTab = ({
           <WYSIWYGTextArea
             placeholder="Describe your space"
             editorState={editorState}
-            onEditorStateChange={(editor) => { setEditorState(editor) }}
+            onEditorStateChange={editor => {
+              setEditorState(editor)
+            }}
             onBlur={_handleWYSIWYGBlur}
           />
         </SectionStyled>
         <SectionStyled>
           <Title type="h3" title="Amenities" subtitle="What features does your space offer guests?" />
           <CheckboxGroup>
-          {isLoadingAmenities && <Loader /> } 
-          {!isLoadingAmenities &&
+            {isLoadingAmenities && <Loader />}
+            {!isLoadingAmenities &&
               arrayAmenities.map((item, index) =>
-                    listing.settingsParent.subcategory.otherItemName === 'popup' ? (
-                      <Fragment key={index}>
-                        {' '}
-                        {item.otherItemName !== 'mailbox' && (
-                          <Checkbox
-                            label={item.itemName}
-                            name="amenities"
-                            value={item.id}
-                            checked={values.amenities.some(amenitie => amenitie.listSettingsId === item.id)}
-                            handleCheckboxChange={_handleCheckboxChange}
-                          />
-                        )}
-                      </Fragment>
-                    ) : (
+                listing.settingsParent.subcategory.otherItemName === 'popup' ? (
+                  <Fragment key={index}>
+                    {' '}
+                    {item.otherItemName !== 'mailbox' && (
                       <Checkbox
-                        key={index}
                         label={item.itemName}
                         name="amenities"
                         value={item.id}
                         checked={values.amenities.some(amenitie => amenitie.listSettingsId === item.id)}
                         handleCheckboxChange={_handleCheckboxChange}
                       />
-                    )
+                    )}
+                  </Fragment>
+                ) : (
+                  <Checkbox
+                    key={index}
+                    label={item.itemName}
+                    name="amenities"
+                    value={item.id}
+                    checked={values.amenities.some(amenitie => amenitie.listSettingsId === item.id)}
+                    handleCheckboxChange={_handleCheckboxChange}
+                  />
                 )
-              
-          }
+              )}
           </CheckboxGroup>
         </SectionStyled>
         <SectionStyled>
