@@ -7,6 +7,7 @@ import styled from 'styled-components'
 import { Title, Grid, Cell, Loader, MessageDetailCard, TextArea, Button, Box, Avatar } from 'components'
 import queryString from 'query-string'
 import { toast } from 'react-toastify'
+import config from 'variables/config'
 
 import { onGetMessage, onCreateMessageItem, onReadMessage, onGetMessageItems } from 'redux/ducks/message'
 
