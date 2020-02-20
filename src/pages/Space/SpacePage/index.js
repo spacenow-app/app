@@ -743,7 +743,6 @@ const SpacePage = ({ match, location, history, ...props }) => {
     if (listing.bookingPeriod !== 'daily') term = listing.bookingPeriod.replace('ly', '')
 
     let date = ''
-    console.log(content.reservations)
     if (content.reservations && content.reservations[0]) {
       date = format(new Date(content.reservations[0]) , 'EEEE d MMMM, yyyy') + ','
     } else if (content.reservations) {
@@ -773,9 +772,8 @@ const SpacePage = ({ match, location, history, ...props }) => {
       capacity: listing.listingData.capacity ? listing.listingData.capacity : 1,
       minimumTerm: listing.listingData.minTerm ? listing.listingData.minTerm : 1,
       term,
-      appLink: config.domain
+      appLink: location.origin
     }
-    console.log(listing.user.email , emailValues)
     const emailHost = {
       template: 'enquiry-contact-host',
       data: JSON.stringify(Object.assign(emailValues, { email: listing.user.email }))
