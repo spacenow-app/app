@@ -57,7 +57,7 @@ const MessageDetailPage = ({ match, location, history, ...props }) => {
     if (queryParams && queryParams.a && queryParams.a === 'cancel-inspection') {
       toast.error('Your inspection request has been cancelled')
       // Todo: call from backend when new inspections table implemented
-      fetch(`https://api-emails.${config.domain}/email/message/${match.params.id}/inspection/cancel`)
+      fetch(`https://api-emails${config.domain}/email/message/${match.params.id}/inspection/cancel`)
         .then(res => console.log(res))
         .catch(err => console.log(err))
       queryParams.a = 'cancelled'
