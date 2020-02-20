@@ -194,7 +194,11 @@ const CheckoutPage = ({ match, location, history, ...props }) => {
       history.replace('/')
       return null
     }
-    await dispatch(pay(selectedCard.id, match.params.id, history))
+    const guest = {
+      email: reservation.guest.email,
+      firstName: reservation.guest.profile.firstName
+    }
+    await dispatch(pay(selectedCard.id, match.params.id, history, guest))
   }
 
   if (isLoadingGetBooking || isLoadingGetCards) {

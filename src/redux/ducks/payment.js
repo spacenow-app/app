@@ -1,8 +1,9 @@
 import { gql } from 'apollo-boost'
 import update from 'react-addons-update'
-import { getDate, getMonth, getYear } from 'date-fns'
+import { getDate, getMonth, getYear, format } from 'date-fns'
 import { getClientWithAuth } from 'graphql/apolloClient'
 import { toast } from 'react-toastify'
+import { sendMail } from 'redux/ducks/mail'
 
 import errToMsg from 'utils/errToMsg'
 
@@ -567,7 +568,7 @@ export const deleteUserCard = id => async dispatch => {
   }
 }
 
-export const pay = (cardId, bookingId, history) => async dispatch => {
+export const pay = (cardId, bookingId, history, guest) => async dispatch => {
   dispatch({ type: Types.DOING_PAYMENT_REQUEST })
   try {
     const { data } = await getClientWithAuth(dispatch).mutate({
@@ -580,6 +581,19 @@ export const pay = (cardId, bookingId, history) => async dispatch => {
     history.push(`/itinerary/${bookingId}`)
   } catch (err) {
     toast.error(`${errToMsg(err)}`)
+
+    // Send payment issue email
+    const emailValues = {
+      currentDate: format(new Date(), 'EEEE d MMMM, yyyy'),
+      guestName: guest.firstName,
+      bookingId,
+      appLink: window.location.origin
+    }
+    const emailHost = {
+      template: 'payment-issue',
+      data: JSON.stringify(Object.assign(emailValues, { email: guest.email }))
+    }
+    dispatch(sendMail(emailHost))
     dispatch({ type: Types.DOING_PAYMENT_FAILURE, payload: errToMsg(err) })
   }
 }
