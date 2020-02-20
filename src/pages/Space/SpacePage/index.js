@@ -1333,6 +1333,7 @@ const SpacePage = ({ match, location, history, ...props }) => {
                       user={user}
                       handleMessageChange={_handleMessageChange}
                       dispatch={dispatch}
+                      history={history}
                     />
                   )}
                 </>
