@@ -94,9 +94,11 @@ const ModalContactHost = ({
   const [hourlyError, setHourlyError] = useState('')
 
   useEffect(() => {
-    setFieldValue('reservations', datesSelected)
-    setFieldValue('period', datesSelected.length)
-  }, [datesSelected, setFieldValue])
+    if(listing.bookingPeriod === 'daily') {
+      setFieldValue('reservations', datesSelected)
+      setFieldValue('period', datesSelected.length)
+    }
+  }, [datesSelected, setFieldValue, listing])
 
   const handleConfirm = isConfirmed => {
     if( (listing.bookingPeriod !== 'daily' && date) 
