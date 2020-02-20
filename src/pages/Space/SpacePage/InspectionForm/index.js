@@ -1,6 +1,7 @@
 /* eslint-disable  */
 import React, { useState, useEffect } from 'react'
 import styled from 'styled-components'
+import { useSelector } from 'react-redux'
 import {
   Text,
   Cell,
@@ -64,14 +65,26 @@ const InspectionForm = ({
   user,
   values,
   handleChange,
-  dispatch
+  dispatch,
+  history
 }) => {
   const [dayPicker, setDayPicker] = useState('')
   const [stepOne, setStepOne] = useState(true)
+  const  {object: message}  = useSelector(state => state.message.create)
+  const { isAuthenticated } = useSelector(state => state.auth)
 
   useEffect(() => {
     onCalcHourlyPeriod()
   }, [date, startTime]) // eslint-disable-line react-hooks/exhaustive-deps
+
+  useEffect(() => {
+    if (message && message.id) setStepOne(false)
+  }, [message])
+
+  if (!isAuthenticated) {
+    history.push(`/auth/signin`, { from: '/space/' + listing.id })
+    return null
+  }
 
   const _getRatingAvg = field => {
     if (publicReviews && publicReviews.length > 0) {
@@ -105,10 +118,7 @@ const InspectionForm = ({
         hostId: listing.userId,
         bookingPeriod: 'hourly' // send hourly to store the start time.
       }
-      console.log('values', valuesCreate)
       await dispatch(onCreateMessage(valuesCreate))
-      console.log()
-      setStepOne(false)
     } else {
       dayPicker.input.focus()
     }
