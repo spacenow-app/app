@@ -33,7 +33,6 @@ const FormProfile = ({
   isValid,
   ...props
 }) => {
-
   const { user } = props
 
   const _handleSelectChange = e => {
@@ -72,18 +71,18 @@ const FormProfile = ({
               onBlur={handleBlur}
             />
           ) : (
-              <Input
-                label="Email"
-                placeholder="Email"
-                name="email"
-                disabled
-                value={user.email}
-                borderColor={!user.emailConfirmed ? 'warning.0' : 'primary'}
-                backgroundColor={!user.emailConfirmed ? 'warning.1' : 'greyscale.4'}
-                color={user.emailConfirmed ? 'greyscale.1' : ''}
-                error={!user.emailConfirmed}
-              />
-            )}
+            <Input
+              label="Email"
+              placeholder="Email"
+              name="email"
+              disabled
+              value={user.email}
+              borderColor={!user.emailConfirmed ? 'warning.0' : 'primary'}
+              backgroundColor={!user.emailConfirmed ? 'warning.1' : 'greyscale.4'}
+              color={user.emailConfirmed ? 'greyscale.1' : ''}
+              error={!user.emailConfirmed}
+            />
+          )}
           {!user.emailConfirmed && (
             <Text fontSize={12} marginLeft="18px">
               Email not verified{' '}
@@ -128,8 +127,8 @@ const FormProfile = ({
               name="phoneNumber"
               error={errors.phoneNumber}
               value={values.phoneNumber}
-              onChange={(e) => _handlePhoneChange('phoneNumber', e)}
-            // onBlur={handleBlur}
+              onChange={e => _handlePhoneChange('phoneNumber', e)}
+              // onBlur={handleBlur}
             />
             {/* <Input
               label="Phone Number"
@@ -204,7 +203,7 @@ const formik = {
     lastName: Yup.string().required('Last name field is required'),
     dateOfBirth: Yup.date().notRequired(),
     gender: Yup.string().notRequired(),
-    phoneNumber: Yup.string().notRequired(),
+    phoneNumber: Yup.string().required('Phone number field is required'),
     info: Yup.string().notRequired()
   }),
   enableReinitialize: true,

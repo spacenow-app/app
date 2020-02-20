@@ -75,8 +75,8 @@ const mutationLogin = gql`
 `
 
 const mutationSignUp = gql`
-  mutation signup($firstName: String!, $lastName: String!, $email: String!, $password: String!, $userType: String) {
-    signup(firstName: $firstName, lastName: $lastName, email: $email, password: $password, userType: $userType) {
+  mutation signup($firstName: String!, $lastName: String!, $email: String!, $password: String!, $phoneNumber: String!, $userType: String) {
+    signup(firstName: $firstName, lastName: $lastName, email: $email, password: $password, phoneNumber: $phoneNumber, userType: $userType) {
       ${loginBaseFields}
     }
   }
@@ -274,11 +274,11 @@ export const signin = (email, password, from) => async dispatch => {
   }
 }
 
-export const signup = (name, email, password, from, userType) => async dispatch => {
+export const signup = (name, email, password, phoneNumber, from, userType) => async dispatch => {
   dispatch({ type: Types.AUTH_SIGNUP_REQUEST })
   try {
     const { data } = await getClient().mutate({
-      variables: { firstName: name.first, lastName: name.last, email, password, userType },
+      variables: { firstName: name.first, lastName: name.last, email, password, phoneNumber, userType },
       mutation: mutationSignUp
     })
     const signupReturn = data.signup

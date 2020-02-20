@@ -2,7 +2,7 @@ import React from 'react'
 import { withFormik } from 'formik'
 import { useSelector, useDispatch } from 'react-redux'
 import * as Yup from 'yup'
-import { NavBar, Wrapper, Box, Input, Button, Text, Title, Link, Line, ButtonSocial, Select } from 'components'
+import { NavBar, Wrapper, Box, Input, Button, Text, Title, Link, Line, ButtonSocial, Select, Phone } from 'components'
 import { signup, googleSignin, facebookSignin } from 'redux/ducks/auth'
 import { config } from 'variables'
 
@@ -42,6 +42,7 @@ const SignupPage = ({
         },
         values.email,
         values.password,
+        values.phoneNumber,
         (state && state.from) || false,
         values.userType
       )
@@ -54,6 +55,10 @@ const SignupPage = ({
 
   const _handleSelectChange = e => {
     const { name, value } = e.target
+    setFieldValue(name, value)
+  }
+
+  const _handlePhoneChange = (name, value) => {
     setFieldValue(name, value)
   }
 
@@ -96,6 +101,15 @@ const SignupPage = ({
                 error={touched.email && errors.email}
                 onChange={handleChange}
                 onBlur={handleBlur}
+              />
+              <Phone
+                country="AU"
+                label="Phone Number"
+                placeholder="Phone Number"
+                name="phoneNumber"
+                error={touched.phoneNumber && errors.phoneNumber}
+                value={values.phoneNumber}
+                onChange={e => _handlePhoneChange('phoneNumber', e)}
               />
               <Input
                 placeholder="Password"
@@ -140,6 +154,7 @@ const formik = {
       fullName: '',
       email: '',
       password: '',
+      phoneNumber: '',
       userType: ''
     }
   },
@@ -167,6 +182,7 @@ const formik = {
       .matches(/[A-Z]/, 'at least one uppercase char')
       .matches(/[a-zA-Z]+[^a-zA-Z\s]+/, 'at least 1 number or special char (@,!,#, etc).')
       .required(),
+    phoneNumber: Yup.string().required('Phone number field is required'),
     userType: Yup.string().required()
   }),
   enableReinitialize: true,
