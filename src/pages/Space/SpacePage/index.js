@@ -765,7 +765,7 @@ const SpacePage = ({ match, location, history, ...props }) => {
       hostPhoto: listing.user.profile.picture || '',
       listImage: _convertedArrayPhotos(listing.photos)[0].source,
       listTitle: listing.title,
-      fullAddress: `${listing.location.address1}, ${listing.location.city}`,
+      fullAddress: `${listing.location.address1 + ','|| ''} ${listing.location.city}`,
       basePrice: listing.listingData.basePrice.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,'),
       priceType: listing.bookingPeriod,
       category: listing.settingsParent.category.itemName,
