@@ -772,7 +772,7 @@ const SpacePage = ({ match, location, history, ...props }) => {
       capacity: listing.listingData.capacity ? listing.listingData.capacity : 1,
       minimumTerm: listing.listingData.minTerm ? listing.listingData.minTerm : 1,
       term,
-      appLink: location.origin
+      appLink: window.location.origin
     }
     const emailHost = {
       template: 'enquiry-contact-host',
