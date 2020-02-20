@@ -568,7 +568,7 @@ export const deleteUserCard = id => async dispatch => {
   }
 }
 
-export const pay = (cardId, bookingId, history, guest) => async dispatch => {
+export const pay = (cardId, bookingId, history, metadata) => async dispatch => {
   dispatch({ type: Types.DOING_PAYMENT_REQUEST })
   try {
     const { data } = await getClientWithAuth(dispatch).mutate({
@@ -576,7 +576,6 @@ export const pay = (cardId, bookingId, history, guest) => async dispatch => {
       variables: { cardId, bookingId }
     })
     toast.success('Paid')
-
     dispatch({ type: Types.DOING_PAYMENT_SUCCESS, payload: data.createPayment })
     history.push(`/itinerary/${bookingId}`)
   } catch (err) {
@@ -585,13 +584,13 @@ export const pay = (cardId, bookingId, history, guest) => async dispatch => {
     // Send payment issue email
     const emailValues = {
       currentDate: format(new Date(), 'EEEE d MMMM, yyyy'),
-      guestName: guest.firstName,
+      guestName: metadata.guestName,
       bookingId,
-      appLink: window.location.origin
+      appLink: metadata.location
     }
     const emailHost = {
       template: 'payment-issue',
-      data: JSON.stringify(Object.assign(emailValues, { email: guest.email }))
+      data: JSON.stringify(Object.assign(emailValues, { email: metadata.guestEmail }))
     }
     dispatch(sendMail(emailHost))
     dispatch({ type: Types.DOING_PAYMENT_FAILURE, payload: errToMsg(err) })
