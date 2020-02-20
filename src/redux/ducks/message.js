@@ -400,7 +400,6 @@ export const onGetMessage = id => async dispatch => {
 }
 
 export const onCreateMessage = values => async dispatch => {
-  console.log('action values =>', values)
   dispatch({ type: Types.CREATE_MESSAGE_REQUEST })
   try {
     const { data } = await getClientWithAuth(dispatch).mutate({ mutation: createMessage, variables: values })
