@@ -312,9 +312,9 @@ const SpacePage = ({ match, location, history, ...props }) => {
 
   const _getAddress = address => {
     const { city = '', zipcode = '', state = '', country = '' } = address
-    const convertedAddress = `${city ? `${city}, ` : ''} ${
-      zipcode ? `${zipcode}, ` : ''
-    } ${state ? `${state}, ` : ''} ${country ? `${country}` : ''}`
+    const convertedAddress = `${city ? `${city}, ` : ''} ${zipcode ? `${zipcode}, ` : ''} ${
+      state ? `${state}, ` : ''
+    } ${country ? `${country}` : ''}`
     return convertedAddress.replace(/\0.*$/g, '')
   }
 
@@ -744,13 +744,13 @@ const SpacePage = ({ match, location, history, ...props }) => {
 
     let date = ''
     if (content.reservations && content.reservations[0]) {
-      date = format(new Date(content.reservations[0]) , 'EEEE d MMMM, yyyy') + ','
+      date = `${format(new Date(content.reservations[0]), 'EEEE d MMMM, yyyy')  },`
     } else if (content.reservations) {
-      date = format(new Date(content.reservations) , 'EEEE d MMMM, yyyy') + ','
+      date = `${format(new Date(content.reservations), 'EEEE d MMMM, yyyy')  },`
     }
 
     const emailValues = {
-      date: date,
+      date,
       time: date !== '' ? time : '',
       hasFlexibleTime: content.hasFlexibleTime ? 'Yes' : 'No',
       message: content.content,
@@ -765,7 +765,7 @@ const SpacePage = ({ match, location, history, ...props }) => {
       hostPhoto: listing.user.profile.picture || '',
       listImage: _convertedArrayPhotos(listing.photos)[0].source,
       listTitle: listing.title,
-      fullAddress: `${listing.location.address1 ? listing.location.address1 + ',' : ''} ${listing.location.city}`,
+      fullAddress: `${listing.location.address1 ? `${listing.location.address1  },` : ''} ${listing.location.city}`,
       basePrice: listing.listingData.basePrice.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,'),
       priceType: listing.bookingPeriod,
       category: listing.settingsParent.category.itemName,
@@ -780,7 +780,6 @@ const SpacePage = ({ match, location, history, ...props }) => {
     }
 
     dispatch(sendMail(emailHost))
-  
   }
 
   const _calcHourlyPeriod = () => {

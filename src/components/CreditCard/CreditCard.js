@@ -49,8 +49,18 @@ const CreditCard = ({
   const [boolPromo, setBoolPromo] = useState(false)
   const [voucherCode, setVoucherCode] = useState('')
 
+  let metadata
+  if (reservation) {
+    metadata = {
+      guestEmail: reservation.guest.email,
+      guestName: reservation.guest.profile.firstName,
+      location: window.location.origin
+    }
+  }
+
   useEffect(() => {
-    newCard && newCard.id && dispatch(pay(newCard.id, match.params.id, history))
+    newCard && newCard.id && dispatch(pay(newCard.id, match.params.id, history, metadata))
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [newCard, match, dispatch, history])
 
   const _handleInputFocus = e => {
@@ -60,7 +70,14 @@ const CreditCard = ({
   const _payNow = async () => {
     validateForm()
     setTouched({ name: true, expiry: true, number: true, cvc: true })
-    isValid && (await dispatch(createUserCard(values)))
+
+    metadata = {
+      guestEmail: reservation.guest.email,
+      guestName: reservation.guest.profile.firstName,
+      location: window.location.origin
+    }
+
+    isValid && (await dispatch(createUserCard(values, reservation.bookingId, metadata)))
   }
 
   const _setVoucherCode = e => {
