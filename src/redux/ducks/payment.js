@@ -533,7 +533,7 @@ export const getUserCards = () => async dispatch => {
   }
 }
 
-export const createUserCard = card => async dispatch => {
+export const createUserCard = (card, bookingId, metadata) => async dispatch => {
   dispatch({ type: Types.CREATE_CREDIT_CARD_REQUEST })
 
   const newCard = {
@@ -550,6 +550,19 @@ export const createUserCard = card => async dispatch => {
     // return data.createPaymentCard.lastCardCreated
   } catch (err) {
     toast.error(`${errToMsg(err)}`)
+
+    // Send payment issue email
+    const emailValues = {
+      currentDate: format(new Date(), 'EEEE d MMMM, yyyy'),
+      guestName: metadata.guestName,
+      bookingId,
+      appLink: metadata.location
+    }
+    const emailHost = {
+      template: 'payment-issue',
+      data: JSON.stringify(Object.assign(emailValues, { email: metadata.guestEmail }))
+    }
+    dispatch(sendMail(emailHost))
     dispatch({ type: Types.CREATE_CREDIT_CARD_FAILURE, payload: errToMsg(err) })
   }
 }
