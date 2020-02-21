@@ -140,7 +140,7 @@ const InfoTab = ({ match, location, history, ...props }) => {
                 : reservation.listing.location.city
             }`}
             subtitle={`This reservation will expire after ${_getExpiry(reservation.createdAt)}`}
-            subTitleMargin="21"
+            subTitleMargin={21}
             weight="Montserrat-SemiBold"
           />
           <br />
