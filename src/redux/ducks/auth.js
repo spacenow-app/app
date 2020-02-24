@@ -284,7 +284,7 @@ export const signup = (name, email, password, phoneNumber, from, userType) => as
     const signupReturn = data.signup
     setToken(signupReturn.token, signupReturn.expiresIn)
     dispatch({ type: AccountTypes.ACC_GET_PROFILE_SUCCESS, payload: signupReturn.user })
-    if (userType) {
+    if (userType && !from) {
       dispatch({ type: Types.AUTH_SIGNIN_SUCCESS, from: { pathname: `/welcome/${userType}` } })
       window.location.reload()
     } else {
@@ -346,7 +346,7 @@ export const googleSignin = (googleResponse, from, userType) => async dispatch =
     })
     const signinReturn = data.tokenGoogleValidate
     setToken(signinReturn.token, signinReturn.expiresIn)
-    if (userType) {
+    if (userType && !from) {
       dispatch({ type: Types.AUTH_SIGNIN_SUCCESS, from: { pathname: `/welcome/${userType}` } })
       window.location.reload()
     } else {
@@ -371,7 +371,7 @@ export const facebookSignin = (facebookResponse, from, userType) => async dispat
     })
     const signinReturn = data.tokenFacebookValidate
     setToken(signinReturn.token, signinReturn.expiresIn)
-    if (userType) {
+    if (userType && !from) {
       dispatch({ type: Types.AUTH_SIGNIN_SUCCESS, from: { pathname: `/welcome/${userType}` } })
       window.location.reload()
     } else {
