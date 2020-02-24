@@ -106,6 +106,7 @@ const bookingObj = `
   guestId
   guest {
     id
+    email
     profile {
       profileId
       firstName
