@@ -8,6 +8,7 @@ import { PartnerPage, SpacePage } from './Space'
 import CheckoutPage from './Checkout'
 import ItineraryPage from './ItineraryPage'
 import { IntroGuestPage, IntroHostPage } from './IntroPage'
+import BookingRequestConfirmation from './BookingRequestConfirmationPage'
 
 export {
   HomePage,
@@ -31,5 +32,6 @@ export {
   ItineraryPage,
   DocumentVerificationPage,
   IntroHostPage,
-  IntroGuestPage
+  IntroGuestPage,
+  BookingRequestConfirmation
 }

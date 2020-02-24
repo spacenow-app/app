@@ -21,6 +21,7 @@ const Receipt = lazy(() => import('routes/Receipt'))
 const Review = lazy(() => import('routes/Review'))
 const ListingProcess = lazy(() => import('routes/ListingProcess'))
 const Intro = lazy(() => import('routes/Intro'))
+const BookingRequestConfirmation = lazy(() => import('routes/BookingRequestConfirmation'))
 
 const Routes = props => {
   const dispatch = useDispatch()
@@ -122,6 +123,12 @@ const Routes = props => {
                       path={`${otherProps.match.path}receipt`}
                       isAuthenticated={isAuthenticated}
                       component={Receipt}
+                    />
+                    <Route
+                      {...otherProps}
+                      path={`${otherProps.match.path}booking-confirmation-page`}
+                      isAuthenticated={isAuthenticated}
+                      component={BookingRequestConfirmation}
                     />
                     <Route
                       {...otherProps}

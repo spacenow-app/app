@@ -11,6 +11,7 @@ const CardContainer = styled.div`
   box-shadow: 0 0 5px 1px #eee;
   border-radius: 6px;
   opacity: 1;
+  height: max-content;
 
   @media only screen and (max-width: 991px) {
     width: 100%;

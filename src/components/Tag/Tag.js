@@ -17,7 +17,7 @@ const SpanStyled = styled.div`
   ${props =>
     props.icon &&
     css`
-      grid-template-columns: 20px 1fr;
+      grid-template-columns: auto 1fr;
     `}
   ${color};
   ${size};
