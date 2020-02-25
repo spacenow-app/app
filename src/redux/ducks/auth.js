@@ -265,6 +265,7 @@ export const signin = (email, password, from) => async dispatch => {
     setToken(signinReturn.token, signinReturn.expiresIn)
     dispatch({ type: Types.AUTH_SIGNIN_SUCCESS, from })
     dispatch({ type: AccountTypes.ACC_GET_PROFILE_SUCCESS, payload: signinReturn.user })
+    window.location.reload()
   } catch (err) {
     toast.error(errToMsg(err))
     dispatch({
@@ -289,6 +290,7 @@ export const signup = (name, email, password, phoneNumber, from, userType) => as
       window.location.reload()
     } else {
       dispatch({ type: Types.AUTH_SIGNIN_SUCCESS, from })
+      window.location.reload()
     }
   } catch (err) {
     toast.error(errToMsg(err))
@@ -351,6 +353,7 @@ export const googleSignin = (googleResponse, from, userType) => async dispatch =
       window.location.reload()
     } else {
       dispatch({ type: Types.AUTH_SIGNIN_SUCCESS, from })
+      window.location.reload()
     }
     dispatch({ type: AccountTypes.ACC_GET_PROFILE_SUCCESS, payload: signinReturn.user })
   } catch (err) {
@@ -376,6 +379,7 @@ export const facebookSignin = (facebookResponse, from, userType) => async dispat
       window.location.reload()
     } else {
       dispatch({ type: Types.AUTH_SIGNIN_SUCCESS, from })
+      window.location.reload()
     }
     dispatch({ type: AccountTypes.ACC_GET_PROFILE_SUCCESS, payload: signinReturn.user })
   } catch (err) {
