@@ -58,7 +58,7 @@ const PricingPage = ({ listing, values, handleChange, handleBlur, ...props }) =>
                 onChange={handleChange}
                 onBlur={handleBlur}
               />
-              <Input
+              {/* <Input
                 placeholder="$"
                 label="Peak day rate"
                 type="number"
@@ -66,11 +66,7 @@ const PricingPage = ({ listing, values, handleChange, handleBlur, ...props }) =>
                 value={values.listingData.peakPrice}
                 onChange={handleChange}
                 onBlur={handleBlur}
-              />
-            </Box>
-            <Box display="grid" gridTemplateColumns={{ _: '1fr', medium: 'auto auto auto' }} gridGap="30px">
-              <Checkbox label="Price includes GST" />
-              <Checkbox label="Show as starting price (From $x..)" checked />
+              /> */}
             </Box>
           </Box>
           <StepButtons
@@ -98,7 +94,7 @@ const formik = {
         minTerm: listing.listingData.minTerm || 1,
         basePrice: listing.listingData.basePrice || 0,
         maxPrice: listing.listingData.maxPrice || 0,
-        peakPrice: listing.listingData.peakPrice || 0
+        // peakPrice: listing.listingData.peakPrice || 0
       }
     }
   },

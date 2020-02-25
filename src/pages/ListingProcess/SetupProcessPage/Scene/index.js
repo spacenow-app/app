@@ -12,7 +12,15 @@ const ScenePage = ({ listing, values, setFieldValue, ...props }) => {
 
   const { object: media, isLoading: loadingMedia } = useSelector(state => state.listing_process.media)
 
-  const _handleOnDropMedia = useCallback(acceptedFiles => acceptedFiles.map(file => dispatch(onPostMedia({ file }))), [
+  const _handleOnDropMediaPhoto = useCallback(acceptedFiles => acceptedFiles.map(file => dispatch(onPostMedia({ file, category: 'photo', listingId: listing.id }))), [
+    dispatch
+  ])
+
+  const _handleOnDropMediaFloorplan = useCallback(acceptedFiles => acceptedFiles.map(file => dispatch(onPostMedia({ file, category: 'floorplan', listingId: listing.id }))), [
+    dispatch
+  ])
+
+  const _handleOnDropMediaVideo = useCallback(acceptedFiles => acceptedFiles.map(file => dispatch(onPostMedia({ file, category: 'video', listingId: listing.id }))), [
     dispatch
   ])
 
@@ -39,15 +47,15 @@ const ScenePage = ({ listing, values, setFieldValue, ...props }) => {
               />
               <Box display="grid" gridTemplateColumns={{ _: 'repeat(auto-fit, minmax(160px, 1fr))' }} gridGap="20px">
                 {[
-                  ...Array(6 - values.photos.filter(media => media.type !== 'video/mp4').length).concat(
-                    values.photos.filter(media => media.type !== 'video/mp4')
+                  ...Array(6 - values.photos.filter(media => media.type !== 'video/mp4' && media.category === 'photo').length).concat(
+                    values.photos.filter(media => media.type !== 'video/mp4' && media.category === 'photo')
                   )
                 ]
                   .reverse()
                   .map((photo, index) => (
                     <Photo
                       key={`photo-${index}`}
-                      onDrop={_handleOnDropMedia}
+                      onDrop={_handleOnDropMediaPhoto}
                       url={photo ? cropPicture(photo.name) : null}
                       isCover={photo ? photo.isCover : false}
                       // onCover={_handleSetCoverPhoto(photo ? photo.id : '')}
@@ -67,13 +75,18 @@ const ScenePage = ({ listing, values, setFieldValue, ...props }) => {
                 subtitle="Floor plans help guest imagine the full size of your space."
               />
               <Box width={160}>
-                <Photo
-                  key="1"
-                  onDrop={_handleOnDropMedia}
-                  url={null}
-                  // onCover={_handleSetCoverPhoto(listing.floorPlan ? listing.floorPlan.id : '')}
-                  // onDelete={_handleDeletePhoto(listing.floorPlan ? listing.floorPlan.id : '')}
-                />
+              {[
+                  ...Array(1 - values.photos.filter(media => media.type !== 'video/mp4' && media.category === 'floorplan').length).concat(
+                    values.photos.filter(media => media.type !== 'video/mp4' && media.category === 'floorplan')
+                  )
+                ].map((video, index) => (
+                  <Photo
+                    key={`floorplan-${index}`}
+                    onDrop={_handleOnDropMediaFloorplan}
+                    url={photo ? cropPicture(photo.name) : null}
+                    // onDelete={_handleDeleteVideo(listing.video ? listing.video.id : '')}
+                  />
+                ))}
               </Box>
             </Box>
             <Box>
@@ -90,7 +103,7 @@ const ScenePage = ({ listing, values, setFieldValue, ...props }) => {
                 ].map((video, index) => (
                   <Video
                     key={`video-${index}`}
-                    onDrop={_handleOnDropMedia}
+                    onDrop={_handleOnDropMediaVideo}
                     url={video ? video.name : null}
                     // onDelete={_handleDeleteVideo(listing.video ? listing.video.id : '')}
                   />

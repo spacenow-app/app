@@ -91,9 +91,9 @@ const TimeTableEditable = ({
     handleClickOpenFullTime(e, obj)
   }
 
-  const onHandleClickPeakTime = (e, obj) => {
-    handleClickPeakTime(e, obj)
-  }
+  // const onHandleClickPeakTime = (e, obj) => {
+  //   handleClickPeakTime(e, obj)
+  // }
 
   return (
     <WrapperStyled>
@@ -107,7 +107,7 @@ const TimeTableEditable = ({
           </ItemSwitchStyled>
         </Cell>
       </Box>
-      <Box display="grid" gridTemplateColumns={{ _: '1fr', medium: '2fr 1fr 1fr 1fr 1fr' }} gridGap="20px">
+      <Box display="grid" gridTemplateColumns={{ _: '1fr', medium: '2fr 1fr 1fr 1fr' }} gridGap="20px">
         <Cell width={{ _: 2, medium: 1 }} middle>
           <TitleStyled>Days</TitleStyled>
         </Cell>
@@ -120,9 +120,9 @@ const TimeTableEditable = ({
         <Cell width={1} middle>
           <TitleCenteredStyled>Open 24 hours</TitleCenteredStyled>
         </Cell>
-        <Cell width={1} middle>
+        {/* <Cell width={1} middle>
           <TitleCenteredStyled>Peak</TitleCenteredStyled>
-        </Cell>
+        </Cell> */}
       </Box>
       <Box display="grid" gridTemplateColumns="1fr" gridRowGap={{ _: '50px', medium: '20px' }}>
         {data.map((item, index) => {
@@ -130,7 +130,7 @@ const TimeTableEditable = ({
             <Box
               key={item.day}
               display="grid"
-              gridTemplateColumns={{ _: '1fr', medium: '2fr 1fr 1fr 1fr 1fr' }}
+              gridTemplateColumns={{ _: '1fr', medium: '2fr 1fr 1fr 1fr' }}
               gridGap={{ _: '10px', medium: '20px' }}
             >
               <Cell width={{ _: 2, medium: 1 }}>
@@ -171,7 +171,7 @@ const TimeTableEditable = ({
                   </SwitchStyled>
                 </ItemSwitchNoBorderStyled>
               </Cell>
-              <Cell width={1}>
+              {/* <Cell width={1}>
                 <ItemSwitchNoBorderStyled>
                   <SwitchStyled>
                     <Switch
@@ -182,7 +182,7 @@ const TimeTableEditable = ({
                     />
                   </SwitchStyled>
                 </ItemSwitchNoBorderStyled>
-              </Cell>
+              </Cell> */}
             </Box>
           )
         })}

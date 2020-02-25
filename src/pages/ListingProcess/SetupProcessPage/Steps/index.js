@@ -3,18 +3,23 @@ import Helmet from 'react-helmet'
 import styled from 'styled-components'
 import { Wrapper, Title, RadioCheckbox, Grid, Cell, Button, Link, Box } from 'components'
 
+import { useSelector } from 'react-redux'
+
 const CellStyled = styled(Cell)`
   display: grid;
   align-items: center;
 `
 
 const StepPage = ({ listing, steps, ...props }) => {
+
+  const { get: { user }, isLoading } = useSelector(state => state.account)
+
   return (
     <Wrapper my="40px">
       <Helmet title="Listing Intro - Spacenow" />
       <Title
         type="h3"
-        title="Barrett, tell us about your space"
+        title={`${user.profile.firstName}, tell us about your space`}
         subtitle="The more details you list, the faster the bookings."
         subTitleMargin={10}
       />

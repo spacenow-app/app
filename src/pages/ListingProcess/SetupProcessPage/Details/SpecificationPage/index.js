@@ -40,7 +40,7 @@ const SpecificationPage = ({ listing, values, handleChange, handleBlur, ...props
                 checked={checkCocktail}
                 handleCheckboxChange={() => setCheckCocktail(!checkCocktail)}
               />
-              <Box ml="25px">
+              {checkCocktail && <Box ml="25px">
                 <Box bg="#F7F7F7" width="100%" height="93px" my="10px" borderRadius="10px" />
                 <Input
                   type="number"
@@ -52,6 +52,7 @@ const SpecificationPage = ({ listing, values, handleChange, handleBlur, ...props
                   onBlur={handleBlur}
                 />
               </Box>
+              }
             </Box>
             <Box>
               <Checkbox
@@ -61,18 +62,19 @@ const SpecificationPage = ({ listing, values, handleChange, handleBlur, ...props
                 checked={checkBanquet}
                 handleCheckboxChange={() => setCheckBanquet(!checkBanquet)}
               />
-              <Box ml="25px">
+              {checkBanquet && <Box ml="25px">
                 <Box bg="#F7F7F7" width="100%" height="93px" my="10px" borderRadius="10px" />
-                <Input
-                  type="number"
-                  placeholder="Ie. 200"
-                  name="listingData.capacityBanquet"
-                  disabled={!checkBanquet}
-                  value={values.listingData.capacityBanquet}
-                  onChange={handleChange}
-                  onBlur={handleBlur}
-                />
-              </Box>
+                  <Input
+                    type="number"
+                    placeholder="Ie. 200"
+                    name="listingData.capacityBanquet"
+                    disabled={!checkBanquet}
+                    value={values.listingData.capacityBanquet}
+                    onChange={handleChange}
+                    onBlur={handleBlur}
+                  />
+                </Box>
+              }
             </Box>
             <Box>
               <Checkbox
@@ -82,18 +84,19 @@ const SpecificationPage = ({ listing, values, handleChange, handleBlur, ...props
                 checked={checkTheatre}
                 handleCheckboxChange={() => setCheckTheatre(!checkTheatre)}
               />
-              <Box ml="25px">
+              {checkTheatre && <Box ml="25px">
                 <Box bg="#F7F7F7" width="100%" height="93px" my="10px" borderRadius="10px" />
-                <Input
-                  type="number"
-                  placeholder="Ie. 200"
-                  name="listingData.capacityTheatre"
-                  disabled={!checkTheatre}
-                  value={values.listingData.capacityTheatre}
-                  onChange={handleChange}
-                  onBlur={handleBlur}
-                />
-              </Box>
+                  <Input
+                    type="number"
+                    placeholder="Ie. 200"
+                    name="listingData.capacityTheatre"
+                    disabled={!checkTheatre}
+                    value={values.listingData.capacityTheatre}
+                    onChange={handleChange}
+                    onBlur={handleBlur}
+                  />
+                </Box>
+              }
             </Box>
             <Box>
               <Checkbox
@@ -103,18 +106,20 @@ const SpecificationPage = ({ listing, values, handleChange, handleBlur, ...props
                 checked={checkClassroom}
                 handleCheckboxChange={() => setCheckClassroom(!checkClassroom)}
               />
-              <Box ml="25px">
-                <Box bg="#F7F7F7" width="100%" height="93px" my="10px" borderRadius="10px" />
-                <Input
-                  type="number"
-                  placeholder="Ie. 200"
-                  name="listingData.capacityClassroom"
-                  disabled={!checkClassroom}
-                  value={values.listingData.capacityClassroom}
-                  onChange={handleChange}
-                  onBlur={handleBlur}
-                />
-              </Box>
+              {checkClassroom &&
+                <Box ml="25px">
+                  <Box bg="#F7F7F7" width="100%" height="93px" my="10px" borderRadius="10px" />
+                  <Input
+                    type="number"
+                    placeholder="Ie. 200"
+                    name="listingData.capacityClassroom"
+                    disabled={!checkClassroom}
+                    value={values.listingData.capacityClassroom}
+                    onChange={handleChange}
+                    onBlur={handleBlur}
+                  />
+                </Box>
+              }
             </Box>
             <Box>
               <Checkbox
@@ -124,18 +129,20 @@ const SpecificationPage = ({ listing, values, handleChange, handleBlur, ...props
                 checked={checkBoardroom}
                 handleCheckboxChange={() => setCheckBoardroom(!checkBoardroom)}
               />
-              <Box ml="25px">
-                <Box bg="#F7F7F7" width="100%" height="93px" my="10px" borderRadius="10px" />
-                <Input
-                  type="number"
-                  placeholder="Ie. 200"
-                  name="listingData.capacityBoardroom"
-                  disabled={!checkBoardroom}
-                  value={values.listingData.capacityBoardroom}
-                  onChange={handleChange}
-                  onBlur={handleBlur}
-                />
-              </Box>
+              {checkBoardroom &&
+                <Box ml="25px">
+                  <Box bg="#F7F7F7" width="100%" height="93px" my="10px" borderRadius="10px" />
+                  <Input
+                    type="number"
+                    placeholder="Ie. 200"
+                    name="listingData.capacityBoardroom"
+                    disabled={!checkBoardroom}
+                    value={values.listingData.capacityBoardroom}
+                    onChange={handleChange}
+                    onBlur={handleBlur}
+                  />
+                </Box>
+              }
             </Box>
           </Box>
           <Box>
@@ -175,12 +182,12 @@ const formik = {
     return {
       listingData: {
         ...listing.listingData,
-        capacity: listing.listingData.capacity,
-        capacityCocktail: listing.listingData.capacityCocktail,
-        capacityBanquet: listing.listingData.capacityBanquet,
-        capacityTheatre: listing.listingData.capacityTheatre,
-        capacityClassroom: listing.listingData.capacityClassroom,
-        capacityBoardroom: listing.listingData.capacityBoardroom,
+        capacity: listing.listingData.capacity || 0,
+        capacityCocktail: listing.listingData.capacityCocktail || 0,
+        capacityBanquet: listing.listingData.capacityBanquet || 0,
+        capacityTheatre: listing.listingData.capacityTheatre || 0,
+        capacityClassroom: listing.listingData.capacityClassroom || 0,
+        capacityBoardroom: listing.listingData.capacityBoardroom || 0,
         alcoholLicence: listing.listingData.alcoholLicence || ''
       }
     }

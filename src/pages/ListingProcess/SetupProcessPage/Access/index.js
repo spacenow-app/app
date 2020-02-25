@@ -121,12 +121,14 @@ const AccessPage = ({ listing, values, handleChange, handleBlur, ...props }) => 
                   onChange={handleChange}
                   onBlur={handleBlur}
                 >
-                  <option>Access Type:</option>
-                  {get24HSelect().map(item => (
-                    <option key={item} value={item}>
-                      {item}
-                    </option>
-                  ))}
+                  <option value={576}>Swipe Card</option>
+                  <option value={577}>Keys</option>
+                  <option value={578}>Smart Lock</option>
+                  <option value={579}>Person</option>
+                  <option value={695}>Receptionist</option>
+                  <option value={696}>Pin Code</option>
+                  <option value={697}>Host</option>
+                  <option value={698}>Secure Code</option>
                 </Select>
               </Box>
             </Box>
@@ -157,7 +159,7 @@ const formik = {
         checkInStart: listing.listingData.checkInStart || '',
         checkInEnd: listing.listingData.checkInEnd || '',
         checkOut: listing.listingData.checkOut || '',
-        accessType: listing.listingData.accessType || ''
+        accessType: listing.listingData.accessType || 576
       }
     }
   },

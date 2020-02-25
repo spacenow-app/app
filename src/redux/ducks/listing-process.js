@@ -142,11 +142,13 @@ const mediaFields = `
   name
   type
   isCover
+  category
 `
 const uploadMediaFields = `
   name
   type
   isCover
+  category
 `
 const ruleFields = `
   id
@@ -213,8 +215,8 @@ const dataFields = `
   listingStyle
   direction
   alcoholLicence
+  wifiSpeed
   wifiNetwork
-  wifiUsername
   wifiPassword
   capacityCocktail
   capacityBanquet

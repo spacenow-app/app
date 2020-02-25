@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react'
 import { withFormik } from 'formik'
-import { Wrapper, Box, Title, StepButtons, Input, TextArea } from 'components'
+import { Wrapper, Box, Title, StepButtons, Input, TextArea, Select } from 'components'
 
 const DetailPage = ({ listing, values, handleChange, handleBlur, ...props }) => {
   useEffect(() => {
@@ -60,17 +60,23 @@ const DetailPage = ({ listing, values, handleChange, handleBlur, ...props }) => 
             subTitleMargin={10}
           />
           <Box display="grid" gridTemplateColumns={{ _: 'auto', medium: 'auto auto auto' }} gridGap="30px">
+            <Select
+              name="listingData.wifiSpeed"
+              value={values.listingData.wifiSpeed}
+              onChange={handleChange}
+              onBlur={handleBlur}
+            >
+              <option value="">Wifi Speed</option>
+              <option value={`802.11a`}>802.11a - 6 to 24 Mbps</option>
+              <option value={`802.11b`}>802.11b - 11 Mbps</option>
+              <option value={`802.11d`}>802.11d - 11 to 54 Mbps</option>
+              <option value={`802.11g`}>802.11g - 54 Mbps</option>
+              <option value={`802.11n`}>802.11n - 100 Mbps</option>
+            </Select>
             <Input
               name="listingData.wifiNetwork"
               placeholder="Wifi network"
               value={values.listingData.wifiNetwork}
-              onChange={handleChange}
-              onBlur={handleBlur}
-            />
-            <Input
-              name="listingData.wifiUsername"
-              placeholder="Wifi username"
-              value={values.listingData.wifiUsername}
               onChange={handleChange}
               onBlur={handleBlur}
             />
@@ -106,8 +112,8 @@ const formik = {
         ...listing.listingData,
         description: listing.listingData.description || '',
         direction: listing.listingData.direction || '',
+        wifiSpeed: listing.listingData.wifiSpeed || '',
         wifiNetwork: listing.listingData.wifiNetwork || '',
-        wifiUsername: listing.listingData.wifiUsername || '',
         wifiPassword: listing.listingData.wifiPassword || ''
       }
     }
