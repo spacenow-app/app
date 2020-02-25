@@ -265,6 +265,7 @@ export const signin = (email, password, from) => async dispatch => {
     setToken(signinReturn.token, signinReturn.expiresIn)
     dispatch({ type: Types.AUTH_SIGNIN_SUCCESS, from })
     dispatch({ type: AccountTypes.ACC_GET_PROFILE_SUCCESS, payload: signinReturn.user })
+    window.location.reload()
   } catch (err) {
     toast.error(errToMsg(err))
     dispatch({
@@ -284,11 +285,12 @@ export const signup = (name, email, password, phoneNumber, from, userType) => as
     const signupReturn = data.signup
     setToken(signupReturn.token, signupReturn.expiresIn)
     dispatch({ type: AccountTypes.ACC_GET_PROFILE_SUCCESS, payload: signupReturn.user })
-    if (userType) {
+    if (userType && !from) {
       dispatch({ type: Types.AUTH_SIGNIN_SUCCESS, from: { pathname: `/welcome/${userType}` } })
       window.location.reload()
     } else {
       dispatch({ type: Types.AUTH_SIGNIN_SUCCESS, from })
+      window.location.reload()
     }
   } catch (err) {
     toast.error(errToMsg(err))
@@ -346,11 +348,12 @@ export const googleSignin = (googleResponse, from, userType) => async dispatch =
     })
     const signinReturn = data.tokenGoogleValidate
     setToken(signinReturn.token, signinReturn.expiresIn)
-    if (userType) {
+    if (userType && !from) {
       dispatch({ type: Types.AUTH_SIGNIN_SUCCESS, from: { pathname: `/welcome/${userType}` } })
       window.location.reload()
     } else {
       dispatch({ type: Types.AUTH_SIGNIN_SUCCESS, from })
+      window.location.reload()
     }
     dispatch({ type: AccountTypes.ACC_GET_PROFILE_SUCCESS, payload: signinReturn.user })
   } catch (err) {
@@ -371,11 +374,12 @@ export const facebookSignin = (facebookResponse, from, userType) => async dispat
     })
     const signinReturn = data.tokenFacebookValidate
     setToken(signinReturn.token, signinReturn.expiresIn)
-    if (userType) {
+    if (userType && !from) {
       dispatch({ type: Types.AUTH_SIGNIN_SUCCESS, from: { pathname: `/welcome/${userType}` } })
       window.location.reload()
     } else {
       dispatch({ type: Types.AUTH_SIGNIN_SUCCESS, from })
+      window.location.reload()
     }
     dispatch({ type: AccountTypes.ACC_GET_PROFILE_SUCCESS, payload: signinReturn.user })
   } catch (err) {

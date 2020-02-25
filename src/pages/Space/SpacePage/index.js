@@ -289,6 +289,7 @@ const SpacePage = ({ match, location, history, ...props }) => {
       state.checkInHour && setStartTime(state.checkInHour)
       state.checkOutHour && setEndTime(state.checkOutHour)
       state.period && setPeriod(state.period)
+      state.message && setMessage(state.message)
     }
   }, [location])
 
@@ -645,7 +646,8 @@ const SpacePage = ({ match, location, history, ...props }) => {
             period: object.period,
             reservations: object.reservations,
             checkInHour: object.checkInHour,
-            checkOutHour: object.checkOutHour
+            checkOutHour: object.checkOutHour,
+            message: object.message
           }
         }
       })
@@ -744,9 +746,9 @@ const SpacePage = ({ match, location, history, ...props }) => {
 
     let date = ''
     if (content.reservations && content.reservations[0]) {
-      date = `${format(new Date(content.reservations[0]), 'EEEE d MMMM, yyyy')  },`
+      date = `${format(new Date(content.reservations[0]), 'EEEE d MMMM, yyyy')},`
     } else if (content.reservations) {
-      date = `${format(new Date(content.reservations), 'EEEE d MMMM, yyyy')  },`
+      date = `${format(new Date(content.reservations), 'EEEE d MMMM, yyyy')},`
     }
 
     const emailValues = {
@@ -765,7 +767,7 @@ const SpacePage = ({ match, location, history, ...props }) => {
       hostPhoto: listing.user.profile.picture || '',
       listImage: _convertedArrayPhotos(listing.photos)[0].source,
       listTitle: listing.title,
-      fullAddress: `${listing.location.address1 ? `${listing.location.address1  },` : ''} ${listing.location.city}`,
+      fullAddress: `${listing.location.address1 ? `${listing.location.address1},` : ''} ${listing.location.city}`,
       basePrice: listing.listingData.basePrice.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,'),
       priceType: listing.bookingPeriod,
       category: listing.settingsParent.category.itemName,
