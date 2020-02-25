@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 import { Switch, Route, Redirect } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
 import { Wrapper, Loader, ProgressBar } from 'components'
-import { onGetListingSteps, onGetListing, onPutListing } from 'redux/ducks/listing-process'
+import { onGetListingSteps, onGetListing, onPutListing, onPutListingSteps } from 'redux/ducks/listing-process'
 import { openModal, TypesModal } from 'redux/ducks/modal'
 
 import LocationPage from './Location'
@@ -32,6 +32,10 @@ const SetupProcessPage = ({ match, history, location, ...props }) => {
 
   const _setFatherValues = obj => {
     setValues(obj)
+  }
+
+  const _setStepCompleted = step => { 
+    dispatch(onPutListingSteps(listingId, { ...steps, [step]: `completed` }))
   }
 
   useEffect(() => {
@@ -84,6 +88,7 @@ const SetupProcessPage = ({ match, history, location, ...props }) => {
                 listing={listing}
                 dispatch={dispatch}
                 setFatherValues={_setFatherValues}
+                setStepCompleted={_setStepCompleted}
               />
             )}
           />
@@ -96,6 +101,7 @@ const SetupProcessPage = ({ match, history, location, ...props }) => {
                 listing={listing}
                 dispatch={dispatch}
                 setFatherValues={_setFatherValues}
+                setStepCompleted={_setStepCompleted}
               />
             )}
           />
@@ -108,6 +114,7 @@ const SetupProcessPage = ({ match, history, location, ...props }) => {
                 listing={listing}
                 dispatch={dispatch}
                 setFatherValues={_setFatherValues}
+                setStepCompleted={_setStepCompleted}
               />
             )}
           />
@@ -120,6 +127,7 @@ const SetupProcessPage = ({ match, history, location, ...props }) => {
                 listing={listing}
                 dispatch={dispatch}
                 setFatherValues={_setFatherValues}
+                setStepCompleted={_setStepCompleted}
               />
             )}
           />
@@ -132,6 +140,7 @@ const SetupProcessPage = ({ match, history, location, ...props }) => {
                 listing={listing}
                 dispatch={dispatch}
                 setFatherValues={_setFatherValues}
+                setStepCompleted={_setStepCompleted}
               />
             )}
           />
@@ -144,6 +153,7 @@ const SetupProcessPage = ({ match, history, location, ...props }) => {
                 listing={listing}
                 dispatch={dispatch}
                 setFatherValues={_setFatherValues}
+                setStepCompleted={_setStepCompleted}
               />
             )}
           />
@@ -156,6 +166,7 @@ const SetupProcessPage = ({ match, history, location, ...props }) => {
                 listing={listing}
                 dispatch={dispatch}
                 setFatherValues={_setFatherValues}
+                setStepCompleted={_setStepCompleted}
               />
             )}
           />
@@ -168,6 +179,7 @@ const SetupProcessPage = ({ match, history, location, ...props }) => {
                 listing={listing}
                 dispatch={dispatch}
                 setFatherValues={_setFatherValues}
+                setStepCompleted={_setStepCompleted}
               />
             )}
           />
@@ -181,6 +193,7 @@ const SetupProcessPage = ({ match, history, location, ...props }) => {
                 listing={listing}
                 dispatch={dispatch}
                 setFatherValues={_setFatherValues}
+                setStepCompleted={_setStepCompleted}
               />
             )}
           />

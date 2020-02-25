@@ -28,9 +28,14 @@ const OpeningHoursPage = ({ listing, ...props }) => {
     const valuesToUpdate = {
       accessDays: _mapToAccessHourType(timetable),
     }
-    props.setFatherValues(valuesToUpdate)
+    valuesToUpdate && props.setFatherValues(valuesToUpdate)
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [props.setFatherValues])
+
+  const _handleNext = () => {
+    props.setStepCompleted("step7")
+    props.history.push(`/listing-process/setup-process/${listing.id}/cancellation`)
+  }
 
   useEffect(() => {
     const { accessDays } = listing
@@ -190,7 +195,7 @@ const OpeningHoursPage = ({ listing, ...props }) => {
           onClick: () => props.history.push(`/listing-process/setup-process/${listing.id}/access`)
         }}
         next={{
-          onClick: () => props.history.push(`/listing-process/setup-process/${listing.id}/cancellation`)
+          onClick: _handleNext
         }}
       />
     </Wrapper>

@@ -48,6 +48,11 @@ const CategoryPage = ({ listing, values, setFieldValue, handleChange, handleBlur
     dispatch(onGetCategoryTags(value))
   }
 
+  const _handleNext = () => {
+    props.setStepCompleted("step2")
+    props.history.push(`/listing-process/setup-process/${listing.id}/details/specification`)
+  }
+
   return (
     <form>
       <Wrapper>
@@ -90,7 +95,7 @@ const CategoryPage = ({ listing, values, setFieldValue, handleChange, handleBlur
         <StepButtons
           prev={{ disabled: false, onClick: () => props.history.push('space-type') }}
           next={{
-            onClick: () => props.history.push(`/listing-process/setup-process/${listing.id}/details/specification`)
+            onClick: _handleNext
           }}
         />
       </Wrapper>

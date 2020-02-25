@@ -43,6 +43,11 @@ const AmenitiesPage = ({ listing, values, setFieldValue, handleChange, handleBlu
     props.setFatherValues({ ...values })
   }, [props, values])
 
+  const _handleNext = () => {
+    props.setStepCompleted("step3")
+    props.history.push(`/listing-process/setup-process/${listing.id}/scene`)
+  }
+
   return (
     <Wrapper>
       <form>
@@ -85,7 +90,7 @@ const AmenitiesPage = ({ listing, values, setFieldValue, handleChange, handleBlu
         <StepButtons
           prev={{ disabled: false, onClick: () => props.history.push('detail') }}
           next={{
-            onClick: () => props.history.push(`/listing-process/setup-process/${listing.id}/scene`)
+            onClick: _handleNext
           }}
         />
       </form>

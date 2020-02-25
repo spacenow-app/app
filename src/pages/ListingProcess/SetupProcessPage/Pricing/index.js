@@ -7,6 +7,11 @@ const PricingPage = ({ listing, values, handleChange, handleBlur, ...props }) =>
     props.setFatherValues({ ...values })
   }, [props, values])
 
+  const _handleNext = () => {
+    props.setStepCompleted("step5")
+    props.history.push(`/listing-process/setup-process/${listing.id}/access`)
+  }
+
   return (
     <form>
       <Wrapper>
@@ -75,7 +80,7 @@ const PricingPage = ({ listing, values, handleChange, handleBlur, ...props }) =>
               onClick: () => props.history.push(`/listing-process/setup-process/${listing.id}/scene`)
             }}
             next={{
-              onClick: () => props.history.push(`/listing-process/setup-process/${listing.id}/access`)
+              onClick: _handleNext
             }}
           />
         </Box>

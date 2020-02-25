@@ -28,6 +28,11 @@ const ScenePage = ({ listing, values, setFieldValue, ...props }) => {
     props.setFatherValues({ ...values })
   }, [props, values])
 
+  const _handleNext = () => {
+    props.setStepCompleted("step4")
+    props.history.push(`/listing-process/setup-process/${listing.id}/pricing`)
+  }
+
   useEffect(() => {
     media && setFieldValue('photos', [...values['photos'], media])
     media && dispatch(onCleanMedia())
@@ -116,7 +121,7 @@ const ScenePage = ({ listing, values, setFieldValue, ...props }) => {
                 onClick: () => props.history.push(`/listing-process/setup-process/${listing.id}/details`)
               }}
               next={{
-                onClick: () => props.history.push(`/listing-process/setup-process/${listing.id}/pricing`)
+                onClick: _handleNext
               }}
             />
           </>

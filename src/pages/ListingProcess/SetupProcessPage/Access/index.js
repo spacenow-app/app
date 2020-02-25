@@ -8,6 +8,11 @@ const AccessPage = ({ listing, values, handleChange, handleBlur, ...props }) => 
     props.setFatherValues({ ...values })
   }, [props, values])
 
+  const _handleNext = () => {
+    props.setStepCompleted("step6")
+    props.history.push(`/listing-process/setup-process/${listing.id}/opening-hours`)
+  }
+
   return (
     <form>
       <Wrapper>
@@ -140,7 +145,7 @@ const AccessPage = ({ listing, values, handleChange, handleBlur, ...props }) => 
             onClick: () => props.history.push(`/listing-process/setup-process/${listing.id}/scene`)
           }}
           next={{
-            onClick: () => props.history.push(`/listing-process/setup-process/${listing.id}/opening-hours`)
+            onClick: _handleNext
           }}
         />
       </Wrapper>

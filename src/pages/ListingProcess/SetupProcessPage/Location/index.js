@@ -29,6 +29,7 @@ const LocationPage = ({ listing, values, handleChange, handleBlur, setFieldValue
   }, [location, setFieldValue])
 
   const _handleNext = () => {
+    props.setStepCompleted("step1")
     dispatch(onPostLocation({ address, unit, placeId }))
   }
 

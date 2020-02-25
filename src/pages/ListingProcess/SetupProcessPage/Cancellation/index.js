@@ -19,9 +19,14 @@ const CancellationPage = ({ listing, steps, values, setFieldValue, handleBlur, .
     setFieldValue(name, parseInt(value))
   }
 
+  const _handleNext = () => {
+    props.setStepCompleted("step8")
+    props.history.push(`/listing-process/setup-process/${listing.id}/steps`)
+  }
+
   useEffect(() => {
     props.setFatherValues({ ...values })
-  }, [props, values])
+  }, [props.setFatherValues, values])
 
   return (
     <form>
@@ -66,8 +71,8 @@ const CancellationPage = ({ listing, steps, values, setFieldValue, handleBlur, .
             onClick: () => props.history.push(`/listing-process/setup-process/${listing.id}/opening-hours`)
           }}
           next={{
-            disabled: steps && steps.completed !== 100,
-            onClick: () => props.history.push(`/listing-process/view/${listing.id}`)
+            disabled: false,
+            onClick: _handleNext
           }}
         />
       </Wrapper>

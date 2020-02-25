@@ -11,6 +11,9 @@ export const Types = {
   GET_LISTING_STEPS_REQUEST: 'GET_LISTING_STEPS_REQUEST',
   GET_LISTING_STEPS_SUCCESS: 'GET_LISTING_STEPS_SUCCESS',
   GET_LISTING_STEPS_FAILURE: 'GET_LISTING_STEPS_FAILURE',
+  PUT_LISTING_STEPS_REQUEST: 'PUT_LISTING_STEPS_REQUEST',
+  PUT_LISTING_STEPS_SUCCESS: 'PUT_LISTING_STEPS_SUCCESS',
+  PUT_LISTING_STEPS_FAILURE: 'PUT_LISTING_STEPS_FAILURE',
   GET_LISTING_REQUEST: 'GET_LISTING_REQUEST',
   GET_LISTING_SUCCESS: 'GET_LISTING_SUCCESS',
   GET_LISTING_FAILURE: 'GET_LISTING_FAILURE',
@@ -265,6 +268,13 @@ const queryGetV2Steps = gql`
     }
   }
 `
+const mutationPutV2Steps = gql`
+  mutation putV2Steps($id: Int!, $steps: V2InputStep!) {
+    putV2Steps(id: $id, steps: $steps) {
+      ${stepsFields}
+    }
+  }
+`
 const queryGetV2Listing = gql`
   query getV2Listing($id: Int!) {
     getV2Listing(id: $id) {
@@ -345,7 +355,8 @@ const mutationPostV2Media = gql`
 
 export default function reducer(state = initialState, action) {
   switch (action.type) {
-    case Types.GET_LISTING_STEPS_REQUEST: {
+    case Types.GET_LISTING_STEPS_REQUEST: 
+    case Types.PUT_LISTING_STEPS_REQUEST: {
       return {
         ...state,
         steps: {
@@ -355,7 +366,8 @@ export default function reducer(state = initialState, action) {
         }
       }
     }
-    case Types.GET_LISTING_STEPS_SUCCESS: {
+    case Types.GET_LISTING_STEPS_SUCCESS:
+    case Types.PUT_LISTING_STEPS_SUCCESS: {
       return {
         ...state,
         steps: {
@@ -365,7 +377,8 @@ export default function reducer(state = initialState, action) {
         }
       }
     }
-    case Types.GET_LISTING_STEPS_FAILURE: {
+    case Types.GET_LISTING_STEPS_FAILURE:
+    case Types.PUT_LISTING_STEPS_FAILURE: {
       return {
         ...state,
         steps: {
@@ -706,6 +719,19 @@ export const onGetListingSteps = id => async dispatch => {
     dispatch({ type: Types.GET_LISTING_STEPS_SUCCESS, payload: data.getV2Steps })
   } catch (err) {
     dispatch({ type: Types.GET_LISTING_STEPS_FAILURE, payload: errToMsg(err) })
+  }
+}
+
+export const onPutListingSteps = (id, steps) => async dispatch => {
+  dispatch({ type: Types.PUT_LISTING_STEPS_REQUEST })
+  try {
+    const { data } = await getClientWithAuth(dispatch).mutate({
+      mutation: mutationPutV2Steps,
+      variables: { id: parseInt(id, 10), steps }
+    })
+    dispatch({ type: Types.PUT_LISTING_STEPS_SUCCESS, payload: data.putV2Steps })
+  } catch (err) {
+    dispatch({ type: Types.PUT_LISTING_STEPS_FAILURE, payload: errToMsg(err) })
   }
 }
 
