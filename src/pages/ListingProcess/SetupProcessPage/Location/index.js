@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
+import Helmet from 'react-helmet'
 import { useDispatch, useSelector } from 'react-redux'
 import { withFormik } from 'formik'
-import Helmet from 'react-helmet'
 import { Box, Wrapper, Title, StepButtons, Input, Map, AutoComplete } from 'components'
 
 import { onPostLocation, onCleanLocation } from 'redux/ducks/listing-process'

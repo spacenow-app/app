@@ -1,4 +1,5 @@
 import React, { useEffect } from 'react'
+import Helmet from 'react-helmet'
 import _ from 'lodash'
 import { useDispatch, useSelector } from 'react-redux'
 import { withFormik } from 'formik'
@@ -56,6 +57,7 @@ const CategoryPage = ({ listing, values, setFieldValue, handleChange, handleBlur
   return (
     <form>
       <Wrapper>
+        <Helmet title="Listing Intro - Spacenow - Steps - Basics - Category" />
         <Box display="grid" gridGap="30px">
           {loadingCategories && <Loader text="Loading root categories" />}
           {!loadingCategories && (

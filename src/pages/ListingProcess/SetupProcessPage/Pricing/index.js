@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react'
+import Helmet from 'react-helmet'
 import { withFormik } from 'formik'
-import { Wrapper, Box, Title, StepButtons, Select, Input, Icon, Text, Checkbox } from 'components'
+import { Wrapper, Box, Title, StepButtons, Select, Input, Icon, Text } from 'components'
 
 const PricingPage = ({ listing, values, handleChange, handleBlur, ...props }) => {
   useEffect(() => {
