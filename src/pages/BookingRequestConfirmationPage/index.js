@@ -27,10 +27,10 @@ const BookingRequestConfirmation = ({ match, ...props }) => {
           <Box display="grid" gridGap="30px">
             <Title type="h6" title="Request Details" noMargin/>
             <Box display="grid">
-              <Tag icon={ <Icon width="24px" height="24px" name={`price`} fill={`#51C482`}/> } noBorder={true}><Text>Reservation Cost: AUD ${reservation.priceDetails.total.toFixed(2)}</Text></Tag>
-              <Tag icon={ <Icon width="24px" height="24px" name={`calendar-thin`} fill={`#51C482`}/> } noBorder={true}><Text>Date: {format(new Date(reservation.checkIn), 'd LLL yyyy')}</Text></Tag>
-              {reservation.priceType === "hourly" && <Tag icon={ <Icon width="24px" height="24px" name={`clock`} fill={`#51C482`}/> } noBorder={true}><Text>Time: </Text></Tag> }
-              <Tag icon={ <Icon width="24px" height="24px" name={`hourglass`} fill={`#51C482`}/> } noBorder={true}><Text>Duration: {`${reservation.period} ${periodLabel(reservation.priceType, reservation.period)}`}</Text></Tag>
+              <Tag icon={ <Icon width="20px" height="20px" name={`price`} fill={`#51C482`}/> } noBorder={true}><Text>Reservation Cost: AUD ${reservation.priceDetails.total.toFixed(2)}</Text></Tag>
+              <Tag icon={ <Icon width="20px" height="20px" name={`calendar-thin`} fill={`#51C482`}/> } noBorder={true}><Text>Date: {format(new Date(reservation.checkIn), 'd LLL yyyy')}</Text></Tag>
+              {reservation.priceType === "hourly" && <Tag icon={ <Icon width="20px" height="20px" name={`clock`} fill={`#51C482`}/> } noBorder={true}><Text>Time: </Text></Tag> }
+              <Tag icon={ <Icon width="20px" height="20px" name={`hourglass`} fill={`#51C482`}/> } noBorder={true}><Text>Duration: {`${reservation.period} ${periodLabel(reservation.priceType, reservation.period)}`}</Text></Tag>
             </Box>
             <Title type="h6" title="What happen next?" noMargin/>
             <Box display="grid">
