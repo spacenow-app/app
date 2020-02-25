@@ -40,8 +40,8 @@ const BookingRequestConfirmation = ({ match, ...props }) => {
             </Box>
             <Title type="h6" title="Need help?" noMargin/>
             <Box display="grid" gridGap="30px" gridAutoFlow="column" gridAutoColumns="max-content" >
-              <Tag><Link to={`#`} style={{padding: "10px 30px"}}>FAQ</Link></Tag>
-              <Tag><Link to={`#`} style={{padding: "10px 30px"}}>Contact our helpful support team</Link></Tag>
+              <Tag><Link to={`https://spacenow.com/help/`} style={{padding: "10px 30px"}}>FAQ</Link></Tag>
+              <Tag><Link to={`https://spacenow.com/contact-us/`} style={{padding: "10px 30px"}}>Contact our helpful support team</Link></Tag>
             </Box>
           </Box>
         </Box>
