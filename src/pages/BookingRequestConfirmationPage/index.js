@@ -46,7 +46,10 @@ const BookingRequestConfirmation = ({ match, ...props }) => {
           </Box>
         </Box>
       </Box>
-      <Box display="grid" gridGap="30px">
+      <Box display="grid">
+        <Box display="grid" style={{justifyItems: "end", height: "max-content"}}>
+          <Tag><Link to={`/search`}>Back to search</Link></Tag>
+        </Box>
         <CardCheckout reservation={reservation} />
       </Box>
     </Box>
