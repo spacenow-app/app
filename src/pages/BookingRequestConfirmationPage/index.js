@@ -27,16 +27,16 @@ const BookingRequestConfirmation = ({ match, ...props }) => {
           <Box display="grid" gridGap="30px">
             <Title type="h6" title="Request Details" noMargin/>
             <Box display="grid">
-              <Tag icon={ <Icon width="24px" height="24px" name={`play`} /> } noBorder={true}><Text>Reservation Cost: AUD ${reservation.priceDetails.total.toFixed(2)}</Text></Tag>
-              <Tag icon={ <Icon width="24px" height="24px" name={`calendar`} /> } noBorder={true}><Text>Date: {format(new Date(reservation.checkIn), 'd LLL yyyy')}</Text></Tag>
-              {reservation.priceType === "hourly" && <Tag icon={ <Icon width="24px" height="24px" name={`play`} /> } noBorder={true}><Text>Time: </Text></Tag> }
-              <Tag icon={ <Icon width="24px" height="24px" name={`play`} /> } noBorder={true}><Text>Duration: {`${reservation.period} ${periodLabel(reservation.priceType, reservation.period)}`}</Text></Tag>
+              <Tag icon={ <Icon width="24px" height="24px" name={`price`} fill={`#51C482`}/> } noBorder={true}><Text>Reservation Cost: AUD ${reservation.priceDetails.total.toFixed(2)}</Text></Tag>
+              <Tag icon={ <Icon width="24px" height="24px" name={`calendar-thin`} fill={`#51C482`}/> } noBorder={true}><Text>Date: {format(new Date(reservation.checkIn), 'd LLL yyyy')}</Text></Tag>
+              {reservation.priceType === "hourly" && <Tag icon={ <Icon width="24px" height="24px" name={`clock`} fill={`#51C482`}/> } noBorder={true}><Text>Time: </Text></Tag> }
+              <Tag icon={ <Icon width="24px" height="24px" name={`hourglass`} fill={`#51C482`}/> } noBorder={true}><Text>Duration: {`${reservation.period} ${periodLabel(reservation.priceType, reservation.period)}`}</Text></Tag>
             </Box>
             <Title type="h6" title="What happen next?" noMargin/>
             <Box display="grid">
-              <Tag icon={ <Icon width="42px" height="42px" name={`play`} /> } noBorder={true}><Text>Your request has been sent to the host to review and approve. If there are any changes or modifications needed to get you booking confirmed, you will be notified straight away!</Text></Tag>
-              <Tag icon={ <Icon width="42px" height="42px" name={`play`} /> } noBorder={true}><Text>Once you're approved, you will receive a confirmation email with a link to pay and lock-in your booking for the requested date.</Text></Tag>
-              <Tag icon={ <Icon width="42px" height="42px" name={`play`} /> } noBorder={true}><Text>As soon as the payment has been received you're good to go! We will share the details about how to check-in + any other helpful hints, tips and notifications to do with your bookings.</Text></Tag>
+              <Tag icon={ <Icon width="42px" height="42px" name={`clock-booking`} fill={`#51C482`}/> } noBorder={true}><Text>Your request has been sent to the host to review and approve. If there are any changes or modifications needed to get you booking confirmed, you will be notified straight away!</Text></Tag>
+              <Tag icon={ <Icon width="42px" height="42px" name={`payment`} fill={`#51C482`}/> } noBorder={true}><Text>Once you're approved, you will receive a confirmation email with a link to pay and lock-in your booking for the requested date.</Text></Tag>
+              <Tag icon={ <Icon width="42px" height="42px" name={`confirm-with-host`} fill={`#51C482`}/> } noBorder={true}><Text>As soon as the payment has been received you're good to go! We will share the details about how to check-in + any other helpful hints, tips and notifications to do with your bookings.</Text></Tag>
             </Box>
             <Title type="h6" title="Need help?" noMargin/>
             <Box display="grid" gridGap="30px" gridAutoFlow="column" gridAutoColumns="max-content" >

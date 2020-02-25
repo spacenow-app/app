@@ -79,7 +79,7 @@ const ScenePage = ({ listing, values, setFieldValue, ...props }) => {
                   ...Array(1 - values.photos.filter(media => media.type !== 'video/mp4' && media.category === 'floorplan').length).concat(
                     values.photos.filter(media => media.type !== 'video/mp4' && media.category === 'floorplan')
                   )
-                ].map((video, index) => (
+                ].map((photo, index) => (
                   <Photo
                     key={`floorplan-${index}`}
                     onDrop={_handleOnDropMediaFloorplan}

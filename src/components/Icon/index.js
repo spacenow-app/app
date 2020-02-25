@@ -167,6 +167,13 @@ import { ReactComponent as ArrowLeft } from './svg/generic/arrow_left.svg'
 import { ReactComponent as FullLeftArrow } from './svg/generic/full-left-arrow.svg'
 import { ReactComponent as MovieCamera } from './svg/generic/movie-camera.svg'
 
+import { ReactComponent as CalendarThin } from './svg/generic/calendar-thin.svg'
+import { ReactComponent as ClockBooking } from './svg/generic/clock-booking.svg'
+import { ReactComponent as ConfirmWithHost } from './svg/generic/confirm-with-host.svg'
+import { ReactComponent as HourGlass } from './svg/generic/hourglass.svg'
+import { ReactComponent as Payment } from './svg/generic/payment.svg'
+import { ReactComponent as Price } from './svg/generic/price.svg'
+
 const Icons = {
   'question-mark': <QuestionMark />,
   'single-space': <SingleSpace />,
@@ -326,7 +333,13 @@ const Icons = {
   'check-mark': <CheckMark />,
   search: <Search />,
   'clock-bgwhite': <Clock />,
-  'pin-bgwhite': <PinBGWhite />
+  'pin-bgwhite': <PinBGWhite />,
+  'calendar-thin': <CalendarThin />,
+  'clock-booking': <ClockBooking />,
+  'confirm-with-host': <ConfirmWithHost />,
+  'hourglass': <HourGlass />,
+  'payment': <Payment />,
+  'price': <Price />
 }
 
 const Icon = props => {
