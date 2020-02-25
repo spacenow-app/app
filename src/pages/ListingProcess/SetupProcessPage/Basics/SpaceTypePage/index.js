@@ -10,6 +10,7 @@ const SpaceTypePage = ({ listing, values, handleChange, handleBlur, ...props }) 
   return (
     <form>
       <Wrapper>
+        <Helmet title="Listing Intro - Spacenow - Steps - Basics - Space Type" />
         <Box display="grid" gridGap="30px">
           <Title type="h3" title="Property type" subtitle="Which best describes your space?" subTitleMargin={10} />
           <Box display="grid" gridTemplateColumns={{ _: 'auto 1fr' }} gridGap="10px">

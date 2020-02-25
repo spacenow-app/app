@@ -13,15 +13,15 @@ const ScenePage = ({ listing, values, setFieldValue, ...props }) => {
   const { object: media, isLoading: loadingMedia } = useSelector(state => state.listing_process.media)
 
   const _handleOnDropMediaPhoto = useCallback(acceptedFiles => acceptedFiles.map(file => dispatch(onPostMedia({ file, category: 'photo', listingId: listing.id }))), [
-    dispatch
+    dispatch, listing.id
   ])
 
   const _handleOnDropMediaFloorplan = useCallback(acceptedFiles => acceptedFiles.map(file => dispatch(onPostMedia({ file, category: 'floorplan', listingId: listing.id }))), [
-    dispatch
+    dispatch, listing.id
   ])
 
   const _handleOnDropMediaVideo = useCallback(acceptedFiles => acceptedFiles.map(file => dispatch(onPostMedia({ file, category: 'video', listingId: listing.id }))), [
-    dispatch
+    dispatch, listing.id
   ])
 
   useEffect(() => {
@@ -41,6 +41,7 @@ const ScenePage = ({ listing, values, setFieldValue, ...props }) => {
   return (
     <form>
       <Wrapper>
+        <Helmet title="Listing Intro - Spacenow - Steps - Scene" />
         {loadingMedia && <Loader text="Uploading Media File" />}
         {!loadingMedia && (
           <>

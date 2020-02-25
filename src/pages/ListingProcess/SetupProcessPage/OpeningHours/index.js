@@ -175,7 +175,7 @@ const OpeningHoursPage = ({ listing, ...props }) => {
 
   return (
     <Wrapper>
-      <Helmet title="Listing Space Availability - Spacenow" />
+      <Helmet title="Listing Intro - Spacenow - Steps - Opening Hours" />
       <Box>
         <Title type="h3" title="Timetable*" subtitle="Let guests know the times your space is open." />
         <TimeTable

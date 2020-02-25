@@ -43,6 +43,7 @@ const FeaturePage = ({ listing, values, setFieldValue, handleChange, handleBlur,
 
   return (
     <Wrapper>
+      <Helmet title="Listing Intro - Spacenow - Steps - Details - Features" />
       <form>
         <Box>
           <Title type="h3" title="Style of space" subtitle="What style best describes the space?" subTitleMargin={10} />

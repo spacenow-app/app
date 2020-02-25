@@ -10,6 +10,7 @@ const DetailPage = ({ listing, values, handleChange, handleBlur, ...props }) => 
   return (
     <form>
       <Wrapper>
+        <Helmet title="Listing Intro - Spacenow - Steps - Details - Info" />
         <Box>
           <Title
             type="h3"

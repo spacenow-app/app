@@ -15,6 +15,7 @@ const PricingPage = ({ listing, values, handleChange, handleBlur, ...props }) =>
   return (
     <form>
       <Wrapper>
+        <Helmet title="Listing Intro - Spacenow - Steps - Pricing" />
         <Box display="grid" gridGap="30px">
           <Box>
             <Title

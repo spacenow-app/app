@@ -63,7 +63,7 @@ const LocationPage = ({ listing, values, handleChange, handleBlur, setFieldValue
   return (
     <form>
       <Wrapper>
-        <Helmet title="Listing Location - Spacenow" />
+        <Helmet title="Listing Intro - Spacenow - Steps - Location" />
         <Title type="h3" title="Location" />
         <Box display="grid" gridTemplateColumns={{ _: '1fr', medium: 'auto 280px' }} gridGap="30px">
           <AutoComplete

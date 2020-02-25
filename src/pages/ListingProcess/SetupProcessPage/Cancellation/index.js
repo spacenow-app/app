@@ -31,6 +31,7 @@ const CancellationPage = ({ listing, steps, values, setFieldValue, handleBlur, .
   return (
     <form>
       <Wrapper>
+        <Helmet title="Listing Intro - Spacenow - Steps - Cancellation" />
         <Box display="grid" gridGap="30px">
           {loadingCancellations && <Loader text="Loading cancellations" />}
           {!loadingCancellations && (

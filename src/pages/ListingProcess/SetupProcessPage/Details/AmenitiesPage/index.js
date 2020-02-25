@@ -50,6 +50,7 @@ const AmenitiesPage = ({ listing, values, setFieldValue, handleChange, handleBlu
 
   return (
     <Wrapper>
+      <Helmet title="Listing Intro - Spacenow - Steps - Details - Amenities" />
       <form>
         <Box display="grid" gridGap="30px">
           {loadingAmenities && <Loader text="Loading listing process" />}

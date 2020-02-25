@@ -16,6 +16,7 @@ const SpecificationPage = ({ listing, values, handleChange, handleBlur, ...props
   return (
     <form>
       <Wrapper>
+        <Helmet title="Listing Intro - Spacenow - Steps - Details - Specifications" />
         <Box display="grid" gridGap="30px">
           <Box>
             <Title type="h3" title="Capacity and seating" />
