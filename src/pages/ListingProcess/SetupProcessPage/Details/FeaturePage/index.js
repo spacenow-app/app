@@ -42,9 +42,9 @@ const FeaturePage = ({ listing, values, setFieldValue, handleChange, handleBlur,
   }, [props, values])
 
   return (
-    <Wrapper>
-      <Helmet title="Listing Intro - Spacenow - Steps - Details - Features" />
-      <form>
+    <form>
+      <Wrapper>
+        <Helmet title="Listing Intro - Spacenow - Steps - Details - Features" />
         <Box>
           <Title type="h3" title="Style of space" subtitle="What style best describes the space?" subTitleMargin={10} />
           <Box display="grid" gridTemplateColumns={{ _: 'auto', medium: 'auto auto' }} gridGap="30px">
@@ -110,8 +110,8 @@ const FeaturePage = ({ listing, values, setFieldValue, handleChange, handleBlur,
             onClick: () => props.history.push('detail')
           }}
         />
-      </form>
-    </Wrapper>
+      </Wrapper>
+    </form>
   )
 }
 

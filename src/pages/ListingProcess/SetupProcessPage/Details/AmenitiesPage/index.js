@@ -49,9 +49,9 @@ const AmenitiesPage = ({ listing, values, setFieldValue, handleChange, handleBlu
   }
 
   return (
-    <Wrapper>
-      <Helmet title="Listing Intro - Spacenow - Steps - Details - Amenities" />
-      <form>
+    <form>
+      <Wrapper>
+        <Helmet title="Listing Intro - Spacenow - Steps - Details - Amenities" />
         <Box display="grid" gridGap="30px">
           {loadingAmenities && <Loader text="Loading listing process" />}
           {!loadingAmenities && (
@@ -94,8 +94,8 @@ const AmenitiesPage = ({ listing, values, setFieldValue, handleChange, handleBlu
             onClick: _handleNext
           }}
         />
-      </form>
-    </Wrapper>
+      </Wrapper>
+    </form>
   )
 }
 
