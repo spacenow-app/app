@@ -21,6 +21,7 @@ import { capitalize, toPlural } from 'utils/strings'
 import { format } from 'date-fns'
 
 import { onCreateMessage } from 'redux/ducks/message'
+import { onCreateInspection } from 'redux/ducks/inspection'
 
 const StepOne = styled(Box)``
 
@@ -70,7 +71,7 @@ const InspectionForm = ({
 }) => {
   const [dayPicker, setDayPicker] = useState('')
   const [stepOne, setStepOne] = useState(true)
-  const  {object: message}  = useSelector(state => state.message.create)
+  const { object: message } = useSelector(state => state.message.create)
   const { isAuthenticated } = useSelector(state => state.auth)
 
   useEffect(() => {
@@ -78,7 +79,17 @@ const InspectionForm = ({
   }, [date, startTime]) // eslint-disable-line react-hooks/exhaustive-deps
 
   useEffect(() => {
-    if (message && message.id) setStepOne(false)
+    if (message && message.id && date && startTime) {
+      setStepOne(false)
+      const valuesInspection = {
+        listingId: listing.id,
+        messageId: message.id,
+        guestId: user.id,
+        date,
+        time: startTime
+      }
+      dispatch(onCreateInspection(valuesInspection))
+    }
   }, [message])
 
   if (!isAuthenticated) {
