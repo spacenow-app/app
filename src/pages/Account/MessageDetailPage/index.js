@@ -61,7 +61,7 @@ const MessageDetailPage = ({ match, location, history, ...props }) => {
         .then(res => console.log(res))
         .catch(err => console.log(err))
       dispatch(onUpdateInspection(match.params.id, 'canceled'))
-      match && match.params && dispatch(onGetMessageItems({ id: match.params.id, pageIndex: 0, pageSize }))
+      // match && match.params && dispatch(onGetMessageItems({ id: match.params.id, pageIndex: 0, pageSize }))
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [match])
