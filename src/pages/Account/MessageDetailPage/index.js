@@ -60,8 +60,8 @@ const MessageDetailPage = ({ match, location, history, ...props }) => {
       fetch(`https://api-emails${config.domain}/email/message/${match.params.id}/inspection/cancel`)
         .then(res => console.log(res))
         .catch(err => console.log(err))
-      match && match.params && dispatch(onGetMessageItems({ id: match.params.id, pageIndex: 0, pageSize }))
       dispatch(onUpdateInspection(match.params.id, 'canceled'))
+      match && match.params && dispatch(onGetMessageItems({ id: match.params.id, pageIndex: 0, pageSize }))
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [match])
