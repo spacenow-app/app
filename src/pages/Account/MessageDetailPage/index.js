@@ -10,6 +10,7 @@ import { toast } from 'react-toastify'
 import config from 'variables/config'
 
 import { onGetMessage, onCreateMessageItem, onReadMessage, onGetMessageItems } from 'redux/ducks/message'
+import { onUpdateInspection } from 'redux/ducks/inspection'
 
 const CellStyled = styled(Cell)`
   display: grid;
@@ -46,7 +47,6 @@ const MessageDetailPage = ({ match, location, history, ...props }) => {
 
   const queryParams = queryString.parse(location.search)
   const pageSize = 5
-
   useEffect(() => {
     match && match.params && user && dispatch(onReadMessage(match.params.id, user.id))
     match && match.params && dispatch(onGetMessage(match.params.id))
@@ -55,12 +55,12 @@ const MessageDetailPage = ({ match, location, history, ...props }) => {
 
   useEffect(() => {
     if (queryParams && queryParams.a && queryParams.a === 'cancel-inspection') {
-      toast.error('Your inspection request has been cancelled')
-      // Todo: call from backend when new inspections table implemented
+      toast.error('Your inspection request has been canceled')
+      // Todo: call from backend
       fetch(`https://api-emails${config.domain}/email/message/${match.params.id}/inspection/cancel`)
         .then(res => console.log(res))
         .catch(err => console.log(err))
-      queryParams.a = 'cancelled'
+      dispatch(onUpdateInspection(match.params.id, 'canceled'))
       match && match.params && dispatch(onGetMessageItems({ id: match.params.id, pageIndex: 0, pageSize }))
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -142,27 +142,27 @@ const MessageDetailPage = ({ match, location, history, ...props }) => {
       {isItemsLoading ? (
         <Loader />
       ) : (
-        <Box
-          overflow="auto"
-          gridColumn={3}
-          gridRow={2}
-          height="500px"
-          onScroll={_handleScroll}
-          ref={e => setScroller(e)}
-        >
-          {messageItems &&
-            messageItems.rows.map((item, i) => (
-              <MessageDetailCard
-                item={item}
-                key={item.id}
-                user={user}
-                count={messageItems.rows.length}
-                index={i}
-                messageParent={messageItems.messageParent}
-              />
-            ))}
-        </Box>
-      )}
+          <Box
+            overflow="auto"
+            gridColumn={3}
+            gridRow={2}
+            height="500px"
+            onScroll={_handleScroll}
+            ref={e => setScroller(e)}
+          >
+            {messageItems &&
+              messageItems.rows.map((item, i) => (
+                <MessageDetailCard
+                  item={item}
+                  key={item.id}
+                  user={user}
+                  count={messageItems.rows.length}
+                  index={i}
+                  messageParent={messageItems.messageParent}
+                />
+              ))}
+          </Box>
+        )}
     </>
   )
 }
