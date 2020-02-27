@@ -27,7 +27,7 @@ const CancellationPage = ({ listing, steps, values, setFieldValue, handleBlur, .
 
   useEffect(() => {
     props.setFatherValues({ ...values })
-  }, [props.setFatherValues, values])
+  }, [props, values])
 
   return (
     <form>
