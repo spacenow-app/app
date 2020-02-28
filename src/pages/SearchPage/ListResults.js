@@ -5,6 +5,7 @@ import { Box, Text, Icon, Tag, Avatar, Pagination, Price, Grid } from 'component
 import { toPlural } from 'utils/strings'
 
 import { cropPicture } from 'utils/images'
+import { onCreateSavedListingByUser, onRemoveSavedListingByUser } from 'redux/ducks/listing'
 
 const Wrapper = styled.div`
   overflow-y: scroll;
@@ -94,7 +95,24 @@ const ContainerPagination = styled.div`
 `
 
 const ListResults = forwardRef(
-  ({ history, markers, onHoverItem, pagination, onPageChanged, showMap, eventSpace, ...props }, ref) => {
+  (
+    {
+      history,
+      markers,
+      onHoverItem,
+      pagination,
+      onPageChanged,
+      showMap,
+      eventSpace,
+      savedListings,
+      user,
+      dispatch,
+      isAuthenticated,
+      location,
+      ...props
+    },
+    ref
+  ) => {
     const _parseCategoryIconName = (name, isSub) => {
       const prefix = isSub ? 'sub-category-' : 'category-'
       return prefix + name.replace(/([A-Z])/g, g => `-${g[0].toLowerCase()}`)
@@ -177,6 +195,21 @@ const ListResults = forwardRef(
       return convertedAddress.replace(/\0.*$/g, '')
     }
 
+    const _handleSaveListingByUser = async (listingId, userId) => {
+      if (!isAuthenticated) {
+        history.push(`/auth/signin`, {
+          from: {
+            ...location
+          }
+        })
+      }
+      await dispatch(onCreateSavedListingByUser(listingId, userId))
+    }
+
+    const _handleRemoveSavedListingByUser = async (listingId, userId) => {
+      await dispatch(onRemoveSavedListingByUser(listingId, userId))
+    }
+
     return (
       <Wrapper ref={ref}>
         <ContainerList showMap={showMap}>
@@ -199,17 +232,7 @@ const ListResults = forwardRef(
                         onClick={() => window.open(`/space/${item.id}`)}
                       />
                       <CardContent showMap={showMap}>
-                        <Box display="flex" justifyContent="start" mb="10px">
-                          {/* <Box>
-                            <Tag
-                              small
-                              icon={
-                                <Icon width="24px" name={_parseCategoryIconName(item.category.otherItemName, false)} />
-                              }
-                            >
-                              {item.category.itemName}
-                            </Tag>
-                          </Box> */}
+                        <Box display="flex" justifyContent="space-betwee" mb="10px">
                           <Box>
                             <Tag
                               small
@@ -223,6 +246,21 @@ const ListResults = forwardRef(
                               {item.subcategory.itemName}
                             </Tag>
                           </Box>
+                          {savedListings && savedListings.find(res => res.listingId === item.id) ? (
+                            <Box
+                              onClick={() => _handleRemoveSavedListingByUser(item.id, user.id)}
+                              style={{ cursor: 'pointer' }}
+                            >
+                              <Icon name="bookmark-filled" width="30" height="30" fill="#6adc91" />
+                            </Box>
+                          ) : (
+                            <Box
+                              onClick={() => _handleSaveListingByUser(item.id, user.id)}
+                              style={{ cursor: 'pointer' }}
+                            >
+                              <Icon name="bookmark" width="30" height="30" />
+                            </Box>
+                          )}
                         </Box>
                         <Box>
                           <CardTitle onClick={() => window.open(`/space/${item.id}`)}>{item.title}</CardTitle>
@@ -280,17 +318,7 @@ const ListResults = forwardRef(
                       onClick={() => window.open(`/space/${item.id}`)}
                     />
                     <CardContent showMap={showMap}>
-                      <Box display="flex" justifyContent="start" mb="10px">
-                        {/* <Box>
-                          <Tag
-                            small
-                            icon={
-                              <Icon width="24px" name={_parseCategoryIconName(item.category.otherItemName, false)} />
-                            }
-                          >
-                            {item.category.itemName}
-                          </Tag>
-                        </Box> */}
+                      <Box display="flex" justifyContent="space-between" mb="10px">
                         <Box>
                           <Tag
                             small
@@ -301,6 +329,18 @@ const ListResults = forwardRef(
                             {item.subcategory.itemName}
                           </Tag>
                         </Box>
+                        {savedListings && savedListings.find(res => res.listingId === item.id) ? (
+                          <Box
+                            onClick={() => _handleRemoveSavedListingByUser(item.id, user.id)}
+                            style={{ cursor: 'pointer' }}
+                          >
+                            <Icon name="bookmark-filled" width="30" height="30" fill="#6adc91" />
+                          </Box>
+                        ) : (
+                          <Box onClick={() => _handleSaveListingByUser(item.id, user.id)} style={{ cursor: 'pointer' }}>
+                            <Icon name="bookmark" width="30" height="30" />
+                          </Box>
+                        )}
                       </Box>
                       <Box>
                         <CardTitle onClick={() => window.open(`/space/${item.id}`)}>{item.title}</CardTitle>
@@ -371,7 +411,12 @@ ListResults.propTypes = {
   onHoverItem: PropTypes.instanceOf(Object).isRequired,
   onPageChanged: PropTypes.instanceOf(Object).isRequired,
   showMap: PropTypes.bool.isRequired,
-  eventSpace: PropTypes.bool // TODO: Remove when include again health and creative spaces in event search
+  eventSpace: PropTypes.bool, // TODO: Remove when include again health and creative spaces in event search
+  savedListings: PropTypes.instanceOf(Object),
+  user: PropTypes.instanceOf(Object),
+  dispatch: PropTypes.any,
+  isAuthenticated: PropTypes.bool,
+  location: PropTypes.instanceOf(Object)
 }
 
 export default memo(ListResults, comparisonFn)

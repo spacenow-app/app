@@ -6,6 +6,7 @@ import errToMsg from 'utils/errToMsg'
 import { monthNames } from 'variables'
 import { camalize, isPositiveInt } from 'utils/strings'
 import { toast } from 'react-toastify'
+import _ from 'lodash'
 
 // Actions
 export const Types = {
@@ -54,7 +55,19 @@ export const Types = {
   LISTING_GET_VIDEO_FAILURE: 'LISTING_GET_VIDEO_FAILURE',
   SAVE_LISTING_BY_CLICK_START: 'SAVE_LISTING_BY_CLICK_START',
   SAVE_LISTING_BY_CLICK_SUCCESS: 'SAVE_LISTING_BY_CLICK_SUCCESS',
-  SAVE_LISTING_BY_CLICK_FAILURE: 'SAVE_LISTING_BY_CLICK_FAILURE'
+  SAVE_LISTING_BY_CLICK_FAILURE: 'SAVE_LISTING_BY_CLICK_FAILURE',
+  CREATE_SAVED_LISTING_BY_USER_START: 'CREATE_SAVED_LISTING_BY_USER_START',
+  CREATE_SAVED_LISTING_BY_USER_SUCCESS: 'CREATE_SAVED_LISTING_BY_USER_SUCCESS',
+  CREATE_SAVED_LISTING_BY_USER_FAILURE: 'CREATE_SAVED_LISTING_BY_USER_FAILURE',
+  REMOVE_SAVED_LISTING_BY_USER_START: 'REMOVE_SAVED_LISTING_BY_USER_START',
+  REMOVE_SAVED_LISTING_BY_USER_SUCCESS: 'REMOVE_SAVED_LISTING_BY_USER_SUCCESS',
+  REMOVE_SAVED_LISTING_BY_USER_FAILURE: 'REMOVE_SAVED_LISTING_BY_USER_FAILURE',
+  GET_SAVED_LISTING_BY_USER_START: 'GET_SAVED_LISTING_BY_USER_START',
+  GET_SAVED_LISTING_BY_USER_SUCCESS: 'GET_SAVED_LISTING_BY_USER_SUCCESS',
+  GET_SAVED_LISTING_BY_USER_FAILURE: 'GET_SAVED_LISTING_BY_USER_FAILURE',
+  CHECK_SAVED_LISTING_BY_USER_START: 'CHECK_SAVED_LISTING_BY_USER_START',
+  CHECK_SAVED_LISTING_BY_USER_SUCCESS: 'CHECK_SAVED_LISTING_BY_USER_SUCCESS',
+  CHECK_SAVED_LISTING_BY_USER_FAILURE: 'CHECK_SAVED_LISTING_BY_USER_FAILURE'
 }
 
 // Initial State
@@ -129,6 +142,14 @@ const initialState = {
   listingClicks: {
     isLoading: false,
     clicks: 0,
+    error: null
+  },
+  savedListings: {
+    isLoading: false,
+    saved: false,
+    listings: [],
+    create: {},
+    remove: null,
     error: null
   }
 }
@@ -538,6 +559,87 @@ const mutationSaveClicksByListing = gql`
   mutation saveClicksByListing($listingId: Int!) {
     saveClicksByListing(listingId: $listingId) {
       totalClicks
+    }
+  }
+`
+
+const mutationCreateSavedListingByUser = gql`
+  mutation createSavedListing($listingId: Int!, $userId: String!) {
+    createSavedListing(listingId: $listingId, userId: $userId) {
+      userId
+      listingId
+    }
+  }
+`
+
+const mutationRemoveSavedListingByUser = gql`
+  mutation removeSavedListingByUser($listingId: Int!, $userId: String!) {
+    removeSavedListingByUser(listingId: $listingId, userId: $userId) {
+      userId
+      listingId
+    }
+  }
+`
+
+const queryGetSavedListingsByUser = gql`
+  query getSavedListingsByUser($userId: String!) {
+    getSavedListingsByUser(userId: $userId) {
+      userId
+      listingId
+      listing {
+        id
+        title
+        isPublished
+        isReady
+        quantity
+        status
+        amenities {
+          id
+          settingsData {
+            id
+            itemName
+            otherItemName
+          }
+        }
+        listingData {
+          id
+          basePrice
+          bookingType
+        }
+        location {
+          id
+          address1
+          city
+          state
+        }
+        photos {
+          id
+          name
+          isCover
+        }
+        settingsParent {
+          id
+          category {
+            id
+            itemName
+            otherItemName
+          }
+          subcategory {
+            id
+            itemName
+            otherItemName
+          }
+        }
+      }
+    }
+  }
+`
+
+const mutationCheckSavedListingByUser = gql`
+  mutation checkSavedListingByUser($listingId: Int!, $userId: String!) {
+    checkSavedListingByUser(listingId: $listingId, userId: $userId) {
+      userId
+      listingId
     }
   }
 `
@@ -999,6 +1101,118 @@ export default function reducer(state = initialState, action) {
         }
       }
     }
+    case Types.CREATE_SAVED_LISTING_BY_USER_START: {
+      return {
+        ...state,
+        savedListings: {
+          ...state.savedListings,
+          isLoading: true,
+          error: null
+        }
+      }
+    }
+    case Types.CREATE_SAVED_LISTING_BY_USER_SUCCESS: {
+      return {
+        ...state,
+        savedListings: {
+          ...state.savedListings,
+          isLoading: false,
+          listings: _.concat(state.savedListings.listings, action.payload)
+        }
+      }
+    }
+    case Types.CREATE_SAVED_LISTING_BY_USER_FAILURE: {
+      return {
+        ...state,
+        savedListings: {
+          isLoading: false,
+          error: action.payload
+        }
+      }
+    }
+    case Types.REMOVE_SAVED_LISTING_BY_USER_START: {
+      return {
+        ...state,
+        savedListings: {
+          ...state.savedListings,
+          isLoading: false,
+          create: action.payload
+        }
+      }
+    }
+    case Types.REMOVE_SAVED_LISTING_BY_USER_SUCCESS: {
+      return {
+        ...state,
+        savedListings: {
+          ...state.savedListings,
+          isLoading: false,
+          listings: state.savedListings.listings.filter(res => res.listingId !== action.payload.listingId)
+        }
+      }
+    }
+    case Types.REMOVE_SAVED_LISTING_BY_USER_FAILURE: {
+      return {
+        ...state,
+        savedListings: {
+          isLoading: false,
+          error: action.payload
+        }
+      }
+    }
+    case Types.GET_SAVED_LISTING_BY_USER_START: {
+      return {
+        ...state,
+        savedListings: {
+          isLoading: true,
+          error: null
+        }
+      }
+    }
+    case Types.GET_SAVED_LISTING_BY_USER_SUCCESS: {
+      return {
+        ...state,
+        savedListings: {
+          isLoading: false,
+          listings: action.payload
+        }
+      }
+    }
+    case Types.GET_SAVED_LISTING_BY_USER_FAILURE: {
+      return {
+        ...state,
+        savedListings: {
+          isLoading: false,
+          error: action.payload
+        }
+      }
+    }
+    case Types.CHECK_SAVED_LISTING_BY_USER_START: {
+      return {
+        ...state,
+        savedListings: {
+          isLoading: true,
+          error: null
+        }
+      }
+    }
+    case Types.CHECK_SAVED_LISTING_BY_USER_SUCCESS: {
+      return {
+        ...state,
+        savedListings: {
+          isLoading: false,
+          saved: action.payload
+        }
+      }
+    }
+    case Types.CHECK_SAVED_LISTING_BY_USER_FAILURE: {
+      return {
+        ...state,
+        savedListings: {
+          isLoading: false,
+          error: action.payload
+        }
+      }
+    }
     default:
       return state
   }
@@ -1302,5 +1516,57 @@ export const onSaveClicksByListing = (listingId, link) => async dispatch => {
     window.location.href = `${link}`
   } catch (err) {
     dispatch({ type: Types.SAVE_LISTING_BY_CLICK_FAILURE, payload: errToMsg(err) })
+  }
+}
+
+export const onCreateSavedListingByUser = (listingId, userId) => async dispatch => {
+  dispatch({ type: Types.CREATE_SAVED_LISTING_BY_USER_START })
+  try {
+    const { data } = await getClient(dispatch).mutate({
+      mutation: mutationCreateSavedListingByUser,
+      variables: { listingId: parseInt(listingId, 10), userId }
+    })
+    dispatch({ type: Types.CREATE_SAVED_LISTING_BY_USER_SUCCESS, payload: data.createSavedListing })
+  } catch (err) {
+    dispatch({ type: Types.CREATE_SAVED_LISTING_BY_USER_FAILURE, payload: errToMsg(err) })
+  }
+}
+
+export const onRemoveSavedListingByUser = (listingId, userId) => async dispatch => {
+  dispatch({ type: Types.REMOVE_SAVED_LISTING_BY_USER_START })
+  try {
+    const { data } = await getClient(dispatch).mutate({
+      mutation: mutationRemoveSavedListingByUser,
+      variables: { listingId: parseInt(listingId, 10), userId }
+    })
+    dispatch({ type: Types.REMOVE_SAVED_LISTING_BY_USER_SUCCESS, payload: data.removeSavedListingByUser })
+  } catch (err) {
+    dispatch({ type: Types.REMOVE_SAVED_LISTING_BY_USER_FAILURE, payload: errToMsg(err) })
+  }
+}
+
+export const onGetSavedListingByUser = userId => async dispatch => {
+  dispatch({ type: Types.GET_SAVED_LISTING_BY_USER_START })
+  try {
+    const { data } = await getClient(dispatch).mutate({
+      mutation: queryGetSavedListingsByUser,
+      variables: { userId }
+    })
+    dispatch({ type: Types.GET_SAVED_LISTING_BY_USER_SUCCESS, payload: data.getSavedListingsByUser })
+  } catch (err) {
+    dispatch({ type: Types.GET_SAVED_LISTING_BY_USER_FAILURE, payload: errToMsg(err) })
+  }
+}
+
+export const onCheckSavedListingByUser = (listingId, userId) => async dispatch => {
+  dispatch({ type: Types.CHECK_SAVED_LISTING_BY_USER_START })
+  try {
+    const { data } = await getClient(dispatch).mutate({
+      mutation: mutationCheckSavedListingByUser,
+      variables: { listingId: parseInt(listingId, 10), userId }
+    })
+    dispatch({ type: Types.CHECK_SAVED_LISTING_BY_USER_SUCCESS, payload: data.checkSavedListingByUser })
+  } catch (err) {
+    dispatch({ type: Types.CHECK_SAVED_LISTING_BY_USER_FAILURE, payload: errToMsg(err) })
   }
 }

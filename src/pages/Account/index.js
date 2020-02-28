@@ -6,5 +6,16 @@ import DocumentVerificationPage from './DocumentVerificationPage'
 import MessagePage from './MessagePage'
 import MessageDetailPage from './MessageDetailPage'
 import NotificationPage from './NotificationPage'
+import SavedListingPage from './SavedListingPage'
 
-export { ProfilePage, PaymentPage, BookingPage, ListingPage, DocumentVerificationPage, MessagePage, MessageDetailPage, NotificationPage }
+export {
+  ProfilePage,
+  PaymentPage,
+  BookingPage,
+  ListingPage,
+  DocumentVerificationPage,
+  MessagePage,
+  MessageDetailPage,
+  NotificationPage,
+  SavedListingPage
+}
