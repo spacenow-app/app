@@ -26,6 +26,7 @@ import { Manager, Reference, Popper } from 'react-popper'
 import numeral from 'numeral'
 
 import { onSearch, onQuery } from 'redux/ducks/search'
+import { onGetSavedListingByUser } from 'redux/ducks/listing'
 
 import { cropPicture } from 'utils/images'
 
@@ -177,11 +178,18 @@ const SearchPage = ({ history, location }) => {
     shallowEqual
   )
   const isLoading = useSelector(state => state.search.isLoading)
+  const { user } = useSelector(state => state.account.get)
+  const { listings: savedListings } = useSelector(state => state.listing.savedListings)
+  const { isAuthenticated } = useSelector(state => state.auth)
 
   useLayoutEffect(() => {
     window.addEventListener('wheel', _onHandleScroll, true)
     return () => window.removeEventListener('wheel', _onHandleScroll, true)
   }, [])
+
+  useEffect(() => {
+    if (user) dispatch(onGetSavedListingByUser(user.id))
+  }, [user, dispatch])
 
   const _onHandleScroll = event => {
     event.deltaY > 0
@@ -906,6 +914,11 @@ const SearchPage = ({ history, location }) => {
           onPageChanged={_onPagionationChange}
           showMap={showMap}
           eventSpace={filterCategory.eventSpace} // TODO: Remove when include again health and creative spaces in event search
+          savedListings={savedListings}
+          user={user}
+          dispatch={dispatch}
+          isAuthenticated={isAuthenticated}
+          location={location}
         />
         {showMap && (
           <ContainerMap>
