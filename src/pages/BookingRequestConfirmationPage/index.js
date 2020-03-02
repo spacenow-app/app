@@ -34,19 +34,19 @@ const BookingRequestConfirmation = ({ match, ...props }) => {
             </Box>
             <Title type="h6" title="What happen next?" noMargin/>
             <Box display="grid">
-              <Tag icon={ <Icon width="42px" height="42px" name={`clock-booking`} fill={`#51C482`}/> } noBorder={true}><Text>Your request has been sent to the host to review and approve. If there are any changes or modifications needed to get you booking confirmed, you will be notified straight away!</Text></Tag>
-              <Tag icon={ <Icon width="42px" height="42px" name={`payment`} fill={`#51C482`}/> } noBorder={true}><Text>Once you're approved, you will receive a confirmation email with a link to pay and lock-in your booking for the requested date.</Text></Tag>
-              <Tag icon={ <Icon width="42px" height="42px" name={`confirm-with-host`} fill={`#51C482`}/> } noBorder={true}><Text>As soon as the payment has been received you're good to go! We will share the details about how to check-in + any other helpful hints, tips and notifications to do with your bookings.</Text></Tag>
+              <Tag icon={ <Icon width="42px" height="42px" name={`clock-booking`} fill={`#51C482`}/> } noBorder={true}><Text lineHeight={2}>Your request has been sent to the host to review and approve. If there are any changes or modifications needed to get you booking confirmed, you will be notified straight away!</Text></Tag>
+              <Tag icon={ <Icon width="42px" height="42px" name={`payment`} fill={`#51C482`}/> } noBorder={true}><Text lineHeight={2}>Once you're approved, you will receive a confirmation email with a link to pay and lock-in your booking for the requested date.</Text></Tag>
+              <Tag icon={ <Icon width="42px" height="42px" name={`confirm-with-host`} fill={`#51C482`}/> } noBorder={true} lineHeight={2}><Text>As soon as the payment has been received you're good to go! We will share the details about how to check-in + any other helpful hints, tips and notifications to do with your bookings.</Text></Tag>
             </Box>
             <Title type="h6" title="Need help?" noMargin/>
-            <Box display="grid" gridGap="30px" gridAutoFlow="column" gridAutoColumns="max-content" >
+            <Box display="grid" gridGap="30px" gridAutoFlow={{ _: 'row', medium: 'column' }} gridAutoColumns="max-content" >
               <Tag><Link to={`https://spacenow.com/help/`} style={{padding: "10px 30px"}}>FAQ</Link></Tag>
               <Tag><Link to={`https://spacenow.com/contact-us/`} style={{padding: "10px 30px"}}>Contact our helpful support team</Link></Tag>
             </Box>
           </Box>
         </Box>
       </Box>
-      <Box display="grid">
+      <Box display="grid" gridGap="30px">
         <Box display="grid" style={{justifyItems: "end", height: "max-content"}}>
           <Tag><Link to={`/search`}>Back to search</Link></Tag>
         </Box>
