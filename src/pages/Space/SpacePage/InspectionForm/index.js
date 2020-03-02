@@ -67,7 +67,8 @@ const InspectionForm = ({
   values,
   handleChange,
   dispatch,
-  history
+  history,
+  setVisitRequest
 }) => {
   const [dayPicker, setDayPicker] = useState('')
   const [stepOne, setStepOne] = useState(true)
@@ -137,7 +138,7 @@ const InspectionForm = ({
 
   return (
     <>
-      {stepOne && (
+      {stepOne &&
         <StepOne>
           <Title type="h7" weight="Montserrat-Medium" title="Request a site visit" noMargin subtitle="" />
           <Box mt="10px"></Box>
@@ -210,33 +211,40 @@ const InspectionForm = ({
             <Box textAlign="center" lineHeight="1.3">
               <Text fontSize="11px" color="#172439">
                 The Spacenow team will contact you as soon as the visit has been confirmed with the host.
-              </Text>
+              </Text><br />
+              <Text fontSize="11px" color="#172439" style={{ textDecoration: "underline", cursor: "pointer" }}
+                onClick={() => setVisitRequest(false)}>Go back to booking</Text>
             </Box>
           </Grid>
         </StepOne>
-      )}
-      {!stepOne && (
-        <StepTwo>
-          <Title type="h4" weight="Montserrat-SemiBold" noMargin title="Thank you, your request has been received." />
-          <Title type="h7" weight="Montserrat-Medium" title="Request details" />
-          <Grid columns={1} rowGap="12px" style={{ fontSize: '12px' }}>
-            <Cell width={1}>
-              <Icon name="calendar" width="20px" background="white" /> Date{' '}
-              <Text fontFamily="Montserrat-Bold">{format(date, 'EEEE d/MM/yyyy')}</Text>
-            </Cell>
-            <Cell width={1}>
-              <Icon name="clock-bgwhite" width="20px" fill="#6adc91" /> Time{' '}
-              <Text fontFamily="Montserrat-Bold">{startTime}</Text>
-            </Cell>
-            <Cell width={1}>
-              <Icon name="pin-bgwhite" fill="#6adc91" width="20px" /> Address line 1, {location}
-            </Cell>
-          </Grid>
-          <Box mt="40px" lineHeight="1.3">
-            <Text fontSize="12px">Please keep an eye out for the confirmation email from the Spacenow team.</Text>
-          </Box>
-        </StepTwo>
-      )}
+
+      }
+      {
+        !stepOne && (
+          <StepTwo>
+            <Title type="h4" weight="Montserrat-SemiBold" noMargin title="Thank you, your request has been received." />
+            <Title type="h7" weight="Montserrat-Medium" title="Request details" />
+            <Grid columns={1} rowGap="12px" style={{ fontSize: '12px' }}>
+              <Cell width={1}>
+                <Icon name="calendar" width="20px" background="white" /> Date{' '}
+                <Text fontFamily="Montserrat-Bold">{format(date, 'EEEE d/MM/yyyy')}</Text>
+              </Cell>
+              <Cell width={1}>
+                <Icon name="clock-bgwhite" width="20px" fill="#6adc91" /> Time{' '}
+                <Text fontFamily="Montserrat-Bold">{startTime}</Text>
+              </Cell>
+              <Cell width={1}>
+                <Icon name="pin-bgwhite" fill="#6adc91" width="20px" /> Address line 1, {location}
+              </Cell>
+            </Grid>
+            <Box mt="40px" lineHeight="1.3">
+              <Text fontSize="12px">Please keep an eye out for the confirmation email from the Spacenow team.</Text><br />
+              <Text fontSize="11px" color="#172439" style={{ textDecoration: "underline", cursor: "pointer" }}
+                onClick={() => setVisitRequest(false)}>Go back to booking</Text>
+            </Box>
+          </StepTwo>
+        )
+      }
     </>
   )
 }
