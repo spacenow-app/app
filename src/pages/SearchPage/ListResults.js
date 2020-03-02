@@ -204,10 +204,8 @@ const ListResults = forwardRef(
           }
         })
       }
-      // let link = `<div>Listing saved to your account - <div><input class="input-small" value="textbox"/><a href="http://johnpapa.net" target="_blank"> click here </a>to view your saved properties</div>`
       await dispatch(onCreateSavedListingByUser(listingId, userId))
-      toast.success('Listing saved to your account - go to your dashboard to see it')
-
+      toast.success('Listing saved to your account - go to your dashboard to see it!')
     }
 
     const _handleRemoveSavedListingByUser = async (listingId, userId) => {
