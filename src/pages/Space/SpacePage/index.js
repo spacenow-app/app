@@ -323,7 +323,7 @@ const SpacePage = ({ match, location, history, ...props }) => {
     const { city = '', zipcode = '', state = '', country = '' } = address
     const convertedAddress = `${city ? `${city}, ` : ''} ${zipcode ? `${zipcode}, ` : ''} ${
       state ? `${state}, ` : ''
-      } ${country ? `${country}` : ''}`
+    } ${country ? `${country}` : ''}`
     return convertedAddress.replace(/\0.*$/g, '')
   }
 
@@ -445,11 +445,11 @@ const SpacePage = ({ match, location, history, ...props }) => {
   const _convertedArrayPhotos = array => {
     return array.filter(el => el !== undefined).length > 0
       ? array
-        .filter(el => el !== undefined)
-        .map(el => ({
-          source: cropPicture(el.name, 800, 500),
-          isCover: el.isCover
-        }))
+          .filter(el => el !== undefined)
+          .map(el => ({
+            source: cropPicture(el.name, 800, 500),
+            isCover: el.isCover
+          }))
       : []
   }
 
@@ -917,9 +917,10 @@ const SpacePage = ({ match, location, history, ...props }) => {
           ...location
         }
       })
+    } else {
+      await dispatch(onCreateSavedListingByUser(listingId, userId))
+      toast.success('Listing saved to your account - go to your dashboard to see it!')
     }
-    await dispatch(onCreateSavedListingByUser(listingId, userId))
-    toast.success('Listing saved to your account - go to your dashboard to see it!')
   }
 
   const _handleRemoveSavedListingByUser = async (listingId, userId) => {
@@ -929,14 +930,14 @@ const SpacePage = ({ match, location, history, ...props }) => {
   return (
     <>
       {imageHeight == 325 ||
-        (listing.photos.length > 1 &&
-          listing.settingsParent.category.otherItemName !== 'parking' &&
-          listing.settingsParent.category.otherItemName !== 'storage' &&
-          listing.user.provider !== 'external') ? (
-          <Box mb="30px">
-            <CarouselListing photos={_convertedArrayPhotos(listing.photos)} />
-          </Box>
-        ) : null}
+      (listing.photos.length > 1 &&
+        listing.settingsParent.category.otherItemName !== 'parking' &&
+        listing.settingsParent.category.otherItemName !== 'storage' &&
+        listing.user.provider !== 'external') ? (
+        <Box mb="30px">
+          <CarouselListing photos={_convertedArrayPhotos(listing.photos)} />
+        </Box>
+      ) : null}
       <Wrapper>
         <Helmet
           title={`${listing.title} | ${listing.settingsParent.category.itemName} | ${_getSuburb(
@@ -948,10 +949,10 @@ const SpacePage = ({ match, location, history, ...props }) => {
             content={`Find the perfect space for ${listing.settingsParent.category.itemName} in ${_getSuburb(
               listing.location
             )}. ${listing.listingData.description &&
-            _formatDescription(listing.listingData.description).substring(
-              0,
-              160 - (listing.settingsParent.category.itemName.length + _getSuburb(listing.location).length + 30)
-            )}`}
+              _formatDescription(listing.listingData.description).substring(
+                0,
+                160 - (listing.settingsParent.category.itemName.length + _getSuburb(listing.location).length + 30)
+              )}`}
           />
         </Helmet>
         {listing.user.provider === 'external' && imageHeight !== 325 && (
@@ -969,11 +970,11 @@ const SpacePage = ({ match, location, history, ...props }) => {
                 imageHeight !== 325 && <CarouselListing photos={_convertedArrayPhotos(listing.photos)} />}
 
               {imageHeight !== 325 &&
-                (listing.settingsParent.category.otherItemName === 'parking' ||
-                  listing.settingsParent.category.otherItemName === 'storage') &&
-                listing.user.provider !== 'external' ? (
-                  <Carousel photos={_convertedArrayPhotos(listing.photos)} />
-                ) : null}
+              (listing.settingsParent.category.otherItemName === 'parking' ||
+                listing.settingsParent.category.otherItemName === 'storage') &&
+              listing.user.provider !== 'external' ? (
+                <Carousel photos={_convertedArrayPhotos(listing.photos)} />
+              ) : null}
 
               <Grid columns={12}>
                 <Cell width={8} style={{ display: 'flex' }}>
@@ -1009,23 +1010,25 @@ const SpacePage = ({ match, location, history, ...props }) => {
                       gridAutoFlow="column"
                       // gridAutoFlow={{ _: 'row', medium: 'column' }}
                       alignItems="center"
-                    // justifyItems={{ _: 'end', medium: 'center' }}
+                      // justifyItems={{ _: 'end', medium: 'center' }}
                     >
                       {savedListings && savedListings.find(res => res.listingId === listing.id) ? (
                         <Box
+                          display={{ _: 'none', medium: 'block' }}
                           onClick={() => _handleRemoveSavedListingByUser(listing.id, user.id)}
-                          style={{ cursor: 'pointer' }}
+                          style={{ cursor: 'pointer', marginRight: '8px' }}
                         >
                           <Icon name="bookmark-filled" width="30" height="30" fill="#6adc91" />
                         </Box>
                       ) : (
-                          <Box
-                            onClick={() => _handleSaveListingByUser(listing.id, user.id)}
-                            style={{ cursor: 'pointer' }}
-                          >
-                            <Icon name="bookmark" width="30" height="30" />
-                          </Box>
-                        )}
+                        <Box
+                          display={{ _: 'none', medium: 'block' }}
+                          onClick={() => _handleSaveListingByUser(listing.id, user.id)}
+                          style={{ cursor: 'pointer', marginRight: '8px' }}
+                        >
+                          <Icon name="bookmark" width="30" height="30" />
+                        </Box>
+                      )}
                       <Tag>{`${capitalize(listing.listingData.bookingType)} Booking`}</Tag>
                     </Box>
                   </Cell>
@@ -1194,65 +1197,65 @@ const SpacePage = ({ match, location, history, ...props }) => {
 
               {((publicReviews && publicReviews.length > 0) ||
                 (googleReviews && googleReviews.reviews && googleReviews.reviews.length > 0)) && (
-                  <>
-                    <Box display="grid" gridTemplateColumns="200px auto" ref={reviewRef}>
-                      <Title type="h5" title={`Reviews (${_getCountReviews()})`} />
-                      <TitleStarContainer>
-                        <StarRatingComponent name="ratingOverall" value={_getRatingAvg('Overall')} editing={false} />
-                      </TitleStarContainer>
+                <>
+                  <Box display="grid" gridTemplateColumns="200px auto" ref={reviewRef}>
+                    <Title type="h5" title={`Reviews (${_getCountReviews()})`} />
+                    <TitleStarContainer>
+                      <StarRatingComponent name="ratingOverall" value={_getRatingAvg('Overall')} editing={false} />
+                    </TitleStarContainer>
+                  </Box>
+                  <ContainerMobile>
+                    <Box display="grid" gridTemplateColumns="auto 1fr auto 1fr" gridColumnGap="20px">
+                      <Label>Cleanliness</Label>
+                      <Cell style={{ alignContent: 'center', justifyContent: 'left', display: 'grid' }}>
+                        <StarRatingComponent
+                          name="ratingCleanliness"
+                          value={_getRatingAvg('Cleanliness')}
+                          editing={false}
+                        />
+                      </Cell>
+                      <Label>Value</Label>
+                      <Cell style={{ alignContent: 'center', justifyContent: 'left', display: 'grid' }}>
+                        <StarRatingComponent name="ratingValue" value={_getRatingAvg('Value')} editing={false} />
+                      </Cell>
+                      <Label>Check-in</Label>
+                      <Cell style={{ alignContent: 'center', justifyContent: 'left', display: 'grid' }}>
+                        <StarRatingComponent name="ratingCheckIn" value={_getRatingAvg('CheckIn')} editing={false} />
+                      </Cell>
+                      <Label>Location</Label>
+                      <Cell style={{ alignContent: 'center', justifyContent: 'left', display: 'grid' }}>
+                        <StarRatingComponent name="ratingLocation" value={_getRatingAvg('Location')} editing={false} />
+                      </Cell>
                     </Box>
-                    <ContainerMobile>
-                      <Box display="grid" gridTemplateColumns="auto 1fr auto 1fr" gridColumnGap="20px">
-                        <Label>Cleanliness</Label>
-                        <Cell style={{ alignContent: 'center', justifyContent: 'left', display: 'grid' }}>
-                          <StarRatingComponent
-                            name="ratingCleanliness"
-                            value={_getRatingAvg('Cleanliness')}
-                            editing={false}
-                          />
-                        </Cell>
-                        <Label>Value</Label>
-                        <Cell style={{ alignContent: 'center', justifyContent: 'left', display: 'grid' }}>
-                          <StarRatingComponent name="ratingValue" value={_getRatingAvg('Value')} editing={false} />
-                        </Cell>
-                        <Label>Check-in</Label>
-                        <Cell style={{ alignContent: 'center', justifyContent: 'left', display: 'grid' }}>
-                          <StarRatingComponent name="ratingCheckIn" value={_getRatingAvg('CheckIn')} editing={false} />
-                        </Cell>
-                        <Label>Location</Label>
-                        <Cell style={{ alignContent: 'center', justifyContent: 'left', display: 'grid' }}>
-                          <StarRatingComponent name="ratingLocation" value={_getRatingAvg('Location')} editing={false} />
-                        </Cell>
-                      </Box>
-                    </ContainerMobile>
-                    {[].concat(publicReviews, googleReviews.reviews).map((o, index) => {
-                      if (o) {
-                        if (o.__typename !== 'Review')
-                          return (
-                            <Review
-                              key={o.author_name}
-                              userName={o.author_name}
-                              userPicture={o.profile_photo_url}
-                              date={new Date(o.time * 1000)}
-                              comment={o.text}
-                              isGoogle
-                            />
-                          )
-
+                  </ContainerMobile>
+                  {[].concat(publicReviews, googleReviews.reviews).map((o, index) => {
+                    if (o) {
+                      if (o.__typename !== 'Review')
                         return (
                           <Review
-                            key={o.id}
-                            userName={o.author.profile && o.author.profile.firstName}
-                            userPicture={o.author.profile && o.author.profile.picture}
-                            date={new Date(o.createdAt)}
-                            comment={o.reviewContent}
+                            key={o.author_name}
+                            userName={o.author_name}
+                            userPicture={o.profile_photo_url}
+                            date={new Date(o.time * 1000)}
+                            comment={o.text}
+                            isGoogle
                           />
                         )
-                      }
-                      return <></>
-                    })}
-                  </>
-                )}
+
+                      return (
+                        <Review
+                          key={o.id}
+                          userName={o.author.profile && o.author.profile.firstName}
+                          userPicture={o.author.profile && o.author.profile.picture}
+                          date={new Date(o.createdAt)}
+                          comment={o.reviewContent}
+                        />
+                      )
+                    }
+                    return <></>
+                  })}
+                </>
+              )}
 
               <ContainerPagination>
                 <Pagination

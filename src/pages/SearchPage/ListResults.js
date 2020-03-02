@@ -185,8 +185,8 @@ const ListResults = forwardRef(
             </Text>
           </Box>
         ) : (
-            <></>
-          )
+          <></>
+        )
       })
     }
 
@@ -203,9 +203,10 @@ const ListResults = forwardRef(
             ...location
           }
         })
+      } else {
+        await dispatch(onCreateSavedListingByUser(listingId, userId))
+        toast.success('Listing saved to your account - go to your dashboard to see it!')
       }
-      await dispatch(onCreateSavedListingByUser(listingId, userId))
-      toast.success('Listing saved to your account - go to your dashboard to see it!')
     }
 
     const _handleRemoveSavedListingByUser = async (listingId, userId) => {
@@ -256,13 +257,13 @@ const ListResults = forwardRef(
                               <Icon name="bookmark-filled" width="30" height="30" fill="#6adc91" />
                             </Box>
                           ) : (
-                              <Box
-                                onClick={() => _handleSaveListingByUser(item.id, user.id)}
-                                style={{ cursor: 'pointer' }}
-                              >
-                                <Icon name="bookmark" width="30" height="30" />
-                              </Box>
-                            )}
+                            <Box
+                              onClick={() => _handleSaveListingByUser(item.id, user.id)}
+                              style={{ cursor: 'pointer' }}
+                            >
+                              <Icon name="bookmark" width="30" height="30" />
+                            </Box>
+                          )}
                         </Box>
                         <Box>
                           <CardTitle onClick={() => window.open(`/space/${item.id}`)}>{item.title}</CardTitle>
@@ -339,10 +340,10 @@ const ListResults = forwardRef(
                             <Icon name="bookmark-filled" width="30" height="30" fill="#6adc91" />
                           </Box>
                         ) : (
-                            <Box onClick={() => _handleSaveListingByUser(item.id, user.id)} style={{ cursor: 'pointer' }}>
-                              <Icon name="bookmark" width="30" height="30" />
-                            </Box>
-                          )}
+                          <Box onClick={() => _handleSaveListingByUser(item.id, user.id)} style={{ cursor: 'pointer' }}>
+                            <Icon name="bookmark" width="30" height="30" />
+                          </Box>
+                        )}
                       </Box>
                       <Box>
                         <CardTitle onClick={() => window.open(`/space/${item.id}`)}>{item.title}</CardTitle>
