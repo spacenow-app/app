@@ -59,7 +59,7 @@ const StepPage = ({ listing, steps, ...props }) => {
         <Box display="grid" justifyItems="end">
           <Button
             disabled={steps && steps.completed !== 100}
-            onClick={() => props.history.push(`/setup-process/view/${listing.id}`)}
+            onClick={() => props.history.push(`/view/${listing.id}`)}
             >
             Preview
           </Button>
