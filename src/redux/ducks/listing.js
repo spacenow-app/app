@@ -1172,6 +1172,7 @@ export default function reducer(state = initialState, action) {
       return {
         ...state,
         savedListings: {
+          ...state.savedListings,
           isLoading: false,
           listings: action.payload
         }
@@ -1548,9 +1549,10 @@ export const onRemoveSavedListingByUser = (listingId, userId) => async dispatch 
 export const onGetSavedListingByUser = userId => async dispatch => {
   dispatch({ type: Types.GET_SAVED_LISTING_BY_USER_START })
   try {
-    const { data } = await getClient(dispatch).mutate({
-      mutation: queryGetSavedListingsByUser,
-      variables: { userId }
+    const { data } = await getClient(dispatch).query({
+      query: queryGetSavedListingsByUser,
+      variables: { userId },
+      fetchPolicy: 'network-only'
     })
     dispatch({ type: Types.GET_SAVED_LISTING_BY_USER_SUCCESS, payload: data.getSavedListingsByUser })
   } catch (err) {

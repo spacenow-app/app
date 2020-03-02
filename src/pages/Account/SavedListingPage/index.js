@@ -105,10 +105,10 @@ const SavedListingPage = ({ ...props }) => {
       {!listings || listings.length === 0 ? (
         <BackgroundImage text="We didn't find any listings :(" />
       ) : (
-        <Grid columns={1} rowGap="30px">
-          {listings.map((item, index) => ListingCard(dispatch, item.listing, index, user))}
-        </Grid>
-      )}
+          listings && <Grid columns={1} rowGap="30px">
+            {listings.map((item, index) => ListingCard(dispatch, item.listing, index, user))}
+          </Grid>
+        )}
     </>
   )
 }

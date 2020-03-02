@@ -3,6 +3,7 @@ import PropTypes from 'prop-types'
 import styled from 'styled-components'
 import { Box, Text, Icon, Tag, Avatar, Pagination, Price, Grid } from 'components'
 import { toPlural } from 'utils/strings'
+import { toast } from 'react-toastify'
 
 import { cropPicture } from 'utils/images'
 import { onCreateSavedListingByUser, onRemoveSavedListingByUser } from 'redux/ducks/listing'
@@ -184,8 +185,8 @@ const ListResults = forwardRef(
             </Text>
           </Box>
         ) : (
-          <></>
-        )
+            <></>
+          )
       })
     }
 
@@ -203,7 +204,10 @@ const ListResults = forwardRef(
           }
         })
       }
+      // let link = `<div>Listing saved to your account - <div><input class="input-small" value="textbox"/><a href="http://johnpapa.net" target="_blank"> click here </a>to view your saved properties</div>`
       await dispatch(onCreateSavedListingByUser(listingId, userId))
+      toast.success('Listing saved to your account - go to your dashboard to see it')
+
     }
 
     const _handleRemoveSavedListingByUser = async (listingId, userId) => {
@@ -254,13 +258,13 @@ const ListResults = forwardRef(
                               <Icon name="bookmark-filled" width="30" height="30" fill="#6adc91" />
                             </Box>
                           ) : (
-                            <Box
-                              onClick={() => _handleSaveListingByUser(item.id, user.id)}
-                              style={{ cursor: 'pointer' }}
-                            >
-                              <Icon name="bookmark" width="30" height="30" />
-                            </Box>
-                          )}
+                              <Box
+                                onClick={() => _handleSaveListingByUser(item.id, user.id)}
+                                style={{ cursor: 'pointer' }}
+                              >
+                                <Icon name="bookmark" width="30" height="30" />
+                              </Box>
+                            )}
                         </Box>
                         <Box>
                           <CardTitle onClick={() => window.open(`/space/${item.id}`)}>{item.title}</CardTitle>
@@ -337,10 +341,10 @@ const ListResults = forwardRef(
                             <Icon name="bookmark-filled" width="30" height="30" fill="#6adc91" />
                           </Box>
                         ) : (
-                          <Box onClick={() => _handleSaveListingByUser(item.id, user.id)} style={{ cursor: 'pointer' }}>
-                            <Icon name="bookmark" width="30" height="30" />
-                          </Box>
-                        )}
+                            <Box onClick={() => _handleSaveListingByUser(item.id, user.id)} style={{ cursor: 'pointer' }}>
+                              <Icon name="bookmark" width="30" height="30" />
+                            </Box>
+                          )}
                       </Box>
                       <Box>
                         <CardTitle onClick={() => window.open(`/space/${item.id}`)}>{item.title}</CardTitle>

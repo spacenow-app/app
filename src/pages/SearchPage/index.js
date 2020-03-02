@@ -191,6 +191,10 @@ const SearchPage = ({ history, location }) => {
     if (user) dispatch(onGetSavedListingByUser(user.id))
   }, [user, dispatch])
 
+  useEffect(() => {
+    return () => { dispatch(onGetSavedListingByUser(user.id)) }
+  }, [dispatch, user]);
+
   const _onHandleScroll = event => {
     event.deltaY > 0
       ? (refResults.current.scrollTop = refResults.current.scrollTop + event.deltaY)
