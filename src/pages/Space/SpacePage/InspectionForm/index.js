@@ -213,7 +213,7 @@ const InspectionForm = ({
                 The Spacenow team will contact you as soon as the visit has been confirmed with the host.
               </Text><br />
               <Text fontSize="11px" color="#172439" style={{ textDecoration: "underline", cursor: "pointer" }}
-                onClick={() => setVisitRequest(false)}>Go back to booking</Text>
+                onClick={() => setVisitRequest(false)}>Go back to book</Text>
             </Box>
           </Grid>
         </StepOne>
@@ -240,7 +240,7 @@ const InspectionForm = ({
             <Box mt="40px" lineHeight="1.3">
               <Text fontSize="12px">Please keep an eye out for the confirmation email from the Spacenow team.</Text><br />
               <Text fontSize="11px" color="#172439" style={{ textDecoration: "underline", cursor: "pointer" }}
-                onClick={() => setVisitRequest(false)}>Go back to booking</Text>
+                onClick={() => setVisitRequest(false)}>Go back to book</Text>
             </Box>
           </StepTwo>
         )
