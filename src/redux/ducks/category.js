@@ -1,13 +1,15 @@
 import { gql } from 'apollo-boost'
 
 import { getClientWithAuth } from 'graphql/apolloClient'
-import errToMsg from 'utils/errToMsg'
 
 // Actions
 export const Types = {
   GET_ALL_CATEGORIES_START: 'GET_ALL_CATEGORIES_START',
   GET_ALL_CATEGORIES_SUCCESS: 'GET_ALL_CATEGORIES_SUCCESS',
-  GET_ALL_CATEGORIES_ERROR: 'GET_ALL_CATEGORIES_ERROR'
+  GET_ALL_CATEGORIES_ERROR: 'GET_ALL_CATEGORIES_ERROR',
+  GET_ALL_CATEGORY_ACTIVITIES_START: 'GET_ALL_CATEGORY_ACTIVITIES_START',
+  GET_ALL_CATEGORY_ACTIVITIES_SUCCESS: 'GET_ALL_CATEGORY_ACTIVITIES_SUCCESS',
+  GET_ALL_CATEGORY_ACTIVITIES_ERROR: 'GET_ALL_CATEGORY_ACTIVITIES_ERROR'
 }
 
 // Initial State
@@ -20,6 +22,11 @@ const initialState = {
     categories: []
   },
   categories: {
+    object: [],
+    isLoading: true,
+    error: null
+  },
+  activities: {
     object: [],
     isLoading: true,
     error: null
@@ -48,6 +55,15 @@ const queryGetAllCategories = gql`
           monthly
         }
       }
+    }
+  }
+`
+const queryGetCategoryActivities = gql`
+  query getCategoryActivities($id: Int!) {
+    getCategoryActivities(id: $id) {
+      id
+      itemName
+      otherItemName
     }
   }
 `
@@ -82,40 +98,64 @@ export default function reducer(state = initialState, action) {
         }
       }
     }
+    case Types.GET_ALL_CATEGORY_ACTIVITIES_START: {
+      return {
+        ...state,
+        activities: {
+          ...state.activities,
+          isLoading: true,
+          error: null
+        }
+      }
+    }
+    case Types.GET_ALL_CATEGORY_ACTIVITIES_SUCCESS: {
+      return {
+        ...state,
+        activities: {
+          ...state.activities,
+          isLoading: false,
+          object: action.payload
+        }
+      }
+    }
+    case Types.GET_ALL_CATEGORY_ACTIVITIES_ERROR: {
+      return {
+        ...state,
+        activities: {
+          ...state.activities,
+          isLoading: false,
+          error: action.payload
+        }
+      }
+    }
     default:
       return state
   }
 }
 
-// Action Creators
-const getAllCategoriesStart = () => {
-  return { type: Types.GET_ALL_CATEGORIES_START }
-}
-
-const getAllCategoriesSuccess = categoriesResponse => {
-  return {
-    type: Types.GET_ALL_CATEGORIES_SUCCESS,
-    payload: categoriesResponse
-  }
-}
-
-const getAllCategoriesFailed = error => {
-  return {
-    type: Types.GET_ALL_CATEGORIES_ERROR,
-    payload: error
-  }
-}
-
-// Side Effects
 export const onGetAllCategories = () => async dispatch => {
-  dispatch(getAllCategoriesStart())
+  dispatch({ type: Types.GET_ALL_CATEGORIES_START })
   try {
     const { data } = await getClientWithAuth(dispatch).query({
       query: queryGetAllCategories,
       fetchPolicy: 'network-only'
     })
-    dispatch(getAllCategoriesSuccess(data.getCategories))
+    dispatch({ type: Types.GET_ALL_CATEGORIES_SUCCESS, payload: data.getCategories })
   } catch (err) {
-    dispatch(getAllCategoriesFailed(errToMsg(err)))
+    dispatch({ type: Types.GET_ALL_CATEGORIES_ERROR, payload: err })
+  }
+}
+
+export const onGetCategoryActivities = id => async dispatch => {
+  dispatch({ type: Types.GET_ALL_CATEGORY_ACTIVITIES_START })
+  try {
+    const { data } = await getClientWithAuth(dispatch).query({
+      query: queryGetCategoryActivities,
+      variables: { id },
+      fetchPolicy: 'network-only'
+    })
+    dispatch({ type: Types.GET_ALL_CATEGORY_ACTIVITIES_SUCCESS, payload: data.getCategoryActivities })
+  } catch (err) {
+    dispatch({ type: Types.GET_ALL_CATEGORY_ACTIVITIES_ERROR, payload: err })
   }
 }

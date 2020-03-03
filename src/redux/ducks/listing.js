@@ -378,7 +378,6 @@ const queryGetAllAmenities = gql`
     }
   }
 `
-
 const queryGetAllSpecifications = gql`
   query getSpecifications($listSettingsParentId: Int!) {
     getAllSpecificationsByParentId(listSettingsParentId: $listSettingsParentId) {
@@ -1056,6 +1055,21 @@ export const onGetAllAccessTypes = () => async dispatch => {
 }
 
 export const onGetAllAmenities = subCategoryId => async dispatch => {
+  dispatch({ type: Types.LISTING_GET_SPACE_AMENITIES_REQUEST })
+  try {
+    const { data } = await getClientWithAuth(dispatch).query({
+      query: queryGetAllAmenities,
+      variables: { subCategoryId },
+      fetchPolicy: 'network-only'
+    })
+    const sorted = data.getAllAmenitiesBySubCategoryId.map(o => o).sort((a, b) => a.itemName.localeCompare(b.itemName))
+    dispatch({ type: Types.LISTING_GET_SPACE_AMENITIES_SUCCESS, payload: sorted })
+  } catch (err) {
+    dispatch({ type: Types.LISTING_GET_SPACE_AMENITIES_FAILURE, payload: errToMsg(err) })
+  }
+}
+
+export const onGetCategoryAmenities = subCategoryId => async dispatch => {
   dispatch({ type: Types.LISTING_GET_SPACE_AMENITIES_REQUEST })
   try {
     const { data } = await getClientWithAuth(dispatch).query({

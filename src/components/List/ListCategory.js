@@ -91,6 +91,7 @@ const TitleStyled = styled.span`
 
 const ListCategory = ({
   circular,
+  isActivity,
   data,
   bgItem,
   border,
@@ -143,10 +144,28 @@ const ListCategory = ({
     </ListItem>
   )
 
+  const _renderActivity = (item) => (
+    <ListItem
+      key={item.id}
+      shadow={shadow}
+      bgItem={bgItem}
+      border={border}
+      circular
+      onClick={e => handleItemClick(e, { ...item })}
+      active={itemSelected && item.id === itemSelected.id}
+    >
+      <IconContainer active={itemSelected && item.id === itemSelected.id}>
+        <IconStyled name={_parseIconName(true, item.otherItemName)} fill="#172439" />
+      </IconContainer>
+      <TitleStyled circular>{item.itemName}</TitleStyled>
+    </ListItem>
+  )
+
   return (
     <List spaceBetween={spaceBetween} >
-      {!circular && data && [].concat(data).map(item => _renderCategory(item))}
-      {circular && data && [].concat(data).map(item => _renderSubCategory(item.subCategory, item.bookingPeriod))}
+      {isActivity && data && [].concat(data).map(item => _renderActivity(item))}
+      {!isActivity && !circular && data && [].concat(data).map(item => _renderCategory(item))}
+      {!isActivity && circular && data && [].concat(data).map(item => _renderSubCategory(item.subCategory, item.bookingPeriod))}
     </List >
   )
 
@@ -156,6 +175,7 @@ ListCategory.propsType = {}
 
 ListCategory.defaultProps = {
   circular: false,
+  isActivity: false,
   itemSelected: false,
   handleItemClick: () => { }
 }

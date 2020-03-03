@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import { Wrapper, Title, StepButtons, List, Caption, Loader } from 'components'
+import _ from 'lodash'
 
-import { onGetAllCategories } from 'redux/ducks/category'
+import { onGetAllCategories, onGetCategoryActivities } from 'redux/ducks/category'
 import { onCreate } from 'redux/ducks/listing'
 
 const CategoryPage = props => {
@@ -18,6 +19,11 @@ const CategoryPage = props => {
   } = useSelector(state => state.category)
 
   const {
+    isLoading: isLoadingActivities,
+    activities: { object: objActivities }
+  } = useSelector(state => state.category)
+
+  const {
     create: { isLoading: isLoadingCreating }
   } = useSelector(state => state.listing)
 
@@ -29,11 +35,16 @@ const CategoryPage = props => {
 
   const [subCategorySelected, setSubCategorySelected] = useState(null)
 
+  const [activitiesSelected, setActivitiesSelected] = useState([])
+
   const _handleCategoryClick = (_, value) => {
     if (value.itemName === 'Office') {
       setCategorySelected(value)
       setSubCategorySelected(value.subCategories[1])
       return
+    }
+    if (value.itemName === 'Events') {
+      dispatch(onGetCategoryActivities(value.id))
     }
     setCategorySelected(value)
     setSubCategorySelected(null)
@@ -41,6 +52,18 @@ const CategoryPage = props => {
 
   const _handleSubCategoryClick = (_, value) => {
     setSubCategorySelected(value)
+  }
+
+  const _handleActivityClick = (_, value) => {
+
+    
+
+    console.log("BEFORE REMOVE", activitiesSelected)
+
+    activitiesSelected.length > 0 && _.remove(activitiesSelected, activity => activity.id === Number(value.id))
+
+    console.log("AFTER REMOVE", activitiesSelected)
+    
   }
 
   const _handlerCreateDraft = () => {
@@ -68,7 +91,22 @@ const CategoryPage = props => {
               handleItemClick={_handleCategoryClick}
               itemSelected={categorySelected}
             />
-            {categorySelected && categorySelected.subCategories && categorySelected.itemName !== 'Office' && (
+            {categorySelected && categorySelected.itemName === 'Events' && objActivities && objActivities.length > 0 && (
+              <>
+              {console.log(objActivities)}
+                <Caption large centered margin="50px 0">
+                  Select the activities
+                </Caption>
+                <List
+                  circular
+                  isActivity
+                  data={objActivities}
+                  handleItemClick={_handleActivityClick}
+                  itemSelected={activitiesSelected}
+                />
+              </>
+            )}
+            {categorySelected && categorySelected.subCategories && categorySelected.itemName !== 'Office' && categorySelected.itemName !== 'Events' && (
               <>
                 <Caption large centered margin="50px 0">
                   Select a sub-category
