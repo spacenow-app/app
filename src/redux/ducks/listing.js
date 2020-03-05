@@ -436,8 +436,8 @@ const queryGetAvailabilities = gql`
 `
 
 const mutationCreate = gql`
-  mutation createOrUpdateListing($locationId: Int!, $listSettingsParentId: Int!) {
-    createOrUpdateListing(locationId: $locationId, listSettingsParentId: $listSettingsParentId) {
+  mutation createOrUpdateListing($locationId: Int!, $listSettingsParentId: Int!, $listingActivities: [Int]) {
+    createOrUpdateListing(locationId: $locationId, listSettingsParentId: $listSettingsParentId, listingActivities: $listingActivities) {
       ${allListingFields}
     }
   }
@@ -471,6 +471,7 @@ const mutationUpdate = gql`
     $listingAccessDays: ListingAccessDaysInput
     $listingExceptionDates: [String]
     $listingRules: [Int],
+    $listingActivities: [Int],
     $link: String
   ) {
     createOrUpdateListing(
@@ -500,6 +501,7 @@ const mutationUpdate = gql`
       listingAccessDays: $listingAccessDays
       listingExceptionDates: $listingExceptionDates
       listingRules: $listingRules,
+      listingActivities: $listingActivities,
       link: $link
     ) {
       ${allListingFields}
@@ -1185,18 +1187,21 @@ export const onGetAllHolidays = () => async dispatch => {
   }
 }
 
-export const onCreate = (locationId, listSettingsParentId, history) => async dispatch => {
+export const onCreate = (locationId, listSettingsParentId, history, listingActivities) => async dispatch => {
   dispatch({ type: Types.CREATE_LISTING_START })
   try {
     const { data } = await getClientWithAuth(dispatch).mutate({
       mutation: mutationCreate,
       variables: {
         locationId,
-        listSettingsParentId
+        listSettingsParentId,
+        listingActivities
       }
     })
     dispatch({ type: Types.CREATE_LISTING_SUCCESS, payload: data.createOrUpdateListing })
-    history.push(`/listing/space/${data.createOrUpdateListing.id}/specification`)
+    listingActivities.length === 0
+      ? history.push(`/listing/space/${data.createOrUpdateListing.id}/specification`)
+      : history.push(`/listing/v2/space/${data.createOrUpdateListing.id}/specification`)
   } catch (err) {
     dispatch({ type: Types.CREATE_LISTING_FAILURE, payload: errToMsg(err) })
   }
