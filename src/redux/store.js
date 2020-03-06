@@ -7,7 +7,7 @@ import reducers from './reducers'
 
 let middlewares = [thunk]
 
-if (process.env.NODE_ENV !== 'production') {
+if (process.env,PLAYGROUND === true) {
   const logger = createLogger({ collapsed: true })
   middlewares = [...middlewares, logger]
 }
