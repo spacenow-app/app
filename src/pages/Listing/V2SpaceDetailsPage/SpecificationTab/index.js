@@ -10,15 +10,9 @@ import { useSelector } from 'react-redux'
 
 import { EditorState, ContentState, convertToRaw, convertFromRaw } from 'draft-js'
 
-import {
-  onGetAllRules,
-  onGetAllAccessTypes,
-  onGetAllAmenities,
-  onGetPhotosByListingId,
-  onGetVideoByListingId
-} from 'redux/ducks/listing'
+import { onGetPhotosByListingId, onGetVideoByListingId } from 'redux/ducks/listing'
 
-import { onGetCategorySpecifications } from 'redux/ducks/category'
+import { onGetCategoryRules, onGetCategoryCheckinTypes, onGetCategoryAccess, onGetCategoryAmenities, onGetCategoryFeatures, onGetCategorySpecifications, onGetCategoryStyles } from 'redux/ducks/category'
 
 import { onUploadPhoto, onSetCoverPhoto, onDeletePhoto } from 'redux/ducks/photo'
 
@@ -27,46 +21,6 @@ import { openModal, TypesModal } from 'redux/ducks/modal'
 import { Title, Input, Checkbox, Select, WYSIWYGTextArea, StepButtons, Loader, Photo, Box, Video } from 'components'
 
 import { cropPicture } from 'utils/images'
-
-const WrapperStyled = styled.div`
-  display: grid;
-  grid-row-gap: 80px;
-
-  @media (max-width: 680px) {
-    grid-row-gap: 20px;
-  }
-`
-
-const SectionStyled = styled.div``
-
-const InputGroup = styled.div`
-  display: grid;
-  grid-template-columns: 1fr 1fr 1fr 1fr;
-  grid-gap: 30px;
-  @media (max-width: 680px) {
-    grid-template-columns: 1fr;
-  }
-`
-
-const CheckboxGroup = styled.div`
-  display: grid;
-  grid-template-columns: 1fr 1fr 1fr;
-  grid-gap: 40px;
-  @media (max-width: 680px) {
-    grid-template-columns: 1fr 1fr;
-    grid-gap: 20px;
-  }
-`
-
-const CheckboxGroupRules = styled.div`
-  display: grid;
-  grid-template-columns: 1fr 1fr 1fr;
-  grid-gap: 40px;
-  @media (max-width: 680px) {
-    grid-template-columns: 1fr;
-    grid-gap: 20px;
-  }
-`
 
 const PhotosGroup = styled.div`
   display: grid;
@@ -88,22 +42,25 @@ const SpecificationTab = ({
   isValid,
   ...props
 }) => {
-  const { array: arrayRules, isLoading: isLoadingRules } = useSelector(state => state.listing.rules)
-  const { array: arrayAccessTypes, isLoading: isLoadingAccessTypes } = useSelector(state => state.listing.accessTypes)
-  const { array: arrayAmenities, isLoading: isLoadingAmenities } = useSelector(state => state.listing.amenities)
-  const { array: arrayPhotos, isLoading: isLoadingPhotos } = useSelector(state => state.listing.photos)
+  const { object: rules, isLoading: isLoadingRules } = useSelector(state => state.category.rules)
+  const { object: amenities, isLoading: isLoadingAmenities } = useSelector(state => state.category.amenities)
+  const { object: features, isLoading: isLoadingFeatures } = useSelector(state => state.category.features)
+  const { object: access, isLoading: isLoadingAccess } = useSelector(state => state.category.access)
+  const { object: checkinTypes, isLoading: isLoadingCheckinTypes } = useSelector(state => state.category.checkinTypes)
+  const { object: specifications, isLoading: isLoadingSpecifications } = useSelector( state => state.category.specifications)
+  const { object: styles, isLoading: isLoadingStyles } = useSelector( state => state.category.styles)
   const { object: video, isLoading: isLoadingVideo } = useSelector(state => state.listing.video)
-  const { isLoading: isLoadingCategorySpecifications, object: objectCategorySpecifications } = useSelector(
-    state => state.category.specifications
-  )
-
+  const { array: arrayPhotos, isLoading: isLoadingPhotos } = useSelector(state => state.listing.photos)
   const [editorState, setEditorState] = useState(EditorState.createEmpty())
 
   useEffect(() => {
     dispatch(onGetCategorySpecifications(listing.settingsParent.id))
-    dispatch(onGetAllAmenities(listing.settingsParent.subcategory.id))
-    dispatch(onGetAllRules())
-    dispatch(onGetAllAccessTypes())
+    dispatch(onGetCategoryAmenities(listing.settingsParent.id))
+    dispatch(onGetCategoryRules(listing.settingsParent.id))
+    dispatch(onGetCategoryFeatures(listing.settingsParent.id))
+    dispatch(onGetCategoryAccess(listing.settingsParent.id))
+    dispatch(onGetCategoryCheckinTypes(listing.settingsParent.id))
+    dispatch(onGetCategoryStyles(listing.settingsParent.id))
     dispatch(onGetPhotosByListingId(listing.id))
     dispatch(onGetVideoByListingId(listing.id))
   }, [dispatch, listing])
@@ -301,9 +258,9 @@ const SpecificationTab = ({
 
   return (
     <form>
-      <WrapperStyled>
+      <Box display="grid" gridGap={{ _: '20px', medium: '80px' }}>
         <Helmet title="Listing Space Specification - Spacenow" />
-        <SectionStyled>
+        <Box>
           <Title
             type="h3"
             title="Title*"
@@ -318,25 +275,24 @@ const SpecificationTab = ({
             onChange={_handleChangeTitle}
             onBlur={handleBlur}
           />
-        </SectionStyled>
-        <SectionStyled>
+        </Box>
+        <Box>
           <Title
             type="h3"
             title="Specifications*"
             subtitle="Give users the quick highlights of the space. These are also important search criteria for guests to find their perfect space."
           />
-          {isLoadingCategorySpecifications ? (
-            <Loader />
-          ) : (
-            <InputGroup>
-              {Object.keys(objectCategorySpecifications).map((k, index) => {
-                const o = objectCategorySpecifications[k]
+          { isLoadingSpecifications && <Loader /> }
+          { !isLoadingSpecifications && 
+            <Box display="grid" gridTemplateColumns={{ _: 'auto', medium: 'auto auto auto auto' }} gridGap="30px">
+              {Object.keys(specifications).map((k, index) => {
+                const o = specifications[k]
                 return <span key={index}>{_renderSpecifications(o)}</span>
               })}
-            </InputGroup>
-          )}
-        </SectionStyled>
-        <SectionStyled>
+            </Box>
+          }
+        </Box>
+        <Box>
           <Title
             type="h3"
             title="About"
@@ -350,27 +306,14 @@ const SpecificationTab = ({
             }}
             onBlur={_handleWYSIWYGBlur}
           />
-        </SectionStyled>
-        <SectionStyled>
+        </Box>
+        <Box>
           <Title type="h3" title="Amenities" subtitle="What features does your space offer guests?" />
-          <CheckboxGroup>
+          <Box display="grid" gridTemplateColumns={{ _: 'auto auto', medium: 'auto auto auto' }} gridGap="30px">
             {isLoadingAmenities && <Loader />}
             {!isLoadingAmenities &&
-              arrayAmenities.map((item, index) =>
-                listing.settingsParent.subcategory.otherItemName === 'popup' ? (
-                  <Fragment key={index}>
-                    {' '}
-                    {item.otherItemName !== 'mailbox' && (
-                      <Checkbox
-                        label={item.itemName}
-                        name="amenities"
-                        value={item.id}
-                        checked={values.amenities.some(amenitie => amenitie.listSettingsId === item.id)}
-                        handleCheckboxChange={_handleCheckboxChange}
-                      />
-                    )}
-                  </Fragment>
-                ) : (
+              amenities.map((item, index) =>
+                (
                   <Checkbox
                     key={index}
                     label={item.itemName}
@@ -381,15 +324,14 @@ const SpecificationTab = ({
                   />
                 )
               )}
-          </CheckboxGroup>
-        </SectionStyled>
-        <SectionStyled>
+          </Box>
+        </Box>
+        <Box>
           <Title type="h3" title="Space Rules" subtitle="Let guests know about the rules of the space." />
-          <CheckboxGroupRules>
-            {isLoadingRules ? (
-              <Loader />
-            ) : (
-              arrayRules.map((item, index) => (
+          <Box display="grid" gridTemplateColumns={{ _: 'auto', medium: 'auto auto auto' }} gridGap="30px">
+          {isLoadingRules && <Loader />}
+          {!isLoadingRules &&
+              rules.map((item, index) => (
                 <Checkbox
                   key={index}
                   label={item.itemName}
@@ -399,18 +341,36 @@ const SpecificationTab = ({
                   handleCheckboxChange={_handleCheckboxChange}
                 />
               ))
-            )}
-          </CheckboxGroupRules>
-        </SectionStyled>
-        <SectionStyled>
-          <Title type="h3" title="Access Information*" subtitle="Let your guests know how they’ll get in." />
+            }
+          </Box>
+        </Box>
+        <Box>
+          <Title type="h3" title="Features" subtitle="What features does your space offer guests?" />
+          <Box display="grid" gridTemplateColumns={{ _: 'auto auto', medium: 'auto auto auto' }} gridGap="30px">
+            {isLoadingFeatures && <Loader />}
+            {!isLoadingFeatures &&
+              features.map((item, index) =>
+                (
+                  <Checkbox
+                    key={index}
+                    label={item.itemName}
+                    name="features"
+                    value={item.id}
+                    checked={values.features.some(feature => feature.listSettingsId === item.id)}
+                    handleCheckboxChange={_handleCheckboxChange}
+                  />
+                )
+              )}
+          </Box>
+        </Box>
+        <Box>
+          <Title type="h3" title="Check-In*" subtitle="Let your guests know how they’ll get in." />
           <Box width="350px">
-            {isLoadingAccessTypes ? (
-              <Loader />
-            ) : (
-              <Select value={values.accessType} name="accessType" onChange={_handleSelectChange}>
-                {!values.accessType && <option>Select type of access</option>}
-                {arrayAccessTypes.map(
+            {isLoadingCheckinTypes && <Loader />}
+            {!isLoadingCheckinTypes && 
+              <Select value={values.checkinType} name="accessType" onChange={_handleSelectChange}>
+                {!values.checkinType && <option>Select type of checkin</option>}
+                {checkinTypes.map(
                   (item, index) =>
                     item.itemName !== 'Receptionist' && (
                       <option key={index} value={item.itemName}>
@@ -419,65 +379,90 @@ const SpecificationTab = ({
                     )
                 )}
               </Select>
-            )}
+            }
           </Box>
-        </SectionStyled>
-        <SectionStyled>
+        </Box>
+        <Box>
+          <Title type="h3" title="Styles*" subtitle="Lorem Ipsum." />
+          <Box width="350px">
+            {isLoadingStyles && <Loader />}
+            {!isLoadingStyles && 
+              <Select value={values.listingStyle} name="listingStyle" onChange={_handleSelectChange}>
+                {!values.styles && <option>Select type of access</option>}
+                {styles.map(
+                  (item, index) =>
+                    item.itemName !== 'Receptionist' && (
+                      <option key={index} value={item.itemName}>
+                        {item.itemName === 'Person' ? `${item.itemName} at reception` : item.itemName}
+                      </option>
+                    )
+                )}
+              </Select>
+            }
+          </Box>
+        </Box>
+        {/* <Box>
+          <Title type="h3" title="Style*" subtitle="Lorem Ipsum." />
+          <Box width="350px">
+            {isLoadingAccessTypes && <Loader />}
+            {!isLoadingAccessTypes && 
+              <Select value={values.accessType} name="accessType" onChange={_handleSelectChange}>
+                {!values.accessType && <option>Select type of access</option>}
+                {accessTypes.map(
+                  (item, index) =>
+                    item.itemName !== 'Receptionist' && (
+                      <option key={index} value={item.itemName}>
+                        {item.itemName === 'Person' ? `${item.itemName} at reception` : item.itemName}
+                      </option>
+                    )
+                )}
+              </Select>
+            }
+          </Box>
+        </Box> */}
+        <Box>
           <Title
             type="h3"
             title="Photos*"
             subtitle="Photos help guests imagine using your space. You can start with one and add more after you publish."
           />
           <PhotosGroup>
-            {isLoadingPhotos ? (
-              <Loader />
-            ) : (
-              <>
-                {arrayPhotos.map((item, index) => (
-                  <Photo
-                    key={index}
-                    onDrop={_handleOnDrop}
-                    url={item ? cropPicture(item.name) : null}
-                    isCover={item ? item.isCover : false}
-                    onCover={_handleSetCoverPhoto(item ? item.id : '')}
-                    onDelete={_handleDeletePhoto(item ? item.id : '')}
-                  />
-                ))}
-              </>
-            )}
+            {isLoadingPhotos && <Loader />}
+            {!isLoadingPhotos && arrayPhotos.map((item, index) => (
+              <Photo
+                key={index}
+                onDrop={_handleOnDrop}
+                url={item ? cropPicture(item.name) : null}
+                isCover={item ? item.isCover : false}
+                onCover={_handleSetCoverPhoto(item ? item.id : '')}
+                onDelete={_handleDeletePhoto(item ? item.id : '')}
+              />
+            ))}
           </PhotosGroup>
           <p>
             TIP: Take photos in landscape mode to capture as much of your space as possible. Shoot from corners to add
             perspective. Spaces look best in natural light. Include all areas your guest can access.
           </p>
-        </SectionStyled>
-        <SectionStyled>
+        </Box>
+        <Box>
           <Title
             type="h3"
             title="Video*"
             subtitle="Videos help guests see more of the space and make it easier for them to get a better understanding of it."
           />
           <Box width="196px">
-            {isLoadingVideo ? (
-              <Loader />
-            ) : (
-              <>
-                <Video
-                  onDrop={_handleOnDropVideo}
-                  url={video ? video.name : null}
-                  onDelete={_handleDeleteVideo(video ? video.id : '')}
-                />
-              </>
+            {isLoadingVideo && <Loader />}
+            {!isLoadingVideo && (
+              <Video
+                onDrop={_handleOnDropVideo}
+                url={video ? video.name : null}
+                onDelete={_handleDeleteVideo(video ? video.id : '')}
+              />
             )}
           </Box>
-          {/* <p>
-            TIP: Take photos in landscape mode to capture as much of your space as possible. Shoot from corners to add
-            perspective. Spaces look best in natural light. Include all areas your guest can access.
-          </p> */}
-        </SectionStyled>
+        </Box>
         <StepButtons prev={{ onClick: _goBack }} next={{ onClick: () => props.history.push('booking') }} />
-        {/* <StepButtons prev={{ onClick: _goBack }} next={{ onClick: () => console.log(convertToRaw(editorState.getCurrentContent())) }} /> */}
-      </WrapperStyled>
+      </Box>
     </form>
   )
 }
@@ -498,9 +483,13 @@ const formik = {
         spaceType: listing.listingData.spaceType || 'Covered',
         description: listing.listingData.description || '',
         accessType: listing.listingData.accessType || '',
+        listingStyle: listing.listingData.listingStyle || '',
         amenities: listing.amenities || [],
         photos: listing.photos || [],
-        rules: listing.rules || []
+        rules: listing.rules || [],
+        features: listing.features || [],
+        access: listing.access || [],
+        checkinTypes: listing.checkinTypes || []
       }
     }
     return {}
@@ -519,7 +508,8 @@ const formik = {
     maxEntranceHeight: Yup.string().typeError('Max Entrance Height field is required'),
     spaceType: Yup.string().typeError('Space Type field is required'),
     description: Yup.string().typeError('Description need to be string'),
-    accessType: Yup.string()
+    accessType: Yup.string(),
+    listingStyle: Yup.string()
   }),
   enableReinitialize: true,
   isInitialValid: true
