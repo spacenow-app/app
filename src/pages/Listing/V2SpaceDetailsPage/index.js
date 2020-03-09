@@ -81,18 +81,6 @@ const SpaceDetailsPage = ({ match, history, location, ...props }) => {
               {objectListing.settingsParent.category.itemName}
             </Tag>
           </Box>
-          <Box margin="0 10px">
-            <Tag
-              icon={
-                <Icon
-                  width="24px"
-                  name={_parseCategoryIconName(objectListing.settingsParent.subcategory.otherItemName, true)}
-                />
-              }
-            >
-              {objectListing.settingsParent.subcategory.itemName}
-            </Tag>
-          </Box>
         </Box>
       </Box>
       <Tab>

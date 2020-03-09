@@ -1,6 +1,7 @@
 import { gql } from 'apollo-boost'
 
 import { getClientWithAuth } from 'graphql/apolloClient'
+import { camalize } from 'utils/strings'
 
 // Actions
 export const Types = {
@@ -149,6 +150,7 @@ const queryGetCategorySpecifications = gql`
       id
       itemName
       otherItemName
+      specData
     }
   }
 `
@@ -553,7 +555,7 @@ export const onGetCategoryBookingPeriod = id => async dispatch => {
   }
 }
 
-export const onGetCategorySpecifications = id => async dispatch => {
+export const onGetCategorySpecifications = (id, listingData)  => async dispatch => {
   dispatch({ type: Types.GET_ALL_CATEGORY_SPECIFICATIONS_START })
   try {
     const { data } = await getClientWithAuth(dispatch).query({
@@ -561,7 +563,8 @@ export const onGetCategorySpecifications = id => async dispatch => {
       variables: { id },
       fetchPolicy: 'network-only'
     })
-    dispatch({ type: Types.GET_ALL_CATEGORY_SPECIFICATIONS_SUCCESS, payload: data.getCategorySpecifications })
+    const specificationsToView = mapTo(data.getCategorySpecifications, listingData)
+    dispatch({ type: Types.GET_ALL_CATEGORY_SPECIFICATIONS_SUCCESS, payload: specificationsToView })
   } catch (err) {
     dispatch({ type: Types.GET_ALL_CATEGORY_SPECIFICATIONS_ERROR, payload: err })
   }
@@ -649,4 +652,26 @@ export const onGetCategoryCheckinTypes = id => async dispatch => {
   } catch (err) {
     dispatch({ type: Types.GET_ALL_CATEGORY_CHECKIN_TYPES_ERROR, payload: err })
   }
+}
+
+const mapTo = (originalArray, listingData) => {
+  const specifications = {}
+  for (let i = 0, size = originalArray.length; i < size; i += 1) {
+    const { itemName, specData } = originalArray[i]
+    if (specData && specData.length > 0) {
+      const specDataObj = JSON.parse(specData)
+      specifications[specDataObj.field] = {
+        ...specDataObj,
+        value: listingData[specDataObj.field] || specDataObj.defaultValue
+      }
+    } else {
+      const fieldTarget = camalize(itemName)
+      specifications[fieldTarget] = {
+        label: itemName,
+        field: fieldTarget,
+        value: listingData[fieldTarget]
+      }
+    }
+  }
+  return specifications
 }

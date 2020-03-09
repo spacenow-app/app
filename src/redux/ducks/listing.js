@@ -218,6 +218,68 @@ const allListingFields = `
       specData
     }
   }
+  features {
+    id
+    listingId
+    listSettingsId
+    amount
+    quantity
+    currency
+    settings
+    type
+    createdAt
+    updatedAt
+    settingsData {
+      id
+      typeId
+      itemName
+      otherItemName
+      description
+      maximum
+      minimum
+      startValue
+      endValue
+      step
+      isEnable
+      photo
+      photoType
+      isSpecification
+      createdAt
+      updatedAt
+      specData
+    }
+  }
+  access {
+    id
+    listingId
+    listSettingsId
+    amount
+    quantity
+    currency
+    settings
+    type
+    createdAt
+    updatedAt
+    settingsData {
+      id
+      typeId
+      itemName
+      otherItemName
+      description
+      maximum
+      minimum
+      startValue
+      endValue
+      step
+      isEnable
+      photo
+      photoType
+      isSpecification
+      createdAt
+      updatedAt
+      specData
+    }
+  }
   rules {
     id
     listingId
@@ -450,6 +512,7 @@ const mutationUpdate = gql`
     $listingId: Int!
     $title: String
     $accessType: String
+    $listingStyle: String
     $bookingNoticeTime: String
     $minTerm: Float
     $maxTerm: Float
@@ -468,6 +531,8 @@ const mutationUpdate = gql`
     $bookingType: String
     $bookingPeriod: String
     $listingAmenities: [Int]
+    $listingFeatures: [Int]
+    $listingAccess: [Int]
     $listingAccessDays: ListingAccessDaysInput
     $listingExceptionDates: [String]
     $listingRules: [Int],
@@ -480,6 +545,7 @@ const mutationUpdate = gql`
       listingId: $listingId
       title: $title
       accessType: $accessType
+      listingStyle: $listingStyle
       bookingNoticeTime: $bookingNoticeTime
       minTerm: $minTerm
       maxTerm: $maxTerm
@@ -498,6 +564,8 @@ const mutationUpdate = gql`
       bookingType: $bookingType
       bookingPeriod: $bookingPeriod
       listingAmenities: $listingAmenities
+      listingFeatures: $listingFeatures
+      listingAccess: $listingAccess
       listingAccessDays: $listingAccessDays
       listingExceptionDates: $listingExceptionDates
       listingRules: $listingRules,
@@ -1238,6 +1306,7 @@ const getValues = (_, values) => {
     title: values.title || _.title,
     bookingPeriod: values.bookingPeriod || _.bookingPeriod,
     accessType: values.accessType || _.listingData.accessType,
+    listingStyle: values.listingStyle || _.listingData.listingStyle,
     bookingNoticeTime: values.bookingNoticeTime || _.listingData.bookingNoticeTime,
     minTerm: values.minTerm || _.listingData.minTerm,
     maxTerm: values.maxTerm || _.listingData.maxTerm,
@@ -1257,6 +1326,14 @@ const getValues = (_, values) => {
     listingAmenities:
       values.amenities !== undefined && values.amenities.length > 0
         ? values.amenities.map(o => o.listSettingsId)
+        : undefined,
+    listingFeatures:
+      values.features !== undefined && values.features.length > 0
+        ? values.features.map(o => o.listSettingsId)
+        : undefined,
+    listingAccess:
+      values.access !== undefined && values.access.length > 0
+        ? values.access.map(o => o.listSettingsId)
         : undefined,
     listingAccessDays: values.listingAccessDays,
     listingExceptionDates: values.listingExceptionDates || undefined,

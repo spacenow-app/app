@@ -1,6 +1,6 @@
 /* eslint-disable react/no-array-index-key */
 /* eslint-disable no-console */
-import React, { useEffect, useCallback, useState, Fragment } from 'react'
+import React, { useEffect, useCallback, useState } from 'react'
 import styled from 'styled-components'
 import Helmet from 'react-helmet'
 import { withFormik } from 'formik'
@@ -54,7 +54,7 @@ const SpecificationTab = ({
   const [editorState, setEditorState] = useState(EditorState.createEmpty())
 
   useEffect(() => {
-    dispatch(onGetCategorySpecifications(listing.settingsParent.id))
+    dispatch(onGetCategorySpecifications(listing.settingsParent.id, listing.listingData))
     dispatch(onGetCategoryAmenities(listing.settingsParent.id))
     dispatch(onGetCategoryRules(listing.settingsParent.id))
     dispatch(onGetCategoryFeatures(listing.settingsParent.id))
@@ -368,8 +368,8 @@ const SpecificationTab = ({
           <Box width="350px">
             {isLoadingCheckinTypes && <Loader />}
             {!isLoadingCheckinTypes && 
-              <Select value={values.checkinType} name="accessType" onChange={_handleSelectChange}>
-                {!values.checkinType && <option>Select type of checkin</option>}
+              <Select value={values.accessType} name="accessType" onChange={_handleSelectChange}>
+                {!values.accessType && <option>Select type of checkin</option>}
                 {checkinTypes.map(
                   (item, index) =>
                     item.itemName !== 'Receptionist' && (
@@ -391,14 +391,31 @@ const SpecificationTab = ({
                 {!values.styles && <option>Select type of access</option>}
                 {styles.map(
                   (item, index) =>
-                    item.itemName !== 'Receptionist' && (
-                      <option key={index} value={item.itemName}>
-                        {item.itemName === 'Person' ? `${item.itemName} at reception` : item.itemName}
-                      </option>
-                    )
+                  <option key={index} value={item.itemName}>
+                    {item.itemName}
+                  </option>
                 )}
               </Select>
             }
+          </Box>
+        </Box>
+        <Box>
+          <Title type="h3" title="Access" subtitle="What access does your space offer guests?" />
+          <Box display="grid" gridTemplateColumns={{ _: 'auto auto', medium: 'auto auto auto' }} gridGap="30px">
+            {isLoadingAccess && <Loader />}
+            {!isLoadingAccess &&
+              access.map((item, index) =>
+                (
+                  <Checkbox
+                    key={index}
+                    label={item.itemName}
+                    name="access"
+                    value={item.id}
+                    checked={values.access.some(a => a.listSettingsId === item.id)}
+                    handleCheckboxChange={_handleCheckboxChange}
+                  />
+                )
+              )}
           </Box>
         </Box>
         {/* <Box>
