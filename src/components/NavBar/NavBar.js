@@ -78,6 +78,26 @@ const NavLinkStyled = styled(NavLink)`
   }
 `
 
+const LinkStyled = styled(Link)`
+  display: block;
+  padding: 0.5rem 1rem;
+  padding-right: 0.5rem;
+  padding-left: 0.5rem;
+  color: #172439;
+  text-decoration: none;
+  align-items: center;
+
+  :hover {
+    color: #51c482;
+    text-decoration: none;
+  }
+
+  @media only screen and (max-width: 600px) {
+    align-items: initial;
+    border-bottom: 1px solid #ececec;
+  }
+`
+
 const SearchBar = styled.div`
   display: grid;
   grid-template-columns: 1fr auto;
@@ -94,7 +114,7 @@ const SearchBar = styled.div`
   }
 `
 
-const NavBar = ({ history, shownSearch }) => {
+const NavBar = ({ history, shownSearch, ...props }) => {
   const dispatch = useDispatch()
   const { user } = useSelector(state => state.account.get)
   const { isAuthenticated } = useSelector(state => state.auth)
@@ -181,8 +201,8 @@ const NavBar = ({ history, shownSearch }) => {
           </NavLinkStyled>
           {!isAuthenticated ? (
             <>
-              <NavLinkStyled to="/auth/signin">Sign In</NavLinkStyled>
-              <NavLinkStyled to="/auth/signup">Sign Up</NavLinkStyled>
+              <LinkStyled to={{ pathname: '/auth/signin', from: props.location }}>Sign In</LinkStyled>
+              <LinkStyled to={{ pathname: '/auth/signup', from: props.location }}>Sign Up</LinkStyled>
             </>
           ) : (
             <>
