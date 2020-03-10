@@ -8,10 +8,10 @@ const Landingpages = ({ match, ...props }) => {
   return (
     <Suspense fallback={<Loader />}>
       <Switch>
-        <Route exact component={SigninPage} path={`${match.path}/signin`} />
-        <Route exact component={SignupPage} path={`${match.path}/signup`} />
-        <Route exact component={ForgotPasswordPage} path={`${match.path}/forgot_password`} />
-        <Route exact component={ResetPasswordPage} path={`${match.path}/reset_password`} />
+        <Route exact {...props} component={SigninPage} path={`${match.path}/signin`} />
+        <Route exact {...props} component={SignupPage} path={`${match.path}/signup`} />
+        <Route exact {...props} component={ForgotPasswordPage} path={`${match.path}/forgot_password`} />
+        <Route exact {...props} component={ResetPasswordPage} path={`${match.path}/reset_password`} />
         <Redirect to="/404" />
       </Switch>
     </Suspense>

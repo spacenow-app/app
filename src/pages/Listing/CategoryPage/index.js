@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import { Wrapper, Title, StepButtons, List, Caption, Loader } from 'components'
+import _ from 'lodash'
 
-import { onGetAllCategories } from 'redux/ducks/category'
+import { onGetAllCategories, onGetCategoryActivities, onGetCategoryBookingPeriod } from 'redux/ducks/category'
 import { onCreate } from 'redux/ducks/listing'
 
 const CategoryPage = props => {
@@ -18,6 +19,16 @@ const CategoryPage = props => {
   } = useSelector(state => state.category)
 
   const {
+    isLoading: isLoadingActivities,
+    activities: { object: objActivities }
+  } = useSelector(state => state.category)
+
+  const {
+    isLoading: isLoadingBookingPeriod,
+    bookingPeriod: { object: objBookingPeriod }
+  } = useSelector(state => state.category)
+
+  const {
     create: { isLoading: isLoadingCreating }
   } = useSelector(state => state.listing)
 
@@ -29,11 +40,17 @@ const CategoryPage = props => {
 
   const [subCategorySelected, setSubCategorySelected] = useState(null)
 
+  const [activitiesSelected, setActivitiesSelected] = useState([])
+
   const _handleCategoryClick = (_, value) => {
     if (value.itemName === 'Office') {
       setCategorySelected(value)
       setSubCategorySelected(value.subCategories[1])
       return
+    }
+    if (value.itemName === 'Events') {
+      dispatch(onGetCategoryActivities(value.id))
+      dispatch(onGetCategoryBookingPeriod(value.id))
     }
     setCategorySelected(value)
     setSubCategorySelected(null)
@@ -43,8 +60,21 @@ const CategoryPage = props => {
     setSubCategorySelected(value)
   }
 
+  const _handleActivityClick = (__, value) => {
+    if (_.find(activitiesSelected, i => i === value.id)) {
+      setActivitiesSelected(_.filter(activitiesSelected, i => i !== value.id))
+    } else {
+      setActivitiesSelected([...activitiesSelected, value.id])
+    }
+  }
+
   const _handlerCreateDraft = () => {
-    dispatch(onCreate(location.id, subCategorySelected.bookingPeriod.listSettingsParentId, props.history))
+    if (categorySelected.itemName === 'Events')
+      dispatch(onCreate(location.id, objBookingPeriod.listSettingsParentId, props.history, activitiesSelected))
+    else
+      dispatch(
+        onCreate(location.id, subCategorySelected.bookingPeriod.listSettingsParentId, props.history, activitiesSelected)
+      )
   }
 
   if (!location) {
@@ -62,17 +92,34 @@ const CategoryPage = props => {
       {isLoadingCategories ? (
         <Loader text="Loading Categories..." />
       ) : (
-          <>
-            <List
-              data={categories.filter(res => res.otherItemName !== 'desk')}
-              handleItemClick={_handleCategoryClick}
-              itemSelected={categorySelected}
-            />
-            {categorySelected && categorySelected.subCategories && categorySelected.itemName !== 'Office' && (
+        <>
+          <List
+            data={categories.filter(res => res.otherItemName !== 'desk')}
+            handleItemClick={_handleCategoryClick}
+            itemSelected={categorySelected}
+          />
+          {categorySelected && categorySelected.itemName === 'Events' && objActivities && objActivities.length > 0 && (
+            <>
+              <Caption large centered margin="50px 0">
+                Select the activities
+              </Caption>
+              <List
+                circular
+                isActivity
+                data={objActivities}
+                handleItemClick={_handleActivityClick}
+                itemSelected={activitiesSelected}
+              />
+            </>
+          )}
+          {categorySelected &&
+            categorySelected.subCategories &&
+            categorySelected.itemName !== 'Office' &&
+            categorySelected.itemName !== 'Events' && (
               <>
                 <Caption large centered margin="50px 0">
                   Select a sub-category
-              </Caption>
+                </Caption>
                 <List
                   circular
                   data={categorySelected.subCategories}
@@ -81,12 +128,15 @@ const CategoryPage = props => {
                 />
               </>
             )}
-          </>
-        )}
+        </>
+      )}
       <StepButtons
         prev={{ disabled: false, onClick: () => props.history.replace('/listing/location') }}
         next={{
-          disabled: !location || !categorySelected || !subCategorySelected,
+          disabled:
+            !location ||
+            !categorySelected ||
+            (categorySelected.itemName !== 'Events' ? !subCategorySelected : activitiesSelected.length === 0),
           onClick: _handlerCreateDraft,
           isLoading: isLoadingCreating
         }}

@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react'
 import styled, { css } from 'styled-components'
 import { Icon } from 'components'
+import _ from 'lodash'
 
 const List = styled.div`
   display: grid;
@@ -91,6 +92,7 @@ const TitleStyled = styled.span`
 
 const ListCategory = ({
   circular,
+  isActivity,
   data,
   bgItem,
   border,
@@ -100,7 +102,7 @@ const ListCategory = ({
   spaceBetween,
   ...props
 }) => {
-  useEffect(() => { }, [data, itemSelected])
+  useEffect(() => {}, [data, itemSelected])
 
   const _parseIconName = (isSub, name) => {
     let prefix = 'category-'
@@ -112,7 +114,7 @@ const ListCategory = ({
     return null
   }
 
-  const _renderCategory = (item) => (
+  const _renderCategory = item => (
     <ListItem
       key={item.id}
       shadow={shadow}
@@ -143,21 +145,42 @@ const ListCategory = ({
     </ListItem>
   )
 
-  return (
-    <List spaceBetween={spaceBetween} >
-      {!circular && data && [].concat(data).map(item => _renderCategory(item))}
-      {circular && data && [].concat(data).map(item => _renderSubCategory(item.subCategory, item.bookingPeriod))}
-    </List >
+  const _renderActivity = item => (
+    <ListItem
+      key={item.id}
+      shadow={shadow}
+      bgItem={bgItem}
+      border={border}
+      circular
+      onClick={e => handleItemClick(e, { ...item })}
+      active={_.find(itemSelected, i => i === item.id)}
+    >
+      <IconContainer active={_.find(itemSelected, i => i === item.id)}>
+        <IconStyled name={_parseIconName(true, item.otherItemName)} fill="#172439" />
+      </IconContainer>
+      <TitleStyled circular>{item.itemName}</TitleStyled>
+    </ListItem>
   )
 
+  return (
+    <List spaceBetween={spaceBetween}>
+      {isActivity && data && [].concat(data).map(item => _renderActivity(item))}
+      {!isActivity && !circular && data && [].concat(data).map(item => _renderCategory(item))}
+      {!isActivity &&
+        circular &&
+        data &&
+        [].concat(data).map(item => _renderSubCategory(item.subCategory, item.bookingPeriod))}
+    </List>
+  )
 }
 
 ListCategory.propsType = {}
 
 ListCategory.defaultProps = {
   circular: false,
+  isActivity: false,
   itemSelected: false,
-  handleItemClick: () => { }
+  handleItemClick: () => {}
 }
 
 export default ListCategory

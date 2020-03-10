@@ -170,6 +170,7 @@ const allListingFields = `
   listingData {
     listingId
     accessType
+    listingStyle
     bookingNoticeTime
     minTerm
     maxTerm
@@ -187,8 +188,12 @@ const allListingFields = `
     bookingType
     spaceType
     listingAmenities
+    listingActivities
     listingExceptionDates
     listingRules
+    listingAccess
+    listingFeatures
+    listingStyles
     status
     link
   }
@@ -209,6 +214,130 @@ const allListingFields = `
     updatedAt
   }
   amenities {
+    id
+    listingId
+    listSettingsId
+    amount
+    quantity
+    currency
+    settings
+    type
+    createdAt
+    updatedAt
+    settingsData {
+      id
+      typeId
+      itemName
+      otherItemName
+      description
+      maximum
+      minimum
+      startValue
+      endValue
+      step
+      isEnable
+      photo
+      photoType
+      isSpecification
+      createdAt
+      updatedAt
+      specData
+    }
+  }
+  features {
+    id
+    listingId
+    listSettingsId
+    amount
+    quantity
+    currency
+    settings
+    type
+    createdAt
+    updatedAt
+    settingsData {
+      id
+      typeId
+      itemName
+      otherItemName
+      description
+      maximum
+      minimum
+      startValue
+      endValue
+      step
+      isEnable
+      photo
+      photoType
+      isSpecification
+      createdAt
+      updatedAt
+      specData
+    }
+  }
+  access {
+    id
+    listingId
+    listSettingsId
+    amount
+    quantity
+    currency
+    settings
+    type
+    createdAt
+    updatedAt
+    settingsData {
+      id
+      typeId
+      itemName
+      otherItemName
+      description
+      maximum
+      minimum
+      startValue
+      endValue
+      step
+      isEnable
+      photo
+      photoType
+      isSpecification
+      createdAt
+      updatedAt
+      specData
+    }
+  }
+  activities {
+    id
+    listingId
+    listSettingsId
+    amount
+    quantity
+    currency
+    settings
+    type
+    createdAt
+    updatedAt
+    settingsData {
+      id
+      typeId
+      itemName
+      otherItemName
+      description
+      maximum
+      minimum
+      startValue
+      endValue
+      step
+      isEnable
+      photo
+      photoType
+      isSpecification
+      createdAt
+      updatedAt
+      specData
+    }
+  }
+  styles {
     id
     listingId
     listSettingsId
@@ -399,7 +528,6 @@ const queryGetAllAmenities = gql`
     }
   }
 `
-
 const queryGetAllSpecifications = gql`
   query getSpecifications($listSettingsParentId: Int!) {
     getAllSpecificationsByParentId(listSettingsParentId: $listSettingsParentId) {
@@ -458,8 +586,8 @@ const queryGetAvailabilities = gql`
 `
 
 const mutationCreate = gql`
-  mutation createOrUpdateListing($locationId: Int!, $listSettingsParentId: Int!) {
-    createOrUpdateListing(locationId: $locationId, listSettingsParentId: $listSettingsParentId) {
+  mutation createOrUpdateListing($locationId: Int!, $listSettingsParentId: Int!, $listingActivities: [Int]) {
+    createOrUpdateListing(locationId: $locationId, listSettingsParentId: $listSettingsParentId, listingActivities: $listingActivities) {
       ${allListingFields}
     }
   }
@@ -472,6 +600,7 @@ const mutationUpdate = gql`
     $listingId: Int!
     $title: String
     $accessType: String
+    $listingStyle: String
     $bookingNoticeTime: String
     $minTerm: Float
     $maxTerm: Float
@@ -490,9 +619,13 @@ const mutationUpdate = gql`
     $bookingType: String
     $bookingPeriod: String
     $listingAmenities: [Int]
+    $listingFeatures: [Int]
+    $listingAccess: [Int]
     $listingAccessDays: ListingAccessDaysInput
     $listingExceptionDates: [String]
     $listingRules: [Int],
+    $listingActivities: [Int],
+    $listingStyles: [Int],
     $link: String
   ) {
     createOrUpdateListing(
@@ -501,6 +634,7 @@ const mutationUpdate = gql`
       listingId: $listingId
       title: $title
       accessType: $accessType
+      listingStyle: $listingStyle
       bookingNoticeTime: $bookingNoticeTime
       minTerm: $minTerm
       maxTerm: $maxTerm
@@ -519,9 +653,13 @@ const mutationUpdate = gql`
       bookingType: $bookingType
       bookingPeriod: $bookingPeriod
       listingAmenities: $listingAmenities
+      listingFeatures: $listingFeatures
+      listingAccess: $listingAccess
       listingAccessDays: $listingAccessDays
       listingExceptionDates: $listingExceptionDates
       listingRules: $listingRules,
+      listingActivities: $listingActivities,
+      listingStyles: $listingStyles,
       link: $link
     ) {
       ${allListingFields}
@@ -1285,6 +1423,21 @@ export const onGetAllAmenities = subCategoryId => async dispatch => {
   }
 }
 
+export const onGetCategoryAmenities = subCategoryId => async dispatch => {
+  dispatch({ type: Types.LISTING_GET_SPACE_AMENITIES_REQUEST })
+  try {
+    const { data } = await getClientWithAuth(dispatch).query({
+      query: queryGetAllAmenities,
+      variables: { subCategoryId },
+      fetchPolicy: 'network-only'
+    })
+    const sorted = data.getAllAmenitiesBySubCategoryId.map(o => o).sort((a, b) => a.itemName.localeCompare(b.itemName))
+    dispatch({ type: Types.LISTING_GET_SPACE_AMENITIES_SUCCESS, payload: sorted })
+  } catch (err) {
+    dispatch({ type: Types.LISTING_GET_SPACE_AMENITIES_FAILURE, payload: errToMsg(err) })
+  }
+}
+
 export const onGetAllSpecifications = (listSettingsParentId, listingData) => async dispatch => {
   dispatch({ type: Types.LISTING_GET_SPACE_SPECIFICATIONS_REQUEST })
   try {
@@ -1386,18 +1539,21 @@ export const onGetAllHolidays = () => async dispatch => {
   }
 }
 
-export const onCreate = (locationId, listSettingsParentId, history) => async dispatch => {
+export const onCreate = (locationId, listSettingsParentId, history, listingActivities) => async dispatch => {
   dispatch({ type: Types.CREATE_LISTING_START })
   try {
     const { data } = await getClientWithAuth(dispatch).mutate({
       mutation: mutationCreate,
       variables: {
         locationId,
-        listSettingsParentId
+        listSettingsParentId,
+        listingActivities
       }
     })
     dispatch({ type: Types.CREATE_LISTING_SUCCESS, payload: data.createOrUpdateListing })
-    history.push(`/listing/space/${data.createOrUpdateListing.id}/specification`)
+    listingActivities.length === 0
+      ? history.push(`/listing/space/${data.createOrUpdateListing.id}/specification`)
+      : history.push(`/listing/v2/space/${data.createOrUpdateListing.id}/specification`)
   } catch (err) {
     dispatch({ type: Types.CREATE_LISTING_FAILURE, payload: errToMsg(err) })
   }
@@ -1434,6 +1590,7 @@ const getValues = (_, values) => {
     title: values.title || _.title,
     bookingPeriod: values.bookingPeriod || _.bookingPeriod,
     accessType: values.accessType || _.listingData.accessType,
+    listingStyle: values.listingStyle || _.listingData.listingStyle,
     bookingNoticeTime: values.bookingNoticeTime || _.listingData.bookingNoticeTime,
     minTerm: values.minTerm || _.listingData.minTerm,
     maxTerm: values.maxTerm || _.listingData.maxTerm,
@@ -1453,6 +1610,18 @@ const getValues = (_, values) => {
     listingAmenities:
       values.amenities !== undefined && values.amenities.length > 0
         ? values.amenities.map(o => o.listSettingsId)
+        : undefined,
+    listingFeatures:
+      values.features !== undefined && values.features.length > 0
+        ? values.features.map(o => o.listSettingsId)
+        : undefined,
+    listingAccess:
+      values.access !== undefined && values.access.length > 0
+        ? values.access.map(o => o.listSettingsId)
+        : undefined,
+    listingStyles:
+      values.styles !== undefined && values.styles.length > 0
+        ? values.access.map(o => o.listSettingsId)
         : undefined,
     listingAccessDays: values.listingAccessDays,
     listingExceptionDates: values.listingExceptionDates || undefined,
