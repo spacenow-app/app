@@ -59,9 +59,8 @@ const SpaceDetailsPage = ({ match, history, location, ...props }) => {
     return null
   }
 
-  const _parseCategoryIconName = (name, isSub) => {
+  const _parseCategoryIconName = (name) => {
     let prefix = 'category-'
-    if (isSub) prefix = 'sub-category-'
     return prefix + name.replace(/([A-Z])/g, g => `-${g[0].toLowerCase()}`)
   }
 
@@ -70,16 +69,17 @@ const SpaceDetailsPage = ({ match, history, location, ...props }) => {
       <Box my={{ _: '20px', medium: '40px' }}>
         <Box display="flex" justifyContent="start">
           <Box>
-            {/* <Tag
+            <Tag
               icon={
                 <Icon
                   width="24px"
-                  name={_parseCategoryIconName(objectListing.settingsParent.category.otherItemName, false)}
+                  name={_parseCategoryIconName("events")} //name={_parseCategoryIconName(objectListing.settingsParent.category.otherItemName)}
                 />
               }
             >
-              {objectListing.settingsParent.category.itemName}
-            </Tag> */}
+              Events
+              {/* {objectListing.settingsParent.category.itemName} */}
+            </Tag>
           </Box>
         </Box>
       </Box>
