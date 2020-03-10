@@ -73,12 +73,11 @@ const SpaceDetailsPage = ({ match, history, location, ...props }) => {
               icon={
                 <Icon
                   width="24px"
-                  name={_parseCategoryIconName("events")} //name={_parseCategoryIconName(objectListing.settingsParent.category.otherItemName)}
+                  name={_parseCategoryIconName(objectListing.category.otherItemName)}
                 />
               }
             >
-              Events
-              {/* {objectListing.settingsParent.category.itemName} */}
+              {objectListing.category.itemName}
             </Tag>
           </Box>
         </Box>

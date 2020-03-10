@@ -394,6 +394,25 @@ const allListingFields = `
       specData
     }
   }
+  category {
+    id
+    typeId
+    itemName
+    otherItemName
+    description
+    maximum
+    minimum
+    startValue
+    endValue
+    step
+    isEnable
+    photo
+    photoType
+    isSpecification
+    createdAt
+    updatedAt
+    specData
+  }
   settingsParent {
     id
     category {

@@ -23,8 +23,8 @@ const CategoryPage = props => {
   } = useSelector(state => state.category)
 
   const {
-    bookingPeriod: { object: objBookingPeriod }
-  } = useSelector(state => state.category)
+    object: objBookingPeriod
+  } = useSelector(state => state.category.bookingPeriod)
 
   const {
     create: { isLoading: isLoadingCreating }
