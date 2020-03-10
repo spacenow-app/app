@@ -70,7 +70,7 @@ const SpaceDetailsPage = ({ match, history, location, ...props }) => {
       <Box my={{ _: '20px', medium: '40px' }}>
         <Box display="flex" justifyContent="start">
           <Box>
-            <Tag
+            {/* <Tag
               icon={
                 <Icon
                   width="24px"
@@ -79,7 +79,7 @@ const SpaceDetailsPage = ({ match, history, location, ...props }) => {
               }
             >
               {objectListing.settingsParent.category.itemName}
-            </Tag>
+            </Tag> */}
           </Box>
         </Box>
       </Box>

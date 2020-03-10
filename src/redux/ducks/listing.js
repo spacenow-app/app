@@ -149,6 +149,7 @@ const allListingFields = `
   listingData {
     listingId
     accessType
+    listingStyle
     bookingNoticeTime
     minTerm
     maxTerm
@@ -166,8 +167,12 @@ const allListingFields = `
     bookingType
     spaceType
     listingAmenities
+    listingActivities
     listingExceptionDates
     listingRules
+    listingAccess
+    listingFeatures
+    listingStyles
     status
     link
   }
@@ -250,6 +255,68 @@ const allListingFields = `
     }
   }
   access {
+    id
+    listingId
+    listSettingsId
+    amount
+    quantity
+    currency
+    settings
+    type
+    createdAt
+    updatedAt
+    settingsData {
+      id
+      typeId
+      itemName
+      otherItemName
+      description
+      maximum
+      minimum
+      startValue
+      endValue
+      step
+      isEnable
+      photo
+      photoType
+      isSpecification
+      createdAt
+      updatedAt
+      specData
+    }
+  }
+  activities {
+    id
+    listingId
+    listSettingsId
+    amount
+    quantity
+    currency
+    settings
+    type
+    createdAt
+    updatedAt
+    settingsData {
+      id
+      typeId
+      itemName
+      otherItemName
+      description
+      maximum
+      minimum
+      startValue
+      endValue
+      step
+      isEnable
+      photo
+      photoType
+      isSpecification
+      createdAt
+      updatedAt
+      specData
+    }
+  }
+  styles {
     id
     listingId
     listSettingsId
@@ -537,6 +604,7 @@ const mutationUpdate = gql`
     $listingExceptionDates: [String]
     $listingRules: [Int],
     $listingActivities: [Int],
+    $listingStyles: [Int],
     $link: String
   ) {
     createOrUpdateListing(
@@ -570,6 +638,7 @@ const mutationUpdate = gql`
       listingExceptionDates: $listingExceptionDates
       listingRules: $listingRules,
       listingActivities: $listingActivities,
+      listingStyles: $listingStyles,
       link: $link
     ) {
       ${allListingFields}
@@ -1333,6 +1402,10 @@ const getValues = (_, values) => {
         : undefined,
     listingAccess:
       values.access !== undefined && values.access.length > 0
+        ? values.access.map(o => o.listSettingsId)
+        : undefined,
+    listingStyles:
+      values.styles !== undefined && values.styles.length > 0
         ? values.access.map(o => o.listSettingsId)
         : undefined,
     listingAccessDays: values.listingAccessDays,

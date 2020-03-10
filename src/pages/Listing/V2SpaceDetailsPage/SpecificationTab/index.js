@@ -506,6 +506,7 @@ const formik = {
         rules: listing.rules || [],
         features: listing.features || [],
         access: listing.access || [],
+        styles: listing.styles || [],
         checkinTypes: listing.checkinTypes || []
       }
     }
