@@ -351,7 +351,7 @@ const AvailabilityTab = ({ match, listing, history, setFatherValues }) => {
       isValid: true
     }
     dispatch(onUpdate(listing, valuesToUpdate))
-    history.push(`/listing/preview/${listing.id}`)
+    history.push(`/listing/v2/preview/${listing.id}`)
   }
 
   return (
