@@ -19,12 +19,10 @@ const CategoryPage = props => {
   } = useSelector(state => state.category)
 
   const {
-    isLoading: isLoadingActivities,
     activities: { object: objActivities }
   } = useSelector(state => state.category)
 
   const {
-    isLoading: isLoadingBookingPeriod,
     bookingPeriod: { object: objBookingPeriod }
   } = useSelector(state => state.category)
 
