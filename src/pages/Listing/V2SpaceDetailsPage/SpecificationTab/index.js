@@ -10,9 +10,22 @@ import { useSelector } from 'react-redux'
 
 import { EditorState, ContentState, convertToRaw, convertFromRaw } from 'draft-js'
 
-import { onGetPhotosByListingId, onGetVideoByListingId } from 'redux/ducks/listing'
+import {
+  onGetPhotosByListingId,
+  onGetVideoByListingId,
+  onGetFloorplanByListingId,
+  onGetMenuByListingId
+} from 'redux/ducks/listing'
 
-import { onGetCategoryRules, onGetCategoryCheckinTypes, onGetCategoryAccess, onGetCategoryAmenities, onGetCategoryFeatures, onGetCategorySpecifications, onGetCategoryStyles } from 'redux/ducks/category'
+import {
+  onGetCategoryRules,
+  onGetCategoryCheckinTypes,
+  onGetCategoryAccess,
+  onGetCategoryAmenities,
+  onGetCategoryFeatures,
+  onGetCategorySpecifications,
+  onGetCategoryStyles
+} from 'redux/ducks/category'
 
 import { onUploadPhoto, onSetCoverPhoto, onDeletePhoto } from 'redux/ducks/photo'
 
@@ -21,12 +34,6 @@ import { openModal, TypesModal } from 'redux/ducks/modal'
 import { Title, Input, Checkbox, Select, WYSIWYGTextArea, StepButtons, Loader, Photo, Box, Video } from 'components'
 
 import { cropPicture } from 'utils/images'
-
-const PhotosGroup = styled.div`
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
-  grid-column-gap: 30px;
-`
 
 const SpecificationTab = ({
   values,
@@ -47,9 +54,13 @@ const SpecificationTab = ({
   const { object: features, isLoading: isLoadingFeatures } = useSelector(state => state.category.features)
   const { object: access, isLoading: isLoadingAccess } = useSelector(state => state.category.access)
   const { object: checkinTypes, isLoading: isLoadingCheckinTypes } = useSelector(state => state.category.checkinTypes)
-  const { object: specifications, isLoading: isLoadingSpecifications } = useSelector( state => state.category.specifications)
-  const { object: styles, isLoading: isLoadingStyles } = useSelector( state => state.category.styles)
+  const { object: specifications, isLoading: isLoadingSpecifications } = useSelector(
+    state => state.category.specifications
+  )
+  const { object: styles, isLoading: isLoadingStyles } = useSelector(state => state.category.styles)
   const { object: video, isLoading: isLoadingVideo } = useSelector(state => state.listing.video)
+  const { object: floorplan, isLoading: isLoadingFloorplan } = useSelector(state => state.listing.floorplan)
+  const { object: menu, isLoading: isLoadingMenu } = useSelector(state => state.listing.menu)
   const { array: arrayPhotos, isLoading: isLoadingPhotos } = useSelector(state => state.listing.photos)
   const [editorState, setEditorState] = useState(EditorState.createEmpty())
 
@@ -63,6 +74,8 @@ const SpecificationTab = ({
     dispatch(onGetCategoryStyles(listing.settingsParent.id))
     dispatch(onGetPhotosByListingId(listing.id))
     dispatch(onGetVideoByListingId(listing.id))
+    dispatch(onGetFloorplanByListingId(listing.id))
+    dispatch(onGetMenuByListingId(listing.id))
   }, [dispatch, listing])
 
   useEffect(() => {
@@ -210,7 +223,7 @@ const SpecificationTab = ({
   const _handleOnDrop = useCallback(
     acceptedFiles => {
       acceptedFiles.map(async file => {
-        await dispatch(onUploadPhoto(file, listing.id))
+        await dispatch(onUploadPhoto(file, 'photo', listing.id))
         await dispatch(onGetPhotosByListingId(listing.id))
       })
     },
@@ -230,8 +243,28 @@ const SpecificationTab = ({
   const _handleOnDropVideo = useCallback(
     acceptedFiles => {
       acceptedFiles.map(async file => {
-        await dispatch(onUploadPhoto(file, listing.id))
+        await dispatch(onUploadPhoto(file, 'video', listing.id))
         await dispatch(onGetVideoByListingId(listing.id))
+      })
+    },
+    [dispatch, listing.id]
+  )
+
+  const _handleOnDropFloorplan = useCallback(
+    acceptedFiles => {
+      acceptedFiles.map(async file => {
+        await dispatch(onUploadPhoto(file, 'floorplan', listing.id))
+        await dispatch(onGetFloorplanByListingId(listing.id))
+      })
+    },
+    [dispatch, listing.id]
+  )
+
+  const _handleOnDropMenu = useCallback(
+    acceptedFiles => {
+      acceptedFiles.map(async file => {
+        await dispatch(onUploadPhoto(file, 'menu', listing.id))
+        await dispatch(onGetMenuByListingId(listing.id))
       })
     },
     [dispatch, listing.id]
@@ -240,6 +273,16 @@ const SpecificationTab = ({
   const _handleDeleteVideo = photoId => async () => {
     await dispatch(onDeletePhoto(listing.id, photoId))
     await dispatch(onGetVideoByListingId(listing.id))
+  }
+
+  const _handleDeleteFloorplan = photoId => async () => {
+    await dispatch(onDeletePhoto(listing.id, photoId))
+    await dispatch(onGetFloorplanByListingId(listing.id))
+  }
+
+  const _handleDeleteMenu = photoId => async () => {
+    await dispatch(onDeletePhoto(listing.id, photoId))
+    await dispatch(onGetMenuByListingId(listing.id))
   }
 
   const _goBack = () => {
@@ -282,15 +325,15 @@ const SpecificationTab = ({
             title="Specifications*"
             subtitle="Give users the quick highlights of the space. These are also important search criteria for guests to find their perfect space."
           />
-          { isLoadingSpecifications && <Loader /> }
-          { !isLoadingSpecifications && 
+          {isLoadingSpecifications && <Loader />}
+          {!isLoadingSpecifications && (
             <Box display="grid" gridTemplateColumns={{ _: 'auto', medium: 'auto auto auto auto' }} gridGap="30px">
               {Object.keys(specifications).map((k, index) => {
                 const o = specifications[k]
                 return <span key={index}>{_renderSpecifications(o)}</span>
               })}
             </Box>
-          }
+          )}
         </Box>
         <Box>
           <Title
@@ -312,25 +355,23 @@ const SpecificationTab = ({
           <Box display="grid" gridTemplateColumns={{ _: 'auto auto', medium: 'auto auto auto' }} gridGap="30px">
             {isLoadingAmenities && <Loader />}
             {!isLoadingAmenities &&
-              amenities.map((item, index) =>
-                (
-                  <Checkbox
-                    key={index}
-                    label={item.itemName}
-                    name="amenities"
-                    value={item.id}
-                    checked={values.amenities.some(amenitie => amenitie.listSettingsId === item.id)}
-                    handleCheckboxChange={_handleCheckboxChange}
-                  />
-                )
-              )}
+              amenities.map((item, index) => (
+                <Checkbox
+                  key={index}
+                  label={item.itemName}
+                  name="amenities"
+                  value={item.id}
+                  checked={values.amenities.some(amenitie => amenitie.listSettingsId === item.id)}
+                  handleCheckboxChange={_handleCheckboxChange}
+                />
+              ))}
           </Box>
         </Box>
         <Box>
           <Title type="h3" title="Space Rules" subtitle="Let guests know about the rules of the space." />
           <Box display="grid" gridTemplateColumns={{ _: 'auto', medium: 'auto auto auto' }} gridGap="30px">
-          {isLoadingRules && <Loader />}
-          {!isLoadingRules &&
+            {isLoadingRules && <Loader />}
+            {!isLoadingRules &&
               rules.map((item, index) => (
                 <Checkbox
                   key={index}
@@ -340,8 +381,7 @@ const SpecificationTab = ({
                   checked={values.rules.some(rule => rule.listSettingsId === item.id)}
                   handleCheckboxChange={_handleCheckboxChange}
                 />
-              ))
-            }
+              ))}
           </Box>
         </Box>
         <Box>
@@ -349,25 +389,23 @@ const SpecificationTab = ({
           <Box display="grid" gridTemplateColumns={{ _: 'auto auto', medium: 'auto auto auto' }} gridGap="30px">
             {isLoadingFeatures && <Loader />}
             {!isLoadingFeatures &&
-              features.map((item, index) =>
-                (
-                  <Checkbox
-                    key={index}
-                    label={item.itemName}
-                    name="features"
-                    value={item.id}
-                    checked={values.features.some(feature => feature.listSettingsId === item.id)}
-                    handleCheckboxChange={_handleCheckboxChange}
-                  />
-                )
-              )}
+              features.map((item, index) => (
+                <Checkbox
+                  key={index}
+                  label={item.itemName}
+                  name="features"
+                  value={item.id}
+                  checked={values.features.some(feature => feature.listSettingsId === item.id)}
+                  handleCheckboxChange={_handleCheckboxChange}
+                />
+              ))}
           </Box>
         </Box>
         <Box>
           <Title type="h3" title="Check-In*" subtitle="Let your guests know how they’ll get in." />
           <Box width="350px">
             {isLoadingCheckinTypes && <Loader />}
-            {!isLoadingCheckinTypes && 
+            {!isLoadingCheckinTypes && (
               <Select value={values.accessType} name="accessType" onChange={_handleSelectChange}>
                 {!values.accessType && <option>Select type of checkin</option>}
                 {checkinTypes.map(
@@ -379,24 +417,23 @@ const SpecificationTab = ({
                     )
                 )}
               </Select>
-            }
+            )}
           </Box>
         </Box>
         <Box>
           <Title type="h3" title="Styles*" subtitle="Lorem Ipsum." />
           <Box width="350px">
             {isLoadingStyles && <Loader />}
-            {!isLoadingStyles && 
+            {!isLoadingStyles && (
               <Select value={values.listingStyle} name="listingStyle" onChange={_handleSelectChange}>
                 {!values.styles && <option>Select type of access</option>}
-                {styles.map(
-                  (item, index) =>
+                {styles.map((item, index) => (
                   <option key={index} value={item.itemName}>
                     {item.itemName}
                   </option>
-                )}
+                ))}
               </Select>
-            }
+            )}
           </Box>
         </Box>
         <Box>
@@ -404,58 +441,38 @@ const SpecificationTab = ({
           <Box display="grid" gridTemplateColumns={{ _: 'auto auto', medium: 'auto auto auto' }} gridGap="30px">
             {isLoadingAccess && <Loader />}
             {!isLoadingAccess &&
-              access.map((item, index) =>
-                (
-                  <Checkbox
-                    key={index}
-                    label={item.itemName}
-                    name="access"
-                    value={item.id}
-                    checked={values.access.some(a => a.listSettingsId === item.id)}
-                    handleCheckboxChange={_handleCheckboxChange}
-                  />
-                )
-              )}
+              access.map((item, index) => (
+                <Checkbox
+                  key={index}
+                  label={item.itemName}
+                  name="access"
+                  value={item.id}
+                  checked={values.access.some(a => a.listSettingsId === item.id)}
+                  handleCheckboxChange={_handleCheckboxChange}
+                />
+              ))}
           </Box>
         </Box>
-        {/* <Box>
-          <Title type="h3" title="Style*" subtitle="Lorem Ipsum." />
-          <Box width="350px">
-            {isLoadingAccessTypes && <Loader />}
-            {!isLoadingAccessTypes && 
-              <Select value={values.accessType} name="accessType" onChange={_handleSelectChange}>
-                {!values.accessType && <option>Select type of access</option>}
-                {accessTypes.map(
-                  (item, index) =>
-                    item.itemName !== 'Receptionist' && (
-                      <option key={index} value={item.itemName}>
-                        {item.itemName === 'Person' ? `${item.itemName} at reception` : item.itemName}
-                      </option>
-                    )
-                )}
-              </Select>
-            }
-          </Box>
-        </Box> */}
         <Box>
           <Title
             type="h3"
             title="Photos*"
             subtitle="Photos help guests imagine using your space. You can start with one and add more after you publish."
           />
-          <PhotosGroup>
+          <Box display="grid" gridTemplateColumns={{ _: 'repeat(auto-fit, minmax(160px, 1fr))' }} gridGap="20px">
             {isLoadingPhotos && <Loader />}
-            {!isLoadingPhotos && arrayPhotos.map((item, index) => (
-              <Photo
-                key={index}
-                onDrop={_handleOnDrop}
-                url={item ? cropPicture(item.name) : null}
-                isCover={item ? item.isCover : false}
-                onCover={_handleSetCoverPhoto(item ? item.id : '')}
-                onDelete={_handleDeletePhoto(item ? item.id : '')}
-              />
-            ))}
-          </PhotosGroup>
+            {!isLoadingPhotos &&
+              arrayPhotos.map((item, index) => (
+                <Photo
+                  key={index}
+                  onDrop={_handleOnDrop}
+                  url={item ? cropPicture(item.name) : null}
+                  isCover={item ? item.isCover : false}
+                  onCover={_handleSetCoverPhoto(item ? item.id : '')}
+                  onDelete={_handleDeletePhoto(item ? item.id : '')}
+                />
+              ))}
+          </Box>
           <p>
             TIP: Take photos in landscape mode to capture as much of your space as possible. Shoot from corners to add
             perspective. Spaces look best in natural light. Include all areas your guest can access.
@@ -467,13 +484,49 @@ const SpecificationTab = ({
             title="Video*"
             subtitle="Videos help guests see more of the space and make it easier for them to get a better understanding of it."
           />
-          <Box width="196px">
+          <Box width={160}>
             {isLoadingVideo && <Loader />}
             {!isLoadingVideo && (
               <Video
                 onDrop={_handleOnDropVideo}
                 url={video ? video.name : null}
                 onDelete={_handleDeleteVideo(video ? video.id : '')}
+              />
+            )}
+          </Box>
+        </Box>
+        <Box>
+          <Title
+            type="h3"
+            title="Floorplan*"
+            subtitle="Floorplan help guests see more of the space and make it easier for them to get a better understanding of it."
+          />
+          <Box width={160}>
+            {isLoadingFloorplan && <Loader />}
+            {!isLoadingFloorplan && (
+              <Photo
+                showCover={false}
+                onDrop={_handleOnDropFloorplan}
+                url={floorplan ? floorplan.name : null}
+                onDelete={_handleDeleteFloorplan(floorplan ? floorplan.id : '')}
+              />
+            )}
+          </Box>
+        </Box>
+        <Box>
+          <Title
+            type="h3"
+            title="Menu*"
+            subtitle="Menu help guests see more of the space and make it easier for them to get a better understanding of it."
+          />
+          <Box width={160}>
+            {isLoadingMenu && <Loader />}
+            {!isLoadingMenu && (
+              <Photo
+                showCover={false}
+                onDrop={_handleOnDropMenu}
+                url={menu ? menu.name : null}
+                onDelete={_handleDeleteMenu(menu ? menu.id : '')}
               />
             )}
           </Box>
