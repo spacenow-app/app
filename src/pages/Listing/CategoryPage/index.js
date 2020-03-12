@@ -22,9 +22,7 @@ const CategoryPage = props => {
     activities: { object: objActivities }
   } = useSelector(state => state.category)
 
-  const {
-    object: objBookingPeriod
-  } = useSelector(state => state.category.bookingPeriod)
+  const { object: objBookingPeriod } = useSelector(state => state.category.bookingPeriod)
 
   const {
     create: { isLoading: isLoadingCreating }
@@ -102,6 +100,7 @@ const CategoryPage = props => {
                 Select the activities
               </Caption>
               <List
+                category={categorySelected.otherItemName}
                 circular
                 isActivity
                 data={objActivities}

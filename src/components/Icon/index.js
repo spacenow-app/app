@@ -174,6 +174,31 @@ import { ReactComponent as HourGlass } from './svg/generic/hourglass.svg'
 import { ReactComponent as Payment } from './svg/generic/payment.svg'
 import { ReactComponent as Price } from './svg/generic/price.svg'
 
+// Activites
+import { ReactComponent as EventActivityFirstBirthday } from './svg/EVENT/ACTIVITIES/1st-birthday.svg'
+import { ReactComponent as EventActivityAnniversaries } from './svg/EVENT/ACTIVITIES/anniversaries.svg'
+import { ReactComponent as EventActivityBabyShowers } from './svg/EVENT/ACTIVITIES/baby-showers.svg'
+import { ReactComponent as EventActivityBarMitzvah } from './svg/EVENT/ACTIVITIES/bar-mitzvah.svg'
+import { ReactComponent as EventActivityBirthdays } from './svg/EVENT/ACTIVITIES/birthdays.svg'
+import { ReactComponent as EventActivityBrandActivations } from './svg/EVENT/ACTIVITIES/brand-activations.svg'
+import { ReactComponent as EventActivityConferences } from './svg/EVENT/ACTIVITIES/conferences.svg'
+import { ReactComponent as EventActivityCorporateEvents } from './svg/EVENT/ACTIVITIES/corporate-events.svg'
+import { ReactComponent as EventActivityEngagementParties } from './svg/EVENT/ACTIVITIES/engagement-parties.svg'
+import { ReactComponent as EventActivityFashionShows } from './svg/EVENT/ACTIVITIES/fashion-shows.svg'
+import { ReactComponent as EventActivityHensBucksParties } from './svg/EVENT/ACTIVITIES/hens-bucks-parties.svg'
+import { ReactComponent as EventActivityKidsParties } from './svg/EVENT/ACTIVITIES/kids-parties.svg'
+import { ReactComponent as EventActivityKitchenTea } from './svg/EVENT/ACTIVITIES/kitchen-tea.svg'
+import { ReactComponent as EventActivityMusicPerformance } from './svg/EVENT/ACTIVITIES/music-performance.svg'
+import { ReactComponent as EventActivityOffsiteMeetings } from './svg/EVENT/ACTIVITIES/offsite-meetings.svg'
+import { ReactComponent as EventActivityPrivateDinners } from './svg/EVENT/ACTIVITIES/private-dinners.svg'
+import { ReactComponent as EventActivityProductLaunch } from './svg/EVENT/ACTIVITIES/product-launch.svg'
+import { ReactComponent as EventActivityReceptions } from './svg/EVENT/ACTIVITIES/receptions.svg'
+import { ReactComponent as EventActivityReunions } from './svg/EVENT/ACTIVITIES/reunions.svg'
+import { ReactComponent as EventActivitySeminars } from './svg/EVENT/ACTIVITIES/seminars.svg'
+import { ReactComponent as EventActivityTradeShows } from './svg/EVENT/ACTIVITIES/trade-shows.svg'
+import { ReactComponent as EventActivityWeddings } from './svg/EVENT/ACTIVITIES/weddings.svg'
+import { ReactComponent as EventActivityWorkshops } from './svg/EVENT/ACTIVITIES/workshops.svg'
+
 const Icons = {
   'question-mark': <QuestionMark />,
   'single-space': <SingleSpace />,
@@ -337,9 +362,32 @@ const Icons = {
   'calendar-thin': <CalendarThin />,
   'clock-booking': <ClockBooking />,
   'confirm-with-host': <ConfirmWithHost />,
-  'hourglass': <HourGlass />,
-  'payment': <Payment />,
-  'price': <Price />
+  hourglass: <HourGlass />,
+  payment: <Payment />,
+  price: <Price />,
+  'events-activity-1st-birthday': <EventActivityFirstBirthday />,
+  'events-activity-anniversaries': <EventActivityAnniversaries />,
+  'events-activity-baby-showers': <EventActivityBabyShowers />,
+  'events-activity-bar-mitzvah': <EventActivityBarMitzvah />,
+  'events-activity-birthdays': <EventActivityBirthdays />,
+  'events-activity-brand-activations': <EventActivityBrandActivations />,
+  'events-activity-conferences': <EventActivityConferences />,
+  'events-activity-corporate-events': <EventActivityCorporateEvents />,
+  'events-activity-engagement-parties': <EventActivityEngagementParties />,
+  'events-activity-fashion-shows': <EventActivityFashionShows />,
+  'events-activity-hens-bucks-parties': <EventActivityHensBucksParties />,
+  'events-activity-kids-parties': <EventActivityKidsParties />,
+  'events-activity-kitchen-tea': <EventActivityKitchenTea />,
+  'events-activity-music-performance': <EventActivityMusicPerformance />,
+  'events-activity-offsite-meetings': <EventActivityOffsiteMeetings />,
+  'events-activity-private-dinners': <EventActivityPrivateDinners />,
+  'events-activity-product-launch': <EventActivityProductLaunch />,
+  'events-activity-receptions': <EventActivityReceptions />,
+  'events-activity-reunions': <EventActivityReunions />,
+  'events-activity-seminars': <EventActivitySeminars />,
+  'events-activity-trade-shows': <EventActivityTradeShows />,
+  'events-activity-weddings': <EventActivityWeddings />,
+  'events-activity-workshops': <EventActivityWorkshops />
 }
 
 const Icon = props => {
