@@ -70,6 +70,9 @@ const IconContainer = styled.div`
 
 const IconStyled = styled(Icon)`
   width: 50px;
+  max-width: 50px;
+  height: 50px;
+  max-height: 50px;
   justify-self: center;
   align-self: center;
   fill: #172439;
@@ -91,6 +94,7 @@ const TitleStyled = styled.span`
 `
 
 const ListCategory = ({
+  category,
   circular,
   isActivity,
   data,
@@ -107,6 +111,7 @@ const ListCategory = ({
   const _parseIconName = (isSub, name) => {
     let prefix = 'category-'
     if (isSub) prefix = 'sub-category-'
+    if (isActivity) prefix = `${category}-activity-`
     return prefix + name.replace(/([A-Z])/g, g => `-${g[0].toLowerCase()}`)
   }
 
