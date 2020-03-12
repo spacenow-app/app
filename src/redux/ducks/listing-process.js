@@ -355,7 +355,7 @@ const mutationPostV2Media = gql`
 
 export default function reducer(state = initialState, action) {
   switch (action.type) {
-    case Types.GET_LISTING_STEPS_REQUEST: 
+    case Types.GET_LISTING_STEPS_REQUEST:
     case Types.PUT_LISTING_STEPS_REQUEST: {
       return {
         ...state,
@@ -762,7 +762,6 @@ export const onPostListing = () => async dispatch => {
 }
 
 export const onPutListing = input => async dispatch => {
-  console.log("INPUT ===>>> ", input)
   dispatch({ type: Types.PUT_LISTING_REQUEST })
   try {
     const { data } = await getClientWithAuth(dispatch).mutate({

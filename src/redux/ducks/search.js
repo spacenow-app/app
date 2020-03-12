@@ -59,6 +59,7 @@ const searchResultFields = `
     id
     isCover
     name
+    category
   }
   listingData {
     accessType
@@ -227,7 +228,7 @@ export const onSearch = (lat, lng, categoryKey, page) => async dispatch => {
   try {
     const queryVariables = { lat: `${lat}`, lng: `${lng}`, priceMax: 10000, page }
     if (categoryKey) {
-      queryVariables.categories = categoryKey.map((o) => CATEGORIES[o]).join()
+      queryVariables.categories = categoryKey.map(o => CATEGORIES[o]).join()
     }
     const { data } = await getClient().query({
       fetchPolicy: 'network-only',
@@ -316,7 +317,7 @@ export const onQuery = (searchKey, filters, page = null) => async dispatch => {
   }
 }
 
-export const onSimilarSpaces = (listingId) => async (dispatch) => {
+export const onSimilarSpaces = listingId => async dispatch => {
   try {
     const { data } = await getClient().query({
       fetchPolicy: 'network-only',

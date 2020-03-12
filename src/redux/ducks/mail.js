@@ -5,8 +5,8 @@ import errToMsg from 'utils/errToMsg'
 
 // Graphql
 const sendEmail = gql`
-  mutation sendEmail($template: String!, $data: String!) {
-    sendEmail(template: $template, data: $data) {
+  mutation sendEmail($template: String, $destination: String, $data: String) {
+    sendEmail(template: $template, destination: $destination, data: $data) {
       status
     }
   }

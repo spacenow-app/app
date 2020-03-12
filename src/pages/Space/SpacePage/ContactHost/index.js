@@ -79,10 +79,12 @@ const ContactHost = ({
     )
     const emailGuest = {
       template: 'contact-guest-hourly',
+      destination: values.guestEmail,
       data: JSON.stringify(Object.assign(values, { email: values.guestEmail }))
     }
     const emailHost = {
       template: 'contact-host-hourly',
+      destination: listing.user.email,
       data: JSON.stringify(Object.assign(values, { email: listing.user.email }))
     }
     dispatch(sendMail(emailGuest))

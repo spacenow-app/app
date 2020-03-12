@@ -247,7 +247,11 @@ const ViewPage = ({ match, location, history, ...props }) => {
   }, [dispatch, listing])
 
   if (listing && listing.user.provider === 'wework') {
-    history.push(`/space/partner/${match.params.id}`)
+    history.push(`/space/partner/${match.params.id}/wework`)
+  }
+
+  if (listing && listing.user.provider === 'hoyts') {
+    history.push(`/space/partner/${match.params.id}/hoyts`)
   }
 
   if (isListingLoading) {
@@ -533,6 +537,7 @@ const ViewPage = ({ match, location, history, ...props }) => {
         )
         const emailData = {
           template: 'report-listing',
+          destination: config.admin_email,
           data: JSON.stringify(values)
         }
 

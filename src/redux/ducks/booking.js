@@ -139,6 +139,7 @@ const bookingObj = `
       region
       key
       type
+      category
       createdAt
       updatedAt
     }
@@ -387,6 +388,7 @@ const queryGetListingInfo = gql`
         region
         key
         type
+        category
         createdAt
         updatedAt
       }

@@ -53,6 +53,12 @@ export const Types = {
   LISTING_GET_VIDEO_REQUEST: 'LISTING_GET_VIDEO_REQUEST',
   LISTING_GET_VIDEO_SUCCESS: 'LISTING_GET_VIDEO_SUCCESS',
   LISTING_GET_VIDEO_FAILURE: 'LISTING_GET_VIDEO_FAILURE',
+  LISTING_GET_FLOORPLAN_REQUEST: 'LISTING_GET_FLOORPLAN_REQUEST',
+  LISTING_GET_FLOORPLAN_SUCCESS: 'LISTING_GET_FLOORPLAN_SUCCESS',
+  LISTING_GET_FLOORPLAN_FAILURE: 'LISTING_GET_FLOORPLAN_FAILURE',
+  LISTING_GET_MENU_REQUEST: 'LISTING_GET_MENU_REQUEST',
+  LISTING_GET_MENU_SUCCESS: 'LISTING_GET_MENU_SUCCESS',
+  LISTING_GET_MENU_FAILURE: 'LISTING_GET_MENU_FAILURE',
   SAVE_LISTING_BY_CLICK_START: 'SAVE_LISTING_BY_CLICK_START',
   SAVE_LISTING_BY_CLICK_SUCCESS: 'SAVE_LISTING_BY_CLICK_SUCCESS',
   SAVE_LISTING_BY_CLICK_FAILURE: 'SAVE_LISTING_BY_CLICK_FAILURE',
@@ -120,6 +126,16 @@ const initialState = {
     error: null
   },
   video: {
+    object: {},
+    isLoading: true,
+    error: null
+  },
+  floorplan: {
+    object: {},
+    isLoading: true,
+    error: null
+  },
+  menu: {
     object: {},
     isLoading: true,
     error: null
@@ -494,7 +510,8 @@ const allListingFields = `
 		bucket
 		region
 		key
-		type
+    type
+    category
 		createdAt
 		updatedAt
   }
@@ -576,6 +593,7 @@ const queryGetPhotosByListingId = gql`
       region
       key
       type
+      category
     }
   }
 `
@@ -591,6 +609,39 @@ const queryGetVideoByListingId = gql`
       region
       key
       type
+      category
+    }
+  }
+`
+
+const queryGetFloorplanByListingId = gql`
+  query getFloorplanByListingId($listingId: Int!) {
+    getFloorplanByListingId(listingId: $listingId) {
+      id
+      listingId
+      name
+      isCover
+      bucket
+      region
+      key
+      type
+      category
+    }
+  }
+`
+
+const queryGetMenuByListingId = gql`
+  query getMenuByListingId($listingId: Int!) {
+    getMenuByListingId(listingId: $listingId) {
+      id
+      listingId
+      name
+      isCover
+      bucket
+      region
+      key
+      type
+      category
     }
   }
 `
@@ -1231,6 +1282,66 @@ export default function reducer(state = initialState, action) {
         }
       }
     }
+    case Types.LISTING_GET_FLOORPLAN_REQUEST: {
+      return {
+        ...state,
+        floorplan: {
+          ...state.floorplan,
+          isLoading: true,
+          error: null
+        }
+      }
+    }
+    case Types.LISTING_GET_FLOORPLAN_SUCCESS: {
+      return {
+        ...state,
+        floorplan: {
+          ...state.floorplan,
+          isLoading: false,
+          object: action.payload
+        }
+      }
+    }
+    case Types.LISTING_GET_FLOORPLAN_FAILURE: {
+      return {
+        ...state,
+        floorplan: {
+          ...state.floorplan,
+          isLoading: false,
+          error: action.payload
+        }
+      }
+    }
+    case Types.LISTING_GET_MENU_REQUEST: {
+      return {
+        ...state,
+        menu: {
+          ...state.menu,
+          isLoading: true,
+          error: null
+        }
+      }
+    }
+    case Types.LISTING_GET_MENU_SUCCESS: {
+      return {
+        ...state,
+        menu: {
+          ...state.menu,
+          isLoading: false,
+          object: action.payload
+        }
+      }
+    }
+    case Types.LISTING_GET_MENU_FAILURE: {
+      return {
+        ...state,
+        menu: {
+          ...state.menu,
+          isLoading: false,
+          error: action.payload
+        }
+      }
+    }
     case Types.SAVE_LISTING_BY_CLICK_START: {
       return {
         ...state,
@@ -1496,7 +1607,35 @@ export const onGetVideoByListingId = listingId => async dispatch => {
     })
     dispatch({ type: Types.LISTING_GET_VIDEO_SUCCESS, payload: data.getVideoByListingId })
   } catch (err) {
-    dispatch({ type: Types.LISTING_GET_PHOTOS_FAILURE, payload: errToMsg(err) })
+    dispatch({ type: Types.LISTING_GET_VIDEO_FAILURE, payload: errToMsg(err) })
+  }
+}
+
+export const onGetFloorplanByListingId = listingId => async dispatch => {
+  dispatch({ type: Types.LISTING_GET_FLOORPLAN_REQUEST })
+  try {
+    const { data } = await getClientWithAuth(dispatch).query({
+      query: queryGetFloorplanByListingId,
+      variables: { listingId },
+      fetchPolicy: 'network-only'
+    })
+    dispatch({ type: Types.LISTING_GET_FLOORPLAN_SUCCESS, payload: data.getFloorplanByListingId })
+  } catch (err) {
+    dispatch({ type: Types.LISTING_GET_FLOORPLAN_FAILURE, payload: errToMsg(err) })
+  }
+}
+
+export const onGetMenuByListingId = listingId => async dispatch => {
+  dispatch({ type: Types.LISTING_GET_MENU_REQUEST })
+  try {
+    const { data } = await getClientWithAuth(dispatch).query({
+      query: queryGetMenuByListingId,
+      variables: { listingId },
+      fetchPolicy: 'network-only'
+    })
+    dispatch({ type: Types.LISTING_GET_MENU_SUCCESS, payload: data.getMenuByListingId })
+  } catch (err) {
+    dispatch({ type: Types.LISTING_GET_MENU_FAILURE, payload: errToMsg(err) })
   }
 }
 
@@ -1635,13 +1774,9 @@ const getValues = (_, values) => {
         ? values.features.map(o => o.listSettingsId)
         : undefined,
     listingAccess:
-      values.access !== undefined && values.access.length > 0
-        ? values.access.map(o => o.listSettingsId)
-        : undefined,
+      values.access !== undefined && values.access.length > 0 ? values.access.map(o => o.listSettingsId) : undefined,
     listingStyles:
-      values.styles !== undefined && values.styles.length > 0
-        ? values.access.map(o => o.listSettingsId)
-        : undefined,
+      values.styles !== undefined && values.styles.length > 0 ? values.access.map(o => o.listSettingsId) : undefined,
     listingAccessDays: values.listingAccessDays,
     listingExceptionDates: values.listingExceptionDates || undefined,
     listingRules:

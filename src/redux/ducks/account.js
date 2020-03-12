@@ -199,6 +199,7 @@ const queryGetAllListingsByUser = gql`
           id
           name
           isCover
+          category
         }
         settingsParent {
           id

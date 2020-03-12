@@ -560,6 +560,7 @@ export const createUserCard = (card, bookingId, metadata) => async dispatch => {
     }
     const emailHost = {
       template: 'payment-issue',
+      destination: metadata.guestEmail,
       data: JSON.stringify(Object.assign(emailValues, { email: metadata.guestEmail }))
     }
     dispatch(sendMail(emailHost))
@@ -603,6 +604,7 @@ export const pay = (cardId, bookingId, history, metadata) => async dispatch => {
     }
     const emailHost = {
       template: 'payment-issue',
+      destination: metadata.guestEmail,
       data: JSON.stringify(Object.assign(emailValues, { email: metadata.guestEmail }))
     }
     dispatch(sendMail(emailHost))
