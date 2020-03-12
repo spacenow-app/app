@@ -13,7 +13,7 @@ const Space = ({ match, ...props }) => {
       <NavBar shownSearch {...props} />
       <Switch>
         <Route exact component={SpacePage} path={`${match.path}/:id`} />
-        <Route exact component={PartnerPage} path={`${match.path}/partner/:id`} />
+        <Route component={PartnerPage} path={`${match.path}/partner/:id`} />
         <Route component={NotFoundPage} />
       </Switch>
     </Suspense>

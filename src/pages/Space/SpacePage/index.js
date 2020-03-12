@@ -684,6 +684,7 @@ const SpacePage = ({ match, location, history, ...props }) => {
         )
         const emailData = {
           template: 'report-listing',
+          destination: config.admin_email,
           data: JSON.stringify(values)
         }
 
@@ -778,6 +779,7 @@ const SpacePage = ({ match, location, history, ...props }) => {
     }
     const emailHost = {
       template: 'enquiry-contact-host',
+      destination: listing.user.email,
       data: JSON.stringify(Object.assign(emailValues, { email: listing.user.email }))
     }
 
@@ -879,10 +881,6 @@ const SpacePage = ({ match, location, history, ...props }) => {
     return totalReviews
   }
 
-  if (listing && listing.user.provider === 'wework') {
-    return <Redirect to={{ pathname: `/space/partner/${match.params.id}` }} push />
-  }
-
   if (listing && listing.status === 'deleted') {
     toast.warn(`The space ${listing.id} was deleted`)
     return <Redirect to={{ pathname: `/search` }} push />
@@ -896,6 +894,14 @@ const SpacePage = ({ match, location, history, ...props }) => {
   if (listing && listing.user.userBanStatus == 1) {
     toast.warn(`The host for space ${listing.id} was blocked by Spacenow`)
     return <Redirect to={{ pathname: `/search` }} push />
+  }
+
+  if (listing && listing.user.provider === 'wework') {
+    return <Redirect to={{ pathname: `/space/partner/${match.params.id}/wework` }} push />
+  }
+
+  if (listing && listing.user.provider === 'hoyts') {
+    return <Redirect to={{ pathname: `/space/partner/${match.params.id}/hoyts` }} push />
   }
 
   if (isListingLoading) {

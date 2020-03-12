@@ -1,7 +1,6 @@
 /* eslint-disable react/no-array-index-key */
 /* eslint-disable no-console */
 import React, { useEffect, useCallback, useState } from 'react'
-import styled from 'styled-components'
 import Helmet from 'react-helmet'
 import { withFormik } from 'formik'
 import * as Yup from 'yup'

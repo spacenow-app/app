@@ -1,6 +1,6 @@
 import { gql } from 'apollo-boost'
 
-import { getClientWithAuth } from 'graphql/apolloClient'
+import { getClientWithAuth, getClient } from 'graphql/apolloClient'
 import errToMsg from 'utils/errToMsg'
 
 import { toast } from 'react-toastify'
@@ -10,6 +10,9 @@ export const Types = {
   CREATE_WEWORK_REFERRAL_START: 'CREATE_WEWORK_REFERRAL_START',
   CREATE_WEWORK_REFERRAL_SUCCESS: 'CREATE_WEWORK_REFERRAL_SUCCESS',
   CREATE_WEWORK_REFERRAL_ERROR: 'CREATE_WEWORK_REFERRAL_ERROR',
+  CREATE_HOYTS_REFERRAL_START: 'CREATE_HOYTS_REFERRAL_START',
+  CREATE_HOYTS_REFERRAL_SUCCESS: 'CREATE_HOYTS_REFERRAL_SUCCESS',
+  CREATE_HOYTS_REFERRAL_ERROR: 'CREATE_HOYTS_REFERRAL_ERROR',
   SEND_HUBSPOT_FORM_START: 'SEND_HUBSPOT_FORM_START',
   SEND_HUBSPOT_FORM_SUCCESS: 'SEND_HUBSPOT_FORM_SUCCESS',
   SEND_HUBSPOT_FORM_FAILED: 'SEND_HUBSPOT_FORM_FAILED',
@@ -23,30 +26,38 @@ const initialState = {
   isLoading: false,
   error: {
     message: null
-  },
+  }
 }
 
 // GraphQL
 const mutationCreateWeWorkReferral = gql`
   mutation createWeWorkReferral($wework: WeWorkInput) {
     createWeWorkReferral(wework: $wework) {
-        status
+      status
+    }
+  }
+`
+
+const mutationCreateHoytsReferral = gql`
+  mutation createHoytsReferral($hoyts: HoytsInput, $listingId: Int) {
+    createHoytsReferral(hoyts: $hoyts, listingId: $listingId) {
+      status
     }
   }
 `
 
 const mutationSendHubSpotForm = gql`
   mutation sendHubSpotForm($hubspot: WeWorkInput) {
-      sendHubSpotForm(hubspot: $hubspot) {
-        status
+    sendHubSpotForm(hubspot: $hubspot) {
+      status
     }
   }
 `
 
 const mutationSendRequestForm = gql`
   mutation sendRequestForm($request: RequestInput) {
-      sendRequestForm(request: $request) {
-        status
+    sendRequestForm(request: $request) {
+      status
     }
   }
 `
@@ -63,10 +74,31 @@ export default function reducer(state = initialState, action) {
     case Types.CREATE_WEWORK_REFERRAL_SUCCESS: {
       return {
         ...state,
-        isLoading: false,
+        isLoading: false
       }
     }
     case Types.CREATE_WEWORK_REFERRAL_ERROR: {
+      return {
+        ...state,
+        isLoading: false,
+        error: {
+          message: action.payload
+        }
+      }
+    }
+    case Types.CREATE_HOYTS_REFERRAL_START: {
+      return {
+        ...state,
+        isLoading: true
+      }
+    }
+    case Types.CREATE_HOYTS_REFERRAL_SUCCESS: {
+      return {
+        ...state,
+        isLoading: false
+      }
+    }
+    case Types.CREATE_HOYTS_REFERRAL_ERROR: {
       return {
         ...state,
         isLoading: false,
@@ -84,7 +116,7 @@ export default function reducer(state = initialState, action) {
     case Types.SEND_HUBSPOT_FORM_SUCCESS: {
       return {
         ...state,
-        isLoading: false,
+        isLoading: false
       }
     }
     case Types.SEND_HUBSPOT_FORM_FAILED: {
@@ -105,7 +137,7 @@ export default function reducer(state = initialState, action) {
     case Types.SEND_REQUEST_FORM_SUCCESS: {
       return {
         ...state,
-        isLoading: false,
+        isLoading: false
       }
     }
     case Types.SEND_REQUEST_FORM_FAILED: {
@@ -129,7 +161,7 @@ const createWeWorkStart = () => {
 
 const createWeWorkSuccess = () => {
   return {
-    type: Types.CREATE_WEWORK_REFERRAL_SUCCESS,
+    type: Types.CREATE_WEWORK_REFERRAL_SUCCESS
     // payload: weworkResponse
   }
 }
@@ -145,7 +177,7 @@ const sendHubSpotStart = () => {
   return { type: Types.SEND_HUBSPOT_FORM_START }
 }
 
-const sendHubSpotSuccess = (data) => {
+const sendHubSpotSuccess = data => {
   return {
     type: Types.SEND_HUBSPOT_FORM_SUCCESS,
     payload: data
@@ -160,7 +192,7 @@ const sendHubSpotFailed = error => {
 }
 
 // Side Effects
-export const onCreateWeWorkReferral = (wework) => async dispatch => {
+export const onCreateWeWorkReferral = wework => async dispatch => {
   dispatch(createWeWorkStart())
   try {
     const { data } = await getClientWithAuth(dispatch).mutate({
@@ -173,7 +205,22 @@ export const onCreateWeWorkReferral = (wework) => async dispatch => {
   }
 }
 
-export const onSendHubSpotForm = (hubspot) => async dispatch => {
+export const onCreateHoytsReferral = (hoyts, listingId) => async dispatch => {
+  dispatch({ type: Types.CREATE_HOYTS_REFERRAL_START })
+  try {
+    const { data } = await getClient(dispatch).mutate({
+      mutation: mutationCreateHoytsReferral,
+      variables: { hoyts, listingId }
+    })
+    dispatch({ type: Types.CREATE_HOYTS_REFERRAL_SUCCESS, payload: data.createHoytsReferral })
+    toast.success('Your request was sent successfully.')
+  } catch (err) {
+    dispatch({ type: Types.CREATE_HOYTS_REFERRAL_START, paylad: errToMsg(err) })
+    toast.success('Your request could not been sent.')
+  }
+}
+
+export const onSendHubSpotForm = hubspot => async dispatch => {
   dispatch(sendHubSpotStart())
   try {
     const { data } = await getClientWithAuth(dispatch).mutate({
@@ -181,14 +228,14 @@ export const onSendHubSpotForm = (hubspot) => async dispatch => {
       variables: { hubspot }
     })
     dispatch(sendHubSpotSuccess(data.sendHubSpotForm))
-    toast.success("Your request was sent successfully.")
+    toast.success('Your request was sent successfully.')
   } catch (err) {
     dispatch(sendHubSpotFailed(errToMsg(err)))
-    toast.success("Your request could not been sent.")
+    toast.success('Your request could not been sent.')
   }
 }
 
-export const onSendRequestForm = (request) => async dispatch => {
+export const onSendRequestForm = request => async dispatch => {
   dispatch({ type: Types.SEND_REQUEST_FORM_START })
   try {
     const { data } = await getClientWithAuth(dispatch).mutate({
@@ -196,9 +243,9 @@ export const onSendRequestForm = (request) => async dispatch => {
       variables: { request }
     })
     dispatch({ type: Types.SEND_REQUEST_FORM_SUCCESS, payload: data.sendRequestForm })
-    toast.success("Your request was sent successfully.")
+    toast.success('Your request was sent successfully.')
   } catch (err) {
     dispatch({ type: Types.SEND_REQUEST_FORM_FAILED, payload: errToMsg(err) })
-    toast.success("Your request could not been sent.")
+    toast.success('Your request could not been sent.')
   }
 }
