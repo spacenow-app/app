@@ -14,6 +14,7 @@ const NotificationPage = lazy(() => import('pages/Account/NotificationPage'))
 const DocumentVerificationPage = lazy(() => import('pages/Account/DocumentVerificationPage'))
 const MessagePage = lazy(() => import('pages/Account/MessagePage'))
 const MessageDetailPage = lazy(() => import('pages/Account/MessageDetailPage'))
+const SavedListingPage = lazy(() => import('pages/Account/SavedListingPage'))
 const NotFoundPage = lazy(() => import('pages/NotFoundPage'))
 
 const BoxStyled = styled(Box)`
@@ -47,6 +48,7 @@ const Account = ({ match, ...props }) => {
               <Route exact component={DocumentVerificationPage} path={`${match.path}/document-verification`} />
               <Route exact component={MessagePage} path={`${match.path}/messages`} />
               <Route exact component={MessageDetailPage} path={`${match.path}/message/:id`} />
+              <Route exact component={SavedListingPage} path={`${match.path}/saved-listing`} />
               <Route component={NotFoundPage} />
             </Switch>
           </Box>

@@ -403,7 +403,7 @@ const ItineraryPage = ({ match, location, history, ...props }) => {
                     <Title
                       type="h7"
                       title={`${listing.settingsParent.subcategory.itemName} for ${booking.period} ${_spelling(
-                        booking.bookingPeriod,
+                        booking.listing.bookingPeriod,
                         booking.period
                       ).toLowerCase()} in ${
                         listing.location.address1 ? listing.location.address1 : listing.location.city

@@ -60,6 +60,8 @@ import { ReactComponent as CheckMark } from './svg/generic/check-mark.svg'
 import { ReactComponent as Search } from './svg/generic/search.svg'
 import { ReactComponent as Clock } from './svg/generic/clock.svg'
 import { ReactComponent as PinBGWhite } from './svg/generic/pin-bgwhite.svg'
+import { ReactComponent as Bookmark } from './svg/generic/bookmark.svg'
+import { ReactComponent as BookmarkFilled } from './svg/generic/bookmark-filled.svg'
 
 // Access Type
 import { ReactComponent as AccessTypeKeys } from './svg/access-type/access_type_keys.svg'
@@ -365,6 +367,8 @@ const Icons = {
   hourglass: <HourGlass />,
   payment: <Payment />,
   price: <Price />,
+  bookmark: <Bookmark />,
+  'bookmark-filled': <BookmarkFilled />,
   'events-activity-1st-birthday': <EventActivityFirstBirthday />,
   'events-activity-anniversaries': <EventActivityAnniversaries />,
   'events-activity-baby-showers': <EventActivityBabyShowers />,

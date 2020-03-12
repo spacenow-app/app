@@ -51,7 +51,10 @@ import {
   onGetAvailabilitiesByListingId,
   onClaimListing,
   onGetVideoByListingId,
-  onSaveClicksByListing
+  onSaveClicksByListing,
+  onCreateSavedListingByUser,
+  onRemoveSavedListingByUser,
+  onGetSavedListingByUser
 } from 'redux/ducks/listing'
 
 import { onSimilarSpaces } from 'redux/ducks/search'
@@ -250,6 +253,7 @@ const SpacePage = ({ match, location, history, ...props }) => {
   const { similar: similarResults } = useSelector(state => state.search)
   const { public: publicReviews, google: googleReviews, totalPages } = useSelector(state => state.reviews.get)
   const { object: videoInput } = useSelector(state => state.listing.video)
+  const { listings: savedListings } = useSelector(state => state.listing.savedListings)
 
   const [datesSelected, setDatesSelected] = useState([])
   const [date, setDate] = useState('')
@@ -276,6 +280,10 @@ const SpacePage = ({ match, location, history, ...props }) => {
     listing && dispatch(onGetAllSpecifications(listing.settingsParent.id, listing.listingData))
     listing && user && user.id && dispatch(onGetPendingBooking(listing.id, user.id))
   }, [dispatch, listing, user])
+
+  useEffect(() => {
+    if (user) dispatch(onGetSavedListingByUser(user.id))
+  }, [user, dispatch])
 
   useEffect(() => {
     listing && dispatch(onGetAvailabilitiesByListingId(listing.id))
@@ -908,6 +916,23 @@ const SpacePage = ({ match, location, history, ...props }) => {
     return <Loader text="Loading listing view" />
   }
 
+  const _handleSaveListingByUser = async (listingId, userId) => {
+    if (!isAuthenticated) {
+      history.push(`/auth/signin`, {
+        from: {
+          ...location
+        }
+      })
+    } else {
+      await dispatch(onCreateSavedListingByUser(listingId, userId))
+      toast.success('Listing saved to your account - go to your dashboard to see it!')
+    }
+  }
+
+  const _handleRemoveSavedListingByUser = async (listingId, userId) => {
+    await dispatch(onRemoveSavedListingByUser(listingId, userId))
+  }
+
   return (
     <>
       {imageHeight == 325 ||
@@ -986,7 +1011,32 @@ const SpacePage = ({ match, location, history, ...props }) => {
                 </Cell>
                 {listing.listingData.bookingType && listing.listingData.bookingType !== 'poa' && (
                   <Cell width={4} style={{ justifySelf: 'end' }}>
-                    <Tag>{`${capitalize(listing.listingData.bookingType)} Booking`}</Tag>
+                    <Box
+                      display="grid"
+                      gridAutoFlow="column"
+                      // gridAutoFlow={{ _: 'row', medium: 'column' }}
+                      alignItems="center"
+                      // justifyItems={{ _: 'end', medium: 'center' }}
+                    >
+                      {savedListings && savedListings.find(res => res.listingId === listing.id) ? (
+                        <Box
+                          display={{ _: 'none', medium: 'block' }}
+                          onClick={() => _handleRemoveSavedListingByUser(listing.id, user.id)}
+                          style={{ cursor: 'pointer', marginRight: '8px' }}
+                        >
+                          <Icon name="bookmark-filled" width="30" height="30" fill="#6adc91" />
+                        </Box>
+                      ) : (
+                        <Box
+                          display={{ _: 'none', medium: 'block' }}
+                          onClick={() => _handleSaveListingByUser(listing.id, user.id)}
+                          style={{ cursor: 'pointer', marginRight: '8px' }}
+                        >
+                          <Icon name="bookmark" width="30" height="30" />
+                        </Box>
+                      )}
+                      <Tag>{`${capitalize(listing.listingData.bookingType)} Booking`}</Tag>
+                    </Box>
                   </Cell>
                 )}
               </Grid>
@@ -1341,6 +1391,7 @@ const SpacePage = ({ match, location, history, ...props }) => {
                       handleMessageChange={_handleMessageChange}
                       dispatch={dispatch}
                       history={history}
+                      setVisitRequest={setVisitRequest}
                     />
                   )}
                 </>
