@@ -66,20 +66,34 @@ const SpaceDetailsPage = ({ match, history, location, ...props }) => {
 
   return (
     <Wrapper>
-      <Box my={{ _: '20px', medium: '40px' }}>
+      <Box display="grid" gridGap={{ _: '30px'}}>
         <Box display="flex" justifyContent="start">
           <Box>
             <Tag
               icon={
                 <Icon
                   width="24px"
-                  name={_parseCategoryIconName(objectListing.category.otherItemName)}
+                  name={_parseCategoryIconName(objectListing.settingsParent.category.otherItemName, false)}
                 />
               }
             >
-              {objectListing.category.itemName}
+              {objectListing.settingsParent.category.itemName}
             </Tag>
           </Box>
+          {objectListing.settingsParent.subcategory !== null &&
+            <Box margin="0 10px">
+              <Tag
+                icon={
+                  <Icon
+                    width="24px"
+                    name={_parseCategoryIconName(objectListing.settingsParent.subcategory.otherItemName, true)}
+                  />
+                }
+              >
+                {objectListing.settingsParent.subcategory.itemName}
+              </Tag>
+            </Box>
+          }
         </Box>
       </Box>
       <Tab>
