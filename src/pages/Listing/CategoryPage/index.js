@@ -55,7 +55,7 @@ const CategoryPage = props => {
 
   const _handleSubCategoryClick = (_, value) => {
     setSubCategorySelected(value)
-    if (value.itemName === 'Creative') {
+    if (categorySelected.itemName === 'Creative') {
       dispatch(onGetCategoryActivities(value.bookingPeriod.listSettingsParentId))
     }
   }
@@ -98,21 +98,6 @@ const CategoryPage = props => {
             handleItemClick={_handleCategoryClick}
             itemSelected={categorySelected}
           />
-          {categorySelected && categorySelected.itemName === 'Events' && objActivities && objActivities.length > 0 && (
-            <>
-              <Caption large centered margin="50px 0">
-                Select the activities
-              </Caption>
-              <List
-                category={categorySelected.otherItemName}
-                circular
-                isActivity
-                data={objActivities}
-                handleItemClick={_handleActivityClick}
-                itemSelected={activitiesSelected}
-              />
-            </>
-          )}
           {categorySelected &&
             categorySelected.subCategories &&
             categorySelected.itemName !== 'Office' &&
@@ -126,6 +111,24 @@ const CategoryPage = props => {
                   data={categorySelected.subCategories}
                   handleItemClick={_handleSubCategoryClick}
                   itemSelected={subCategorySelected}
+                />
+              </>
+            )}
+          {categorySelected &&
+            (categorySelected.itemName === 'Events' || categorySelected.itemName === 'Creative') &&
+            objActivities &&
+            objActivities.length > 0 && (
+              <>
+                <Caption large centered margin="50px 0">
+                  Select the activities
+                </Caption>
+                <List
+                  category={categorySelected.otherItemName}
+                  circular
+                  isActivity
+                  data={objActivities}
+                  handleItemClick={_handleActivityClick}
+                  itemSelected={activitiesSelected}
                 />
               </>
             )}
