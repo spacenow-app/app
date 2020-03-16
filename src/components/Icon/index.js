@@ -10,6 +10,7 @@ import { ReactComponent as CategoryMeetingRoom } from './svg/category/category_m
 import { ReactComponent as CategoryOffice } from './svg/category/category_office.svg'
 import { ReactComponent as CategoryParking } from './svg/category/category_parking.svg'
 import { ReactComponent as CategoryStorage } from './svg/category/category_storage.svg'
+import { ReactComponent as CategoryCreative } from './svg/category/category_creative.svg'
 // Sub-Category
 import { ReactComponent as SubCategoryBoardRoom } from './svg/sub-category/sub_category_board_room.svg'
 import { ReactComponent as SubCategoryBusiness } from './svg/sub-category/sub_category_business.svg'
@@ -176,7 +177,7 @@ import { ReactComponent as HourGlass } from './svg/generic/hourglass.svg'
 import { ReactComponent as Payment } from './svg/generic/payment.svg'
 import { ReactComponent as Price } from './svg/generic/price.svg'
 
-// Activites
+// EVENT Activites
 import { ReactComponent as EventActivityFirstBirthday } from './svg/EVENT/ACTIVITIES/1st-birthday.svg'
 import { ReactComponent as EventActivityAnniversaries } from './svg/EVENT/ACTIVITIES/anniversaries.svg'
 import { ReactComponent as EventActivityBabyShowers } from './svg/EVENT/ACTIVITIES/baby-showers.svg'
@@ -201,6 +202,31 @@ import { ReactComponent as EventActivityTradeShows } from './svg/EVENT/ACTIVITIE
 import { ReactComponent as EventActivityWeddings } from './svg/EVENT/ACTIVITIES/weddings.svg'
 import { ReactComponent as EventActivityWorkshops } from './svg/EVENT/ACTIVITIES/workshops.svg'
 
+// CREATIVE STUDIO Activites
+import { ReactComponent as CreativeStudioActivityArtGallery } from './svg/CREATIVE/ACTIVITIES/STUDIO/art-gallery.svg'
+import { ReactComponent as CreativeStudioActivityAuditionsCastings } from './svg/CREATIVE/ACTIVITIES/STUDIO/auditions-castings.svg'
+import { ReactComponent as CreativeStudioActivityBrandActivations } from './svg/CREATIVE/ACTIVITIES/STUDIO/brand-activations.svg'
+import { ReactComponent as CreativeStudioActivityCinema } from './svg/CREATIVE/ACTIVITIES/STUDIO/cinema.svg'
+import { ReactComponent as CreativeStudioActivityDanceClasses } from './svg/CREATIVE/ACTIVITIES/STUDIO/dance-classes.svg'
+import { ReactComponent as CreativeStudioActivityDanceStudio } from './svg/CREATIVE/ACTIVITIES/STUDIO/dance-studio.svg'
+import { ReactComponent as CreativeStudioActivityDesignStudio } from './svg/CREATIVE/ACTIVITIES/STUDIO/design-studio.svg'
+import { ReactComponent as CreativeStudioActivityExhibitions } from './svg/CREATIVE/ACTIVITIES/STUDIO/exhibitions.svg'
+import { ReactComponent as CreativeStudioActivityFashionShows } from './svg/CREATIVE/ACTIVITIES/STUDIO/fashion-shows.svg'
+import { ReactComponent as CreativeStudioActivityDashionStudio } from './svg/CREATIVE/ACTIVITIES/STUDIO/fashion-studio.svg'
+import { ReactComponent as CreativeStudioActivityFilmEditingSuite } from './svg/CREATIVE/ACTIVITIES/STUDIO/film-editing-suite.svg'
+import { ReactComponent as CreativeStudioActivityManufacturingSpace } from './svg/CREATIVE/ACTIVITIES/STUDIO/manufacturing-space.svg'
+import { ReactComponent as CreativeStudioActivityMusicRehearsalSpace } from './svg/CREATIVE/ACTIVITIES/STUDIO/music-rehearsal-space.svg'
+import { ReactComponent as CreativeStudioActivityMusicalPerformances } from './svg/CREATIVE/ACTIVITIES/STUDIO/musical-performances.svg'
+import { ReactComponent as CreativeStudioActivityOffsiteMeetings } from './svg/CREATIVE/ACTIVITIES/STUDIO/offsite-meetings.svg'
+import { ReactComponent as CreativeStudioActivityPerformanceVenue } from './svg/CREATIVE/ACTIVITIES/STUDIO/performance-venue.svg'
+import { ReactComponent as CreativeStudioActivityPhotographyStudio } from './svg/CREATIVE/ACTIVITIES/STUDIO/photography-studio.svg'
+import { ReactComponent as CreativeStudioActivityRehearsalSpace } from './svg/CREATIVE/ACTIVITIES/STUDIO/rehearsal-space.svg'
+import { ReactComponent as CreativeStudioActivitySoundRecordingStudio } from './svg/CREATIVE/ACTIVITIES/STUDIO/sound-recording-studio.svg'
+import { ReactComponent as CreativeStudioActivityTheatre } from './svg/CREATIVE/ACTIVITIES/STUDIO/theatre.svg'
+import { ReactComponent as CreativeStudioActivityVideoFilmShoots } from './svg/CREATIVE/ACTIVITIES/STUDIO/video-film-shoots.svg'
+import { ReactComponent as CreativeStudioActivityVisualArtStudio } from './svg/CREATIVE/ACTIVITIES/STUDIO/visual-art-studio.svg'
+import { ReactComponent as CreativeStudioActivityWorkshop } from './svg/CREATIVE/ACTIVITIES/STUDIO/workshops.svg'
+
 const Icons = {
   'question-mark': <QuestionMark />,
   'single-space': <SingleSpace />,
@@ -216,6 +242,7 @@ const Icons = {
   'category-coworking': <CategoryCoworking />,
   'category-desk': <CategoryDesk />,
   'category-events': <CategoryEvents />,
+  'category-creative': <CategoryCreative />,
   'category-hospitality-retail': <CategoryHospitality />,
   'category-meetings': <CategoryMeetingRoom />,
   'category-office': <CategoryOffice />,
@@ -250,7 +277,9 @@ const Icons = {
   'sub-category-sports': <SubCategorySports />,
   'sub-category-trainning-room': <SubCategoryTrainingRoom />,
   'sub-category-venue': <SubCategoryVenue />,
+  'sub-category-location': <SubCategoryVenue />,
   'sub-category-wedding': <SubCategoryWeddingVenue />,
+  'sub-category-studio': <SubCategoryWeddingVenue />,
   'sub-category-wine-storage': <SubCategoryWineStorage />,
 
   'access-type-keys': <AccessTypeKeys />,
@@ -391,7 +420,31 @@ const Icons = {
   'events-activity-seminars': <EventActivitySeminars />,
   'events-activity-trade-shows': <EventActivityTradeShows />,
   'events-activity-weddings': <EventActivityWeddings />,
-  'events-activity-workshops': <EventActivityWorkshops />
+  'events-activity-workshops': <EventActivityWorkshops />,
+
+  'creative-studio-activity-art-gallery': <CreativeStudioActivityArtGallery />,
+  'creative-studio-activity-auditions-castings': <CreativeStudioActivityAuditionsCastings />,
+  'creative-studio-activity-brand-activations': <CreativeStudioActivityBrandActivations />,
+  'creative-studio-activity-cinema': <CreativeStudioActivityCinema />,
+  'creative-studio-activity-dance-classes': <CreativeStudioActivityDanceClasses />,
+  'creative-studio-activity-dance-studio': <CreativeStudioActivityDanceStudio />,
+  'creative-studio-activity-design-studio': <CreativeStudioActivityDesignStudio />,
+  'creative-studio-activity-exhibitions': <CreativeStudioActivityExhibitions />,
+  'creative-studio-activity-fashion-shows': <CreativeStudioActivityFashionShows />,
+  'creative-studio-activity-film-editing-suite': <CreativeStudioActivityFilmEditingSuite />,
+  'creative-studio-activity-manufacturing-space': <CreativeStudioActivityManufacturingSpace />,
+  'creative-studio-activity-music-performance-venue': <CreativeStudioActivityMusicalPerformances />,
+  'creative-studio-activity-music-rehearsal-space': <CreativeStudioActivityMusicRehearsalSpace />,
+  'creative-studio-activity-musical-performances': <CreativeStudioActivityMusicalPerformances />,
+  'creative-studio-activity-offsite-meetings': <CreativeStudioActivityOffsiteMeetings />,
+  'creative-studio-activity-performance-venue': <CreativeStudioActivityPerformanceVenue />,
+  'creative-studio-activity-photography-studio': <CreativeStudioActivityPhotographyStudio />,
+  'creative-studio-activity-rehearsal-space': <CreativeStudioActivityRehearsalSpace />,
+  'creative-studio-activity-sound-recording-studio': <CreativeStudioActivitySoundRecordingStudio />,
+  'creative-studio-activity-theatre': <CreativeStudioActivityTheatre />,
+  'creative-studio-activity-video-film-shoots': <CreativeStudioActivityVideoFilmShoots />,
+  'creative-studio-activity-visual-art-studios': <CreativeStudioActivityVisualArtStudio />,
+  'creative-studio-activity-workshops': <CreativeStudioActivityWorkshop />
 }
 
 const Icon = props => {
