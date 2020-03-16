@@ -55,6 +55,9 @@ const CategoryPage = props => {
 
   const _handleSubCategoryClick = (_, value) => {
     setSubCategorySelected(value)
+    if (value.itemName === 'Creative') {
+      dispatch(onGetCategoryActivities(value.bookingPeriod.listSettingsParentId))
+    }
   }
 
   const _handleActivityClick = (__, value) => {
