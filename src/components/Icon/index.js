@@ -226,6 +226,11 @@ import { ReactComponent as CreativeStudioActivityTheatre } from './svg/CREATIVE/
 import { ReactComponent as CreativeStudioActivityVideoFilmShoots } from './svg/CREATIVE/ACTIVITIES/STUDIO/video-film-shoots.svg'
 import { ReactComponent as CreativeStudioActivityVisualArtStudio } from './svg/CREATIVE/ACTIVITIES/STUDIO/visual-art-studio.svg'
 import { ReactComponent as CreativeStudioActivityWorkshops } from './svg/CREATIVE/ACTIVITIES/STUDIO/workshops.svg'
+import { ReactComponent as CreativeStudioActivityCommunityHall } from './svg/CREATIVE/ACTIVITIES/LOCATION/community-hall.svg'
+import { ReactComponent as CreativeStudioActivityDinners } from './svg/CREATIVE/ACTIVITIES/LOCATION/dinners.svg'
+import { ReactComponent as CreativeStudioActivityFestivals } from './svg/CREATIVE/ACTIVITIES/LOCATION/festivals.svg'
+import { ReactComponent as CreativeStudioActivityOpenAirSpace } from './svg/CREATIVE/ACTIVITIES/LOCATION/open-air-space.svg'
+import { ReactComponent as CreativeStudioActivityParkBushland } from './svg/CREATIVE/ACTIVITIES/LOCATION/park-bushland.svg'
 
 const Icons = {
   'question-mark': <QuestionMark />,
@@ -437,15 +442,21 @@ const Icons = {
   'creative-activity-music-performance-venue': <CreativeStudioActivityMusicalPerformances />,
   'creative-activity-music-rehearsal-space': <CreativeStudioActivityMusicRehearsalSpace />,
   'creative-activity-musical-performances': <CreativeStudioActivityMusicalPerformances />,
+  'creative-activity-music-performance': <CreativeStudioActivityMusicalPerformances />,
   'creative-activity-offsite-meetings': <CreativeStudioActivityOffsiteMeetings />,
   'creative-activity-performance-venue': <CreativeStudioActivityPerformanceVenue />,
   'creative-activity-photography-studio': <CreativeStudioActivityPhotographyStudio />,
   'creative-activity-rehearsal-space': <CreativeStudioActivityRehearsalSpace />,
   'creative-activity-sound-recording-studio': <CreativeStudioActivitySoundRecordingStudio />,
   'creative-activity-theatre': <CreativeStudioActivityTheatre />,
-  'creative-activity-video-film-shoots': <CreativeStudioActivityVideoFilmShoots />,
-  'creative-activity-visual-art-studios': <CreativeStudioActivityVisualArtStudio />,
-  'creative-activity-workshops': <CreativeStudioActivityWorkshops />
+  'creative-activity-video-film-shoot': <CreativeStudioActivityVideoFilmShoots />,
+  'creative-activity-visual-art-studio': <CreativeStudioActivityVisualArtStudio />,
+  'creative-activity-workshops': <CreativeStudioActivityWorkshops />,
+  'creative-activity-community-hall': <CreativeStudioActivityCommunityHall />,
+  'creative-activity-dinners': <CreativeStudioActivityDinners />,
+  'creative-activity-festivals': <CreativeStudioActivityFestivals />,
+  'creative-activity-open-air-space': <CreativeStudioActivityOpenAirSpace />,
+  'creative-activity-park-bushland': <CreativeStudioActivityParkBushland />
 }
 
 const Icon = props => {
