@@ -300,7 +300,7 @@ const SpecificationTab = ({
 
   return (
     <form>
-      <Box display="grid" gridGap={{ _: '20px', medium: '80px' }}>
+      <Box display="grid" gridGap={{ _: '30px' }}>
         <Helmet title="Listing Space Specification - Spacenow" />
         <Box>
           <Title

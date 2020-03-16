@@ -1,7 +1,7 @@
 const path = require('path')
 const fs = require('fs')
 
-const directoryPath = path.join(__dirname, '../src/components/Icon/svg/EVENT/ACTIVITIES')
+const directoryPath = path.join(__dirname, '../src/components/Icon/svg/EVENT/STYLE')
 
 fs.readdir(directoryPath, function(err, files) {
   if (err) {

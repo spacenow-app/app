@@ -39,14 +39,15 @@ const CategoryPage = props => {
   const [activitiesSelected, setActivitiesSelected] = useState([])
 
   const _handleCategoryClick = (_, value) => {
+    console.log(value)
     if (value.itemName === 'Office') {
       setCategorySelected(value)
       setSubCategorySelected(value.subCategories[1])
       return
     }
     if (value.itemName === 'Events') {
-      dispatch(onGetCategoryActivities(value.id))
-      dispatch(onGetCategoryBookingPeriod(value.id))
+      dispatch(onGetCategoryActivities(value.subCategories[0].bookingPeriod.listSettingsParentId))
+      dispatch(onGetCategoryBookingPeriod(value.subCategories[0].bookingPeriod.listSettingsParentId))
     }
     setCategorySelected(value)
     setSubCategorySelected(null)
