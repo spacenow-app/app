@@ -212,7 +212,7 @@ import { ReactComponent as CreativeStudioActivityDanceStudio } from './svg/CREAT
 import { ReactComponent as CreativeStudioActivityDesignStudio } from './svg/CREATIVE/ACTIVITIES/STUDIO/design-studio.svg'
 import { ReactComponent as CreativeStudioActivityExhibitions } from './svg/CREATIVE/ACTIVITIES/STUDIO/exhibitions.svg'
 import { ReactComponent as CreativeStudioActivityFashionShows } from './svg/CREATIVE/ACTIVITIES/STUDIO/fashion-shows.svg'
-import { ReactComponent as CreativeStudioActivityDashionStudio } from './svg/CREATIVE/ACTIVITIES/STUDIO/fashion-studio.svg'
+import { ReactComponent as CreativeStudioActivityFashionStudio } from './svg/CREATIVE/ACTIVITIES/STUDIO/fashion-studio.svg'
 import { ReactComponent as CreativeStudioActivityFilmEditingSuite } from './svg/CREATIVE/ACTIVITIES/STUDIO/film-editing-suite.svg'
 import { ReactComponent as CreativeStudioActivityManufacturingSpace } from './svg/CREATIVE/ACTIVITIES/STUDIO/manufacturing-space.svg'
 import { ReactComponent as CreativeStudioActivityMusicRehearsalSpace } from './svg/CREATIVE/ACTIVITIES/STUDIO/music-rehearsal-space.svg'
@@ -225,7 +225,7 @@ import { ReactComponent as CreativeStudioActivitySoundRecordingStudio } from './
 import { ReactComponent as CreativeStudioActivityTheatre } from './svg/CREATIVE/ACTIVITIES/STUDIO/theatre.svg'
 import { ReactComponent as CreativeStudioActivityVideoFilmShoots } from './svg/CREATIVE/ACTIVITIES/STUDIO/video-film-shoots.svg'
 import { ReactComponent as CreativeStudioActivityVisualArtStudio } from './svg/CREATIVE/ACTIVITIES/STUDIO/visual-art-studio.svg'
-import { ReactComponent as CreativeStudioActivityWorkshop } from './svg/CREATIVE/ACTIVITIES/STUDIO/workshops.svg'
+import { ReactComponent as CreativeStudioActivityWorkshops } from './svg/CREATIVE/ACTIVITIES/STUDIO/workshops.svg'
 
 const Icons = {
   'question-mark': <QuestionMark />,
@@ -431,6 +431,7 @@ const Icons = {
   'creative-studio-activity-design-studio': <CreativeStudioActivityDesignStudio />,
   'creative-studio-activity-exhibitions': <CreativeStudioActivityExhibitions />,
   'creative-studio-activity-fashion-shows': <CreativeStudioActivityFashionShows />,
+  'creative-studio-activity-fashion-studio': <CreativeStudioActivityFashionStudio />,
   'creative-studio-activity-film-editing-suite': <CreativeStudioActivityFilmEditingSuite />,
   'creative-studio-activity-manufacturing-space': <CreativeStudioActivityManufacturingSpace />,
   'creative-studio-activity-music-performance-venue': <CreativeStudioActivityMusicalPerformances />,
@@ -444,7 +445,7 @@ const Icons = {
   'creative-studio-activity-theatre': <CreativeStudioActivityTheatre />,
   'creative-studio-activity-video-film-shoots': <CreativeStudioActivityVideoFilmShoots />,
   'creative-studio-activity-visual-art-studios': <CreativeStudioActivityVisualArtStudio />,
-  'creative-studio-activity-workshops': <CreativeStudioActivityWorkshop />
+  'creative-studio-activity-workshops': <CreativeStudioActivityWorkshops />
 }
 
 const Icon = props => {
