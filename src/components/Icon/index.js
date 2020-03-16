@@ -231,6 +231,7 @@ import { ReactComponent as CreativeStudioActivityDinners } from './svg/CREATIVE/
 import { ReactComponent as CreativeStudioActivityFestivals } from './svg/CREATIVE/ACTIVITIES/LOCATION/festivals.svg'
 import { ReactComponent as CreativeStudioActivityOpenAirSpace } from './svg/CREATIVE/ACTIVITIES/LOCATION/open-air-space.svg'
 import { ReactComponent as CreativeStudioActivityParkBushland } from './svg/CREATIVE/ACTIVITIES/LOCATION/park-bushland.svg'
+import { ReactComponent as CreativeStudioActivityPhotographyFilmLocation } from './svg/CREATIVE/ACTIVITIES/LOCATION/photography-film-location.svg'
 
 const Icons = {
   'question-mark': <QuestionMark />,
@@ -456,7 +457,8 @@ const Icons = {
   'creative-activity-dinners': <CreativeStudioActivityDinners />,
   'creative-activity-festivals': <CreativeStudioActivityFestivals />,
   'creative-activity-open-air-space': <CreativeStudioActivityOpenAirSpace />,
-  'creative-activity-park-bushland': <CreativeStudioActivityParkBushland />
+  'creative-activity-park-bushland': <CreativeStudioActivityParkBushland />,
+  'creative-activity-photography-film-location': <CreativeStudioActivityPhotographyFilmLocation />
 }
 
 const Icon = props => {
