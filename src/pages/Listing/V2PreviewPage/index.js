@@ -30,13 +30,23 @@ import { capitalize, toPlural } from 'utils/strings'
 import { cropPicture } from 'utils/images'
 
 import {
-  onGetListingById,
-  onGetAllRules,
-  onGetAllAmenities,
-  onGetAllSpecifications,
   onGetPhotosByListingId,
+  onGetVideoByListingId,
+  onGetFloorplanByListingId,
+  onGetMenuByListingId,
+  onGetListingById,
   onPublish
 } from 'redux/ducks/listing'
+
+import {
+  onGetCategoryRules,
+  onGetCategoryCheckinTypes,
+  onGetCategoryAccess,
+  onGetCategoryAmenities,
+  onGetCategoryFeatures,
+  onGetCategorySpecifications,
+  onGetCategoryStyles
+} from 'redux/ducks/category'
 
 import { openModal, TypesModal } from 'redux/ducks/modal'
 
@@ -56,7 +66,8 @@ const PreviewPage = ({ match, location, ...props }) => {
   const dispatch = useDispatch()
 
   const { object: listing, isLoading: isListingLoading, isNotOwner } = useSelector(state => state.listing.get)
-  const { array: arrayRules, isLoading: isLoadingRules } = useSelector(state => state.listing.rules)
+  const { object: rules, isLoading: isLoadingRules } = useSelector(state => state.category.rules)
+  const { object: features, isLoading: isLoadingFeatures } = useSelector(state => state.category.features)
   const { array: arrayPhotos } = useSelector(state => state.listing.photos)
   const { object: objectSpecifications } = useSelector(state => state.listing.specifications)
   const { isLoading: isPublishLoading, isPublished } = useSelector(state => state.listing.publishing)
@@ -75,10 +86,22 @@ const PreviewPage = ({ match, location, ...props }) => {
 
   useEffect(() => {
     if (listing) {
-      dispatch(onGetAllSpecifications(listing.settingsParent.id, listing.listingData))
-      dispatch(onGetAllAmenities(listing.settingsParent.subcategory.id))
-      dispatch(onGetAllRules())
+      dispatch(onGetCategorySpecifications(listing.settingsParent.id, listing.listingData))
+      dispatch(onGetCategoryAmenities(listing.settingsParent.id))
+      dispatch(onGetCategoryRules(listing.settingsParent.id))
+      dispatch(onGetCategoryFeatures(listing.settingsParent.id))
+      dispatch(onGetCategoryAccess(listing.settingsParent.id))
+      dispatch(onGetCategoryCheckinTypes(listing.settingsParent.id))
+      dispatch(onGetCategoryStyles(listing.settingsParent.id))
       dispatch(onGetPhotosByListingId(listing.id))
+      dispatch(onGetVideoByListingId(listing.id))
+      dispatch(onGetFloorplanByListingId(listing.id))
+      dispatch(onGetMenuByListingId(listing.id))
+
+      // dispatch(onGetAllSpecifications(listing.settingsParent.id, listing.listingData))
+      // dispatch(onGetAllAmenities(listing.settingsParent.subcategory.id))
+      // dispatch(onGetAllRules())
+      // dispatch(onGetPhotosByListingId(listing.id))
     }
   }, [dispatch, listing])
 
@@ -234,27 +257,35 @@ const PreviewPage = ({ match, location, ...props }) => {
         <Title type="h2" title="Just one more thing, review your space!" />
         <Carousel photos={_convertedArrayPhotos(arrayPhotos)} height={imageHeight} />
         <Box my="15px" display="grid" gridTemplateColumns={{ _: '1fr', medium: '2fr 1fr' }} gridGap="20px">
-          <Box display="grid" gridAutoColumns={{ _: 'max-content' }} gridAutoFlow={{ _: 'column' }} gridGap="20px">
-            <Tag
-              icon={
-                <Icon
-                  width="24px"
-                  name={_parseCategoryIconName(listing.settingsParent.category.otherItemName, false)}
-                />
+          <Box display="grid" gridGap={{ _: '30px' }}>
+            <Box display="flex" justifyContent="start">
+              <Box>
+                <Tag
+                  icon={
+                    <Icon
+                      width="24px"
+                      name={_parseCategoryIconName(listing.settingsParent.category.otherItemName, false)}
+                    />
+                  }
+                >
+                  {listing.settingsParent.category.itemName}
+                </Tag>
+              </Box>
+              {listing.settingsParent.subcategory !== null &&
+                <Box margin="0 10px">
+                  <Tag
+                    icon={
+                      <Icon
+                        width="24px"
+                        name={_parseCategoryIconName(listing.settingsParent.subcategory.otherItemName, true)}
+                      />
+                    }
+                  >
+                    {listing.settingsParent.subcategory.itemName}
+                  </Tag>
+                </Box>
               }
-            >
-              {listing.settingsParent.category.itemName}
-            </Tag>
-            <Tag
-              icon={
-                <Icon
-                  width="24px"
-                  name={_parseCategoryIconName(listing.settingsParent.subcategory.otherItemName, true)}
-                />
-              }
-            >
-              {listing.settingsParent.subcategory.itemName}
-            </Tag>
+            </Box>
           </Box>
           {listing.listingData.bookingType !== 'poa' && (
             <Box display="grid" justifySelf={{ _: 'start', medium: 'end' }}>
@@ -311,7 +342,7 @@ const PreviewPage = ({ match, location, ...props }) => {
         <Box my="50px">
           <Title
             type="h4"
-            title="Access Information"
+            title="Check-In"
             subtitle="How you’ll gain access to this space. Your host will provide the following upon successful bookings:"
           />
           <Box
@@ -348,6 +379,29 @@ const PreviewPage = ({ match, location, ...props }) => {
           <div dangerouslySetInnerHTML={{ __html: _formatDescription(listing.listingData.description) }} />
         </Box>
 
+        {listing.activities.length > 0 && (
+          <Box my="50px">
+            <Title type="h4" title="Activities" />
+            <Box display="grid" gridTemplateColumns={{ _: '1fr', medium: '1fr 1fr 1fr' }} gridRowGap="20px">
+              {listing.activities.map((item, index) => {
+                return (
+                  <Box key={index} display="grid" gridTemplateColumns="auto 1fr" gridColumnGap="20px">
+                    <Box width="54px" height="54px" borderRadius="100%" bg="primary">
+                      <Icon
+                        name={`${listing.settingsParent.category.otherItemName}-activity-${item.settingsData.otherItemName}`}
+                        width="70%"
+                        height="100%"
+                        style={{ display: 'block', margin: 'auto' }}
+                      />
+                    </Box>
+                    <span style={{ alignSelf: 'center' }}>{item.settingsData.itemName}</span>
+                  </Box>
+                )
+              })}
+            </Box>
+          </Box>
+        )}
+
         {listing.amenities.length > 0 && (
           <Box my="50px">
             <Title type="h4" title="Amenities" />
@@ -378,7 +432,7 @@ const PreviewPage = ({ match, location, ...props }) => {
               {isLoadingRules ? (
                 <Loader />
               ) : (
-                  arrayRules.map(item => (
+                  rules.map(item => (
                     <Checkbox
                       disabled
                       key={item.id}
@@ -386,6 +440,28 @@ const PreviewPage = ({ match, location, ...props }) => {
                       name="rules"
                       value={item.id}
                       checked={listing.rules.some(rule => rule.listSettingsId === item.id)}
+                    />
+                  ))
+                )}
+            </Box>
+          </Box>
+        )}
+
+        {listing.features.length > 0 && (
+          <Box my="50px">
+            <Title type="h4" title="Space Features" />
+            <Box display="grid" gridTemplateColumns={{ _: '1fr', medium: '1fr 1fr 1fr' }} gridRowGap="20px">
+              {isLoadingFeatures ? (
+                <Loader />
+              ) : (
+                  features.map(item => (
+                    <Checkbox
+                      disabled
+                      key={item.id}
+                      label={item.itemName}
+                      name="features"
+                      value={item.id}
+                      checked={listing.features.some(feature => feature.listSettingsId === item.id)}
                     />
                   ))
                 )}
