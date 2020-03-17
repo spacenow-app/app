@@ -83,7 +83,7 @@ const FormPartner = ({
         </Box>
 
         <Box>
-          <Select value={values.pax} name="pax" onChange={_handleSelectChange} label="Number of Desks needed">
+          <Select value={values.pax} name="pax" onChange={_handleSelectChange} label="Number of guests">
             <option>Select a range</option>
             {arrayDesks.map(item => (
               <option key={item} value={item}>
@@ -95,7 +95,7 @@ const FormPartner = ({
 
         <Box>
           <DatePicker
-            label="Requested Move In Date"
+            label="Event Date"
             handleDateChange={date => setFieldValue('date', format(date, 'yyyy-MM-dd'))}
             dayPickerProps={{
               disabledDays: [{ before: new Date() }]

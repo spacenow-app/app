@@ -4,7 +4,7 @@ import styled from 'styled-components'
 import { Box, Icon } from 'components'
 
 const TitleStyled = styled.span`
-  font-size: ${props => (props.isTitle ? '12px' : '18px')};
+  font-size: ${props => (props.isTitle ? '12px' : '16px')};
   color: ${props => (props.error ? '#E05252' : '#172439')};
   font-family: ${props => (props.isTitle ? 'Montserrat-Bold' : 'Montserrat-Regular')};
 `
@@ -13,13 +13,18 @@ const Highlights = ({ title, name, icon, last, error, ...props }) => {
   return (
     <Box
       {...props}
-      borderRight={!last ? '1px solid' : null}
-      borderColor="greyLight"
-      ml="-20px"
-      pl="40px"
       display="grid"
-      gridTemplateRows="auto auto auto"
-      gridRowGap="20px"
+      gridGap="20px"
+      gridAutoFlow="row"
+      gridTemplateColumns="repeat(auto-fill, max-content)"
+      justifyContent="center"
+      justifyItems="center"
+      padding="20px 5px"
+      style={{
+        border: "1px solid",
+        borderRadius: "10px",
+        borderColor: "#c4c4c4"
+      }}
     >
       <TitleStyled isTitle>{title}</TitleStyled>
       <Icon width="40px" fill={error ? '#E05252' : '#6ADD92'} name={icon} />

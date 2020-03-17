@@ -247,6 +247,61 @@ import { ReactComponent as CreativeStudioActivityOpenAirSpace } from './svg/CREA
 import { ReactComponent as CreativeStudioActivityParkBushland } from './svg/CREATIVE/ACTIVITIES/LOCATION/park-bushland.svg'
 import { ReactComponent as CreativeStudioActivityPhotographyFilmLocation } from './svg/CREATIVE/ACTIVITIES/LOCATION/photography-film-location.svg'
 
+// FEATURES
+import { ReactComponent as FeatureArt } from './svg/features/art.svg'
+import { ReactComponent as FeatureBar } from './svg/features/bar.svg'
+import { ReactComponent as FeatureBareWalls } from './svg/features/bare-walls.svg'
+import { ReactComponent as FeatureBathtub } from './svg/features/bathtub.svg'
+import { ReactComponent as FeatureColumns } from './svg/features/columns.svg'
+import { ReactComponent as FeatureConcrete } from './svg/features/concrete.svg'
+import { ReactComponent as FeatureCycWall } from './svg/features/cyc-wall.svg'
+import { ReactComponent as FeatureDiningTable } from './svg/features/dining-table.svg'
+import { ReactComponent as FeatureEmpty } from './svg/features/empty.svg'
+import { ReactComponent as FeatureExposedBrick } from './svg/features/exposed-brick.svg'
+import { ReactComponent as FeatureExposedPipes } from './svg/features/exposed-pipes.svg'
+import { ReactComponent as FeatureFirePit } from './svg/features/fire-pit.svg'
+import { ReactComponent as FeatureFireplace } from './svg/features/fireplace.svg'
+import { ReactComponent as FeatureGarden } from './svg/features/garden.svg'
+import { ReactComponent as FeatureGazebo } from './svg/features/gazebo.svg'
+import { ReactComponent as FeatureGraffiti } from './svg/features/graffiti.svg'
+import { ReactComponent as FeatureHighCelling } from './svg/features/high-ceiling.svg'
+import { ReactComponent as FeatureLargeWindows } from './svg/features/large-windows.svg'
+import { ReactComponent as FeatureLibraryLounge } from './svg/features/library-lounge.svg'
+import { ReactComponent as FeatureLibrary } from './svg/features/library.svg'
+import { ReactComponent as FeatureModernBathroom } from './svg/features/modern-bathroom.svg'
+import { ReactComponent as FeatureNaturalLight } from './svg/features/natural-light.svg'
+import { ReactComponent as FeatureOpenKitchen } from './svg/features/open-kitchen.svg'
+import { ReactComponent as FeaturePatio } from './svg/features/patio.svg'
+import { ReactComponent as FeaturePiano } from './svg/features/piano.svg'
+import { ReactComponent as FeaturePlants } from './svg/features/plants.svg'
+import { ReactComponent as FeaturePool } from './svg/features/pool.svg'
+import { ReactComponent as FeatureProps } from './svg/features/props.svg'
+import { ReactComponent as FeatureRoof } from './svg/features/roof.svg'
+import { ReactComponent as FeatureScreeningRoom } from './svg/features/screening-room.svg'
+import { ReactComponent as FeatureSkylight } from './svg/features/skylight.svg'
+import { ReactComponent as FeatureSoundProof } from './svg/features/sound-proof.svg'
+import { ReactComponent as FeatureView } from './svg/features/view.svg'
+import { ReactComponent as FeatureWhiteSpace } from './svg/features/white-space.svg'
+import { ReactComponent as FeatureWoodBeams } from './svg/features/wood-beams.svg'
+import { ReactComponent as FeatureWoodFloors } from './svg/features/wood-floors.svg'
+
+
+// RULES
+import { ReactComponent as RuleNoAlcoholSelling } from './svg/rules/no-alcohol-selling.svg'
+import { ReactComponent as RuleNoAlcoholServing } from './svg/rules/no-alcohol-serving.svg'
+import { ReactComponent as RuleNoChildren010 } from './svg/rules/no-children-0-10.svg'
+import { ReactComponent as RuleNoCooking } from './svg/rules/no-cooking.svg'
+import { ReactComponent as RuleNoLateNightParties } from './svg/rules/no-late-night-parties.svg'
+import { ReactComponent as RuleNoLoudMusicDancing } from './svg/rules/no-loud-music-dancing.svg'
+import { ReactComponent as RuleNoMusic } from './svg/rules/no-music.svg'
+import { ReactComponent as RuleNoOpenHouse } from './svg/rules/no-open-house.svg'
+import { ReactComponent as RuleNoOutsideCateringFood } from './svg/rules/no-outside-catering-food.svg'
+import { ReactComponent as RuleNoSmokingOutside } from './svg/rules/no-smoking-outside.svg'
+import { ReactComponent as RuleNoSmoking } from './svg/rules/no-smoking.svg'
+import { ReactComponent as RuleNoTicketSales } from './svg/rules/no-ticket-sales.svg'
+import { ReactComponent as RuleNoUnderAge018 } from './svg/rules/no-under-age-0-18.svg'
+import { ReactComponent as RuleNoUnderAge021 } from './svg/rules/no-under-age-0-21.svg'
+
 const Icons = {
   'question-mark': <QuestionMark />,
   'single-space': <SingleSpace />,
@@ -486,7 +541,60 @@ const Icons = {
   'creative-activity-festivals': <CreativeStudioActivityFestivals />,
   'creative-activity-open-air-space': <CreativeStudioActivityOpenAirSpace />,
   'creative-activity-park-bushland': <CreativeStudioActivityParkBushland />,
-  'creative-activity-photography-film-location': <CreativeStudioActivityPhotographyFilmLocation />
+  'creative-activity-photography-film-location': <CreativeStudioActivityPhotographyFilmLocation />,
+
+  'feature-art': <FeatureArt />,
+  'feature-bar': <FeatureBar />,
+  'feature-bare-walls': <FeatureBareWalls />,
+  'feature-bathtub': <FeatureBathtub />,
+  'feature-columns': <FeatureColumns />,
+  'feature-concrete': <FeatureConcrete />,
+  'feature-cyc-wall': <FeatureCycWall />,
+  'feature-dining-table': <FeatureDiningTable />,
+  'feature-empty': <FeatureEmpty />,
+  'feature-exposed-brick': <FeatureExposedBrick />,
+  'feature-exposed-pipes': <FeatureExposedPipes />,
+  'feature-fire-pit': <FeatureFirePit />,
+  'feature-fireplace': <FeatureFireplace />,
+  'feature-garden': <FeatureGarden />,
+  'feature-gazebo': <FeatureGazebo />,
+  'feature-graffiti': <FeatureGraffiti />,
+  'feature-high-ceiling': <FeatureHighCelling />,
+  'feature-large-windows': <FeatureLargeWindows />,
+  'feature-library-lounge': <FeatureLibraryLounge />,
+  'feature-library': <FeatureLibrary />,
+  'feature-modern-bathroom': <FeatureModernBathroom />,
+  'feature-natural-light': <FeatureNaturalLight />,
+  'feature-open-kitchen': <FeatureOpenKitchen />,
+  'feature-patio': <FeaturePatio />,
+  'feature-piano': <FeaturePiano />,
+  'feature-plants': <FeaturePlants />,
+  'feature-pool': <FeaturePool />,
+  'feature-props': <FeatureProps />,
+  'feature-roof': <FeatureRoof />,
+  'feature-screening-room': <FeatureScreeningRoom />,
+  'feature-skylight': <FeatureSkylight />,
+  'feature-sound-proof': <FeatureSoundProof />,
+  'feature-view': <FeatureView />,
+  'feature-white-space': <FeatureWhiteSpace />,
+  'feature-wood-beams': <FeatureWoodBeams />,
+  'feature-wood-floors': <FeatureWoodFloors />,
+
+  'rule-no-alcohol-selling': <RuleNoAlcoholSelling />,
+  'rule-no-alcohol-serving': <RuleNoAlcoholServing />,
+  'rule-no-children-0-10': <RuleNoChildren010 />,
+  'rule-no-cooking': <RuleNoCooking />,
+  'rule-no-late-night-parties': <RuleNoLateNightParties />,
+  'rule-no-loud-music-dancing': <RuleNoLoudMusicDancing />,
+  'rule-no-music': <RuleNoMusic />,
+  'rule-no-open-house': <RuleNoOpenHouse />,
+  'rule-no-outside-catering-food': <RuleNoOutsideCateringFood />,
+  'rule-no-smoking-outside': <RuleNoSmokingOutside />,
+  'rule-no-smoking': <RuleNoSmoking />,
+  'rule-no-ticket-sales': <RuleNoTicketSales />,
+  'rule-no-under-age-0-18': <RuleNoUnderAge018 />,
+  'rule-no-under-age-0-21': <RuleNoUnderAge021 />,
+
 }
 
 const Icon = props => {

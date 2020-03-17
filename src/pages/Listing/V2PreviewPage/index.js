@@ -69,9 +69,9 @@ const PreviewPage = ({ match, location, ...props }) => {
   const { object: rules, isLoading: isLoadingRules } = useSelector(state => state.category.rules)
   const { object: features, isLoading: isLoadingFeatures } = useSelector(state => state.category.features)
   const { array: arrayPhotos } = useSelector(state => state.listing.photos)
-  const { object: floorplan } = useSelector(state => state.listing.floorplan)
-  const { object: menu } = useSelector(state => state.listing.menu)
-  const { object: objectSpecifications } = useSelector(state => state.listing.specifications)
+  const { object: floorplan, isLoading: isLoadingFloorPlan } = useSelector(state => state.listing.floorplan)
+  const { object: menu, isLoading: isLoadingMenu } = useSelector(state => state.listing.menu)
+  const { object: specifications } = useSelector(state => state.category.specifications)
   const { isLoading: isPublishLoading, isPublished } = useSelector(state => state.listing.publishing)
   const {
     user,
@@ -327,7 +327,7 @@ const PreviewPage = ({ match, location, ...props }) => {
 
         <Box my="30px" display="grid" gridTemplateColumns={{ _: '1fr', medium: '1fr' }}>
           <Title type="h4" title="Highlights" />
-          <Box display="grid" gridTemplateColumns={{ _: '1fr 1fr', medium: '1fr 1fr 1fr 1fr 1fr' }} gridGap="20px">
+          <Box display="grid" gridGap="20px" gridTemplateColumns="repeat(auto-fit, minmax(120px, max-content))">
             <Highlights
               title="Minimum term"
               name={_changeToPlural(listing.bookingPeriod, listing.listingData.minTerm)}
@@ -339,7 +339,7 @@ const PreviewPage = ({ match, location, ...props }) => {
               icon="specification-opening-days"
               error={_getWeekName(listing.accessDays) === 'Closed'}
             />
-            {objectSpecifications && _renderHighLights(objectSpecifications)}
+            {specifications && _renderHighLights(specifications)}
           </Box>
         </Box>
 
@@ -383,21 +383,24 @@ const PreviewPage = ({ match, location, ...props }) => {
           <div dangerouslySetInnerHTML={{ __html: _formatDescription(listing.listingData.description) }} />
         </Box>
 
-        {(!floorplan || !menu) && (
+
+        {(Object.keys(floorplan).length || Object.keys(menu).length) && (
           <Box display="grid" gridAutoFlow="column" gridAutoColumns="max-content" my="50px" gridGap="30px">
-            {!floorplan && <Button outline onClick={() => _handlerFloorplan()} width="200px">
-              <Icon
-                width="24px"
-                height="24px"
-                name="floor-plan"
-              /> Floorplan
+            {Object.keys(floorplan).length && floorplan.id && <Button outline onClick={() => _handlerFloorplan()} width="200px" icon={<Icon
+              width="18px"
+              height="18px"
+              name="feature-wood-floors"
+              style={{ marginRight: "10px" }}
+            />}>
+              Floorplan
             </Button>}
-            {!menu && <Button outline onClick={() => _handlerFloorplan()} width="200px">
-              <Icon
-                width="24px"
-                height="24px"
-                name="floor-plan"
-              /> Menu
+            {Object.keys(menu).length && menu.id && <Button outline onClick={() => _handlerFloorplan()} width="200px" icon={<Icon
+              width="18px"
+              height="18px"
+              name="floor-plan"
+              style={{ marginRight: "10px" }}
+            />}>
+              Menu
             </Button>}
           </Box>
         )}
@@ -409,11 +412,11 @@ const PreviewPage = ({ match, location, ...props }) => {
               {listing.activities.map((item, index) => {
                 return (
                   <Box key={index} display="grid" gridTemplateColumns="auto 1fr" gridColumnGap="20px">
-                    <Box width="54px" height="54px" borderRadius="100%" bg="primary">
+                    <Box display="grid" width="54px" height="54px" borderRadius="100%" bg="primary" alignContent="center">
                       <Icon
                         name={`${listing.settingsParent.category.otherItemName}-activity-${item.settingsData.otherItemName}`}
-                        width="70%"
-                        height="100%"
+                        width="30px"
+                        height="30px"
                         style={{ display: 'block', margin: 'auto' }}
                       />
                     </Box>
@@ -429,14 +432,14 @@ const PreviewPage = ({ match, location, ...props }) => {
           <Box my="50px">
             <Title type="h4" title="Amenities" />
             <Box display="grid" gridTemplateColumns={{ _: '1fr', medium: '1fr 1fr 1fr' }} gridRowGap="20px">
-              {listing.amenities.map(item => {
+              {listing.amenities.map((item, index) => {
                 return (
-                  <Box key={item.id} display="grid" gridTemplateColumns="auto 1fr" gridColumnGap="20px">
-                    <Box width="54px" height="54px" borderRadius="100%" bg="primary">
+                  <Box key={index} display="grid" gridTemplateColumns="auto 1fr" gridColumnGap="20px">
+                    <Box display="grid" width="54px" height="54px" borderRadius="100%" bg="primary" alignContent="center">
                       <Icon
                         name={`amenitie-${item.settingsData.otherItemName}`}
-                        width="70%"
-                        height="100%"
+                        width="30px"
+                        height="30px"
                         style={{ display: 'block', margin: 'auto' }}
                       />
                     </Box>
@@ -452,20 +455,21 @@ const PreviewPage = ({ match, location, ...props }) => {
           <Box my="50px">
             <Title type="h4" title="Space Rules" />
             <Box display="grid" gridTemplateColumns={{ _: '1fr', medium: '1fr 1fr 1fr' }} gridRowGap="20px">
-              {isLoadingRules ? (
-                <Loader />
-              ) : (
-                  rules.map(item => (
-                    <Checkbox
-                      disabled
-                      key={item.id}
-                      label={item.itemName}
-                      name="rules"
-                      value={item.id}
-                      checked={listing.rules.some(rule => rule.listSettingsId === item.id)}
-                    />
-                  ))
-                )}
+              {listing.rules.map((item, index) => {
+                return (
+                  <Box key={index} display="grid" gridTemplateColumns="auto 1fr" gridColumnGap="20px">
+                    <Box display="grid" width="54px" height="54px" borderRadius="100%" bg="primary" alignContent="center">
+                      <Icon
+                        name={`rule-${item.settingsData.otherItemName}`}
+                        width="30px"
+                        height="30px"
+                        style={{ display: 'block', margin: 'auto' }}
+                      />
+                    </Box>
+                    <span style={{ alignSelf: 'center' }}>{item.settingsData.itemName}</span>
+                  </Box>
+                )
+              })}
             </Box>
           </Box>
         )}
@@ -474,20 +478,21 @@ const PreviewPage = ({ match, location, ...props }) => {
           <Box my="50px">
             <Title type="h4" title="Space Features" />
             <Box display="grid" gridTemplateColumns={{ _: '1fr', medium: '1fr 1fr 1fr' }} gridRowGap="20px">
-              {isLoadingFeatures ? (
-                <Loader />
-              ) : (
-                  features.map(item => (
-                    <Checkbox
-                      disabled
-                      key={item.id}
-                      label={item.itemName}
-                      name="features"
-                      value={item.id}
-                      checked={listing.features.some(feature => feature.listSettingsId === item.id)}
-                    />
-                  ))
-                )}
+              {listing.features.map((item, index) => {
+                return (
+                  <Box key={index} display="grid" gridTemplateColumns="auto 1fr" gridColumnGap="20px">
+                    <Box display="grid" width="54px" height="54px" borderRadius="100%" bg="primary" alignContent="center">
+                      <Icon
+                        name={`feature-${item.settingsData.otherItemName}`}
+                        width="30px"
+                        height="30px"
+                        style={{ display: 'block', margin: 'auto' }}
+                      />
+                    </Box>
+                    <span style={{ alignSelf: 'center' }}>{item.settingsData.itemName}</span>
+                  </Box>
+                )
+              })}
             </Box>
           </Box>
         )}
