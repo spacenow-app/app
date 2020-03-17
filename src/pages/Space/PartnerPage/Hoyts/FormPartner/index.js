@@ -1,22 +1,14 @@
 /* eslint-disable react/no-array-index-key */
 /* eslint-disable no-console */
 import React from 'react'
-import styled from 'styled-components'
 import { useDispatch } from 'react-redux'
 import { withFormik } from 'formik'
 import * as Yup from 'yup'
 import { format } from 'date-fns'
 
-import { Title, Input, Select, TextArea, Button, DatePicker } from 'components'
+import { Title, Input, Select, TextArea, Button, DatePicker, Box } from 'components'
 
 import { onCreateHoytsReferral } from 'redux/ducks/integration'
-
-const WrapperStyled = styled.div`
-  display: grid;
-  grid-row-gap: 10px;
-`
-
-const SectionStyled = styled.div``
 
 const FormPartner = ({
   values,
@@ -49,8 +41,8 @@ const FormPartner = ({
 
   return (
     <form>
-      <WrapperStyled>
-        <SectionStyled>
+      <Box display="grid" gridGap="10px">
+        <Box>
           <Input
             label="Full Name*"
             placeholder="Your full name"
@@ -60,9 +52,9 @@ const FormPartner = ({
             onChange={handleChange}
             onBlur={handleBlur}
           />
-        </SectionStyled>
+        </Box>
 
-        <SectionStyled>
+        <Box>
           <Input
             label="Email*"
             placeholder="Email Address"
@@ -72,9 +64,9 @@ const FormPartner = ({
             onChange={handleChange}
             onBlur={handleBlur}
           />
-        </SectionStyled>
+        </Box>
 
-        <SectionStyled>
+        <Box>
           <Input
             label="Phone"
             placeholder="Phone"
@@ -84,13 +76,13 @@ const FormPartner = ({
             onChange={handleChange}
             onBlur={handleBlur}
           />
-        </SectionStyled>
+        </Box>
 
-        <SectionStyled>
+        <Box>
           <Title title="Tell us more about your introduction" type="h6" subTitleMargin={0} />
-        </SectionStyled>
+        </Box>
 
-        <SectionStyled>
+        <Box>
           <Select value={values.pax} name="pax" onChange={_handleSelectChange} label="Number of Desks needed">
             <option>Select a range</option>
             {arrayDesks.map(item => (
@@ -99,9 +91,9 @@ const FormPartner = ({
               </option>
             ))}
           </Select>
-        </SectionStyled>
+        </Box>
 
-        <SectionStyled>
+        <Box>
           <DatePicker
             label="Requested Move In Date"
             handleDateChange={date => setFieldValue('date', format(date, 'yyyy-MM-dd'))}
@@ -109,9 +101,9 @@ const FormPartner = ({
               disabledDays: [{ before: new Date() }]
             }}
           />
-        </SectionStyled>
+        </Box>
 
-        <SectionStyled>
+        <Box>
           <Select value={values.time} name="time" onChange={_handleSelectChange} label="Hours">
             <option>Select the hour</option>
             {arrayHours.map(item => (
@@ -120,9 +112,9 @@ const FormPartner = ({
               </option>
             ))}
           </Select>
-        </SectionStyled>
+        </Box>
 
-        <SectionStyled>
+        <Box>
           <TextArea
             label="Additional notes"
             name="notes"
@@ -131,12 +123,12 @@ const FormPartner = ({
             onChange={handleChange}
             onBlur={handleBlur}
           />
-        </SectionStyled>
+        </Box>
 
         <Button width="100%" onClick={() => _handleSubmit()}>
           SUBMIT INTRODUCTION
         </Button>
-      </WrapperStyled>
+      </Box>
     </form>
   )
 }

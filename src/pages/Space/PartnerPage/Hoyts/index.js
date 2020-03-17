@@ -24,7 +24,8 @@ import {
   CardSearch,
   Carousel,
   Price,
-  Text
+  Text,
+  Image
 } from 'components'
 
 import { capitalize, toPlural } from 'utils/strings'
@@ -67,7 +68,7 @@ const HoytsPage = ({ match, location, listing, similar, specifications, dispatch
     const { city = '', zipcode = '', state = '', country = '' } = address
     const convertedAddress = `${city ? `${city}, ` : ''} ${zipcode ? `${zipcode}, ` : ''} ${
       state ? `${state}, ` : ''
-    } ${country ? `${country}` : ''}`
+      } ${country ? `${country}` : ''}`
     return convertedAddress.replace(/\0.*$/g, '')
   }
 
@@ -224,13 +225,13 @@ const HoytsPage = ({ match, location, listing, similar, specifications, dispatch
   return (
     <>
       {imageHeight === 325 ||
-      (listing.photos.length > 1 &&
-        listing.settingsParent.category.otherItemName !== 'parking' &&
-        listing.settingsParent.category.otherItemName !== 'storage') ? (
-        <Box mb="30px">
-          <CarouselListing photos={_convertedArrayPhotos(listing.photos)} />
-        </Box>
-      ) : null}
+        (listing.photos.length > 1 &&
+          listing.settingsParent.category.otherItemName !== 'parking' &&
+          listing.settingsParent.category.otherItemName !== 'storage') ? (
+          <Box mb="30px">
+            <CarouselListing photos={_convertedArrayPhotos(listing.photos)} />
+          </Box>
+        ) : null}
       <Wrapper>
         <Helmet
           title={`${listing.title} | ${listing.settingsParent.category.itemName} | ${_getSuburb(
@@ -242,10 +243,10 @@ const HoytsPage = ({ match, location, listing, similar, specifications, dispatch
             content={`Find the perfect space for ${listing.settingsParent.category.itemName} in ${_getSuburb(
               listing.location
             )}. ${listing.listingData.description &&
-              _formatDescription(listing.listingData.description).substring(
-                0,
-                160 - (listing.settingsParent.category.itemName.length + _getSuburb(listing.location).length + 30)
-              )}`}
+            _formatDescription(listing.listingData.description).substring(
+              0,
+              160 - (listing.settingsParent.category.itemName.length + _getSuburb(listing.location).length + 30)
+            )}`}
           />
         </Helmet>
         <Box display="grid" gridTemplateColumns={{ _: 'auto', medium: 'auto 350px' }} gridGap="30px">
@@ -256,10 +257,10 @@ const HoytsPage = ({ match, location, listing, similar, specifications, dispatch
               imageHeight !== 325 && <CarouselListing photos={_convertedArrayPhotos(listing.photos)} />}
 
             {imageHeight !== 325 &&
-            (listing.settingsParent.category.otherItemName === 'parking' ||
-              listing.settingsParent.category.otherItemName === 'storage') ? (
-              <Carousel photos={_convertedArrayPhotos(listing.photos)} />
-            ) : null}
+              (listing.settingsParent.category.otherItemName === 'parking' ||
+                listing.settingsParent.category.otherItemName === 'storage') ? (
+                <Carousel photos={_convertedArrayPhotos(listing.photos)} />
+              ) : null}
 
             <Grid columns={12}>
               <CellStyled width={6}>
@@ -416,6 +417,9 @@ const HoytsPage = ({ match, location, listing, similar, specifications, dispatch
               }
               contentComponent={<FormPartner {...props} listing={listing} dispatch={dispatch} />}
             />
+            <Box display="grid" padding="20px 100px">
+              <Image src="https://sandpit-spacenow-images.s3-ap-southeast-2.amazonaws.com/space-images/hoyts.png" height="auto" />
+            </Box>
           </Box>
         </Box>
         <Box my="45px">
