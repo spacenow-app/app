@@ -20,7 +20,6 @@ import {
   Highlights,
   Button,
   Loader,
-  Checkbox,
   Carousel,
   Footer,
   Price
@@ -66,11 +65,9 @@ const PreviewPage = ({ match, location, ...props }) => {
   const dispatch = useDispatch()
 
   const { object: listing, isLoading: isListingLoading, isNotOwner } = useSelector(state => state.listing.get)
-  const { object: rules, isLoading: isLoadingRules } = useSelector(state => state.category.rules)
-  const { object: features, isLoading: isLoadingFeatures } = useSelector(state => state.category.features)
   const { array: arrayPhotos } = useSelector(state => state.listing.photos)
-  const { object: floorplan, isLoading: isLoadingFloorPlan } = useSelector(state => state.listing.floorplan)
-  const { object: menu, isLoading: isLoadingMenu } = useSelector(state => state.listing.menu)
+  const { object: floorplan } = useSelector(state => state.listing.floorplan)
+  const { object: menu } = useSelector(state => state.listing.menu)
   const { object: specifications } = useSelector(state => state.category.specifications)
   const { isLoading: isPublishLoading, isPublished } = useSelector(state => state.listing.publishing)
   const {
