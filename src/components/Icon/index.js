@@ -166,6 +166,19 @@ import { ReactComponent as AmenitieWeddingCake } from './svg/amenities/amenities
 import { ReactComponent as AmenitieWhiteboard } from './svg/amenities/amenities_whiteboard.svg'
 import { ReactComponent as AmenitieWifi } from './svg/amenities/amenities_wifi.svg'
 
+import { ReactComponent as AmenitieBathrooms } from './svg/amenities/amenities_bathrooms.svg'
+import { ReactComponent as AmenitieBreakoutRooms } from './svg/amenities/amenities_breakout_rooms.svg'
+import { ReactComponent as AmenitieComferencePhone } from './svg/amenities/amenities_conference_phone.svg'
+import { ReactComponent as AmenitieGrill } from './svg/amenities/amenities_grill.svg'
+import { ReactComponent as AmenitieHeating } from './svg/amenities/amenities_heating.svg'
+import { ReactComponent as AmenitieLargeTable } from './svg/amenities/amenities_large_table.svg'
+import { ReactComponent as AmenitiePowerTieIn } from './svg/amenities/amenities_power_tie_in.svg'
+import { ReactComponent as AmenitiePrivateEntrance } from './svg/amenities/amenities_private_entrance.svg'
+import { ReactComponent as AmenitieSink } from './svg/amenities/amenities_sink.svg'
+import { ReactComponent as AmenitieSoundSystem } from './svg/amenities/amenities_sound_system.svg'
+import { ReactComponent as AmenitieStage } from './svg/amenities/amenities_stage.svg'
+import { ReactComponent as AmenitieTableware } from './svg/amenities/amenities_tableware.svg'
+
 import { ReactComponent as Download } from './svg/download.svg'
 import { ReactComponent as ArrowLeft } from './svg/generic/arrow_left.svg'
 import { ReactComponent as FullLeftArrow } from './svg/generic/full-left-arrow.svg'
@@ -386,6 +399,19 @@ const Icons = {
   'amenitie-weedingCakeService': <AmenitieWeddingCake />,
   'amenitie-whiteboard': <AmenitieWhiteboard />,
   'amenitie-wifi': <AmenitieWifi />,
+  'amenitie-bathrooms': <AmenitieBathrooms />,
+  'amenitie-breakout-rooms': <AmenitieBreakoutRooms />,
+  'amenitie-conference-phone': <AmenitieComferencePhone />,
+  'amenitie-grill': <AmenitieGrill />,
+  'amenitie-heating': <AmenitieHeating />,
+  'amenitie-large-table': <AmenitieLargeTable />,
+  'amenitie-power-tie-in': <AmenitiePowerTieIn />,
+  'amenitie-private-entrance': <AmenitiePrivateEntrance />,
+  'amenitie-sink': <AmenitieSink />,
+  'amenitie-sound-system': <AmenitieSoundSystem />,
+  'amenitie-stage': <AmenitieStage />,
+  'amenitie-tableware': <AmenitieTableware />,
+
   download: <Download />,
   'arrow-left': <ArrowLeft />,
   'full-left-arrow': <FullLeftArrow />,
