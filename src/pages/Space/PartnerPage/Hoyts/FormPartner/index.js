@@ -36,7 +36,7 @@ const FormPartner = ({
     })
   }
 
-  const arrayDesks = ['1-10', '10-20', '20-50', '50-100', '100-1000']
+  const arrayGuests = ['1-10', '10-20', '20-50', '50-100', '100-1000']
   const arrayHours = ['2', '3', '4', '5', '6']
 
   return (
@@ -85,7 +85,7 @@ const FormPartner = ({
         <Box>
           <Select value={values.pax} name="pax" onChange={_handleSelectChange} label="Number of guests">
             <option>Select a range</option>
-            {arrayDesks.map(item => (
+            {arrayGuests.map(item => (
               <option key={item} value={item}>
                 {item}
               </option>
@@ -154,9 +154,9 @@ const formik = {
     email: Yup.string().required('Email field is required'),
     name: Yup.string().required('Name field is required'),
     phone: Yup.number().typeError('Need to be number.'),
-    pax: Yup.string(),
-    date: Yup.string(),
-    time: Yup.string(),
+    pax: Yup.string().required('Number of guests is required'),
+    date: Yup.string().required('Date of the event is required'),
+    time: Yup.string().required('Time is required'),
     notes: Yup.string()
   }),
   enableReinitialize: true,
