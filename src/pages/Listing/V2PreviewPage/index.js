@@ -23,8 +23,7 @@ import {
   Checkbox,
   Carousel,
   Footer,
-  Price,
-  Image
+  Price
 } from 'components'
 
 import { capitalize, toPlural } from 'utils/strings'
