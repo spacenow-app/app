@@ -23,7 +23,8 @@ import {
   Checkbox,
   Carousel,
   Footer,
-  Price
+  Price,
+  Image
 } from 'components'
 
 import { capitalize, toPlural } from 'utils/strings'
@@ -69,6 +70,8 @@ const PreviewPage = ({ match, location, ...props }) => {
   const { object: rules, isLoading: isLoadingRules } = useSelector(state => state.category.rules)
   const { object: features, isLoading: isLoadingFeatures } = useSelector(state => state.category.features)
   const { array: arrayPhotos } = useSelector(state => state.listing.photos)
+  const { object: floorplan } = useSelector(state => state.listing.floorplan)
+  const { object: menu } = useSelector(state => state.listing.menu)
   const { object: objectSpecifications } = useSelector(state => state.listing.specifications)
   const { isLoading: isPublishLoading, isPublished } = useSelector(state => state.listing.publishing)
   const {
@@ -250,6 +253,8 @@ const PreviewPage = ({ match, location, ...props }) => {
     }
   }
 
+  const _handlerFloorplan = () => { }
+
   return (
     <>
       <Wrapper>
@@ -378,6 +383,25 @@ const PreviewPage = ({ match, location, ...props }) => {
           <Title type="h4" title="Description" color={!listing.listingData.description ? '#E05252' : null} />
           <div dangerouslySetInnerHTML={{ __html: _formatDescription(listing.listingData.description) }} />
         </Box>
+
+        {(!floorplan || !menu) && (
+          <Box display="grid" gridAutoFlow="column" gridAutoColumns="max-content" my="50px" gridGap="30px">
+            {!floorplan && <Button outline onClick={() => _handlerFloorplan()} width="200px">
+              <Icon
+                width="24px"
+                height="24px"
+                name="floor-plan"
+              /> Floorplan
+            </Button>}
+            {!menu && <Button outline onClick={() => _handlerFloorplan()} width="200px">
+              <Icon
+                width="24px"
+                height="24px"
+                name="floor-plan"
+              /> Menu
+            </Button>}
+          </Box>
+        )}
 
         {listing.activities.length > 0 && (
           <Box my="50px">

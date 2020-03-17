@@ -63,6 +63,7 @@ import { ReactComponent as Clock } from './svg/generic/clock.svg'
 import { ReactComponent as PinBGWhite } from './svg/generic/pin-bgwhite.svg'
 import { ReactComponent as Bookmark } from './svg/generic/bookmark.svg'
 import { ReactComponent as BookmarkFilled } from './svg/generic/bookmark-filled.svg'
+import { ReactComponent as Floorplan } from './svg/generic/floor-plan.svg'
 
 // Access Type
 import { ReactComponent as AccessTypeKeys } from './svg/access-type/access_type_keys.svg'
@@ -244,6 +245,7 @@ const Icons = {
   calendar: <Calendar />,
   play: <Play />,
   flag: <Flag />,
+  'floor-plan': <Floorplan />,
   'google-logo': <GoogleLogo />,
   'category-coworking': <CategoryCoworking />,
   'category-desk': <CategoryDesk />,
