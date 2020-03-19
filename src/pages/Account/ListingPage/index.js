@@ -61,15 +61,6 @@ const ListingCard = (dispatch, item, index) => {
           subTitleMargin={0}
           type="h6"
           title={
-            // <Text>
-            //   AUD ${' '}
-            //   {item.listingData.basePrice
-            //     ? item.listingData.basePrice
-            //         .toFixed(2)
-            //         .toString()
-            //         .replace(/\B(?=(\d{3})+(?!\d))/g, ',')
-            //     : 0.0}
-            // </Text>
             <Price
               currency="AUD"
               price={item.listingData.basePrice || 0}
@@ -96,19 +87,11 @@ const ListingCard = (dispatch, item, index) => {
         </Card.Horizontal.Dropdown.Menu>
       </Card.Horizontal.Dropdown>
       <Card.Horizontal.Footer>
-        {/* <Card.Horizontal.Tag
+        <Card.Horizontal.Tag
           small
           icon={<Icon width="24px" name={_parseCategoryIconName(item.settingsParent.category.otherItemName, false)} />}
         >
           {item.settingsParent.category.itemName}
-        </Card.Horizontal.Tag> */}
-        <Card.Horizontal.Tag
-          small
-          icon={
-            <Icon width="24px" name={_parseCategoryIconName(item.settingsParent.subcategory.otherItemName, true)} />
-          }
-        >
-          {item.settingsParent.subcategory.itemName}
         </Card.Horizontal.Tag>
         <Card.Horizontal.Button
           size="xs"
