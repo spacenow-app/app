@@ -480,7 +480,7 @@ const SpecificationTab = ({
         <Box>
           <Title
             type="h3"
-            title="Video*"
+            title="Video"
             subtitle="Videos help guests see more of the space and make it easier for them to get a better understanding of it."
           />
           <Box width={160}>
@@ -497,7 +497,7 @@ const SpecificationTab = ({
         <Box>
           <Title
             type="h3"
-            title="Floorplan*"
+            title="Floorplan"
             subtitle="Floorplan help guests see more of the space and make it easier for them to get a better understanding of it."
           />
           <Box width={160}>
@@ -515,7 +515,7 @@ const SpecificationTab = ({
         <Box>
           <Title
             type="h3"
-            title="Menu*"
+            title="Menu"
             subtitle="Menu help guests see more of the space and make it easier for them to get a better understanding of it."
           />
           <Box width={160}>

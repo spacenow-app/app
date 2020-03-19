@@ -19,8 +19,13 @@ const _handleRedirect = id => {
   window.open(`/space/${id}`)
 }
 
-const _handleEditRedirect = id => {
-  window.open(`/listing/space/${id}/specification`)
+const _handleEditRedirect = item => {
+  if (
+    item.settingsParent.category.otherItemName === 'events' ||
+    item.settingsParent.category.otherItemName === 'creative'
+  )
+    window.open(`/listing/v2/space/${item.id}/specification`)
+  window.open(`/listing/space/${item.id}/specification`)
 }
 
 const _handleDelete = dispatch => id => {
@@ -78,9 +83,7 @@ const ListingCard = (dispatch, item, index) => {
           </Text>
         </Card.Horizontal.Dropdown.Toggle>
         <Card.Horizontal.Dropdown.Menu>
-          <Card.Horizontal.Dropdown.Item onClick={() => _handleEditRedirect(item.id)}>
-            Edit
-          </Card.Horizontal.Dropdown.Item>
+          <Card.Horizontal.Dropdown.Item onClick={() => _handleEditRedirect(item)}>Edit</Card.Horizontal.Dropdown.Item>
           <Card.Horizontal.Dropdown.Item onClick={() => _handleDelete(dispatch)(item.id)}>
             Delete
           </Card.Horizontal.Dropdown.Item>

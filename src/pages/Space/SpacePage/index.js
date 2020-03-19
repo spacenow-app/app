@@ -46,7 +46,7 @@ import {
 
 import {
   onGetListingById,
-  onGetAllSpecifications,
+  // onGetAllSpecifications,
   onCleanAvailabilitiesByListingId,
   onGetAvailabilitiesByListingId,
   onClaimListing,
@@ -56,6 +56,8 @@ import {
   onRemoveSavedListingByUser,
   onGetSavedListingByUser
 } from 'redux/ducks/listing'
+
+import { onGetCategorySpecifications } from 'redux/ducks/category'
 
 import { onSimilarSpaces } from 'redux/ducks/search'
 
@@ -244,7 +246,7 @@ const SpacePage = ({ match, location, history, ...props }) => {
 
   const { object: listing, isLoading: isListingLoading } = useSelector(state => state.listing.get)
   const { isCleaned: isCleanedAvailabilities } = useSelector(state => state.listing.cleanAvailabilities)
-  const { object: objectSpecifications } = useSelector(state => state.listing.specifications)
+  const { object: objectSpecifications } = useSelector(state => state.category.specifications)
   const { array: availabilities } = useSelector(state => state.listing.availabilities)
   const { user } = useSelector(state => state.account.get)
   const { isAuthenticated } = useSelector(state => state.auth)
@@ -277,7 +279,8 @@ const SpacePage = ({ match, location, history, ...props }) => {
   }, [dispatch, match.params.id])
 
   useEffect(() => {
-    listing && dispatch(onGetAllSpecifications(listing.settingsParent.id, listing.listingData))
+    listing && dispatch(onGetCategorySpecifications(listing.settingsParent.id, listing.listingData))
+    // listing && dispatch(onGetAllSpecifications(listing.settingsParent.id, listing.listingData))
     listing && user && user.id && dispatch(onGetPendingBooking(listing.id, user.id))
   }, [dispatch, listing, user])
 
@@ -353,6 +356,7 @@ const SpacePage = ({ match, location, history, ...props }) => {
   const _handleClickByListing = () => dispatch(onSaveClicksByListing(match.params.id, listing.listingData.link))
 
   const _renderHighLights = obj => {
+    console.log('OBJ SPECS ===>>>', obj)
     let array = Object.keys(obj).map(i => obj[i])
     if (listing.user.provider === 'external') {
       array = array
@@ -996,18 +1000,20 @@ const SpacePage = ({ match, location, history, ...props }) => {
                       {listing.settingsParent.category.itemName}
                     </Tag>
                   </Box>
-                  <Box margin="0 10px">
-                    <Tag
-                      icon={
-                        <Icon
-                          width="24px"
-                          name={_parseCategoryIconName(listing.settingsParent.subcategory.otherItemName, true)}
-                        />
-                      }
-                    >
-                      {listing.settingsParent.subcategory.itemName}
-                    </Tag>
-                  </Box>
+                  {listing.settingsParent.subcategory && (
+                    <Box margin="0 10px">
+                      <Tag
+                        icon={
+                          <Icon
+                            width="24px"
+                            name={_parseCategoryIconName(listing.settingsParent.subcategory.otherItemName, true)}
+                          />
+                        }
+                      >
+                        {listing.settingsParent.subcategory.itemName}
+                      </Tag>
+                    </Box>
+                  )}
                 </Cell>
                 {listing.listingData.bookingType && listing.listingData.bookingType !== 'poa' && (
                   <Cell width={4} style={{ justifySelf: 'end' }}>
@@ -1465,9 +1471,9 @@ const SpacePage = ({ match, location, history, ...props }) => {
           <Box mt="45px">
             <Title type="h5" title="See more similar spaces" />
             <SimilarSpacesContainer>
-              {similarResults.map(item => {
-                return <CardSearch item={item} key={item.id} />
-              })}
+              {similarResults.map(item => (
+                <CardSearch item={item} key={item.id} />
+              ))}
             </SimilarSpacesContainer>
           </Box>
         )}

@@ -4,8 +4,8 @@ import Helmet from 'react-helmet'
 import { useSelector, useDispatch } from 'react-redux'
 import styled from 'styled-components'
 
-import { stateToHTML } from 'draft-js-export-html';
-import { convertFromRaw } from 'draft-js';
+import { stateToHTML } from 'draft-js-export-html'
+import { convertFromRaw } from 'draft-js'
 
 import {
   Wrapper,
@@ -114,7 +114,7 @@ const PreviewPage = ({ match, location, ...props }) => {
     const { address1 = '', city = '', zipcode = '', state = '', country = '' } = address
     const convertedAddress = `${address1 ? `${address1}, ` : ''} ${city ? `${city}, ` : ''} ${
       zipcode ? `${zipcode}, ` : ''
-      } ${state ? `${state}, ` : ''} ${country ? `${country}` : ''}`
+    } ${state ? `${state}, ` : ''} ${country ? `${country}` : ''}`
     return convertedAddress.replace(/\0.*$/g, '')
   }
 
@@ -225,7 +225,7 @@ const PreviewPage = ({ match, location, ...props }) => {
     return null
   }
 
-  if (isNotOwner && user.role !== "admin") {
+  if (isNotOwner && user.role !== 'admin') {
     dispatch(
       openModal(TypesModal.MODAL_TYPE_WARN, {
         options: {
@@ -241,7 +241,7 @@ const PreviewPage = ({ match, location, ...props }) => {
     )
   }
 
-  const _formatDescription = (description) => {
+  const _formatDescription = description => {
     try {
       return stateToHTML(convertFromRaw(JSON.parse(description)))
     } catch {
@@ -249,7 +249,7 @@ const PreviewPage = ({ match, location, ...props }) => {
     }
   }
 
-  const _handlerFloorplan = () => { }
+  const _handlerFloorplan = () => {}
 
   return (
     <>
@@ -272,7 +272,7 @@ const PreviewPage = ({ match, location, ...props }) => {
                   {listing.settingsParent.category.itemName}
                 </Tag>
               </Box>
-              {listing.settingsParent.subcategory !== null &&
+              {listing.settingsParent.subcategory !== null && (
                 <Box margin="0 10px">
                   <Tag
                     icon={
@@ -285,7 +285,7 @@ const PreviewPage = ({ match, location, ...props }) => {
                     {listing.settingsParent.subcategory.itemName}
                   </Tag>
                 </Box>
-              }
+              )}
             </Box>
           </Box>
           {listing.listingData.bookingType !== 'poa' && (
@@ -315,7 +315,7 @@ const PreviewPage = ({ match, location, ...props }) => {
             right
             color={
               (listing.listingData.basePrice === 0 || listing.listingData.basePrice === null) &&
-                listing.listingData.bookingType !== 'poa'
+              listing.listingData.bookingType !== 'poa'
                 ? '#E05252'
                 : null
             }
@@ -380,25 +380,28 @@ const PreviewPage = ({ match, location, ...props }) => {
           <div dangerouslySetInnerHTML={{ __html: _formatDescription(listing.listingData.description) }} />
         </Box>
 
-
         {(Object.keys(floorplan).length || Object.keys(menu).length) && (
           <Box display="grid" gridAutoFlow="column" gridAutoColumns="max-content" my="50px" gridGap="30px">
-            {Object.keys(floorplan).length && floorplan.id && <Button outline onClick={() => _handlerFloorplan()} width="200px" icon={<Icon
-              width="18px"
-              height="18px"
-              name="feature-wood-floors"
-              style={{ marginRight: "10px" }}
-            />}>
-              Floorplan
-            </Button>}
-            {Object.keys(menu).length && menu.id && <Button outline onClick={() => _handlerFloorplan()} width="200px" icon={<Icon
-              width="18px"
-              height="18px"
-              name="floor-plan"
-              style={{ marginRight: "10px" }}
-            />}>
-              Menu
-            </Button>}
+            {Object.keys(floorplan).length && floorplan.id && (
+              <Button
+                outline
+                onClick={() => _handlerFloorplan()}
+                width="200px"
+                icon={<Icon width="18px" height="18px" name="feature-wood-floors" style={{ marginRight: '10px' }} />}
+              >
+                Floorplan
+              </Button>
+            )}
+            {Object.keys(menu).length && menu.id && (
+              <Button
+                outline
+                onClick={() => _handlerFloorplan()}
+                width="200px"
+                icon={<Icon width="18px" height="18px" name="floor-plan" style={{ marginRight: '10px' }} />}
+              >
+                Menu
+              </Button>
+            )}
           </Box>
         )}
 
@@ -409,7 +412,14 @@ const PreviewPage = ({ match, location, ...props }) => {
               {listing.activities.map((item, index) => {
                 return (
                   <Box key={index} display="grid" gridTemplateColumns="auto 1fr" gridColumnGap="20px">
-                    <Box display="grid" width="54px" height="54px" borderRadius="100%" bg="primary" alignContent="center">
+                    <Box
+                      display="grid"
+                      width="54px"
+                      height="54px"
+                      borderRadius="100%"
+                      bg="primary"
+                      alignContent="center"
+                    >
                       <Icon
                         name={`${listing.settingsParent.category.otherItemName}-activity-${item.settingsData.otherItemName}`}
                         width="30px"
@@ -432,7 +442,14 @@ const PreviewPage = ({ match, location, ...props }) => {
               {listing.amenities.map((item, index) => {
                 return (
                   <Box key={index} display="grid" gridTemplateColumns="auto 1fr" gridColumnGap="20px">
-                    <Box display="grid" width="54px" height="54px" borderRadius="100%" bg="primary" alignContent="center">
+                    <Box
+                      display="grid"
+                      width="54px"
+                      height="54px"
+                      borderRadius="100%"
+                      bg="primary"
+                      alignContent="center"
+                    >
                       <Icon
                         name={`amenitie-${item.settingsData.otherItemName}`}
                         width="30px"
@@ -455,7 +472,14 @@ const PreviewPage = ({ match, location, ...props }) => {
               {listing.rules.map((item, index) => {
                 return (
                   <Box key={index} display="grid" gridTemplateColumns="auto 1fr" gridColumnGap="20px">
-                    <Box display="grid" width="54px" height="54px" borderRadius="100%" bg="primary" alignContent="center">
+                    <Box
+                      display="grid"
+                      width="54px"
+                      height="54px"
+                      borderRadius="100%"
+                      bg="primary"
+                      alignContent="center"
+                    >
                       <Icon
                         name={`rule-${item.settingsData.otherItemName}`}
                         width="30px"
@@ -478,7 +502,14 @@ const PreviewPage = ({ match, location, ...props }) => {
               {listing.features.map((item, index) => {
                 return (
                   <Box key={index} display="grid" gridTemplateColumns="auto 1fr" gridColumnGap="20px">
-                    <Box display="grid" width="54px" height="54px" borderRadius="100%" bg="primary" alignContent="center">
+                    <Box
+                      display="grid"
+                      width="54px"
+                      height="54px"
+                      borderRadius="100%"
+                      bg="primary"
+                      alignContent="center"
+                    >
                       <Icon
                         name={`feature-${item.settingsData.otherItemName}`}
                         width="30px"
@@ -513,7 +544,11 @@ const PreviewPage = ({ match, location, ...props }) => {
 
         <Grid columns={12}>
           <CellStyled width={2}>
-            <Button fluid outline onClick={() => props.history.push(`/listing/space/${match.params.id}/availability`)}>
+            <Button
+              fluid
+              outline
+              onClick={() => props.history.push(`/listing/v2/space/${match.params.id}/availability`)}
+            >
               {`Previous Step`}
             </Button>
           </CellStyled>
