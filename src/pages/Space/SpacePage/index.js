@@ -356,7 +356,6 @@ const SpacePage = ({ match, location, history, ...props }) => {
   const _handleClickByListing = () => dispatch(onSaveClicksByListing(match.params.id, listing.listingData.link))
 
   const _renderHighLights = obj => {
-    console.log('OBJ SPECS ===>>>', obj)
     let array = Object.keys(obj).map(i => obj[i])
     if (listing.user.provider === 'external') {
       array = array
@@ -1204,6 +1203,38 @@ const SpacePage = ({ match, location, history, ...props }) => {
                       )
                     })}
                   </Grid>
+                </Box>
+              )}
+
+              {listing.activities && listing.activities.length > 0 && (
+                <Box my="50px">
+                  <Title type="h4" title="Activities" />
+                  <Box display="grid" gridTemplateColumns={{ _: '1fr', medium: '1fr 1fr 1fr' }} gridRowGap="20px">
+                    {listing.activities.map((item, index) => {
+                      return (
+                        <Box key={index} display="grid" gridTemplateColumns="auto 1fr" gridColumnGap="20px">
+                          <Box
+                            display="grid"
+                            width="54px"
+                            height="54px"
+                            borderRadius="100%"
+                            alignContent="center"
+                            border={'1px solid #6ADC91'}
+                            borderRadius="50%"
+                          >
+                            <Icon
+                              name={`${listing.settingsParent.category.otherItemName}-activity-${item.settingsData.otherItemName}`}
+                              width="30px"
+                              height="30px"
+                              style={{ display: 'block', margin: 'auto' }}
+                              fill="#6ADC91"
+                            />
+                          </Box>
+                          <span style={{ alignSelf: 'center' }}>{item.settingsData.itemName}</span>
+                        </Box>
+                      )
+                    })}
+                  </Box>
                 </Box>
               )}
 
