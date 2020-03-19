@@ -1217,7 +1217,6 @@ const SpacePage = ({ match, location, history, ...props }) => {
                             display="grid"
                             width="54px"
                             height="54px"
-                            borderRadius="100%"
                             alignContent="center"
                             border={'1px solid #6ADC91'}
                             borderRadius="50%"
