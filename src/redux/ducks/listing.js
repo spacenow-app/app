@@ -170,6 +170,347 @@ const initialState = {
   }
 }
 
+// TO BE REMOVED once changed the GraphQL
+// const allListingFields = `
+//   id
+//   userId
+//   title
+//   coverPhotoId
+//   bookingPeriod
+//   isPublished
+//   isReady
+//   quantity
+//   status
+//   updatedAt
+//   createdAt
+//   count
+//   listingData {
+//     listingId
+//     accessType
+//     listingStyle
+//     bookingNoticeTime
+//     minTerm
+//     maxTerm
+//     description
+//     basePrice
+//     currency
+//     isAbsorvedFee
+//     capacity
+//     size
+//     meetingRooms
+//     isFurnished
+//     carSpace
+//     sizeOfVehicle
+//     maxEntranceHeight
+//     bookingType
+//     spaceType
+//     listingAmenities
+//     listingActivities
+//     listingExceptionDates
+//     listingRules
+//     listingAccess
+//     listingFeatures
+//     listingStyles
+//     status
+//     link
+//   }
+//   location {
+//     id
+//     userId
+//     country
+//     address1
+//     address2
+//     buildingName
+//     city
+//     state
+//     zipcode
+//     lat
+//     lng
+//     placeId
+//     createdAt
+//     updatedAt
+//   }
+//   amenities {
+//     id
+//     listingId
+//     listSettingsId
+//     amount
+//     quantity
+//     currency
+//     settings
+//     type
+//     createdAt
+//     updatedAt
+//     settingsData {
+//       id
+//       typeId
+//       itemName
+//       otherItemName
+//       description
+//       maximum
+//       minimum
+//       startValue
+//       endValue
+//       step
+//       isEnable
+//       photo
+//       photoType
+//       isSpecification
+//       createdAt
+//       updatedAt
+//       specData
+//     }
+//   }
+//   features {
+//     id
+//     listingId
+//     listSettingsId
+//     amount
+//     quantity
+//     currency
+//     settings
+//     type
+//     createdAt
+//     updatedAt
+//     settingsData {
+//       id
+//       typeId
+//       itemName
+//       otherItemName
+//       description
+//       maximum
+//       minimum
+//       startValue
+//       endValue
+//       step
+//       isEnable
+//       photo
+//       photoType
+//       isSpecification
+//       createdAt
+//       updatedAt
+//       specData
+//     }
+//   }
+//   access {
+//     id
+//     listingId
+//     listSettingsId
+//     amount
+//     quantity
+//     currency
+//     settings
+//     type
+//     createdAt
+//     updatedAt
+//     settingsData {
+//       id
+//       typeId
+//       itemName
+//       otherItemName
+//       description
+//       maximum
+//       minimum
+//       startValue
+//       endValue
+//       step
+//       isEnable
+//       photo
+//       photoType
+//       isSpecification
+//       createdAt
+//       updatedAt
+//       specData
+//     }
+//   }
+//   activities {
+//     id
+//     listingId
+//     listSettingsId
+//     amount
+//     quantity
+//     currency
+//     settings
+//     type
+//     createdAt
+//     updatedAt
+//     settingsData {
+//       id
+//       typeId
+//       itemName
+//       otherItemName
+//       description
+//       maximum
+//       minimum
+//       startValue
+//       endValue
+//       step
+//       isEnable
+//       photo
+//       photoType
+//       isSpecification
+//       createdAt
+//       updatedAt
+//       specData
+//     }
+//   }
+//   styles {
+//     id
+//     listingId
+//     listSettingsId
+//     amount
+//     quantity
+//     currency
+//     settings
+//     type
+//     createdAt
+//     updatedAt
+//     settingsData {
+//       id
+//       typeId
+//       itemName
+//       otherItemName
+//       description
+//       maximum
+//       minimum
+//       startValue
+//       endValue
+//       step
+//       isEnable
+//       photo
+//       photoType
+//       isSpecification
+//       createdAt
+//       updatedAt
+//       specData
+//     }
+//   }
+//   rules {
+//     id
+//     listingId
+//     listSettingsId
+//     createdAt
+//     updatedAt
+//     settingsData {
+//       id
+//       typeId
+//       itemName
+//       otherItemName
+//       description
+//       maximum
+//       minimum
+//       startValue
+//       endValue
+//       step
+//       isEnable
+//       photo
+//       photoType
+//       isSpecification
+//       createdAt
+//       updatedAt
+//       specData
+//     }
+//   }
+//   settingsParent {
+//     id
+//     category {
+//       id
+//       typeId
+//       itemName
+//       otherItemName
+//       description
+//       maximum
+//       minimum
+//       startValue
+//       endValue
+//       step
+//       isEnable
+//       photo
+//       photoType
+//       isSpecification
+//       createdAt
+//       updatedAt
+//       specData
+//     }
+//     subcategory {
+//       id
+//       typeId
+//       itemName
+//       otherItemName
+//       description
+//       maximum
+//       minimum
+//       startValue
+//       endValue
+//       step
+//       isEnable
+//       photo
+//       photoType
+//       isSpecification
+//       createdAt
+//       updatedAt
+//       specData
+//     }
+//     bookingPeriod {
+//       id
+//       listSettingsParentId
+//       monthly
+//       weekly
+//       daily
+//       hourly
+//     }
+//   }
+//   accessDays {
+//     id
+//     listingId
+//     mon
+//     tue
+//     wed
+//     thu
+//     fri
+//     sat
+//     sun
+//     all247
+//     createdAt
+//     updatedAt
+//     listingAccessHours {
+//       id
+//       listingAccessDaysId
+//       weekday
+//       openHour
+//       closeHour
+//       allday
+//       createdAt
+//       updatedAt
+//     }
+//   }
+//   photos {
+//     id
+// 		listingId
+// 		name
+// 		isCover
+// 		bucket
+// 		region
+// 		key
+//     type
+//     category
+// 		createdAt
+// 		updatedAt
+//   }
+//   user {
+//     id
+//     email
+//     provider
+//     userBanStatus
+//     profile {
+//       displayName
+//       picture
+//       firstName
+//       lastName
+//     }
+//   }
+// `
+
 const allListingFields = `
   id
   userId
@@ -186,7 +527,6 @@ const allListingFields = `
   listingData {
     listingId
     accessType
-    listingStyle
     bookingNoticeTime
     minTerm
     maxTerm
@@ -230,130 +570,6 @@ const allListingFields = `
     updatedAt
   }
   amenities {
-    id
-    listingId
-    listSettingsId
-    amount
-    quantity
-    currency
-    settings
-    type
-    createdAt
-    updatedAt
-    settingsData {
-      id
-      typeId
-      itemName
-      otherItemName
-      description
-      maximum
-      minimum
-      startValue
-      endValue
-      step
-      isEnable
-      photo
-      photoType
-      isSpecification
-      createdAt
-      updatedAt
-      specData
-    }
-  }
-  features {
-    id
-    listingId
-    listSettingsId
-    amount
-    quantity
-    currency
-    settings
-    type
-    createdAt
-    updatedAt
-    settingsData {
-      id
-      typeId
-      itemName
-      otherItemName
-      description
-      maximum
-      minimum
-      startValue
-      endValue
-      step
-      isEnable
-      photo
-      photoType
-      isSpecification
-      createdAt
-      updatedAt
-      specData
-    }
-  }
-  access {
-    id
-    listingId
-    listSettingsId
-    amount
-    quantity
-    currency
-    settings
-    type
-    createdAt
-    updatedAt
-    settingsData {
-      id
-      typeId
-      itemName
-      otherItemName
-      description
-      maximum
-      minimum
-      startValue
-      endValue
-      step
-      isEnable
-      photo
-      photoType
-      isSpecification
-      createdAt
-      updatedAt
-      specData
-    }
-  }
-  activities {
-    id
-    listingId
-    listSettingsId
-    amount
-    quantity
-    currency
-    settings
-    type
-    createdAt
-    updatedAt
-    settingsData {
-      id
-      typeId
-      itemName
-      otherItemName
-      description
-      maximum
-      minimum
-      startValue
-      endValue
-      step
-      isEnable
-      photo
-      photoType
-      isSpecification
-      createdAt
-      updatedAt
-      specData
-    }
-  }
-  styles {
     id
     listingId
     listSettingsId
@@ -492,7 +708,6 @@ const allListingFields = `
 		region
 		key
     type
-    category
 		createdAt
 		updatedAt
   }
