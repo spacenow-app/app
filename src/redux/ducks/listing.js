@@ -544,12 +544,8 @@ const allListingFields = `
     bookingType
     spaceType
     listingAmenities
-    listingActivities
     listingExceptionDates
     listingRules
-    listingAccess
-    listingFeatures
-    listingStyles
     status
     link
   }
