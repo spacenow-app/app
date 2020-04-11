@@ -285,7 +285,7 @@ const SpacePage = ({ match, location, history, ...props }) => {
   }, [dispatch, listing, user])
 
   useEffect(() => {
-    if (user) dispatch(onGetSavedListingByUser(user.id))
+    user && user.id && dispatch(onGetSavedListingByUser(user.id))
   }, [user, dispatch])
 
   useEffect(() => {
