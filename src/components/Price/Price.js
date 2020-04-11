@@ -32,13 +32,10 @@ const Price = ({ currency, currencySymbol, price, bookingPeriod, bookingType, si
           <Text fontSize={size}>POA</Text>
         ) : (
           <Text fontSize={size} {...props}>
-            {' '}
-            `${currency || ''} ${currencySymbol}$
-            {(Math.round((price || 0) * 100) / 100)
+            {` ${currency || ''} ${currencySymbol} ${(Math.round((price || 0) * 100) / 100)
               .toFixed(2)
               .toString()
-              .replace(/\B(?=(\d{3})+(?!\d))/g, ',')}{' '}
-            ` <TextStyled {...props}>{bookingPeriod || ''}</TextStyled>
+              .replace(/\B(?=(\d{3})+(?!\d))/g, ',')} ${<TextStyled {...props}>{bookingPeriod || ''}</TextStyled>}`}
           </Text>
         )
       ) : (
