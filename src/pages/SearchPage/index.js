@@ -188,12 +188,14 @@ const SearchPage = ({ history, location }) => {
   }, [])
 
   useEffect(() => {
-    if (user) dispatch(onGetSavedListingByUser(user.id))
+    user && user.id && dispatch(onGetSavedListingByUser(user.id))
   }, [user, dispatch])
 
   useEffect(() => {
-    return () => { dispatch(onGetSavedListingByUser(user.id)) }
-  }, [dispatch, user]);
+    return () => {
+      dispatch(onGetSavedListingByUser(user.id))
+    }
+  }, [dispatch, user])
 
   const _onHandleScroll = event => {
     event.deltaY > 0

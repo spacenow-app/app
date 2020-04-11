@@ -89,7 +89,7 @@ const SavedListingPage = ({ ...props }) => {
   const { user } = useSelector(state => state.account.get)
 
   useEffect(() => {
-    if (user) dispatch(onGetSavedListingByUser(user.id))
+    user && user.id && dispatch(onGetSavedListingByUser(user.id))
   }, [dispatch, user])
 
   if (isLoading) return <Loader text="Loading listing process" />
@@ -105,10 +105,12 @@ const SavedListingPage = ({ ...props }) => {
       {!listings || listings.length === 0 ? (
         <BackgroundImage text="We didn't find any listings :(" />
       ) : (
-          listings && <Grid columns={1} rowGap="30px">
+        listings && (
+          <Grid columns={1} rowGap="30px">
             {listings.map((item, index) => ListingCard(dispatch, item.listing, index, user))}
           </Grid>
-        )}
+        )
+      )}
     </>
   )
 }

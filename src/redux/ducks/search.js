@@ -59,7 +59,6 @@ const searchResultFields = `
     id
     isCover
     name
-    category
   }
   listingData {
     accessType
