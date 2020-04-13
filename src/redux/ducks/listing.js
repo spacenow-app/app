@@ -847,9 +847,17 @@ const queryGetAvailabilities = gql`
   }
 `
 
+// const mutationCreate = gql`
+//   mutation createOrUpdateListing($locationId: Int!, $listSettingsParentId: Int!, $listingActivities: [Int]) {
+//     createOrUpdateListing(locationId: $locationId, listSettingsParentId: $listSettingsParentId, listingActivities: $listingActivities) {
+//       ${allListingFields}
+//     }
+//   }
+// `
+
 const mutationCreate = gql`
-  mutation createOrUpdateListing($locationId: Int!, $listSettingsParentId: Int!, $listingActivities: [Int]) {
-    createOrUpdateListing(locationId: $locationId, listSettingsParentId: $listSettingsParentId, listingActivities: $listingActivities) {
+  mutation createOrUpdateListing($locationId: Int!, $listSettingsParentId: Int!) {
+    createOrUpdateListing(locationId: $locationId, listSettingsParentId: $listSettingsParentId) {
       ${allListingFields}
     }
   }
