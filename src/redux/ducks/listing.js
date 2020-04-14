@@ -805,6 +805,22 @@ const queryGetPhotosByListingId = gql`
   }
 `
 
+// const queryGetVideoByListingId = gql`
+//   query getVideoByListingId($listingId: Int!) {
+//     getVideoByListingId(listingId: $listingId) {
+//       id
+//       listingId
+//       name
+//       isCover
+//       bucket
+//       region
+//       key
+//       type
+//       category
+//     }
+//   }
+// `
+
 const queryGetVideoByListingId = gql`
   query getVideoByListingId($listingId: Int!) {
     getVideoByListingId(listingId: $listingId) {
@@ -816,7 +832,6 @@ const queryGetVideoByListingId = gql`
       region
       key
       type
-      category
     }
   }
 `
