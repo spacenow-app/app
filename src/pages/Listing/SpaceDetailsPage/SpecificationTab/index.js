@@ -251,7 +251,7 @@ const SpecificationTab = ({
   const _handleOnDrop = useCallback(
     acceptedFiles => {
       acceptedFiles.map(async file => {
-        await dispatch(onUploadPhoto(file, listing.id))
+        await dispatch(onUploadPhoto(file, 'photo', listing.id))
         await dispatch(onGetPhotosByListingId(listing.id))
       })
     },
@@ -271,7 +271,7 @@ const SpecificationTab = ({
   const _handleOnDropVideo = useCallback(
     acceptedFiles => {
       acceptedFiles.map(async file => {
-        await dispatch(onUploadPhoto(file, listing.id))
+        await dispatch(onUploadPhoto(file, 'video', listing.id))
         await dispatch(onGetVideoByListingId(listing.id))
       })
     },
