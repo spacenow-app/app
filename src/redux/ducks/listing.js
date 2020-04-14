@@ -774,6 +774,22 @@ const queryGetAllHolidays = gql`
   }
 `
 
+// const queryGetPhotosByListingId = gql`
+//   query getPhotosByListingId($listingId: Int!) {
+//     getPhotosByListingId(listingId: $listingId) {
+//       id
+//       listingId
+//       name
+//       isCover
+//       bucket
+//       region
+//       key
+//       type
+//       category
+//     }
+//   }
+// `
+
 const queryGetPhotosByListingId = gql`
   query getPhotosByListingId($listingId: Int!) {
     getPhotosByListingId(listingId: $listingId) {
@@ -785,7 +801,6 @@ const queryGetPhotosByListingId = gql`
       region
       key
       type
-      category
     }
   }
 `
