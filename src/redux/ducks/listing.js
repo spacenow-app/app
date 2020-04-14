@@ -893,6 +893,80 @@ const mutationCreate = gql`
   }
 `
 
+// const mutationUpdate = gql`
+//   mutation createOrUpdateListing(
+//     $locationId: Int!
+//     $listSettingsParentId: Int!
+//     $listingId: Int!
+//     $title: String
+//     $accessType: String
+//     $listingStyle: String
+//     $bookingNoticeTime: String
+//     $minTerm: Float
+//     $maxTerm: Float
+//     $description: String
+//     $basePrice: Float
+//     $currency: String
+//     $isAbsorvedFee: Boolean
+//     $capacity: Int
+//     $size: Float
+//     $meetingRooms: Int
+//     $isFurnished: Boolean
+//     $carSpace: Int
+//     $sizeOfVehicle: String
+//     $maxEntranceHeight: String
+//     $spaceType: String
+//     $bookingType: String
+//     $bookingPeriod: String
+//     $listingAmenities: [Int]
+//     $listingFeatures: [Int]
+//     $listingAccess: [Int]
+//     $listingAccessDays: ListingAccessDaysInput
+//     $listingExceptionDates: [String]
+//     $listingRules: [Int],
+//     $listingActivities: [Int],
+//     $listingStyles: [Int],
+//     $link: String
+//   ) {
+//     createOrUpdateListing(
+//       locationId: $locationId
+//       listSettingsParentId: $listSettingsParentId
+//       listingId: $listingId
+//       title: $title
+//       accessType: $accessType
+//       listingStyle: $listingStyle
+//       bookingNoticeTime: $bookingNoticeTime
+//       minTerm: $minTerm
+//       maxTerm: $maxTerm
+//       description: $description
+//       basePrice: $basePrice
+//       currency: $currency
+//       isAbsorvedFee: $isAbsorvedFee
+//       capacity: $capacity
+//       size: $size
+//       meetingRooms: $meetingRooms
+//       isFurnished: $isFurnished
+//       carSpace: $carSpace
+//       sizeOfVehicle: $sizeOfVehicle
+//       maxEntranceHeight: $maxEntranceHeight
+//       spaceType: $spaceType
+//       bookingType: $bookingType
+//       bookingPeriod: $bookingPeriod
+//       listingAmenities: $listingAmenities
+//       listingFeatures: $listingFeatures
+//       listingAccess: $listingAccess
+//       listingAccessDays: $listingAccessDays
+//       listingExceptionDates: $listingExceptionDates
+//       listingRules: $listingRules,
+//       listingActivities: $listingActivities,
+//       listingStyles: $listingStyles,
+//       link: $link
+//     ) {
+//       ${allListingFields}
+//     }
+//   }
+// `
+
 const mutationUpdate = gql`
   mutation createOrUpdateListing(
     $locationId: Int!
@@ -900,7 +974,6 @@ const mutationUpdate = gql`
     $listingId: Int!
     $title: String
     $accessType: String
-    $listingStyle: String
     $bookingNoticeTime: String
     $minTerm: Float
     $maxTerm: Float
@@ -919,13 +992,9 @@ const mutationUpdate = gql`
     $bookingType: String
     $bookingPeriod: String
     $listingAmenities: [Int]
-    $listingFeatures: [Int]
-    $listingAccess: [Int]
     $listingAccessDays: ListingAccessDaysInput
     $listingExceptionDates: [String]
     $listingRules: [Int],
-    $listingActivities: [Int],
-    $listingStyles: [Int],
     $link: String
   ) {
     createOrUpdateListing(
@@ -934,7 +1003,6 @@ const mutationUpdate = gql`
       listingId: $listingId
       title: $title
       accessType: $accessType
-      listingStyle: $listingStyle
       bookingNoticeTime: $bookingNoticeTime
       minTerm: $minTerm
       maxTerm: $maxTerm
@@ -953,13 +1021,9 @@ const mutationUpdate = gql`
       bookingType: $bookingType
       bookingPeriod: $bookingPeriod
       listingAmenities: $listingAmenities
-      listingFeatures: $listingFeatures
-      listingAccess: $listingAccess
       listingAccessDays: $listingAccessDays
       listingExceptionDates: $listingExceptionDates
       listingRules: $listingRules,
-      listingActivities: $listingActivities,
-      listingStyles: $listingStyles,
       link: $link
     ) {
       ${allListingFields}
