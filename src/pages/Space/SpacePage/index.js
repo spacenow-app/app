@@ -246,7 +246,7 @@ const SpacePage = ({ match, location, history, ...props }) => {
 
   const { object: listing, isLoading: isListingLoading } = useSelector(state => state.listing.get)
   const { isCleaned: isCleanedAvailabilities } = useSelector(state => state.listing.cleanAvailabilities)
-  const { object: objectSpecifications } = useSelector(state => state.category.specifications)
+  const { object: objectSpecifications } = useSelector(state => state.listing.specifications)
   const { array: availabilities } = useSelector(state => state.listing.availabilities)
   const { user } = useSelector(state => state.account.get)
   const { isAuthenticated } = useSelector(state => state.auth)
