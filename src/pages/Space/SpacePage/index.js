@@ -46,7 +46,7 @@ import {
 
 import {
   onGetListingById,
-  // onGetAllSpecifications,
+  onGetAllSpecifications,
   onCleanAvailabilitiesByListingId,
   onGetAvailabilitiesByListingId,
   onClaimListing,
@@ -57,7 +57,7 @@ import {
   onGetSavedListingByUser
 } from 'redux/ducks/listing'
 
-import { onGetCategorySpecifications } from 'redux/ducks/category'
+// import { onGetCategorySpecifications } from 'redux/ducks/category'
 
 import { onSimilarSpaces } from 'redux/ducks/search'
 
@@ -279,8 +279,8 @@ const SpacePage = ({ match, location, history, ...props }) => {
   }, [dispatch, match.params.id])
 
   useEffect(() => {
-    listing && dispatch(onGetCategorySpecifications(listing.settingsParent.id, listing.listingData))
-    // listing && dispatch(onGetAllSpecifications(listing.settingsParent.id, listing.listingData))
+    // listing && dispatch(onGetCategorySpecifications(listing.settingsParent.id, listing.listingData))
+    listing && dispatch(onGetAllSpecifications(listing.settingsParent.id, listing.listingData))
     listing && user && user.id && dispatch(onGetPendingBooking(listing.id, user.id))
   }, [dispatch, listing, user])
 
