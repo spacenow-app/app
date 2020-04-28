@@ -525,7 +525,7 @@ const SearchPage = ({ history, location }) => {
                             }
                           />
                           <Text display="block" ml="28px" mb="20px">
-                            I’m looking for a kitchen to prepera my menu
+                            I’m looking to rent a kitchen
                           </Text>
                         </div>
                         <Box display="flex" justifyContent="space-between">
