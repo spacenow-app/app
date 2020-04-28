@@ -36,7 +36,7 @@ const CATEGORIES = {
   parking: [570],
   storage: [571],
   retailAndHospitality: [573],
-  kitchen: [677]
+  kitchen: [573]
 }
 
 const searchBaseFields = `
