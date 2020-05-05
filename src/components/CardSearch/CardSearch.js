@@ -136,8 +136,8 @@ const CardSearch = ({ item, ...props }) => {
             </Tag>
           </Box> */}
           <Box>
-            <Tag small icon={<Icon width="24px" name={_parseCategoryIconName(item.category.otherItemName, true)} />}>
-              {item.category.itemName}
+            <Tag small icon={<Icon width="24px" name={_parseCategoryIconName(item.subcategory.otherItemName, true)} />}>
+              {item.subcategory.itemName}
             </Tag>
           </Box>
         </Box>
