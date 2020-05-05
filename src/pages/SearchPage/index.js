@@ -168,7 +168,8 @@ const SearchPage = ({ history, location }) => {
     eventSpace: queryCategory.includes('eventSpace'),
     parking: queryCategory.includes('parking'),
     storage: queryCategory.includes('storage'),
-    retailAndHospitality: queryCategory.includes('retailAndHospitality')
+    retailAndHospitality: queryCategory.includes('retailAndHospitality'),
+    kitchen: queryCategory.includes('kitchen')
   })
   const [showMap, setShowMap] = useState(true)
   const [filterSelectedDates, setFilterSelectedDates] = useState([])
@@ -515,6 +516,16 @@ const SearchPage = ({ history, location }) => {
                           />
                           <Text display="block" ml="28px" mb="20px">
                             I’m looking for a space to hold an event
+                          </Text>
+                          <Checkbox
+                            label={<Text fontFamily="bold">Kitchen</Text>}
+                            checked={filterCategory.kitchen}
+                            handleCheckboxChange={(e, { checked }) =>
+                              setFilterCategory({ ...filterCategory, kitchen: !checked })
+                            }
+                          />
+                          <Text display="block" ml="28px" mb="20px">
+                            I’m looking to rent a kitchen
                           </Text>
                         </div>
                         <Box display="flex" justifyContent="space-between">

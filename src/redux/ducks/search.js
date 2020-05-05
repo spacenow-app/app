@@ -35,7 +35,8 @@ const CATEGORIES = {
   eventSpace: [569],
   parking: [570],
   storage: [571],
-  retailAndHospitality: [573]
+  retailAndHospitality: [573],
+  kitchen: [573]
 }
 
 const searchBaseFields = `
