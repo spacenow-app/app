@@ -1,13 +1,16 @@
 /* eslint-disable react/no-array-index-key */
 /* eslint-disable no-console */
-import React, { useState } from 'react'
+// import React, { useState } from 'react'
+import React from 'react'
 import styled from 'styled-components'
 import { withFormik } from 'formik'
 import * as Yup from 'yup'
 import { format } from 'date-fns'
-import { DateUtils } from 'react-day-picker'
+// import { DateUtils } from 'react-day-picker'
 
-import { Input, TextArea, Button, DatePicker } from 'components'
+// import { Input, TextArea, Button, DatePicker } from 'components'
+
+import { Input, TextArea, Button } from 'components'
 
 import { onSendHubSpotForm } from 'redux/ducks/integration'
 
@@ -35,22 +38,22 @@ const GenericForm = ({
     dispatch(onSendHubSpotForm(values))
   }
 
-  const [from, setFrom] = useState(undefined)
-  const [to, setTo] = useState(undefined)
-  const [range, setRange] = useState(undefined)
-  const modifiers = { start: from, end: to }
+  // const [from, setFrom] = useState(undefined)
+  // const [to, setTo] = useState(undefined)
+  // const [range, setRange] = useState(undefined)
+  // const modifiers = { start: from, end: to }
 
-  const _handleDayClick = day => {
-    const rangeInput = DateUtils.addDayToRange(day, range)
-    let fullDate = format(rangeInput.from, 'dd-MM-yyyy')
-    if (rangeInput.from && rangeInput.to)
-      fullDate = `${format(rangeInput.from, 'dd-MM-yyyy')} to ${format(rangeInput.to, 'dd-MM-yyyy')}`
+  // const _handleDayClick = day => {
+  //   const rangeInput = DateUtils.addDayToRange(day, range)
+  //   let fullDate = format(rangeInput.from, 'dd-MM-yyyy')
+  //   if (rangeInput.from && rangeInput.to)
+  //     fullDate = `${format(rangeInput.from, 'dd-MM-yyyy')} to ${format(rangeInput.to, 'dd-MM-yyyy')}`
 
-    setFieldValue('requested_move_in_date', fullDate)
-    setRange(rangeInput)
-    setFrom(rangeInput.from)
-    setTo(rangeInput.to)
-  }
+  //   setFieldValue('requested_move_in_date', fullDate)
+  //   setRange(rangeInput)
+  //   setFrom(rangeInput.from)
+  //   setTo(rangeInput.to)
+  // }
 
   return (
     <form>
@@ -91,7 +94,7 @@ const GenericForm = ({
           />
         </SectionStyled>
 
-        <SectionStyled>
+        {/* <SectionStyled>
           <DatePicker
             label="Dates"
             handleDateChange={date => _handleDayClick(date)}
@@ -105,7 +108,7 @@ const GenericForm = ({
               modifiers: { modifiers }
             }}
           />
-        </SectionStyled>
+        </SectionStyled> */}
 
         <SectionStyled>
           <TextArea
@@ -135,7 +138,7 @@ const formik = {
         email: '',
         name: '',
         phone: '',
-        requested_move_in_date: '',
+        requested_move_in_date: format(new Date(), 'dd-MM-yyyy'),
         notes: ''
       }
     }
