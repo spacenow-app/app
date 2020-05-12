@@ -1391,7 +1391,7 @@ const SpacePage = ({ match, location, history, ...props }) => {
                         _renderContentCard(listing.bookingPeriod, listing.listingData.bookingType)}
                       {(pendingBooking ? pendingBooking && pendingBooking.count == 0 : true) && (
                         <>
-                          {listing.user.provider !== 'generic' && listing.user.provider !== 'external' && (
+                          {listing.listingData.bookingType !== 'enquire' && listing.user.provider !== 'generic' && listing.user.provider !== 'external' && (
                             <Button onClick={e => _onSubmitBooking(e)} isLoading={isLoadingOnCreateReservation} fluid>
                               {listing.listingData.bookingType === 'request' ? 'Booking Request' : 'Reserve'}
                             </Button>
