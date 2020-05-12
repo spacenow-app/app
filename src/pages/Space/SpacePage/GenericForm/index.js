@@ -60,7 +60,7 @@ const GenericForm = ({
       <WrapperStyled>
         <SectionStyled>
           <Input
-            label="Full Name*"
+            // label="Full Name*"
             placeholder="Your full name"
             name="name"
             error={errors.name}
@@ -72,7 +72,7 @@ const GenericForm = ({
 
         <SectionStyled>
           <Input
-            label="Email*"
+            // label="Email*"
             placeholder="Email Address"
             name="email"
             error={errors.email}
@@ -84,7 +84,7 @@ const GenericForm = ({
 
         <SectionStyled>
           <Input
-            label="Phone"
+            // label="Phone"
             placeholder="Phone"
             name="phone"
             error={errors.phone}
@@ -112,7 +112,7 @@ const GenericForm = ({
 
         <SectionStyled>
           <TextArea
-            label="Notes"
+            // label="Notes"
             name="notes"
             error={errors.notes}
             value={values.notes}
