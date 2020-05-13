@@ -816,7 +816,7 @@ const SearchPage = ({ history, location }) => {
             </Manager>
           )}
 
-          <Manager>
+          {/* <Manager>
             <Reference>
               {({ ref }) => {
                 return (
@@ -834,7 +834,7 @@ const SearchPage = ({ history, location }) => {
                 )
               }}
             </Reference>
-            {/* {shouldShowFilter === 'instantBooking' && (
+            {shouldShowFilter === 'instantBooking' && (
               <Popper placement="bottom-start" modifiers={modifiers}>
                 {({ ref, style, placement, arrowProps }) => {
                   return (
@@ -877,8 +877,8 @@ const SearchPage = ({ history, location }) => {
                   )
                 }}
               </Popper>
-            )} */}
-          </Manager>
+            )} 
+          </Manager> */}
 
           <Manager>
             <SwitchStyled showMap={showMap}>
