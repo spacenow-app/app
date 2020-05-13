@@ -228,10 +228,10 @@ export const onSendHubSpotForm = hubspot => async dispatch => {
       variables: { hubspot }
     })
     dispatch(sendHubSpotSuccess(data.sendHubSpotForm))
-    toast.success('Your request was sent successfully.')
+    toast.success('Your enquire was sent successfully.')
   } catch (err) {
     dispatch(sendHubSpotFailed(errToMsg(err)))
-    toast.success('Your request could not been sent.')
+    toast.success('Your enquire could not been sent.')
   }
 }
 

@@ -79,6 +79,7 @@ import MonthlyBooking from './MonthlyBooking'
 import PendingBooking from './PenidngBooking'
 import HourlyBooking from './HourlyBooking'
 import GenericForm from './GenericForm'
+import EnquireForm from './EnquireForm'
 import InspectionForm from './InspectionForm'
 
 const GridStyled = styled(Grid)`
@@ -506,7 +507,10 @@ const SpacePage = ({ match, location, history, ...props }) => {
   }
 
   const _renderContentCard = (bookingPeriod, bookingType) => {
-    if (listing.user.provider === 'generic' || bookingType === 'enquire') {
+    if (bookingType === 'enquire') {
+      return <EnquireForm {...props} listing={listing} dispatch={dispatch} />
+    }
+    if (listing.user.provider === 'generic') {
       return <GenericForm {...props} listing={listing} dispatch={dispatch} />
     }
     if (pendingBooking && pendingBooking.items && pendingBooking.items.length > 0 && bookingType !== 'poa') {
