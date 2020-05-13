@@ -68,8 +68,8 @@ const EnquireForm = ({
       destination: listing.user.email,
       data: JSON.stringify(Object.assign(values, { email: listing.user.email }))
     }
-    dispatch(sendMail({ emailGuest }))
-    dispatch(sendMail({ emailHost }, 'Your enquiry was sent succesfully'))
+    dispatch(sendMail(...emailGuest))
+    dispatch(sendMail(...emailHost, 'Your enquiry was sent succesfully'))
   }
 
   return (
