@@ -113,6 +113,7 @@ const GenericForm = ({
         <SectionStyled>
           <TextArea
             // label="Notes"
+            placeholder="Message"
             name="notes"
             error={errors.notes}
             value={values.notes}
@@ -147,7 +148,7 @@ const formik = {
   validationSchema: Yup.object().shape({
     email: Yup.string().required('Email field is required'),
     name: Yup.string().required('Name field is required'),
-    phone: Yup.number().typeError('Need to be number.'),
+    phone: Yup.number().required('Phone field is required'),
     requested_move_in_date: Yup.string(),
     notes: Yup.string()
   }),
