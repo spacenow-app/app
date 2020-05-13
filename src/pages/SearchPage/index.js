@@ -81,18 +81,18 @@ const ContainerMap = styled.div`
   }
 `
 
-const ItemSwitchStyled = styled.div`
-  height: 65px;
-  border-radius: 6px;
-  border: 1px solid ${({ checked }) => (checked ? '#6adc91' : '#c4c4c4')};
-  padding: 20px;
-  display: grid;
-  grid-template-columns: auto auto;
-  grid-column-gap: 10px;
-  width: 189px;
-  margin-top: 35px;
-  margin-bottom: 35px;
-`
+// const ItemSwitchStyled = styled.div`
+//   height: 65px;
+//   border-radius: 6px;
+//   border: 1px solid ${({ checked }) => (checked ? '#6adc91' : '#c4c4c4')};
+//   padding: 20px;
+//   display: grid;
+//   grid-template-columns: auto auto;
+//   grid-column-gap: 10px;
+//   width: 189px;
+//   margin-top: 35px;
+//   margin-bottom: 35px;
+// `
 
 const SwitchStyled = styled.div`
   display: grid;
@@ -154,7 +154,8 @@ const SearchPage = ({ history, location }) => {
   const [shouldShowFilter, setShouldShowFilter] = useState(false)
   const [markers, setMarkers] = useState([])
   const [filterPrice, setFilterPrice] = useState([0, 10000])
-  const [filterInstantBooking, setFilterInstantBooking] = useState(false)
+  // const [filterInstantBooking, setFilterInstantBooking] = useState(false)
+  const [filterInstantBooking] = useState(false)
   const [showFilterBar, setShowFilterBar] = useState(false)
   const [filterDuration, setFilterDuration] = useState({
     hourly: false,
