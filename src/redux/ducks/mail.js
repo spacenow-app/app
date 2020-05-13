@@ -58,7 +58,7 @@ export const sendMail = (emailOptions, message) => async dispatch => {
   try {
     const { data } = await getClientWithAuth(dispatch).mutate({
       mutation: sendEmail,
-      variables: { ...emailOptions }
+      variables: emailOptions
     })
     message && toast.success(message)
     dispatch({ type: Types.SEND_EMAIL_SUCCESS, payload: data.sendEmail })
