@@ -7,7 +7,7 @@ import * as Yup from 'yup'
 import { format } from 'date-fns'
 import { useSelector } from 'react-redux'
 
-import { Input, TextArea, Button, Collapse } from 'components'
+import { Input, TextArea, Button, Text, Select } from 'components'
 
 import { sendMail } from 'redux/ducks/mail'
 
@@ -72,17 +72,29 @@ const EnquireForm = ({
     dispatch(sendMail({ ...emailHost }, 'Your enquiry was sent succesfully'))
   }
 
-  const [open, setOpen] = useState(false)
+  const _handleSelectChange = e => {
+    const { name, value } = e.target
+    setFieldValue(name, value)
+  }
 
   return (
     <form>
       <WrapperStyled>
-        <Button onClick={() => setOpen(!open)} />
-        <Collapse in={open}>
-          <div id="inquiry-question-form">
-            <p>Question</p>
-          </div>
-        </Collapse>
+        <Text>Hi,</Text>
+        <Text>I'm interested in this property. Could you please provide me with more information.</Text>
+
+        <Select
+          error={errors.desiredInfo}
+          value={values.desiredInfo}
+          name="desiredInfo"
+          onChange={_handleSelectChange}
+        >
+          <option value="">Select desired information</option>
+          <option value="pricing">Pricing</option>
+          <option value="leasing-terms">Leasing terms</option>
+          <option value="property-inspection">Property inspection</option>
+          <option value="outgoings">Outgoings</option>
+        </Select>
 
         {!isAuthenticated && (
           <>
@@ -107,6 +119,16 @@ const EnquireForm = ({
             />
           </>
         )}
+
+        <Input
+          // label="Company"
+          placeholder="Company"
+          name="company"
+          error={errors.company}
+          value={values.company}
+          onChange={handleChange}
+          onBlur={handleBlur}
+        />
 
         <Input
           // label="Phone number"

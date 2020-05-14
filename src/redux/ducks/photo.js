@@ -28,27 +28,9 @@ const initialState = {
   }
 }
 
-// const mutationUploadPhoto = gql`
-//   mutation uploadPhoto($file: Upload, $category: String!, $listingId: Int!) {
-//     uploadPhoto(file: $file, category: $category, listingId: $listingId) {
-//       id
-//       listingId
-//       name
-//       isCover
-//       bucket
-//       region
-//       key
-//       type
-//       category
-//       createdAt
-//       updatedAt
-//     }
-//   }
-// `
-
 const mutationUploadPhoto = gql`
-  mutation uploadPhoto($file: Upload, $listingId: Int!) {
-    uploadPhoto(file: $file, listingId: $listingId) {
+  mutation uploadPhoto($file: Upload, $category: String!, $listingId: Int!) {
+    uploadPhoto(file: $file, category: $category, listingId: $listingId) {
       id
       listingId
       name
@@ -57,6 +39,7 @@ const mutationUploadPhoto = gql`
       region
       key
       type
+      category
       createdAt
       updatedAt
     }
@@ -154,30 +137,14 @@ export default function reducer(state = initialState, action) {
   }
 }
 
-// export const onUploadPhoto = (file, category, listingId) => async dispatch => {
-//   dispatch({ type: Types.UPLOAD_PHOTO_START })
-//   try {
-//     const { data } = await getClientWithAuth(dispatch).mutate({
-//       mutation: mutationUploadPhoto,
-//       variables: {
-//         file,
-//         category,
-//         listingId
-//       }
-//     })
-//     dispatch({ type: Types.UPLOAD_PHOTO_SUCCESS, payload: data.uploadPhoto })
-//   } catch (err) {
-//     dispatch({ type: Types.UPLOAD_PHOTO_FAILURE, payload: errToMsg(err) })
-//   }
-// }
-
-export const onUploadPhoto = (file, listingId) => async dispatch => {
+export const onUploadPhoto = (file, category, listingId) => async dispatch => {
   dispatch({ type: Types.UPLOAD_PHOTO_START })
   try {
     const { data } = await getClientWithAuth(dispatch).mutate({
       mutation: mutationUploadPhoto,
       variables: {
         file,
+        category,
         listingId
       }
     })
