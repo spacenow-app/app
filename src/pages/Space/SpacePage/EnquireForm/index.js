@@ -72,15 +72,29 @@ const EnquireForm = ({
     dispatch(sendMail({ ...emailHost }, 'Your enquiry was sent succesfully'))
   }
 
-  const [open, setOpen] = useState(false)
+  const [question, setQuestion] = useState(false)
+  const [inspection, setInspection] = useState(false)
 
   return (
     <form>
       <WrapperStyled>
-        <Button onClick={() => setOpen(!open)} />
-        <Collapse in={open}>
+        <Button onClick={() => setInspection(false) || setQuestion(!question)}>
+          Ask a Question
+        </Button>
+        <Button onClick={() => setQuestion(false) || setInspection(!inspection)}>
+          Organise and Inspection
+        </Button>
+
+        <Collapse in={question}>
           <div id="inquiry-question-form">
-            <p>Question</p>
+            <p>Hi,</p>
+            <p>I'm interested in this property. Could you please provide me with more information.</p>
+          </div>
+        </Collapse>
+        <Collapse in={inspection}>
+          <div id="inquiry-inspection-form">
+            <p>Hi,</p>
+            <p>I would like to organise and inspection.</p>
           </div>
         </Collapse>
 
