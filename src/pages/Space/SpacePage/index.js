@@ -1405,9 +1405,6 @@ const SpacePage = ({ match, location, history, ...props }) => {
                               Reserve
                             </Button>
                           )}
-                          <Box width="100%" textAlign="center">
-                            <Text fontSize="11px">You won't be charged at this point</Text>
-                          </Box>
                         </>
                       )}
                     </>

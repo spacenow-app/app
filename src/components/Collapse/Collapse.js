@@ -1,6 +1,6 @@
 import React from 'react'
 import styled from 'styled-components'
-import { Collapse as SpacenowCollapse } from 'react-bootstrap/Collapse'
+import { Collapse as SpacenowCollapse } from 'react-bootstrap'
 
 const CollapseStyled = styled(SpacenowCollapse)`
 `

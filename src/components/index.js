@@ -67,6 +67,7 @@ import CheckInOut from './CheckInOut'
 import CardCheckout from './CardCheckout'
 import CreditCard from './CreditCard'
 import BookingPriceDetail from './BookingPriceDetail'
+import Collapse from './Collapse'
 
 export {
   Modal,
@@ -140,5 +141,6 @@ export {
   CardCheckout,
   CreditCard,
   WYSIWYGTextArea,
-  BookingPriceDetail
+  BookingPriceDetail,
+  Collapse
 }
