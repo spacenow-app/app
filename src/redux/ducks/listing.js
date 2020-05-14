@@ -170,347 +170,6 @@ const initialState = {
   }
 }
 
-// TO BE REMOVED once changed the GraphQL
-// const allListingFields = `
-//   id
-//   userId
-//   title
-//   coverPhotoId
-//   bookingPeriod
-//   isPublished
-//   isReady
-//   quantity
-//   status
-//   updatedAt
-//   createdAt
-//   count
-//   listingData {
-//     listingId
-//     accessType
-//     listingStyle
-//     bookingNoticeTime
-//     minTerm
-//     maxTerm
-//     description
-//     basePrice
-//     currency
-//     isAbsorvedFee
-//     capacity
-//     size
-//     meetingRooms
-//     isFurnished
-//     carSpace
-//     sizeOfVehicle
-//     maxEntranceHeight
-//     bookingType
-//     spaceType
-//     listingAmenities
-//     listingActivities
-//     listingExceptionDates
-//     listingRules
-//     listingAccess
-//     listingFeatures
-//     listingStyles
-//     status
-//     link
-//   }
-//   location {
-//     id
-//     userId
-//     country
-//     address1
-//     address2
-//     buildingName
-//     city
-//     state
-//     zipcode
-//     lat
-//     lng
-//     placeId
-//     createdAt
-//     updatedAt
-//   }
-//   amenities {
-//     id
-//     listingId
-//     listSettingsId
-//     amount
-//     quantity
-//     currency
-//     settings
-//     type
-//     createdAt
-//     updatedAt
-//     settingsData {
-//       id
-//       typeId
-//       itemName
-//       otherItemName
-//       description
-//       maximum
-//       minimum
-//       startValue
-//       endValue
-//       step
-//       isEnable
-//       photo
-//       photoType
-//       isSpecification
-//       createdAt
-//       updatedAt
-//       specData
-//     }
-//   }
-//   features {
-//     id
-//     listingId
-//     listSettingsId
-//     amount
-//     quantity
-//     currency
-//     settings
-//     type
-//     createdAt
-//     updatedAt
-//     settingsData {
-//       id
-//       typeId
-//       itemName
-//       otherItemName
-//       description
-//       maximum
-//       minimum
-//       startValue
-//       endValue
-//       step
-//       isEnable
-//       photo
-//       photoType
-//       isSpecification
-//       createdAt
-//       updatedAt
-//       specData
-//     }
-//   }
-//   access {
-//     id
-//     listingId
-//     listSettingsId
-//     amount
-//     quantity
-//     currency
-//     settings
-//     type
-//     createdAt
-//     updatedAt
-//     settingsData {
-//       id
-//       typeId
-//       itemName
-//       otherItemName
-//       description
-//       maximum
-//       minimum
-//       startValue
-//       endValue
-//       step
-//       isEnable
-//       photo
-//       photoType
-//       isSpecification
-//       createdAt
-//       updatedAt
-//       specData
-//     }
-//   }
-//   activities {
-//     id
-//     listingId
-//     listSettingsId
-//     amount
-//     quantity
-//     currency
-//     settings
-//     type
-//     createdAt
-//     updatedAt
-//     settingsData {
-//       id
-//       typeId
-//       itemName
-//       otherItemName
-//       description
-//       maximum
-//       minimum
-//       startValue
-//       endValue
-//       step
-//       isEnable
-//       photo
-//       photoType
-//       isSpecification
-//       createdAt
-//       updatedAt
-//       specData
-//     }
-//   }
-//   styles {
-//     id
-//     listingId
-//     listSettingsId
-//     amount
-//     quantity
-//     currency
-//     settings
-//     type
-//     createdAt
-//     updatedAt
-//     settingsData {
-//       id
-//       typeId
-//       itemName
-//       otherItemName
-//       description
-//       maximum
-//       minimum
-//       startValue
-//       endValue
-//       step
-//       isEnable
-//       photo
-//       photoType
-//       isSpecification
-//       createdAt
-//       updatedAt
-//       specData
-//     }
-//   }
-//   rules {
-//     id
-//     listingId
-//     listSettingsId
-//     createdAt
-//     updatedAt
-//     settingsData {
-//       id
-//       typeId
-//       itemName
-//       otherItemName
-//       description
-//       maximum
-//       minimum
-//       startValue
-//       endValue
-//       step
-//       isEnable
-//       photo
-//       photoType
-//       isSpecification
-//       createdAt
-//       updatedAt
-//       specData
-//     }
-//   }
-//   settingsParent {
-//     id
-//     category {
-//       id
-//       typeId
-//       itemName
-//       otherItemName
-//       description
-//       maximum
-//       minimum
-//       startValue
-//       endValue
-//       step
-//       isEnable
-//       photo
-//       photoType
-//       isSpecification
-//       createdAt
-//       updatedAt
-//       specData
-//     }
-//     subcategory {
-//       id
-//       typeId
-//       itemName
-//       otherItemName
-//       description
-//       maximum
-//       minimum
-//       startValue
-//       endValue
-//       step
-//       isEnable
-//       photo
-//       photoType
-//       isSpecification
-//       createdAt
-//       updatedAt
-//       specData
-//     }
-//     bookingPeriod {
-//       id
-//       listSettingsParentId
-//       monthly
-//       weekly
-//       daily
-//       hourly
-//     }
-//   }
-//   accessDays {
-//     id
-//     listingId
-//     mon
-//     tue
-//     wed
-//     thu
-//     fri
-//     sat
-//     sun
-//     all247
-//     createdAt
-//     updatedAt
-//     listingAccessHours {
-//       id
-//       listingAccessDaysId
-//       weekday
-//       openHour
-//       closeHour
-//       allday
-//       createdAt
-//       updatedAt
-//     }
-//   }
-//   photos {
-//     id
-// 		listingId
-// 		name
-// 		isCover
-// 		bucket
-// 		region
-// 		key
-//     type
-//     category
-// 		createdAt
-// 		updatedAt
-//   }
-//   user {
-//     id
-//     email
-//     provider
-//     userBanStatus
-//     profile {
-//       displayName
-//       picture
-//       firstName
-//       lastName
-//     }
-//   }
-// `
-
 const allListingFields = `
   id
   userId
@@ -527,6 +186,7 @@ const allListingFields = `
   listingData {
     listingId
     accessType
+    listingStyle
     bookingNoticeTime
     minTerm
     maxTerm
@@ -544,8 +204,12 @@ const allListingFields = `
     bookingType
     spaceType
     listingAmenities
+    listingActivities
     listingExceptionDates
     listingRules
+    listingAccess
+    listingFeatures
+    listingStyles
     status
     link
   }
@@ -566,6 +230,130 @@ const allListingFields = `
     updatedAt
   }
   amenities {
+    id
+    listingId
+    listSettingsId
+    amount
+    quantity
+    currency
+    settings
+    type
+    createdAt
+    updatedAt
+    settingsData {
+      id
+      typeId
+      itemName
+      otherItemName
+      description
+      maximum
+      minimum
+      startValue
+      endValue
+      step
+      isEnable
+      photo
+      photoType
+      isSpecification
+      createdAt
+      updatedAt
+      specData
+    }
+  }
+  features {
+    id
+    listingId
+    listSettingsId
+    amount
+    quantity
+    currency
+    settings
+    type
+    createdAt
+    updatedAt
+    settingsData {
+      id
+      typeId
+      itemName
+      otherItemName
+      description
+      maximum
+      minimum
+      startValue
+      endValue
+      step
+      isEnable
+      photo
+      photoType
+      isSpecification
+      createdAt
+      updatedAt
+      specData
+    }
+  }
+  access {
+    id
+    listingId
+    listSettingsId
+    amount
+    quantity
+    currency
+    settings
+    type
+    createdAt
+    updatedAt
+    settingsData {
+      id
+      typeId
+      itemName
+      otherItemName
+      description
+      maximum
+      minimum
+      startValue
+      endValue
+      step
+      isEnable
+      photo
+      photoType
+      isSpecification
+      createdAt
+      updatedAt
+      specData
+    }
+  }
+  activities {
+    id
+    listingId
+    listSettingsId
+    amount
+    quantity
+    currency
+    settings
+    type
+    createdAt
+    updatedAt
+    settingsData {
+      id
+      typeId
+      itemName
+      otherItemName
+      description
+      maximum
+      minimum
+      startValue
+      endValue
+      step
+      isEnable
+      photo
+      photoType
+      isSpecification
+      createdAt
+      updatedAt
+      specData
+    }
+  }
+  styles {
     id
     listingId
     listSettingsId
@@ -704,6 +492,7 @@ const allListingFields = `
 		region
 		key
     type
+    category
 		createdAt
 		updatedAt
   }
@@ -774,22 +563,6 @@ const queryGetAllHolidays = gql`
   }
 `
 
-// const queryGetPhotosByListingId = gql`
-//   query getPhotosByListingId($listingId: Int!) {
-//     getPhotosByListingId(listingId: $listingId) {
-//       id
-//       listingId
-//       name
-//       isCover
-//       bucket
-//       region
-//       key
-//       type
-//       category
-//     }
-//   }
-// `
-
 const queryGetPhotosByListingId = gql`
   query getPhotosByListingId($listingId: Int!) {
     getPhotosByListingId(listingId: $listingId) {
@@ -801,25 +574,10 @@ const queryGetPhotosByListingId = gql`
       region
       key
       type
+      category
     }
   }
 `
-
-// const queryGetVideoByListingId = gql`
-//   query getVideoByListingId($listingId: Int!) {
-//     getVideoByListingId(listingId: $listingId) {
-//       id
-//       listingId
-//       name
-//       isCover
-//       bucket
-//       region
-//       key
-//       type
-//       category
-//     }
-//   }
-// `
 
 const queryGetVideoByListingId = gql`
   query getVideoByListingId($listingId: Int!) {
@@ -832,6 +590,7 @@ const queryGetVideoByListingId = gql`
       region
       key
       type
+      category
     }
   }
 `
@@ -877,95 +636,13 @@ const queryGetAvailabilities = gql`
   }
 `
 
-// const mutationCreate = gql`
-//   mutation createOrUpdateListing($locationId: Int!, $listSettingsParentId: Int!, $listingActivities: [Int]) {
-//     createOrUpdateListing(locationId: $locationId, listSettingsParentId: $listSettingsParentId, listingActivities: $listingActivities) {
-//       ${allListingFields}
-//     }
-//   }
-// `
-
 const mutationCreate = gql`
-  mutation createOrUpdateListing($locationId: Int!, $listSettingsParentId: Int!) {
-    createOrUpdateListing(locationId: $locationId, listSettingsParentId: $listSettingsParentId) {
+  mutation createOrUpdateListing($locationId: Int!, $listSettingsParentId: Int!, $listingActivities: [Int]) {
+    createOrUpdateListing(locationId: $locationId, listSettingsParentId: $listSettingsParentId, listingActivities: $listingActivities) {
       ${allListingFields}
     }
   }
 `
-
-// const mutationUpdate = gql`
-//   mutation createOrUpdateListing(
-//     $locationId: Int!
-//     $listSettingsParentId: Int!
-//     $listingId: Int!
-//     $title: String
-//     $accessType: String
-//     $listingStyle: String
-//     $bookingNoticeTime: String
-//     $minTerm: Float
-//     $maxTerm: Float
-//     $description: String
-//     $basePrice: Float
-//     $currency: String
-//     $isAbsorvedFee: Boolean
-//     $capacity: Int
-//     $size: Float
-//     $meetingRooms: Int
-//     $isFurnished: Boolean
-//     $carSpace: Int
-//     $sizeOfVehicle: String
-//     $maxEntranceHeight: String
-//     $spaceType: String
-//     $bookingType: String
-//     $bookingPeriod: String
-//     $listingAmenities: [Int]
-//     $listingFeatures: [Int]
-//     $listingAccess: [Int]
-//     $listingAccessDays: ListingAccessDaysInput
-//     $listingExceptionDates: [String]
-//     $listingRules: [Int],
-//     $listingActivities: [Int],
-//     $listingStyles: [Int],
-//     $link: String
-//   ) {
-//     createOrUpdateListing(
-//       locationId: $locationId
-//       listSettingsParentId: $listSettingsParentId
-//       listingId: $listingId
-//       title: $title
-//       accessType: $accessType
-//       listingStyle: $listingStyle
-//       bookingNoticeTime: $bookingNoticeTime
-//       minTerm: $minTerm
-//       maxTerm: $maxTerm
-//       description: $description
-//       basePrice: $basePrice
-//       currency: $currency
-//       isAbsorvedFee: $isAbsorvedFee
-//       capacity: $capacity
-//       size: $size
-//       meetingRooms: $meetingRooms
-//       isFurnished: $isFurnished
-//       carSpace: $carSpace
-//       sizeOfVehicle: $sizeOfVehicle
-//       maxEntranceHeight: $maxEntranceHeight
-//       spaceType: $spaceType
-//       bookingType: $bookingType
-//       bookingPeriod: $bookingPeriod
-//       listingAmenities: $listingAmenities
-//       listingFeatures: $listingFeatures
-//       listingAccess: $listingAccess
-//       listingAccessDays: $listingAccessDays
-//       listingExceptionDates: $listingExceptionDates
-//       listingRules: $listingRules,
-//       listingActivities: $listingActivities,
-//       listingStyles: $listingStyles,
-//       link: $link
-//     ) {
-//       ${allListingFields}
-//     }
-//   }
-// `
 
 const mutationUpdate = gql`
   mutation createOrUpdateListing(
@@ -974,6 +651,7 @@ const mutationUpdate = gql`
     $listingId: Int!
     $title: String
     $accessType: String
+    $listingStyle: String
     $bookingNoticeTime: String
     $minTerm: Float
     $maxTerm: Float
@@ -992,9 +670,13 @@ const mutationUpdate = gql`
     $bookingType: String
     $bookingPeriod: String
     $listingAmenities: [Int]
+    $listingFeatures: [Int]
+    $listingAccess: [Int]
     $listingAccessDays: ListingAccessDaysInput
     $listingExceptionDates: [String]
     $listingRules: [Int],
+    $listingActivities: [Int],
+    $listingStyles: [Int],
     $link: String
   ) {
     createOrUpdateListing(
@@ -1003,6 +685,7 @@ const mutationUpdate = gql`
       listingId: $listingId
       title: $title
       accessType: $accessType
+      listingStyle: $listingStyle
       bookingNoticeTime: $bookingNoticeTime
       minTerm: $minTerm
       maxTerm: $maxTerm
@@ -1021,9 +704,13 @@ const mutationUpdate = gql`
       bookingType: $bookingType
       bookingPeriod: $bookingPeriod
       listingAmenities: $listingAmenities
+      listingFeatures: $listingFeatures
+      listingAccess: $listingAccess
       listingAccessDays: $listingAccessDays
       listingExceptionDates: $listingExceptionDates
       listingRules: $listingRules,
+      listingActivities: $listingActivities,
+      listingStyles: $listingStyles,
       link: $link
     ) {
       ${allListingFields}

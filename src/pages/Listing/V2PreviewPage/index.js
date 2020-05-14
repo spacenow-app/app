@@ -22,7 +22,8 @@ import {
   Loader,
   Carousel,
   Footer,
-  Price
+  Price,
+  LightBox
 } from 'components'
 
 import { capitalize, toPlural } from 'utils/strings'
@@ -34,7 +35,10 @@ import {
   onGetFloorplanByListingId,
   onGetMenuByListingId,
   onGetListingById,
-  onPublish
+  onPublish,
+  onGetAllSpecifications,
+  onGetAllAmenities,
+  onGetAllRules
 } from 'redux/ducks/listing'
 
 import {
@@ -78,6 +82,8 @@ const PreviewPage = ({ match, location, ...props }) => {
   } = useSelector(state => state.account.get)
 
   const [imageHeight, setImageHeight] = useState(500)
+  const [isOpenFloorplan, setIsOpenFloorplan] = useState(false)
+  const [isOpenMenu, setIsOpenMenu] = useState(false)
 
   useEffect(() => {
     dispatch(onGetListingById(match.params.id, user.id))
@@ -85,22 +91,22 @@ const PreviewPage = ({ match, location, ...props }) => {
 
   useEffect(() => {
     if (listing) {
-      dispatch(onGetCategorySpecifications(listing.settingsParent.id, listing.listingData))
-      dispatch(onGetCategoryAmenities(listing.settingsParent.id))
-      dispatch(onGetCategoryRules(listing.settingsParent.id))
+      // dispatch(onGetCategorySpecifications(listing.settingsParent.id, listing.listingData))
+      // dispatch(onGetCategoryAmenities(listing.settingsParent.id))
+      // dispatch(onGetCategoryRules(listing.settingsParent.id))
       dispatch(onGetCategoryFeatures(listing.settingsParent.id))
       dispatch(onGetCategoryAccess(listing.settingsParent.id))
       dispatch(onGetCategoryCheckinTypes(listing.settingsParent.id))
       dispatch(onGetCategoryStyles(listing.settingsParent.id))
-      dispatch(onGetPhotosByListingId(listing.id))
+      // dispatch(onGetPhotosByListingId(listing.id))
       dispatch(onGetVideoByListingId(listing.id))
       dispatch(onGetFloorplanByListingId(listing.id))
       dispatch(onGetMenuByListingId(listing.id))
 
-      // dispatch(onGetAllSpecifications(listing.settingsParent.id, listing.listingData))
-      // dispatch(onGetAllAmenities(listing.settingsParent.subcategory.id))
-      // dispatch(onGetAllRules())
-      // dispatch(onGetPhotosByListingId(listing.id))
+      dispatch(onGetAllSpecifications(listing.settingsParent.id, listing.listingData))
+      dispatch(onGetAllAmenities(listing.settingsParent.id))
+      dispatch(onGetAllRules())
+      dispatch(onGetPhotosByListingId(listing.id))
     }
   }, [dispatch, listing])
 
@@ -380,27 +386,43 @@ const PreviewPage = ({ match, location, ...props }) => {
           <div dangerouslySetInnerHTML={{ __html: _formatDescription(listing.listingData.description) }} />
         </Box>
 
-        {(Object.keys(floorplan).length || Object.keys(menu).length) && (
+        {(Object.keys(floorplan).length > 0 || Object.keys(menu).length > 0) && (
           <Box display="grid" gridAutoFlow="column" gridAutoColumns="max-content" my="50px" gridGap="30px">
-            {Object.keys(floorplan).length && floorplan.id && (
-              <Button
-                outline
-                onClick={() => _handlerFloorplan()}
-                width="200px"
-                icon={<Icon width="18px" height="18px" name="feature-wood-floors" style={{ marginRight: '10px' }} />}
-              >
-                Floorplan
-              </Button>
+            {Object.keys(floorplan) && Object.keys(floorplan).length && floorplan.id && (
+              <>
+                <LightBox
+                  photos={_convertedArrayPhotos(new Array(floorplan))}
+                  height={imageHeight}
+                  open={isOpenFloorplan}
+                  handleClose={() => setIsOpenFloorplan(false)}
+                />
+                <Button
+                  outline
+                  onClick={() => setIsOpenFloorplan(true)}
+                  width="200px"
+                  icon={<Icon width="18px" height="18px" name="feature-wood-floors" style={{ marginRight: '10px' }} />}
+                >
+                  Floorplan
+                </Button>
+              </>
             )}
-            {Object.keys(menu).length && menu.id && (
-              <Button
-                outline
-                onClick={() => _handlerFloorplan()}
-                width="200px"
-                icon={<Icon width="18px" height="18px" name="floor-plan" style={{ marginRight: '10px' }} />}
-              >
-                Menu
-              </Button>
+            {Object.keys(menu).length > 0 && menu.id && (
+              <>
+                <LightBox
+                  photos={_convertedArrayPhotos(new Array(menu))}
+                  height={imageHeight}
+                  open={isOpenMenu}
+                  handleClose={() => setIsOpenMenu(false)}
+                />
+                <Button
+                  outline
+                  onClick={() => setIsOpenMenu(true)}
+                  width="200px"
+                  icon={<Icon width="18px" height="18px" name="floor-plan" style={{ marginRight: '10px' }} />}
+                >
+                  Menu
+                </Button>
+              </>
             )}
           </Box>
         )}

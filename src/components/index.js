@@ -36,6 +36,7 @@ import Highlights from './Highlights'
 import Loader from './Loader'
 import ToolTip from './ToolTip'
 import Photo from './Photo'
+import LightBox from './LightBox'
 import Avatar from './Avatar'
 import Carousel from './Carousel'
 import Text from './Text'
@@ -110,6 +111,7 @@ export {
   Loader,
   ToolTip,
   Photo,
+  LightBox,
   Avatar,
   Carousel,
   UserDetails,
