@@ -81,7 +81,7 @@ const EnquireForm = ({
     <form>
       <WrapperStyled>
         <Text>Hi,</Text>
-        <Text>I'm interested in this property. Could you please provide me with more information.</Text>
+        <Text>I am interested in this property. Could you please provide me with more information.</Text>
 
         <Select
           error={errors.desiredInfo}
