@@ -72,47 +72,18 @@ const EnquireForm = ({
     dispatch(sendMail({ ...emailHost }, 'Your enquiry was sent succesfully'))
   }
 
-  const [open, setOpen] = useState(false);
-
-  function askQuestionHandler() {
-    setOpen(false)
-
-    setOpen(true)
-  }
-
-  function organiseInspectionHandler() {
-    setOpen(false)
-    
-    setOpen(true)
-  }
+  const [open, setOpen] = useState(false)
 
   return (
     <form>
       <WrapperStyled>
-        <Button
-          onClick={() => askQuestionHandler()} 
-          aria-controls="inquiry-question-form"
-          ariaexpanded={open}
-        >
-          Ask a Question
-        </Button>
-        <Button
-          onClick={() => organiseInspectionHandler()}
-          aria-controls="inquiry-inspection-form"
-          ariaexpanded={open}
-        >
-          Organise an Inspection
-        </Button>
-
+        <Button onClick={() => setOpen(!open)} />
         <Collapse in={open}>
           <div id="inquiry-question-form">
             <p>Question</p>
           </div>
-          <div id="inquiry-inspection-form">
-            <p>Inspection</p>
-          </div>
         </Collapse>
-        
+
         {!isAuthenticated && (
           <>
             <Input
