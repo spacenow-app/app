@@ -14,6 +14,7 @@ const MapSearch = withGoogleMap(props => {
 
   return (
     <GoogleMap
+      ref={map => map && map.fitBounds(bounds)}
       defaultZoom={12}
       center={{ lat: parseFloat(props.position.lat), lng: parseFloat(props.position.lng) }}
       defaultCenter={{ lat: parseFloat(props.position.lat), lng: parseFloat(props.position.lng) }}
@@ -24,14 +25,12 @@ const MapSearch = withGoogleMap(props => {
         styles: props.styles,
         scrollwheel: false
       }}
-      fitBounds={bounds}
     >
       {props.markers &&
         props.markers.map(marker => {
           const pos = { lat: parseFloat(marker.lat), lng: parseFloat(marker.lng) }
           bounds.extend(pos)
           return(
-          <>
             <MarkerWithLabel
               key={marker.id}
               position={pos}
@@ -71,7 +70,6 @@ const MapSearch = withGoogleMap(props => {
                 fontFamily: 'Montserrat-Bold'
               }}
             />
-          </>
           )
         })}
     </GoogleMap>
