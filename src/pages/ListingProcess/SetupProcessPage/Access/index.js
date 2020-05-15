@@ -40,6 +40,7 @@ const AccessPage = ({ listing, values, handleChange, handleBlur, ...props }) => 
                   <option>Select guest booking</option>
                   <option value={`instant`}>Instantly</option>
                   <option value={`request`}>Request</option>
+                  <option value={`enquire`}>Enquiry</option>
                 </Select>
               </Box>
               <Box display="grid">

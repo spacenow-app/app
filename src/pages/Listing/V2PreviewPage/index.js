@@ -42,12 +42,12 @@ import {
 } from 'redux/ducks/listing'
 
 import {
-  onGetCategoryRules,
+  // onGetCategoryRules,
   onGetCategoryCheckinTypes,
   onGetCategoryAccess,
-  onGetCategoryAmenities,
+  // onGetCategoryAmenities,
   onGetCategoryFeatures,
-  onGetCategorySpecifications,
+  // onGetCategorySpecifications,
   onGetCategoryStyles
 } from 'redux/ducks/category'
 
@@ -120,7 +120,7 @@ const PreviewPage = ({ match, location, ...props }) => {
     const { address1 = '', city = '', zipcode = '', state = '', country = '' } = address
     const convertedAddress = `${address1 ? `${address1}, ` : ''} ${city ? `${city}, ` : ''} ${
       zipcode ? `${zipcode}, ` : ''
-    } ${state ? `${state}, ` : ''} ${country ? `${country}` : ''}`
+      } ${state ? `${state}, ` : ''} ${country ? `${country}` : ''}`
     return convertedAddress.replace(/\0.*$/g, '')
   }
 
@@ -255,8 +255,6 @@ const PreviewPage = ({ match, location, ...props }) => {
     }
   }
 
-  const _handlerFloorplan = () => {}
-
   return (
     <>
       <Wrapper>
@@ -321,7 +319,7 @@ const PreviewPage = ({ match, location, ...props }) => {
             right
             color={
               (listing.listingData.basePrice === 0 || listing.listingData.basePrice === null) &&
-              listing.listingData.bookingType !== 'poa'
+                listing.listingData.bookingType !== 'poa'
                 ? '#E05252'
                 : null
             }
