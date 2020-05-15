@@ -8,7 +8,6 @@ import { Input } from 'components'
 const Box = styled.div`
   border-radius: 27px;
   padding: 15px;
-  box-shadow: 0px 0px 20px 0px rgba(0, 0, 0, 0.1);
   z-index: 10;
   position: absolute;
   background-color: #fff;

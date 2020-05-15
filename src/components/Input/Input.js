@@ -49,7 +49,6 @@ const InputStyled = styled.input`
 
   :focus {
     outline: 0px;
-    box-shadow: 0 0 0 0.2rem ${props => (props.error ? 'rgba(224, 82, 82, 0.5)' : 'rgba(106, 220, 145, 0.5)')};
     border-color: ${props => (props.error ? '#e05252' : '#6adc91')};
   }
 

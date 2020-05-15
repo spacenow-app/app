@@ -41,38 +41,53 @@ const SearchFrame = ({ history, shownSearch, ...props }) => {
   document.body.style = 'background: transparent;'
 
   return (
-    <Form>
-      <Form.Group>
-        <Label>Where:</Label>
-          <AutoComplete
-            searchOptions={{
-              types: ['geocode']
-            }}
-            address={address}
-            onChangeAddress={setAddress}
-            onSelectedAddess={_onSelectedAddess}
-            onHandleError={_onHandleError}
-            onClickCloseButton={_reset}
-            placeholder="Ie. Sydney, AU"
-            size="md"
-            name="address"
-            label={null}
-          />
-      </Form.Group>
-      <Form.Group controlId="spaceType">
-        <Label>I need a:</Label>
-        <Form.Control as="select" style={{height: "54px"}} size="sm" name="spacetype" onChange={ (e) => setCategory(e.target.value)}>
-          <option disabled="" hidden="">Type of space</option>
-          <option value="kitchen">Kitchen</option>
-					<option value="eventSpace">Event Space</option>
-          <option value="meetingSpace">Meeting Rooms</option>
-          <option value="workspace">Work Space </option>
-        </Form.Control>
-      </Form.Group>
-      <Button variant="primary" type="submit" onClick={handleSubmit} block>
-        Search
-      </Button>
-    </Form>
+    <>
+    <style type="text/css">
+    {`
+    .form-search-frame {
+      height: 54px;
+      box-shadow: none !important
+    }
+
+    .form-search-frame: focus {
+      border:1px solid: #6adc91
+    }
+    `}
+    </style>
+      <Form>
+        <Form.Group>
+          <Label>Where:</Label>
+            <AutoComplete
+              searchOptions={{
+                types: ['geocode']
+              }}
+              address={address}
+              onChangeAddress={setAddress}
+              onSelectedAddess={_onSelectedAddess}
+              onHandleError={_onHandleError}
+              onClickCloseButton={_reset}
+              placeholder="Ie. Sydney, AU"
+              size="md"
+              style={{"box-shadow": "none"}}
+              name="address"
+              label={null}
+            />
+        </Form.Group>
+        <Form.Group controlId="spaceType">
+          <Label>I need a:</Label>
+          <Form.Control as="select" size="sm" className="form-search-frame" onChange={ (e) => setCategory(e.target.value)}>
+            <option disabled="" hidden="">Type of space</option>
+            <option value="kitchen">Kitchen</option>
+            <option value="eventSpace">Event Space</option>
+            <option value="meetingSpace">Meeting Rooms</option>
+            <option value="workspace">Work Space </option>
+          </Form.Control>
+        </Form.Group>
+        <Button variant="primary" type="submit" onClick={handleSubmit} block>
+          Search
+        </Button>
+      </Form>
+    </>
   )
 }
 
