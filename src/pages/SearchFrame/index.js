@@ -30,16 +30,15 @@ const SearchFrame = ({ history, shownSearch, ...props }) => {
   }
 
   const handleSubmit = e => {
-    history.push({
-      pathname: '/search',
-      search: `?lat=${latLng.lat}&lng=${latLng.lng}&category=${category}&location=${address}&page=1`
-    })
+    window.open(`/search?lat=${latLng.lat}&lng=${latLng.lng}&category=${category}&location=${address}&page=1`);
   }
 
   const _reset = () => {
     setLatLng({})
     setAddress('')
   }
+
+  document.body.style = 'background: transparent;'
 
   return (
     <Form>
