@@ -1,4 +1,4 @@
-import React, { memo } from 'react'
+import React, { memo, useEffect, useState } from 'react'
 import PropTypes from 'prop-types'
 import { withGoogleMap, GoogleMap } from 'react-google-maps'
 import MarkerWithLabel from 'react-google-maps/lib/components/addons/MarkerWithLabel'
@@ -7,10 +7,14 @@ import { Price } from 'components'
 
 import defaultMapStyle from './default_map_style.json'
 
+
 const MapSearch = withGoogleMap(props => {
+
+  var bounds = new window.google.maps.LatLngBounds();
+
   return (
     <GoogleMap
-      defaultZoom={15}
+      defaultZoom={12}
       center={{ lat: parseFloat(props.position.lat), lng: parseFloat(props.position.lng) }}
       defaultCenter={{ lat: parseFloat(props.position.lat), lng: parseFloat(props.position.lng) }}
       defaultOptions={{
@@ -20,13 +24,17 @@ const MapSearch = withGoogleMap(props => {
         styles: props.styles,
         scrollwheel: false
       }}
+      fitBounds={bounds}
     >
       {props.markers &&
-        props.markers.map(marker => (
+        props.markers.map(marker => {
+          const pos = { lat: parseFloat(marker.lat), lng: parseFloat(marker.lng) }
+          bounds.extend(pos)
+          return(
           <>
             <MarkerWithLabel
               key={marker.id}
-              position={{ lat: parseFloat(marker.lat), lng: parseFloat(marker.lng) }}
+              position={pos}
               onClick={() => {
                 props.onClickMarker(marker)
               }}
@@ -41,7 +49,7 @@ const MapSearch = withGoogleMap(props => {
                   currencySymbol="$"
                   bookingPeriod={marker.bookingPeriod}
                   bookingType={marker.bookingType}
-                  size="16px"
+                  size="12px"
                 />
               }
               zIndex={props.selectedMarker && props.selectedMarker.id === marker.id ? 2 : 1}
@@ -64,7 +72,8 @@ const MapSearch = withGoogleMap(props => {
               }}
             />
           </>
-        ))}
+          )
+        })}
     </GoogleMap>
   )
 })

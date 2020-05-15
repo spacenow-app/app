@@ -33,8 +33,7 @@ const Price = ({ currency, currencySymbol, price, bookingPeriod, bookingType, si
         ) : (
           <Text fontSize={size} {...props}>
             {` ${currency || ''} ${currencySymbol} ${(Math.round((price || 0) * 100) / 100)
-              .toFixed(2)
-              .toString()
+              .toFixed(0)
               .replace(/\B(?=(\d{3})+(?!\d))/g, ',')} `}
             <TextStyled {...props}>{bookingPeriod || ''}</TextStyled>
           </Text>
