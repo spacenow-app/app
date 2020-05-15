@@ -9,6 +9,8 @@ import CheckoutPage from './Checkout'
 import ItineraryPage from './ItineraryPage'
 import { IntroGuestPage, IntroHostPage } from './IntroPage'
 import BookingRequestConfirmation from './BookingRequestConfirmationPage'
+import SearchFrame from './SearchFrame'
+
 
 export {
   HomePage,
@@ -33,5 +35,6 @@ export {
   DocumentVerificationPage,
   IntroHostPage,
   IntroGuestPage,
-  BookingRequestConfirmation
+  BookingRequestConfirmation,
+  SearchFrame
 }

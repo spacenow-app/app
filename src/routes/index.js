@@ -6,7 +6,7 @@ import { ToastContainer } from 'react-toastify'
 import { Container } from 'react-bootstrap'
 
 import { onTokenValidation, onIsTokenExists } from 'redux/ducks/auth'
-import { HomePage, SearchPage, NotFoundPage } from 'pages'
+import { HomePage, SearchPage, NotFoundPage, SearchFrame } from 'pages'
 import PrivateRoute from './PrivateRoute'
 import PublicRoute from './PublicRoute'
 
@@ -66,6 +66,7 @@ const Routes = props => {
           <PublicRoute {...props} path="/lp" handlerCheckAuthentication={() => {}} component={LandingPages} />
           <PublicRoute {...props} path="/space" handlerCheckAuthentication={() => {}} component={Space} />
           <PublicRoute {...props} path="/search" handlerCheckAuthentication={() => {}} component={SearchPage} />
+          <PublicRoute {...props} path="/searchFramePage" handlerCheckAuthentication={() => {}} component={SearchFrame} />
           <PublicRoute {...props} path="/welcome" handlerCheckAuthentication={() => {}} component={Intro} />
           <Redirect from="/account/dashboard" to="/account/profile" />
           <PrivateRoute
