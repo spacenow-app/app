@@ -33,9 +33,11 @@ const PaginationItem = styled(PaginationImported.Item)`
         `}
       :hover {
         z-index: 1;
-        color: #fff;
-        background-color: #6adc91;
-        border-color: #6adc91;
+        ${props =>
+          !props.active &&
+          css`
+            color: #6adc91;
+          `}
         border-radius: 50%;
       }
       :focus {
