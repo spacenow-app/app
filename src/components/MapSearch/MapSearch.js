@@ -1,4 +1,4 @@
-import React, { memo, useEffect, useState } from 'react'
+import React, { memo } from 'react'
 import PropTypes from 'prop-types'
 import { withGoogleMap, GoogleMap } from 'react-google-maps'
 import MarkerWithLabel from 'react-google-maps/lib/components/addons/MarkerWithLabel'
