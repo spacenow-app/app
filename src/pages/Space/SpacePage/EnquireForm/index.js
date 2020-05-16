@@ -22,9 +22,6 @@ const _getCoverPhoto = object => {
   return cropPicture(object.photos[0].name)
 }
 
-const [isOpenAskQuestion, setIsOpenAskQuestion] = useState(true)
-const [isOpenInspection, setIsOpenInspection] = useState(false)
-
 const EnquireForm = ({
   values,
   errors,
@@ -39,6 +36,8 @@ const EnquireForm = ({
 }) => {
   const { isLoading: isSendingEmail } = useSelector(state => state.mail)
   const [date] = useState(new Date())
+  const [isOpenAskQuestion, setIsOpenAskQuestion] = useState(true)
+  const [isOpenInspection, setIsOpenInspection] = useState(false)
   const _handleSubmit = () => {
     Object.assign(
       values,
@@ -75,32 +74,27 @@ const EnquireForm = ({
 
   return (
     <Box display="grid" gridGap={20}>
-
       <Button fluid onClick={() => setIsOpenAskQuestion(false)}>
         Ask a Question
       </Button>
 
-      <Button fluid outline onClick={() => setIsOpenInspection(false)} style={{ background: "transparent", borderColor: "#51c482" }}>
+      <Button
+        fluid
+        outline
+        onClick={() => setIsOpenInspection(false)}
+        style={{ background: 'transparent', borderColor: '#51c482' }}
+      >
         Organise an Inspection
-        </Button>
+      </Button>
 
       <Text>Hi,</Text>
       <Text>I am interested in this property. Could you please provide me with more information.</Text>
 
       <form>
-        <Collapse in={isOpenAskQuestion}>
-          Ask Question
-        </Collapse>
-        <Collapse in={isOpenInspection}>
-          Inspection
-        </Collapse>
+        <Collapse in={isOpenAskQuestion}>Ask Question</Collapse>
+        <Collapse in={isOpenInspection}>Inspection</Collapse>
       </form>
-      <Select
-        error={errors.desiredInfo}
-        value={values.desiredInfo}
-        name="desiredInfo"
-        onChange={_handleSelectChange}
-      >
+      <Select error={errors.desiredInfo} value={values.desiredInfo} name="desiredInfo" onChange={_handleSelectChange}>
         <option value="">Select desired information</option>
         <option value="pricing">Pricing</option>
         <option value="leasing-terms">Leasing terms</option>
@@ -164,7 +158,7 @@ const EnquireForm = ({
 
       <Button fluid mt="20px" onClick={() => _handleSubmit()} disabled={!isValid} isLoading={isSendingEmail}>
         Enquire
-        </Button>
+      </Button>
     </Box>
   )
 }
@@ -174,13 +168,15 @@ const formik = {
   mapPropsToValues: props => {
     return {
       guestName: props.user && props.user.id ? `${props.user.profile.firstName} ${props.user.profile.lastName}` : '',
-      guestEmail: props.user && props.user.id ? props.user.email : '',
+      guestEmail: props.user && props.user.id ? props.user.email : ''
     }
   },
   validationSchema: Yup.object().shape({
     guestEmail: Yup.string().required('Email field is required'),
     guestName: Yup.string().required('Name field is required'),
-    phone: Yup.number().required('Email field is required').typeError('Need to be number.'),
+    phone: Yup.number()
+      .required('Email field is required')
+      .typeError('Need to be number.'),
     message: Yup.string()
   }),
   enableReinitialize: true,
