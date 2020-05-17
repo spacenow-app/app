@@ -74,14 +74,23 @@ const EnquireForm = ({
 
   return (
     <Box display="grid" gridGap={20}>
-      <Button fluid onClick={() => setIsOpenAskQuestion(false)}>
+      <Button
+        fluid
+        onClick={() => {
+          setIsOpenAskQuestion(true)
+          setIsOpenInspection(false)
+        }}
+      >
         Ask a Question
       </Button>
 
       <Button
         fluid
         outline
-        onClick={() => setIsOpenInspection(false)}
+        onClick={() => {
+          setIsOpenAskQuestion(false)
+          setIsOpenInspection(true)
+        }}
         style={{ background: 'transparent', borderColor: '#51c482' }}
       >
         Organise an Inspection
@@ -89,76 +98,155 @@ const EnquireForm = ({
 
       <Text>Hi,</Text>
       <Text>I am interested in this property. Could you please provide me with more information.</Text>
+      <Collapse in={isOpenAskQuestion}>
+        <form>
+          <Select
+            error={errors.desiredInfo}
+            value={values.desiredInfo}
+            name="desiredInfo"
+            onChange={_handleSelectChange}
+          >
+            <option value="">Select desired information</option>
+            <option value="pricing">Pricing</option>
+            <option value="leasing-terms">Leasing terms</option>
+            <option value="property-inspection">Property inspection</option>
+            <option value="outgoings">Outgoings</option>
+          </Select>
 
-      <form>
-        <Collapse in={isOpenAskQuestion}>Ask Question</Collapse>
-        <Collapse in={isOpenInspection}>Inspection</Collapse>
-      </form>
-      <Select error={errors.desiredInfo} value={values.desiredInfo} name="desiredInfo" onChange={_handleSelectChange}>
-        <option value="">Select desired information</option>
-        <option value="pricing">Pricing</option>
-        <option value="leasing-terms">Leasing terms</option>
-        <option value="property-inspection">Property inspection</option>
-        <option value="outgoings">Outgoings</option>
-      </Select>
+          {!isAuthenticated && (
+            <>
+              <Input
+                // label="Full Name*"
+                placeholder="Your full name"
+                name="guestName"
+                error={errors.name}
+                value={values.name}
+                onChange={handleChange}
+                onBlur={handleBlur}
+              />
 
-      {!isAuthenticated && (
-        <>
+              <Input
+                // label="Email*"
+                placeholder="Email Address"
+                name="guestEmail"
+                error={errors.guestEmail}
+                value={values.guestEmail}
+                onChange={handleChange}
+                onBlur={handleBlur}
+              />
+            </>
+          )}
+
           <Input
-            // label="Full Name*"
-            placeholder="Your full name"
-            name="guestName"
-            error={errors.name}
-            value={values.name}
+            // label="Company"
+            placeholder="Company"
+            name="company"
+            error={errors.company}
+            value={values.company}
             onChange={handleChange}
             onBlur={handleBlur}
           />
 
           <Input
-            // label="Email*"
-            placeholder="Email Address"
-            name="guestEmail"
-            error={errors.guestEmail}
-            value={values.guestEmail}
+            // label="Phone number"
+            placeholder="Phone"
+            name="phone"
+            error={errors.phone}
+            value={values.phone}
             onChange={handleChange}
             onBlur={handleBlur}
           />
-        </>
-      )}
 
-      <Input
-        // label="Company"
-        placeholder="Company"
-        name="company"
-        error={errors.company}
-        value={values.company}
-        onChange={handleChange}
-        onBlur={handleBlur}
-      />
+          <TextArea
+            // label="Write a message"
+            name="message"
+            placeholder="Start your message"
+            error={errors.message}
+            value={values.message}
+            onChange={handleChange}
+            onBlur={handleBlur}
+          />
 
-      <Input
-        // label="Phone number"
-        placeholder="Phone"
-        name="phone"
-        error={errors.phone}
-        value={values.phone}
-        onChange={handleChange}
-        onBlur={handleBlur}
-      />
+          <Button fluid mt="20px" onClick={() => _handleSubmit()} disabled={!isValid} isLoading={isSendingEmail}>
+            Enquire
+          </Button>
+        </form>
+      </Collapse>
 
-      <TextArea
-        // label="Write a message"
-        name="message"
-        placeholder="Start your message"
-        error={errors.message}
-        value={values.message}
-        onChange={handleChange}
-        onBlur={handleBlur}
-      />
+      <Collapse in={isOpenInspection}>
+        <form>
+          <Select
+            error={errors.desiredInfo}
+            value={values.desiredInfo}
+            name="desiredInfo"
+            onChange={_handleSelectChange}
+          >
+            <option value="">Select desired information</option>
+            <option value="pricing">Pricing</option>
+            <option value="leasing-terms">Leasing terms</option>
+            <option value="property-inspection">Property inspection</option>
+            <option value="outgoings">Outgoings</option>
+          </Select>
 
-      <Button fluid mt="20px" onClick={() => _handleSubmit()} disabled={!isValid} isLoading={isSendingEmail}>
-        Enquire
-      </Button>
+          {!isAuthenticated && (
+            <>
+              <Input
+                // label="Full Name*"
+                placeholder="Your full name"
+                name="guestName"
+                error={errors.name}
+                value={values.name}
+                onChange={handleChange}
+                onBlur={handleBlur}
+              />
+
+              <Input
+                // label="Email*"
+                placeholder="Email Address"
+                name="guestEmail"
+                error={errors.guestEmail}
+                value={values.guestEmail}
+                onChange={handleChange}
+                onBlur={handleBlur}
+              />
+            </>
+          )}
+
+          <Input
+            // label="Company"
+            placeholder="Company"
+            name="company"
+            error={errors.company}
+            value={values.company}
+            onChange={handleChange}
+            onBlur={handleBlur}
+          />
+
+          <Input
+            // label="Phone number"
+            placeholder="Phone"
+            name="phone"
+            error={errors.phone}
+            value={values.phone}
+            onChange={handleChange}
+            onBlur={handleBlur}
+          />
+
+          <TextArea
+            // label="Write a message"
+            name="message"
+            placeholder="Start your message"
+            error={errors.message}
+            value={values.message}
+            onChange={handleChange}
+            onBlur={handleBlur}
+          />
+
+          <Button fluid mt="20px" onClick={() => _handleSubmit()} disabled={!isValid} isLoading={isSendingEmail}>
+            Enquire
+          </Button>
+        </form>
+      </Collapse>
     </Box>
   )
 }
