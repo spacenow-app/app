@@ -32,39 +32,52 @@ const EnquireForm = ({
   dispatch,
   user,
   isAuthenticated,
-  listing
+  listing,
+  ...props
 }) => {
   const { isLoading: isSendingEmail } = useSelector(state => state.mail)
-  const [date] = useState(new Date())
   const [isOpenAskQuestion, setIsOpenAskQuestion] = useState(true)
   const [isOpenInspection, setIsOpenInspection] = useState(false)
+
   const _handleSubmit = () => {
+    if (!isValid) return
     Object.assign(
       values,
-      { listingPhoto: JSON.stringify(_getCoverPhoto(listing)) },
-      { listingTitle: listing.title },
-      { listingCity: listing.location.city },
-      { listingCountry: listing.location.country },
-      { hostName: listing.user.profile.displayName },
-      { listingCurrency: listing.listingData.currency },
-      { listingPrice: listing.listingData.basePrice || 0 },
-      { listingPeriod: listing.bookingPeriod },
-      { currentDate: format(new Date(), 'EEEE d MMMM, yyyy') },
-      { listingCategory: listing.settingsParent.category.itemName },
-      { date: format(date, 'dd/MM/yyyy') }
+      { l_id: listing.id },
+      { l_image: JSON.stringify(_getCoverPhoto(listing)) },
+      { l_title: listing.title },
+      { l_address: listing.location.address1 },
+      { l_city: listing.location.city },
+      { l_country: listing.location.country },
+      { h_name: listing.user.profile.displayName },
+      { h_image: listing.user.profile.picture },
+      { l_currency: listing.listingData.currency },
+      { l_minimum_term: listing.listingData.minTerm },
+      { l_term: _handleTerm(listing.bookingPeriod, listing.listingData.minTerm) || 'day' },
+      { l_capacity: listing.listingData.capacity },
+      { l_price: listing.listingData.basePrice || 0 },
+      { l_period: listing.bookingPeriod },
+      { g_current_date: format(new Date(), 'EEEE d MMMM, yyyy') },
+      { l_category: listing.settingsParent.category.itemName },
+      { g_app_link: window.location.origin },
+      { g_mail: values.g_email }
     )
     const emailGuest = {
-      template: 'contact-guest-hourly',
-      destination: values.guestEmail,
-      data: JSON.stringify(Object.assign(values, { email: values.guestEmail }))
+      template: 'new-enquiry-guest',
+      destination: values.g_email,
+      data: JSON.stringify(values)
     }
     const emailHost = {
-      template: 'contact-host-hourly',
+      template: 'new-enquiry-host',
       destination: listing.user.email,
-      data: JSON.stringify(Object.assign(values, { email: listing.user.email }))
+      data: JSON.stringify(Object.assign(values, { h_email: listing.user.email }))
     }
     dispatch(sendMail({ ...emailGuest }))
     dispatch(sendMail({ ...emailHost }, 'Your enquiry was sent succesfully'))
+  }
+
+  const _handleTerm = (period) => {
+    return (period !== 'daily') && period.replace('ly', '')
   }
 
   const _handleSelectChange = e => {
@@ -76,10 +89,12 @@ const EnquireForm = ({
     <Box display="grid" gridGap={20}>
       <Button
         fluid
+        outline
         onClick={() => {
           setIsOpenAskQuestion(true)
           setIsOpenInspection(false)
         }}
+        style={{ background: 'transparent', borderColor: '#51c482' }}
       >
         Ask a Question
       </Button>
@@ -97,83 +112,81 @@ const EnquireForm = ({
       </Button>
 
       <Text>Hi,</Text>
-      <Text>I am interested in this property. Could you please provide me with more information.</Text>
+      <Text>I am interested in this space. Could you please provide me with more information.</Text>
       <Collapse in={isOpenAskQuestion}>
         <form>
-          <Select
-            error={errors.desiredInfo}
-            value={values.desiredInfo}
-            name="desiredInfo"
-            onChange={_handleSelectChange}
-          >
-            <option value="">Select desired information</option>
-            <option value="pricing">Pricing</option>
-            <option value="leasing-terms">Leasing terms</option>
-            <option value="property-inspection">Property inspection</option>
-            <option value="outgoings">Outgoings</option>
-          </Select>
+          <Box display="grid" gridGap="10px">
+            <Select
+              error={errors.desiredInfo}
+              value={values.desiredInfo}
+              name="g_desired_info"
+              onChange={_handleSelectChange}
+            >
+              <option value="">Select desired information</option>
+              <option value="Pricing">Pricing</option>
+              <option value="Leasing terms">Leasing terms</option>
+              <option value="Property Inspection">Property inspection</option>
+              <option value="Outgoings">Outgoings</option>
+            </Select>
 
-          {!isAuthenticated && (
-            <>
-              <Input
-                // label="Full Name*"
-                placeholder="Your full name"
-                name="guestName"
-                error={errors.name}
-                value={values.name}
-                onChange={handleChange}
-                onBlur={handleBlur}
-              />
+            {!isAuthenticated && (
+              <>
+                <Input
+                  placeholder="Full name"
+                  name="g_name"
+                  error={errors.name}
+                  value={values.name}
+                  onChange={handleChange}
+                  onBlur={handleBlur}
+                />
 
-              <Input
-                // label="Email*"
-                placeholder="Email Address"
-                name="guestEmail"
-                error={errors.guestEmail}
-                value={values.guestEmail}
-                onChange={handleChange}
-                onBlur={handleBlur}
-              />
-            </>
-          )}
+                <Input
+                  placeholder="Email"
+                  name="g_email"
+                  error={errors.email}
+                  value={values.email}
+                  onChange={handleChange}
+                  onBlur={handleBlur}
+                />
+              </>
+            )}
 
-          <Input
-            // label="Company"
-            placeholder="Company"
-            name="company"
-            error={errors.company}
-            value={values.company}
-            onChange={handleChange}
-            onBlur={handleBlur}
-          />
+            <Input
+              placeholder="Company"
+              name="g_company"
+              error={errors.company}
+              value={values.company}
+              onChange={handleChange}
+              onBlur={handleBlur}
+            />
 
-          <Input
-            // label="Phone number"
-            placeholder="Phone"
-            name="phone"
-            error={errors.phone}
-            value={values.phone}
-            onChange={handleChange}
-            onBlur={handleBlur}
-          />
+            <Input
+              placeholder="Contact Number"
+              name="g_phone"
+              error={errors.phone}
+              value={values.phone}
+              onChange={handleChange}
+              onBlur={handleBlur}
+            />
 
-          <TextArea
-            // label="Write a message"
-            name="message"
-            placeholder="Start your message"
-            error={errors.message}
-            value={values.message}
-            onChange={handleChange}
-            onBlur={handleBlur}
-          />
+            <TextArea
+              name="g_message"
+              placeholder="Start your message"
+              error={errors.message}
+              value={values.message}
+              onChange={handleChange}
+              onBlur={handleBlur}
+            />
 
-          <Button fluid mt="20px" onClick={() => _handleSubmit()} disabled={!isValid} isLoading={isSendingEmail}>
-            Enquire
+            <Button blue fluid onClick={() => _handleSubmit()} isLoading={isSendingEmail}>
+              Enquire
           </Button>
+          </Box>
+
         </form>
       </Collapse>
 
-      <Collapse in={isOpenInspection}>
+      {/* <Collapse in={isOpenInspection}>
         <form>
           <Select
             error={errors.desiredInfo}
@@ -242,11 +255,11 @@ const EnquireForm = ({
             onBlur={handleBlur}
           />
 
-          <Button fluid mt="20px" onClick={() => _handleSubmit()} disabled={!isValid} isLoading={isSendingEmail}>
+          <Button fluid mt="20px" onClick={() => _handleSubmit()} isLoading={isSendingEmail}>
             Enquire
           </Button>
         </form>
-      </Collapse>
+      </Collapse> */}
     </Box>
   )
 }
@@ -255,17 +268,17 @@ const formik = {
   displayName: 'RequireForm',
   mapPropsToValues: props => {
     return {
-      guestName: props.user && props.user.id ? `${props.user.profile.firstName} ${props.user.profile.lastName}` : '',
-      guestEmail: props.user && props.user.id ? props.user.email : ''
+      g_name: props.listing.user && props.listing.user.id ? `${props.listing.user.profile.firstName} ${props.listing.user.profile.lastName}` : '',
+      g_email: props.listing.user && props.listing.user.id ? props.listing.user.email : ''
     }
   },
   validationSchema: Yup.object().shape({
-    guestEmail: Yup.string().required('Email field is required'),
-    guestName: Yup.string().required('Name field is required'),
-    phone: Yup.number()
+    g_email: Yup.string().required('Email field is required'),
+    g_name: Yup.string().required('Name field is required'),
+    g_phone: Yup.number()
       .required('Email field is required')
       .typeError('Need to be number.'),
-    message: Yup.string()
+    g_message: Yup.string()
   }),
   enableReinitialize: true,
   isInitialValid: false

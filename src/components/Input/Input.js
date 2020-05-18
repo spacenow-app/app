@@ -35,7 +35,7 @@ const InputStyled = styled.input`
   display: block;
   cursor: text;
   width: 100%;
-  color: rgb(33, 37, 41);
+  color: #172439;
   background-color: ${props => (props.error ? 'rgba(224, 82, 82, 0.1);' : '#fefefe')};
   border-width: 1px;
   border-color: ${props => (props.error ? '#e05252' : '#cacaca')};
@@ -63,6 +63,10 @@ const InputStyled = styled.input`
   &[type='date']::-webkit-clear-button {
     display: none;
     -webkit-appearance: none;
+  }
+
+  &&&::placeholder {
+    color: #172439;
   }
 
   ${border}
