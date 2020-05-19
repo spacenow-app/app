@@ -62,6 +62,7 @@ const EnquireForm = ({
       { g_app_link: window.location.origin },
       { g_mail: values.g_email }
     )
+
     const emailGuest = {
       template: 'new-enquiry-guest',
       destination: values.g_email,
@@ -95,6 +96,7 @@ const EnquireForm = ({
           setIsOpenInspection(false)
         }}
         style={{ background: 'transparent', borderColor: '#51c482' }}
+        className={isOpenInspection}
       >
         Ask a Question
       </Button>
@@ -186,80 +188,67 @@ const EnquireForm = ({
         </form>
       </Collapse>
 
-      {/* <Collapse in={isOpenInspection}>
+      <Collapse in={isOpenInspection}>
         <form>
-          <Select
-            error={errors.desiredInfo}
-            value={values.desiredInfo}
-            name="desiredInfo"
-            onChange={_handleSelectChange}
-          >
-            <option value="">Select desired information</option>
-            <option value="pricing">Pricing</option>
-            <option value="leasing-terms">Leasing terms</option>
-            <option value="property-inspection">Property inspection</option>
-            <option value="outgoings">Outgoings</option>
-          </Select>
+          <Box display="grid" gridGap="10px">
+            <Select
+              error={errors.desiredInfo}
+              value={values.desiredInfo}
+              name="g_desired_info"
+              onChange={_handleSelectChange}
+            >
+              <option value="">Select inspection type</option>
+              <option value="In Person">In person</option>
+              <option value="Virtual">Virtual</option>
+            </Select>
 
-          {!isAuthenticated && (
-            <>
-              <Input
-                // label="Full Name*"
-                placeholder="Your full name"
-                name="guestName"
-                error={errors.name}
-                value={values.name}
-                onChange={handleChange}
-                onBlur={handleBlur}
-              />
+            {!isAuthenticated && (
+              <>
+                <Input
+                  placeholder="Full name"
+                  name="g_name"
+                  error={errors.name}
+                  value={values.name}
+                  onChange={handleChange}
+                  onBlur={handleBlur}
+                />
 
-              <Input
-                // label="Email*"
-                placeholder="Email Address"
-                name="guestEmail"
-                error={errors.guestEmail}
-                value={values.guestEmail}
-                onChange={handleChange}
-                onBlur={handleBlur}
-              />
-            </>
-          )}
+                <Input
+                  placeholder="Email"
+                  name="g_email"
+                  error={errors.email}
+                  value={values.email}
+                  onChange={handleChange}
+                  onBlur={handleBlur}
+                />
+              </>
+            )}
 
-          <Input
-            // label="Company"
-            placeholder="Company"
-            name="company"
-            error={errors.company}
-            value={values.company}
-            onChange={handleChange}
-            onBlur={handleBlur}
-          />
+            <Input
+              placeholder="Company"
+              name="g_company"
+              error={errors.company}
+              value={values.company}
+              onChange={handleChange}
+              onBlur={handleBlur}
+            />
 
-          <Input
-            // label="Phone number"
-            placeholder="Phone"
-            name="phone"
-            error={errors.phone}
-            value={values.phone}
-            onChange={handleChange}
-            onBlur={handleBlur}
-          />
+            <Input
+              placeholder="Contact Number"
+              name="g_phone"
+              error={errors.phone}
+              value={values.phone}
+              onChange={handleChange}
+              onBlur={handleBlur}
+            />
 
-          <TextArea
-            // label="Write a message"
-            name="message"
-            placeholder="Start your message"
-            error={errors.message}
-            value={values.message}
-            onChange={handleChange}
-            onBlur={handleBlur}
-          />
-
-          <Button fluid mt="20px" onClick={() => _handleSubmit()} isLoading={isSendingEmail}>
-            Enquire
+            <Button blue fluid onClick={() => _handleSubmit()} isLoading={isSendingEmail}>
+              Enquire
           </Button>
+          </Box>
+
         </form>
-      </Collapse> */}
+      </Collapse>
     </Box>
   )
 }
