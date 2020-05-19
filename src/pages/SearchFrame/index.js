@@ -46,11 +46,12 @@ const SearchFrame = ({ history, shownSearch, ...props }) => {
     {`
     .form-search-frame {
       height: 54px;
-      box-shadow: none !important
+      box-shadow: none !important;
+      border-radius: 8px;
     }
 
-    .form-search-frame: focus {
-      border:1px solid: #6adc91
+    .form-search-frame:focus {
+      border-color: #6adc91;
     }
     `}
     </style>
