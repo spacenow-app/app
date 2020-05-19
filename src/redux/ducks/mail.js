@@ -54,6 +54,7 @@ export default function reducer(state = initialState, action) {
 
 // Action Creators
 export const sendMail = (emailOptions, message) => async dispatch => {
+  console.log("EMAIL OPTIONS ===>>>", emailOptions)
   dispatch({ type: Types.SEND_EMAIL_REQUEST })
   try {
     const { data } = await getClientWithAuth(dispatch).mutate({
