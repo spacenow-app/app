@@ -96,7 +96,7 @@ const EnquireForm = ({
           setIsOpenInspection(false)
         }}
         style={{ background: 'transparent', borderColor: '#51c482' }}
-        className={isOpenInspection}
+        className={`${isOpenAskQuestion ? "active" : ""}`}
       >
         Ask a Question
       </Button>
@@ -109,6 +109,7 @@ const EnquireForm = ({
           setIsOpenInspection(true)
         }}
         style={{ background: 'transparent', borderColor: '#51c482' }}
+        className={`${isOpenInspection ? "active" : ""}`}
       >
         Organise an Inspection
       </Button>

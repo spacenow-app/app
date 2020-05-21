@@ -68,6 +68,10 @@ const ButtonStyled = styled(ButtonExternal)`
       }
     }
   }
+  &&&.active {
+    background-color: #6adc91 !important;
+    color: #ffffff !important;
+  }
 `
 
 // const ButtonOldStyled = styled.button`
