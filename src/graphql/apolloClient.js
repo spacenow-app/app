@@ -8,7 +8,7 @@ import { config } from 'variables'
 
 import { getByName } from 'utils/cookies'
 
-const uploadLink = createUploadLink({ uri: config.graphQlHost, headers: { 'Accept-Encoding': 'gzip' } })
+const uploadLink = createUploadLink({ uri: `${config.graphQlHost}/graphql`, headers: { 'Accept-Encoding': 'gzip' } })
 
 let apolloClientWithAuth
 const authLink = dispatch =>
