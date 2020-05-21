@@ -185,8 +185,7 @@ Button.defaultProps = {
   disabled: false,
   size: 'md',
   fluid: false,
-  error: false,
-  blue: false
+  error: false
 }
 
 Button.propTypes = {
