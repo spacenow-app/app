@@ -131,12 +131,12 @@ const Pagination = ({
 
   const handleMoveLeft = e => {
     e.preventDefault()
-    gotoPage(currentPage - pageNeighbour * 2 - 1)
+    gotoPage(currentPage - 1)
   }
 
   const handleMoveRight = e => {
     e.preventDefault()
-    gotoPage(currentPage + pageNeighbour * 2 + 1)
+    gotoPage(currentPage + 1)
   }
 
   const fetchPageNumbers = () => {
