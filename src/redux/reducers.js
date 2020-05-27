@@ -19,6 +19,7 @@ import message from './ducks/message'
 import reviews from './ducks/reviews'
 import notifications from './ducks/notification'
 import inspection from './ducks/inspection'
+import aws from './ducks/aws'
 
 export default combineReducers({
   modal,
@@ -39,5 +40,6 @@ export default combineReducers({
   message,
   reviews,
   notifications,
-  inspection
+  inspection,
+  aws
 })

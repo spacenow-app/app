@@ -73,7 +73,10 @@ export const Types = {
   GET_SAVED_LISTING_BY_USER_FAILURE: 'GET_SAVED_LISTING_BY_USER_FAILURE',
   CHECK_SAVED_LISTING_BY_USER_START: 'CHECK_SAVED_LISTING_BY_USER_START',
   CHECK_SAVED_LISTING_BY_USER_SUCCESS: 'CHECK_SAVED_LISTING_BY_USER_SUCCESS',
-  CHECK_SAVED_LISTING_BY_USER_FAILURE: 'CHECK_SAVED_LISTING_BY_USER_FAILURE'
+  CHECK_SAVED_LISTING_BY_USER_FAILURE: 'CHECK_SAVED_LISTING_BY_USER_FAILURE',
+  POST_MEDIA_LEGACY_REQUEST: 'POST_MEDIA_LEGACY_REQUEST',
+  POST_MEDIA_LEGACY_SUCCESS: 'POST_MEDIA_LEGACY_SUCCESS',
+  POST_MEDIA_LEGACY_FAILURE: 'POST_MEDIA_LEGACY_FAILURE',
 }
 
 // Initial State
@@ -833,6 +836,19 @@ const mutationCheckSavedListingByUser = gql`
   }
 `
 
+const postMediaFields = `
+  name
+  isCover
+  category
+`
+const mutationPostV2Media = gql`
+  mutation postV2Media($id: Int, $input: MediaInput) {
+    postV2Media(id: $id, input: $input) {
+      ${postMediaFields}
+    }
+  }
+`
+
 // Reducer
 export default function reducer(state = initialState, action) {
   switch (action.type) {
@@ -1463,6 +1479,35 @@ export default function reducer(state = initialState, action) {
         }
       }
     }
+    case Types.POST_MEDIA_LEGACY_REQUEST: {
+      return {
+        ...state,
+        media: {
+          ...state.media,
+          isLoading: true
+        }
+      }
+    }
+    case Types.POST_MEDIA_LEGACY_SUCCESS: {
+      return {
+        ...state,
+        media: {
+          ...state.media,
+          object: action.payload,
+          isLoading: false
+        }
+      }
+    }
+    case Types.POST_MEDIA_LEGACY_FAILURE: {
+      return {
+        ...state,
+        media: {
+          ...state.media,
+          isLoading: false,
+          error: action.payload
+        }
+      }
+    }
     default:
       return state
   }
@@ -1715,6 +1760,19 @@ export const onUpdate = (listing, values) => async dispatch => {
   } catch (err) {
     toast.error(errToMsg(err))
     dispatch({ type: Types.UPDATE_LISTING_FAILURE, payload: errToMsg(err) })
+  }
+}
+
+export const onPostV2Media = (id, input) => async dispatch => {
+  dispatch({ type: Types.POST_MEDIA_LEGACY_REQUEST })
+  try {
+    const { data } = await getClientWithAuth(dispatch).mutate({
+      mutation: mutationPostV2Media,
+      variables: { id, input }
+    })
+    dispatch({ type: Types.POST_MEDIA_LEGACY_SUCCESS, payload: data.postV2Media })
+  } catch (err) {
+    dispatch({ type: Types.POST_MEDIA_LEGACY_FAILURE, payload: errToMsg(err) })
   }
 }
 

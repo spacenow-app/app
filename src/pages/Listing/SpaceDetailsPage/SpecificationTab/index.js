@@ -16,10 +16,13 @@ import {
   onGetAllAmenities,
   onGetAllSpecifications,
   onGetPhotosByListingId,
-  onGetVideoByListingId
+  onGetVideoByListingId,
+  onPostV2Media
 } from 'redux/ducks/listing'
 
-import { onUploadPhoto, onSetCoverPhoto, onDeletePhoto } from 'redux/ducks/photo'
+import { onSetCoverPhoto, onDeletePhoto } from 'redux/ducks/photo'
+
+import { onPutObject } from 'redux/ducks/aws'
 
 import { openModal, TypesModal } from 'redux/ducks/modal'
 
@@ -92,6 +95,7 @@ const SpecificationTab = ({
   const { array: arrayAmenities, isLoading: isLoadingAmenities } = useSelector(state => state.listing.amenities)
   const { array: arrayPhotos, isLoading: isLoadingPhotos } = useSelector(state => state.listing.photos)
   const { object: video, isLoading: isLoadingVideo } = useSelector(state => state.listing.video)
+  const { get: awsObject } = useSelector(state => state.aws)
   const { object: objectSpecifications, isLoading: isLoadingSpecifications } = useSelector(
     state => state.listing.specifications
   )
@@ -110,6 +114,14 @@ const SpecificationTab = ({
     setFatherValues({ ...values, isValid })
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [values, isValid])
+
+  useEffect(() => {
+    if (awsObject) {
+      dispatch(onPostV2Media(listing.id, { category: awsObject.type, name: awsObject.url }))
+      dispatch(onGetPhotosByListingId(listing.id))
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [awsObject.url])
 
   useEffect(() => {
     try {
@@ -250,10 +262,13 @@ const SpecificationTab = ({
 
   const _handleOnDrop = useCallback(
     acceptedFiles => {
+      const reader = new FileReader()
       acceptedFiles.map(async file => {
-        await dispatch(onUploadPhoto(file, 'photo', listing.id))
-        // await dispatch(onUploadPhoto(file, listing.id))
-        await dispatch(onGetPhotosByListingId(listing.id))
+        reader.readAsDataURL(file)
+        reader.onload = async (event) => {
+          await dispatch(onPutObject(listing.id, { file: event.target.result }, 'photo'))
+        }
+        // await dispatch(onGetPhotosByListingId(listing.id))
       })
     },
     [dispatch, listing.id]
@@ -271,8 +286,12 @@ const SpecificationTab = ({
 
   const _handleOnDropVideo = useCallback(
     acceptedFiles => {
+      const reader = new FileReader()
       acceptedFiles.map(async file => {
-        await dispatch(onUploadPhoto(file, 'video', listing.id))
+        reader.readAsDataURL(file)
+        reader.onload = async (event) => {
+          await dispatch(onPutObject(listing.id, { file: event.target.result }, 'video'))
+        }
         // await dispatch(onUploadPhoto(file, listing.id))
         await dispatch(onGetVideoByListingId(listing.id))
       })
