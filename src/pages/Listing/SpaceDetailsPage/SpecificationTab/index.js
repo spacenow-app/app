@@ -95,7 +95,7 @@ const SpecificationTab = ({
   const { array: arrayAmenities, isLoading: isLoadingAmenities } = useSelector(state => state.listing.amenities)
   const { array: arrayPhotos, isLoading: isLoadingPhotos } = useSelector(state => state.listing.photos)
   const { object: video, isLoading: isLoadingVideo } = useSelector(state => state.listing.video)
-  const { get: awsObject } = useSelector(state => state.aws)
+  // const { get: awsObject } = useSelector(state => state.aws)
   const { object: objectSpecifications, isLoading: isLoadingSpecifications } = useSelector(
     state => state.listing.specifications
   )
@@ -262,7 +262,7 @@ const SpecificationTab = ({
 
   const _handleOnDrop = useCallback(
     acceptedFiles => {
-      const reader = new FileReader()
+      // const reader = new FileReader()
       acceptedFiles.map(async file => {
         await dispatch(onUploadPhoto(file, 'photo', listing.id))
         await dispatch(onGetPhotosByListingId(listing.id))
@@ -288,7 +288,7 @@ const SpecificationTab = ({
 
   const _handleOnDropVideo = useCallback(
     acceptedFiles => {
-      const reader = new FileReader()
+      // const reader = new FileReader()
       acceptedFiles.map(async file => {
         await dispatch(onUploadPhoto(file, 'video', listing.id))
         await dispatch(onGetVideoByListingId(listing.id))
