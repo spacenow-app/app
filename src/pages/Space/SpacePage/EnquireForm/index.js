@@ -60,7 +60,7 @@ const EnquireForm = ({
       { g_current_date: format(new Date(), 'EEEE d MMMM, yyyy') },
       { l_category: listing.settingsParent.category.itemName },
       { g_app_link: window.location.origin },
-      { g_mail: values.g_email }
+      { g_mail: values.g_email },
       { g_message: values.g_message }
     )
 
