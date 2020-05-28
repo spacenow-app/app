@@ -16,13 +16,13 @@ import {
   onGetAllAmenities,
   onGetAllSpecifications,
   onGetPhotosByListingId,
-  onGetVideoByListingId,
-  onPostV2Media
+  onGetVideoByListingId
+  // onPostV2Media
 } from 'redux/ducks/listing'
 
-import { onSetCoverPhoto, onDeletePhoto } from 'redux/ducks/photo'
+import { onUploadPhoto, onSetCoverPhoto, onDeletePhoto } from 'redux/ducks/photo'
 
-import { onPutObject } from 'redux/ducks/aws'
+// import { onPutObject } from 'redux/ducks/aws'
 
 import { openModal, TypesModal } from 'redux/ducks/modal'
 
@@ -115,13 +115,13 @@ const SpecificationTab = ({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [values, isValid])
 
-  useEffect(() => {
-    if (awsObject) {
-      dispatch(onPostV2Media(listing.id, { category: awsObject.type, name: awsObject.url }))
-      dispatch(onGetPhotosByListingId(listing.id))
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [awsObject.url])
+  // useEffect(() => {
+  //   if (awsObject) {
+  //     dispatch(onPostV2Media(listing.id, { category: awsObject.type, name: awsObject.url }))
+  //     dispatch(onGetPhotosByListingId(listing.id))
+  //   }
+  //   // eslint-disable-next-line react-hooks/exhaustive-deps
+  // }, [awsObject.url])
 
   useEffect(() => {
     try {
@@ -264,10 +264,12 @@ const SpecificationTab = ({
     acceptedFiles => {
       const reader = new FileReader()
       acceptedFiles.map(async file => {
-        reader.readAsDataURL(file)
-        reader.onload = async (event) => {
-          await dispatch(onPutObject(listing.id, { file: event.target.result }, 'photo'))
-        }
+        await dispatch(onUploadPhoto(file, 'photo', listing.id))
+        await dispatch(onGetPhotosByListingId(listing.id))
+        // reader.readAsDataURL(file)
+        // reader.onload = async (event) => {
+        //   await dispatch(onPutObject(listing.id, { file: event.target.result }, 'photo'))
+        // }
         // await dispatch(onGetPhotosByListingId(listing.id))
       })
     },
@@ -288,12 +290,14 @@ const SpecificationTab = ({
     acceptedFiles => {
       const reader = new FileReader()
       acceptedFiles.map(async file => {
-        reader.readAsDataURL(file)
-        reader.onload = async (event) => {
-          await dispatch(onPutObject(listing.id, { file: event.target.result }, 'video'))
-        }
-        // await dispatch(onUploadPhoto(file, listing.id))
+        await dispatch(onUploadPhoto(file, 'video', listing.id))
         await dispatch(onGetVideoByListingId(listing.id))
+        // reader.readAsDataURL(file)
+        // reader.onload = async (event) => {
+        //   await dispatch(onPutObject(listing.id, { file: event.target.result }, 'video'))
+        // }
+        // // await dispatch(onUploadPhoto(file, listing.id))
+        // await dispatch(onGetVideoByListingId(listing.id))
       })
     },
     [dispatch, listing.id]
@@ -347,13 +351,13 @@ const SpecificationTab = ({
           {isLoadingSpecifications ? (
             <Loader />
           ) : (
-              <InputGroup>
-                {Object.keys(objectSpecifications).map((k, index) => {
-                  const o = objectSpecifications[k]
-                  return <span key={index}>{_renderSpecifications(o)}</span>
-                })}
-              </InputGroup>
-            )}
+            <InputGroup>
+              {Object.keys(objectSpecifications).map((k, index) => {
+                const o = objectSpecifications[k]
+                return <span key={index}>{_renderSpecifications(o)}</span>
+              })}
+            </InputGroup>
+          )}
         </SectionStyled>
         <SectionStyled>
           <Title
@@ -390,15 +394,15 @@ const SpecificationTab = ({
                     )}
                   </Fragment>
                 ) : (
-                    <Checkbox
-                      key={index}
-                      label={item.itemName}
-                      name="amenities"
-                      value={item.id}
-                      checked={values.amenities.some(amenitie => amenitie.listSettingsId === item.id)}
-                      handleCheckboxChange={_handleCheckboxChange}
-                    />
-                  )
+                  <Checkbox
+                    key={index}
+                    label={item.itemName}
+                    name="amenities"
+                    value={item.id}
+                    checked={values.amenities.some(amenitie => amenitie.listSettingsId === item.id)}
+                    handleCheckboxChange={_handleCheckboxChange}
+                  />
+                )
               )}
           </CheckboxGroup>
         </SectionStyled>
@@ -408,17 +412,17 @@ const SpecificationTab = ({
             {isLoadingRules ? (
               <Loader />
             ) : (
-                arrayRules.map((item, index) => (
-                  <Checkbox
-                    key={index}
-                    label={item.itemName}
-                    name="rules"
-                    value={item.id}
-                    checked={values.rules.some(rule => rule.listSettingsId === item.id)}
-                    handleCheckboxChange={_handleCheckboxChange}
-                  />
-                ))
-              )}
+              arrayRules.map((item, index) => (
+                <Checkbox
+                  key={index}
+                  label={item.itemName}
+                  name="rules"
+                  value={item.id}
+                  checked={values.rules.some(rule => rule.listSettingsId === item.id)}
+                  handleCheckboxChange={_handleCheckboxChange}
+                />
+              ))
+            )}
           </CheckboxGroupRules>
         </SectionStyled>
         <SectionStyled>
@@ -427,18 +431,18 @@ const SpecificationTab = ({
             {isLoadingAccessTypes ? (
               <Loader />
             ) : (
-                <Select value={values.accessType} name="accessType" onChange={_handleSelectChange}>
-                  {!values.accessType && <option>Select type of access</option>}
-                  {arrayAccessTypes.map(
-                    (item, index) =>
-                      item.itemName !== 'Receptionist' && (
-                        <option key={index} value={item.itemName}>
-                          {item.itemName === 'Person' ? `${item.itemName} at reception` : item.itemName}
-                        </option>
-                      )
-                  )}
-                </Select>
-              )}
+              <Select value={values.accessType} name="accessType" onChange={_handleSelectChange}>
+                {!values.accessType && <option>Select type of access</option>}
+                {arrayAccessTypes.map(
+                  (item, index) =>
+                    item.itemName !== 'Receptionist' && (
+                      <option key={index} value={item.itemName}>
+                        {item.itemName === 'Person' ? `${item.itemName} at reception` : item.itemName}
+                      </option>
+                    )
+                )}
+              </Select>
+            )}
           </Box>
         </SectionStyled>
         <SectionStyled>
@@ -451,19 +455,19 @@ const SpecificationTab = ({
             {isLoadingPhotos ? (
               <Loader />
             ) : (
-                <>
-                  {arrayPhotos.map((item, index) => (
-                    <Photo
-                      key={index}
-                      onDrop={_handleOnDrop}
-                      url={item ? cropPicture(item.name, 196, 150) : null}
-                      isCover={item ? item.isCover : false}
-                      onCover={_handleSetCoverPhoto(item ? item.id : '')}
-                      onDelete={_handleDeletePhoto(item ? item.id : '')}
-                    />
-                  ))}
-                </>
-              )}
+              <>
+                {arrayPhotos.map((item, index) => (
+                  <Photo
+                    key={index}
+                    onDrop={_handleOnDrop}
+                    url={item ? cropPicture(item.name, 196, 150) : null}
+                    isCover={item ? item.isCover : false}
+                    onCover={_handleSetCoverPhoto(item ? item.id : '')}
+                    onDelete={_handleDeletePhoto(item ? item.id : '')}
+                  />
+                ))}
+              </>
+            )}
           </PhotosGroup>
           <p>
             TIP: Take photos in landscape mode to capture as much of your space as possible. Shoot from corners to add
@@ -480,14 +484,14 @@ const SpecificationTab = ({
             {isLoadingVideo ? (
               <Loader />
             ) : (
-                <>
-                  <Video
-                    onDrop={_handleOnDropVideo}
-                    url={video ? video.name : null}
-                    onDelete={_handleDeleteVideo(video ? video.id : '')}
-                  />
-                </>
-              )}
+              <>
+                <Video
+                  onDrop={_handleOnDropVideo}
+                  url={video ? video.name : null}
+                  onDelete={_handleDeleteVideo(video ? video.id : '')}
+                />
+              </>
+            )}
           </Box>
           {/* <p>
             TIP: Take photos in landscape mode to capture as much of your space as possible. Shoot from corners to add
