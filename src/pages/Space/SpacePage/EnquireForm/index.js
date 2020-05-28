@@ -44,7 +44,7 @@ const EnquireForm = ({
     Object.assign(
       values,
       { l_id: listing.id },
-      { l_image: JSON.stringify(_getCoverPhoto(listing)) },
+      { l_image: JSON.stringify(listing.photos[0].name) },
       { l_title: listing.title },
       { l_address: listing.location.address1 },
       { l_city: listing.location.city },
@@ -55,7 +55,7 @@ const EnquireForm = ({
       { l_minimum_term: listing.listingData.minTerm },
       { l_term: _handleTerm(listing.bookingPeriod, listing.listingData.minTerm) || 'day' },
       { l_capacity: listing.listingData.capacity },
-      { l_price: listing.listingData.basePrice || 0 },
+      { l_price: listing.listingData.basePrice === 1 ? "POA" : listing.listingData.basePrice },
       { l_period: listing.bookingPeriod },
       { g_current_date: format(new Date(), 'EEEE d MMMM, yyyy') },
       { l_category: listing.settingsParent.category.itemName },
