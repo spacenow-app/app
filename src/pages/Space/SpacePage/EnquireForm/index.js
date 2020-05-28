@@ -9,18 +9,18 @@ import { useSelector } from 'react-redux'
 import { Box, Input, TextArea, Button, Text, Select, Collapse } from 'components'
 
 import { sendMail } from 'redux/ducks/mail'
-import { cropPicture } from 'utils/images'
+// import { cropPicture } from 'utils/images'
 
-const _getCoverPhoto = object => {
-  if (object.photos.length <= 0) {
-    return ''
-  }
-  const photoCover = object.photos.find(e => e.isCover)
-  if (photoCover) {
-    return cropPicture(photoCover.name)
-  }
-  return cropPicture(object.photos[0].name)
-}
+// const _getCoverPhoto = object => {
+//   if (object.photos.length <= 0) {
+//     return ''
+//   }
+//   const photoCover = object.photos.find(e => e.isCover)
+//   if (photoCover) {
+//     return cropPicture(photoCover.name)
+//   }
+//   return cropPicture(object.photos[0].name)
+// }
 
 const EnquireForm = ({
   values,
