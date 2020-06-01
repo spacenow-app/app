@@ -13,7 +13,8 @@ import {
   onGetPhotosByListingId,
   onGetVideoByListingId,
   onGetFloorplanByListingId,
-  onGetMenuByListingId
+  onGetMenuByListingId,
+  onPostV2Media
 } from 'redux/ducks/listing'
 
 import {
@@ -26,7 +27,8 @@ import {
   onGetCategoryStyles
 } from 'redux/ducks/category'
 
-import { onUploadPhoto, onSetCoverPhoto, onDeletePhoto } from 'redux/ducks/photo'
+import { onPutObject } from 'redux/ducks/aws'
+import { onSetCoverPhoto, onDeletePhoto } from 'redux/ducks/photo'
 
 import { openModal, TypesModal } from 'redux/ducks/modal'
 
@@ -61,6 +63,7 @@ const SpecificationTab = ({
   const { object: floorplan, isLoading: isLoadingFloorplan } = useSelector(state => state.listing.floorplan)
   const { object: menu, isLoading: isLoadingMenu } = useSelector(state => state.listing.menu)
   const { array: arrayPhotos, isLoading: isLoadingPhotos } = useSelector(state => state.listing.photos)
+  const { get: awsObject } = useSelector(state => state.aws)
   const [editorState, setEditorState] = useState(EditorState.createEmpty())
 
   useEffect(() => {
@@ -81,6 +84,14 @@ const SpecificationTab = ({
     setFatherValues({ ...values, isValid })
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [values, isValid])
+
+  useEffect(() => {
+    if (awsObject) {
+      dispatch(onPostV2Media(listing.id, { category: awsObject.type, name: awsObject.url }))
+      dispatch(onGetPhotosByListingId(listing.id))
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [awsObject.url])
 
   useEffect(() => {
     try {
@@ -221,9 +232,55 @@ const SpecificationTab = ({
 
   const _handleOnDrop = useCallback(
     acceptedFiles => {
+      const reader = new FileReader()
       acceptedFiles.map(async file => {
-        await dispatch(onUploadPhoto(file, 'photo', listing.id))
+        reader.readAsDataURL(file)
+        reader.onload = async (event) => {
+          await dispatch(onPutObject(listing.id, { file: event.target.result }, 'photo'))
+        }
         await dispatch(onGetPhotosByListingId(listing.id))
+      })
+    },
+    [dispatch, listing.id]
+  )
+
+  const _handleOnDropVideo = useCallback(
+    acceptedFiles => {
+      const reader = new FileReader()
+      acceptedFiles.map(async file => {
+        reader.readAsDataURL(file)
+        reader.onload = async (event) => {
+          await dispatch(onPutObject(listing.id, { file: event.target.result }, 'video'))
+        }
+        await dispatch(onGetVideoByListingId(listing.id))
+      })
+    },
+    [dispatch, listing.id]
+  )
+
+  const _handleOnDropFloorplan = useCallback(
+    acceptedFiles => {
+      const reader = new FileReader()
+      acceptedFiles.map(async file => {
+        reader.readAsDataURL(file)
+        reader.onload = async (event) => {
+          await dispatch(onPutObject(listing.id, { file: event.target.result }, 'floorplan'))
+        }
+        await dispatch(onGetFloorplanByListingId(listing.id))
+      })
+    },
+    [dispatch, listing.id]
+  )
+
+  const _handleOnDropMenu = useCallback(
+    acceptedFiles => {
+      const reader = new FileReader()
+      acceptedFiles.map(async file => {
+        reader.readAsDataURL(file)
+        reader.onload = async (event) => {
+          await dispatch(onPutObject(listing.id, { file: event.target.result }, 'menu'))
+        }
+        await dispatch(onGetMenuByListingId(listing.id))
       })
     },
     [dispatch, listing.id]
@@ -238,36 +295,6 @@ const SpecificationTab = ({
     await dispatch(onDeletePhoto(listing.id, photoId))
     await dispatch(onGetPhotosByListingId(listing.id))
   }
-
-  const _handleOnDropVideo = useCallback(
-    acceptedFiles => {
-      acceptedFiles.map(async file => {
-        await dispatch(onUploadPhoto(file, 'video', listing.id))
-        await dispatch(onGetVideoByListingId(listing.id))
-      })
-    },
-    [dispatch, listing.id]
-  )
-
-  const _handleOnDropFloorplan = useCallback(
-    acceptedFiles => {
-      acceptedFiles.map(async file => {
-        await dispatch(onUploadPhoto(file, 'floorplan', listing.id))
-        await dispatch(onGetFloorplanByListingId(listing.id))
-      })
-    },
-    [dispatch, listing.id]
-  )
-
-  const _handleOnDropMenu = useCallback(
-    acceptedFiles => {
-      acceptedFiles.map(async file => {
-        await dispatch(onUploadPhoto(file, 'menu', listing.id))
-        await dispatch(onGetMenuByListingId(listing.id))
-      })
-    },
-    [dispatch, listing.id]
-  )
 
   const _handleDeleteVideo = photoId => async () => {
     await dispatch(onDeletePhoto(listing.id, photoId))
