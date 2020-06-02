@@ -11,8 +11,10 @@ const CellStyled = styled(Cell)`
 `
 
 const StepPage = ({ listing, steps, ...props }) => {
-
-  const { get: { user }, isLoading } = useSelector(state => state.account)
+  const {
+    get: { user },
+    isLoading
+  } = useSelector(state => state.account)
 
   return (
     <Wrapper my="40px">
@@ -31,7 +33,7 @@ const StepPage = ({ listing, steps, ...props }) => {
               return (
                 <Fragment key={item.id}>
                   <CellStyled width={1}>
-                    <RadioCheckbox checked={(steps && steps[item.id] === 'completed') || false} onChange={() => { }} />
+                    <RadioCheckbox checked={(steps && steps[item.id] === 'completed') || false} onChange={() => {}} />
                   </CellStyled>
                   <CellStyled width={8}>
                     <Box my="10px" ml="-20px">
@@ -46,7 +48,12 @@ const StepPage = ({ listing, steps, ...props }) => {
                     </Box>
                   </CellStyled>
                   <CellStyled width={3}>
-                    {listing && (
+                    {listing && item.id === 'step1' && steps && steps[item.id] !== 'completed' && (
+                      <Link to={`${item.path}`} style={{ justifySelf: 'end' }}>
+                        Start
+                      </Link>
+                    )}
+                    {listing && steps && steps[item.id] === 'completed' && (
                       <Link to={`${item.path}`} style={{ justifySelf: 'end' }}>
                         Edit
                       </Link>
@@ -62,9 +69,10 @@ const StepPage = ({ listing, steps, ...props }) => {
               onClick={() => props.history.push(`/listing-process/view/${listing.id}`)}
             >
               Preview
-          </Button>
+            </Button>
           </Box>
-        </>)}
+        </>
+      )}
     </Wrapper>
   )
 }

@@ -19,6 +19,7 @@ const LocationPage = ({ listing, values, handleChange, handleBlur, setFieldValue
     props.setFatherValues(values)
     listing.locationId !== values.locationId &&
       props.history.push(`/listing-process/setup-process/${listing.id}/basics/space-type`)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [values])
 
   useEffect(() => {
@@ -100,7 +101,7 @@ const formik = {
   mapPropsToValues: ({ listing }) => {
     return {
       ...listing,
-      locationId: listing.locationId || 0
+      locationId: listing.locationId || null
     }
   },
   enableReinitialize: true,
