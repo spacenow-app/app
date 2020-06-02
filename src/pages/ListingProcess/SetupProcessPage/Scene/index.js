@@ -13,17 +13,38 @@ const ScenePage = ({ listing, values, setFieldValue, ...props }) => {
 
   const { object: media, isLoading: loadingMedia } = useSelector(state => state.listing_process.media)
 
-  const _handleOnDropMediaPhoto = useCallback(acceptedFiles => acceptedFiles.map(file => dispatch(onPostMedia({ file, category: 'photo', listingId: listing.id }))), [
-    dispatch, listing.id
-  ])
+  const _handleOnDropMediaPhoto = useCallback(acceptedFiles => {
+    const reader = new FileReader()
+    // eslint-disable-next-line array-callback-return
+    acceptedFiles.map(file => {
+      reader.readAsDataURL(file)
+      reader.onload = async (event) => {
+        dispatch(onPostMedia(listing.id, { file: event.target.result, category: 'photo' }))
+      }
+    })
+  }, [dispatch, listing.id])
 
-  const _handleOnDropMediaFloorplan = useCallback(acceptedFiles => acceptedFiles.map(file => dispatch(onPostMedia({ file, category: 'floorplan', listingId: listing.id }))), [
-    dispatch, listing.id
-  ])
+  const _handleOnDropMediaFloorplan = useCallback(acceptedFiles => {
+    const reader = new FileReader()
+    // eslint-disable-next-line array-callback-return
+    acceptedFiles.map(file => {
+      reader.readAsDataURL(file)
+      reader.onload = async (event) => {
+        dispatch(onPostMedia(listing.id, { file: event.target.result, category: 'floorplan' }))
+      }
+    })
+  }, [dispatch, listing.id])
 
-  const _handleOnDropMediaVideo = useCallback(acceptedFiles => acceptedFiles.map(file => dispatch(onPostMedia({ file, category: 'video', listingId: listing.id }))), [
-    dispatch, listing.id
-  ])
+  const _handleOnDropMediaVideo = useCallback(acceptedFiles => {
+    const reader = new FileReader()
+    // eslint-disable-next-line array-callback-return
+    acceptedFiles.map(file => {
+      reader.readAsDataURL(file)
+      reader.onload = async (event) => {
+        dispatch(onPostMedia(listing.id, { file: event.target.result, category: 'video' }))
+      }
+    })
+  }, [dispatch, listing.id])
 
   useEffect(() => {
     props.setFatherValues({ ...values })
@@ -35,7 +56,7 @@ const ScenePage = ({ listing, values, setFieldValue, ...props }) => {
   }
 
   useEffect(() => {
-    media && setFieldValue('photos', [...values['photos'], media])
+    media && setFieldValue('photos', [...values.photos, media])
     media && dispatch(onCleanMedia())
   }, [setFieldValue, media, values, dispatch])
 
@@ -65,8 +86,8 @@ const ScenePage = ({ listing, values, setFieldValue, ...props }) => {
                       onDrop={_handleOnDropMediaPhoto}
                       url={photo ? cropPicture(photo.name) : null}
                       isCover={photo ? photo.isCover : false}
-                      // onCover={_handleSetCoverPhoto(photo ? photo.id : '')}
-                      // onDelete={_handleDeletePhoto(photo ? photo.id : '')}
+                    // onCover={_handleSetCoverPhoto(photo ? photo.id : '')}
+                    // onDelete={_handleDeletePhoto(photo ? photo.id : '')}
                     />
                   ))}
               </Box>
@@ -82,7 +103,7 @@ const ScenePage = ({ listing, values, setFieldValue, ...props }) => {
                 subtitle="Floor plans help guest imagine the full size of your space."
               />
               <Box width={160}>
-              {[
+                {[
                   ...Array(1 - values.photos.filter(media => media.type !== 'video/mp4' && media.category === 'floorplan').length).concat(
                     values.photos.filter(media => media.type !== 'video/mp4' && media.category === 'floorplan')
                   )
@@ -91,7 +112,7 @@ const ScenePage = ({ listing, values, setFieldValue, ...props }) => {
                     key={`floorplan-${index}`}
                     onDrop={_handleOnDropMediaFloorplan}
                     url={photo ? cropPicture(photo.name) : null}
-                    // onDelete={_handleDeleteVideo(listing.video ? listing.video.id : '')}
+                  // onDelete={_handleDeleteVideo(listing.video ? listing.video.id : '')}
                   />
                 ))}
               </Box>
@@ -112,7 +133,7 @@ const ScenePage = ({ listing, values, setFieldValue, ...props }) => {
                     key={`video-${index}`}
                     onDrop={_handleOnDropMediaVideo}
                     url={video ? video.name : null}
-                    // onDelete={_handleDeleteVideo(listing.video ? listing.video.id : '')}
+                  // onDelete={_handleDeleteVideo(listing.video ? listing.video.id : '')}
                   />
                 ))}
               </Box>

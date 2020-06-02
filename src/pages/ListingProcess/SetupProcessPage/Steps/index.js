@@ -19,52 +19,52 @@ const StepPage = ({ listing, steps, ...props }) => {
       <Helmet title="Listing Intro - Spacenow - Steps" />
       {isLoading && <Loader text="Uploading Media File" />}
       {!isLoading && (
-      <>
-        <Title
-          type="h3"
-          title={`${user.profile.firstName}, tell us about your space`}
-          subtitle="The more details you list, the faster the bookings."
-          subTitleMargin={10}
-        />
-        <Grid columns={12}>
-          {list.map(item => {
-            return (
-              <Fragment key={item.id}>
-                <CellStyled width={1}>
-                  <RadioCheckbox checked={(steps && steps[item.id] === 'completed') || false} onChange={() => {}} />
-                </CellStyled>
-                <CellStyled width={8}>
-                  <Box my="10px" ml="-20px">
-                    <Title
-                      type="h6"
-                      title={item.title}
-                      subtitle={item.subtitle}
-                      subTitleMargin={12}
-                      mediumBold
-                      noMargin
-                    />
-                  </Box>
-                </CellStyled>
-                <CellStyled width={3}>
-                  {listing && (
-                    <Link to={`${item.path}`} style={{ justifySelf: 'end' }}>
-                      Edit
-                    </Link>
-                  )}
-                </CellStyled>
-              </Fragment>
-            )
-          })}
-        </Grid>
-        <Box display="grid" justifyItems="end">
-          <Button
-            disabled={steps && steps.completed !== 100}
-            onClick={() => props.history.push(`/view/${listing.id}`)}
+        <>
+          <Title
+            type="h3"
+            title={`${user.profile.firstName}, tell us about your space`}
+            subtitle="The more details you list, the faster the bookings."
+            subTitleMargin={10}
+          />
+          <Grid columns={12}>
+            {list.map(item => {
+              return (
+                <Fragment key={item.id}>
+                  <CellStyled width={1}>
+                    <RadioCheckbox checked={(steps && steps[item.id] === 'completed') || false} onChange={() => { }} />
+                  </CellStyled>
+                  <CellStyled width={8}>
+                    <Box my="10px" ml="-20px">
+                      <Title
+                        type="h6"
+                        title={item.title}
+                        subtitle={item.subtitle}
+                        subTitleMargin={12}
+                        mediumBold
+                        noMargin
+                      />
+                    </Box>
+                  </CellStyled>
+                  <CellStyled width={3}>
+                    {listing && (
+                      <Link to={`${item.path}`} style={{ justifySelf: 'end' }}>
+                        Edit
+                      </Link>
+                    )}
+                  </CellStyled>
+                </Fragment>
+              )
+            })}
+          </Grid>
+          <Box display="grid" justifyItems="end">
+            <Button
+              disabled={steps && steps.completed !== 100}
+              onClick={() => props.history.push(`/listing-process/view/${listing.id}`)}
             >
-            Preview
+              Preview
           </Button>
-        </Box>
-      </>)}
+          </Box>
+        </>)}
     </Wrapper>
   )
 }

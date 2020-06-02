@@ -346,8 +346,8 @@ const mutationPostV2Location = gql`
   }
 `
 const mutationPostV2Media = gql`
-  mutation postV2Media($input: V2InputUpload) {
-    postV2Media(input: $input) {
+  mutation postV2Media($id: Int!, $input: V2InputUpload) {
+    postV2Media(id: $id, input: $input) {
       ${uploadMediaFields}
     }
   }
@@ -866,12 +866,12 @@ export const onPostLocation = input => async dispatch => {
   }
 }
 
-export const onPostMedia = input => async dispatch => {
+export const onPostMedia = (id, input) => async dispatch => {
   dispatch({ type: Types.POST_MEDIA_REQUEST })
   try {
     const { data } = await getClientWithAuth(dispatch).mutate({
       mutation: mutationPostV2Media,
-      variables: { input }
+      variables: { id, input }
     })
     dispatch({ type: Types.POST_MEDIA_SUCCESS, payload: data.postV2Media })
   } catch (err) {

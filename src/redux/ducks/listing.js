@@ -841,9 +841,9 @@ const postMediaFields = `
   isCover
   category
 `
-const mutationPostV2Media = gql`
-  mutation postV2Media($id: Int, $input: MediaInput) {
-    postV2Media(id: $id, input: $input) {
+const mutationPostMedia = gql`
+  mutation postMedia($id: Int, $input: MediaInput) {
+    postMedia(id: $id, input: $input) {
       ${postMediaFields}
     }
   }
@@ -1763,14 +1763,14 @@ export const onUpdate = (listing, values) => async dispatch => {
   }
 }
 
-export const onPostV2Media = (id, input) => async dispatch => {
+export const onPostMedia = (id, input) => async dispatch => {
   dispatch({ type: Types.POST_MEDIA_LEGACY_REQUEST })
   try {
     const { data } = await getClientWithAuth(dispatch).mutate({
-      mutation: mutationPostV2Media,
+      mutation: mutationPostMedia,
       variables: { id, input }
     })
-    dispatch({ type: Types.POST_MEDIA_LEGACY_SUCCESS, payload: data.postV2Media })
+    dispatch({ type: Types.POST_MEDIA_LEGACY_SUCCESS, payload: data.postMedia })
   } catch (err) {
     dispatch({ type: Types.POST_MEDIA_LEGACY_FAILURE, payload: errToMsg(err) })
   }

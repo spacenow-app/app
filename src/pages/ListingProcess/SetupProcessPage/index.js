@@ -34,7 +34,7 @@ const SetupProcessPage = ({ match, history, location, ...props }) => {
     setValues(obj)
   }
 
-  const _setStepCompleted = step => { 
+  const _setStepCompleted = step => {
     dispatch(onPutListingSteps(listingId, { ...steps, [step]: `completed` }))
   }
 
@@ -46,6 +46,7 @@ const SetupProcessPage = ({ match, history, location, ...props }) => {
   }, [dispatch, listingId])
 
   useEffect(() => {
+    console.log("VALUES ===>>>", values)
     if (history.action === 'PUSH') dispatch(onPutListing({ ...listing, ...values }))
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [history.location.key, dispatch])

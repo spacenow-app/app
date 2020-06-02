@@ -17,7 +17,7 @@ import {
   onGetAllSpecifications,
   onGetPhotosByListingId,
   onGetVideoByListingId,
-  onPostV2Media
+  onPostMedia
 } from 'redux/ducks/listing'
 
 // import { onUploadPhoto, onSetCoverPhoto, onDeletePhoto } from 'redux/ducks/photo'
@@ -118,7 +118,7 @@ const SpecificationTab = ({
 
   useEffect(() => {
     if (awsObject) {
-      dispatch(onPostV2Media(listing.id, { category: awsObject.type, name: awsObject.url }))
+      dispatch(onPostMedia(listing.id, { category: awsObject.type, name: awsObject.url }))
       dispatch(onGetPhotosByListingId(listing.id))
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps

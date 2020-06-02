@@ -69,9 +69,9 @@ const CategoryPage = ({ listing, values, setFieldValue, handleChange, handleBlur
                 subTitleMargin={10}
               />
               <Box display="grid" gridTemplateColumns={{ _: '1fr', medium: 'auto auto auto' }} gridGap="30px">
-                <Select value={values.listSettingsParentId} onChange={_handleSelectChange} name="listSettingsParentId">
-                  {[].concat(categories).map((item, index) => (
-                    <option key={index} value={item.id}>
+                <Select value={values.listSettingsParentId || ""} onChange={_handleSelectChange} name="listSettingsParentId">
+                  {[].concat(categories).map((item) => (
+                    <option key={item.id} value={item.id}>
                       {item.name}
                     </option>
                   ))}

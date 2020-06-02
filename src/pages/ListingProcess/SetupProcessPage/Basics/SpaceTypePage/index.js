@@ -87,7 +87,7 @@ const formik = {
       ...listing,
       listingData: {
         ...listing.listingData,
-        listingType: listing.listingData.listingType || ''
+        listingType: listing.listingData.listingType || 'Established space or business'
       }
     }
   },

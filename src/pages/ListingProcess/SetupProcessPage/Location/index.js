@@ -21,9 +21,10 @@ const LocationPage = ({ listing, values, handleChange, handleBlur, setFieldValue
 
   useEffect(() => {
     if (location) {
+      console.log("LOCATION ===>>>", location.id)
       setFieldValue('locationId', location.id);
       dispatch(onCleanLocation());
-      props.history.push(`/listing-process/setup-process/${listing.id}/basics/space-type`) 
+      props.history.push(`/listing-process/setup-process/${listing.id}/basics/space-type`)
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [location, setFieldValue])
@@ -34,7 +35,7 @@ const LocationPage = ({ listing, values, handleChange, handleBlur, setFieldValue
   }
 
   const _onSelectedAddess = obj => {
-    const { unit: objUnit, position, address: objAddress, placeId } = obj
+    const { unit: objUnit, position, address: objAddress, placeId: objPlaceId } = obj
     if (objUnit || objUnit === '') {
       setUnit(objUnit)
     }
@@ -44,8 +45,8 @@ const LocationPage = ({ listing, values, handleChange, handleBlur, setFieldValue
     if (objAddress) {
       setAddress(objAddress)
     }
-    if (placeId) {
-      setGPlaceId(placeId)
+    if (objPlaceId) {
+      setGPlaceId(objPlaceId)
     }
   }
 
