@@ -6,7 +6,7 @@ import { Box, Wrapper, Title, StepButtons, Input, Map, AutoComplete } from 'comp
 
 import { onPostLocation, onCleanLocation } from 'redux/ducks/listing-process'
 
-const LocationPage = ({ listing, values, handleChange, handleBlur, setFieldValue, ...props }) => {
+const LocationPage = ({ listing, values, handleChange, handleBlur, setFieldValue, setFieldTouched, ...props }) => {
   const [address, setAddress] = useState('')
   const [unit, setUnit] = useState('')
   const [latLng, setLatLng] = useState({})
@@ -16,21 +16,21 @@ const LocationPage = ({ listing, values, handleChange, handleBlur, setFieldValue
   const { object: location, isLoading, error } = useSelector(state => state.listing_process.location)
 
   useEffect(() => {
-    props.setFatherValues({ ...values })
-  }, [props, values])
+    props.setFatherValues(values)
+    listing.locationId !== values.locationId &&
+      props.history.push(`/listing-process/setup-process/${listing.id}/basics/space-type`)
+  }, [values])
 
   useEffect(() => {
     if (location) {
-      console.log("LOCATION ===>>>", location.id)
-      setFieldValue('locationId', location.id);
-      dispatch(onCleanLocation());
-      props.history.push(`/listing-process/setup-process/${listing.id}/basics/space-type`)
+      setFieldValue('locationId', location.id)
+      dispatch(onCleanLocation())
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [location, setFieldValue])
+  }, [location])
 
   const _handleNext = () => {
-    props.setStepCompleted("step1")
+    props.setStepCompleted('step1')
     dispatch(onPostLocation({ address, unit, placeId }))
   }
 
@@ -100,7 +100,7 @@ const formik = {
   mapPropsToValues: ({ listing }) => {
     return {
       ...listing,
-      locationId: listing.locationId || null
+      locationId: listing.locationId || 0
     }
   },
   enableReinitialize: true,
