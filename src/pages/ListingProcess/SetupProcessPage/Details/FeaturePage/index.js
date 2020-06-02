@@ -124,7 +124,7 @@ const formik = {
       features: listing.features || [],
       listingData: {
         ...listing.listingData,
-        listingStyle: listing.listingData.listingStyle || ''
+        listingStyle: listing.listingData.listingStyle || 'classic'
       }
     }
   },
