@@ -50,11 +50,10 @@ const PricingPage = ({ listing, values, handleChange, handleBlur, ...props }) =>
                 onChange={handleChange}
                 onBlur={handleBlur}
               >
-                <option value="">Select</option>
-                <option value="1">1 hour</option>
-                <option value="2">2 hours</option>
-                <option value="3">3 hours</option>
-                <option value="4">4 hours</option>
+                <option value={1}>1 hour</option>
+                <option value={2}>2 hours</option>
+                <option value={3}>3 hours</option>
+                <option value={4}>4 hours</option>
               </Select>
               <Input
                 placeholder="$"
@@ -65,15 +64,6 @@ const PricingPage = ({ listing, values, handleChange, handleBlur, ...props }) =>
                 onChange={handleChange}
                 onBlur={handleBlur}
               />
-              {/* <Input
-                placeholder="$"
-                label="Peak day rate"
-                type="number"
-                name="listingData.peakPrice"
-                value={values.listingData.peakPrice}
-                onChange={handleChange}
-                onBlur={handleBlur}
-              /> */}
             </Box>
           </Box>
           <StepButtons
@@ -101,7 +91,6 @@ const formik = {
         minTerm: listing.listingData.minTerm || 1,
         basePrice: listing.listingData.basePrice || 0,
         maxPrice: listing.listingData.maxPrice || 0,
-        // peakPrice: listing.listingData.peakPrice || 0
       }
     }
   },

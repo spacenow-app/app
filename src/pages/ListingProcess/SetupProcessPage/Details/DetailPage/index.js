@@ -1,12 +1,31 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import Helmet from 'react-helmet'
 import { withFormik } from 'formik'
-import { Wrapper, Box, Title, StepButtons, Input, TextArea, Select } from 'components'
+import { EditorState, ContentState, convertToRaw, convertFromRaw } from 'draft-js'
+import { Wrapper, Box, Title, StepButtons, Input, TextArea, Select, WYSIWYGTextArea } from 'components'
 
-const DetailPage = ({ listing, values, handleChange, handleBlur, ...props }) => {
+const DetailPage = ({ listing, values, setFieldValue, handleChange, handleBlur, ...props }) => {
+
+  const [editorState, setEditorState] = useState(EditorState.createEmpty())
+
   useEffect(() => {
-    props.setFatherValues({ ...values })
-  }, [props, values])
+    props.setFatherValues(values)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [values])
+
+  useEffect(() => {
+    try {
+      setEditorState(EditorState.createWithContent(convertFromRaw(JSON.parse(values.listingData.description))))
+    } catch (err) {
+      setEditorState(EditorState.createWithContent(ContentState.createFromText(values.listingData.description)))
+    }
+  }, [values.listingData.description])
+
+  const _handleWYSIWYGBlur = () => {
+    const description = convertToRaw(editorState.getCurrentContent())
+    setFieldValue('listingData.description', JSON.stringify(description))
+  }
+
 
   return (
     <form>
@@ -31,12 +50,13 @@ const DetailPage = ({ listing, values, handleChange, handleBlur, ...props }) => 
         </Box>
         <Box>
           <Title type="h3" title="Description" subtitle="Sell 'em the dream." subTitleMargin={10} />
-          <TextArea
-            placeholder="Description"
-            name="listingData.description"
-            value={values.listingData.description}
-            onChange={handleChange}
-            onBlur={handleBlur}
+          <WYSIWYGTextArea
+            placeholder="Describe your space"
+            editorState={editorState}
+            onEditorStateChange={editor => {
+              setEditorState(editor)
+            }}
+            onBlur={_handleWYSIWYGBlur}
           />
         </Box>
         <Box>

@@ -38,6 +38,12 @@ export const Types = {
   GET_TAGS_REQUEST: 'GET_TAGS_REQUEST',
   GET_TAGS_SUCCESS: 'GET_TAGS_SUCCESS',
   GET_TAGS_FAILURE: 'GET_TAGS_FAILURE',
+  GET_CATEGORY_REQUEST: 'GET_CATEGORY_REQUEST',
+  GET_CATEGORY_SUCCESS: 'GET_CATEGORY_SUCCESS',
+  GET_CATEGORY_FAILURE: 'GET_CATEGORY_FAILURE',
+  GET_LOCATION_REQUEST: 'GET_LOCATION_REQUEST',
+  GET_LOCATION_SUCCESS: 'GET_LOCATION_SUCCESS',
+  GET_LOCATION_FAILURE: 'GET_LOCATION_FAILURE',
   GET_CANCELLATIONS_REQUEST: 'GET_CANCELLATIONS_REQUEST',
   GET_CANCELLATIONS_SUCCESS: 'GET_CANCELLATIONS_SUCCESS',
   GET_CANCELLATIONS_FAILURE: 'GET_CANCELLATIONS_FAILURE',
@@ -91,6 +97,11 @@ const initialState = {
   },
   cancellations: {
     object: [],
+    isLoading: false,
+    error: null
+  },
+  category: {
+    object: null,
     isLoading: false,
     error: null
   },
@@ -335,6 +346,20 @@ const queryGetV2Cancellations = gql`
   query getV2Cancellations {
     getV2Cancellations {
       ${cancellationFields}
+    }
+  }
+`
+const queryGetV2Category = gql`
+  query getV2Category($id: String!) {
+    getV2CategoryTags(id: $id) {
+      ${categoryFields}
+    }
+  }
+`
+const queryGetV2Location = gql`
+  query getV2Location($id: String!) {
+    getV2LocationTags(id: $id) {
+      ${locationFields}
     }
   }
 `
@@ -596,6 +621,64 @@ export default function reducer(state = initialState, action) {
         }
       }
     }
+    case Types.GET_CATEGORY_REQUEST: {
+      return {
+        ...state,
+        category: {
+          ...state.category,
+          isLoading: true
+        }
+      }
+    }
+    case Types.GET_CATEGORY_SUCCESS: {
+      return {
+        ...state,
+        category: {
+          ...state.category,
+          object: action.payload,
+          isLoading: false
+        }
+      }
+    }
+    case Types.GET_CATEGORY_FAILURE: {
+      return {
+        ...state,
+        category: {
+          ...state.category,
+          isLoading: false,
+          error: action.payload
+        }
+      }
+    }
+    case Types.GET_LOCATION_REQUEST: {
+      return {
+        ...state,
+        location: {
+          ...state.location,
+          isLoading: true
+        }
+      }
+    }
+    case Types.GET_LOCATION_SUCCESS: {
+      return {
+        ...state,
+        location: {
+          ...state.location,
+          object: action.payload,
+          isLoading: false
+        }
+      }
+    }
+    case Types.GET_LOCATION_FAILURE: {
+      return {
+        ...state,
+        location: {
+          ...state.location,
+          isLoading: false,
+          error: action.payload
+        }
+      }
+    }
     case Types.GET_CANCELLATIONS_REQUEST: {
       return {
         ...state,
@@ -850,6 +933,34 @@ export const onGetCancellations = () => async dispatch => {
     dispatch({ type: Types.GET_CANCELLATIONS_SUCCESS, payload: data.getV2Cancellations })
   } catch (err) {
     dispatch({ type: Types.GET_CANCELLATIONS_FAILURE, payload: errToMsg(err) })
+  }
+}
+
+export const onGetCategory = id => async dispatch => {
+  dispatch({ type: Types.GET_CATEGORY_REQUEST })
+  try {
+    const { data } = await getClient(dispatch).query({
+      query: queryGetV2Category,
+      fetchPolicy: 'network-only',
+      variables: { id }
+    })
+    dispatch({ type: Types.GET_CATEGORY_SUCCESS, payload: data.getV2Category })
+  } catch (err) {
+    dispatch({ type: Types.GET_CATEGORY_FAILURE, payload: errToMsg(err) })
+  }
+}
+
+export const onGetLocation = id => async dispatch => {
+  dispatch({ type: Types.GET_LOCATION_REQUEST })
+  try {
+    const { data } = await getClient(dispatch).query({
+      query: queryGetV2Location,
+      fetchPolicy: 'network-only',
+      variables: { id }
+    })
+    dispatch({ type: Types.GET_LOCATION_SUCCESS, payload: data.getV2Location })
+  } catch (err) {
+    dispatch({ type: Types.GET_LOCATION_FAILURE, payload: errToMsg(err) })
   }
 }
 

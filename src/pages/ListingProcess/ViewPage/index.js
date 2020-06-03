@@ -29,7 +29,7 @@ import {
 import { capitalize, toPlural } from 'utils/strings'
 import { cropPicture } from 'utils/images'
 
-import { onGetListing, onPutListing } from 'redux/ducks/listing-process'
+import { onGetListing, onGetCategory, onGetLocation, onPutListing } from 'redux/ducks/listing-process'
 
 import { openModal, TypesModal } from 'redux/ducks/modal'
 
@@ -48,8 +48,10 @@ const CellDesktop = styled(Cell)`
 const ViewPage = ({ match, location, ...props }) => {
   const dispatch = useDispatch()
 
-  const { object: listing, isLoading: isListingLoading, isNotOwner } = useSelector(state => state.listing_process.get)
+  const { object: listing, isLoading, isNotOwner } = useSelector(state => state.listing_process.get)
   const { object: specifications } = useSelector(state => state.category.specifications)
+  const { object: category } = useSelector(state => state.listing_process.category)
+  // const { object: location } = useSelector(state => state.listing_process.location)
   const {
     user,
     user: {
@@ -63,7 +65,14 @@ const ViewPage = ({ match, location, ...props }) => {
 
   useEffect(() => {
     dispatch(onGetListing(match.params.id))
-  }, [dispatch, match.params.id])
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
+
+  useEffect(() => {
+    if (listing && listing.listSettingsParentId)
+      dispatch(onGetCategory(listing.listSettingsParentId))
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [listing])
 
   useEffect(() => {
     if (window.innerWidth <= 991) {
@@ -130,12 +139,12 @@ const ViewPage = ({ match, location, ...props }) => {
         return <Highlights key={el.field} title={el.label} name={value} icon={icon} last={index === 2} />
       }
       if (el.field === 'carSpace') {
-        // const value = el.value === 0 ? 'None available’' : `${el.value} available`
-        // return <Highlights title={el.label} name={value} icon="category-desk" last={index === 2} />
+        const value = el.value === 0 ? 'None available’' : `${el.value} available`
+        return <Highlights title={el.label} name={value} icon="category-desk" last={index === 2} />
       }
       if (el.field === 'isFurnished') {
-        // const value = el.value === 0 ? 'None available’' : `${el.value} available`
-        // return <Highlights title={el.label} name={value} icon="category-desk" last={index === 2} />
+        const value = el.value === 0 ? 'None available’' : `${el.value} available`
+        return <Highlights title={el.label} name={value} icon="category-desk" last={index === 2} />
       }
       return <Highlights key={el.field} title={el.label} name={el.value} icon="category-desk" last={index === 2} />
     })
@@ -171,10 +180,6 @@ const ViewPage = ({ match, location, ...props }) => {
       : []
   }
 
-  if (isListingLoading) {
-    return <Loader text="Loading listing preview" />
-  }
-
   if (isNotOwner && user.role !== 'admin') {
     dispatch(
       openModal(TypesModal.MODAL_TYPE_WARN, {
@@ -201,322 +206,282 @@ const ViewPage = ({ match, location, ...props }) => {
 
   return (
     <>
-      <Wrapper>
-        <Helmet title="Listing Preview - Spacenow" />
-        <Title type="h2" title="Just one more thing, review your space!" />
-        <Carousel photos={listing.photos} height={imageHeight} />
-        <Box my="15px" display="grid" gridTemplateColumns={{ _: '1fr', medium: '2fr 1fr' }} gridGap="20px">
-          <Box display="grid" gridGap={{ _: '30px' }}>
-            <Box display="flex" justifyContent="start">
-              <Box>
-                <Tag
-                  icon={
-                    <Icon
-                      width="24px"
-                      name={`category-${listing.category.otherItemName}`}
-                    />
-                  }
-                >
-                  {listing.category.itemName}
-                </Tag>
-              </Box>
-            </Box>
-          </Box>
-          {listing.listingData.bookingType !== 'poa' && (
-            <Box display="grid" justifySelf={{ _: 'start', medium: 'end' }}>
+      {isLoading && !listing && <Loader text="Loading listing preview" />}
+      {!isLoading && listing &&
+        <Wrapper>
+          <Helmet title="Listing Preview - Spacenow" />
+          <Title type="h2" title="Just one more thing, review your space!" />
+          <Carousel photos={_convertedArrayPhotos(listing.photos)} height={imageHeight} />
+          <Box my="15px" display="grid" gridTemplateColumns={{ _: '1fr', medium: '2fr 1fr' }} gridGap="20px">
+            <Box display="grid" gridAutoFlow="column" gridGap={{ _: '15px' }}>
               <Tag>
-                {listing.listingData.bookingType ? `${capitalize(listing.listingData.bookingType)} Booking` : 'No data'}
+                {category && category.otherItemName}
               </Tag>
+              {listing.tags.length > 0 && listing.tags.map((item, index) =>
+                <Tag>{item.id}</Tag>)}
             </Box>
-          )}
-        </Box>
-        <Box my="30px" display="grid" gridTemplateColumns={{ _: '1fr', medium: '2fr 1fr' }} gridGap="20px">
-          <Title
-            type="h3"
-            title={listing.title ? listing.title : 'Input Title'}
-            color={!listing.title ? '#E05252' : null}
-            subtitle={_getAddress(listing.location)}
-            subTitleSize={18}
-            noMargin
-          />
-          <Price
-            currency={listing.listingData.currency}
-            price={listing.listingData.basePrice}
-            currencySymbol="$"
-            bookingPeriod={listing.bookingPeriod}
-            bookingType={listing.listingData.bookingType}
-            size="28px"
-            right
-            color={
-              (listing.listingData.basePrice === 0 || listing.listingData.basePrice === null) &&
-                listing.listingData.bookingType !== 'poa'
-                ? '#E05252'
-                : null
-            }
-          />
-        </Box>
-
-        <Box my="30px" display="grid" gridTemplateColumns={{ _: '1fr', medium: '1fr' }}>
-          <Title type="h4" title="Highlights" />
-          <Box display="grid" gridGap="20px" gridTemplateColumns="repeat(auto-fit, minmax(120px, max-content))">
-            <Highlights
-              title="Minimum term"
-              name={_changeToPlural(listing.bookingPeriod, listing.listingData.minTerm)}
-              icon="specification-minimum-term"
-            />
-            <Highlights
-              title="Opening Days"
-              name={_getWeekName(listing.accessDays)}
-              icon="specification-opening-days"
-              error={_getWeekName(listing.accessDays) === 'Closed'}
-            />
-            {specifications && _renderHighLights(specifications)}
           </Box>
-        </Box>
-
-        <Box my="50px">
-          <Title
-            type="h4"
-            title="Check-In"
-            subtitle="How you’ll gain access to this space. Your host will provide the following upon successful bookings:"
-          />
-          <Box
-            display="grid"
-            border="1px solid"
-            borderRadius="10px"
-            width="110px"
-            height="130px"
-            justifyContent="center"
-            textAlign="center"
-            fontFamily="MontSerrat-SemiBold"
-            fontSize="14px"
-            color={listing.listingData.accessType ? 'quartenary' : 'error'}
-            borderColor={listing.listingData.accessType ? '#c4c4c4' : 'error'}
-          >
-            <Icon
-              style={{ alignSelf: 'center', justifySelf: 'center' }}
-              width="50px"
-              fill={listing.listingData.accessType ? '#6ADC91' : '#E05252'}
-              name={
-                listing.listingData.accessType &&
-                `access-type-${listing.listingData.accessType
-                  .toLowerCase()
-                  .split(' ')
-                  .join('-')}`
+          <Box my="30px" display="grid" gridTemplateColumns={{ _: '1fr', medium: '2fr 1fr' }} gridGap="20px">
+            <Title
+              type="h3"
+              title={listing.title ? listing.title : 'Input Title'}
+              color={!listing.title ? '#E05252' : null}
+              subtitle={_getAddress(location)}
+              subTitleSize={18}
+              noMargin
+            />
+            <Price
+              currency={listing.listingData.currency}
+              price={listing.listingData.basePrice}
+              currencySymbol="$"
+              bookingPeriod={listing.bookingPeriod}
+              bookingType={listing.listingData.bookingType}
+              size="28px"
+              right
+              color={
+                (listing.listingData.basePrice === 0 || listing.listingData.basePrice === null) &&
+                  listing.listingData.bookingType !== 'poa'
+                  ? '#E05252'
+                  : null
               }
             />
-            {listing.listingData.accessType ? <>{listing.listingData.accessType}</> : 'No Data'}
           </Box>
-        </Box>
 
-        <Box my="50px">
-          <Title type="h4" title="Description" color={!listing.listingData.description ? '#E05252' : null} />
-          <div dangerouslySetInnerHTML={{ __html: _formatDescription(listing.listingData.description) }} />
-        </Box>
-
-        {(Object.keys(listing.floorplan).length > 0 || Object.keys(listing.menu).length > 0) && (
-          <Box display="grid" gridAutoFlow="column" gridAutoColumns="max-content" my="50px" gridGap="30px">
-            {Object.keys(listing.floorplan) && Object.keys(listing.floorplan).length && listing.floorplan.id && (
-              <>
-                <LightBox
-                  photos={_convertedArrayPhotos(new Array(listing.floorplan))}
-                  height={imageHeight}
-                  open={isOpenFloorplan}
-                  handleClose={() => setIsOpenFloorplan(false)}
-                />
-                <Button
-                  outline
-                  onClick={() => setIsOpenFloorplan(true)}
-                  width="200px"
-                  icon={<Icon width="18px" height="18px" name="feature-wood-floors" style={{ marginRight: '10px' }} />}
-                >
-                  Floorplan
-                </Button>
-              </>
-            )}
-            {Object.keys(listing.menu).length > 0 && listing.menu.id && (
-              <>
-                <LightBox
-                  photos={_convertedArrayPhotos(new Array(listing.menu))}
-                  height={imageHeight}
-                  open={isOpenMenu}
-                  handleClose={() => setIsOpenMenu(false)}
-                />
-                <Button
-                  outline
-                  onClick={() => setIsOpenMenu(true)}
-                  width="200px"
-                  icon={<Icon width="18px" height="18px" name="floor-plan" style={{ marginRight: '10px' }} />}
-                >
-                  Menu
-                </Button>
-              </>
-            )}
-          </Box>
-        )}
-
-        {listing.activities.length > 0 && (
-          <Box my="50px">
-            <Title type="h4" title="Activities" />
-            <Box display="grid" gridTemplateColumns={{ _: '1fr', medium: '1fr 1fr 1fr' }} gridRowGap="20px">
-              {listing.activities.map((item, index) => {
-                return (
-                  <Box key={index} display="grid" gridTemplateColumns="auto 1fr" gridColumnGap="20px">
-                    <Box
-                      display="grid"
-                      width="54px"
-                      height="54px"
-                      borderRadius="100%"
-                      bg="primary"
-                      alignContent="center"
-                    >
-                      <Icon
-                        name={`${listing.settingsParent.category.otherItemName}-activity-${item.settingsData.otherItemName}`}
-                        width="30px"
-                        height="30px"
-                        style={{ display: 'block', margin: 'auto' }}
-                      />
-                    </Box>
-                    <span style={{ alignSelf: 'center' }}>{item.settingsData.itemName}</span>
-                  </Box>
-                )
-              })}
+          <Box my="30px" display="grid" gridTemplateColumns={{ _: '1fr', medium: '1fr' }}>
+            <Title type="h4" title="Highlights" />
+            <Box display="grid" gridGap="20px" gridTemplateColumns="repeat(auto-fit, minmax(120px, max-content))">
+              <Highlights
+                title="Minimum term"
+                name={_changeToPlural(listing.bookingPeriod, listing.listingData.minTerm)}
+                icon="specification-minimum-term"
+              />
+              <Highlights
+                title="Opening Days"
+                name={_getWeekName(listing.accessDays)}
+                icon="specification-opening-days"
+                error={_getWeekName(listing.accessDays) === 'Closed'}
+              />
+              {specifications && _renderHighLights(specifications)}
             </Box>
           </Box>
-        )}
 
-        {listing.amenities.length > 0 && (
           <Box my="50px">
-            <Title type="h4" title="Amenities" />
-            <Box display="grid" gridTemplateColumns={{ _: '1fr', medium: '1fr 1fr 1fr' }} gridRowGap="20px">
-              {listing.amenities.map((item, index) => {
-                return (
-                  <Box key={index} display="grid" gridTemplateColumns="auto 1fr" gridColumnGap="20px">
-                    <Box
-                      display="grid"
-                      width="54px"
-                      height="54px"
-                      borderRadius="100%"
-                      bg="primary"
-                      alignContent="center"
-                    >
-                      <Icon
-                        name={`amenitie-${item.settingsData.otherItemName}`}
-                        width="30px"
-                        height="30px"
-                        style={{ display: 'block', margin: 'auto' }}
-                      />
-                    </Box>
-                    <span style={{ alignSelf: 'center' }}>{item.settingsData.itemName}</span>
-                  </Box>
-                )
-              })}
-            </Box>
-          </Box>
-        )}
-
-        {listing.rules.length > 0 && (
-          <Box my="50px">
-            <Title type="h4" title="Space Rules" />
-            <Box display="grid" gridTemplateColumns={{ _: '1fr', medium: '1fr 1fr 1fr' }} gridRowGap="20px">
-              {listing.rules.map((item, index) => {
-                return (
-                  <Box key={index} display="grid" gridTemplateColumns="auto 1fr" gridColumnGap="20px">
-                    <Box
-                      display="grid"
-                      width="54px"
-                      height="54px"
-                      borderRadius="100%"
-                      bg="primary"
-                      alignContent="center"
-                    >
-                      <Icon
-                        name={`rule-${item.settingsData.otherItemName}`}
-                        width="30px"
-                        height="30px"
-                        style={{ display: 'block', margin: 'auto' }}
-                      />
-                    </Box>
-                    <span style={{ alignSelf: 'center' }}>{item.settingsData.itemName}</span>
-                  </Box>
-                )
-              })}
-            </Box>
-          </Box>
-        )}
-
-        {listing.features.length > 0 && (
-          <Box my="50px">
-            <Title type="h4" title="Space Features" />
-            <Box display="grid" gridTemplateColumns={{ _: '1fr', medium: '1fr 1fr 1fr' }} gridRowGap="20px">
-              {listing.features.map((item, index) => {
-                return (
-                  <Box key={index} display="grid" gridTemplateColumns="auto 1fr" gridColumnGap="20px">
-                    <Box
-                      display="grid"
-                      width="54px"
-                      height="54px"
-                      borderRadius="100%"
-                      bg="primary"
-                      alignContent="center"
-                    >
-                      <Icon
-                        name={`feature-${item.settingsData.otherItemName}`}
-                        width="30px"
-                        height="30px"
-                        style={{ display: 'block', margin: 'auto' }}
-                      />
-                    </Box>
-                    <span style={{ alignSelf: 'center' }}>{item.settingsData.itemName}</span>
-                  </Box>
-                )
-              })}
-            </Box>
-          </Box>
-        )}
-
-        <Box my="50px">
-          <Title
-            type="h4"
-            title="Availability"
-            color={_getWeekName(listing.accessDays) === 'Closed' ? '#E05252' : null}
-          />
-          <TimeTable
-            data={listing.accessDays.listingAccessHours}
-            error={_getWeekName(listing.accessDays) === 'Closed'}
-          />
-        </Box>
-
-        <Box mt="50px">
-          <Title type="h4" title="Location" />
-          <Map position={{ lat: Number(listing.location.lat), lng: Number(listing.location.lng) }} />
-        </Box>
-
-        <Grid columns={12}>
-          <CellStyled width={2}>
-            <Button
-              fluid
-              outline
-              onClick={() => props.history.push(`/listing/v2/space/${match.params.id}/availability`)}
+            <Title
+              type="h4"
+              title="Access Information"
+              subtitle="How you’ll gain access to this space. Your host will provide the following upon successful bookings:"
+            />
+            <Box
+              display="grid"
+              border="1px solid"
+              borderRadius="10px"
+              width="110px"
+              height="130px"
+              justifyContent="center"
+              textAlign="center"
+              fontFamily="MontSerrat-SemiBold"
+              fontSize="14px"
+              color={listing.listingData.accessType ? 'quartenary' : 'error'}
+              borderColor={listing.listingData.accessType ? '#c4c4c4' : 'error'}
             >
-              {`Previous Step`}
-            </Button>
-          </CellStyled>
-          <CellDesktop width={6} />
-          <CellStyled width={2}>
-            <Button fluid outline onClick={() => _handlerSaveContinue()} disabled={!listing.isReady}>
-              {`Save & Continue`}
-            </Button>
-          </CellStyled>
-          <CellStyled width={2}>
-            <Button fluid onClick={() => _handlerPublish()} disabled={!listing.isReady}>
-              {`Publish`}
-            </Button>
-          </CellStyled>
-        </Grid>
+              <Icon
+                style={{ alignSelf: 'center', justifySelf: 'center' }}
+                width="50px"
+                fill={listing.listingData.accessType ? '#6ADC91' : '#E05252'}
+                name={
+                  listing.listingData.accessType &&
+                  `access-type-${listing.listingData.accessType
+                    .toLowerCase()
+                    .split(' ')
+                    .join('-')}`
+                }
+              />
+              {listing.listingData.accessType ? <>{listing.listingData.accessType}</> : 'No Data'}
+            </Box>
+          </Box>
 
-        <Footer />
-      </Wrapper>
+          <Box my="50px">
+            <Title type="h4" title="Description" color={!listing.listingData.description ? '#E05252' : null} />
+            <div dangerouslySetInnerHTML={{ __html: _formatDescription(listing.listingData.description) }} />
+          </Box>
+
+          {/* {(Object.keys(listing.floorplan) || Object.keys(listing.menu)) && (Object.keys(listing.floorplan).length > 0 || Object.keys(listing.menu).length > 0) && (
+            <Box display="grid" gridAutoFlow="column" gridAutoColumns="max-content" my="50px" gridGap="30px">
+              {Object.keys(listing.floorplan) && Object.keys(listing.floorplan).length && listing.floorplan.id && (
+                <>
+                  <LightBox
+                    photos={_convertedArrayPhotos(new Array(listing.floorplan))}
+                    height={imageHeight}
+                    open={isOpenFloorplan}
+                    handleClose={() => setIsOpenFloorplan(false)}
+                  />
+                  <Button
+                    outline
+                    onClick={() => setIsOpenFloorplan(true)}
+                    width="200px"
+                    icon={<Icon width="18px" height="18px" name="feature-wood-floors" style={{ marginRight: '10px' }} />}
+                  >
+                    Floorplan
+                </Button>
+                </>
+              )}
+              {Object.keys(listing.menu).length > 0 && listing.menu.id && (
+                <>
+                  <LightBox
+                    photos={_convertedArrayPhotos(new Array(listing.menu))}
+                    height={imageHeight}
+                    open={isOpenMenu}
+                    handleClose={() => setIsOpenMenu(false)}
+                  />
+                  <Button
+                    outline
+                    onClick={() => setIsOpenMenu(true)}
+                    width="200px"
+                    icon={<Icon width="18px" height="18px" name="floor-plan" style={{ marginRight: '10px' }} />}
+                  >
+                    Menu
+                </Button>
+                </>
+              )}
+            </Box>
+          )} */}
+
+          {listing.amenities.length > 0 && (
+            <Box my="50px">
+              <Title type="h4" title="Amenities" />
+              <Box display="grid" gridTemplateColumns={{ _: '1fr', medium: '1fr 1fr 1fr' }} gridRowGap="20px">
+                {listing.amenities.map((item, index) => {
+                  return (
+                    <Box key={index} display="grid" gridTemplateColumns="auto 1fr" gridColumnGap="20px">
+                      <Box
+                        display="grid"
+                        width="54px"
+                        height="54px"
+                        borderRadius="100%"
+                        bg="primary"
+                        alignContent="center"
+                      >
+                        {/* <Icon
+                          name={`amenitie-${item.settingsData.otherItemName}`}
+                          width="30px"
+                          height="30px"
+                          style={{ display: 'block', margin: 'auto' }}
+                        /> */}
+                      </Box>
+                      {/* <span style={{ alignSelf: 'center' }}>{item.settingsData.itemName}</span> */}
+                      <span style={{ alignSelf: 'center' }}>{item.id}</span>
+                    </Box>
+                  )
+                })}
+              </Box>
+            </Box>
+          )}
+
+          {listing.rules.length > 0 && (
+            <Box my="50px">
+              <Title type="h4" title="Space Rules" />
+              <Box display="grid" gridTemplateColumns={{ _: '1fr', medium: '1fr 1fr 1fr' }} gridRowGap="20px">
+                {listing.rules.map((item, index) => {
+                  return (
+                    <Box key={index} display="grid" gridTemplateColumns="auto 1fr" gridColumnGap="20px">
+                      <Box
+                        display="grid"
+                        width="54px"
+                        height="54px"
+                        borderRadius="100%"
+                        bg="primary"
+                        alignContent="center"
+                      >
+                        {/* <Icon
+                          name={`rule-${item.settingsData.otherItemName}`}
+                          width="30px"
+                          height="30px"
+                          style={{ display: 'block', margin: 'auto' }}
+                        /> */}
+                      </Box>
+                      {/* <span style={{ alignSelf: 'center' }}>{item.settingsData.itemName}</span> */}
+                      <span style={{ alignSelf: 'center' }}>{item.id}</span>
+                    </Box>
+                  )
+                })}
+              </Box>
+            </Box>
+          )}
+
+          {listing.features.length > 0 && (
+            <Box my="50px">
+              <Title type="h4" title="Space Features" />
+              <Box display="grid" gridTemplateColumns={{ _: '1fr', medium: '1fr 1fr 1fr' }} gridRowGap="20px">
+                {listing.features.map((item, index) => {
+                  return (
+                    <Box key={index} display="grid" gridTemplateColumns="auto 1fr" gridColumnGap="20px">
+                      <Box
+                        display="grid"
+                        width="54px"
+                        height="54px"
+                        borderRadius="100%"
+                        bg="primary"
+                        alignContent="center"
+                      >
+                        {/* <Icon
+                          name={`feature-${item.settingsData.otherItemName}`}
+                          width="30px"
+                          height="30px"
+                          style={{ display: 'block', margin: 'auto' }}
+                        /> */}
+                      </Box>
+                      {/* <span style={{ alignSelf: 'center' }}>{item.settingsData.itemName}</span> */}
+                      <span style={{ alignSelf: 'center' }}>{item.id}</span>
+                    </Box>
+                  )
+                })}
+              </Box>
+            </Box>
+          )}
+
+          <Box my="50px">
+            <Title
+              type="h4"
+              title="Availability"
+              color={_getWeekName(listing.accessDays) === 'Closed' ? '#E05252' : null}
+            />
+            <TimeTable
+              data={listing.accessDays.accessHours}
+              error={_getWeekName(listing.accessDays) === 'Closed'}
+            />
+          </Box>
+
+          {/* <Box mt="50px">
+            <Title type="h4" title="Location" />
+            <Map position={{ lat: Number(location.lat), lng: Number(location.lng) }} />
+          </Box> */}
+
+          <Grid columns={12}>
+            <CellStyled width={2}>
+              <Button
+                fluid
+                outline
+                onClick={() => props.history.push(`/listing/v2/space/${match.params.id}/availability`)}
+              >
+                {`Previous Step`}
+              </Button>
+            </CellStyled>
+            <CellDesktop width={6} />
+            <CellStyled width={2}>
+              <Button fluid outline onClick={() => _handlerSaveContinue()} disabled={!listing.isReady}>
+                {`Save & Continue`}
+              </Button>
+            </CellStyled>
+            <CellStyled width={2}>
+              <Button fluid onClick={() => _handlerPublish()} disabled={!listing.isReady}>
+                {`Publish`}
+              </Button>
+            </CellStyled>
+          </Grid>
+
+          <Footer />
+        </Wrapper>
+      }
     </>
   )
 }
